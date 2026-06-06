@@ -35,9 +35,16 @@ const reels = [
 ];
 
 const trending = [
-  { img: trend1, name: "Classic Choc Chunk", caption: "Gooey center, golden crust" },
-  { img: trend2, name: "Salted Caramel", caption: "Sweet meets salty perfection" },
-  { img: trend3, name: "Matcha White Choc", caption: "Earthy & elegant" },
+  { img: imgChocChunk, name: "Chocolate Chunk", caption: "Buttery vanilla with semi-sweet chunks" },
+  { img: imgCookiesCream, name: "Cookies 'N Cream", caption: "Crushed cookies & white chocolate" },
+  { img: imgSnicker, name: "Snickerdoodle", caption: "Soft, warm cinnamon sugar" },
+  { img: imgSugar, name: "Sugar", caption: "Melt-in-your-mouth buttery sweet" },
+  { img: imgDoubleChoc, name: "Double Chocolate Chunk", caption: "Dark cocoa packed with chunks" },
+  { img: imgOatmeal, name: "Oatmeal Raisin", caption: "Warm oats and plump raisins" },
+  { img: imgWhiteMac, name: "White Chocolate Macadamia", caption: "Coconut-buttery, tropical vibes" },
+  { img: imgMM, name: "Classic with M&M'S®", caption: "Candy-coated chocolate twist" },
+  { img: imgPB, name: "Peanut Butter Chip", caption: "Soft vanilla, peanut butter chips" },
+  { img: imgMint, name: "Double Chocolate Mint", caption: "Warm chocolate with cool mint" },
 ];
 
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
