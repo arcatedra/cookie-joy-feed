@@ -4,10 +4,17 @@ import { BottomNav } from "@/components/BottomNav";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
-import trend1 from "@/assets/trend-1.jpg";
-import trend2 from "@/assets/trend-2.jpg";
-import trend3 from "@/assets/trend-3.jpg";
 import avatar from "@/assets/avatar.jpg";
+import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
+import imgCookiesCream from "@/assets/ins-double-choc.jpg";
+import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
+import imgSugar from "@/assets/ins-sugar.jpg";
+import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
+import imgOatmeal from "@/assets/ins-oatmeal.jpg";
+import imgWhiteMac from "@/assets/ins-white-mac.jpg";
+import imgMM from "@/assets/ins-mm.jpg";
+import imgPB from "@/assets/ins-pb.jpg";
+import imgMint from "@/assets/ins-mint.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
