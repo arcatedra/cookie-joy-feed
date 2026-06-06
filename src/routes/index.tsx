@@ -175,7 +175,7 @@ function Home() {
       <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
         <div className="m-3 flex items-center justify-around rounded-full bg-primary px-3 py-2.5 shadow-2xl">
           {[
-            { id: "home", label: "Home", Icon: Home },
+            { id: "home", label: "Home", Icon: HomeIcon },
             { id: "explore", label: "Explore", Icon: Compass },
             { id: "subscribe", label: "Subscribe", Icon: Package },
             { id: "profile", label: "Profile", Icon: User },
