@@ -300,6 +300,15 @@ function MenuPage() {
             })}
           </div>
 
+          <button
+            type="button"
+            onClick={() => scrollToPack(Math.min(packs.length - 1, packIndex + 1))}
+            aria-label="Next pack"
+            className={`absolute right-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-black shadow-lg backdrop-blur-sm transition-opacity ${packIndex === packs.length - 1 ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          >
+            <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
+          </button>
+
           {/* Pagination dots */}
           <div className="flex justify-center gap-2 pb-2">
             {packs.map((_, i) => (
