@@ -4,10 +4,17 @@ import { BottomNav } from "@/components/BottomNav";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
-import trend1 from "@/assets/trend-1.jpg";
-import trend2 from "@/assets/trend-2.jpg";
-import trend3 from "@/assets/trend-3.jpg";
 import avatar from "@/assets/avatar.jpg";
+import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
+import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
+import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
+import imgSugar from "@/assets/ins-sugar.jpg";
+import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
+import imgOatmeal from "@/assets/ins-oatmeal.jpg";
+import imgWhiteMac from "@/assets/ins-white-mac.jpg";
+import imgMM from "@/assets/ins-mm.jpg";
+import imgPB from "@/assets/ins-pb.jpg";
+import imgMint from "@/assets/ins-mint.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,9 +35,16 @@ const reels = [
 ];
 
 const trending = [
-  { img: trend1, name: "Classic Choc Chunk", caption: "Gooey center, golden crust" },
-  { img: trend2, name: "Salted Caramel", caption: "Sweet meets salty perfection" },
-  { img: trend3, name: "Matcha White Choc", caption: "Earthy & elegant" },
+  { img: imgChocChunk, name: "Chocolate Chunk", caption: "Buttery vanilla with semi-sweet chunks" },
+  { img: imgCookiesCream, name: "Cookies 'N Cream", caption: "Crushed cookies & white chocolate" },
+  { img: imgSnicker, name: "Snickerdoodle", caption: "Soft, warm cinnamon sugar" },
+  { img: imgSugar, name: "Sugar", caption: "Melt-in-your-mouth buttery sweet" },
+  { img: imgDoubleChoc, name: "Double Chocolate Chunk", caption: "Dark cocoa packed with chunks" },
+  { img: imgOatmeal, name: "Oatmeal Raisin", caption: "Warm oats and plump raisins" },
+  { img: imgWhiteMac, name: "White Chocolate Macadamia", caption: "Coconut-buttery, tropical vibes" },
+  { img: imgMM, name: "Classic with M&M'S®", caption: "Candy-coated chocolate twist" },
+  { img: imgPB, name: "Peanut Butter Chip", caption: "Soft vanilla, peanut butter chips" },
+  { img: imgMint, name: "Double Chocolate Mint", caption: "Warm chocolate with cool mint" },
 ];
 
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
@@ -125,7 +139,7 @@ function Home() {
                 <h3 className="text-sm font-semibold text-foreground">{t.name}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">{t.caption}</p>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-bold text-primary">$8.50</span>
+                  <span className="text-sm font-bold text-primary">$3.75</span>
                   <button className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground">
                     Add
                   </button>
