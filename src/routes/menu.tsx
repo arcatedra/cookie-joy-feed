@@ -59,6 +59,7 @@ const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
 function MenuPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Classic Cookies");
+  const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
   const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0);
@@ -72,6 +73,8 @@ function MenuPage() {
       else next[id] = n;
       return next;
     });
+
+  const detailQty = selectedCookie ? (cart[selectedCookie.id] ?? 0) : 0;
 
   return (
     <main className="min-h-screen bg-white pb-32 font-sans text-black">
