@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronLeft, Plus, Minus, Search, ThumbsUp, ShoppingCart, Menu as MenuIcon } from "lucide-react";
+import { ChevronLeft, Plus, Minus, Search, ThumbsUp, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { BottomNav } from "@/components/BottomNav";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
