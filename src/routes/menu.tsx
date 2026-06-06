@@ -164,7 +164,7 @@ function MenuPage() {
                     </button>
                   </div>
                 )}
-              </button>
+              </div>
               <h3 className="mt-2.5 text-[17px] font-bold leading-tight text-black">{item.name}</h3>
               <div className="mt-1 flex items-center gap-1.5 text-[14px] text-black">
                 <span className="font-medium">${item.price.toFixed(2)}</span>
