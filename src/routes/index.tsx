@@ -36,7 +36,6 @@ const trending = [
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
 
 function Home() {
-  const [activeTab, setActiveTab] = useState("home");
 
   return (
     <main className="min-h-screen bg-background pb-24">
