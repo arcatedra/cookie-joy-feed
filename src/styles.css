@@ -23,6 +23,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-cta: var(--cta);
   --color-cta-foreground: var(--cta-foreground);
+  --color-orange: var(--orange);
+  --color-orange-foreground: var(--orange-foreground);
   --color-cream: var(--cream);
   --color-brown: var(--brown);
   --color-border: var(--border);
