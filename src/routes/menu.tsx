@@ -115,13 +115,13 @@ function MenuPage() {
           const qty = cart[item.id] ?? 0;
           return (
             <article key={item.id} className="flex flex-col">
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelectedCookie(item)}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedCookie(item); }}
-                className="relative aspect-square cursor-pointer overflow-hidden rounded-xl bg-[#f6f6f6] text-left"
-              >
+              <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6]">
+                <button
+                  type="button"
+                  aria-label={`View ${item.name} details`}
+                  onClick={() => setSelectedCookie(item)}
+                  className="absolute inset-0 cursor-pointer text-left"
+                >
                 <img
                   src={item.image}
                   alt={item.name}
@@ -142,8 +142,10 @@ function MenuPage() {
                     {item.tag}
                   </span>
                 )}
+                </button>
                 {qty === 0 ? (
                   <button
+                    type="button"
                     onClick={(e) => { e.stopPropagation(); add(item.id); }}
                     aria-label={`Add ${item.name}`}
                     className="absolute bottom-2 right-2 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md ring-1 ring-black/5"
@@ -155,11 +157,11 @@ function MenuPage() {
                     onClick={(e) => e.stopPropagation()}
                     className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-md ring-1 ring-black/5"
                   >
-                    <button onClick={() => sub(item.id)} aria-label="Remove" className="grid h-6 w-6 place-items-center">
+                    <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-6 w-6 place-items-center">
                       <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
                     </button>
                     <span className="min-w-[14px] text-center text-sm font-bold text-black">{qty}</span>
-                    <button onClick={() => add(item.id)} aria-label="Add" className="grid h-6 w-6 place-items-center">
+                    <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-6 w-6 place-items-center">
                       <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
                     </button>
                   </div>
