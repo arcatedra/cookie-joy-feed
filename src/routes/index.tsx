@@ -6,7 +6,7 @@ import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
 import avatar from "@/assets/avatar.jpg";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
-import imgCookiesCream from "@/assets/ins-double-choc.jpg";
+import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
 import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
