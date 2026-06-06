@@ -194,6 +194,81 @@ function MenuPage() {
       )}
 
       <BottomNav />
+
+      {/* Cookie Detail Modal */}
+      <Dialog open={!!selectedCookie} onOpenChange={(open) => !open && setSelectedCookie(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-0 p-0 sm:max-w-md">
+          <DialogTitle className="sr-only">{selectedCookie?.name}</DialogTitle>
+          <DialogDescription className="sr-only">Detalle de {selectedCookie?.name}</DialogDescription>
+          {selectedCookie && (
+            <div className="flex flex-col">
+              {/* Large image */}
+              <div className="relative aspect-square bg-[#f6f6f6]">
+                <img
+                  src={selectedCookie.image}
+                  alt={selectedCookie.name}
+                  className="h-full w-full object-cover"
+                  width={1024}
+                  height={1024}
+                />
+                {selectedCookie.badge && (
+                  <span className="absolute left-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-[#0a8a3a] text-xs font-extrabold text-white">
+                    {selectedCookie.badge}
+                  </span>
+                )}
+                {selectedCookie.tag && (
+                  <span className="absolute right-3 top-3 rounded-full bg-[#6b2c91] px-2.5 py-1.5 text-[10px] font-extrabold tracking-wide text-white">
+                    {selectedCookie.tag}
+                  </span>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="px-5 pb-6 pt-4">
+                <h2 className="text-[22px] font-bold leading-tight text-black">
+                  {selectedCookie.name}
+                </h2>
+                <div className="mt-1.5 flex items-center gap-2 text-[15px] text-black">
+                  <span className="font-bold">${selectedCookie.price.toFixed(2)}</span>
+                  <span className="text-gray-300">|</span>
+                  <ThumbsUp className="h-4 w-4" strokeWidth={2.5} />
+                  <span className="font-medium">{selectedCookie.rating}%</span>
+                  <span className="text-gray-500">({selectedCookie.reviews} reviews)</span>
+                </div>
+                <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
+                  {selectedCookie.description}
+                </p>
+
+                {/* Quantity & Add to cart */}
+                <div className="mt-6 flex items-center gap-4">
+                  <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1.5">
+                    <button
+                      onClick={() => sub(selectedCookie.id)}
+                      disabled={detailQty === 0}
+                      className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm disabled:opacity-40"
+                    >
+                      <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                    </button>
+                    <span className="min-w-[28px] text-center text-base font-bold text-black">{detailQty}</span>
+                    <button
+                      onClick={() => add(selectedCookie.id)}
+                      className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm"
+                    >
+                      <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => add(selectedCookie.id)}
+                    className="flex-1 rounded-full bg-black py-3.5 text-center text-[16px] font-bold text-white shadow-lg"
+                  >
+                    {detailQty === 0 ? "Add to Cart" : `Update Cart • $${(detailQty * selectedCookie.price).toFixed(2)}`}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
