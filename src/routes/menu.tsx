@@ -235,7 +235,16 @@ function MenuPage() {
       )}
 
       {activeTab === "Packs" && (
-        <section className="pt-5">
+        <section className="relative pt-5">
+          <button
+            type="button"
+            onClick={() => scrollToPack(Math.max(0, packIndex - 1))}
+            aria-label="Previous pack"
+            className={`absolute left-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-black shadow-lg backdrop-blur-sm transition-opacity ${packIndex === 0 ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          >
+            <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
+          </button>
+
           <div
             ref={packsRef}
             className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
