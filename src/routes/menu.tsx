@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ChevronLeft, Plus, Minus, Search, ThumbsUp, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Minus, Search, ThumbsUp, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
