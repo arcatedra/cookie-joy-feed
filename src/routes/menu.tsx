@@ -18,6 +18,9 @@ import imgMM from "@/assets/ins-mm.jpg";
 import imgPB from "@/assets/ins-pb.jpg";
 import imgVeganChoc from "@/assets/ins-vegan-choc.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
+import imgPack6 from "@/assets/pack-6.jpg";
+import imgPack9 from "@/assets/pack-9.jpg";
+import imgPack12 from "@/assets/pack-12.jpg";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
@@ -54,6 +57,20 @@ const cookies: MenuItem[] = [
   { id: "c10", name: "Double Chocolate Mint", price: 3.75, rating: 95, reviews: 23, description: "Our take on a favorite flavor combo. A warm chocolate cookie with cool mint chips.", image: imgMint, badge: "V" },
 ];
 
+interface PackItem {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+}
+
+const packs: PackItem[] = [
+  { id: "p6", name: "6-Pack", price: 20.00, description: "Treat yourself to 6 warm, delicious treats in one box.", image: imgPack6 },
+  { id: "p9", name: "9-Pack", price: 28.00, description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.", image: imgPack9 },
+  { id: "p12", name: "12-Pack", price: 36.00, description: "What they REALLY mean when they say to bring enough for everyone.", image: imgPack12 },
+];
+
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
 
 function MenuPage() {
@@ -62,7 +79,8 @@ function MenuPage() {
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
-  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0);
+  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
+    + packs.reduce((sum, p) => sum + (cart[p.id] ?? 0) * p.price, 0);
 
   const add = (id: string) => setCart((p) => ({ ...p, [id]: (p[id] ?? 0) + 1 }));
   const sub = (id: string) =>
@@ -110,78 +128,138 @@ function MenuPage() {
       </nav>
 
       {/* Grid */}
-      <section className="grid grid-cols-2 gap-x-3 gap-y-6 px-4 pt-5">
-        {cookies.map((item) => {
-          const qty = cart[item.id] ?? 0;
-          return (
-            <article key={item.id} className="flex flex-col">
-              <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6]">
-                <button
-                  type="button"
-                  aria-label={`View ${item.name} details`}
-                  onClick={() => setSelectedCookie(item)}
-                  className="absolute inset-0 cursor-pointer text-left"
-                >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                  width={1024}
-                  height={1024}
-                />
-                {item.badge && (
-                  <span
-                    className={`absolute left-2 top-2 grid h-7 w-7 place-items-center rounded-full text-xs font-extrabold text-white ${item.badge === "V" ? "bg-[#0a8a3a]" : "bg-[#0a8a3a]"}`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-                {item.tag && (
-                  <span className="absolute right-2 top-2 rounded-full bg-[#6b2c91] px-2 py-1 text-[9px] font-extrabold tracking-wide text-white">
-                    {item.tag}
-                  </span>
-                )}
-                </button>
-                {qty === 0 ? (
+      {activeTab === "Classic Cookies" && (
+        <section className="grid grid-cols-2 gap-x-3 gap-y-6 px-4 pt-5">
+          {cookies.map((item) => {
+            const qty = cart[item.id] ?? 0;
+            return (
+              <article key={item.id} className="flex flex-col">
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6]">
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); add(item.id); }}
-                    aria-label={`Add ${item.name}`}
-                    className="absolute bottom-2 right-2 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md ring-1 ring-black/5"
+                    aria-label={`View ${item.name} details`}
+                    onClick={() => setSelectedCookie(item)}
+                    className="absolute inset-0 cursor-pointer text-left"
                   >
-                    <Plus className="h-5 w-5 text-black" strokeWidth={2.5} />
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    width={1024}
+                    height={1024}
+                  />
+                  {item.badge && (
+                    <span
+                      className={`absolute left-2 top-2 grid h-7 w-7 place-items-center rounded-full text-xs font-extrabold text-white ${item.badge === "V" ? "bg-[#0a8a3a]" : "bg-[#0a8a3a]"}`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.tag && (
+                    <span className="absolute right-2 top-2 rounded-full bg-[#6b2c91] px-2 py-1 text-[9px] font-extrabold tracking-wide text-white">
+                      {item.tag}
+                    </span>
+                  )}
                   </button>
-                ) : (
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-md ring-1 ring-black/5"
-                  >
-                    <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-6 w-6 place-items-center">
-                      <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                  {qty === 0 ? (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); add(item.id); }}
+                      aria-label={`Add ${item.name}`}
+                      className="absolute bottom-2 right-2 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md ring-1 ring-black/5"
+                    >
+                      <Plus className="h-5 w-5 text-black" strokeWidth={2.5} />
                     </button>
-                    <span className="min-w-[14px] text-center text-sm font-bold text-black">{qty}</span>
-                    <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-6 w-6 place-items-center">
-                      <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
-                    </button>
+                  ) : (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-md ring-1 ring-black/5"
+                    >
+                      <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-6 w-6 place-items-center">
+                        <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                      <span className="min-w-[14px] text-center text-sm font-bold text-black">{qty}</span>
+                      <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-6 w-6 place-items-center">
+                        <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <h3 className="mt-2.5 text-[17px] font-bold leading-tight text-black">{item.name}</h3>
+                <div className="mt-1 flex items-center gap-1.5 text-[14px] text-black">
+                  <span className="font-medium">${item.price.toFixed(2)}</span>
+                  <span className="text-gray-400">•</span>
+                  <ThumbsUp className="h-3.5 w-3.5" strokeWidth={2.5} />
+                  <span className="font-medium">{item.rating}%</span>
+                  <span className="text-gray-500">({item.reviews})</span>
+                </div>
+                <p className="mt-1 line-clamp-2 text-[14px] leading-snug text-gray-500">
+                  {item.description}
+                </p>
+              </article>
+            );
+          })}
+        </section>
+      )}
+
+      {activeTab === "Packs" && (
+        <section className="grid grid-cols-1 gap-4 px-4 pt-5">
+          {packs.map((item) => {
+            const qty = cart[item.id] ?? 0;
+            return (
+              <article key={item.id} className="flex gap-4 rounded-2xl bg-[#f6f6f6] p-3">
+                <div className="relative h-28 w-28 flex-shrink-0 overflow-hidden rounded-xl">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
+                <div className="flex flex-1 flex-col justify-between py-0.5">
+                  <div>
+                    <h3 className="text-[17px] font-bold leading-tight text-black">{item.name}</h3>
+                    <p className="mt-0.5 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
+                    <p className="mt-1 text-[14px] leading-snug text-gray-500">{item.description}</p>
                   </div>
-                )}
-              </div>
-              <h3 className="mt-2.5 text-[17px] font-bold leading-tight text-black">{item.name}</h3>
-              <div className="mt-1 flex items-center gap-1.5 text-[14px] text-black">
-                <span className="font-medium">${item.price.toFixed(2)}</span>
-                <span className="text-gray-400">•</span>
-                <ThumbsUp className="h-3.5 w-3.5" strokeWidth={2.5} />
-                <span className="font-medium">{item.rating}%</span>
-                <span className="text-gray-500">({item.reviews})</span>
-              </div>
-              <p className="mt-1 line-clamp-2 text-[14px] leading-snug text-gray-500">
-                {item.description}
-              </p>
-            </article>
-          );
-        })}
-      </section>
+                  {qty === 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => add(item.id)}
+                      aria-label={`Add ${item.name}`}
+                      className="mt-2 w-full rounded-full bg-black py-2.5 text-center text-[14px] font-bold text-white shadow-md"
+                    >
+                      Add to Cart
+                    </button>
+                  ) : (
+                    <div className="mt-2 flex items-center justify-between rounded-full bg-white px-2 py-1.5 shadow-sm ring-1 ring-black/5">
+                      <div className="flex items-center gap-2">
+                        <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-7 w-7 place-items-center rounded-full bg-gray-100">
+                          <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                        </button>
+                        <span className="min-w-[20px] text-center text-sm font-bold text-black">{qty}</span>
+                        <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-7 w-7 place-items-center rounded-full bg-gray-100">
+                          <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                        </button>
+                      </div>
+                      <span className="pr-2 text-sm font-bold text-black">${(qty * item.price).toFixed(2)}</span>
+                    </div>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      )}
+
+      {activeTab === "Deluxe Cookies" && (
+        <section className="flex flex-col items-center justify-center px-4 pt-16 text-center">
+          <p className="text-[17px] font-medium text-gray-400">Coming soon</p>
+        </section>
+      )}
 
       {/* Floating cart */}
       {cartCount > 0 && (
