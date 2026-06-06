@@ -57,6 +57,20 @@ const cookies: MenuItem[] = [
   { id: "c10", name: "Double Chocolate Mint", price: 3.75, rating: 95, reviews: 23, description: "Our take on a favorite flavor combo. A warm chocolate cookie with cool mint chips.", image: imgMint, badge: "V" },
 ];
 
+interface PackItem {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+}
+
+const packs: PackItem[] = [
+  { id: "p6", name: "6-Pack", price: 20.00, description: "Treat yourself to 6 warm, delicious treats in one box.", image: imgPack6 },
+  { id: "p9", name: "9-Pack", price: 28.00, description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.", image: imgPack9 },
+  { id: "p12", name: "12-Pack", price: 36.00, description: "What they REALLY mean when they say to bring enough for everyone.", image: imgPack12 },
+];
+
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
 
 function MenuPage() {
