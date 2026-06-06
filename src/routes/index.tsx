@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Search, Heart, MessageCircle, Play, Home as HomeIcon, Compass, Package, User, Bell } from "lucide-react";
+import { Search, Heart, MessageCircle, Play, Bell } from "lucide-react";
+import { BottomNav } from "@/components/BottomNav";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
@@ -36,7 +36,6 @@ const trending = [
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
 
 function Home() {
-  const [activeTab, setActiveTab] = useState("home");
 
   return (
     <main className="min-h-screen bg-background pb-24">
@@ -171,32 +170,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
-        <div className="m-3 flex items-center justify-around rounded-full bg-primary px-3 py-2.5 shadow-2xl">
-          {[
-            { id: "home", label: "Home", Icon: HomeIcon },
-            { id: "explore", label: "Explore", Icon: Compass },
-            { id: "subscribe", label: "Subscribe", Icon: Package },
-            { id: "profile", label: "Profile", Icon: User },
-          ].map(({ id, label, Icon }) => {
-            const active = activeTab === id;
-            return (
-              <button
-                key={id}
-                onClick={() => setActiveTab(id)}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 transition ${
-                  active ? "bg-cta text-cta-foreground" : "text-primary-foreground/70"
-                }`}
-                aria-label={label}
-              >
-                <Icon className="h-5 w-5" />
-                {active && <span className="text-xs font-semibold">{label}</span>}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+      <BottomNav />
     </main>
   );
 }

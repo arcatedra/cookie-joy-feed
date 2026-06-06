@@ -23,6 +23,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-cta: var(--cta);
   --color-cta-foreground: var(--cta-foreground);
+  --color-orange: var(--orange);
+  --color-orange-foreground: var(--orange-foreground);
   --color-cream: var(--cream);
   --color-brown: var(--brown);
   --color-border: var(--border);
@@ -59,6 +61,10 @@
   /* Terracotta CTA */
   --cta: oklch(0.68 0.16 45);
   --cta-foreground: oklch(0.99 0.005 80);
+
+  /* Bright orange FAB */
+  --orange: oklch(0.65 0.2 55);
+  --orange-foreground: oklch(0.99 0.005 80);
 
   /* Dark brown for category labels */
   --brown: oklch(0.32 0.04 50);
