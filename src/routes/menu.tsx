@@ -115,7 +115,10 @@ function MenuPage() {
           const qty = cart[item.id] ?? 0;
           return (
             <article key={item.id} className="flex flex-col">
-              <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6]">
+              <button
+                onClick={() => setSelectedCookie(item)}
+                className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6] text-left"
+              >
                 <img
                   src={item.image}
                   alt={item.name}
