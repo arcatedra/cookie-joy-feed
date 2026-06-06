@@ -139,7 +139,7 @@ function Home() {
                 <h3 className="text-sm font-semibold text-foreground">{t.name}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">{t.caption}</p>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-bold text-primary">$8.50</span>
+                  <span className="text-sm font-bold text-primary">$3.75</span>
                   <button className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground">
                     Add
                   </button>
