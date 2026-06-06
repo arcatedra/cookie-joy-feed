@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
   path: '/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/explore' | '/subscribe'
+  fullPaths: '/' | '/explore' | '/profile' | '/subscribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/explore' | '/subscribe'
-  id: '__root__' | '/' | '/explore' | '/subscribe'
+  to: '/' | '/explore' | '/profile' | '/subscribe'
+  id: '__root__' | '/' | '/explore' | '/profile' | '/subscribe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExploreRoute: typeof ExploreRoute
+  ProfileRoute: typeof ProfileRoute
   SubscribeRoute: typeof SubscribeRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/subscribe'
       fullPath: '/subscribe'
       preLoaderRoute: typeof SubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -88,18 +105,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRoute: ExploreRoute,
+  ProfileRoute: ProfileRoute,
   SubscribeRoute: SubscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
