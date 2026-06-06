@@ -5,7 +5,6 @@ import { BottomNav } from "@/components/BottomNav";
 import cookieChoc from "@/assets/cookie-choc.jpg";
 import cookiePb from "@/assets/cookie-pb.jpg";
 import cookieSnicker from "@/assets/cookie-snicker.jpg";
-import cookieBox from "@/assets/cookie-box.jpg";
 import product1 from "@/assets/product-1.jpg";
 import product2 from "@/assets/product-2.jpg";
 import product3 from "@/assets/product-3.jpg";
@@ -15,7 +14,7 @@ export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
       { title: "Menu — Oys" },
-      { name: "description", content: "Browse our full menu of classic cookies and cookie packs at Oys." },
+      { name: "description", content: "Browse our full menu of classic cookies at Oys." },
     ],
   }),
   component: MenuPage,
@@ -37,21 +36,15 @@ interface MenuItem {
 
 const classicCookies: MenuItem[] = [
   { id: "c1", name: "Chocolate Chunk", price: 3.75, image: cookieChoc },
-  { id: "c2", name: "Classic Oreo / Cookies 'N Cream", price: 3.75, image: product1 },
-  { id: "c3", name: "Snickerdoodle", price: 3.75, image: cookieSnicker },
-  { id: "c4", name: "M&M", price: 3.75, image: product2 },
-  { id: "c5", name: "Sugar", price: 3.75, image: product3 },
-  { id: "c6", name: "Double Chocolate Chunk", price: 3.75, image: product4 },
-  { id: "c7", name: "Oatmeal Raisin", price: 3.75, image: cookiePb },
+  { id: "c2", name: "Snickerdoodle", price: 3.75, image: cookieSnicker },
+  { id: "c3", name: "Sugar", price: 3.75, image: product3 },
+  { id: "c4", name: "Double Chocolate Chunk", price: 3.75, image: cookieChoc },
+  { id: "c5", name: "Oatmeal Raisin", price: 3.75, image: product4 },
+  { id: "c6", name: "White Chocolate Macadamia", price: 3.75, image: product1 },
+  { id: "c7", name: "Classic with M&M'S®", price: 3.75, image: product2 },
   { id: "c8", name: "Peanut Butter Chip", price: 3.75, image: cookiePb },
-  { id: "c9", name: "Double Chocolate Mint", price: 3.75, image: cookieChoc },
-  { id: "c10", name: "White Chocolate Macadamia", price: 3.75, image: product1 },
-];
-
-const cookiePacks: MenuItem[] = [
-  { id: "p6", name: "6-Pack Cookies", price: 20.0, image: cookieBox },
-  { id: "p9", name: "9-Pack Cookies", price: 28.0, image: cookieBox },
-  { id: "p12", name: "12-Pack Cookies", price: 36.0, image: cookieBox },
+  { id: "c9", name: "Vegan Chocolate Chunk", price: 3.75, image: cookieChoc },
+  { id: "c10", name: "Double Chocolate Mint", price: 3.75, image: cookieChoc },
 ];
 
 function formatPrice(n: number) {
@@ -127,12 +120,12 @@ function MenuPage() {
         </p>
       </header>
 
-      {/* Individual Classic Cookies */}
+      {/* Classic Cookies */}
       <section className="px-5 pt-6">
         <div className="mb-4 flex items-center gap-2">
           <div className="h-6 w-1 rounded-full bg-cta" />
           <h2 className="text-lg font-bold text-foreground">
-            Individual Classic Cookies
+            Classic Cookies
           </h2>
         </div>
         <p className="mb-4 text-xs font-medium text-muted-foreground">
@@ -200,79 +193,6 @@ function MenuPage() {
                       aria-label={`Add another ${item.name}`}
                     >
                       <Plus className="h-3 w-3" />
-                    </button>
-                  </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Cookie Packs */}
-      <section className="px-5 pt-10">
-        <div className="mb-4 flex items-center gap-2">
-          <div className="h-6 w-1 rounded-full bg-cta" />
-          <h2 className="text-lg font-bold text-foreground">Cookie Packs</h2>
-        </div>
-        <p className="mb-4 text-xs font-medium text-muted-foreground">
-          Perfect for sharing — or not
-        </p>
-
-        <div className="flex flex-col gap-4">
-          {cookiePacks.map((item) => {
-            const qty = getQty(item.id);
-            return (
-              <article
-                key={item.id}
-                className="flex items-center gap-4 overflow-hidden rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border"
-              >
-                <div
-                  className="h-20 w-20 shrink-0 overflow-hidden rounded-xl"
-                  style={{ backgroundColor: "oklch(0.90 0.015 70)" }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    width={256}
-                    height={256}
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-bold text-foreground">{item.name}</h3>
-                  <p className="mt-0.5 text-sm font-extrabold text-primary">
-                    {formatPrice(item.price)}
-                  </p>
-                </div>
-
-                {qty === 0 ? (
-                  <button
-                    type="button"
-                    onClick={() => addToCart(item)}
-                    className="shrink-0 rounded-full bg-cta px-4 py-2 text-xs font-bold uppercase tracking-wider text-cta-foreground shadow-md transition hover:brightness-105"
-                  >
-                    Add to Cart
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-1.5 rounded-full bg-primary px-2 py-1.5 shadow-md">
-                    <button
-                      type="button"
-                      onClick={() => decrement(item.id)}
-                      className="grid h-6 w-6 place-items-center rounded-full bg-primary-foreground/10 text-primary-foreground"
-                    >
-                      <Minus className="h-3.5 w-3.5" />
-                    </button>
-                    <span className="min-w-[1.25rem] text-center text-sm font-bold text-primary-foreground">
-                      {qty}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => addToCart(item)}
-                      className="grid h-6 w-6 place-items-center rounded-full bg-primary-foreground/10 text-primary-foreground"
-                    >
-                      <Plus className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 )}
