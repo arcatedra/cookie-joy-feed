@@ -73,10 +73,41 @@ const packs: PackItem[] = [
 
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
 
+function useSnapCarousel(itemCount: number) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const scrollTo = useCallback((index: number) => {
+    const el = ref.current;
+    if (!el) return;
+    const scrollWidth = el.scrollWidth;
+    const itemWidth = scrollWidth / itemCount;
+    el.scrollTo({ left: itemWidth * index, behavior: "smooth" });
+  }, [itemCount]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const scrollWidth = el.scrollWidth - el.clientWidth;
+      if (scrollWidth <= 0) return;
+      const progress = el.scrollLeft / scrollWidth;
+      const idx = Math.min(itemCount - 1, Math.max(0, Math.round(progress * (itemCount - 1))));
+      setActiveIndex(idx);
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [itemCount]);
+
+  return { ref, activeIndex, scrollTo };
+}
+
 function MenuPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Classic Cookies");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
+
+  const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
   const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
