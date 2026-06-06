@@ -10,7 +10,7 @@ export const Route = createFileRoute("/subscribe")({
       {
         name: "description",
         content:
-          "Choose your Oys cookie subscription plan. Delivered Mondays and Thursdays only.",
+          "Choose your Oys cookie subscription plan. Delivered Mondays and Fridays only.",
       },
     ],
   }),
@@ -36,7 +36,7 @@ const tiers: Tier[] = [
     title: "Starter Plan",
     cadence: "2 DELIVERIES / MONTH",
     description:
-      "Perfect for essentials. Schedule up to 2 deliveries per month on your choice of Mondays or Thursdays.",
+      "Perfect for essentials. Schedule up to 2 deliveries per month on your choice of Mondays or Fridays.",
     price: "$14.99",
     maxDeliveries: 2,
     badgeColor: "bg-[oklch(0.85_0.06_150)]",
@@ -61,7 +61,7 @@ const tiers: Tier[] = [
     title: "Intermediate Plan",
     cadence: "6 DELIVERIES / MONTH",
     description:
-      "Extra flexibility for active households. Get up to 6 deliveries per month scheduled on Mondays or Thursdays.",
+      "Extra flexibility for active households. Get up to 6 deliveries per month scheduled on Mondays or Fridays.",
     price: "$44.99",
     maxDeliveries: 6,
     badgeColor: "bg-[oklch(0.85_0.10_80)]",
@@ -73,7 +73,7 @@ const tiers: Tier[] = [
     title: "Premium Plan",
     cadence: "8 DELIVERIES / MONTH",
     description:
-      "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Thursdays).",
+      "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays)."
     price: "$59.99",
     maxDeliveries: 8,
     badgeColor: "bg-[oklch(0.82_0.12_50)]",
@@ -98,9 +98,9 @@ function getMonthGrid(year: number, month: number) {
   return cells;
 }
 
-function isMondayOrThursday(d: Date) {
+function isMondayOrFriday(d: Date) {
   const day = d.getDay();
-  return day === 1 || day === 4;
+  return day === 1 || day === 5;
 }
 
 function fmtKey(d: Date) {
@@ -119,7 +119,7 @@ function SubscribePage() {
   const grid = useMemo(() => getMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
 
   function toggleDate(d: Date) {
-    if (!isMondayOrThursday(d)) return;
+    if (!isMondayOrFriday(d)) return;
     const key = fmtKey(d);
     setSelectedDates((prev) => {
       if (prev.includes(key)) return prev.filter((k) => k !== key);
@@ -162,7 +162,7 @@ function SubscribePage() {
         </div>
         <div className="mt-5 flex justify-center">
           <span className="rounded-full bg-cta px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-cta-foreground">
-            Monday & Thursday Delivery Only
+            Monday & Friday Delivery Only
           </span>
         </div>
       </header>
@@ -277,7 +277,7 @@ function SubscribePage() {
             </h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Only Mondays and Thursdays are selectable.
+            Only Mondays and Fridays are selectable.
           </p>
 
           {/* Month nav */}
@@ -392,7 +392,7 @@ function SubscribePage() {
 
       <footer className="mt-6 px-5 pb-4 text-center">
         <p className="text-xs font-medium italic text-muted-foreground">
-          *Available Only on MONDAYS & THURSDAYS
+          *Available Only on MONDAYS & FRIDAYS
         </p>
       </footer>
 
