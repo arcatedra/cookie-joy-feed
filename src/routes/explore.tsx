@@ -114,6 +114,7 @@ function ExplorePage() {
               </div>
               <div className="mt-3">
                 <h3 className="text-sm font-bold text-foreground leading-tight">{p.name}</h3>
+                <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">{p.description}</p>
                 <div className="mt-1">
                   <StarRating rating={p.rating} reviews={p.reviews} />
                 </div>
