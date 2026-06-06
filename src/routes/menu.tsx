@@ -141,14 +141,17 @@ function MenuPage() {
                 )}
                 {qty === 0 ? (
                   <button
-                    onClick={() => add(item.id)}
+                    onClick={(e) => { e.stopPropagation(); add(item.id); }}
                     aria-label={`Add ${item.name}`}
                     className="absolute bottom-2 right-2 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md ring-1 ring-black/5"
                   >
                     <Plus className="h-5 w-5 text-black" strokeWidth={2.5} />
                   </button>
                 ) : (
-                  <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-md ring-1 ring-black/5">
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-md ring-1 ring-black/5"
+                  >
                     <button onClick={() => sub(item.id)} aria-label="Remove" className="grid h-6 w-6 place-items-center">
                       <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
                     </button>
@@ -158,7 +161,7 @@ function MenuPage() {
                     </button>
                   </div>
                 )}
-              </div>
+              </button>
               <h3 className="mt-2.5 text-[17px] font-bold leading-tight text-black">{item.name}</h3>
               <div className="mt-1 flex items-center gap-1.5 text-[14px] text-black">
                 <span className="font-medium">${item.price.toFixed(2)}</span>
