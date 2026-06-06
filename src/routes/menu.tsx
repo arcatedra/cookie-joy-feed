@@ -18,6 +18,9 @@ import imgMM from "@/assets/ins-mm.jpg";
 import imgPB from "@/assets/ins-pb.jpg";
 import imgVeganChoc from "@/assets/ins-vegan-choc.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
+import imgPack6 from "@/assets/pack-6.jpg";
+import imgPack9 from "@/assets/pack-9.jpg";
+import imgPack12 from "@/assets/pack-12.jpg";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
