@@ -1,10 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ChevronLeft, Star, Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
+import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
+import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
+import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
+import imgSugar from "@/assets/ins-sugar.jpg";
+import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
+import imgOatmeal from "@/assets/ins-oatmeal.jpg";
+import imgWhiteMac from "@/assets/ins-white-mac.jpg";
+import imgMM from "@/assets/ins-mm.jpg";
+import imgPB from "@/assets/ins-pb.jpg";
+import imgMint from "@/assets/ins-mint.jpg";
 
 export const Route = createFileRoute("/explore")({
   head: () => ({
@@ -17,38 +23,16 @@ export const Route = createFileRoute("/explore")({
 });
 
 const products = [
-  {
-    id: 1,
-    name: "Classic Choc Chip",
-    price: "$12.99",
-    rating: 5,
-    reviews: 12,
-    image: product1,
-  },
-  {
-    id: 2,
-    name: "Oatmeal Raisin",
-    price: "$11.49",
-    rating: 5,
-    reviews: 8,
-    image: product2,
-  },
-  {
-    id: 3,
-    name: "Peanut Butter Blast",
-    price: "$13.99",
-    rating: 5,
-    reviews: 15,
-    image: product3,
-  },
-  {
-    id: 4,
-    name: "White Choc Macadamia",
-    price: "$14.49",
-    rating: 5,
-    reviews: 10,
-    image: product4,
-  },
+  { id: 1, name: "Chocolate Chunk", price: "$3.75", rating: 5, reviews: 272, image: imgChocChunk, description: "Buttery vanilla with semi-sweet chunks." },
+  { id: 2, name: "Cookies 'N Cream", price: "$3.75", rating: 5, reviews: 184, image: imgCookiesCream, description: "Crushed cookies & white chocolate." },
+  { id: 3, name: "Snickerdoodle", price: "$3.75", rating: 5, reviews: 125, image: imgSnicker, description: "Soft, warm cinnamon sugar." },
+  { id: 4, name: "Sugar", price: "$3.75", rating: 5, reviews: 134, image: imgSugar, description: "Melt-in-your-mouth buttery sweet." },
+  { id: 5, name: "Double Chocolate Chunk", price: "$3.75", rating: 5, reviews: 197, image: imgDoubleChoc, description: "Dark cocoa packed with chunks." },
+  { id: 6, name: "Oatmeal Raisin", price: "$3.75", rating: 5, reviews: 98, image: imgOatmeal, description: "Warm oats and plump raisins." },
+  { id: 7, name: "White Chocolate Macadamia", price: "$3.75", rating: 5, reviews: 95, image: imgWhiteMac, description: "Coconut-buttery, tropical vibes." },
+  { id: 8, name: "Classic with M&M'S®", price: "$3.75", rating: 5, reviews: 79, image: imgMM, description: "Candy-coated chocolate twist." },
+  { id: 9, name: "Peanut Butter Chip", price: "$3.75", rating: 5, reviews: 56, image: imgPB, description: "Soft vanilla with peanut butter chips." },
+  { id: 10, name: "Double Chocolate Mint", price: "$3.75", rating: 5, reviews: 23, image: imgMint, description: "Warm chocolate with cool mint." },
 ];
 
 function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
