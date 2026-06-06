@@ -129,7 +129,7 @@ function MenuPage() {
           </h2>
         </div>
         <p className="mb-4 text-xs font-medium text-muted-foreground">
-          $3.75 each — mix & match your favorites
+          $2.25 each — mix & match your favorites
         </p>
 
         <div className="grid grid-cols-2 gap-4">
