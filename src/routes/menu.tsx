@@ -115,9 +115,12 @@ function MenuPage() {
           const qty = cart[item.id] ?? 0;
           return (
             <article key={item.id} className="flex flex-col">
-              <button
+              <div
+                role="button"
+                tabIndex={0}
                 onClick={() => setSelectedCookie(item)}
-                className="relative aspect-square overflow-hidden rounded-xl bg-[#f6f6f6] text-left"
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedCookie(item); }}
+                className="relative aspect-square cursor-pointer overflow-hidden rounded-xl bg-[#f6f6f6] text-left"
               >
                 <img
                   src={item.image}
@@ -161,7 +164,7 @@ function MenuPage() {
                     </button>
                   </div>
                 )}
-              </button>
+              </div>
               <h3 className="mt-2.5 text-[17px] font-bold leading-tight text-black">{item.name}</h3>
               <div className="mt-1 flex items-center gap-1.5 text-[14px] text-black">
                 <span className="font-medium">${item.price.toFixed(2)}</span>
