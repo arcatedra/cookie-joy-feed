@@ -35,16 +35,16 @@ interface MenuItem {
 }
 
 const classicCookies: MenuItem[] = [
-  { id: "c1", name: "Chocolate Chunk", price: 3.75, image: cookieChoc },
-  { id: "c2", name: "Snickerdoodle", price: 3.75, image: cookieSnicker },
-  { id: "c3", name: "Sugar", price: 3.75, image: product3 },
-  { id: "c4", name: "Double Chocolate Chunk", price: 3.75, image: cookieChoc },
-  { id: "c5", name: "Oatmeal Raisin", price: 3.75, image: product4 },
-  { id: "c6", name: "White Chocolate Macadamia", price: 3.75, image: product1 },
-  { id: "c7", name: "Classic with M&M'S®", price: 3.75, image: product2 },
-  { id: "c8", name: "Peanut Butter Chip", price: 3.75, image: cookiePb },
-  { id: "c9", name: "Vegan Chocolate Chunk", price: 3.75, image: cookieChoc },
-  { id: "c10", name: "Double Chocolate Mint", price: 3.75, image: cookieChoc },
+  { id: "c1", name: "Chocolate Chunk", price: 2.25, image: cookieChoc },
+  { id: "c2", name: "Snickerdoodle", price: 2.25, image: cookieSnicker },
+  { id: "c3", name: "Sugar", price: 2.25, image: product3 },
+  { id: "c4", name: "Double Chocolate Chunk", price: 2.25, image: cookieChoc },
+  { id: "c5", name: "Oatmeal Raisin", price: 2.25, image: product4 },
+  { id: "c6", name: "White Chocolate Macadamia", price: 2.25, image: product1 },
+  { id: "c7", name: "Classic with M&M'S®", price: 2.25, image: product2 },
+  { id: "c8", name: "Peanut Butter Chip", price: 2.25, image: cookiePb },
+  { id: "c9", name: "Vegan Chocolate Chunk", price: 2.25, image: cookieChoc },
+  { id: "c10", name: "Double Chocolate Mint", price: 2.25, image: cookieChoc },
 ];
 
 function formatPrice(n: number) {
