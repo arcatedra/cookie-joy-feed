@@ -315,7 +315,7 @@ function SubscribePage() {
             {grid.map((cell, i) => {
               if (!cell.date) return <div key={i} className="aspect-square" />;
               const d = cell.date;
-              const allowed = isMondayOrThursday(d);
+              const allowed = isMondayOrFriday(d);
               const key = fmtKey(d);
               const isSel = selectedDates.includes(key);
               const past = d < new Date(today.getFullYear(), today.getMonth(), today.getDate());
