@@ -73,7 +73,7 @@ const tiers: Tier[] = [
     title: "Premium Plan",
     cadence: "8 DELIVERIES / MONTH",
     description:
-      "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays)."
+      "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays).",
     price: "$59.99",
     maxDeliveries: 8,
     badgeColor: "bg-[oklch(0.82_0.12_50)]",
