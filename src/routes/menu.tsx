@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronLeft, Plus, Minus, Search, ThumbsUp, ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import {
   Dialog,
@@ -73,10 +73,41 @@ const packs: PackItem[] = [
 
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
 
+function useSnapCarousel(itemCount: number) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const scrollTo = useCallback((index: number) => {
+    const el = ref.current;
+    if (!el) return;
+    const scrollWidth = el.scrollWidth;
+    const itemWidth = scrollWidth / itemCount;
+    el.scrollTo({ left: itemWidth * index, behavior: "smooth" });
+  }, [itemCount]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const scrollWidth = el.scrollWidth - el.clientWidth;
+      if (scrollWidth <= 0) return;
+      const progress = el.scrollLeft / scrollWidth;
+      const idx = Math.min(itemCount - 1, Math.max(0, Math.round(progress * (itemCount - 1))));
+      setActiveIndex(idx);
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [itemCount]);
+
+  return { ref, activeIndex, scrollTo };
+}
+
 function MenuPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Classic Cookies");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
+
+  const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
   const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
@@ -204,54 +235,73 @@ function MenuPage() {
       )}
 
       {activeTab === "Packs" && (
-        <section className="grid grid-cols-1 gap-4 px-4 pt-5">
-          {packs.map((item) => {
-            const qty = cart[item.id] ?? 0;
-            return (
-              <article key={item.id} className="flex gap-4 rounded-2xl bg-[#f6f6f6] p-3">
-                <div className="relative h-28 w-28 flex-shrink-0 overflow-hidden rounded-xl">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    width={1024}
-                    height={1024}
-                  />
-                </div>
-                <div className="flex flex-1 flex-col justify-between py-0.5">
-                  <div>
-                    <h3 className="text-[17px] font-bold leading-tight text-black">{item.name}</h3>
-                    <p className="mt-0.5 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
-                    <p className="mt-1 text-[14px] leading-snug text-gray-500">{item.description}</p>
+        <section className="pt-5">
+          <div
+            ref={packsRef}
+            className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {packs.map((item) => {
+              const qty = cart[item.id] ?? 0;
+              return (
+                <article
+                  key={item.id}
+                  className="mr-4 w-[82vw] max-w-[340px] flex-shrink-0 snap-center rounded-2xl bg-[#f6f6f6] p-3 last:mr-4"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      width={1024}
+                      height={1024}
+                    />
                   </div>
-                  {qty === 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => add(item.id)}
-                      aria-label={`Add ${item.name}`}
-                      className="mt-2 w-full rounded-full bg-black py-2.5 text-center text-[14px] font-bold text-white shadow-md"
-                    >
-                      Add to Cart
-                    </button>
-                  ) : (
-                    <div className="mt-2 flex items-center justify-between rounded-full bg-white px-2 py-1.5 shadow-sm ring-1 ring-black/5">
-                      <div className="flex items-center gap-2">
-                        <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-7 w-7 place-items-center rounded-full bg-gray-100">
-                          <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
-                        </button>
-                        <span className="min-w-[20px] text-center text-sm font-bold text-black">{qty}</span>
-                        <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-7 w-7 place-items-center rounded-full bg-gray-100">
-                          <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
-                        </button>
+                  <div className="mt-3 flex flex-col">
+                    <h3 className="text-[18px] font-bold leading-tight text-black">{item.name}</h3>
+                    <p className="mt-1 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
+                    <p className="mt-1.5 text-[14px] leading-snug text-gray-500">{item.description}</p>
+
+                    {qty === 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => add(item.id)}
+                        aria-label={`Add ${item.name}`}
+                        className="mt-4 w-full rounded-full bg-black py-3 text-center text-[14px] font-bold text-white shadow-md active:scale-[0.98] transition-transform"
+                      >
+                        Add to Cart
+                      </button>
+                    ) : (
+                      <div className="mt-4 flex items-center justify-between rounded-full bg-white px-2 py-2 shadow-sm ring-1 ring-black/5">
+                        <div className="flex items-center gap-2">
+                          <button type="button" onClick={() => sub(item.id)} aria-label="Remove" className="grid h-8 w-8 place-items-center rounded-full bg-gray-100 active:scale-90 transition-transform">
+                            <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                          </button>
+                          <span className="min-w-[24px] text-center text-sm font-bold text-black">{qty}</span>
+                          <button type="button" onClick={() => add(item.id)} aria-label="Add" className="grid h-8 w-8 place-items-center rounded-full bg-gray-100 active:scale-90 transition-transform">
+                            <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                          </button>
+                        </div>
+                        <span className="pr-3 text-sm font-bold text-black">${(qty * item.price).toFixed(2)}</span>
                       </div>
-                      <span className="pr-2 text-sm font-bold text-black">${(qty * item.price).toFixed(2)}</span>
-                    </div>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          {/* Pagination dots */}
+          <div className="flex justify-center gap-2 pb-2">
+            {packs.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToPack(i)}
+                aria-label={`Go to pack ${i + 1}`}
+                className={`h-2 w-2 rounded-full transition-all ${i === packIndex ? "w-5 bg-black" : "bg-gray-300"}`}
+              />
+            ))}
+          </div>
         </section>
       )}
 
