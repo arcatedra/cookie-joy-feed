@@ -79,7 +79,8 @@ function MenuPage() {
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
-  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0);
+  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
+    + packs.reduce((sum, p) => sum + (cart[p.id] ?? 0) * p.price, 0);
 
   const add = (id: string) => setCart((p) => ({ ...p, [id]: (p[id] ?? 0) + 1 }));
   const sub = (id: string) =>
