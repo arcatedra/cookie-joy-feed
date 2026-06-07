@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, Heart, MessageCircle, Play, Bell } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import imgPack6 from "@/assets/pack-6.jpg";
+import imgPack9 from "@/assets/pack-9.jpg";
+import imgPack12 from "@/assets/pack-12.jpg";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
@@ -48,6 +51,12 @@ const trending = [
 ];
 
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
+
+const packs = [
+  { id: "p6", img: imgPack6, name: "6-Pack", price: "$20.00", description: "Treat yourself to 6 warm, delicious treats in one box." },
+  { id: "p9", img: imgPack9, name: "9-Pack", price: "$28.00", description: "The sweet spot of satisfaction. Select 9 of your favorite cookies." },
+  { id: "p12", img: imgPack12, name: "12-Pack", price: "$36.00", description: "What they REALLY mean when they say to bring enough for everyone." },
+];
 
 function Home() {
 
@@ -167,6 +176,33 @@ function Home() {
             >
               {c}
             </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Cookie Packs */}
+      <section className="mt-7">
+        <div className="flex items-center justify-between px-5">
+          <h2 className="text-lg font-bold text-foreground">Cookie Packs</h2>
+          <Link to="/menu" className="text-xs font-semibold text-cta">See all</Link>
+        </div>
+        <div className="mt-3 grid grid-cols-1 gap-4 px-5 sm:grid-cols-3">
+          {packs.map((p) => (
+            <article key={p.id} className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
+              <div className="aspect-[4/3] overflow-hidden bg-cream">
+                <img src={p.img} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
+              </div>
+              <div className="p-4">
+                <div className="flex items-baseline justify-between">
+                  <h3 className="text-base font-bold text-foreground">{p.name}</h3>
+                  <span className="text-base font-bold text-primary">{p.price}</span>
+                </div>
+                <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{p.description}</p>
+                <button className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow">
+                  Add to Cart
+                </button>
+              </div>
+            </article>
           ))}
         </div>
       </section>
