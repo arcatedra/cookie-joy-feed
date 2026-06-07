@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, Heart, MessageCircle, Play, Bell } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import imgPack6 from "@/assets/pack-6.jpg";
+import imgPack9 from "@/assets/pack-9.jpg";
+import imgPack12 from "@/assets/pack-12.jpg";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
