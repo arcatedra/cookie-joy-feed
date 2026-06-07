@@ -108,28 +108,31 @@ function useSnapCarousel(itemCount: number) {
 
 function MenuPage() {
   const { t, i18n } = useTranslation();
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const globalCart = useCart();
   const [activeTab, setActiveTab] = useState<TabKey>("classic");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
   const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
 
   const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
-  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
-  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
-    + packs.reduce((sum, p) => sum + (cart[p.id] ?? 0) * p.price, 0);
+  const qtyOf = (id: string) => globalCart.items.find((it) => it.id === id)?.qty ?? 0;
+  const cartCount = globalCart.count;
+  const cartTotal = globalCart.total;
 
-  const add = (id: string) => setCart((p) => ({ ...p, [id]: (p[id] ?? 0) + 1 }));
-  const sub = (id: string) =>
-    setCart((p) => {
-      const n = (p[id] ?? 0) - 1;
-      const next = { ...p };
-      if (n <= 0) delete next[id];
-      else next[id] = n;
-      return next;
-    });
+  const add = (id: string) => {
+    const cookie = cookies.find((c) => c.id === id);
+    if (cookie) {
+      globalCart.add({ id: cookie.id, name: t(`cookies.${cookie.tKey}.name`), price: cookie.price, image: cookie.image });
+      return;
+    }
+    const pack = packs.find((p) => p.id === id);
+    if (pack) {
+      globalCart.add({ id: pack.id, name: t(`packs.${pack.id}.name`), price: pack.price, image: pack.image });
+    }
+  };
+  const sub = (id: string) => globalCart.setQty(id, qtyOf(id) - 1);
 
-  const detailQty = selectedCookie ? (cart[selectedCookie.id] ?? 0) : 0;
+  const detailQty = selectedCookie ? qtyOf(selectedCookie.id) : 0;
 
   return (
     <main className="min-h-screen bg-white pb-32 font-sans text-black">
