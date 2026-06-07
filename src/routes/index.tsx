@@ -132,20 +132,25 @@ function Home() {
           <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
         </div>
         <div className="no-scrollbar mt-3 flex gap-4 overflow-x-auto px-5 pb-2">
-          {trending.map((tItem, idx) => (
+          {trendingProducts.map(({ item, productId, name }) => (
             <article
-              key={`${tItem.key}-${idx}`}
+              key={productId}
               className="w-44 shrink-0 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border"
             >
-              <div className="aspect-square overflow-hidden bg-cream">
-                <img src={tItem.img} alt={t(`cookies.${tItem.key}.name`)} className="h-full w-full object-cover" loading="lazy" />
-              </div>
+              <Link to="/menu" className="block aspect-square overflow-hidden bg-cream">
+                <img src={item.img} alt={name} className="h-full w-full object-cover transition hover:scale-105" loading="lazy" />
+              </Link>
               <div className="p-3">
-                <h3 className="text-sm font-semibold text-foreground">{t(`cookies.${tItem.key}.name`)}</h3>
-                <p className="mt-0.5 text-xs text-muted-foreground">{t(`cookies.${tItem.key}.caption`)}</p>
+                <h3 className="text-sm font-semibold text-foreground">{name}</h3>
+                <p className="mt-0.5 text-xs text-muted-foreground">{t(`cookies.${item.key}.caption`)}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm font-bold text-primary">{formatPrice(3.75, i18n.language)}</span>
-                  <button className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground">
+                  <button
+                    type="button"
+                    onClick={() => cart.add({ id: productId, name, price: 3.75, image: item.img })}
+                    aria-label={`${t("common.add")} ${name}`}
+                    className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground active:scale-95 transition"
+                  >
                     {t("common.add")}
                   </button>
                 </div>
