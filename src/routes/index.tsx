@@ -184,7 +184,7 @@ function Home() {
       </section>
 
       {/* Cookie Packs */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.cookiePacks")}</h2>
           <Link to="/menu" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
