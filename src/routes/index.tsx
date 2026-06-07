@@ -138,7 +138,7 @@ function Home() {
       <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.trending")}</h2>
-          <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
+          <Link to="/menu" className="text-xs font-semibold text-cta">{t("common.viewMore")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-4 overflow-x-auto px-5 pb-2">
           {trendingProducts.map(({ item, productId, name }) => (
