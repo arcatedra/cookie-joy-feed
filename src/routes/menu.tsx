@@ -171,7 +171,7 @@ function MenuPage() {
       {activeTab === "classic" && (
         <section className="grid grid-cols-2 gap-x-3 gap-y-6 px-4 pt-5">
           {cookies.map((item) => {
-            const qty = cart[item.id] ?? 0;
+            const qty = qtyOf(item.id);
             const name = t(`cookies.${item.tKey}.name`);
             return (
               <article key={item.id} className="flex flex-col">
@@ -258,7 +258,7 @@ function MenuPage() {
             className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {packs.map((item) => {
-              const qty = cart[item.id] ?? 0;
+              const qty = qtyOf(item.id);
               const name = t(`packs.${item.id}.name`);
               return (
                 <article
@@ -449,7 +449,7 @@ function MenuPage() {
           </DialogDescription>
           {selectedPack && (() => {
             const pack = selectedPack;
-            const qty = cart[pack.id] ?? 0;
+            const qty = qtyOf(pack.id);
             const name = t(`packs.${pack.id}.name`);
             return (
               <div className="flex flex-col">
