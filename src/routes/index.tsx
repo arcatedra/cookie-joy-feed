@@ -163,7 +163,7 @@ function Home() {
       </section>
 
       {/* Categories */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.categories")}</h2>
         </div>
