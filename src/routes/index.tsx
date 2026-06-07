@@ -37,9 +37,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k" },
-  { img: reel2, key: "reel2", likes: "8.1k" },
-  { img: reel3, key: "reel3", likes: "5.7k" },
+  { img: reel1, key: "reel1", likes: "12.4k", src: "https://assets.mixkit.co/videos/4717/4717-720.mp4" },
+  { img: reel2, key: "reel2", likes: "8.1k", src: "https://assets.mixkit.co/videos/43002/43002-720.mp4" },
+  { img: reel3, key: "reel3", likes: "5.7k", src: "https://assets.mixkit.co/videos/4738/4738-720.mp4" },
 ];
 
 const trending = [
