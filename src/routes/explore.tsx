@@ -60,6 +60,7 @@ function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
 
 function ExplorePage() {
   const { t, i18n } = useTranslation();
+  const cart = useCart();
   return (
     <main className="min-h-screen bg-background pb-24">
       {/* Header */}
