@@ -11,6 +11,7 @@ import {
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
+import { useCart } from "@/lib/cart";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
