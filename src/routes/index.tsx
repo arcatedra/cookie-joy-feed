@@ -119,7 +119,7 @@ function Home() {
       <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.reels")}</h2>
-          <button className="text-xs font-semibold text-cta">{t("common.seeAll")}</button>
+          <Link to="/explore" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
           {reels.map((r) => (
