@@ -180,6 +180,33 @@ function Home() {
         </div>
       </section>
 
+      {/* Cookie Packs */}
+      <section className="mt-7">
+        <div className="flex items-center justify-between px-5">
+          <h2 className="text-lg font-bold text-foreground">Cookie Packs</h2>
+          <Link to="/menu" className="text-xs font-semibold text-cta">See all</Link>
+        </div>
+        <div className="mt-3 grid grid-cols-1 gap-4 px-5 sm:grid-cols-3">
+          {packs.map((p) => (
+            <article key={p.id} className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
+              <div className="aspect-[4/3] overflow-hidden bg-cream">
+                <img src={p.img} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
+              </div>
+              <div className="p-4">
+                <div className="flex items-baseline justify-between">
+                  <h3 className="text-base font-bold text-foreground">{p.name}</h3>
+                  <span className="text-base font-bold text-primary">{p.price}</span>
+                </div>
+                <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{p.description}</p>
+                <button className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow">
+                  Add to Cart
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       {/* Subscription CTA */}
       <section className="mt-7 px-5">
         <div className="relative overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground shadow-lg">
