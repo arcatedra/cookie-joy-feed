@@ -168,6 +168,19 @@ function ProfilePage() {
         </div>
       </section>
 
+      <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
+        <SheetContent side="right" className="w-full sm:max-w-sm p-0">
+          <SheetHeader className="px-5 pt-6 pb-3">
+            <SheetTitle className="text-lg font-bold capitalize">
+              {sheet ? t(`profile.menu.${sheet}`) : ""}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="px-5 pb-8">
+            <p className="text-sm text-muted-foreground">{t("common.comingSoon")}</p>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       <BottomNav />
     </main>
   );
