@@ -1,0 +1,166 @@
+{
+  "common": {
+    "back": "Volver",
+    "search": "Buscar",
+    "addToCart": "Añadir al carrito",
+    "updateCart": "Actualizar carrito",
+    "viewCart": "Ver carrito",
+    "add": "Añadir",
+    "remove": "Quitar",
+    "selected": "Seleccionado",
+    "signUp": "Suscribirse",
+    "goHome": "Ir al inicio",
+    "tryAgain": "Reintentar",
+    "seeAll": "Ver todo",
+    "viewMore": "Ver más",
+    "comingSoon": "Próximamente",
+    "reviews": "reseñas"
+  },
+  "language": {
+    "switchTo": "Cambiar idioma",
+    "english": "Inglés",
+    "spanish": "Español"
+  },
+  "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "subscribe": "Suscripción",
+    "profile": "Perfil"
+  },
+  "errors": {
+    "pageNotFoundTitle": "Página no encontrada",
+    "pageNotFoundDesc": "La página que buscas no existe o ha sido movida.",
+    "didNotLoadTitle": "Esta página no cargó",
+    "didNotLoadDesc": "Algo salió mal por nuestra parte. Prueba a recargar o vuelve al inicio."
+  },
+  "home": {
+    "metaTitle": "Oys — Galletas gourmet, entregadas cada mes",
+    "metaDesc": "Descubre galletas gourmet artesanales y únete a la suscripción mensual de Oys para recibir delicias recién horneadas en tu puerta.",
+    "welcome": "Bienvenido de nuevo",
+    "greeting": "¡Buenos días, {{name}}!",
+    "freshToday": "Nuevas hornadas frescas hoy",
+    "searchPlaceholder": "Busca galletas, sabores, cajas…",
+    "reels": "Reels",
+    "trending": "Tendencias",
+    "categories": "Categorías destacadas",
+    "cookiePacks": "Packs de galletas",
+    "subscriptionEyebrow": "Caja mensual",
+    "subscriptionHeadline": "12 galletas frescas, entregadas en tu puerta.",
+    "subscriptionSubcopy": "Cancela cuando quieras · Envío gratis",
+    "startSubscription": "Iniciar suscripción"
+  },
+  "categories": {
+    "cookies": "Galletas",
+    "brownies": "Brownies",
+    "boxes": "Cajas surtidas",
+    "vegan": "Veganas",
+    "gifts": "Sets de regalo"
+  },
+  "reels": {
+    "reel1": "Delicia de doble chocolate",
+    "reel2": "¡Recién horneadas!",
+    "reel3": "Pura masa deliciosa"
+  },
+  "explore": {
+    "metaTitle": "Explorar galletas — Oys",
+    "metaDesc": "Explora toda nuestra gama de galletas gourmet artesanales en Oys.",
+    "title": "Explorar galletas",
+    "sort": "Ordenar",
+    "price": "Precio"
+  },
+  "menu": {
+    "metaTitle": "Menú — Oys",
+    "metaDesc": "Explora nuestras galletas clásicas.",
+    "title": "Insomnia Cookies",
+    "tabs": {
+      "classic": "Galletas clásicas",
+      "packs": "Packs",
+      "deluxe": "Galletas deluxe"
+    },
+    "allCategories": "Todas las categorías",
+    "cookies": "Galletas",
+    "serves": "Porciones",
+    "calPerCookie": "Cal / galleta",
+    "ingredients": "Ingredientes",
+    "allergens": "Alérgenos",
+    "prevPack": "Pack anterior",
+    "nextPack": "Pack siguiente",
+    "goToPack": "Ir al pack {{n}}",
+    "viewDetails": "Ver detalles de {{name}}",
+    "detailOf": "Detalle de {{name}}"
+  },
+  "cookies": {
+    "c1": { "name": "Trozos de chocolate", "desc": "Una galleta mantecosa de vainilla rebosante de trozos de chocolate semidulce.", "caption": "Vainilla mantecosa con trozos semidulces" },
+    "c2": { "name": "Snickerdoodle", "desc": "Apuesta por lo clásico con nuestra Snickerdoodle: una galleta tierna rebozada en canela y azúcar.", "caption": "Suave, con canela y azúcar" },
+    "c3": { "name": "Azúcar", "desc": "Sencillamente la mejor galleta de azúcar mantecosa que se deshace en la boca.", "caption": "Se deshace en la boca, dulce y mantecosa" },
+    "c4": { "name": "Doble trozo de chocolate", "desc": "Nuestra galleta de chocolate negro repleta de trozos de chocolate. Para los verdaderos amantes del chocolate.", "caption": "Cacao intenso con trozos de chocolate" },
+    "c5": { "name": "Avena con pasas", "desc": "Un capricho que abraza el alma. Avena cálida y pasas jugosas en cada bocado.", "caption": "Avena cálida y pasas jugosas" },
+    "c6": { "name": "Chocolate blanco y macadamia", "desc": "Este snack vive a ritmo isleño. Una galleta de coco y mantequilla con chocolate blanco y nueces de macadamia.", "caption": "Mantecosa con coco, vibe tropical" },
+    "c7": { "name": "Clásica con M&M'S®", "desc": "Un giro colorido sobre nuestra clásica chip de chocolate, con caramelos cubiertos de azúcar.", "caption": "Toque de caramelos de chocolate" },
+    "c8": { "name": "Chips de mantequilla de maní", "desc": "Chips de mantequilla de maní envueltos en una suave galleta de vainilla. Paraíso de frutos secos.", "caption": "Vainilla suave con chips de maní" },
+    "c9": { "name": "Trozos de chocolate vegana", "desc": "Una galleta vegana que reconforta el alma con muchos trozos de chocolate sin lácteos.", "caption": "Trozos de chocolate sin lácteos" },
+    "c10": { "name": "Doble chocolate y menta", "desc": "Nuestra versión de una combinación favorita. Una galleta de chocolate cálida con chips de menta fresca.", "caption": "Chocolate cálido con menta fresca" }
+  },
+  "packs": {
+    "p6": { "name": "Pack de 6", "desc": "Date un capricho con 6 delicias calientes en una sola caja.", "serves": "3 a 6 personas" },
+    "p9": { "name": "Pack de 9", "desc": "El punto dulce de la satisfacción. Elige 9 de tus galletas favoritas.", "serves": "5 a 9 personas" },
+    "p12": { "name": "Pack de 12", "desc": "Lo que REALMENTE quieren decir cuando piden traer suficiente para todos.", "serves": "6 a 12 personas" },
+    "ingredients": "Harina de trigo enriquecida, mantequilla, azúcar de caña, azúcar moreno, huevos, trozos de chocolate semidulce, extracto de vainilla, bicarbonato, sal marina.",
+    "allergens": "Contiene trigo, lácteos, huevos y soja. Puede contener trazas de frutos secos y cacahuetes."
+  },
+  "tags": {
+    "treeNuts": "FRUTOS SECOS",
+    "peanuts": "CACAHUETES"
+  },
+  "subscribe": {
+    "metaTitle": "Planes de suscripción — Oys",
+    "metaDesc": "Elige tu plan de suscripción de galletas Oys. Entregas solo lunes y viernes.",
+    "title": "Planes de suscripción",
+    "deliveryBadge": "Entregas solo lunes y viernes",
+    "activePlan": "Plan activo",
+    "remaining": "Restantes",
+    "scheduledCount": "{{used}} de {{total}} entregas programadas este mes",
+    "choosePlan": "Elige tu plan",
+    "mostPopular": "Más popular",
+    "perMonth": "/ mes",
+    "schedule": "Programar entregas",
+    "scheduleHint": "Solo se pueden seleccionar lunes y viernes.",
+    "prevMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "yourDeliveries": "Tus entregas",
+    "usedAll": "Ya usaste las {{count}} entregas de este plan. Sube de plan para añadir más.",
+    "footnote": "*Disponible solo los LUNES Y VIERNES",
+    "removeDate": "Quitar {{date}}",
+    "tiers": {
+      "starter": { "title": "Plan Inicial", "cadence": "2 ENTREGAS / MES", "desc": "Perfecto para lo esencial. Programa hasta 2 entregas al mes en lunes o viernes." },
+      "essential": { "title": "Plan Esencial", "cadence": "4 ENTREGAS / MES", "desc": "Nuestra opción más popular. Disfruta de hasta 4 entregas al mes con horarios flexibles: semanales, quincenales o como mejor te venga." },
+      "intermediate": { "title": "Plan Intermedio", "cadence": "6 ENTREGAS / MES", "desc": "Más flexibilidad para hogares activos. Hasta 6 entregas al mes los lunes o viernes." },
+      "premium": { "title": "Plan Premium", "cadence": "8 ENTREGAS / MES", "desc": "Cobertura mensual completa. Máxima comodidad con hasta 8 entregas al mes (dos veces por semana, lunes y viernes)." }
+    }
+  },
+  "profile": {
+    "metaTitle": "Mi perfil — Oys",
+    "metaDesc": "Gestiona tu cuenta, pedidos y suscripción de Oys.",
+    "title": "Mi perfil",
+    "settings": "Ajustes",
+    "city": "Nueva York",
+    "joined": "Se unió: julio de 2024",
+    "orders": "Pedidos",
+    "favorites": "Favoritos",
+    "level": "Nivel",
+    "cookieFan": "Fan de galletas",
+    "currentPlan": "Plan actual",
+    "enthusiast": "Plan Entusiasta",
+    "active": "Activo",
+    "recentOrders": "Pedidos recientes",
+    "order": "Pedido #{{id}}",
+    "orderItems": "Choc Chip Clásica · 1 artículo",
+    "account": "Cuenta",
+    "menu": {
+      "favorites": "Favoritos",
+      "payment": "Métodos de pago",
+      "general": "Ajustes generales",
+      "help": "Ayuda y soporte"
+    }
+  }
+}

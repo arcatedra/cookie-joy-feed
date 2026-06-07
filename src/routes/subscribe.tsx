@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
@@ -18,11 +21,8 @@ export const Route = createFileRoute("/subscribe")({
 });
 
 interface Tier {
-  id: string;
-  title: string;
-  cadence: string;
-  description: string;
-  price: string;
+  id: "starter" | "essential" | "intermediate" | "premium";
+  price: number;
   maxDeliveries: number;
   badgeColor: string;
   badgeTextColor: string;
@@ -33,11 +33,7 @@ interface Tier {
 const tiers: Tier[] = [
   {
     id: "starter",
-    title: "Starter Plan",
-    cadence: "2 DELIVERIES / MONTH",
-    description:
-      "Perfect for essentials. Schedule up to 2 deliveries per month on your choice of Mondays or Fridays.",
-    price: "$14.99",
+    price: 14.99,
     maxDeliveries: 2,
     badgeColor: "bg-[oklch(0.85_0.06_150)]",
     badgeTextColor: "text-[oklch(0.28_0.05_150)]",
@@ -45,11 +41,7 @@ const tiers: Tier[] = [
   },
   {
     id: "essential",
-    title: "Essential Plan",
-    cadence: "4 DELIVERIES / MONTH",
-    description:
-      "Our most popular choice. Enjoy up to 4 deliveries per month. Flexible scheduling: use them weekly, bi-weekly, or however fits your routine.",
-    price: "$29.99",
+    price: 29.99,
     maxDeliveries: 4,
     badgeColor: "bg-[oklch(0.85_0.08_280)]",
     badgeTextColor: "text-[oklch(0.28_0.06_280)]",
@@ -58,11 +50,7 @@ const tiers: Tier[] = [
   },
   {
     id: "intermediate",
-    title: "Intermediate Plan",
-    cadence: "6 DELIVERIES / MONTH",
-    description:
-      "Extra flexibility for active households. Get up to 6 deliveries per month scheduled on Mondays or Fridays.",
-    price: "$44.99",
+    price: 44.99,
     maxDeliveries: 6,
     badgeColor: "bg-[oklch(0.85_0.10_80)]",
     badgeTextColor: "text-[oklch(0.32_0.08_80)]",
@@ -70,11 +58,7 @@ const tiers: Tier[] = [
   },
   {
     id: "premium",
-    title: "Premium Plan",
-    cadence: "8 DELIVERIES / MONTH",
-    description:
-      "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays).",
-    price: "$59.99",
+    price: 59.99,
     maxDeliveries: 8,
     badgeColor: "bg-[oklch(0.82_0.12_50)]",
     badgeTextColor: "text-[oklch(0.28_0.06_50)]",
@@ -82,14 +66,9 @@ const tiers: Tier[] = [
   },
 ];
 
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
-
 function getMonthGrid(year: number, month: number) {
   const first = new Date(year, month, 1);
-  const startDay = first.getDay(); // 0 Sun..6 Sat
+  const startDay = first.getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const cells: Array<{ date: Date | null }> = [];
   for (let i = 0; i < startDay; i++) cells.push({ date: null });
@@ -108,8 +87,9 @@ function fmtKey(d: Date) {
 }
 
 function SubscribePage() {
+  const { t, i18n } = useTranslation();
   const today = useMemo(() => new Date(), []);
-  const [selectedTierId, setSelectedTierId] = useState<string>("essential");
+  const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
@@ -117,6 +97,22 @@ function SubscribePage() {
   const selectedTier = tiers.find((t) => t.id === selectedTierId)!;
   const remaining = selectedTier.maxDeliveries - selectedDates.length;
   const grid = useMemo(() => getMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
+
+  const monthLabel = new Intl.DateTimeFormat(getLocale(i18n.language), {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(viewYear, viewMonth, 1));
+
+  const weekdayHeaders = useMemo(() => {
+    const fmt = new Intl.DateTimeFormat(getLocale(i18n.language), { weekday: "narrow" });
+    // Sunday = base date 2024-06-02 (Sun)
+    const base = new Date(2024, 5, 2);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      return fmt.format(d);
+    });
+  }, [i18n.language]);
 
   function toggleDate(d: Date) {
     if (!isMondayOrFriday(d)) return;
@@ -137,7 +133,7 @@ function SubscribePage() {
     setViewYear(y);
   }
 
-  function selectTier(id: string) {
+  function selectTier(id: Tier["id"]) {
     setSelectedTierId(id);
     const max = tiers.find((t) => t.id === id)!.maxDeliveries;
     setSelectedDates((prev) => prev.slice(0, max));
@@ -145,44 +141,42 @@ function SubscribePage() {
 
   return (
     <main className="min-h-screen bg-background pb-28">
-      {/* Header */}
       <header className="relative bg-primary px-5 pb-7 pt-12 text-primary-foreground">
         <div className="flex items-center justify-between">
           <Link
             to="/"
             className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-foreground/10"
-            aria-label="Go back"
+            aria-label={t("common.back")}
           >
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <h1 className="absolute left-1/2 -translate-x-1/2 text-sm font-bold uppercase tracking-[0.15em]">
-            Subscription Plans
+            {t("subscribe.title")}
           </h1>
-          <div className="h-10 w-10" />
+          <LanguageSwitcher />
         </div>
         <div className="mt-5 flex justify-center">
           <span className="rounded-full bg-cta px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-cta-foreground">
-            Monday & Friday Delivery Only
+            {t("subscribe.deliveryBadge")}
           </span>
         </div>
       </header>
 
-      {/* Active plan summary / counter */}
       <section className="-mt-5 px-5">
         <div className="rounded-2xl bg-card p-4 shadow-lg ring-1 ring-border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Active Plan
+                {t("subscribe.activePlan")}
               </p>
-              <p className="mt-0.5 text-base font-bold text-foreground">{selectedTier.title}</p>
+              <p className="mt-0.5 text-base font-bold text-foreground">{t(`subscribe.tiers.${selectedTier.id}.title`)}</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Remaining
+                {t("subscribe.remaining")}
               </p>
               <p className="mt-0.5 text-base font-extrabold text-primary">
-                {remaining} / {selectedTier.maxDeliveries}
+                {formatNumber(remaining, i18n.language)} / {formatNumber(selectedTier.maxDeliveries, i18n.language)}
               </p>
             </div>
           </div>
@@ -195,15 +189,14 @@ function SubscribePage() {
             />
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            {selectedDates.length} of {selectedTier.maxDeliveries} deliveries scheduled this month
+            {t("subscribe.scheduledCount", { used: selectedDates.length, total: selectedTier.maxDeliveries })}
           </p>
         </div>
       </section>
 
-      {/* Tier cards */}
       <section className="px-5 pt-6">
         <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground">
-          Choose Your Plan
+          {t("subscribe.choosePlan")}
         </h2>
         <div className="flex flex-col gap-4">
           {tiers.map((tier) => {
@@ -212,34 +205,32 @@ function SubscribePage() {
               <article
                 key={tier.id}
                 className={`relative overflow-hidden rounded-2xl bg-card p-5 shadow-md transition-all duration-300 ${
-                  isSelected
-                    ? "ring-2 ring-primary"
-                    : "ring-1 ring-border"
+                  isSelected ? "ring-2 ring-primary" : "ring-1 ring-border"
                 }`}
               >
                 {tier.popular && (
                   <div className="absolute right-0 top-0 flex items-center gap-1 rounded-bl-2xl bg-cta px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-cta-foreground shadow-md">
-                    <Sparkles className="h-3 w-3" /> Most Popular
+                    <Sparkles className="h-3 w-3" /> {t("subscribe.mostPopular")}
                   </div>
                 )}
 
                 <span
                   className={`inline-block rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${tier.badgeColor} ${tier.badgeTextColor}`}
                 >
-                  {tier.cadence}
+                  {t(`subscribe.tiers.${tier.id}.cadence`)}
                 </span>
 
-                <h3 className="mt-3 text-xl font-bold text-foreground">{tier.title}</h3>
+                <h3 className="mt-3 text-xl font-bold text-foreground">{t(`subscribe.tiers.${tier.id}.title`)}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                  {tier.description}
+                  {t(`subscribe.tiers.${tier.id}.desc`)}
                 </p>
 
                 <div className="my-4 h-px bg-border" />
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-2xl font-extrabold text-primary">{tier.price}</span>
-                    <span className="text-sm font-medium text-muted-foreground"> / mo.</span>
+                    <span className="text-2xl font-extrabold text-primary">{formatPrice(tier.price, i18n.language)}</span>
+                    <span className="text-sm font-medium text-muted-foreground"> {t("subscribe.perMonth")}</span>
                   </div>
                   <button
                     type="button"
@@ -252,10 +243,10 @@ function SubscribePage() {
                   >
                     {isSelected ? (
                       <>
-                        <Check className="h-3.5 w-3.5" /> Selected
+                        <Check className="h-3.5 w-3.5" /> {t("common.selected")}
                       </>
                     ) : (
-                      "Sign Up"
+                      t("common.signUp")
                     )}
                   </button>
                 </div>
@@ -267,50 +258,46 @@ function SubscribePage() {
         </div>
       </section>
 
-      {/* Scheduler */}
       <section className="px-5 pt-8">
         <div className="rounded-2xl bg-card p-5 shadow-md ring-1 ring-border">
           <div className="flex items-center gap-2">
             <CalendarIcon className="h-4 w-4 text-primary" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
-              Schedule Deliveries
+              {t("subscribe.schedule")}
             </h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Only Mondays and Fridays are selectable.
+            {t("subscribe.scheduleHint")}
           </p>
 
-          {/* Month nav */}
           <div className="mt-4 flex items-center justify-between">
             <button
               type="button"
               onClick={() => changeMonth(-1)}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground"
-              aria-label="Previous month"
+              aria-label={t("subscribe.prevMonth")}
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <p className="text-sm font-bold text-foreground">
-              {MONTH_NAMES[viewMonth]} {viewYear}
+            <p className="text-sm font-bold text-foreground capitalize">
+              {monthLabel}
             </p>
             <button
               type="button"
               onClick={() => changeMonth(1)}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground"
-              aria-label="Next month"
+              aria-label={t("subscribe.nextMonth")}
             >
               <ChevronLeft className="h-4 w-4 rotate-180" />
             </button>
           </div>
 
-          {/* Day headers */}
           <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-            {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+            {weekdayHeaders.map((d, i) => (
               <div key={i} className="py-1">{d}</div>
             ))}
           </div>
 
-          {/* Grid */}
           <div className="mt-1 grid grid-cols-7 gap-1">
             {grid.map((cell, i) => {
               if (!cell.date) return <div key={i} className="aspect-square" />;
@@ -335,17 +322,16 @@ function SubscribePage() {
                       : "bg-muted text-foreground hover:bg-cta hover:text-cta-foreground"
                   } ${isToday && !isSel ? "ring-1 ring-primary" : ""}`}
                 >
-                  {d.getDate()}
+                  {formatNumber(d.getDate(), i18n.language)}
                 </button>
               );
             })}
           </div>
 
-          {/* Selected list */}
           {selectedDates.length > 0 && (
             <div className="mt-5">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Your Deliveries
+                {t("subscribe.yourDeliveries")}
               </p>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {selectedDates
@@ -354,11 +340,11 @@ function SubscribePage() {
                   .map((k) => {
                     const [y, m, d] = k.split("-").map(Number);
                     const date = new Date(y, m, d);
-                    const label = date.toLocaleDateString(undefined, {
+                    const label = formatDate(date, {
                       weekday: "short",
                       month: "short",
                       day: "numeric",
-                    });
+                    }, i18n.language);
                     return (
                       <li
                         key={k}
@@ -371,7 +357,7 @@ function SubscribePage() {
                             setSelectedDates((prev) => prev.filter((x) => x !== k))
                           }
                           className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/20 hover:bg-primary/30"
-                          aria-label={`Remove ${label}`}
+                          aria-label={t("subscribe.removeDate", { date: label })}
                         >
                           <X className="h-2.5 w-2.5" />
                         </button>
@@ -384,7 +370,7 @@ function SubscribePage() {
 
           {remaining === 0 && (
             <p className="mt-4 rounded-lg bg-cta/15 px-3 py-2 text-xs font-semibold text-foreground">
-              You've used all {selectedTier.maxDeliveries} deliveries on this plan. Upgrade to add more.
+              {t("subscribe.usedAll", { count: selectedTier.maxDeliveries })}
             </p>
           )}
         </div>
@@ -392,7 +378,7 @@ function SubscribePage() {
 
       <footer className="mt-6 px-5 pb-4 text-center">
         <p className="text-xs font-medium italic text-muted-foreground">
-          *Available Only on MONDAYS & FRIDAYS
+          {t("subscribe.footnote")}
         </p>
       </footer>
 
