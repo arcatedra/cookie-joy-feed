@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
+import { useCart } from "@/lib/cart";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
