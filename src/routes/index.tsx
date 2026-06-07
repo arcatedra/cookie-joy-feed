@@ -64,28 +64,28 @@ function Home() {
   return (
     <main className="min-h-screen bg-background pb-24">
       {/* Header banner */}
-      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-5 pb-4 shadow-lg">
+      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-3 pb-2 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-primary-foreground/60">{t("home.welcome")}</p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">{t("home.greeting", { name: "Alex" })}</h1>
-            <p className="mt-1 text-sm text-primary-foreground/70">{t("home.freshToday")}</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-primary-foreground/60">{t("home.welcome")}</p>
+            <h1 className="text-lg font-bold tracking-tight">{t("home.greeting", { name: "Alex" })}</h1>
+            <p className="text-xs text-primary-foreground/70">{t("home.freshToday")}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <button className="relative grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-cta" />
+            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
+              <Bell className="h-4 w-4" />
+              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cta" />
             </button>
-            <div className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
+            <div className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
               <img src={avatar} alt="Alex" className="h-full w-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
 
         {/* Search */}
-        <div className="mt-3">
-          <div className="flex items-center gap-3 rounded-full bg-background px-5 py-3.5 shadow-md">
+        <div className="mt-2">
+          <div className="flex items-center gap-3 rounded-full bg-background px-4 py-2 shadow-md">
             <Search className="h-5 w-5 text-muted-foreground" />
             <input
               type="text"
