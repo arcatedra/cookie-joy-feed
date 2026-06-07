@@ -199,7 +199,11 @@ function Home() {
                   <span className="text-base font-bold text-primary">{formatPrice(packPrices[id], i18n.language)}</span>
                 </div>
                 <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{t(`packs.${id}.desc`)}</p>
-                <button className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow">
+                <button
+                  type="button"
+                  onClick={() => cart.add({ id: `pack-${id}`, name: t(`packs.${id}.name`), price: packPrices[id], image: packImages[id] })}
+                  className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow active:scale-[0.98] transition"
+                >
                   {t("common.addToCart")}
                 </button>
               </div>
