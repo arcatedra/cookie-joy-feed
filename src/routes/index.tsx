@@ -84,7 +84,7 @@ function Home() {
         </div>
 
         {/* Search */}
-        <div className="mt-6">
+        <div className="mt-3">
           <div className="flex items-center gap-3 rounded-full bg-background px-5 py-3.5 shadow-md">
             <Search className="h-5 w-5 text-muted-foreground" />
             <input
