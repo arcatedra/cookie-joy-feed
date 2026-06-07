@@ -1,0 +1,166 @@
+{
+  "common": {
+    "back": "Back",
+    "search": "Search",
+    "addToCart": "Add to Cart",
+    "updateCart": "Update Cart",
+    "viewCart": "View cart",
+    "add": "Add",
+    "remove": "Remove",
+    "selected": "Selected",
+    "signUp": "Sign Up",
+    "goHome": "Go home",
+    "tryAgain": "Try again",
+    "seeAll": "See all",
+    "viewMore": "View more",
+    "comingSoon": "Coming soon",
+    "reviews": "reviews"
+  },
+  "language": {
+    "switchTo": "Switch language",
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "subscribe": "Subscribe",
+    "profile": "Profile"
+  },
+  "errors": {
+    "pageNotFoundTitle": "Page not found",
+    "pageNotFoundDesc": "The page you're looking for doesn't exist or has been moved.",
+    "didNotLoadTitle": "This page didn't load",
+    "didNotLoadDesc": "Something went wrong on our end. You can try refreshing or head back home."
+  },
+  "home": {
+    "metaTitle": "Oys — Gourmet Cookies, Delivered Monthly",
+    "metaDesc": "Discover artisanal gourmet cookies and join the Oys monthly subscription for freshly baked treats at your door.",
+    "welcome": "Welcome back",
+    "greeting": "Good Morning, {{name}}!",
+    "freshToday": "Fresh batches dropped today",
+    "searchPlaceholder": "Search cookies, flavors, boxes…",
+    "reels": "Reels",
+    "trending": "Trending Now",
+    "categories": "Featured Categories",
+    "cookiePacks": "Cookie Packs",
+    "subscriptionEyebrow": "Monthly box",
+    "subscriptionHeadline": "12 fresh cookies, delivered to your door.",
+    "subscriptionSubcopy": "Cancel anytime · Free shipping",
+    "startSubscription": "Start subscription"
+  },
+  "categories": {
+    "cookies": "Cookies",
+    "brownies": "Brownies",
+    "boxes": "Assorted Boxes",
+    "vegan": "Vegan",
+    "gifts": "Gift Sets"
+  },
+  "reels": {
+    "reel1": "Double Choc Delight",
+    "reel2": "Freshly Baked!",
+    "reel3": "Doughy Goodness"
+  },
+  "explore": {
+    "metaTitle": "Browse Cookies — Oys",
+    "metaDesc": "Explore our full range of artisanal gourmet cookies at Oys.",
+    "title": "Browse Cookies",
+    "sort": "Sort",
+    "price": "Price"
+  },
+  "menu": {
+    "metaTitle": "Menu — Oys",
+    "metaDesc": "Browse our classic cookies.",
+    "title": "Insomnia Cookies",
+    "tabs": {
+      "classic": "Classic Cookies",
+      "packs": "Packs",
+      "deluxe": "Deluxe Cookies"
+    },
+    "allCategories": "All categories",
+    "cookies": "Cookies",
+    "serves": "Serves",
+    "calPerCookie": "Cal / cookie",
+    "ingredients": "Ingredients",
+    "allergens": "Allergens",
+    "prevPack": "Previous pack",
+    "nextPack": "Next pack",
+    "goToPack": "Go to pack {{n}}",
+    "viewDetails": "View {{name}} details",
+    "detailOf": "Detail of {{name}}"
+  },
+  "cookies": {
+    "c1": { "name": "Chocolate Chunk", "desc": "A rich, buttery vanilla cookie amped up with semi-sweet chocolate chunks.", "caption": "Buttery vanilla with semi-sweet chunks" },
+    "c2": { "name": "Snickerdoodle", "desc": "Stick to a classic with our Snickerdoodle. A warm, soft cookie rolled in cinnamon sugar.", "caption": "Soft, warm cinnamon sugar" },
+    "c3": { "name": "Sugar", "desc": "Simply the best melt-in-your-mouth, buttery sugar cookie you've ever tasted.", "caption": "Melt-in-your-mouth buttery sweet" },
+    "c4": { "name": "Double Chocolate Chunk", "desc": "Our dark chocolate cookie packed with rich chocolate chunks. For true chocolate lovers.", "caption": "Dark cocoa packed with chunks" },
+    "c5": { "name": "Oatmeal Raisin", "desc": "A treat that's like a hug for the soul. Warm oats and plump raisins in every bite.", "caption": "Warm oats and plump raisins" },
+    "c6": { "name": "White Chocolate Macadamia", "desc": "This snack operates on island time. A coconut-buttery cookie with white chocolate and macadamia nuts.", "caption": "Coconut-buttery, tropical vibes" },
+    "c7": { "name": "Classic with M&M'S®", "desc": "This colorful candy-coated twist on our classic chocolate chip is a sweet surprise.", "caption": "Candy-coated chocolate twist" },
+    "c8": { "name": "Peanut Butter Chip", "desc": "Peanut butter chips folded into a soft, sweet vanilla cookie. Nutty heaven.", "caption": "Soft vanilla, peanut butter chips" },
+    "c9": { "name": "Vegan Chocolate Chunk", "desc": "A vegan cookie that warms your soul with loads of dairy-free chocolate chunks.", "caption": "Dairy-free chocolate chunks" },
+    "c10": { "name": "Double Chocolate Mint", "desc": "Our take on a favorite flavor combo. A warm chocolate cookie with cool mint chips.", "caption": "Warm chocolate with cool mint" }
+  },
+  "packs": {
+    "p6": { "name": "6-Pack", "desc": "Treat yourself to 6 warm, delicious treats in one box.", "serves": "3–6 people" },
+    "p9": { "name": "9-Pack", "desc": "The sweet spot of satisfaction. Select 9 of your favorite cookies.", "serves": "5–9 people" },
+    "p12": { "name": "12-Pack", "desc": "What they REALLY mean when they say to bring enough for everyone.", "serves": "6–12 people" },
+    "ingredients": "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    "allergens": "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts."
+  },
+  "tags": {
+    "treeNuts": "TREE NUTS",
+    "peanuts": "PEANUTS"
+  },
+  "subscribe": {
+    "metaTitle": "Subscription Plans — Oys",
+    "metaDesc": "Choose your Oys cookie subscription plan. Delivered Mondays and Fridays only.",
+    "title": "Subscription Plans",
+    "deliveryBadge": "Monday & Friday Delivery Only",
+    "activePlan": "Active Plan",
+    "remaining": "Remaining",
+    "scheduledCount": "{{used}} of {{total}} deliveries scheduled this month",
+    "choosePlan": "Choose Your Plan",
+    "mostPopular": "Most Popular",
+    "perMonth": "/ mo.",
+    "schedule": "Schedule Deliveries",
+    "scheduleHint": "Only Mondays and Fridays are selectable.",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "yourDeliveries": "Your Deliveries",
+    "usedAll": "You've used all {{count}} deliveries on this plan. Upgrade to add more.",
+    "footnote": "*Available Only on MONDAYS & FRIDAYS",
+    "removeDate": "Remove {{date}}",
+    "tiers": {
+      "starter": { "title": "Starter Plan", "cadence": "2 DELIVERIES / MONTH", "desc": "Perfect for essentials. Schedule up to 2 deliveries per month on your choice of Mondays or Fridays." },
+      "essential": { "title": "Essential Plan", "cadence": "4 DELIVERIES / MONTH", "desc": "Our most popular choice. Enjoy up to 4 deliveries per month. Flexible scheduling: use them weekly, bi-weekly, or however fits your routine." },
+      "intermediate": { "title": "Intermediate Plan", "cadence": "6 DELIVERIES / MONTH", "desc": "Extra flexibility for active households. Get up to 6 deliveries per month scheduled on Mondays or Fridays." },
+      "premium": { "title": "Premium Plan", "cadence": "8 DELIVERIES / MONTH", "desc": "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays)." }
+    }
+  },
+  "profile": {
+    "metaTitle": "My Profile — Oys",
+    "metaDesc": "Manage your Oys account, orders, and subscription.",
+    "title": "My Profile",
+    "settings": "Settings",
+    "city": "New York",
+    "joined": "Joined: July 2024",
+    "orders": "Orders",
+    "favorites": "Favorites",
+    "level": "Level",
+    "cookieFan": "Cookie Fan",
+    "currentPlan": "Current Plan",
+    "enthusiast": "Enthusiast Plan",
+    "active": "Active",
+    "recentOrders": "Recent Orders",
+    "order": "Order #{{id}}",
+    "orderItems": "Classic Choc Chip · 1 item",
+    "account": "Account",
+    "menu": {
+      "favorites": "Favorites",
+      "payment": "Payment Methods",
+      "general": "General Settings",
+      "help": "Help & Support"
+    }
+  }
+}
