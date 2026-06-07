@@ -64,7 +64,7 @@ function Home() {
   return (
     <main className="min-h-screen bg-background pb-24">
       {/* Header banner */}
-      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-12 pb-8 shadow-lg">
+      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-5 pb-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-primary-foreground/60">{t("home.welcome")}</p>
