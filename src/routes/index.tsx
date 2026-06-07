@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, Bell } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ReelPlayer } from "@/components/ReelPlayer";
+import { NotificationsSheet } from "@/components/NotificationsSheet";
 import { formatPrice } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import imgPack6 from "@/assets/pack-6.jpg";
