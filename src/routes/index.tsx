@@ -178,6 +178,8 @@ function Home() {
           {categoryKeys.map((c, i) => (
             <button
               key={c}
+              type="button"
+              onClick={() => navigate("/menu")}
               className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
                 i === 0
                   ? "bg-primary text-primary-foreground shadow"
