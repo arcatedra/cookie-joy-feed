@@ -251,6 +251,7 @@ function Home() {
         </div>
       )}
 
+      <NotificationsSheet open={notifOpen} onOpenChange={setNotifOpen} />
       <BottomNav />
     </main>
   );
