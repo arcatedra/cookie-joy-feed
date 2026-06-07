@@ -1,21 +1,24 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home as HomeIcon, Search, Package, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const tabs = [
-  { to: "/", label: "Home", Icon: HomeIcon },
-  { to: "/explore", label: "Explore", Icon: Search },
-  { to: "/subscribe", label: "Subscribe", Icon: Package },
-  { to: "/profile", label: "Profile", Icon: User },
-];
+  { to: "/", key: "home", Icon: HomeIcon },
+  { to: "/explore", key: "explore", Icon: Search },
+  { to: "/subscribe", key: "subscribe", Icon: Package },
+  { to: "/profile", key: "profile", Icon: User },
+] as const;
 
 export function BottomNav() {
   const location = useLocation();
   const pathname = location.pathname;
+  const { t } = useTranslation();
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
       <div className="m-3 flex items-center justify-between rounded-[32px] bg-primary px-2 py-2 shadow-2xl shadow-primary/20">
-        {tabs.map(({ to, label, Icon }) => {
+        {tabs.map(({ to, key, Icon }) => {
+          const label = t(`nav.${key}`);
           const active = pathname === to;
           if (active) {
             return (
