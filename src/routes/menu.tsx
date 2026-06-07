@@ -63,12 +63,38 @@ interface PackItem {
   price: number;
   description: string;
   image: string;
+  serves: string;
+  cookieCount: number;
+  caloriesPerCookie: number;
+  ingredients: string;
+  allergens: string;
 }
 
 const packs: PackItem[] = [
-  { id: "p6", name: "6-Pack", price: 20.00, description: "Treat yourself to 6 warm, delicious treats in one box.", image: imgPack6 },
-  { id: "p9", name: "9-Pack", price: 28.00, description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.", image: imgPack9 },
-  { id: "p12", name: "12-Pack", price: 36.00, description: "What they REALLY mean when they say to bring enough for everyone.", image: imgPack12 },
+  {
+    id: "p6", name: "6-Pack", price: 20.00,
+    description: "Treat yourself to 6 warm, delicious treats in one box.",
+    image: imgPack6,
+    serves: "3–6 people", cookieCount: 6, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
+  {
+    id: "p9", name: "9-Pack", price: 28.00,
+    description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.",
+    image: imgPack9,
+    serves: "5–9 people", cookieCount: 9, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
+  {
+    id: "p12", name: "12-Pack", price: 36.00,
+    description: "What they REALLY mean when they say to bring enough for everyone.",
+    image: imgPack12,
+    serves: "6–12 people", cookieCount: 12, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
 ];
 
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
