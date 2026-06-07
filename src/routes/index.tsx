@@ -225,6 +225,18 @@ function Home() {
         </div>
       </section>
 
+      {cart.count > 0 && (
+        <div className="fixed inset-x-0 bottom-20 z-40 flex justify-center px-4">
+          <Link
+            to="/cart"
+            className="flex items-center gap-3 rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-2xl active:scale-95 transition"
+          >
+            <span className="text-sm font-bold">{t("common.viewCart")} • {cart.count}</span>
+            <span className="text-sm font-bold opacity-80">{formatPrice(cart.total, i18n.language)}</span>
+          </Link>
+        </div>
+      )}
+
       <BottomNav />
     </main>
   );
