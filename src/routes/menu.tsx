@@ -350,7 +350,7 @@ function MenuPage() {
 
       {cartCount > 0 && (
         <div className="fixed inset-x-0 bottom-20 z-40 flex justify-center px-4">
-          <button className="flex items-center gap-3 rounded-full bg-black px-6 py-3.5 text-white shadow-2xl">
+          <Link to="/cart" className="flex items-center gap-3 rounded-full bg-black px-6 py-3.5 text-white shadow-2xl active:scale-95 transition">
             <ShoppingCart className="h-5 w-5" strokeWidth={2.5} />
             <span className="text-[15px] font-bold">
               {t("common.viewCart")} • {formatNumber(cartCount, i18n.language)}
@@ -358,7 +358,7 @@ function MenuPage() {
             <span className="text-[15px] font-bold text-white/80">
               {formatPrice(cartTotal, i18n.language)}
             </span>
-          </button>
+          </Link>
         </div>
       )}
 
