@@ -65,6 +65,8 @@ const packPrices: Record<(typeof packIds)[number], number> = { p6: 20, p9: 28, p
 function Home() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
+  const navigate = useNavigate();
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const trendingProducts = trending.map((tItem, idx) => ({
     item: tItem,
