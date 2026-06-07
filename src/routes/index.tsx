@@ -179,7 +179,7 @@ function Home() {
             <button
               key={c}
               type="button"
-              onClick={() => navigate("/menu")}
+              onClick={() => navigate({ to: "/menu" })}
               className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
                 i === 0
                   ? "bg-primary text-primary-foreground shadow"
