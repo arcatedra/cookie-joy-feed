@@ -63,12 +63,38 @@ interface PackItem {
   price: number;
   description: string;
   image: string;
+  serves: string;
+  cookieCount: number;
+  caloriesPerCookie: number;
+  ingredients: string;
+  allergens: string;
 }
 
 const packs: PackItem[] = [
-  { id: "p6", name: "6-Pack", price: 20.00, description: "Treat yourself to 6 warm, delicious treats in one box.", image: imgPack6 },
-  { id: "p9", name: "9-Pack", price: 28.00, description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.", image: imgPack9 },
-  { id: "p12", name: "12-Pack", price: 36.00, description: "What they REALLY mean when they say to bring enough for everyone.", image: imgPack12 },
+  {
+    id: "p6", name: "6-Pack", price: 20.00,
+    description: "Treat yourself to 6 warm, delicious treats in one box.",
+    image: imgPack6,
+    serves: "3–6 people", cookieCount: 6, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
+  {
+    id: "p9", name: "9-Pack", price: 28.00,
+    description: "The sweet spot of satisfaction. Select 9 of your favorite cookies.",
+    image: imgPack9,
+    serves: "5–9 people", cookieCount: 9, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
+  {
+    id: "p12", name: "12-Pack", price: 36.00,
+    description: "What they REALLY mean when they say to bring enough for everyone.",
+    image: imgPack12,
+    serves: "6–12 people", cookieCount: 12, caloriesPerCookie: 220,
+    ingredients: "Enriched wheat flour, butter, cane sugar, brown sugar, eggs, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
+    allergens: "Contains wheat, dairy, eggs, soy. May contain traces of tree nuts and peanuts.",
+  },
 ];
 
 const tabs = ["Classic Cookies", "Packs", "Deluxe Cookies"] as const;
@@ -106,6 +132,7 @@ function MenuPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Classic Cookies");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
+  const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
 
   const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
@@ -256,7 +283,12 @@ function MenuPage() {
                   key={item.id}
                   className="mr-4 w-[82vw] max-w-[340px] flex-shrink-0 snap-center rounded-2xl bg-[#f6f6f6] p-3 last:mr-4"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPack(item)}
+                    aria-label={`View ${item.name} details`}
+                    className="relative block aspect-[4/3] w-full overflow-hidden rounded-xl cursor-pointer text-left"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
@@ -265,11 +297,17 @@ function MenuPage() {
                       width={1024}
                       height={1024}
                     />
-                  </div>
+                  </button>
                   <div className="mt-3 flex flex-col">
-                    <h3 className="text-[18px] font-bold leading-tight text-black">{item.name}</h3>
-                    <p className="mt-1 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
-                    <p className="mt-1.5 text-[14px] leading-snug text-gray-500">{item.description}</p>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPack(item)}
+                      className="text-left"
+                    >
+                      <h3 className="text-[18px] font-bold leading-tight text-black">{item.name}</h3>
+                      <p className="mt-1 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
+                      <p className="mt-1.5 text-[14px] leading-snug text-gray-500">{item.description}</p>
+                    </button>
 
                     {qty === 0 ? (
                       <button
@@ -418,6 +456,85 @@ function MenuPage() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Pack Detail Modal */}
+      <Dialog open={!!selectedPack} onOpenChange={(open) => !open && setSelectedPack(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-0 p-0 sm:max-w-md">
+          <DialogTitle className="sr-only">{selectedPack?.name}</DialogTitle>
+          <DialogDescription className="sr-only">Detalle de {selectedPack?.name}</DialogDescription>
+          {selectedPack && (() => {
+            const pack = selectedPack;
+            const qty = cart[pack.id] ?? 0;
+            return (
+              <div className="flex flex-col">
+                <div className="relative aspect-[4/3] bg-[#f6f6f6]">
+                  <img
+                    src={pack.image}
+                    alt={pack.name}
+                    className="h-full w-full object-cover"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
+                <div className="px-5 pb-6 pt-4">
+                  <h2 className="text-[22px] font-bold leading-tight text-black">{pack.name}</h2>
+                  <p className="mt-1.5 text-[16px] font-bold text-black">${pack.price.toFixed(2)}</p>
+                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{pack.description}</p>
+
+                  <div className="mt-5 grid grid-cols-3 gap-2 rounded-2xl bg-gray-50 p-3 text-center">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Cookies</p>
+                      <p className="mt-1 text-[16px] font-bold text-black">{pack.cookieCount}</p>
+                    </div>
+                    <div className="border-x border-gray-200">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Serves</p>
+                      <p className="mt-1 text-[14px] font-bold text-black">{pack.serves}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Cal / cookie</p>
+                      <p className="mt-1 text-[16px] font-bold text-black">{pack.caloriesPerCookie}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Ingredients</h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-gray-700">{pack.ingredients}</p>
+                  </div>
+                  <div className="mt-4">
+                    <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Allergens</h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-gray-700">{pack.allergens}</p>
+                  </div>
+
+                  <div className="mt-6 flex items-center gap-4">
+                    <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1.5">
+                      <button
+                        onClick={() => sub(pack.id)}
+                        disabled={qty === 0}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm disabled:opacity-40"
+                      >
+                        <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                      <span className="min-w-[28px] text-center text-base font-bold text-black">{qty}</span>
+                      <button
+                        onClick={() => add(pack.id)}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm"
+                      >
+                        <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => add(pack.id)}
+                      className="flex-1 rounded-full bg-black py-3.5 text-center text-[16px] font-bold text-white shadow-lg"
+                    >
+                      {qty === 0 ? "Add to Cart" : `Update Cart • $${(qty * pack.price).toFixed(2)}`}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </DialogContent>
       </Dialog>
     </main>
