@@ -42,6 +42,7 @@ const menuItems = [
 
 function ProfilePage() {
   const { t, i18n } = useTranslation();
+  const [sheet, setSheet] = useState<string | null>(null);
   const orderDate = formatDate(new Date(2023, 8, 26), { year: "numeric", month: "short", day: "numeric" }, i18n.language);
 
   return (
