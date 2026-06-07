@@ -98,7 +98,7 @@ function Home() {
       </header>
 
       {/* Reels */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.reels")}</h2>
           <button className="text-xs font-semibold text-cta">{t("common.seeAll")}</button>
