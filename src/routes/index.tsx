@@ -133,7 +133,7 @@ function Home() {
       </section>
 
       {/* Trending */}
-      <section className="mt-6">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.trending")}</h2>
           <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
