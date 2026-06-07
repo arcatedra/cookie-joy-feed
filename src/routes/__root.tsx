@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import "@/i18n";
+import { CartProvider } from "@/lib/cart";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -122,8 +123,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CartProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </CartProvider>
     </QueryClientProvider>
   );
 }

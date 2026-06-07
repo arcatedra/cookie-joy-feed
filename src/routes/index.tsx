@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, Heart, MessageCircle, Play, Bell } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ReelPlayer } from "@/components/ReelPlayer";
 import { formatPrice } from "@/i18n";
+import { useCart } from "@/lib/cart";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
@@ -35,9 +37,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k" },
-  { img: reel2, key: "reel2", likes: "8.1k" },
-  { img: reel3, key: "reel3", likes: "5.7k" },
+  { img: reel1, key: "reel1", likes: "12.4k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+  { img: reel2, key: "reel2", likes: "8.1k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+  { img: reel3, key: "reel3", likes: "5.7k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" },
 ];
 
 const trending = [
@@ -60,6 +62,13 @@ const packPrices: Record<(typeof packIds)[number], number> = { p6: 20, p9: 28, p
 
 function Home() {
   const { t, i18n } = useTranslation();
+  const cart = useCart();
+
+  const trendingProducts = trending.map((tItem, idx) => ({
+    item: tItem,
+    productId: `home-${tItem.key}-${idx}`,
+    name: t(`cookies.${tItem.key}.name`),
+  }));
 
   return (
     <main className="min-h-screen bg-background pb-24">
@@ -105,29 +114,13 @@ function Home() {
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
           {reels.map((r) => (
-            <article
+            <ReelPlayer
               key={r.key}
-              className="relative h-56 w-36 shrink-0 overflow-hidden rounded-2xl shadow-md"
-            >
-              <img src={r.img} alt={t(`reels.${r.key}`)} className="h-full w-full object-cover" loading="lazy" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
-              <button className="absolute top-1/2 left-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-lg backdrop-blur" aria-label={t(`reels.${r.key}`)}>
-                <Play className="h-5 w-5 fill-primary text-primary" />
-              </button>
-              <div className="absolute top-2 right-2 flex flex-col gap-2">
-                <div className="flex flex-col items-center gap-0.5 rounded-full bg-black/30 px-1.5 py-1 backdrop-blur">
-                  <Heart className="h-3.5 w-3.5 text-white" />
-                  <span className="text-[9px] font-semibold text-white">{r.likes}</span>
-                </div>
-                <div className="flex flex-col items-center gap-0.5 rounded-full bg-black/30 px-1.5 py-1 backdrop-blur">
-                  <MessageCircle className="h-3.5 w-3.5 text-white" />
-                  <span className="text-[9px] font-semibold text-white">128</span>
-                </div>
-              </div>
-              <div className="absolute bottom-2 left-2 right-2">
-                <p className="text-xs font-bold leading-tight text-white drop-shadow">{t(`reels.${r.key}`)}</p>
-              </div>
-            </article>
+              poster={r.img}
+              src={r.src}
+              title={t(`reels.${r.key}`)}
+              likes={r.likes}
+            />
           ))}
         </div>
       </section>
@@ -139,20 +132,25 @@ function Home() {
           <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
         </div>
         <div className="no-scrollbar mt-3 flex gap-4 overflow-x-auto px-5 pb-2">
-          {trending.map((tItem, idx) => (
+          {trendingProducts.map(({ item, productId, name }) => (
             <article
-              key={`${tItem.key}-${idx}`}
+              key={productId}
               className="w-44 shrink-0 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border"
             >
-              <div className="aspect-square overflow-hidden bg-cream">
-                <img src={tItem.img} alt={t(`cookies.${tItem.key}.name`)} className="h-full w-full object-cover" loading="lazy" />
-              </div>
+              <Link to="/menu" className="block aspect-square overflow-hidden bg-cream">
+                <img src={item.img} alt={name} className="h-full w-full object-cover transition hover:scale-105" loading="lazy" />
+              </Link>
               <div className="p-3">
-                <h3 className="text-sm font-semibold text-foreground">{t(`cookies.${tItem.key}.name`)}</h3>
-                <p className="mt-0.5 text-xs text-muted-foreground">{t(`cookies.${tItem.key}.caption`)}</p>
+                <h3 className="text-sm font-semibold text-foreground">{name}</h3>
+                <p className="mt-0.5 text-xs text-muted-foreground">{t(`cookies.${item.key}.caption`)}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm font-bold text-primary">{formatPrice(3.75, i18n.language)}</span>
-                  <button className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground">
+                  <button
+                    type="button"
+                    onClick={() => cart.add({ id: productId, name, price: 3.75, image: item.img })}
+                    aria-label={`${t("common.add")} ${name}`}
+                    className="rounded-full bg-cta px-3 py-1 text-[11px] font-semibold text-cta-foreground active:scale-95 transition"
+                  >
                     {t("common.add")}
                   </button>
                 </div>
@@ -201,7 +199,11 @@ function Home() {
                   <span className="text-base font-bold text-primary">{formatPrice(packPrices[id], i18n.language)}</span>
                 </div>
                 <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{t(`packs.${id}.desc`)}</p>
-                <button className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow">
+                <button
+                  type="button"
+                  onClick={() => cart.add({ id: `pack-${id}`, name: t(`packs.${id}.name`), price: packPrices[id], image: packImages[id] })}
+                  className="mt-3 w-full rounded-full bg-cta py-2.5 text-sm font-bold text-cta-foreground shadow active:scale-[0.98] transition"
+                >
                   {t("common.addToCart")}
                 </button>
               </div>
@@ -222,6 +224,18 @@ function Home() {
           </button>
         </div>
       </section>
+
+      {cart.count > 0 && (
+        <div className="fixed inset-x-0 bottom-20 z-40 flex justify-center px-4">
+          <Link
+            to="/cart"
+            className="flex items-center gap-3 rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-2xl active:scale-95 transition"
+          >
+            <span className="text-sm font-bold">{t("common.viewCart")} • {cart.count}</span>
+            <span className="text-sm font-bold opacity-80">{formatPrice(cart.total, i18n.language)}</span>
+          </Link>
+        </div>
+      )}
 
       <BottomNav />
     </main>

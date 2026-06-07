@@ -11,6 +11,7 @@ import {
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
+import { useCart } from "@/lib/cart";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
@@ -107,28 +108,31 @@ function useSnapCarousel(itemCount: number) {
 
 function MenuPage() {
   const { t, i18n } = useTranslation();
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const globalCart = useCart();
   const [activeTab, setActiveTab] = useState<TabKey>("classic");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
   const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
 
   const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
-  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
-  const cartTotal = cookies.reduce((sum, c) => sum + (cart[c.id] ?? 0) * c.price, 0)
-    + packs.reduce((sum, p) => sum + (cart[p.id] ?? 0) * p.price, 0);
+  const qtyOf = (id: string) => globalCart.items.find((it) => it.id === id)?.qty ?? 0;
+  const cartCount = globalCart.count;
+  const cartTotal = globalCart.total;
 
-  const add = (id: string) => setCart((p) => ({ ...p, [id]: (p[id] ?? 0) + 1 }));
-  const sub = (id: string) =>
-    setCart((p) => {
-      const n = (p[id] ?? 0) - 1;
-      const next = { ...p };
-      if (n <= 0) delete next[id];
-      else next[id] = n;
-      return next;
-    });
+  const add = (id: string) => {
+    const cookie = cookies.find((c) => c.id === id);
+    if (cookie) {
+      globalCart.add({ id: cookie.id, name: t(`cookies.${cookie.tKey}.name`), price: cookie.price, image: cookie.image });
+      return;
+    }
+    const pack = packs.find((p) => p.id === id);
+    if (pack) {
+      globalCart.add({ id: pack.id, name: t(`packs.${pack.id}.name`), price: pack.price, image: pack.image });
+    }
+  };
+  const sub = (id: string) => globalCart.setQty(id, qtyOf(id) - 1);
 
-  const detailQty = selectedCookie ? (cart[selectedCookie.id] ?? 0) : 0;
+  const detailQty = selectedCookie ? qtyOf(selectedCookie.id) : 0;
 
   return (
     <main className="min-h-screen bg-white pb-32 font-sans text-black">
@@ -167,7 +171,7 @@ function MenuPage() {
       {activeTab === "classic" && (
         <section className="grid grid-cols-2 gap-x-3 gap-y-6 px-4 pt-5">
           {cookies.map((item) => {
-            const qty = cart[item.id] ?? 0;
+            const qty = qtyOf(item.id);
             const name = t(`cookies.${item.tKey}.name`);
             return (
               <article key={item.id} className="flex flex-col">
@@ -254,7 +258,7 @@ function MenuPage() {
             className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {packs.map((item) => {
-              const qty = cart[item.id] ?? 0;
+              const qty = qtyOf(item.id);
               const name = t(`packs.${item.id}.name`);
               return (
                 <article
@@ -346,7 +350,7 @@ function MenuPage() {
 
       {cartCount > 0 && (
         <div className="fixed inset-x-0 bottom-20 z-40 flex justify-center px-4">
-          <button className="flex items-center gap-3 rounded-full bg-black px-6 py-3.5 text-white shadow-2xl">
+          <Link to="/cart" className="flex items-center gap-3 rounded-full bg-black px-6 py-3.5 text-white shadow-2xl active:scale-95 transition">
             <ShoppingCart className="h-5 w-5" strokeWidth={2.5} />
             <span className="text-[15px] font-bold">
               {t("common.viewCart")} • {formatNumber(cartCount, i18n.language)}
@@ -354,7 +358,7 @@ function MenuPage() {
             <span className="text-[15px] font-bold text-white/80">
               {formatPrice(cartTotal, i18n.language)}
             </span>
-          </button>
+          </Link>
         </div>
       )}
 
@@ -445,7 +449,7 @@ function MenuPage() {
           </DialogDescription>
           {selectedPack && (() => {
             const pack = selectedPack;
-            const qty = cart[pack.id] ?? 0;
+            const qty = qtyOf(pack.id);
             const name = t(`packs.${pack.id}.name`);
             return (
               <div className="flex flex-col">

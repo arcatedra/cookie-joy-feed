@@ -162,5 +162,28 @@
       "general": "Ajustes generales",
       "help": "Ayuda y soporte"
     }
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "checkout": "Pagar",
+    "empty": "Tu carrito está vacío",
+    "emptyDesc": "Añade unas galletas deliciosas para empezar.",
+    "browseMenu": "Ver el menú",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "free": "Gratis",
+    "total": "Total",
+    "proceedCheckout": "Ir al pago",
+    "payMethod": "Método de pago",
+    "orderSummary": "Resumen del pedido",
+    "items": "{{count}} artículos",
+    "payNow": "Pagar ahora",
+    "processing": "Procesando…",
+    "fastSecure": "Rápido y seguro",
+    "demoNote": "Pago de demostración — no se realizará ningún cobro real.",
+    "orderConfirmed": "Pedido confirmado",
+    "thanks": "¡Gracias!",
+    "thanksDesc": "Tus galletas están en camino. Te hemos enviado una confirmación.",
+    "backHome": "Volver al inicio"
   }
 }

@@ -162,5 +162,28 @@
       "general": "General Settings",
       "help": "Help & Support"
     }
+  },
+  "cart": {
+    "title": "Your Cart",
+    "checkout": "Checkout",
+    "empty": "Your cart is empty",
+    "emptyDesc": "Add some delicious cookies to get started.",
+    "browseMenu": "Browse menu",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "proceedCheckout": "Proceed to checkout",
+    "payMethod": "Payment method",
+    "orderSummary": "Order summary",
+    "items": "{{count}} items",
+    "payNow": "Pay now",
+    "processing": "Processing…",
+    "fastSecure": "Fast & secure",
+    "demoNote": "Demo checkout — no real charge will be made.",
+    "orderConfirmed": "Order confirmed",
+    "thanks": "Thank you!",
+    "thanksDesc": "Your cookies are on their way. A confirmation has been sent.",
+    "backHome": "Back to home"
   }
 }
