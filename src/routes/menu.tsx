@@ -132,6 +132,7 @@ function MenuPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Classic Cookies");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
+  const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
 
   const { ref: packsRef, activeIndex: packIndex, scrollTo: scrollToPack } = useSnapCarousel(packs.length);
 
