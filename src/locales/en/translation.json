@@ -14,7 +14,10 @@
     "seeAll": "See all",
     "viewMore": "View more",
     "comingSoon": "Coming soon",
-    "reviews": "reviews"
+    "reviews": "reviews",
+    "notifications": "Notifications",
+    "markRead": "Mark all as read",
+    "settings": "Settings"
   },
   "language": {
     "switchTo": "Switch language",

@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, Bell } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ReelPlayer } from "@/components/ReelPlayer";
+import { NotificationsSheet } from "@/components/NotificationsSheet";
 import { formatPrice } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import imgPack6 from "@/assets/pack-6.jpg";
@@ -63,6 +65,8 @@ const packPrices: Record<(typeof packIds)[number], number> = { p6: 20, p9: 28, p
 function Home() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
+  const navigate = useNavigate();
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const trendingProducts = trending.map((tItem, idx) => ({
     item: tItem,
@@ -82,13 +86,18 @@ function Home() {
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
+            <button
+              type="button"
+              onClick={() => setNotifOpen(true)}
+              className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur"
+              aria-label={t("common.notifications")}
+            >
               <Bell className="h-4 w-4" />
               <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cta" />
             </button>
-            <div className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
+            <Link to="/profile" className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
               <img src={avatar} alt="Alex" className="h-full w-full object-cover" loading="lazy" />
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -110,7 +119,7 @@ function Home() {
       <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.reels")}</h2>
-          <button className="text-xs font-semibold text-cta">{t("common.seeAll")}</button>
+          <Link to="/explore" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
           {reels.map((r) => (
@@ -129,7 +138,7 @@ function Home() {
       <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.trending")}</h2>
-          <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
+          <Link to="/menu" className="text-xs font-semibold text-cta">{t("common.viewMore")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-4 overflow-x-auto px-5 pb-2">
           {trendingProducts.map(({ item, productId, name }) => (
@@ -169,6 +178,8 @@ function Home() {
           {categoryKeys.map((c, i) => (
             <button
               key={c}
+              type="button"
+              onClick={() => navigate({ to: "/menu" })}
               className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
                 i === 0
                   ? "bg-primary text-primary-foreground shadow"
@@ -219,9 +230,12 @@ function Home() {
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cta">{t("home.subscriptionEyebrow")}</p>
           <h3 className="mt-2 text-xl font-bold leading-tight">{t("home.subscriptionHeadline")}</h3>
           <p className="mt-1 text-sm text-primary-foreground/70">{t("home.subscriptionSubcopy")}</p>
-          <button className="mt-4 rounded-full bg-cta px-5 py-2.5 text-sm font-bold text-cta-foreground shadow-md">
+          <Link
+            to="/subscribe"
+            className="mt-4 inline-block rounded-full bg-cta px-5 py-2.5 text-sm font-bold text-cta-foreground shadow-md active:scale-95 transition"
+          >
             {t("home.startSubscription")}
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -237,6 +251,7 @@ function Home() {
         </div>
       )}
 
+      <NotificationsSheet open={notifOpen} onOpenChange={setNotifOpen} />
       <BottomNav />
     </main>
   );

@@ -8,12 +8,20 @@ import {
   ChevronRight,
   Award,
   Cookie,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import avatar from "@/assets/avatar.jpg";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -34,6 +42,7 @@ const menuItems = [
 
 function ProfilePage() {
   const { t, i18n } = useTranslation();
+  const [sheet, setSheet] = useState<string | null>(null);
   const orderDate = formatDate(new Date(2023, 8, 26), { year: "numeric", month: "short", day: "numeric" }, i18n.language);
 
   return (
@@ -46,6 +55,8 @@ function ProfilePage() {
             {t("profile.title")}
           </h1>
           <button
+            type="button"
+            onClick={() => setSheet("settings")}
             className="grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10 text-primary-foreground"
             aria-label={t("profile.settings")}
           >
@@ -141,6 +152,8 @@ function ProfilePage() {
           {menuItems.map((item, i) => (
             <button
               key={item.key}
+              type="button"
+              onClick={() => setSheet(item.key)}
               className={`flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-accent ${
                 i !== menuItems.length - 1 ? "border-b border-border" : ""
               }`}
@@ -154,6 +167,19 @@ function ProfilePage() {
           ))}
         </div>
       </section>
+
+      <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
+        <SheetContent side="right" className="w-full sm:max-w-sm p-0">
+          <SheetHeader className="px-5 pt-6 pb-3">
+            <SheetTitle className="text-lg font-bold capitalize">
+              {sheet ? t(`profile.menu.${sheet}`) : ""}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="px-5 pb-8">
+            <p className="text-sm text-muted-foreground">{t("common.comingSoon")}</p>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <BottomNav />
     </main>
