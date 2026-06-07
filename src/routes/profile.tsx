@@ -152,6 +152,8 @@ function ProfilePage() {
           {menuItems.map((item, i) => (
             <button
               key={item.key}
+              type="button"
+              onClick={() => setSheet(item.key)}
               className={`flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-accent ${
                 i !== menuItems.length - 1 ? "border-b border-border" : ""
               }`}
