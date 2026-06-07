@@ -52,6 +52,12 @@ const trending = [
 
 const categories = ["Cookies", "Brownies", "Assorted Boxes", "Vegan", "Gift Sets"];
 
+const packs = [
+  { id: "p6", img: imgPack6, name: "6-Pack", price: "$20.00", description: "Treat yourself to 6 warm, delicious treats in one box." },
+  { id: "p9", img: imgPack9, name: "9-Pack", price: "$28.00", description: "The sweet spot of satisfaction. Select 9 of your favorite cookies." },
+  { id: "p12", img: imgPack12, name: "12-Pack", price: "$36.00", description: "What they REALLY mean when they say to bring enough for everyone." },
+];
+
 function Home() {
 
   return (
