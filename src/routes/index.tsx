@@ -37,9 +37,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k", src: "https://assets.mixkit.co/videos/4717/4717-720.mp4" },
-  { img: reel2, key: "reel2", likes: "8.1k", src: "https://assets.mixkit.co/videos/43002/43002-720.mp4" },
-  { img: reel3, key: "reel3", likes: "5.7k", src: "https://assets.mixkit.co/videos/4738/4738-720.mp4" },
+  { img: reel1, key: "reel1", likes: "12.4k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+  { img: reel2, key: "reel2", likes: "8.1k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+  { img: reel3, key: "reel3", likes: "5.7k", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" },
 ];
 
 const trending = [
