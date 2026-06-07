@@ -211,7 +211,7 @@ function Home() {
       </section>
 
       {/* Subscription CTA */}
-      <section className="mt-7 px-5">
+      <section className="mt-3 px-5">
         <div className="relative overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground shadow-lg">
           <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cta/30 blur-2xl" />
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cta">{t("home.subscriptionEyebrow")}</p>
