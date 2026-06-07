@@ -114,29 +114,13 @@ function Home() {
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
           {reels.map((r) => (
-            <article
+            <ReelPlayer
               key={r.key}
-              className="relative h-56 w-36 shrink-0 overflow-hidden rounded-2xl shadow-md"
-            >
-              <img src={r.img} alt={t(`reels.${r.key}`)} className="h-full w-full object-cover" loading="lazy" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
-              <button className="absolute top-1/2 left-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-lg backdrop-blur" aria-label={t(`reels.${r.key}`)}>
-                <Play className="h-5 w-5 fill-primary text-primary" />
-              </button>
-              <div className="absolute top-2 right-2 flex flex-col gap-2">
-                <div className="flex flex-col items-center gap-0.5 rounded-full bg-black/30 px-1.5 py-1 backdrop-blur">
-                  <Heart className="h-3.5 w-3.5 text-white" />
-                  <span className="text-[9px] font-semibold text-white">{r.likes}</span>
-                </div>
-                <div className="flex flex-col items-center gap-0.5 rounded-full bg-black/30 px-1.5 py-1 backdrop-blur">
-                  <MessageCircle className="h-3.5 w-3.5 text-white" />
-                  <span className="text-[9px] font-semibold text-white">128</span>
-                </div>
-              </div>
-              <div className="absolute bottom-2 left-2 right-2">
-                <p className="text-xs font-bold leading-tight text-white drop-shadow">{t(`reels.${r.key}`)}</p>
-              </div>
-            </article>
+              poster={r.img}
+              src={r.src}
+              title={t(`reels.${r.key}`)}
+              likes={r.likes}
+            />
           ))}
         </div>
       </section>
