@@ -283,7 +283,12 @@ function MenuPage() {
                   key={item.id}
                   className="mr-4 w-[82vw] max-w-[340px] flex-shrink-0 snap-center rounded-2xl bg-[#f6f6f6] p-3 last:mr-4"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPack(item)}
+                    aria-label={`View ${item.name} details`}
+                    className="relative block aspect-[4/3] w-full overflow-hidden rounded-xl cursor-pointer text-left"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
@@ -292,11 +297,17 @@ function MenuPage() {
                       width={1024}
                       height={1024}
                     />
-                  </div>
+                  </button>
                   <div className="mt-3 flex flex-col">
-                    <h3 className="text-[18px] font-bold leading-tight text-black">{item.name}</h3>
-                    <p className="mt-1 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
-                    <p className="mt-1.5 text-[14px] leading-snug text-gray-500">{item.description}</p>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPack(item)}
+                      className="text-left"
+                    >
+                      <h3 className="text-[18px] font-bold leading-tight text-black">{item.name}</h3>
+                      <p className="mt-1 text-[15px] font-bold text-black">${item.price.toFixed(2)}</p>
+                      <p className="mt-1.5 text-[14px] leading-snug text-gray-500">{item.description}</p>
+                    </button>
 
                     {qty === 0 ? (
                       <button
