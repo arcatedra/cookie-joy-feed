@@ -230,9 +230,12 @@ function Home() {
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cta">{t("home.subscriptionEyebrow")}</p>
           <h3 className="mt-2 text-xl font-bold leading-tight">{t("home.subscriptionHeadline")}</h3>
           <p className="mt-1 text-sm text-primary-foreground/70">{t("home.subscriptionSubcopy")}</p>
-          <button className="mt-4 rounded-full bg-cta px-5 py-2.5 text-sm font-bold text-cta-foreground shadow-md">
+          <Link
+            to="/subscribe"
+            className="mt-4 inline-block rounded-full bg-cta px-5 py-2.5 text-sm font-bold text-cta-foreground shadow-md active:scale-95 transition"
+          >
             {t("home.startSubscription")}
-          </button>
+          </Link>
         </div>
       </section>
 
