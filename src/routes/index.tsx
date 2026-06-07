@@ -62,6 +62,13 @@ const packPrices: Record<(typeof packIds)[number], number> = { p6: 20, p9: 28, p
 
 function Home() {
   const { t, i18n } = useTranslation();
+  const cart = useCart();
+
+  const trendingProducts = trending.map((tItem, idx) => ({
+    item: tItem,
+    productId: `home-${tItem.key}-${idx}`,
+    name: t(`cookies.${tItem.key}.name`),
+  }));
 
   return (
     <main className="min-h-screen bg-background pb-24">
