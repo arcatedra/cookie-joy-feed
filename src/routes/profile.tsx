@@ -55,6 +55,8 @@ function ProfilePage() {
             {t("profile.title")}
           </h1>
           <button
+            type="button"
+            onClick={() => setSheet("settings")}
             className="grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10 text-primary-foreground"
             aria-label={t("profile.settings")}
           >
