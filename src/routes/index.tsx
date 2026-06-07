@@ -64,28 +64,28 @@ function Home() {
   return (
     <main className="min-h-screen bg-background pb-24">
       {/* Header banner */}
-      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-12 pb-8 shadow-lg">
+      <header className="bg-primary text-primary-foreground rounded-b-[2rem] px-5 pt-3 pb-2 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-primary-foreground/60">{t("home.welcome")}</p>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight">{t("home.greeting", { name: "Alex" })}</h1>
-            <p className="mt-1 text-sm text-primary-foreground/70">{t("home.freshToday")}</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-primary-foreground/60">{t("home.welcome")}</p>
+            <h1 className="text-lg font-bold tracking-tight">{t("home.greeting", { name: "Alex" })}</h1>
+            <p className="text-xs text-primary-foreground/70">{t("home.freshToday")}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <button className="relative grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-cta" />
+            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
+              <Bell className="h-4 w-4" />
+              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cta" />
             </button>
-            <div className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
+            <div className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
               <img src={avatar} alt="Alex" className="h-full w-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
 
         {/* Search */}
-        <div className="mt-6">
-          <div className="flex items-center gap-3 rounded-full bg-background px-5 py-3.5 shadow-md">
+        <div className="mt-2">
+          <div className="flex items-center gap-3 rounded-full bg-background px-4 py-2 shadow-md">
             <Search className="h-5 w-5 text-muted-foreground" />
             <input
               type="text"
@@ -98,7 +98,7 @@ function Home() {
       </header>
 
       {/* Reels */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.reels")}</h2>
           <button className="text-xs font-semibold text-cta">{t("common.seeAll")}</button>
@@ -133,7 +133,7 @@ function Home() {
       </section>
 
       {/* Trending */}
-      <section className="mt-6">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.trending")}</h2>
           <button className="text-xs font-semibold text-cta">{t("common.viewMore")}</button>
@@ -163,7 +163,7 @@ function Home() {
       </section>
 
       {/* Categories */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.categories")}</h2>
         </div>
@@ -184,7 +184,7 @@ function Home() {
       </section>
 
       {/* Cookie Packs */}
-      <section className="mt-7">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-5">
           <h2 className="text-lg font-bold text-foreground">{t("home.cookiePacks")}</h2>
           <Link to="/menu" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
@@ -211,7 +211,7 @@ function Home() {
       </section>
 
       {/* Subscription CTA */}
-      <section className="mt-7 px-5">
+      <section className="mt-3 px-5">
         <div className="relative overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground shadow-lg">
           <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cta/30 blur-2xl" />
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cta">{t("home.subscriptionEyebrow")}</p>
