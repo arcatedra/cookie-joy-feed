@@ -86,13 +86,18 @@ function Home() {
           </div>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <button className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur" aria-label={t("nav.profile")}>
+            <button
+              type="button"
+              onClick={() => setNotifOpen(true)}
+              className="relative grid h-8 w-8 place-items-center rounded-full bg-primary-foreground/10 backdrop-blur"
+              aria-label={t("common.notifications")}
+            >
               <Bell className="h-4 w-4" />
               <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cta" />
             </button>
-            <div className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
+            <Link to="/profile" className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-primary-foreground/30">
               <img src={avatar} alt="Alex" className="h-full w-full object-cover" loading="lazy" />
-            </div>
+            </Link>
           </div>
         </div>
 
