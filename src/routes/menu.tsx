@@ -458,6 +458,85 @@ function MenuPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Pack Detail Modal */}
+      <Dialog open={!!selectedPack} onOpenChange={(open) => !open && setSelectedPack(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-0 p-0 sm:max-w-md">
+          <DialogTitle className="sr-only">{selectedPack?.name}</DialogTitle>
+          <DialogDescription className="sr-only">Detalle de {selectedPack?.name}</DialogDescription>
+          {selectedPack && (() => {
+            const pack = selectedPack;
+            const qty = cart[pack.id] ?? 0;
+            return (
+              <div className="flex flex-col">
+                <div className="relative aspect-[4/3] bg-[#f6f6f6]">
+                  <img
+                    src={pack.image}
+                    alt={pack.name}
+                    className="h-full w-full object-cover"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
+                <div className="px-5 pb-6 pt-4">
+                  <h2 className="text-[22px] font-bold leading-tight text-black">{pack.name}</h2>
+                  <p className="mt-1.5 text-[16px] font-bold text-black">${pack.price.toFixed(2)}</p>
+                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">{pack.description}</p>
+
+                  <div className="mt-5 grid grid-cols-3 gap-2 rounded-2xl bg-gray-50 p-3 text-center">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Cookies</p>
+                      <p className="mt-1 text-[16px] font-bold text-black">{pack.cookieCount}</p>
+                    </div>
+                    <div className="border-x border-gray-200">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Serves</p>
+                      <p className="mt-1 text-[14px] font-bold text-black">{pack.serves}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Cal / cookie</p>
+                      <p className="mt-1 text-[16px] font-bold text-black">{pack.caloriesPerCookie}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Ingredients</h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-gray-700">{pack.ingredients}</p>
+                  </div>
+                  <div className="mt-4">
+                    <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Allergens</h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-gray-700">{pack.allergens}</p>
+                  </div>
+
+                  <div className="mt-6 flex items-center gap-4">
+                    <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1.5">
+                      <button
+                        onClick={() => sub(pack.id)}
+                        disabled={qty === 0}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm disabled:opacity-40"
+                      >
+                        <Minus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                      <span className="min-w-[28px] text-center text-base font-bold text-black">{qty}</span>
+                      <button
+                        onClick={() => add(pack.id)}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-white shadow-sm"
+                      >
+                        <Plus className="h-4 w-4 text-black" strokeWidth={2.5} />
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => add(pack.id)}
+                      className="flex-1 rounded-full bg-black py-3.5 text-center text-[16px] font-bold text-white shadow-lg"
+                    >
+                      {qty === 0 ? "Add to Cart" : `Update Cart • $${(qty * pack.price).toFixed(2)}`}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
