@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
+import { TopNav } from "@/components/TopNav";
 import { Toaster } from "sonner";
 
 function NotFoundComponent() {
@@ -124,7 +125,9 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    syncClientLanguage();
+    // Defer past hydration commit to avoid SSR/CSR text mismatch.
+    const id = window.setTimeout(() => syncClientLanguage(), 0);
+    return () => window.clearTimeout(id);
   }, []);
 
 
@@ -132,8 +135,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <div className="min-h-screen bg-[#f3f3f3]">
+            <TopNav />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </div>
           <Toaster position="top-center" richColors />
         </CartProvider>
       </AuthProvider>

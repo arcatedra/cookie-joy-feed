@@ -43,7 +43,57 @@
     "noComments": "No comments yet. Be the first!",
     "signInToLike": "Sign in to like",
     "signInToComment": "Sign in to comment",
-    "anonymous": "User"
+    "anonymous": "User",
+    "reel1": "Double Choc Delight",
+    "reel2": "Freshly Baked!",
+    "reel3": "Doughy Goodness",
+    "reel4": "Oatmeal & Raisin Magic",
+    "reel5": "Peanut Butter Heaven",
+    "reel6": "Mint Choc Crunch"
+  },
+  "topnav": {
+    "deliverTo": "Deliver to",
+    "updateLocation": "Brooklyn — Update location",
+    "searchPlaceholder": "Search cookies, packs, gifts…",
+    "suggestions": "Suggestions",
+    "helloSignIn": "Hello, sign in",
+    "helloUser": "Hello, {{name}}",
+    "accountLists": "Account & Lists",
+    "signInPrompt": "Sign in for personalized recs",
+    "returns": "Returns",
+    "andOrders": "& Orders",
+    "cart": "Cart",
+    "all": "All",
+    "openMenu": "Open menu",
+    "groups": {
+      "shop": "Shop cookies",
+      "discover": "Discover",
+      "account": "Help & settings"
+    },
+    "cats": {
+      "all": "All cookies",
+      "allCookies": "All cookies",
+      "filled": "Filled line",
+      "healthy": "Healthy / Fit",
+      "giftBoxes": "Gift boxes",
+      "vegan": "Vegan",
+      "brownies": "Brownies",
+      "bestSellers": "Best sellers",
+      "deals": "Today's deals",
+      "buildPack": "Build your pack",
+      "subscriptions": "Cookie subscriptions",
+      "yourAccount": "Your account",
+      "ordersReturns": "Returns & orders",
+      "cart": "Your cart",
+      "signIn": "Sign in"
+    },
+    "links": {
+      "deals": "Today's Deals",
+      "bestSellers": "Best Sellers",
+      "buildPack": "Build a Pack",
+      "support": "Customer Service",
+      "subscriptions": "Cookie Subscriptions"
+    }
   },
   "ratings": {
     "yourRating": "Your rating",
@@ -92,11 +142,7 @@
     "vegan": "Vegan",
     "gifts": "Gift Sets"
   },
-  "reels": {
-    "reel1": "Double Choc Delight",
-    "reel2": "Freshly Baked!",
-    "reel3": "Doughy Goodness"
-  },
+  "_reelsLegacy": {},
   "explore": {
     "metaTitle": "Browse Cookies — Oys",
     "metaDesc": "Explore our full range of artisanal gourmet cookies at Oys.",

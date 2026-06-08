@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ProductRating } from "@/components/ProductRating";
 import { formatPrice, formatNumber } from "@/i18n";
@@ -363,7 +362,7 @@ function MenuPage() {
         </div>
       )}
 
-      <BottomNav />
+
 
       <Dialog open={!!selectedCookie} onOpenChange={(open) => !open && setSelectedCookie(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-0 p-0 sm:max-w-md">
