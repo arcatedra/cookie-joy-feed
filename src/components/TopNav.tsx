@@ -31,9 +31,14 @@ export function TopNav() {
   const cart = useCart();
   const { user } = useAuth();
 
+  const navigate = useNavigate();
+
   const [sideOpen, setSideOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const goSearch = () => { setSearchOpen(false); navigate({ to: "/search" }); };
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [category, setCategory] = useState<(typeof categoryKeys)[number]>("all");
