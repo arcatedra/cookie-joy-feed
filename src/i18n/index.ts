@@ -30,7 +30,7 @@ if (!i18n.isInitialized) {
       },
       lng: "en", // SSR-stable; switched on the client after hydration
       fallbackLng: "en",
-      initImmediate: false,
+      initAsync: false,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
     });
