@@ -796,11 +796,10 @@ function AdminModal({
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!user) { toast.error("Inicia sesión para publicar"); return; }
     if (!title.trim()) { toast.error("Añade un título"); return; }
 
-    let videoUrl = "";
     setSubmitting(true);
+    let videoUrl = "";
 
     if (mode === "embed") {
       const trimmed = link.trim();
@@ -821,44 +820,57 @@ function AdminModal({
         setSubmitting(false);
         return;
       }
-      const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      setUploadPct(10);
-      const { error: upErr } = await supabase.storage
-        .from("reels")
-        .upload(path, file, { contentType: file.type || "video/mp4", upsert: false });
-      if (upErr) {
-        toast.error("No se pudo subir el video");
-        setSubmitting(false);
-        return;
+      // Object URL = instantánea, se muestra en el feed inmediatamente
+      videoUrl = URL.createObjectURL(file);
+
+      // Intento de subida a Storage en segundo plano (best-effort, requiere auth)
+      if (user) {
+        const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+        const path = `${user.id}/${Date.now()}.${ext}`;
+        setUploadPct(20);
+        void supabase.storage
+          .from("reels")
+          .upload(path, file, { contentType: file.type || "video/mp4", upsert: false })
+          .then(({ error: upErr }) => {
+            setUploadPct(100);
+            if (upErr) return;
+            const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
+            if (pub?.publicUrl) videoUrl = pub.publicUrl;
+          });
       }
-      setUploadPct(80);
-      const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
-      videoUrl = pub.publicUrl;
-      setUploadPct(100);
     }
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
-    const { data, error } = await supabase
-      .from("reels")
-      .insert({
-        slug: `r-${Date.now()}`,
-        title: title.trim(),
+
+    // Reel optimista — aparece al instante en el feed
+    const localReel: DbReel = {
+      id: `local-${Date.now()}`,
+      slug: `r-${Date.now()}`,
+      title: title.trim(),
+      video_url: videoUrl,
+      product_name: product.name,
+      product_price: product.price,
+      product_image: product.image,
+      product_slug: product.slug,
+      author_id: user?.id ?? null,
+      created_at: new Date().toISOString(),
+    };
+    onPublish(localReel);
+    setSubmitting(false);
+
+    // Persistencia en segundo plano (silencioso si falla, e.g. sin sesión)
+    if (user) {
+      void supabase.from("reels").insert({
+        slug: localReel.slug,
+        title: localReel.title,
         video_url: videoUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
         author_id: user.id,
-      })
-      .select("*")
-      .single();
-    setSubmitting(false);
-    if (error || !data) {
-      toast.error("No se pudo publicar el reel");
-      return;
+      });
     }
-    onPublish(data as DbReel);
   };
 
   return (
