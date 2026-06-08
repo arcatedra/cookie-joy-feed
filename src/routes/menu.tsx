@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ProductRating } from "@/components/ProductRating";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -407,6 +408,11 @@ function MenuPage() {
                   {t(`cookies.${selectedCookie.tKey}.desc`)}
                 </p>
 
+                <div className="mt-5">
+                  <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500 mb-2">{t("ratings.yourRating")}</h3>
+                  <ProductRating productId={`cookie-${selectedCookie.id}`} productName={t(`cookies.${selectedCookie.tKey}.name`)} />
+                </div>
+
                 <div className="mt-6 flex items-center gap-4">
                   <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1.5">
                     <button
@@ -489,6 +495,11 @@ function MenuPage() {
                   <div className="mt-4">
                     <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500">{t("menu.allergens")}</h3>
                     <p className="mt-1.5 text-[14px] leading-relaxed text-gray-700">{t("packs.allergens")}</p>
+                  </div>
+
+                  <div className="mt-5">
+                    <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-500 mb-2">{t("ratings.yourRating")}</h3>
+                    <ProductRating productId={`pack-${pack.id}`} productName={name} />
                   </div>
 
                   <div className="mt-6 flex items-center gap-4">
