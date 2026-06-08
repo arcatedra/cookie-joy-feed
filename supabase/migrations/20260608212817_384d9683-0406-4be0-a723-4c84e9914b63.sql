@@ -1,0 +1,1 @@
+DELETE FROM public.reels WHERE slug IN ('reel1','reel2','reel3','reel4','reel5','reel6') AND video_url IS NULL;
