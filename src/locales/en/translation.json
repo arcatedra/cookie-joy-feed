@@ -142,11 +142,7 @@
     "vegan": "Vegan",
     "gifts": "Gift Sets"
   },
-  "reels": {
-    "reel1": "Double Choc Delight",
-    "reel2": "Freshly Baked!",
-    "reel3": "Doughy Goodness"
-  },
+  "_reelsLegacy": {},
   "explore": {
     "metaTitle": "Browse Cookies — Oys",
     "metaDesc": "Explore our full range of artisanal gourmet cookies at Oys.",

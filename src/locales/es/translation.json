@@ -43,7 +43,57 @@
     "noComments": "Aún no hay comentarios. ¡Sé el primero!",
     "signInToLike": "Inicia sesión para dar me gusta",
     "signInToComment": "Inicia sesión para comentar",
-    "anonymous": "Usuario"
+    "anonymous": "Usuario",
+    "reel1": "Delicia de doble chocolate",
+    "reel2": "¡Recién horneadas!",
+    "reel3": "Pura masa deliciosa",
+    "reel4": "Magia de avena y pasas",
+    "reel5": "Paraíso de mantequilla de maní",
+    "reel6": "Crunch de chocolate y menta"
+  },
+  "topnav": {
+    "deliverTo": "Entregar a",
+    "updateLocation": "Brooklyn — Actualizar ubicación",
+    "searchPlaceholder": "Buscar galletas, packs, regalos…",
+    "suggestions": "Sugerencias",
+    "helloSignIn": "Hola, inicia sesión",
+    "helloUser": "Hola, {{name}}",
+    "accountLists": "Cuenta y Listas",
+    "signInPrompt": "Inicia sesión para recomendaciones",
+    "returns": "Devoluciones",
+    "andOrders": "y Pedidos",
+    "cart": "Carrito",
+    "all": "Todo",
+    "openMenu": "Abrir menú",
+    "groups": {
+      "shop": "Comprar galletas",
+      "discover": "Descubrir",
+      "account": "Ayuda y ajustes"
+    },
+    "cats": {
+      "all": "Todas las galletas",
+      "allCookies": "Todas las galletas",
+      "filled": "Línea rellenas",
+      "healthy": "Saludables / Fit",
+      "giftBoxes": "Cajas de regalo",
+      "vegan": "Veganas",
+      "brownies": "Brownies",
+      "bestSellers": "Más vendidas",
+      "deals": "Ofertas del día",
+      "buildPack": "Crea tu pack",
+      "subscriptions": "Suscripciones de galletas",
+      "yourAccount": "Tu cuenta",
+      "ordersReturns": "Devoluciones y pedidos",
+      "cart": "Tu carrito",
+      "signIn": "Iniciar sesión"
+    },
+    "links": {
+      "deals": "Ofertas del Día",
+      "bestSellers": "Más Vendidas",
+      "buildPack": "Crea tu Pack",
+      "support": "Servicio al Cliente",
+      "subscriptions": "Suscripciones de Galletas"
+    }
   },
   "ratings": {
     "yourRating": "Tu valoración",
