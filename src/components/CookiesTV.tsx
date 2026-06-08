@@ -13,6 +13,7 @@ import {
   Loader2,
   Link as LinkIcon,
   ExternalLink,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
@@ -269,6 +270,14 @@ export function CookiesTV() {
     }
   };
 
+  const handleDelete = async (reelId: string) => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) return;
+    setReels((prev) => prev.filter((r) => r.id !== reelId));
+    const { error } = await supabase.from("reels").delete().eq("id", reelId);
+    if (error) toast.error("No se pudo eliminar el reel");
+    else toast.success("Reel eliminado");
+  };
+
   return (
     <section className="mx-auto max-w-[1500px] px-3 pt-4 md:px-6">
       <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-5">
@@ -309,6 +318,7 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
+                onDelete={() => handleDelete(r.id)}
               />
             ))}
           {!loading && reels.length === 0 && (
@@ -345,6 +355,7 @@ function ReelCard({
   onOpenComments,
   globalMuted,
   onToggleMuted,
+  onDelete,
 }: {
   reel: DbReel;
   likes: number;
@@ -354,7 +365,10 @@ function ReelCard({
   onOpenComments: () => void;
   globalMuted: boolean;
   onToggleMuted: () => void;
+  onDelete: () => void;
 }) {
+  const { user } = useAuth();
+  const isOwner = user?.id === reel.author_id;
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -512,19 +526,36 @@ function ReelCard({
             </a>
           )}
         </div>
-        {!isEmbed && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleMuted();
-            }}
-            aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
-            className="pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-          >
-            {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-          </button>
-        )}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {isOwner && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) {
+                  onDelete();
+                }
+              }}
+              aria-label="Eliminar reel"
+              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-red-600/80"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+          {!isEmbed && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleMuted();
+              }}
+              aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
+              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+            >
+              {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Center play overlay when paused (native video only) */}
