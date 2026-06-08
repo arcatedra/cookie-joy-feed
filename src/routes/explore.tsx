@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ChevronLeft, Star, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
@@ -146,7 +145,7 @@ function ExplorePage() {
         </div>
       </section>
 
-      <BottomNav />
+
     </main>
   );
 }

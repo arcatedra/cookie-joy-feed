@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 
@@ -382,7 +381,7 @@ function SubscribePage() {
         </p>
       </footer>
 
-      <BottomNav />
+
     </main>
   );
 }

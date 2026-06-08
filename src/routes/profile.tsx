@@ -14,7 +14,6 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
@@ -212,7 +211,7 @@ function ProfilePage() {
         </SheetContent>
       </Sheet>
 
-      <BottomNav />
+
     </main>
   );
 }
