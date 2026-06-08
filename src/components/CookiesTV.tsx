@@ -357,24 +357,23 @@ function ReelCard({
   const [burst, setBurst] = useState(false);
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
-  const productImg =
-    reel.product_image ||
-    (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
-    "";
+  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
+  const isEmbed = !!embed;
 
-  // Autoplay when visible
+  // Autoplay native <video> when visible
   useEffect(() => {
     const el = cardRef.current;
-    if (!el) return;
+    if (!el || isEmbed) return;
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.5),
       { threshold: [0, 0.5, 1] },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [isEmbed]);
 
   useEffect(() => {
+    if (isEmbed) return;
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
@@ -384,9 +383,10 @@ function ReelCard({
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc]);
+  }, [inView, globalMuted, videoSrc, isEmbed]);
 
   const togglePlay = () => {
+    if (isEmbed) return;
     const v = videoRef.current;
     if (!v) return;
     if (v.paused) {
@@ -418,7 +418,7 @@ function ReelCard({
 
   const share = async () => {
     try {
-      const url = typeof window !== "undefined" ? window.location.href : "";
+      const url = embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
       if (navigator.share) await navigator.share({ title: reel.title ?? BRAND, url });
       else {
         await navigator.clipboard.writeText(url);
@@ -434,7 +434,17 @@ function ReelCard({
       ref={cardRef}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {videoSrc ? (
+      {isEmbed ? (
+        <iframe
+          src={embed!.embedUrl}
+          title={reel.title ?? `${embed!.label} reel`}
+          loading="lazy"
+          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      ) : videoSrc ? (
         <video
           ref={videoRef}
           src={videoSrc}
@@ -449,33 +459,56 @@ function ReelCard({
         <div className="grid h-full w-full place-items-center text-white/60">Sin video</div>
       )}
 
-      {/* gradient overlays */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+      {/* gradient overlays — softer over iframe so native controls remain visible */}
+      <div
+        className={`pointer-events-none absolute inset-x-0 top-0 ${
+          isEmbed ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-0 ${
+          isEmbed
+            ? "h-32 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+            : "h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+        }`}
+      />
 
-      {/* Top: brand + mute */}
-      <div className="absolute inset-x-3 top-3 z-10 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      {/* Top: brand + mute/source */}
+      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between">
+        <div className="pointer-events-auto flex items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-rose-500 text-xs font-extrabold text-white ring-2 ring-white/80">
             🍪
           </span>
           <span className="text-[12px] font-bold text-white drop-shadow">{BRAND}</span>
+          {isEmbed && (
+            <a
+              href={embed!.originalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25"
+            >
+              {embed!.label}
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
         </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleMuted();
-          }}
-          aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
-          className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-        >
-          {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-        </button>
+        {!isEmbed && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleMuted();
+            }}
+            aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
+            className="pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+          >
+            {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
+        )}
       </div>
 
-      {/* Center play overlay when paused */}
-      {!playing && videoSrc && (
+      {/* Center play overlay when paused (native video only) */}
+      {!isEmbed && !playing && videoSrc && (
         <button
           type="button"
           onClick={togglePlay}
@@ -525,6 +558,7 @@ function ReelCard({
             {formatCount(comments)}
           </span>
         </button>
+
         <button
           type="button"
           onClick={share}
