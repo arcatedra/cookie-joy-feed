@@ -176,6 +176,28 @@ function ProfilePage() {
             </button>
           ))}
         </div>
+
+        <div className="mt-4">
+          {user ? (
+            <button
+              type="button"
+              onClick={async () => {
+                await signOut();
+                toast.success(t("auth.signedOut"));
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-card border border-border py-3 text-sm font-semibold text-destructive shadow-sm hover:bg-accent"
+            >
+              <LogOut className="h-4 w-4" /> {t("auth.signOut")}
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow"
+            >
+              <LogIn className="h-4 w-4" /> {t("auth.signIn")}
+            </Link>
+          )}
+        </div>
       </section>
 
       <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
