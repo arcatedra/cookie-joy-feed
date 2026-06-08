@@ -138,15 +138,19 @@ function Home() {
           <Link to="/explore" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
-          {reels.map((r) => (
-            <ReelPlayer
-              key={r.key}
-              poster={r.img}
-              src={r.src}
-              title={t(`reels.${r.key}`)}
-              likes={r.likes}
-            />
-          ))}
+          {reels.map((r) => {
+            const reelId = reelRowsQ.data?.get(r.key);
+            if (!reelId) return null;
+            return (
+              <ReelPlayer
+                key={r.key}
+                reelId={reelId}
+                poster={r.img}
+                src={r.src}
+                title={t(`reels.${r.key}`)}
+              />
+            );
+          })}
         </div>
       </section>
 
