@@ -73,6 +73,17 @@ function Home() {
   const navigate = useNavigate();
   const [notifOpen, setNotifOpen] = useState(false);
 
+  const reelRowsQ = useQuery({
+    queryKey: ["reels-catalog"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("reels").select("id, slug");
+      if (error) throw error;
+      const map = new Map<string, string>();
+      data?.forEach((r) => map.set(r.slug, r.id));
+      return map;
+    },
+  });
+
   const trendingProducts = trending.map((tItem, idx) => ({
     item: tItem,
     productId: `home-${tItem.key}-${idx}`,
