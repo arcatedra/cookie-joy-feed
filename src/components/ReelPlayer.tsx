@@ -211,12 +211,22 @@ function CommentsSheet({ reelId, title, open, onOpenChange }: { reelId: string; 
     queryFn: async () => {
       const { data, error } = await supabase
         .from("reel_comments")
-        .select("id, body, created_at, user_id, profiles(display_name)")
+        .select("id, body, created_at, user_id")
         .eq("reel_id", reelId)
         .order("created_at", { ascending: false })
         .limit(100);
       if (error) throw error;
-      return data ?? [];
+      const rows = data ?? [];
+      const ids = Array.from(new Set(rows.map((r) => r.user_id)));
+      const names = new Map<string, string | null>();
+      if (ids.length) {
+        const { data: profs } = await supabase
+          .from("profiles")
+          .select("id, display_name")
+          .in("id", ids);
+        profs?.forEach((p) => names.set(p.id, p.display_name));
+      }
+      return rows.map((r) => ({ ...r, display_name: names.get(r.user_id) ?? null }));
     },
     enabled: open,
   });
@@ -252,21 +262,18 @@ function CommentsSheet({ reelId, title, open, onOpenChange }: { reelId: string; 
           {commentsQ.data?.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-8">{t("reels.noComments")}</p>
           )}
-          {commentsQ.data?.map((c) => {
-            const profile = c.profiles as { display_name: string | null } | null;
-            return (
-              <div key={c.id} className="flex gap-3">
-                <div className="h-8 w-8 shrink-0 rounded-full bg-cream grid place-items-center text-xs font-bold text-foreground">
-                  {(profile?.display_name?.[0] ?? "?").toUpperCase()}
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-semibold text-foreground">{profile?.display_name ?? t("reels.anonymous")}</p>
-                  <p className="text-sm text-foreground">{c.body}</p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(c.created_at).toLocaleString()}</p>
-                </div>
+          {commentsQ.data?.map((c) => (
+            <div key={c.id} className="flex gap-3">
+              <div className="h-8 w-8 shrink-0 rounded-full bg-cream grid place-items-center text-xs font-bold text-foreground">
+                {(c.display_name?.[0] ?? "?").toUpperCase()}
               </div>
-            );
-          })}
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-foreground">{c.display_name ?? t("reels.anonymous")}</p>
+                <p className="text-sm text-foreground">{c.body}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(c.created_at).toLocaleString()}</p>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="border-t border-border p-3">
           {user ? (
