@@ -142,11 +142,7 @@
     "vegan": "Veganas",
     "gifts": "Sets de regalo"
   },
-  "reels": {
-    "reel1": "Delicia de doble chocolate",
-    "reel2": "¡Recién horneadas!",
-    "reel3": "Pura masa deliciosa"
-  },
+  "_reelsLegacy": {},
   "explore": {
     "metaTitle": "Explorar galletas — Oys",
     "metaDesc": "Explora toda nuestra gama de galletas gourmet artesanales en Oys.",
