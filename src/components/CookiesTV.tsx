@@ -76,6 +76,80 @@ const PRODUCT_OPTIONS = [
   { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
 ];
 
+// ============ Embed link parser ============
+type EmbedPlatform = "instagram" | "tiktok" | "facebook" | "youtube";
+interface EmbedInfo {
+  platform: EmbedPlatform;
+  embedUrl: string;
+  originalUrl: string;
+  label: string;
+}
+
+function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
+  if (!raw) return null;
+  const url = raw.trim();
+  if (!/^https?:\/\//i.test(url)) return null;
+
+  // Instagram: /reel/{id}, /p/{id}, /tv/{id}
+  const ig = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
+  if (ig) {
+    return {
+      platform: "instagram",
+      embedUrl: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/captioned/`,
+      originalUrl: url,
+      label: "Instagram",
+    };
+  }
+
+  // TikTok: /@user/video/{id} or vm.tiktok.com short links
+  const tt = url.match(/tiktok\.com\/(?:@[\w.-]+\/video\/|v\/|embed\/v2\/)(\d+)/i);
+  if (tt) {
+    return {
+      platform: "tiktok",
+      embedUrl: `https://www.tiktok.com/embed/v2/${tt[1]}`,
+      originalUrl: url,
+      label: "TikTok",
+    };
+  }
+  if (/(?:vm|vt)\.tiktok\.com\//i.test(url)) {
+    // Short link — let TikTok resolve via the generic player
+    return {
+      platform: "tiktok",
+      embedUrl: `https://www.tiktok.com/embed?lang=en&url=${encodeURIComponent(url)}`,
+      originalUrl: url,
+      label: "TikTok",
+    };
+  }
+
+  // Facebook: any fb.watch / facebook.com video/reel link
+  if (/facebook\.com\/(?:reel|watch|.+\/videos)|fb\.watch\//i.test(url)) {
+    return {
+      platform: "facebook",
+      embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+        url,
+      )}&show_text=false&width=560&t=0`,
+      originalUrl: url,
+      label: "Facebook",
+    };
+  }
+
+  // YouTube Shorts / watch
+  const yt =
+    url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+  if (yt) {
+    return {
+      platform: "youtube",
+      embedUrl: `https://www.youtube.com/embed/${yt[1]}?rel=0&playsinline=1`,
+      originalUrl: url,
+      label: "YouTube",
+    };
+  }
+
+  return null;
+}
+
 // ============ Main: Facebook-style Reels row ============
 export function CookiesTV() {
   const { user } = useAuth();
