@@ -241,7 +241,7 @@ function HeroCarousel() {
  * ========================================================== */
 function CategoryCardGrid() {
   return (
-    <div className="relative z-10 mx-auto -mt-0 max-w-[1500px] px-3 md:-mt-24 md:px-6 lg:-mt-32">
+    <div className="relative z-10 mx-auto max-w-[1500px] px-3 md:px-6">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <BestSellersCard />
         <BuildPackCard />
