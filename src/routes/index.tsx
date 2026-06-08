@@ -96,6 +96,9 @@ function Home() {
         backgroundSize: "18px 18px",
       }}
     >
+      {/* Reels stories bar (Instagram-style, above the hero) */}
+      <CookiesTV />
+
       {/* HERO + overlapping cards wrapper */}
       <section className="relative">
         <HeroCarousel />
@@ -107,8 +110,6 @@ function Home() {
       {/* Product slider */}
       <ProductSlider />
 
-      {/* Cookies TV / Reels */}
-      <CookiesTV />
 
 
       {/* Secondary band */}
