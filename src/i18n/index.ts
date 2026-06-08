@@ -30,10 +30,10 @@ if (!i18n.isInitialized) {
       },
       lng: "en", // SSR-stable; switched on the client after hydration
       fallbackLng: "en",
+      initImmediate: false,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
     });
-
 }
 
 /** Call from a useEffect after hydration to switch to the user's preferred language. */
