@@ -526,19 +526,36 @@ function ReelCard({
             </a>
           )}
         </div>
-        {!isEmbed && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleMuted();
-            }}
-            aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
-            className="pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-          >
-            {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-          </button>
-        )}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {isOwner && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) {
+                  onDelete();
+                }
+              }}
+              aria-label="Eliminar reel"
+              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-red-600/80"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+          {!isEmbed && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleMuted();
+              }}
+              aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
+              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+            >
+              {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Center play overlay when paused (native video only) */}
