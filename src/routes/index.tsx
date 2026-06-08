@@ -39,9 +39,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k", src: "https://cdn.pixabay.com/video/2020/09/08/49375-457699988_tiny.mp4" },
-  { img: reel2, key: "reel2", likes: "8.1k", src: "https://cdn.pixabay.com/video/2024/03/15/204306-924853365_tiny.mp4" },
-  { img: reel3, key: "reel3", likes: "5.7k", src: "https://cdn.pixabay.com/video/2022/12/14/142316-779288348_tiny.mp4" },
+  { img: reel1, key: "reel1", likes: "12.4k", src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4" },
+  { img: reel2, key: "reel2", likes: "8.1k", src: "https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_1MB.mp4" },
+  { img: reel3, key: "reel3", likes: "5.7k", src: "https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_1MB.mp4" },
 ];
 
 const trending = [
