@@ -34,12 +34,18 @@ if (!i18n.isInitialized) {
       react: { useSuspense: false },
     });
 
-  // After hydration, swap to the user's preferred language without breaking SSR.
-  if (typeof window !== "undefined") {
-    const preferred = detectInitialLang();
-    if (preferred !== "en") {
-      // Defer to next tick so React finishes hydrating with server HTML first.
-      setTimeout(() => i18n.changeLanguage(preferred), 0);
+}
+
+/** Call from a useEffect after hydration to switch to the user's preferred language. */
+export function syncClientLanguage() {
+  if (typeof window === "undefined") return;
+  const preferred = detectInitialLang();
+  if (preferred !== i18n.language) {
+    void i18n.changeLanguage(preferred);
+    try {
+      document.documentElement.lang = preferred;
+    } catch {
+      /* ignore */
     }
   }
 }

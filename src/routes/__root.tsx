@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import "@/i18n";
+import { syncClientLanguage } from "@/i18n";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "sonner";
@@ -122,6 +122,11 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    syncClientLanguage();
+  }, []);
+
 
   return (
     <QueryClientProvider client={queryClient}>
