@@ -14,6 +14,9 @@ import imgPack12 from "@/assets/pack-12.jpg";
 import reel1 from "@/assets/reel-1.jpg";
 import reel2 from "@/assets/reel-2.jpg";
 import reel3 from "@/assets/reel-3.jpg";
+import reelVideo1 from "@/assets/reel-cookie-1.mp4.asset.json";
+import reelVideo2 from "@/assets/reel-cookie-2.mp4.asset.json";
+import reelVideo3 from "@/assets/reel-cookie-3.mp4.asset.json";
 import avatar from "@/assets/avatar.jpg";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
@@ -39,9 +42,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k", src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4" },
-  { img: reel2, key: "reel2", likes: "8.1k", src: "https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_1MB.mp4" },
-  { img: reel3, key: "reel3", likes: "5.7k", src: "https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_1MB.mp4" },
+  { img: reel1, key: "reel1", likes: "12.4k", src: reelVideo1.url },
+  { img: reel2, key: "reel2", likes: "8.1k", src: reelVideo2.url },
+  { img: reel3, key: "reel3", likes: "5.7k", src: reelVideo3.url },
 ];
 
 const trending = [
