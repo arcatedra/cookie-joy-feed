@@ -99,16 +99,10 @@ function Home() {
       {/* Reels stories bar (Instagram-style, above the hero) */}
       <CookiesTV />
 
-      {/* HERO + overlapping cards wrapper */}
-      <section className="relative">
-        <HeroCarousel />
-        {/* Spacer to allow card grid overlap on desktop */}
-        <div className="h-0 md:h-24 lg:h-32" aria-hidden />
+      {/* Category grid */}
+      <section className="relative pt-4">
         <CategoryCardGrid />
       </section>
-
-      {/* Product slider */}
-      <ProductSlider />
 
 
 
