@@ -107,6 +107,10 @@ function Home() {
       {/* Product slider */}
       <ProductSlider />
 
+      {/* Cookies TV / Reels */}
+      <CookiesTV />
+
+
       {/* Secondary band */}
       <section className="mx-auto mt-6 max-w-[1500px] px-3 pb-12 md:px-6">
         <div className="rounded-md bg-white p-5 shadow-sm ring-1 ring-black/5 md:p-7">
