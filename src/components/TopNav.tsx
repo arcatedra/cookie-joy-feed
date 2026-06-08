@@ -158,7 +158,7 @@ export function TopNav() {
               <button
                 type="button"
                 aria-label={t("common.search")}
-                className="grid w-12 shrink-0 place-items-center bg-amber-400 text-[#1a0f0a] transition hover:bg-amber-300"
+                className="grid w-12 shrink-0 place-items-center bg-emerald-400 text-[#1a0f0a] transition hover:bg-emerald-300"
               >
                 <Search className="h-5 w-5" strokeWidth={2.5} />
               </button>
