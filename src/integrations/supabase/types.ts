@@ -122,19 +122,43 @@ export type Database = {
       }
       reels: {
         Row: {
+          author_id: string | null
           created_at: string
           id: string
+          product_image: string | null
+          product_name: string | null
+          product_price: number | null
+          product_slug: string | null
           slug: string
+          thumb_url: string | null
+          title: string | null
+          video_url: string | null
         }
         Insert: {
+          author_id?: string | null
           created_at?: string
           id?: string
+          product_image?: string | null
+          product_name?: string | null
+          product_price?: number | null
+          product_slug?: string | null
           slug: string
+          thumb_url?: string | null
+          title?: string | null
+          video_url?: string | null
         }
         Update: {
+          author_id?: string | null
           created_at?: string
           id?: string
+          product_image?: string | null
+          product_name?: string | null
+          product_price?: number | null
+          product_slug?: string | null
           slug?: string
+          thumb_url?: string | null
+          title?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }
