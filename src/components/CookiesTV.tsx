@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   Heart,
   MessageCircle,
   Share2,
   ShoppingCart,
-  Upload,
   X,
   Play,
   Volume2,
@@ -12,6 +11,8 @@ import {
   Plus,
   Send,
   Loader2,
+  Link as LinkIcon,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
