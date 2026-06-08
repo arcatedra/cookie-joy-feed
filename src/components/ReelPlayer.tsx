@@ -69,7 +69,7 @@ export function ReelPlayer({ poster, src, title, likes }: ReelPlayerProps) {
         muted
         loop
         preload="auto"
-        crossOrigin="anonymous"
+        
         className="h-full w-full object-cover"
       />
       <button
