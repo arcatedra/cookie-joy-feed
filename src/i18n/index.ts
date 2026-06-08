@@ -28,11 +28,20 @@ if (!i18n.isInitialized) {
         en: { translation: en },
         es: { translation: es },
       },
-      lng: detectInitialLang(),
+      lng: "en", // SSR-stable; switched on the client after hydration
       fallbackLng: "en",
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
     });
+
+  // After hydration, swap to the user's preferred language without breaking SSR.
+  if (typeof window !== "undefined") {
+    const preferred = detectInitialLang();
+    if (preferred !== "en") {
+      // Defer to next tick so React finishes hydrating with server HTML first.
+      setTimeout(() => i18n.changeLanguage(preferred), 0);
+    }
+  }
 }
 
 export function setLanguage(lang: Lang) {
