@@ -177,9 +177,15 @@ export function CookiesTV() {
         setLoading(false);
         return;
       }
-      setReels((data ?? []) as DbReel[]);
+      // Mostrar solo reels que tengan un video reproducible (archivo, fallback o embed válido)
+      const playable = ((data ?? []) as DbReel[]).filter((r) => {
+        if (r.video_url && r.video_url.trim()) return true;
+        if (FALLBACK_VIDEO[r.slug]) return true;
+        return false;
+      });
+      setReels(playable);
       setLoading(false);
-      const ids = (data ?? []).map((r) => r.id);
+      const ids = playable.map((r) => r.id);
       if (ids.length) {
         const [{ data: likeRows }, { data: commentRows }] = await Promise.all([
           supabase.from("reel_likes").select("reel_id, user_id").in("reel_id", ids),
