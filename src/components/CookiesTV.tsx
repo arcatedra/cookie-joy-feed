@@ -399,8 +399,18 @@ function ReelCard({
     if (isEmbed) return;
     const v = videoRef.current;
     if (!v) return;
+    // Quitar mute en la primera interacción del usuario para garantizar reproducción
+    v.muted = globalMuted;
     if (v.paused) {
-      v.play().then(() => setPlaying(true)).catch(() => {});
+      const p = v.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setPlaying(true)).catch((err) => {
+          console.warn("No se pudo reproducir el video:", err);
+          // Reintentar silenciado (política de autoplay)
+          v.muted = true;
+          v.play().then(() => setPlaying(true)).catch(() => toast.error("No se pudo reproducir el video"));
+        });
+      }
     } else {
       v.pause();
       setPlaying(false);
