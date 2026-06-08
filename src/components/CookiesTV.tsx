@@ -773,7 +773,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
   );
 }
 
-// ============ Admin upload modal ============
+// ============ Admin embed-link modal ============
 function AdminModal({
   onClose,
   onPublish,
@@ -784,20 +784,10 @@ function AdminModal({
   const { user } = useAuth();
   const [title, setTitle] = useState("");
   const [productSlug, setProductSlug] = useState(PRODUCT_OPTIONS[0].slug);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [fileName, setFileName] = useState("");
+  const [link, setLink] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    if (!f.type.startsWith("video/")) {
-      toast.error("Selecciona un archivo de video");
-      return;
-    }
-    setFileUrl(URL.createObjectURL(f));
-    setFileName(f.name);
-  };
+  const preview = useMemo(() => parseEmbed(link), [link]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -805,8 +795,13 @@ function AdminModal({
       toast.error("Inicia sesión para publicar");
       return;
     }
-    if (!fileUrl) {
-      toast.error("Sube un video primero");
+    const trimmed = link.trim();
+    if (!trimmed) {
+      toast.error("Pega el enlace de tu Reel");
+      return;
+    }
+    if (!preview) {
+      toast.error("El enlace no parece de Instagram, TikTok, Facebook o YouTube");
       return;
     }
     if (!title.trim()) {
@@ -820,7 +815,7 @@ function AdminModal({
       .insert({
         slug: `r-${Date.now()}`,
         title: title.trim(),
-        video_url: fileUrl,
+        video_url: trimmed,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
@@ -847,7 +842,7 @@ function AdminModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🛠️ Subir nuevo Reel</h3>
+          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🔗 Incrustar nuevo Reel</h3>
           <button
             type="button"
             onClick={onClose}
@@ -866,27 +861,35 @@ function AdminModal({
 
         <form onSubmit={onSubmit} className="mt-4 space-y-4">
           <label className="block">
-            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">Archivo de video</span>
-            <div className="flex items-center gap-2">
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#1a0f0a] px-3 py-2 text-xs font-semibold text-white hover:bg-[#3d2418]">
-                <Upload className="h-3.5 w-3.5" />
-                Elegir video
-                <input type="file" accept="video/*" onChange={onFile} className="hidden" />
-              </label>
-              <span className="truncate text-[11px] text-[#666]">
-                {fileName || "Sin archivo seleccionado"}
-              </span>
-            </div>
-            {fileUrl && (
-              <video
-                src={fileUrl}
-                muted
-                playsInline
-                controls
-                className="mt-2 aspect-[9/16] w-32 rounded-md bg-black object-cover"
+            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
+              Enlace del Reel
+            </span>
+            <div className="relative">
+              <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
+              <input
+                type="url"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
+                className="w-full rounded-md border border-[#ddd] pl-9 pr-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                maxLength={500}
               />
+            </div>
+            <p className="mt-1 text-[10px] text-[#666]">
+              Soporta Instagram (/reel/, /p/), TikTok (/video/), Facebook (/reel/, /watch/) y YouTube Shorts.
+            </p>
+            {link && !preview && (
+              <p className="mt-1 text-[10px] font-semibold text-rose-600">
+                ⚠️ No reconocemos este enlace. Verifica que sea público.
+              </p>
+            )}
+            {preview && (
+              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                ✓ {preview.label} detectado
+              </div>
             )}
           </label>
+
 
           <label className="block">
             <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
