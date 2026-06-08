@@ -155,6 +155,8 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
 export function CookiesTV() {
   const { user } = useAuth();
   const [reels, setReels] = useState<DbReel[]>([]);
+  const reelsRef = useRef(reels);
+  useEffect(() => { reelsRef.current = reels; }, [reels]);
   const [loading, setLoading] = useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
@@ -270,12 +272,39 @@ export function CookiesTV() {
     }
   };
 
-  const handleDelete = async (reelId: string) => {
-    if (!window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) return;
+  const deleteTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  const handleDelete = (reelId: string) => {
+    const reel = reelsRef.current.find((r) => r.id === reelId);
+    if (!reel) return;
+
     setReels((prev) => prev.filter((r) => r.id !== reelId));
-    const { error } = await supabase.from("reels").delete().eq("id", reelId);
-    if (error) toast.error("No se pudo eliminar el reel");
-    else toast.success("Reel eliminado");
+
+    const timer = setTimeout(() => {
+      if (!reelId.startsWith("local-")) {
+        void supabase.from("reels").delete().eq("id", reelId).then(({ error }) => {
+          if (error) toast.error("No se pudo eliminar el reel");
+        });
+      }
+      deleteTimers.current.delete(reelId);
+    }, 5000);
+
+    deleteTimers.current.set(reelId, timer);
+
+    toast("Reel eliminado", {
+      action: {
+        label: "Deshacer",
+        onClick: () => {
+          clearTimeout(timer);
+          deleteTimers.current.delete(reelId);
+          setReels((prev) => {
+            if (prev.some((r) => r.id === reelId)) return prev;
+            return [reel, ...prev];
+          });
+        },
+      },
+      duration: 5000,
+    });
   };
 
   return (
@@ -532,9 +561,7 @@ function ReelCard({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                if (window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) {
-                  onDelete();
-                }
+                onDelete();
               }}
               aria-label="Eliminar reel"
               className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-red-600/80"
