@@ -270,6 +270,14 @@ export function CookiesTV() {
     }
   };
 
+  const handleDelete = async (reelId: string) => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este Reel de galletas?")) return;
+    setReels((prev) => prev.filter((r) => r.id !== reelId));
+    const { error } = await supabase.from("reels").delete().eq("id", reelId);
+    if (error) toast.error("No se pudo eliminar el reel");
+    else toast.success("Reel eliminado");
+  };
+
   return (
     <section className="mx-auto max-w-[1500px] px-3 pt-4 md:px-6">
       <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-5">
