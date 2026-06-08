@@ -1,0 +1,1 @@
+INSERT INTO public.reels (slug) VALUES ('reel4'), ('reel5'), ('reel6') ON CONFLICT (slug) DO NOTHING;
