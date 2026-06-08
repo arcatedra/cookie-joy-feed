@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
   path: '/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
 }
 export interface FileRouteTypes {
@@ -90,9 +99,18 @@ export interface FileRouteTypes {
     | '/explore'
     | '/menu'
     | '/profile'
+    | '/search'
     | '/subscribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/cart' | '/explore' | '/menu' | '/profile' | '/subscribe'
+  to:
+    | '/'
+    | '/auth'
+    | '/cart'
+    | '/explore'
+    | '/menu'
+    | '/profile'
+    | '/search'
+    | '/subscribe'
   id:
     | '__root__'
     | '/'
@@ -101,6 +119,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/menu'
     | '/profile'
+    | '/search'
     | '/subscribe'
   fileRoutesById: FileRoutesById
 }
@@ -111,6 +130,7 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   MenuRoute: typeof MenuRoute
   ProfileRoute: typeof ProfileRoute
+  SearchRoute: typeof SearchRoute
   SubscribeRoute: typeof SubscribeRoute
 }
 
@@ -121,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/subscribe'
       fullPath: '/subscribe'
       preLoaderRoute: typeof SubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -175,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   MenuRoute: MenuRoute,
   ProfileRoute: ProfileRoute,
+  SearchRoute: SearchRoute,
   SubscribeRoute: SubscribeRoute,
 }
 export const routeTree = rootRouteImport
