@@ -318,6 +318,7 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
+                onDelete={() => handleDelete(r.id)}
               />
             ))}
           {!loading && reels.length === 0 && (
