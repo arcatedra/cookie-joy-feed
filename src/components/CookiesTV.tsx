@@ -13,6 +13,7 @@ import {
   Loader2,
   Link as LinkIcon,
   ExternalLink,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
