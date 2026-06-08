@@ -99,16 +99,10 @@ function Home() {
       {/* Reels stories bar (Instagram-style, above the hero) */}
       <CookiesTV />
 
-      {/* HERO + overlapping cards wrapper */}
-      <section className="relative">
-        <HeroCarousel />
-        {/* Spacer to allow card grid overlap on desktop */}
-        <div className="h-0 md:h-24 lg:h-32" aria-hidden />
+      {/* Category grid */}
+      <section className="relative pt-4">
         <CategoryCardGrid />
       </section>
-
-      {/* Product slider */}
-      <ProductSlider />
 
 
 
@@ -247,7 +241,7 @@ function HeroCarousel() {
  * ========================================================== */
 function CategoryCardGrid() {
   return (
-    <div className="relative z-10 mx-auto -mt-0 max-w-[1500px] px-3 md:-mt-24 md:px-6 lg:-mt-32">
+    <div className="relative z-10 mx-auto max-w-[1500px] px-3 md:px-6">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <BestSellersCard />
         <BuildPackCard />
