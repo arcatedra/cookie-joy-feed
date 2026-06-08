@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { CookiesTV } from "@/components/CookiesTV";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
@@ -105,6 +106,10 @@ function Home() {
 
       {/* Product slider */}
       <ProductSlider />
+
+      {/* Cookies TV / Reels */}
+      <CookiesTV />
+
 
       {/* Secondary band */}
       <section className="mx-auto mt-6 max-w-[1500px] px-3 pb-12 md:px-6">
