@@ -773,7 +773,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
   );
 }
 
-// ============ Admin embed-link modal ============
+// ============ Admin modal — File upload OR embed link ============
 function AdminModal({
   onClose,
   onPublish,
@@ -782,40 +782,69 @@ function AdminModal({
   onPublish: (r: DbReel) => void;
 }) {
   const { user } = useAuth();
+  const [mode, setMode] = useState<"file" | "embed">("file");
   const [title, setTitle] = useState("");
   const [productSlug, setProductSlug] = useState(PRODUCT_OPTIONS[0].slug);
   const [link, setLink] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
 
   const preview = useMemo(() => parseEmbed(link), [link]);
+  const fileUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
+  useEffect(() => () => { if (fileUrl) URL.revokeObjectURL(fileUrl); }, [fileUrl]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      toast.error("Inicia sesión para publicar");
-      return;
-    }
-    const trimmed = link.trim();
-    if (!trimmed) {
-      toast.error("Pega el enlace de tu Reel");
-      return;
-    }
-    if (!preview) {
-      toast.error("El enlace no parece de Instagram, TikTok, Facebook o YouTube");
-      return;
-    }
-    if (!title.trim()) {
-      toast.error("Añade un título");
-      return;
-    }
-    const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
+    if (!user) { toast.error("Inicia sesión para publicar"); return; }
+    if (!title.trim()) { toast.error("Añade un título"); return; }
+
+    let videoUrl = "";
     setSubmitting(true);
+
+    if (mode === "embed") {
+      const trimmed = link.trim();
+      if (!trimmed || !preview) {
+        toast.error("Pega un enlace válido de Instagram, TikTok, Facebook o YouTube");
+        setSubmitting(false);
+        return;
+      }
+      videoUrl = trimmed;
+    } else {
+      if (!file) {
+        toast.error("Selecciona un archivo de video");
+        setSubmitting(false);
+        return;
+      }
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error("El archivo supera los 100 MB");
+        setSubmitting(false);
+        return;
+      }
+      const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      setUploadPct(10);
+      const { error: upErr } = await supabase.storage
+        .from("reels")
+        .upload(path, file, { contentType: file.type || "video/mp4", upsert: false });
+      if (upErr) {
+        toast.error("No se pudo subir el video");
+        setSubmitting(false);
+        return;
+      }
+      setUploadPct(80);
+      const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
+      videoUrl = pub.publicUrl;
+      setUploadPct(100);
+    }
+
+    const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
     const { data, error } = await supabase
       .from("reels")
       .insert({
         slug: `r-${Date.now()}`,
         title: title.trim(),
-        video_url: trimmed,
+        video_url: videoUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
@@ -842,7 +871,7 @@ function AdminModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🔗 Incrustar nuevo Reel</h3>
+          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🎬 Nuevo Reel</h3>
           <button
             type="button"
             onClick={onClose}
@@ -859,37 +888,95 @@ function AdminModal({
           </p>
         )}
 
-        <form onSubmit={onSubmit} className="mt-4 space-y-4">
-          <label className="block">
-            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
-              Enlace del Reel
-            </span>
-            <div className="relative">
-              <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
-              <input
-                type="url"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
-                className="w-full rounded-md border border-[#ddd] pl-9 pr-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
-                maxLength={500}
-              />
-            </div>
-            <p className="mt-1 text-[10px] text-[#666]">
-              Soporta Instagram (/reel/, /p/), TikTok (/video/), Facebook (/reel/, /watch/) y YouTube Shorts.
-            </p>
-            {link && !preview && (
-              <p className="mt-1 text-[10px] font-semibold text-rose-600">
-                ⚠️ No reconocemos este enlace. Verifica que sea público.
-              </p>
-            )}
-            {preview && (
-              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
-                ✓ {preview.label} detectado
-              </div>
-            )}
-          </label>
+        <div className="mt-4 grid grid-cols-2 gap-1 rounded-full bg-[#f1f2f4] p-1">
+          <button
+            type="button"
+            onClick={() => setMode("file")}
+            className={`rounded-full px-3 py-2 text-[11px] font-bold transition ${
+              mode === "file" ? "bg-white text-[#1a0f0a] shadow" : "text-[#666] hover:text-[#1a0f0a]"
+            }`}
+          >
+            📁 Desde mi Galería
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("embed")}
+            className={`rounded-full px-3 py-2 text-[11px] font-bold transition ${
+              mode === "embed" ? "bg-white text-[#1a0f0a] shadow" : "text-[#666] hover:text-[#1a0f0a]"
+            }`}
+          >
+            🔗 Incrustar Link
+          </button>
+        </div>
 
+        <form onSubmit={onSubmit} className="mt-4 space-y-4">
+          {mode === "file" ? (
+            <label className="block">
+              <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
+                Archivo de video (.mp4, .mov, .webm — máx 100 MB)
+              </span>
+              <input
+                type="file"
+                accept="video/mp4,video/quicktime,video/webm,video/*"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="block w-full cursor-pointer rounded-md border border-dashed border-[#c8956d] bg-amber-50/40 px-3 py-3 text-xs text-[#1a0f0a] file:mr-3 file:rounded-full file:border-0 file:bg-[#1a0f0a] file:px-3 file:py-1.5 file:text-[11px] file:font-bold file:text-white hover:bg-amber-50"
+              />
+              {file && (
+                <div className="mt-2 space-y-2">
+                  <p className="text-[10px] text-[#666]">
+                    {file.name} · {(file.size / (1024 * 1024)).toFixed(1)} MB
+                  </p>
+                  {fileUrl && (
+                    <video
+                      src={fileUrl}
+                      className="aspect-[9/16] w-32 rounded-lg bg-black object-cover ring-1 ring-black/10"
+                      muted
+                      playsInline
+                      controls
+                    />
+                  )}
+                </div>
+              )}
+              {submitting && uploadPct > 0 && uploadPct < 100 && (
+                <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#eee]">
+                  <div
+                    className="h-full bg-amber-400 transition-all"
+                    style={{ width: `${uploadPct}%` }}
+                  />
+                </div>
+              )}
+            </label>
+          ) : (
+            <label className="block">
+              <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
+                Enlace del Reel
+              </span>
+              <div className="relative">
+                <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
+                <input
+                  type="url"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                  placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
+                  className="w-full rounded-md border border-[#ddd] pl-9 pr-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  maxLength={500}
+                />
+              </div>
+              <p className="mt-1 text-[10px] text-[#666]">
+                Soporta Instagram, TikTok, Facebook y YouTube Shorts.
+              </p>
+              {link && !preview && (
+                <p className="mt-1 text-[10px] font-semibold text-rose-600">
+                  ⚠️ No reconocemos este enlace. Verifica que sea público.
+                </p>
+              )}
+              {preview && (
+                <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                  ✓ {preview.label} detectado
+                </div>
+              )}
+            </label>
+          )}
 
           <label className="block">
             <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
@@ -906,7 +993,7 @@ function AdminModal({
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">Producto asociado</span>
+            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">Galleta asociada</span>
             <select
               value={productSlug}
               onChange={(e) => setProductSlug(e.target.value)}
@@ -918,6 +1005,9 @@ function AdminModal({
                 </option>
               ))}
             </select>
+            <p className="mt-1 text-[10px] text-[#666]">
+              Nombre y precio se mostrarán en la tarjeta translúcida "Comprar del Reel".
+            </p>
           </label>
 
           <div className="flex justify-end gap-2 pt-2">
