@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   Settings,
   Heart,
@@ -8,13 +8,16 @@ import {
   ChevronRight,
   Award,
   Cookie,
-  X,
+  LogOut,
+  LogIn,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
+import { useAuth } from "@/lib/auth";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
@@ -42,8 +45,15 @@ const menuItems = [
 
 function ProfilePage() {
   const { t, i18n } = useTranslation();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [sheet, setSheet] = useState<string | null>(null);
   const orderDate = formatDate(new Date(2023, 8, 26), { year: "numeric", month: "short", day: "numeric" }, i18n.language);
+  const displayName =
+    (user?.user_metadata?.name as string | undefined) ??
+    (user?.user_metadata?.full_name as string | undefined) ??
+    user?.email?.split("@")[0] ??
+    "Alex R.";
 
   return (
     <main className="min-h-screen bg-background pb-24">
@@ -80,8 +90,8 @@ function ProfilePage() {
           </div>
 
           <div className="mt-4 text-center">
-            <h2 className="text-xl font-bold text-foreground">Alex R.</h2>
-            <p className="mt-0.5 text-sm text-muted-foreground">{t("profile.city")}</p>
+            <h2 className="text-xl font-bold text-foreground">{displayName}</h2>
+            <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
           </div>
 
