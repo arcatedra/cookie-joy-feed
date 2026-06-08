@@ -655,7 +655,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
     (async () => {
       const { data, error } = await supabase
         .from("reel_comments")
-        .select("id, reel_id, user_id, body, created_at, profiles(display_name)")
+        .select("id, reel_id, user_id, body, created_at")
         .eq("reel_id", reelId)
         .order("created_at", { ascending: true });
       if (cancelled) return;
@@ -664,15 +664,20 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
         setLoading(false);
         return;
       }
-      const rows: DbComment[] = (data ?? []).map((r: { id: string; reel_id: string; user_id: string; body: string; created_at: string; profiles?: { display_name?: string } | null }) => ({
-        id: r.id,
-        reel_id: r.reel_id,
-        user_id: r.user_id,
-        body: r.body,
-        created_at: r.created_at,
-        author_name: r.profiles?.display_name ?? "Anónimo",
-      }));
-      setComments(rows);
+      const rows = (data ?? []) as Omit<DbComment, "author_name">[];
+      const ids = Array.from(new Set(rows.map((r) => r.user_id)));
+      const names: Record<string, string> = {};
+      if (ids.length) {
+        const { data: profs } = await supabase
+          .from("profiles")
+          .select("id, display_name")
+          .in("id", ids);
+        (profs ?? []).forEach((p: { id: string; display_name: string | null }) => {
+          names[p.id] = p.display_name ?? "Anónimo";
+        });
+      }
+      if (cancelled) return;
+      setComments(rows.map((r) => ({ ...r, author_name: names[r.user_id] ?? "Anónimo" })));
       setLoading(false);
     })();
 
