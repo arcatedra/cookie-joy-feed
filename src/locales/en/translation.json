@@ -17,7 +17,40 @@
     "reviews": "reviews",
     "notifications": "Notifications",
     "markRead": "Mark all as read",
-    "settings": "Settings"
+    "settings": "Settings",
+    "loading": "Loading…"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create account",
+    "subtitle": "Like reels, comment, and rate cookies.",
+    "google": "Continue with Google",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "name": "Your name",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "signedOut": "Signed out",
+    "noAccount": "Don't have an account? Create one",
+    "haveAccount": "Already have an account? Sign in",
+    "checkEmail": "Check your email to confirm your account"
+  },
+  "reels": {
+    "writeComment": "Write a comment…",
+    "send": "Send",
+    "noComments": "No comments yet. Be the first!",
+    "signInToLike": "Sign in to like",
+    "signInToComment": "Sign in to comment",
+    "anonymous": "User"
+  },
+  "ratings": {
+    "yourRating": "Your rating",
+    "writeReview": "Optional review for {{product}}",
+    "save": "Save",
+    "thanks": "Thanks for your rating!",
+    "signInToRate": "Sign in to rate"
   },
   "language": {
     "switchTo": "Switch language",
