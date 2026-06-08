@@ -1,19 +1,10 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useTranslation } from "react-i18next";
-import { ReelPlayer } from "@/components/ReelPlayer";
-import { formatPrice } from "@/i18n";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
-import reel1 from "@/assets/reel-1.jpg";
-import reel2 from "@/assets/reel-2.jpg";
-import reel3 from "@/assets/reel-3.jpg";
-import reelVideo1 from "@/assets/reel-cookie-1.mp4.asset.json";
-import reelVideo2 from "@/assets/reel-cookie-2.mp4.asset.json";
-import reelVideo3 from "@/assets/reel-cookie-3.mp4.asset.json";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -24,203 +15,493 @@ import imgWhiteMac from "@/assets/ins-white-mac.jpg";
 import imgMM from "@/assets/ins-mm.jpg";
 import imgPB from "@/assets/ins-pb.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
+import imgVegan from "@/assets/ins-vegan-choc.jpg";
+import imgBox from "@/assets/cookie-box.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Oys — Gourmet Cookies, Delivered Monthly" },
-      { name: "description", content: "Discover artisanal gourmet cookies and join the Oys monthly subscription for freshly baked treats at your door." },
-      { property: "og:title", content: "Oys — Gourmet Cookies" },
-      { property: "og:description", content: "Discover gourmet cookies & monthly subscriptions with Oys." },
+      { title: "OyS — Galletas Artesanales Premium" },
+      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en OyS." },
     ],
   }),
   component: Home,
 });
 
-const reels = [
-  { key: "reel1", img: reel1, src: reelVideo1.url },
-  { key: "reel2", img: reel2, src: reelVideo2.url },
-  { key: "reel3", img: reel3, src: reelVideo3.url },
-  { key: "reel4", img: reel2, src: reelVideo2.url },
-  { key: "reel5", img: reel1, src: reelVideo3.url },
-  { key: "reel6", img: reel3, src: reelVideo1.url },
+// ============ Banners ============
+const banners = [
+  {
+    id: "b1",
+    eyebrow: "OFERTAS DE LA SEMANA",
+    title: "20% de descuento en Galletas Rellenas de Chispas de Chocolate",
+    cta: "Comprar ahora",
+    to: "/menu",
+    bg: "linear-gradient(120deg, #3d1b0e 0%, #6b2f15 55%, #b06a36 100%)",
+    img: imgDoubleChoc,
+  },
+  {
+    id: "b2",
+    eyebrow: "NUEVO LANZAMIENTO",
+    title: "Prueba la línea Saludable y Vegana",
+    cta: "Explorar línea vegana",
+    to: "/menu",
+    bg: "linear-gradient(120deg, #14361f 0%, #2a6b3f 55%, #8fc18a 100%)",
+    img: imgVegan,
+  },
+  {
+    id: "b3",
+    eyebrow: "CAJAS DE REGALO PREMIUM",
+    title: "El detalle perfecto para cualquier ocasión",
+    cta: "Ver cajas de regalo",
+    to: "/menu",
+    bg: "linear-gradient(120deg, #2a1810 0%, #5a3520 55%, #d4a574 100%)",
+    img: imgPack12,
+  },
 ];
 
-const trending = [
-  { img: imgChocChunk, key: "c1" },
-  { img: imgCookiesCream, key: "c2" },
-  { img: imgSnicker, key: "c2" },
-  { img: imgSugar, key: "c3" },
-  { img: imgDoubleChoc, key: "c4" },
-  { img: imgOatmeal, key: "c5" },
-  { img: imgWhiteMac, key: "c6" },
-  { img: imgMM, key: "c7" },
-  { img: imgPB, key: "c8" },
-  { img: imgMint, key: "c10" },
-];
+// ============ Slider products ============
+interface SliderProduct {
+  id: string;
+  name: string;
+  price: number;
+  oldPrice?: number;
+  rating: number;
+  reviews: number;
+  image: string;
+  discountPct?: number;
+}
 
-const categoryKeys = ["cookies", "brownies", "boxes", "vegan", "gifts"] as const;
-const packIds = ["p6", "p9", "p12"] as const;
-const packImages: Record<(typeof packIds)[number], string> = { p6: imgPack6, p9: imgPack9, p12: imgPack12 };
-const packPrices: Record<(typeof packIds)[number], number> = { p6: 20, p9: 28, p12: 36 };
+const sliderProducts: SliderProduct[] = [
+  { id: "sp1", name: "Galleta de Pistacho y Chocolate Blanco", price: 4.5, oldPrice: 5.5, rating: 4.8, reviews: 1284, image: imgWhiteMac, discountPct: 18 },
+  { id: "sp2", name: "Triple Chocolate Fudge", price: 3.95, oldPrice: 4.95, rating: 4.9, reviews: 2156, image: imgDoubleChoc, discountPct: 20 },
+  { id: "sp3", name: "Snickerdoodle Clásica", price: 3.25, oldPrice: 3.95, rating: 4.7, reviews: 892, image: imgSnicker, discountPct: 18 },
+  { id: "sp4", name: "Avena y Pasas con Canela", price: 3.5, oldPrice: 4.25, rating: 4.6, reviews: 645, image: imgOatmeal, discountPct: 17 },
+  { id: "sp5", name: "Mantequilla de Maní Crujiente", price: 3.75, oldPrice: 4.5, rating: 4.8, reviews: 1043, image: imgPB, discountPct: 16 },
+  { id: "sp6", name: "Cookies & Cream Premium", price: 4.25, oldPrice: 5.0, rating: 4.9, reviews: 1789, image: imgCookiesCream, discountPct: 15 },
+  { id: "sp7", name: "Doble Chispas de Chocolate", price: 3.95, oldPrice: 4.75, rating: 4.7, reviews: 921, image: imgChocChunk, discountPct: 17 },
+  { id: "sp8", name: "Menta y Chocolate Dark", price: 4.5, oldPrice: 5.5, rating: 4.6, reviews: 512, image: imgMint, discountPct: 18 },
+  { id: "sp9", name: "M&M Festiva", price: 4.0, oldPrice: 4.75, rating: 4.8, reviews: 1322, image: imgMM, discountPct: 16 },
+  { id: "sp10", name: "Azúcar Glaseada Vainilla", price: 3.25, oldPrice: 3.95, rating: 4.5, reviews: 478, image: imgSugar, discountPct: 18 },
+];
 
 function Home() {
-  const { t, i18n } = useTranslation();
-  const cart = useCart();
-  const navigate = useNavigate();
+  return (
+    <main
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#eaeded",
+        backgroundImage:
+          "radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0)",
+        backgroundSize: "18px 18px",
+      }}
+    >
+      {/* HERO + overlapping cards wrapper */}
+      <section className="relative">
+        <HeroCarousel />
+        {/* Spacer to allow card grid overlap on desktop */}
+        <div className="h-0 md:h-24 lg:h-32" aria-hidden />
+        <CategoryCardGrid />
+      </section>
 
-  const reelRowsQ = useQuery({
-    queryKey: ["reels-catalog"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("reels").select("id, slug");
-      if (error) throw error;
-      const map = new Map<string, string>();
-      data?.forEach((r) => map.set(r.slug, r.id));
-      return map;
-    },
-  });
+      {/* Product slider */}
+      <ProductSlider />
 
-  const trendingProducts = trending.map((tItem, idx) => ({
-    item: tItem,
-    productId: `home-${tItem.key}-${idx}`,
-    name: t(`cookies.${tItem.key}.name`),
-  }));
+      {/* Secondary band */}
+      <section className="mx-auto mt-6 max-w-[1500px] px-3 pb-12 md:px-6">
+        <div className="rounded-md bg-white p-5 shadow-sm ring-1 ring-black/5 md:p-7">
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <h3 className="text-lg font-extrabold text-[#1a0f0a] md:text-xl">
+                ¿Listo para probar lo nuevo?
+              </h3>
+              <p className="mt-1 text-sm text-[#444]">
+                Descubre nuestras ediciones limitadas y los favoritos del mes.
+              </p>
+            </div>
+            <Link
+              to="/menu"
+              className="rounded-full bg-amber-400 px-6 py-2.5 text-sm font-bold text-[#1a0f0a] shadow transition hover:bg-amber-300"
+            >
+              Ver menú completo
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+/* ============================================================
+ * HERO CAROUSEL
+ * ========================================================== */
+function HeroCarousel() {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = window.setInterval(() => setI((p) => (p + 1) % banners.length), 5500);
+    return () => window.clearInterval(id);
+  }, [paused]);
+
+  const prev = () => setI((p) => (p - 1 + banners.length) % banners.length);
+  const next = () => setI((p) => (p + 1) % banners.length);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pb-16 pt-6 md:px-6">
-      {/* Hero banner */}
-      <section className="overflow-hidden rounded-2xl bg-gradient-to-r from-[#2a1810] to-[#3d2418] p-6 text-white shadow md:p-10">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-300">
-          {t("home.subscriptionEyebrow")}
-        </p>
-        <h1 className="mt-2 text-2xl font-extrabold leading-tight md:text-4xl">
-          {t("home.subscriptionHeadline")}
-        </h1>
-        <p className="mt-2 max-w-xl text-sm text-white/80">
-          {t("home.subscriptionSubcopy")}
-        </p>
-        <Link
-          to="/subscribe"
-          className="mt-4 inline-block rounded-full bg-amber-400 px-6 py-2.5 text-sm font-bold text-[#1a0f0a] shadow transition hover:bg-amber-300"
-        >
-          {t("home.startSubscription")}
-        </Link>
-      </section>
-
-      {/* Reels */}
-      <section className="mt-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground md:text-xl">{t("home.reels")}</h2>
-          <Link to="/explore" className="text-xs font-semibold text-amber-700 hover:underline">
-            {t("common.seeAll")}
-          </Link>
-        </div>
-        <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto pb-2">
-          {reels.map((r) => {
-            const reelId = reelRowsQ.data?.get(r.key);
-            if (!reelId) return null;
-            return (
-              <ReelPlayer
-                key={r.key}
-                reelId={reelId}
-                poster={r.img}
-                src={r.src}
-                title={t(`reels.${r.key}`)}
-              />
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Trending */}
-      <section className="mt-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground md:text-xl">{t("home.trending")}</h2>
-          <Link to="/menu" className="text-xs font-semibold text-amber-700 hover:underline">
-            {t("common.viewMore")}
-          </Link>
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {trendingProducts.slice(0, 10).map(({ item, productId, name }) => (
-            <article
-              key={productId}
-              className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border transition hover:shadow-md"
-            >
-              <Link to="/menu" className="block aspect-square overflow-hidden bg-cream">
-                <img src={item.img} alt={name} className="h-full w-full object-cover transition hover:scale-105" loading="lazy" />
+    <div
+      className="relative w-full overflow-hidden bg-[#1a0f0a]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      aria-roledescription="carousel"
+    >
+      <div className="relative h-[220px] sm:h-[300px] md:h-[420px] lg:h-[480px]">
+        {banners.map((b, idx) => (
+          <div
+            key={b.id}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              idx === i ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+            style={{ background: b.bg }}
+            aria-hidden={idx !== i}
+          >
+            {/* gradient overlay readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/10 to-transparent" />
+            {/* image (right side on desktop) */}
+            <img
+              src={b.img}
+              alt=""
+              className="absolute right-0 top-0 hidden h-full w-1/2 object-cover opacity-80 md:block"
+              style={{
+                maskImage:
+                  "linear-gradient(to left, black 55%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to left, black 55%, transparent 100%)",
+              }}
+              loading={idx === 0 ? "eager" : "lazy"}
+            />
+            <div className="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col justify-center px-5 md:px-10">
+              <p className="text-[11px] font-bold tracking-[0.25em] text-amber-300 md:text-xs">
+                {b.eyebrow}
+              </p>
+              <h2 className="mt-2 max-w-xl text-2xl font-extrabold leading-tight text-white drop-shadow md:text-4xl lg:text-5xl">
+                {b.title}
+              </h2>
+              <Link
+                to={b.to}
+                className="mt-4 inline-flex w-fit items-center rounded-full bg-amber-400 px-5 py-2.5 text-sm font-bold text-[#1a0f0a] shadow-lg transition hover:bg-amber-300 md:mt-6 md:px-7 md:py-3 md:text-base"
+              >
+                {b.cta}
               </Link>
-              <div className="p-3">
-                <h3 className="line-clamp-1 text-sm font-semibold text-foreground">{name}</h3>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-bold text-foreground">{formatPrice(3.75, i18n.language)}</span>
-                  <button
-                    type="button"
-                    onClick={() => cart.add({ id: productId, name, price: 3.75, image: item.img })}
-                    aria-label={`${t("common.add")} ${name}`}
-                    className="rounded-md bg-amber-400 px-2.5 py-1 text-[11px] font-bold text-[#1a0f0a] transition hover:bg-amber-300 active:scale-95"
-                  >
-                    {t("common.add")}
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {/* Categories */}
-      <section className="mt-6">
-        <h2 className="text-lg font-bold text-foreground md:text-xl">{t("home.categories")}</h2>
-        <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-2">
-          {categoryKeys.map((c, i) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => navigate({ to: "/menu" })}
-              className={`shrink-0 rounded-full px-5 py-2 text-sm font-semibold transition ${
-                i === 0
-                  ? "bg-[#1a0f0a] text-white shadow"
-                  : "bg-white text-foreground ring-1 ring-border hover:bg-amber-50"
-              }`}
-            >
-              {t(`categories.${c}`)}
-            </button>
-          ))}
-        </div>
-      </section>
+      {/* Arrows */}
+      <button
+        type="button"
+        onClick={prev}
+        aria-label="Banner anterior"
+        className="absolute left-2 top-1/2 z-20 grid -translate-y-1/2 place-items-center rounded-full bg-white/80 p-2 text-[#1a0f0a] shadow transition hover:bg-white md:left-4 md:p-3"
+      >
+        <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+      </button>
+      <button
+        type="button"
+        onClick={next}
+        aria-label="Banner siguiente"
+        className="absolute right-2 top-1/2 z-20 grid -translate-y-1/2 place-items-center rounded-full bg-white/80 p-2 text-[#1a0f0a] shadow transition hover:bg-white md:right-4 md:p-3"
+      >
+        <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+      </button>
 
-      {/* Cookie Packs */}
-      <section className="mt-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground md:text-xl">{t("home.cookiePacks")}</h2>
-          <Link to="/menu" className="text-xs font-semibold text-amber-700 hover:underline">
-            {t("common.seeAll")}
+      {/* Dots */}
+      <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 md:bottom-5">
+        {banners.map((b, idx) => (
+          <button
+            key={b.id}
+            type="button"
+            onClick={() => setI(idx)}
+            aria-label={`Ir al banner ${idx + 1}`}
+            className={`h-2 rounded-full transition-all ${
+              idx === i ? "w-8 bg-amber-400" : "w-2 bg-white/60 hover:bg-white"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Bottom fade into page bg */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-[#eaeded] md:h-24" />
+    </div>
+  );
+}
+
+/* ============================================================
+ * CATEGORY CARD GRID
+ * ========================================================== */
+function CategoryCardGrid() {
+  return (
+    <div className="relative z-10 mx-auto -mt-0 max-w-[1500px] px-3 md:-mt-24 md:px-6 lg:-mt-32">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <BestSellersCard />
+        <BuildPackCard />
+        <SubscriptionCard />
+        <FlashDealCard />
+      </div>
+    </div>
+  );
+}
+
+function CardShell({
+  title,
+  link,
+  children,
+}: {
+  title: string;
+  link: { to: string; label: string };
+  children: React.ReactNode;
+}) {
+  return (
+    <article className="flex flex-col rounded-md bg-white p-4 shadow-md ring-1 ring-black/5 md:p-5">
+      <h3 className="text-base font-extrabold text-[#1a0f0a] md:text-lg">{title}</h3>
+      <div className="mt-3 flex-1">{children}</div>
+      <Link
+        to={link.to}
+        className="mt-3 inline-block text-xs font-semibold text-[#007185] hover:text-[#c7511f] hover:underline"
+      >
+        {link.label}
+      </Link>
+    </article>
+  );
+}
+
+function BestSellersCard() {
+  const items = [
+    { name: "Clásica", img: imgChocChunk },
+    { name: "Red Velvet", img: imgCookiesCream },
+    { name: "Triple Chocolate", img: imgDoubleChoc },
+    { name: "Avena y Pasas", img: imgOatmeal },
+  ];
+  return (
+    <CardShell title="Las Más Vendidas" link={{ to: "/menu", label: "Ver más" }}>
+      <div className="grid grid-cols-2 gap-2">
+        {items.map((it) => (
+          <Link key={it.name} to="/menu" className="group">
+            <div className="aspect-square overflow-hidden rounded-sm bg-[#f7f7f7]">
+              <img
+                src={it.img}
+                alt={it.name}
+                loading="lazy"
+                className="h-full w-full object-cover transition group-hover:scale-105"
+              />
+            </div>
+            <p className="mt-1 line-clamp-1 text-[11px] text-[#444] group-hover:text-[#c7511f]">
+              {it.name}
+            </p>
+          </Link>
+        ))}
+      </div>
+    </CardShell>
+  );
+}
+
+function BuildPackCard() {
+  return (
+    <CardShell title="Arma tu Pack Personalizado" link={{ to: "/menu", label: "Ver opciones" }}>
+      <Link to="/menu" className="block">
+        <div className="aspect-[4/3] overflow-hidden rounded-sm bg-[#f7f7f7]">
+          <img
+            src={imgBox}
+            alt="Caja de galletas personalizada"
+            loading="lazy"
+            className="h-full w-full object-cover transition hover:scale-[1.03]"
+          />
+        </div>
+      </Link>
+      <Link
+        to="/menu"
+        className="mt-3 inline-flex w-full items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
+      >
+        Empezar a armar
+      </Link>
+    </CardShell>
+  );
+}
+
+function SubscriptionCard() {
+  return (
+    <CardShell title="Suscripción Mensual" link={{ to: "/subscribe", label: "Conocer el club" }}>
+      <Link to="/subscribe" className="block">
+        <div className="aspect-[4/3] overflow-hidden rounded-sm bg-gradient-to-br from-[#3d2418] to-[#1a0f0a] p-3 text-white">
+          <div className="flex h-full flex-col justify-between">
+            <p className="text-[10px] font-bold tracking-[0.2em] text-amber-300">
+              CLUB OYS
+            </p>
+            <div>
+              <p className="text-xl font-extrabold leading-tight md:text-2xl">
+                Entregas semanales recién horneadas
+              </p>
+              <p className="mt-1 text-[11px] text-white/80">
+                Cancela cuando quieras · Envío incluido
+              </p>
+            </div>
+            <div className="flex items-end justify-between">
+              <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#1a0f0a]">
+                Desde $24/mes
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </CardShell>
+  );
+}
+
+function useCountdown(targetMs: number) {
+  const [now, setNow] = useState<number>(() => targetMs);
+  useEffect(() => {
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  const diff = Math.max(0, targetMs - now);
+  const h = Math.floor(diff / 3_600_000);
+  const m = Math.floor((diff % 3_600_000) / 60_000);
+  const s = Math.floor((diff % 60_000) / 1000);
+  return { h, m, s };
+}
+
+function FlashDealCard() {
+  // Stable midnight-based target (avoids hydration mismatch)
+  const target = useMemo(() => {
+    const t = new Date();
+    t.setHours(23, 59, 59, 0);
+    return t.getTime();
+  }, []);
+  const { h, m, s } = useCountdown(target);
+  const stockPct = 38;
+  return (
+    <CardShell title="Ofertas Relámpago" link={{ to: "/menu", label: "Ver todas las ofertas" }}>
+      <Link to="/menu" className="block">
+        <div className="flex gap-3">
+          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-sm bg-[#f7f7f7]">
+            <img src={imgPack9} alt="Pack 9 galletas" loading="lazy" className="h-full w-full object-cover" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="line-clamp-2 text-xs font-semibold text-[#1a0f0a]">
+              Pack 9 Galletas Surtidas
+            </p>
+            <div className="mt-1 flex items-baseline gap-1.5">
+              <span className="text-lg font-extrabold text-[#b12704]">$19.99</span>
+              <span className="text-[11px] text-[#888] line-through">$28.00</span>
+            </div>
+            <span className="mt-1 inline-block rounded-sm bg-[#cc0c39] px-1.5 py-0.5 text-[10px] font-bold text-white">
+              -29%
+            </span>
+          </div>
+        </div>
+      </Link>
+      <div className="mt-3">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#eee]">
+          <div className="h-full rounded-full bg-[#cc0c39]" style={{ width: `${stockPct}%` }} />
+        </div>
+        <p className="mt-1 text-[10px] text-[#666]">Reclamadas: {100 - stockPct}%</p>
+      </div>
+      <div className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-[#b12704]">
+        <Clock className="h-3.5 w-3.5" />
+        Termina en {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
+      </div>
+    </CardShell>
+  );
+}
+
+/* ============================================================
+ * PRODUCT SLIDER
+ * ========================================================== */
+function ProductSlider() {
+  const cart = useCart();
+  return (
+    <section className="mx-auto mt-6 max-w-[1500px] px-3 md:px-6">
+      <div className="rounded-md bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-6">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-extrabold text-[#1a0f0a] md:text-2xl">
+              Inspirado en tus antojos
+            </h2>
+            <p className="mt-0.5 text-xs text-[#555]">
+              Selección horneada hoy · Envío en 24h
+            </p>
+          </div>
+          <Link to="/menu" className="hidden text-xs font-semibold text-[#007185] hover:underline sm:block">
+            Ver más
           </Link>
         </div>
-        <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {packIds.map((id) => (
-            <article key={id} className="overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border">
-              <div className="aspect-[4/3] overflow-hidden bg-cream">
-                <img src={packImages[id]} alt={t(`packs.${id}.name`)} className="h-full w-full object-cover" loading="lazy" />
-              </div>
-              <div className="p-4">
-                <div className="flex items-baseline justify-between">
-                  <h3 className="text-base font-bold text-foreground">{t(`packs.${id}.name`)}</h3>
-                  <span className="text-base font-bold text-foreground">{formatPrice(packPrices[id], i18n.language)}</span>
+
+        <div className="no-scrollbar mt-4 flex snap-x gap-3 overflow-x-auto pb-3">
+          {sliderProducts.map((p) => (
+            <article
+              key={p.id}
+              className="flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-md ring-1 ring-black/5 transition hover:shadow-md sm:w-[200px] md:w-[220px]"
+            >
+              <Link to="/menu" className="relative block aspect-square overflow-hidden bg-[#f7f7f7]">
+                <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition hover:scale-105" />
+                {p.discountPct ? (
+                  <span className="absolute left-2 top-2 rounded-sm bg-emerald-500 px-1.5 py-0.5 text-[10px] font-extrabold text-white shadow">
+                    -{p.discountPct}%
+                  </span>
+                ) : null}
+              </Link>
+              <div className="flex flex-1 flex-col p-3">
+                <h3 className="line-clamp-2 min-h-[2.4em] text-xs font-semibold text-[#0f1111]">
+                  {p.name}
+                </h3>
+                <div className="mt-1 flex items-center gap-1">
+                  <Stars rating={p.rating} />
+                  <span className="text-[11px] text-[#007185]">({p.reviews.toLocaleString("es-ES")})</span>
                 </div>
-                <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{t(`packs.${id}.desc`)}</p>
+                <div className="mt-1 flex items-baseline gap-1.5">
+                  <span className="text-base font-extrabold text-[#0f1111]">
+                    ${p.price.toFixed(2)}
+                  </span>
+                  {p.oldPrice ? (
+                    <span className="text-[11px] text-[#888] line-through">${p.oldPrice.toFixed(2)}</span>
+                  ) : null}
+                </div>
                 <button
                   type="button"
-                  onClick={() => cart.add({ id: `pack-${id}`, name: t(`packs.${id}.name`), price: packPrices[id], image: packImages[id] })}
-                  className="mt-3 w-full rounded-md bg-amber-400 py-2.5 text-sm font-bold text-[#1a0f0a] shadow transition hover:bg-amber-300 active:scale-[0.98]"
+                  onClick={() =>
+                    cart.add({ id: `slider-${p.id}`, name: p.name, price: p.price, image: p.image })
+                  }
+                  className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-[#c8956d] px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-[#a87852] active:scale-95"
                 >
-                  {t("common.addToCart")}
+                  <Plus className="h-3.5 w-3.5" />
+                  Agregar al carrito
                 </button>
               </div>
             </article>
           ))}
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  );
+}
+
+function Stars({ rating }: { rating: number }) {
+  const full = Math.floor(rating);
+  const half = rating - full >= 0.5;
+  return (
+    <span className="inline-flex items-center" aria-label={`${rating} de 5 estrellas`}>
+      {Array.from({ length: 5 }).map((_, i) => {
+        const filled = i < full || (i === full && half);
+        return (
+          <Star
+            key={i}
+            className={`h-3.5 w-3.5 ${filled ? "fill-amber-400 text-amber-400" : "text-amber-400/30"}`}
+            strokeWidth={1.5}
+          />
+        );
+      })}
+      <span className="ml-1 text-[11px] font-semibold text-[#0f1111]">{rating.toFixed(1)}</span>
+    </span>
   );
 }
