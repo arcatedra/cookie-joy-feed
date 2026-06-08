@@ -154,6 +154,7 @@ export function TopNav() {
                 onChange={(e) => setSearchVal(e.target.value)}
                 onFocus={() => setSearchOpen(true)}
                 onClick={() => setSearchOpen(true)}
+                onKeyDown={(e) => { if (e.key === "Enter") goSearch(); }}
                 placeholder={t("topnav.searchPlaceholder")}
                 aria-label={t("common.search")}
                 className="min-w-0 flex-1 bg-white px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
@@ -161,6 +162,7 @@ export function TopNav() {
 
               <button
                 type="button"
+                onClick={goSearch}
                 aria-label={t("common.search")}
                 className="grid w-12 shrink-0 place-items-center bg-emerald-400 text-[#1a0f0a] transition hover:bg-emerald-300"
               >
