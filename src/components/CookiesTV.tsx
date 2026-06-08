@@ -11,8 +11,6 @@ import {
   VolumeX,
   Plus,
   Send,
-  ChevronUp,
-  ChevronDown,
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -52,7 +50,8 @@ interface DbComment {
   author_name?: string;
 }
 
-// Fallback assets for seeded reels (video files live in repo).
+const BRAND = "OyS Cookies";
+
 const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,
   "demo-cookies-cream": reel2.url,
@@ -76,20 +75,20 @@ const PRODUCT_OPTIONS = [
   { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
 ];
 
-// ============ Main component (top stories bar) ============
+// ============ Main: Facebook-style Reels row ============
 export function CookiesTV() {
   const { user } = useAuth();
   const [reels, setReels] = useState<DbReel[]>([]);
   const [loading, setLoading] = useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [commentsFor, setCommentsFor] = useState<string | null>(null);
+  const [globalMuted, setGlobalMuted] = useState(true);
 
-  // Likes aggregate per reel
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [myLikes, setMyLikes] = useState<Set<string>>(new Set());
 
-  // Initial fetch
+  // Fetch reels + aggregates
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -105,8 +104,6 @@ export function CookiesTV() {
       }
       setReels((data ?? []) as DbReel[]);
       setLoading(false);
-
-      // Counts in parallel
       const ids = (data ?? []).map((r) => r.id);
       if (ids.length) {
         const [{ data: likeRows }, { data: commentRows }] = await Promise.all([
@@ -134,31 +131,26 @@ export function CookiesTV() {
     };
   }, [user?.id]);
 
-  // Realtime: keep aggregate counts in sync
+  // Realtime aggregates
   useEffect(() => {
     const ch = supabase
       .channel("reels-aggregates")
       .on("postgres_changes", { event: "*", schema: "public", table: "reel_likes" }, (payload) => {
-        const newRow = (payload.new ?? payload.old) as { reel_id: string; user_id: string } | null;
-        if (!newRow) return;
+        const row = (payload.new ?? payload.old) as { reel_id: string } | null;
+        if (!row) return;
         setLikeCounts((prev) => {
           const delta = payload.eventType === "INSERT" ? 1 : payload.eventType === "DELETE" ? -1 : 0;
-          return { ...prev, [newRow.reel_id]: Math.max(0, (prev[newRow.reel_id] ?? 0) + delta) };
+          return { ...prev, [row.reel_id]: Math.max(0, (prev[row.reel_id] ?? 0) + delta) };
         });
       })
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "reel_comments" },
-        (payload) => {
-          const newRow = (payload.new ?? payload.old) as { reel_id: string } | null;
-          if (!newRow) return;
-          setCommentCounts((prev) => {
-            const delta =
-              payload.eventType === "INSERT" ? 1 : payload.eventType === "DELETE" ? -1 : 0;
-            return { ...prev, [newRow.reel_id]: Math.max(0, (prev[newRow.reel_id] ?? 0) + delta) };
-          });
-        },
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "reel_comments" }, (payload) => {
+        const row = (payload.new ?? payload.old) as { reel_id: string } | null;
+        if (!row) return;
+        setCommentCounts((prev) => {
+          const delta = payload.eventType === "INSERT" ? 1 : payload.eventType === "DELETE" ? -1 : 0;
+          return { ...prev, [row.reel_id]: Math.max(0, (prev[row.reel_id] ?? 0) + delta) };
+        });
+      })
       .subscribe();
     return () => {
       void supabase.removeChannel(ch);
@@ -171,7 +163,6 @@ export function CookiesTV() {
       return;
     }
     const liked = myLikes.has(reelId);
-    // Optimistic
     setMyLikes((prev) => {
       const next = new Set(prev);
       if (liked) next.delete(reelId);
@@ -198,64 +189,62 @@ export function CookiesTV() {
   };
 
   return (
-    <section className="mx-auto max-w-[1500px] px-3 pt-3 md:px-6">
-      <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-black/5">
-        <div className="flex items-center justify-between gap-3 px-1">
+    <section className="mx-auto max-w-[1500px] px-3 pt-4 md:px-6">
+      <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-5">
+        <div className="mb-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-5 items-center rounded-full bg-rose-500 px-1.5 text-[9px] font-extrabold uppercase tracking-wider text-white">
-              Live
+            <span className="inline-flex h-5 items-center rounded-full bg-rose-500 px-2 text-[10px] font-extrabold uppercase tracking-wider text-white">
+              Reels
             </span>
-            <h2 className="text-sm font-extrabold text-[#1a0f0a] md:text-base">
+            <h2 className="text-base font-extrabold text-[#1a0f0a] md:text-lg">
               Cookies TV · Galleta Reels
             </h2>
           </div>
           <button
             type="button"
             onClick={() => setAdminOpen(true)}
-            className="shrink-0 rounded-full bg-[#1a0f0a] px-3 py-1 text-[10px] font-semibold text-white transition hover:bg-[#3d2418]"
+            className="shrink-0 rounded-full bg-[#1a0f0a] px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-[#3d2418]"
           >
             + Nuevo Reel
           </button>
         </div>
 
-        <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-1 pb-1">
+        <div className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 md:gap-4">
           {loading && (
-            <div className="flex h-20 items-center gap-2 text-xs text-[#666]">
+            <div className="flex h-[420px] w-full items-center justify-center gap-2 text-xs text-[#666]">
               <Loader2 className="h-4 w-4 animate-spin" />
               Cargando reels…
             </div>
           )}
           {!loading &&
-            reels.map((r, i) => (
-              <StoryThumb
+            reels.map((r) => (
+              <ReelCard
                 key={r.id}
                 reel={r}
-                onClick={() => setOpenIdx(i)}
+                likes={likeCounts[r.id] ?? 0}
+                comments={commentCounts[r.id] ?? 0}
+                liked={myLikes.has(r.id)}
+                onToggleLike={() => toggleLike(r.id)}
+                onOpenComments={() => setCommentsFor(r.id)}
+                globalMuted={globalMuted}
+                onToggleMuted={() => setGlobalMuted((m) => !m)}
               />
             ))}
           {!loading && reels.length === 0 && (
-            <p className="py-6 text-xs text-[#666]">Aún no hay reels. ¡Sé el primero!</p>
+            <p className="py-10 text-xs text-[#666]">Aún no hay reels. ¡Sé el primero!</p>
           )}
         </div>
       </div>
 
-      {openIdx !== null && (
-        <ReelsViewer
-          reels={reels}
-          startIdx={openIdx}
-          onClose={() => setOpenIdx(null)}
-          likeCounts={likeCounts}
-          commentCounts={commentCounts}
-          myLikes={myLikes}
-          onToggleLike={toggleLike}
-        />
+      {commentsFor && (
+        <CommentsPanel reelId={commentsFor} onClose={() => setCommentsFor(null)} />
       )}
 
       {adminOpen && (
         <AdminModal
           onClose={() => setAdminOpen(false)}
-          onPublish={(newReel) => {
-            setReels((prev) => [newReel, ...prev]);
+          onPublish={(r) => {
+            setReels((prev) => [r, ...prev]);
             setAdminOpen(false);
             toast.success("¡Reel publicado!");
           }}
@@ -265,210 +254,32 @@ export function CookiesTV() {
   );
 }
 
-// ============ Story thumbnail (Instagram-style bubble) ============
-function StoryThumb({ reel, onClick }: { reel: DbReel; onClick: () => void }) {
-  const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    v.muted = true;
-    // capture a still frame
-    const handle = () => {
-      try {
-        v.currentTime = 0.1;
-      } catch {
-        /* ignore */
-      }
-    };
-    v.addEventListener("loadedmetadata", handle);
-    return () => v.removeEventListener("loadedmetadata", handle);
-  }, [videoSrc]);
-
-  const label = reel.title || reel.product_name || "Reel";
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="group flex w-[72px] shrink-0 flex-col items-center gap-1"
-    >
-      <span className="relative grid h-[72px] w-[72px] place-items-center rounded-full bg-gradient-to-tr from-rose-500 via-amber-400 to-pink-500 p-[3px] transition group-hover:scale-105">
-        <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-white p-[2px]">
-          <span className="relative h-full w-full overflow-hidden rounded-full bg-black">
-            {videoSrc ? (
-              <video
-                ref={ref}
-                src={videoSrc}
-                muted
-                playsInline
-                preload="metadata"
-                className="h-full w-full object-cover"
-              />
-            ) : reel.product_image ? (
-              <img src={reel.product_image} alt="" className="h-full w-full object-cover" />
-            ) : null}
-            <span className="absolute inset-0 grid place-items-center bg-black/20">
-              <Play className="h-5 w-5 fill-white text-white drop-shadow" />
-            </span>
-          </span>
-        </span>
-      </span>
-      <span className="line-clamp-1 max-w-[72px] text-center text-[10px] font-medium text-[#1a0f0a]">
-        {label}
-      </span>
-    </button>
-  );
-}
-
-// ============ Fullscreen Reels viewer (Instagram-like) ============
-function ReelsViewer({
-  reels,
-  startIdx,
-  onClose,
-  likeCounts,
-  commentCounts,
-  myLikes,
-  onToggleLike,
-}: {
-  reels: DbReel[];
-  startIdx: number;
-  onClose: () => void;
-  likeCounts: Record<string, number>;
-  commentCounts: Record<string, number>;
-  myLikes: Set<string>;
-  onToggleLike: (id: string) => void;
-}) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [activeIdx, setActiveIdx] = useState(startIdx);
-  const [commentsOpenFor, setCommentsOpenFor] = useState<string | null>(null);
-
-  useEffect(() => {
-    // lock body scroll
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
-
-  useEffect(() => {
-    // jump to start index after mount
-    const el = scrollerRef.current;
-    if (!el) return;
-    const target = el.querySelector<HTMLElement>(`[data-idx='${startIdx}']`);
-    if (target) target.scrollIntoView({ block: "start" });
-  }, [startIdx]);
-
-  // Detect active slide via IntersectionObserver
-  useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const items = el.querySelectorAll<HTMLElement>("[data-idx]");
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && e.intersectionRatio > 0.6) {
-            const idx = Number((e.target as HTMLElement).dataset.idx);
-            setActiveIdx(idx);
-          }
-        });
-      },
-      { root: el, threshold: [0.6] },
-    );
-    items.forEach((it) => obs.observe(it));
-    return () => obs.disconnect();
-  }, [reels.length]);
-
-  const goto = (delta: number) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const nextIdx = Math.min(reels.length - 1, Math.max(0, activeIdx + delta));
-    const target = el.querySelector<HTMLElement>(`[data-idx='${nextIdx}']`);
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  return (
-    <div className="fixed inset-0 z-[200] bg-black">
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Cerrar"
-        className="absolute right-3 top-3 z-30 grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
-      >
-        <X className="h-5 w-5" />
-      </button>
-
-      {/* desktop nav arrows */}
-      <button
-        type="button"
-        onClick={() => goto(-1)}
-        aria-label="Anterior"
-        className="absolute left-3 top-1/2 z-30 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20 md:grid"
-      >
-        <ChevronUp className="h-5 w-5" />
-      </button>
-      <button
-        type="button"
-        onClick={() => goto(1)}
-        aria-label="Siguiente"
-        className="absolute right-3 top-1/2 z-30 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20 md:grid"
-      >
-        <ChevronDown className="h-5 w-5" />
-      </button>
-
-      <div
-        ref={scrollerRef}
-        className="h-full w-full snap-y snap-mandatory overflow-y-scroll"
-        style={{ scrollSnapType: "y mandatory" }}
-      >
-        {reels.map((r, i) => (
-          <div
-            key={r.id}
-            data-idx={i}
-            className="flex h-screen w-full snap-start items-center justify-center"
-          >
-            <ReelSlide
-              reel={r}
-              isActive={i === activeIdx}
-              likes={likeCounts[r.id] ?? 0}
-              comments={commentCounts[r.id] ?? 0}
-              liked={myLikes.has(r.id)}
-              onToggleLike={() => onToggleLike(r.id)}
-              onOpenComments={() => setCommentsOpenFor(r.id)}
-            />
-          </div>
-        ))}
-      </div>
-
-      {commentsOpenFor && (
-        <CommentsPanel reelId={commentsOpenFor} onClose={() => setCommentsOpenFor(null)} />
-      )}
-    </div>
-  );
-}
-
-function ReelSlide({
+// ============ Big Facebook-style Reel card ============
+function ReelCard({
   reel,
-  isActive,
   likes,
   comments,
   liked,
   onToggleLike,
   onOpenComments,
+  globalMuted,
+  onToggleMuted,
 }: {
   reel: DbReel;
-  isActive: boolean;
   likes: number;
   comments: number;
   liked: boolean;
   onToggleLike: () => void;
   onOpenComments: () => void;
+  globalMuted: boolean;
+  onToggleMuted: () => void;
 }) {
   const cart = useCart();
+  const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [burst, setBurst] = useState(false);
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
   const productImg =
@@ -476,17 +287,29 @@ function ReelSlide({
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
 
+  // Autoplay when visible
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.5),
+      { threshold: [0, 0.5, 1] },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (isActive) {
-      v.currentTime = 0;
+    v.muted = globalMuted;
+    if (inView) {
       v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     } else {
       v.pause();
       setPlaying(false);
     }
-  }, [isActive, videoSrc]);
+  }, [inView, globalMuted, videoSrc]);
 
   const togglePlay = () => {
     const v = videoRef.current;
@@ -497,6 +320,14 @@ function ReelSlide({
       v.pause();
       setPlaying(false);
     }
+  };
+
+  const handleLike = () => {
+    if (!liked) {
+      setBurst(true);
+      window.setTimeout(() => setBurst(false), 600);
+    }
+    onToggleLike();
   };
 
   const buy = () => {
@@ -510,63 +341,101 @@ function ReelSlide({
     toast.success(`${reel.product_name} agregado al carrito`);
   };
 
+  const share = async () => {
+    try {
+      const url = typeof window !== "undefined" ? window.location.href : "";
+      if (navigator.share) await navigator.share({ title: reel.title ?? BRAND, url });
+      else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Enlace copiado");
+      }
+    } catch {
+      /* cancel */
+    }
+  };
+
   return (
-    <article className="relative h-full max-h-[100dvh] w-full max-w-[min(450px,100vw)] overflow-hidden bg-black sm:rounded-lg">
+    <article
+      ref={cardRef}
+      className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
+    >
       {videoSrc ? (
         <video
           ref={videoRef}
           src={videoSrc}
           playsInline
           loop
-          muted={muted}
-          preload="auto"
-          className="h-full w-full object-cover"
+          muted
+          preload="metadata"
+          className="absolute inset-0 h-full w-full object-cover"
           onClick={togglePlay}
         />
       ) : (
         <div className="grid h-full w-full place-items-center text-white/60">Sin video</div>
       )}
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+      {/* gradient overlays */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
 
+      {/* Top: brand + mute */}
+      <div className="absolute inset-x-3 top-3 z-10 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-rose-500 text-xs font-extrabold text-white ring-2 ring-white/80">
+            🍪
+          </span>
+          <span className="text-[12px] font-bold text-white drop-shadow">{BRAND}</span>
+        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleMuted();
+          }}
+          aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
+          className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+        >
+          {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+        </button>
+      </div>
+
+      {/* Center play overlay when paused */}
       {!playing && videoSrc && (
         <button
           type="button"
           onClick={togglePlay}
           aria-label="Reproducir"
-          className="absolute inset-0 grid place-items-center"
+          className="absolute inset-0 z-10 grid place-items-center"
         >
-          <span className="grid h-16 w-16 place-items-center rounded-full bg-white/90">
-            <Play className="h-7 w-7 fill-[#1a0f0a] text-[#1a0f0a]" />
+          <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg">
+            <Play className="h-6 w-6 fill-[#1a0f0a] text-[#1a0f0a]" />
           </span>
         </button>
       )}
 
-      {/* Mute */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          setMuted((m) => !m);
-        }}
-        className="absolute right-3 top-14 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/50 text-white backdrop-blur"
-        aria-label={muted ? "Activar sonido" : "Silenciar"}
-      >
-        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-      </button>
-
-      {/* Right rail */}
-      <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
+      {/* Right rail actions */}
+      <div className="absolute bottom-32 right-2.5 z-20 flex flex-col items-center gap-3">
         <button
           type="button"
-          onClick={onToggleLike}
+          onClick={handleLike}
           aria-label="Me gusta"
-          className="flex flex-col items-center gap-0.5 transition active:scale-90"
+          className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
         >
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Heart className={`h-6 w-6 ${liked ? "fill-rose-500 text-rose-500" : "text-white"}`} />
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+            <Heart
+              className={`h-5 w-5 transition ${
+                liked ? "fill-rose-500 text-rose-500" : "text-white"
+              }`}
+            />
           </span>
-          <span className="text-[11px] font-bold text-white drop-shadow">{formatCount(likes)}</span>
+          <span className="text-[10px] font-bold text-white drop-shadow">
+            {formatCount(likes)}
+          </span>
+          {burst && (
+            <span className="pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 animate-ping text-rose-400">
+              <Heart className="h-8 w-8 fill-rose-500 text-rose-500" />
+            </span>
+          )}
         </button>
         <button
           type="button"
@@ -574,74 +443,63 @@ function ReelSlide({
           aria-label="Comentarios"
           className="flex flex-col items-center gap-0.5"
         >
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <MessageCircle className="h-6 w-6 text-white" />
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+            <MessageCircle className="h-5 w-5 text-white" />
           </span>
-          <span className="text-[11px] font-bold text-white drop-shadow">
+          <span className="text-[10px] font-bold text-white drop-shadow">
             {formatCount(comments)}
           </span>
         </button>
         <button
           type="button"
-          onClick={async () => {
-            try {
-              const url = typeof window !== "undefined" ? window.location.href : "";
-              if (navigator.share) await navigator.share({ title: reel.title ?? "", url });
-              else {
-                await navigator.clipboard.writeText(url);
-                toast.success("Enlace copiado");
-              }
-            } catch {
-              /* cancel */
-            }
-          }}
-          className="flex flex-col items-center gap-0.5"
+          onClick={share}
           aria-label="Compartir"
+          className="flex flex-col items-center gap-0.5"
         >
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Share2 className="h-5 w-5 text-white" />
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+            <Share2 className="h-4 w-4 text-white" />
           </span>
         </button>
       </div>
 
-      {/* Title */}
-      <div className="absolute inset-x-3 bottom-24 z-10">
-        <p className="text-sm font-bold leading-tight text-white drop-shadow">
-          {reel.title ?? "Reel"}
+      {/* Bottom fixed info */}
+      <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
+        <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
+          {reel.title ?? "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
-      </div>
-
-      {/* Shoppable card */}
-      {reel.product_name && (
-        <div className="absolute inset-x-3 bottom-3 z-10 flex items-center gap-2 rounded-lg bg-white/95 p-2 shadow-lg backdrop-blur">
-          {productImg && (
-            <img
-              src={productImg}
-              alt={reel.product_name}
-              className="h-12 w-12 shrink-0 rounded-md object-cover"
-            />
-          )}
-          <div className="min-w-0 flex-1">
-            <p className="line-clamp-1 text-xs font-bold text-[#1a0f0a]">{reel.product_name}</p>
-            <p className="text-sm font-extrabold text-[#b12704]">
-              ${Number(reel.product_price ?? 0).toFixed(2)}
-            </p>
-          </div>
+        {reel.product_name && (
           <button
             type="button"
             onClick={buy}
-            className="inline-flex items-center gap-1 rounded-full bg-[#c8956d] px-3 py-2 text-[11px] font-bold text-white shadow hover:bg-[#a87852]"
+            className="flex w-full items-center gap-2 rounded-xl bg-white/15 px-2.5 py-2 text-left text-white shadow-md ring-1 ring-white/25 backdrop-blur-md transition hover:bg-white/25"
           >
-            <ShoppingCart className="h-3.5 w-3.5" />
-            Comprar
+            {productImg && (
+              <img
+                src={productImg}
+                alt=""
+                className="h-9 w-9 shrink-0 rounded-md object-cover ring-1 ring-white/40"
+              />
+            )}
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[11px] font-semibold">
+                {reel.product_name}
+              </span>
+              <span className="block text-[11px] font-extrabold text-amber-300">
+                ${Number(reel.product_price ?? 0).toFixed(2)}
+              </span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold ring-1 ring-white/40">
+              <ShoppingCart className="h-3 w-3" />
+              Comprar
+            </span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </article>
   );
 }
 
-// ============ Comments panel ============
+// ============ Comments panel (slides from right / bottom on mobile) ============
 function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => void }) {
   const { user } = useAuth();
   const [comments, setComments] = useState<DbComment[]>([]);
@@ -649,7 +507,14 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Load + realtime
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -688,7 +553,6 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
         { event: "INSERT", schema: "public", table: "reel_comments", filter: `reel_id=eq.${reelId}` },
         async (payload) => {
           const row = payload.new as DbComment;
-          // Fetch display name
           let name = "Anónimo";
           const { data } = await supabase
             .from("profiles")
@@ -731,11 +595,11 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
 
   return (
     <div
-      className="absolute inset-0 z-40 flex items-end bg-black/60"
+      className="fixed inset-0 z-[200] flex items-end justify-end bg-black/50 md:items-stretch"
       onClick={onClose}
     >
       <div
-        className="flex h-[70vh] w-full flex-col rounded-t-2xl bg-white shadow-2xl"
+        className="flex h-[75vh] w-full flex-col rounded-t-2xl bg-white shadow-2xl md:h-full md:w-[420px] md:rounded-none md:rounded-l-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b px-4 py-3">
@@ -757,16 +621,14 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
             </div>
           )}
           {!loading && comments.length === 0 && (
-            <p className="py-6 text-center text-xs text-[#666]">
-              Sé el primero en comentar 💬
-            </p>
+            <p className="py-6 text-center text-xs text-[#666]">Sé el primero en comentar 💬</p>
           )}
           {comments.map((c) => (
             <div key={c.id} className="flex gap-2">
               <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-rose-500 text-xs font-bold text-white">
                 {(c.author_name ?? "?").charAt(0).toUpperCase()}
               </div>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 rounded-2xl bg-[#f1f2f4] px-3 py-2">
                 <p className="text-[11px] font-bold text-[#1a0f0a]">{c.author_name}</p>
                 <p className="break-words text-sm text-[#333]">{c.body}</p>
               </div>
@@ -845,7 +707,7 @@ function AdminModal({
       .insert({
         slug: `r-${Date.now()}`,
         title: title.trim(),
-        video_url: fileUrl, // NOTE: blob URL — replace with Storage upload for persistence
+        video_url: fileUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
