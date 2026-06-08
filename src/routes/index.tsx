@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, Bell } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -42,9 +44,9 @@ export const Route = createFileRoute("/")({
 });
 
 const reels = [
-  { img: reel1, key: "reel1", likes: "12.4k", src: reelVideo1.url },
-  { img: reel2, key: "reel2", likes: "8.1k", src: reelVideo2.url },
-  { img: reel3, key: "reel3", likes: "5.7k", src: reelVideo3.url },
+  { key: "reel1", img: reel1, src: reelVideo1.url },
+  { key: "reel2", img: reel2, src: reelVideo2.url },
+  { key: "reel3", img: reel3, src: reelVideo3.url },
 ];
 
 const trending = [
@@ -70,6 +72,17 @@ function Home() {
   const cart = useCart();
   const navigate = useNavigate();
   const [notifOpen, setNotifOpen] = useState(false);
+
+  const reelRowsQ = useQuery({
+    queryKey: ["reels-catalog"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("reels").select("id, slug");
+      if (error) throw error;
+      const map = new Map<string, string>();
+      data?.forEach((r) => map.set(r.slug, r.id));
+      return map;
+    },
+  });
 
   const trendingProducts = trending.map((tItem, idx) => ({
     item: tItem,
@@ -125,15 +138,19 @@ function Home() {
           <Link to="/explore" className="text-xs font-semibold text-cta">{t("common.seeAll")}</Link>
         </div>
         <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-2">
-          {reels.map((r) => (
-            <ReelPlayer
-              key={r.key}
-              poster={r.img}
-              src={r.src}
-              title={t(`reels.${r.key}`)}
-              likes={r.likes}
-            />
-          ))}
+          {reels.map((r) => {
+            const reelId = reelRowsQ.data?.get(r.key);
+            if (!reelId) return null;
+            return (
+              <ReelPlayer
+                key={r.key}
+                reelId={reelId}
+                poster={r.img}
+                src={r.src}
+                title={t(`reels.${r.key}`)}
+              />
+            );
+          })}
         </div>
       </section>
 

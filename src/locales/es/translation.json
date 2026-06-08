@@ -17,7 +17,40 @@
     "reviews": "reseñas",
     "notifications": "Notificaciones",
     "markRead": "Marcar todo como leído",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "loading": "Cargando…"
+  },
+  "auth": {
+    "signInTitle": "Iniciar sesión",
+    "signUpTitle": "Crear cuenta",
+    "subtitle": "Da me gusta, comenta y valora galletas.",
+    "google": "Continuar con Google",
+    "or": "o",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Tu nombre",
+    "signIn": "Entrar",
+    "signUp": "Crear cuenta",
+    "signOut": "Cerrar sesión",
+    "signedOut": "Sesión cerrada",
+    "noAccount": "¿No tienes cuenta? Crear una",
+    "haveAccount": "¿Ya tienes cuenta? Entrar",
+    "checkEmail": "Revisa tu correo para confirmar la cuenta"
+  },
+  "reels": {
+    "writeComment": "Escribe un comentario…",
+    "send": "Enviar",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero!",
+    "signInToLike": "Inicia sesión para dar me gusta",
+    "signInToComment": "Inicia sesión para comentar",
+    "anonymous": "Usuario"
+  },
+  "ratings": {
+    "yourRating": "Tu valoración",
+    "writeReview": "Reseña opcional para {{product}}",
+    "save": "Guardar",
+    "thanks": "¡Gracias por tu valoración!",
+    "signInToRate": "Inicia sesión para valorar"
   },
   "language": {
     "switchTo": "Cambiar idioma",
