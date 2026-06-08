@@ -357,6 +357,10 @@ function ReelCard({
   const [burst, setBurst] = useState(false);
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+  const productImg =
+    reel.product_image ||
+    (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
+    "";
   const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
   const isEmbed = !!embed;
 
