@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   Heart,
   MessageCircle,
   Share2,
   ShoppingCart,
-  Upload,
   X,
   Play,
   Volume2,
@@ -12,6 +11,8 @@ import {
   Plus,
   Send,
   Loader2,
+  Link as LinkIcon,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
@@ -74,6 +75,80 @@ const PRODUCT_OPTIONS = [
   { slug: "p-mint", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
   { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
 ];
+
+// ============ Embed link parser ============
+type EmbedPlatform = "instagram" | "tiktok" | "facebook" | "youtube";
+interface EmbedInfo {
+  platform: EmbedPlatform;
+  embedUrl: string;
+  originalUrl: string;
+  label: string;
+}
+
+function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
+  if (!raw) return null;
+  const url = raw.trim();
+  if (!/^https?:\/\//i.test(url)) return null;
+
+  // Instagram: /reel/{id}, /p/{id}, /tv/{id}
+  const ig = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
+  if (ig) {
+    return {
+      platform: "instagram",
+      embedUrl: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/captioned/`,
+      originalUrl: url,
+      label: "Instagram",
+    };
+  }
+
+  // TikTok: /@user/video/{id} or vm.tiktok.com short links
+  const tt = url.match(/tiktok\.com\/(?:@[\w.-]+\/video\/|v\/|embed\/v2\/)(\d+)/i);
+  if (tt) {
+    return {
+      platform: "tiktok",
+      embedUrl: `https://www.tiktok.com/embed/v2/${tt[1]}`,
+      originalUrl: url,
+      label: "TikTok",
+    };
+  }
+  if (/(?:vm|vt)\.tiktok\.com\//i.test(url)) {
+    // Short link — let TikTok resolve via the generic player
+    return {
+      platform: "tiktok",
+      embedUrl: `https://www.tiktok.com/embed?lang=en&url=${encodeURIComponent(url)}`,
+      originalUrl: url,
+      label: "TikTok",
+    };
+  }
+
+  // Facebook: any fb.watch / facebook.com video/reel link
+  if (/facebook\.com\/(?:reel|watch|.+\/videos)|fb\.watch\//i.test(url)) {
+    return {
+      platform: "facebook",
+      embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+        url,
+      )}&show_text=false&width=560&t=0`,
+      originalUrl: url,
+      label: "Facebook",
+    };
+  }
+
+  // YouTube Shorts / watch
+  const yt =
+    url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+  if (yt) {
+    return {
+      platform: "youtube",
+      embedUrl: `https://www.youtube.com/embed/${yt[1]}?rel=0&playsinline=1`,
+      originalUrl: url,
+      label: "YouTube",
+    };
+  }
+
+  return null;
+}
 
 // ============ Main: Facebook-style Reels row ============
 export function CookiesTV() {
@@ -286,20 +361,23 @@ function ReelCard({
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
+  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
+  const isEmbed = !!embed;
 
-  // Autoplay when visible
+  // Autoplay native <video> when visible
   useEffect(() => {
     const el = cardRef.current;
-    if (!el) return;
+    if (!el || isEmbed) return;
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.5),
       { threshold: [0, 0.5, 1] },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [isEmbed]);
 
   useEffect(() => {
+    if (isEmbed) return;
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
@@ -309,9 +387,10 @@ function ReelCard({
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc]);
+  }, [inView, globalMuted, videoSrc, isEmbed]);
 
   const togglePlay = () => {
+    if (isEmbed) return;
     const v = videoRef.current;
     if (!v) return;
     if (v.paused) {
@@ -343,7 +422,7 @@ function ReelCard({
 
   const share = async () => {
     try {
-      const url = typeof window !== "undefined" ? window.location.href : "";
+      const url = embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
       if (navigator.share) await navigator.share({ title: reel.title ?? BRAND, url });
       else {
         await navigator.clipboard.writeText(url);
@@ -359,7 +438,17 @@ function ReelCard({
       ref={cardRef}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {videoSrc ? (
+      {isEmbed ? (
+        <iframe
+          src={embed!.embedUrl}
+          title={reel.title ?? `${embed!.label} reel`}
+          loading="lazy"
+          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      ) : videoSrc ? (
         <video
           ref={videoRef}
           src={videoSrc}
@@ -374,33 +463,56 @@ function ReelCard({
         <div className="grid h-full w-full place-items-center text-white/60">Sin video</div>
       )}
 
-      {/* gradient overlays */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+      {/* gradient overlays — softer over iframe so native controls remain visible */}
+      <div
+        className={`pointer-events-none absolute inset-x-0 top-0 ${
+          isEmbed ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-0 ${
+          isEmbed
+            ? "h-32 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+            : "h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+        }`}
+      />
 
-      {/* Top: brand + mute */}
-      <div className="absolute inset-x-3 top-3 z-10 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      {/* Top: brand + mute/source */}
+      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between">
+        <div className="pointer-events-auto flex items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-rose-500 text-xs font-extrabold text-white ring-2 ring-white/80">
             🍪
           </span>
           <span className="text-[12px] font-bold text-white drop-shadow">{BRAND}</span>
+          {isEmbed && (
+            <a
+              href={embed!.originalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25"
+            >
+              {embed!.label}
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
         </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleMuted();
-          }}
-          aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
-          className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-        >
-          {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-        </button>
+        {!isEmbed && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleMuted();
+            }}
+            aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
+            className="pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+          >
+            {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
+        )}
       </div>
 
-      {/* Center play overlay when paused */}
-      {!playing && videoSrc && (
+      {/* Center play overlay when paused (native video only) */}
+      {!isEmbed && !playing && videoSrc && (
         <button
           type="button"
           onClick={togglePlay}
@@ -450,6 +562,7 @@ function ReelCard({
             {formatCount(comments)}
           </span>
         </button>
+
         <button
           type="button"
           onClick={share}
@@ -660,7 +773,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
   );
 }
 
-// ============ Admin upload modal ============
+// ============ Admin embed-link modal ============
 function AdminModal({
   onClose,
   onPublish,
@@ -671,20 +784,10 @@ function AdminModal({
   const { user } = useAuth();
   const [title, setTitle] = useState("");
   const [productSlug, setProductSlug] = useState(PRODUCT_OPTIONS[0].slug);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [fileName, setFileName] = useState("");
+  const [link, setLink] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    if (!f.type.startsWith("video/")) {
-      toast.error("Selecciona un archivo de video");
-      return;
-    }
-    setFileUrl(URL.createObjectURL(f));
-    setFileName(f.name);
-  };
+  const preview = useMemo(() => parseEmbed(link), [link]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -692,8 +795,13 @@ function AdminModal({
       toast.error("Inicia sesión para publicar");
       return;
     }
-    if (!fileUrl) {
-      toast.error("Sube un video primero");
+    const trimmed = link.trim();
+    if (!trimmed) {
+      toast.error("Pega el enlace de tu Reel");
+      return;
+    }
+    if (!preview) {
+      toast.error("El enlace no parece de Instagram, TikTok, Facebook o YouTube");
       return;
     }
     if (!title.trim()) {
@@ -707,7 +815,7 @@ function AdminModal({
       .insert({
         slug: `r-${Date.now()}`,
         title: title.trim(),
-        video_url: fileUrl,
+        video_url: trimmed,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
@@ -734,7 +842,7 @@ function AdminModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🛠️ Subir nuevo Reel</h3>
+          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🔗 Incrustar nuevo Reel</h3>
           <button
             type="button"
             onClick={onClose}
@@ -753,27 +861,35 @@ function AdminModal({
 
         <form onSubmit={onSubmit} className="mt-4 space-y-4">
           <label className="block">
-            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">Archivo de video</span>
-            <div className="flex items-center gap-2">
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#1a0f0a] px-3 py-2 text-xs font-semibold text-white hover:bg-[#3d2418]">
-                <Upload className="h-3.5 w-3.5" />
-                Elegir video
-                <input type="file" accept="video/*" onChange={onFile} className="hidden" />
-              </label>
-              <span className="truncate text-[11px] text-[#666]">
-                {fileName || "Sin archivo seleccionado"}
-              </span>
-            </div>
-            {fileUrl && (
-              <video
-                src={fileUrl}
-                muted
-                playsInline
-                controls
-                className="mt-2 aspect-[9/16] w-32 rounded-md bg-black object-cover"
+            <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
+              Enlace del Reel
+            </span>
+            <div className="relative">
+              <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
+              <input
+                type="url"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
+                className="w-full rounded-md border border-[#ddd] pl-9 pr-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                maxLength={500}
               />
+            </div>
+            <p className="mt-1 text-[10px] text-[#666]">
+              Soporta Instagram (/reel/, /p/), TikTok (/video/), Facebook (/reel/, /watch/) y YouTube Shorts.
+            </p>
+            {link && !preview && (
+              <p className="mt-1 text-[10px] font-semibold text-rose-600">
+                ⚠️ No reconocemos este enlace. Verifica que sea público.
+              </p>
+            )}
+            {preview && (
+              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                ✓ {preview.label} detectado
+              </div>
             )}
           </label>
+
 
           <label className="block">
             <span className="mb-1 block text-xs font-semibold text-[#1a0f0a]">
