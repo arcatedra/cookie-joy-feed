@@ -773,7 +773,7 @@ function ReelCard({
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
           )}
-          <div className="absolute inset-0 bg-black/35" />
+          <div className="absolute inset-0 bg-black/55" />
           {embed ? (() => {
             const appLink = getPlatformAppLink(embed!);
             const { Icon, label, colorClass } = appLink;
