@@ -594,9 +594,16 @@ function ReelCard({
       case "facebook":
         href = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
         break;
-      case "whatsapp":
-        href = `https://wa.me/?text=${enc(`${text} ${url}`)}`;
+      case "whatsapp": {
+        const msg = enc(`${text} ${url}`);
+        const isMobile =
+          typeof navigator !== "undefined" &&
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        href = isMobile
+          ? `https://wa.me/?text=${msg}`
+          : `https://web.whatsapp.com/send?text=${msg}`;
         break;
+      }
       case "twitter":
         href = `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(text)}`;
         break;
