@@ -247,7 +247,9 @@ function CommentsSheet({ reelId, title, open, onOpenChange }: { reelId: string; 
       qc.invalidateQueries({ queryKey: ["reel-comments-count", reelId] });
     },
     onError: (e: Error) => {
-      if (e.message !== "empty") toast.error(e.message === "not-auth" ? t("reels.signInToComment") : e.message);
+      if (e.message === "empty") return;
+      if (e.message === "not-auth") toast.error(t("reels.signInToComment"));
+      else { console.error("reel-comment error", e); toast.error(t("common.errorOccurred")); }
     },
   });
 
