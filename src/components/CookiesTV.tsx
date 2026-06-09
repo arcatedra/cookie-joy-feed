@@ -606,7 +606,7 @@ function ReelCard({
     "";
   const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
   const isEmbed = !!embed;
-  const firstExternalOnly = Boolean(isFirst && embed);
+  const firstExternalOnly = Boolean(isFirst);
 
   // Autoplay native <video> when visible
   useEffect(() => {
@@ -774,7 +774,7 @@ function ReelCard({
             <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
           )}
           <div className="absolute inset-0 bg-black/35" />
-          {(() => {
+          {embed ? (() => {
             const appLink = getPlatformAppLink(embed!);
             const { Icon, label, colorClass } = appLink;
             return (
@@ -793,7 +793,13 @@ function ReelCard({
                 </button>
               </div>
             );
-          })()}
+          })() : (
+            <div className="absolute inset-0 z-10 grid place-items-center px-6 text-center">
+              <span className="grid h-20 w-20 place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10">
+                <ExternalLink className="h-10 w-10 text-[#1a0f0a]" />
+              </span>
+            </div>
+          )}
         </>
       ) : isEmbed ? (
         <iframe
