@@ -775,11 +775,11 @@ function ReelCard({
           )}
           <div className="absolute inset-0 bg-black/35" />
           {(() => {
-            const appLink = getPlatformAppLink(embed);
+            const appLink = getPlatformAppLink(embed!);
             const { Icon, label, colorClass } = appLink;
             return (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
-                <PlatformMark embed={embed} className="h-20 w-20" />
+                <PlatformMark embed={embed!} className="h-20 w-20" />
                 <button
                   type="button"
                   onClick={(e) => {
