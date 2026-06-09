@@ -39,7 +39,7 @@ export function QRCodeSection({ url = "https://oys1.lovable.app" }: QRCodeSectio
       const pngUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = pngUrl;
-      link.download = "zenda-qr-code.png";
+      link.download = "origen-qr-code.png";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

@@ -19,7 +19,7 @@ import imgPack12 from "@/assets/pack-12.jpg";
 export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
-      { title: "Search results — ZENDA Cookies" },
+      { title: "Search results — OriGen Cookies" },
       { name: "description", content: "Find your favorite artisan cookies." },
     ],
   }),

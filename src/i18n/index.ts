@@ -5,7 +5,7 @@ import es from "@/locales/es/translation.json";
 
 export const SUPPORTED_LANGS = ["en", "es"] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
-const STORAGE_KEY = "zenda.lang";
+const STORAGE_KEY = "origen.lang";
 const resources = {
   en: { translation: en },
   es: { translation: es },

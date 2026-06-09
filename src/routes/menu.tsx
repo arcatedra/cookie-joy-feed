@@ -29,7 +29,7 @@ import imgPack12 from "@/assets/pack-12.jpg";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — Zenda" },
+      { title: "Menu — OriGen" },
       { name: "description", content: "Browse our classic cookies." },
     ],
   }),

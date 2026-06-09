@@ -15,7 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import { ZendaLogo } from "@/components/ZendaLogo";
+import { OriGenLogo } from "@/components/OriGenLogo";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
@@ -86,9 +86,9 @@ export function TopNav() {
           <Link
             to="/"
             className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
-            aria-label="ZENDA"
+            aria-label="OriGen"
           >
-            <ZendaLogo
+            <OriGenLogo
               size={30}
               showTagline
               nameClassName="text-[16px] font-bold tracking-[0.22em] text-amber-300"
