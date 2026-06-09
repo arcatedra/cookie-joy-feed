@@ -560,18 +560,67 @@ function ReelCard({
     toast.success(`${reel.product_name} agregado al carrito`);
   };
 
-  const share = async () => {
+  const shareUrl = () =>
+    embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
+  const shareTitle = () => reel.title ?? BRAND;
+
+  const copyLink = async () => {
     try {
-      const url = embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
-      if (navigator.share) await navigator.share({ title: reel.title ?? BRAND, url });
-      else {
-        await navigator.clipboard.writeText(url);
-        toast.success("Enlace copiado");
-      }
+      await navigator.clipboard.writeText(shareUrl());
+      toast.success("Enlace copiado");
     } catch {
-      /* cancel */
+      toast.error("No se pudo copiar el enlace");
     }
   };
+
+  const nativeShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: shareTitle(), url: shareUrl() });
+      } else {
+        await copyLink();
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
+
+  const openShare = (target: "facebook" | "whatsapp" | "twitter" | "telegram" | "email" | "instagram" | "tiktok") => {
+    const url = shareUrl();
+    const text = shareTitle();
+    const enc = encodeURIComponent;
+    let href = "";
+    switch (target) {
+      case "facebook":
+        href = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
+        break;
+      case "whatsapp":
+        href = `https://wa.me/?text=${enc(`${text} ${url}`)}`;
+        break;
+      case "twitter":
+        href = `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "telegram":
+        href = `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "email":
+        href = `mailto:?subject=${enc(text)}&body=${enc(url)}`;
+        break;
+      case "instagram":
+      case "tiktok":
+        copyLink();
+        toast.info(
+          target === "instagram"
+            ? "Enlace copiado. Pégalo en tu historia o mensaje de Instagram."
+            : "Enlace copiado. Pégalo en TikTok para compartir.",
+        );
+        return;
+    }
+    if (typeof window !== "undefined") {
+      window.open(href, "_blank", "noopener,noreferrer,width=600,height=600");
+    }
+  };
+
 
   return (
     <article
