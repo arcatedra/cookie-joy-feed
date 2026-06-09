@@ -250,13 +250,13 @@ export function TopNav() {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex shrink-0 items-end gap-1 rounded px-2 py-1.5 hover:ring-1 hover:ring-white/40"
+            className="relative flex shrink-0 items-center gap-1.5 rounded-md bg-[#4A3525] px-2.5 py-1.5 text-[#F4F1EA] shadow-sm transition hover:bg-[#3a2a1d] hover:ring-1 hover:ring-amber-300/40"
             aria-label={t("common.viewCart")}
           >
             <div className="relative">
               <ShoppingCart className="h-6 w-6" />
               <span
-                className={`absolute -right-2 -top-1 grid min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[11px] font-bold leading-[18px] text-[#F4F1EA] ${
+                className={`absolute -right-2 -top-1 grid min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[11px] font-bold leading-[18px] text-[#1a0f0a] ${
                   cart.count === 0 ? "opacity-60" : ""
                 }`}
               >
