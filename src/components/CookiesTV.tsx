@@ -68,6 +68,49 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-pista": imgWhiteMac,
 };
 
+const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
+
+function getReelStoragePath(videoUrl: string | null | undefined) {
+  if (!videoUrl) return null;
+  const markerIndex = videoUrl.indexOf(REELS_STORAGE_MARKER);
+  if (markerIndex === -1) return null;
+  const encodedPath = videoUrl.slice(markerIndex + REELS_STORAGE_MARKER.length).split("?")[0];
+  try {
+    return decodeURIComponent(encodedPath);
+  } catch {
+    return encodedPath;
+  }
+}
+
+async function signStoredReelVideos(rows: DbReel[]) {
+  const paths = Array.from(
+    new Set(rows.map((r) => getReelStoragePath(r.video_url)).filter(Boolean) as string[]),
+  );
+  if (!paths.length) return rows;
+
+  const { data, error } = await supabase.storage.from("reels").createSignedUrls(paths, 60 * 60);
+  if (error || !data) return rows;
+
+  const signedByPath = new Map<string, string>();
+  data.forEach((item) => {
+    if (item.path && item.signedUrl) signedByPath.set(item.path, item.signedUrl);
+  });
+
+  return rows.map((row) => {
+    const path = getReelStoragePath(row.video_url);
+    return path && signedByPath.has(path) ? { ...row, video_url: signedByPath.get(path)! } : row;
+  });
+}
+
+function hasPlayableSource(reel: DbReel) {
+  const url = reel.video_url?.trim();
+  if (url) {
+    if (parseEmbed(url)) return true;
+    return /\.(mp4|m4v|mov|webm)(\?|#|$)/i.test(url) || url.includes("/storage/v1/object/");
+  }
+  return Boolean(FALLBACK_VIDEO[reel.slug]);
+}
+
 const PRODUCT_OPTIONS = [
   { slug: "p-doublechoc", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
   { slug: "p-cc", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
