@@ -999,11 +999,9 @@ function ReelCard({
             <DropdownMenuItem onClick={copyLink}>
               <LinkIcon /> Copiar enlace
             </DropdownMenuItem>
-            {typeof navigator !== "undefined" && "share" in navigator && (
-              <DropdownMenuItem onClick={nativeShare}>
-                <Share2 /> Más opciones…
-              </DropdownMenuItem>
-            )}
+            <DropdownMenuItem onClick={nativeShare}>
+              <Share2 /> Más opciones…
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
