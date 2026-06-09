@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
 import {
   Heart,
   MessageCircle,
@@ -20,6 +20,7 @@ import {
   Music2,
   Twitter,
   Mail,
+  Youtube,
 } from "lucide-react";
 import {
   DropdownMenu,
