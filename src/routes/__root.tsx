@@ -136,7 +136,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <div className="min-h-screen bg-[#f3f3f3]">
+          <div className="min-h-screen bg-background">
             <TopNav />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />

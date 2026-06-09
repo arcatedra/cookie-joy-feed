@@ -68,7 +68,7 @@ export function TopNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#1a0f0a] text-white shadow-md">
+      <header className="sticky top-0 z-40 bg-[#1E3A8A] text-white shadow-md">
         {/* Top row */}
         <div className="flex items-center gap-2 px-3 py-2 md:gap-4 md:px-6 md:py-2.5">
           {/* Mobile hamburger */}
@@ -88,7 +88,7 @@ export function TopNav() {
             aria-label="OyS Cookies"
           >
             <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500">
-              <Cookie className="h-5 w-5 text-[#1a0f0a]" />
+              <Cookie className="h-5 w-5 text-[#F4F1EA]" />
             </span>
             <span className="hidden text-lg font-extrabold tracking-tight text-amber-50 sm:inline">
               OyS<span className="text-amber-400">.</span>
@@ -113,13 +113,13 @@ export function TopNav() {
 
           {/* Search bar */}
           <div ref={searchRef} className="relative flex-1 min-w-0">
-            <div className="flex items-stretch overflow-hidden rounded-md bg-white text-foreground shadow-sm focus-within:ring-2 focus-within:ring-amber-400">
+            <div className="flex items-stretch overflow-hidden rounded-md bg-[#4A3525] text-[#F4F1EA] shadow-sm focus-within:ring-2 focus-within:ring-amber-300">
               {/* Category dropdown */}
               <div ref={catRef} className="relative hidden sm:block">
                 <button
                   type="button"
                   onClick={() => setCatOpen((o) => !o)}
-                  className="flex h-full items-center gap-1 border-r border-border bg-muted px-3 text-xs font-semibold text-foreground hover:bg-muted/80"
+                  className="flex h-full items-center gap-1 border-r border-[#3a2a1d] bg-[#3a2a1d] px-3 text-xs font-semibold text-[#F4F1EA] hover:bg-[#2e2117]"
                   aria-haspopup="listbox"
                   aria-expanded={catOpen}
                 >
@@ -157,14 +157,14 @@ export function TopNav() {
                 onKeyDown={(e) => { if (e.key === "Enter") goSearch(); }}
                 placeholder={t("topnav.searchPlaceholder")}
                 aria-label={t("common.search")}
-                className="min-w-0 flex-1 bg-white px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                className="min-w-0 flex-1 bg-[#4A3525] px-3 py-2 text-sm text-[#F4F1EA] placeholder:text-[#F4F1EA]/60 focus:outline-none"
               />
 
               <button
                 type="button"
                 onClick={goSearch}
                 aria-label={t("common.search")}
-                className="grid w-12 shrink-0 place-items-center bg-emerald-400 text-[#1a0f0a] transition hover:bg-emerald-300"
+                className="grid w-12 shrink-0 place-items-center bg-[#3a2a1d] text-[#F4F1EA] transition hover:bg-[#2e2117]"
               >
                 <Search className="h-5 w-5" strokeWidth={2.5} />
               </button>
@@ -250,7 +250,7 @@ export function TopNav() {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex shrink-0 items-end gap-1 rounded px-2 py-1.5 hover:ring-1 hover:ring-white/40"
+            className="relative flex shrink-0 items-center gap-1.5 rounded-md bg-[#4A3525] px-2.5 py-1.5 text-[#F4F1EA] shadow-sm transition hover:bg-[#3a2a1d] hover:ring-1 hover:ring-amber-300/40"
             aria-label={t("common.viewCart")}
           >
             <div className="relative">
@@ -268,7 +268,7 @@ export function TopNav() {
         </div>
 
         {/* Mobile-only address & language row */}
-        <div className="flex items-center justify-between gap-2 bg-[#120906] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
+        <div className="flex items-center justify-between gap-2 bg-[#0F172A] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
           <button type="button" className="flex items-center gap-1">
             <MapPin className="h-3.5 w-3.5 text-amber-300" />
             <span>{t("topnav.deliverTo")} — {t("topnav.updateLocation")}</span>
@@ -277,7 +277,7 @@ export function TopNav() {
         </div>
 
         {/* Sub-navbar */}
-        <nav className="flex items-center gap-1 bg-[#2a1810] px-2 py-1.5 text-sm md:px-4">
+        <nav className="flex items-center gap-1 bg-[#0F172A] px-2 py-1.5 text-sm md:px-4">
           <button
             type="button"
             onClick={() => setSideOpen(true)}

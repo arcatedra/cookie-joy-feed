@@ -37,45 +37,44 @@
 :root {
   --radius: 1rem;
   /* Warm light beige bg */
-  --background: oklch(0.972 0.012 80);
-  --foreground: oklch(0.22 0.04 260);
+  /* Elegant soft beige */
+  --background: #f4f1ea;
+  --foreground: #1a1a1a;
 
   /* Deep elegant blue */
-  --primary: oklch(0.27 0.08 260);
-  --primary-foreground: oklch(0.98 0.012 80);
+  --primary: #1e3a8a;
+  --primary-foreground: #f4f1ea;
 
-  /* Cream cards */
-  --card: oklch(0.985 0.008 80);
-  --card-foreground: oklch(0.22 0.04 260);
-  --cream: oklch(0.94 0.018 75);
+  /* Clean white cards so cookies pop on beige */
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --cream: #f5f5dc;
 
-  --secondary: oklch(0.94 0.018 75);
-  --secondary-foreground: oklch(0.27 0.08 260);
+  --secondary: #1e3a8a;
+  --secondary-foreground: #f4f1ea;
 
-  --muted: oklch(0.93 0.015 75);
-  --muted-foreground: oklch(0.5 0.03 60);
+  --muted: #ece7dc;
+  --muted-foreground: #5a4a3a;
 
-  --accent: oklch(0.94 0.018 75);
-  --accent-foreground: oklch(0.27 0.08 260);
+  --accent: #4a3525;
+  --accent-foreground: #f4f1ea;
 
-  /* Terracotta CTA */
-  --cta: oklch(0.68 0.16 45);
-  --cta-foreground: oklch(0.99 0.005 80);
+  /* Wood brown CTA */
+  --cta: #4a3525;
+  --cta-foreground: #f4f1ea;
 
-  /* Bright orange FAB */
-  --orange: oklch(0.65 0.2 55);
-  --orange-foreground: oklch(0.99 0.005 80);
+  --orange: #4a3525;
+  --orange-foreground: #f4f1ea;
 
-  /* Dark brown for category labels */
-  --brown: oklch(0.32 0.04 50);
+  --brown: #4a3525;
 
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.9 0.012 75);
-  --input: oklch(0.9 0.012 75);
-  --ring: oklch(0.27 0.08 260);
-  --popover: oklch(0.985 0.008 80);
-  --popover-foreground: oklch(0.22 0.04 260);
+  --border: #d9d2c2;
+  --input: #d9d2c2;
+  --ring: #1e3a8a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
 }
 
 .dark {
