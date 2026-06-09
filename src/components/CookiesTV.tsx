@@ -208,6 +208,27 @@ export function CookiesTV() {
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [myLikes, setMyLikes] = useState<Set<string>>(new Set());
+  const [canManageAllReels, setCanManageAllReels] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!user) {
+        setCanManageAllReels(false);
+        return;
+      }
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!cancelled) setCanManageAllReels(Boolean(data));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   // Fetch reels + aggregates
   useEffect(() => {
@@ -223,12 +244,9 @@ export function CookiesTV() {
         setLoading(false);
         return;
       }
-      // Mostrar solo reels que tengan un video reproducible (archivo, fallback o embed válido)
-      const playable = ((data ?? []) as DbReel[]).filter((r) => {
-        if (r.video_url && r.video_url.trim()) return true;
-        if (FALLBACK_VIDEO[r.slug]) return true;
-        return false;
-      });
+      const signedRows = await signStoredReelVideos((data ?? []) as DbReel[]);
+      if (cancelled) return;
+      const playable = signedRows.filter(hasPlayableSource);
       setReels(playable);
       setLoading(false);
       const ids = playable.map((r) => r.id);
@@ -395,6 +413,7 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
+                canDelete={canManageAllReels || user?.id === r.author_id}
                 onDelete={() => handleDelete(r.id)}
               />
             ))}
