@@ -16,6 +16,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { ZendaLogo } from "@/components/ZendaLogo";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -434,14 +435,14 @@ function MiniHeader() {
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-        <Link to="/" className="flex items-center gap-2" aria-label="ZENDA Cookies">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-amber-500">
-              <span className="text-[17px] font-black text-[#1a0f0a] leading-none">Z</span>
-            </span>
-          <span className="text-xl font-extrabold tracking-tight text-[#1a0f0a]">
-            ZENDA<span className="text-amber-500">.</span>
-            <span className="ml-2 text-sm font-semibold text-gray-500">Checkout</span>
-          </span>
+        <Link to="/" className="flex items-center gap-3" aria-label="ZENDA Artisanal Gourmet Market">
+          <ZendaLogo
+            size={36}
+            nameClassName="text-lg text-[#1a0f0a]"
+            tagline="ARTISANAL GOURMET MARKET"
+            taglineClassName="text-[7px] text-[#4A3525]/70"
+          />
+          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
         </Link>
         <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
           <Lock className="h-3.5 w-3.5" /> Pago Seguro
