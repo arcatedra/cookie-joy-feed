@@ -451,6 +451,7 @@ function ReelCard({
   onOpenComments,
   globalMuted,
   onToggleMuted,
+  canDelete,
   onDelete,
 }: {
   reel: DbReel;
@@ -461,10 +462,10 @@ function ReelCard({
   onOpenComments: () => void;
   globalMuted: boolean;
   onToggleMuted: () => void;
+  canDelete: boolean;
   onDelete: () => void;
 }) {
   const { user } = useAuth();
-  const isOwner = user?.id === reel.author_id;
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -623,7 +624,7 @@ function ReelCard({
           )}
         </div>
         <div className="pointer-events-auto flex items-center gap-2">
-          {isOwner && (
+          {canDelete && (
             <button
               type="button"
               onClick={(e) => {
