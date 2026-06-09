@@ -274,11 +274,14 @@ export function CookiesTV() {
 
   const deleteTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-
   const handleDelete = (reelId: string) => {
     const reel = reelsRef.current.find((r) => r.id === reelId);
     if (!reel) return;
+
+    const confirmed = window.confirm(
+      "¿Estás seguro de que quieres eliminar este Reel de galletas?"
+    );
+    if (!confirmed) return;
 
     setReels((prev) => prev.filter((r) => r.id !== reelId));
 
