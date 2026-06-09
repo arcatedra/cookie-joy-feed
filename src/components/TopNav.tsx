@@ -113,7 +113,7 @@ export function TopNav() {
 
           {/* Search bar */}
           <div ref={searchRef} className="relative flex-1 min-w-0">
-            <div className="flex items-stretch overflow-hidden rounded-md bg-white text-foreground shadow-sm focus-within:ring-2 focus-within:ring-amber-400">
+            <div className="flex items-stretch overflow-hidden rounded-md bg-[#4A3525] text-[#F4F1EA] shadow-sm focus-within:ring-2 focus-within:ring-amber-300">
               {/* Category dropdown */}
               <div ref={catRef} className="relative hidden sm:block">
                 <button
