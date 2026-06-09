@@ -907,7 +907,7 @@ function ReelCard({
       )}
 
       {/* Right rail actions */}
-      <div className="absolute bottom-32 right-2.5 z-20 flex flex-col items-center gap-3">
+      {!firstExternalOnly && <div className="absolute bottom-32 right-2.5 z-20 flex flex-col items-center gap-3">
         <button
           type="button"
           onClick={handleLike}
@@ -1013,10 +1013,10 @@ function ReelCard({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div>}
 
       {/* Bottom fixed info */}
-      <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
+      {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
           {reel.title ?? "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
@@ -1047,7 +1047,7 @@ function ReelCard({
             </span>
           </button>
         )}
-      </div>
+      </div>}
     </article>
   );
 }
