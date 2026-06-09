@@ -888,6 +888,30 @@ function ReelCard({
           </span>
         </button>
 
+        {embed && (() => {
+          const appLink = getPlatformAppLink(embed);
+          const { Icon, label, colorClass } = appLink;
+          return (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                openInNativeApp(appLink);
+              }}
+              aria-label={label}
+              title={label}
+              className="flex flex-col items-center gap-0.5 transition active:scale-90"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-white/95 shadow-md ring-1 ring-black/10 backdrop-blur transition hover:bg-white">
+                <Icon className={`h-5 w-5 ${colorClass}`} />
+              </span>
+              <span className="text-[10px] font-bold text-white drop-shadow">
+                {embed.label}
+              </span>
+            </button>
+          );
+        })()}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
