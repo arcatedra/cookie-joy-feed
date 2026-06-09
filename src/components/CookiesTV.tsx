@@ -579,17 +579,19 @@ function ReelCard({
   };
 
   const shareUrl = () => {
-    if (typeof window === "undefined") return "";
-    const origin = window.location.origin;
-    // Always link back to this specific reel on Cookies TV
-    return `${origin}/?reel=${encodeURIComponent(reel.id)}#reel-${encodeURIComponent(reel.id)}`;
+    // Share the actual video/reel link, not the website page.
+    // 1) If it's an embedded reel (YouTube, Instagram, TikTok, Facebook), share the original source URL.
+    // 2) Otherwise share the direct video file URL.
+    if (embed?.originalUrl) return embed.originalUrl;
+    if (reel.video_url) return reel.video_url;
+    return typeof window !== "undefined" ? window.location.href : "";
   };
   const shareTitle = () =>
     reel.title
       ? `${reel.title} · ${BRAND}`
       : reel.product_name
         ? `${reel.product_name} · ${BRAND}`
-        : `Mira este reel en ${BRAND}`;
+        : `Mira este reel de ${BRAND}`;
 
   const copyLink = async () => {
     try {
