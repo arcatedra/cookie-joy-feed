@@ -15,6 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
+import { ZendaLogo } from "@/components/ZendaLogo";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
