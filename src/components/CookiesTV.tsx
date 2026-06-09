@@ -14,7 +14,21 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
+  Facebook,
+  Instagram,
+  MessageCircle as WhatsAppIcon,
+  Music2,
+  Twitter,
+  Mail,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
@@ -546,18 +560,67 @@ function ReelCard({
     toast.success(`${reel.product_name} agregado al carrito`);
   };
 
-  const share = async () => {
+  const shareUrl = () =>
+    embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
+  const shareTitle = () => reel.title ?? BRAND;
+
+  const copyLink = async () => {
     try {
-      const url = embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
-      if (navigator.share) await navigator.share({ title: reel.title ?? BRAND, url });
-      else {
-        await navigator.clipboard.writeText(url);
-        toast.success("Enlace copiado");
-      }
+      await navigator.clipboard.writeText(shareUrl());
+      toast.success("Enlace copiado");
     } catch {
-      /* cancel */
+      toast.error("No se pudo copiar el enlace");
     }
   };
+
+  const nativeShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: shareTitle(), url: shareUrl() });
+      } else {
+        await copyLink();
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
+
+  const openShare = (target: "facebook" | "whatsapp" | "twitter" | "telegram" | "email" | "instagram" | "tiktok") => {
+    const url = shareUrl();
+    const text = shareTitle();
+    const enc = encodeURIComponent;
+    let href = "";
+    switch (target) {
+      case "facebook":
+        href = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
+        break;
+      case "whatsapp":
+        href = `https://wa.me/?text=${enc(`${text} ${url}`)}`;
+        break;
+      case "twitter":
+        href = `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "telegram":
+        href = `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "email":
+        href = `mailto:?subject=${enc(text)}&body=${enc(url)}`;
+        break;
+      case "instagram":
+      case "tiktok":
+        copyLink();
+        toast.info(
+          target === "instagram"
+            ? "Enlace copiado. Pégalo en tu historia o mensaje de Instagram."
+            : "Enlace copiado. Pégalo en TikTok para compartir.",
+        );
+        return;
+    }
+    if (typeof window !== "undefined") {
+      window.open(href, "_blank", "noopener,noreferrer,width=600,height=600");
+    }
+  };
+
 
   return (
     <article
@@ -704,16 +767,53 @@ function ReelCard({
           </span>
         </button>
 
-        <button
-          type="button"
-          onClick={share}
-          aria-label="Compartir"
-          className="flex flex-col items-center gap-0.5"
-        >
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
-            <Share2 className="h-4 w-4 text-white" />
-          </span>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label="Compartir"
+              className="flex flex-col items-center gap-0.5"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+                <Share2 className="h-4 w-4 text-white" />
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => openShare("whatsapp")}>
+              <WhatsAppIcon className="text-green-600" /> WhatsApp
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("facebook")}>
+              <Facebook className="text-blue-600" /> Facebook
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("instagram")}>
+              <Instagram className="text-pink-600" /> Instagram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("tiktok")}>
+              <Music2 className="text-foreground" /> TikTok
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("twitter")}>
+              <Twitter className="text-sky-500" /> X / Twitter
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("telegram")}>
+              <Send className="text-sky-600" /> Telegram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("email")}>
+              <Mail /> Correo
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={copyLink}>
+              <LinkIcon /> Copiar enlace
+            </DropdownMenuItem>
+            {typeof navigator !== "undefined" && "share" in navigator && (
+              <DropdownMenuItem onClick={nativeShare}>
+                <Share2 /> Más opciones…
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Bottom fixed info */}
