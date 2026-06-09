@@ -767,16 +767,53 @@ function ReelCard({
           </span>
         </button>
 
-        <button
-          type="button"
-          onClick={share}
-          aria-label="Compartir"
-          className="flex flex-col items-center gap-0.5"
-        >
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
-            <Share2 className="h-4 w-4 text-white" />
-          </span>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label="Compartir"
+              className="flex flex-col items-center gap-0.5"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+                <Share2 className="h-4 w-4 text-white" />
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => openShare("whatsapp")}>
+              <WhatsAppIcon className="text-green-600" /> WhatsApp
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("facebook")}>
+              <Facebook className="text-blue-600" /> Facebook
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("instagram")}>
+              <Instagram className="text-pink-600" /> Instagram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("tiktok")}>
+              <Music2 className="text-foreground" /> TikTok
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("twitter")}>
+              <Twitter className="text-sky-500" /> X / Twitter
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("telegram")}>
+              <Send className="text-sky-600" /> Telegram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("email")}>
+              <Mail /> Correo
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={copyLink}>
+              <LinkIcon /> Copiar enlace
+            </DropdownMenuItem>
+            {typeof navigator !== "undefined" && "share" in navigator && (
+              <DropdownMenuItem onClick={nativeShare}>
+                <Share2 /> Más opciones…
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Bottom fixed info */}
