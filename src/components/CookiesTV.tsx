@@ -560,9 +560,18 @@ function ReelCard({
     toast.success(`${reel.product_name} agregado al carrito`);
   };
 
-  const shareUrl = () =>
-    embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
-  const shareTitle = () => reel.title ?? BRAND;
+  const shareUrl = () => {
+    if (typeof window === "undefined") return "";
+    const origin = window.location.origin;
+    // Always link back to this specific reel on Cookies TV
+    return `${origin}/?reel=${encodeURIComponent(reel.id)}#reel-${encodeURIComponent(reel.id)}`;
+  };
+  const shareTitle = () =>
+    reel.title
+      ? `${reel.title} · ${BRAND}`
+      : reel.product_name
+        ? `${reel.product_name} · ${BRAND}`
+        : `Mira este reel en ${BRAND}`;
 
   const copyLink = async () => {
     try {
