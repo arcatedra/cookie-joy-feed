@@ -17,6 +17,7 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
@@ -58,6 +59,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReelReelIdRoute = ReelReelIdRouteImport.update({
+  id: '/reel/$reelId',
+  path: '/reel/$reelId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
+  '/reel/$reelId': typeof ReelReelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
+  '/reel/$reelId': typeof ReelReelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
+  '/reel/$reelId': typeof ReelReelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/subscribe'
+    | '/reel/$reelId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/subscribe'
+    | '/reel/$reelId'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/subscribe'
+    | '/reel/$reelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   SubscribeRoute: typeof SubscribeRoute
+  ReelReelIdRoute: typeof ReelReelIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reel/$reelId': {
+      id: '/reel/$reelId'
+      path: '/reel/$reelId'
+      fullPath: '/reel/$reelId'
+      preLoaderRoute: typeof ReelReelIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,7 +224,18 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   SubscribeRoute: SubscribeRoute,
+  ReelReelIdRoute: ReelReelIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
