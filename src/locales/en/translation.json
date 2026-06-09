@@ -121,8 +121,8 @@
     "didNotLoadDesc": "Something went wrong on our end. You can try refreshing or head back home."
   },
   "home": {
-    "metaTitle": "Zenda — Gourmet Cookies, Delivered Monthly",
-    "metaDesc": "Discover artisanal gourmet cookies and join the Zenda monthly subscription for freshly baked treats at your door.",
+    "metaTitle": "OriGen — Gourmet Cookies, Delivered Monthly",
+    "metaDesc": "Discover artisanal gourmet cookies and join the OriGen monthly subscription for freshly baked treats at your door.",
     "welcome": "Welcome back",
     "greeting": "Good Morning, {{name}}!",
     "freshToday": "Fresh batches dropped today",
@@ -147,7 +147,7 @@
       "buildPackAlt": "Custom cookie box",
       "subscriptionTitle": "Monthly Subscription",
       "subscriptionLink": "Discover the club",
-      "subscriptionClub": "ZENDA CLUB",
+      "subscriptionClub": "OriGen CLUB",
       "subscriptionHeadline": "Weekly freshly baked deliveries",
       "subscriptionSubcopy": "Cancel anytime · Shipping included",
       "subscriptionPrice": "From $24/mo",
@@ -174,14 +174,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Browse Cookies — Zenda",
-    "metaDesc": "Explore our full range of artisanal gourmet cookies at Zenda.",
+    "metaTitle": "Browse Cookies — OriGen",
+    "metaDesc": "Explore our full range of artisanal gourmet cookies at OriGen.",
     "title": "Browse Cookies",
     "sort": "Sort",
     "price": "Price"
   },
   "menu": {
-    "metaTitle": "Menu — Zenda",
+    "metaTitle": "Menu — OriGen",
     "metaDesc": "Browse our classic cookies.",
     "title": "Cookies",
     "tabs": {
@@ -225,8 +225,8 @@
     "peanuts": "PEANUTS"
   },
   "subscribe": {
-    "metaTitle": "Subscription Plans — Zenda",
-    "metaDesc": "Choose your Zenda cookie subscription plan. Delivered Mondays and Fridays only.",
+    "metaTitle": "Subscription Plans — OriGen",
+    "metaDesc": "Choose your OriGen cookie subscription plan. Delivered Mondays and Fridays only.",
     "title": "Subscription Plans",
     "deliveryBadge": "Monday & Friday Delivery Only",
     "activePlan": "Active Plan",
@@ -251,8 +251,8 @@
     }
   },
   "profile": {
-    "metaTitle": "My Profile — Zenda",
-    "metaDesc": "Manage your Zenda account, orders, and subscription.",
+    "metaTitle": "My Profile — OriGen",
+    "metaDesc": "Manage your OriGen account, orders, and subscription.",
     "title": "My Profile",
     "settings": "Settings",
     "city": "New York",
@@ -276,7 +276,7 @@
     },
     "qr": {
       "title": "Your QR Code",
-      "description": "Scan to visit the Zenda store directly from any device.",
+      "description": "Scan to visit the OriGen store directly from any device.",
       "download": "Download QR",
       "copyLink": "Copy link",
       "downloaded": "QR downloaded",

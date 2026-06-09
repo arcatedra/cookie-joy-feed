@@ -64,7 +64,7 @@ interface DbComment {
   author_name?: string;
 }
 
-const BRAND = "ZENDA Cookies";
+const BRAND = "OriGen Cookies";
 
 const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,

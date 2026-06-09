@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/auth";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Zenda" },
+      { title: "Sign in — OriGen" },
       { name: "description", content: "Sign in to like reels, comment and rate products." },
     ],
   }),

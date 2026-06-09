@@ -16,12 +16,12 @@ import {
   Trash2,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
-import { ZendaLogo } from "@/components/ZendaLogo";
+import { OriGenLogo } from "@/components/OriGenLogo";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Secure Checkout — ZENDA Cookies" },
+      { title: "Secure Checkout — OriGen Cookies" },
       { name: "description", content: "Complete your cookie order securely." },
     ],
   }),
@@ -435,8 +435,8 @@ function MiniHeader() {
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-        <Link to="/" className="flex items-center gap-3" aria-label="ZENDA">
-          <ZendaLogo
+        <Link to="/" className="flex items-center gap-3" aria-label="OriGen">
+          <OriGenLogo
             size={34}
             showTagline
             nameClassName="text-lg font-bold tracking-[0.22em] text-[#1a0f0a]"
