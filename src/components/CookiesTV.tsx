@@ -14,14 +14,11 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
-  Facebook,
-  Instagram,
   MessageCircle as WhatsAppIcon,
   Music2,
-  Twitter,
   Mail,
-  Youtube,
 } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "@/components/BrandIcons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -227,7 +224,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
       const m = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
       const appUrl = m ? `instagram://media?shortcode=${m[2]}` : null;
       return {
-        Icon: Instagram,
+        Icon: InstagramIcon,
         label: "Abrir en Instagram",
         colorClass: "text-pink-500",
         appUrl,
@@ -247,7 +244,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
     }
     case "facebook":
       return {
-        Icon: Facebook,
+        Icon: FacebookIcon,
         label: "Abrir en Facebook",
         colorClass: "text-blue-500",
         appUrl: `fb://facewebmodal/f?href=${encodeURIComponent(url)}`,
@@ -260,7 +257,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
         url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
       const appUrl = m ? `vnd.youtube://${m[1]}` : null;
       return {
-        Icon: Youtube,
+        Icon: YoutubeIcon,
         label: "Abrir en YouTube",
         colorClass: "text-red-500",
         appUrl,
@@ -1045,16 +1042,16 @@ function ReelCard({
               <WhatsAppIcon className="text-green-600" /> WhatsApp
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("facebook")}>
-              <Facebook className="text-blue-600" /> Facebook
+              <FacebookIcon className="h-4 w-4 text-blue-600" /> Facebook
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("instagram")}>
-              <Instagram className="text-pink-600" /> Instagram
+              <InstagramIcon className="h-4 w-4 text-pink-600" /> Instagram
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("tiktok")}>
               <Music2 className="text-foreground" /> TikTok
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("twitter")}>
-              <Twitter className="text-sky-500" /> X / Twitter
+              <TwitterIcon className="h-4 w-4 text-sky-500" /> X / Twitter
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("telegram")}>
               <Send className="text-sky-600" /> Telegram

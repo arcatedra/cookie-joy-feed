@@ -273,6 +273,16 @@
       "payment": "Métodos de pago",
       "general": "Ajustes generales",
       "help": "Ayuda y soporte"
+    },
+    "qr": {
+      "title": "Tu código QR",
+      "description": "Escanea para visitar la tienda Oys directamente desde cualquier dispositivo.",
+      "download": "Descargar QR",
+      "copyLink": "Copiar enlace",
+      "downloaded": "QR descargado",
+      "downloadError": "No se pudo descargar el QR",
+      "copied": "Enlace copiado al portapapeles",
+      "copyError": "No se pudo copiar el enlace"
     }
   },
   "cart": {
