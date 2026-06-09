@@ -1042,16 +1042,16 @@ function ReelCard({
               <WhatsAppIcon className="text-green-600" /> WhatsApp
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("facebook")}>
-              <Facebook className="text-blue-600" /> Facebook
+              <FacebookIcon className="h-4 w-4 text-blue-600" /> Facebook
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("instagram")}>
-              <Instagram className="text-pink-600" /> Instagram
+              <InstagramIcon className="h-4 w-4 text-pink-600" /> Instagram
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("tiktok")}>
               <Music2 className="text-foreground" /> TikTok
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("twitter")}>
-              <Twitter className="text-sky-500" /> X / Twitter
+              <TwitterIcon className="h-4 w-4 text-sky-500" /> X / Twitter
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => openShare("telegram")}>
               <Send className="text-sky-600" /> Telegram
