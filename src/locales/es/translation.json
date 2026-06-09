@@ -1,6 +1,7 @@
 {
   "common": {
     "back": "Volver",
+    "errorOccurred": "Algo salió mal. Por favor, inténtalo de nuevo.",
     "search": "Buscar",
     "addToCart": "Añadir al carrito",
     "updateCart": "Actualizar carrito",
