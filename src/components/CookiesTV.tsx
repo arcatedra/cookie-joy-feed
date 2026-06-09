@@ -793,16 +793,34 @@ function ReelCard({
                 </button>
               </div>
             );
-          })() : (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 px-6 text-center">
-              <span className="grid h-20 w-20 place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10">
-                <ExternalLink className="h-10 w-10 text-[#1a0f0a]" />
-              </span>
-              <span className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-[#1a0f0a] shadow-lg ring-1 ring-black/10">
-                Solo enlace externo
-              </span>
-            </div>
-          )}
+          })() : (() => {
+            const rawUrl = (reel.video_url ?? "").trim();
+            const isHttp = /^https?:\/\//i.test(rawUrl);
+            return (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
+                <span className="grid h-20 w-20 place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10">
+                  <ExternalLink className="h-10 w-10 text-[#1a0f0a]" />
+                </span>
+                {isHttp ? (
+                  <a
+                    href={rawUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#1a0f0a] shadow-xl ring-1 ring-black/10 transition hover:scale-105 active:scale-95"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Abrir enlace
+                  </a>
+                ) : (
+                  <span className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-[#1a0f0a] shadow-lg ring-1 ring-black/10">
+                    Sin enlace · edita el reel y pega la URL
+                  </span>
+                )}
+              </div>
+            );
+          })()}
+
         </>
       ) : isEmbed ? (
         <iframe
