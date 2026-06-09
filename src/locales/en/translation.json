@@ -1,6 +1,7 @@
 {
   "common": {
     "back": "Back",
+    "errorOccurred": "Something went wrong. Please try again.",
     "search": "Search",
     "addToCart": "Add to Cart",
     "updateCart": "Update Cart",
