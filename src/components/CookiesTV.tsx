@@ -274,6 +274,8 @@ export function CookiesTV() {
 
   const deleteTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
   const handleDelete = (reelId: string) => {
     const reel = reelsRef.current.find((r) => r.id === reelId);
     if (!reel) return;
