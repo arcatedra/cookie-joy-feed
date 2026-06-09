@@ -133,7 +133,36 @@
     "subscriptionEyebrow": "Monthly box",
     "subscriptionHeadline": "12 fresh cookies, delivered to your door.",
     "subscriptionSubcopy": "Cancel anytime · Free shipping",
-    "startSubscription": "Start subscription"
+    "startSubscription": "Start subscription",
+    "promoTitle": "Ready to try something new?",
+    "promoSubtitle": "Discover our limited editions and this month's favorites.",
+    "promoCta": "View full menu",
+    "cards": {
+      "bestSellersTitle": "Best Sellers",
+      "bestSellersLink": "See more",
+      "buildPackTitle": "Build Your Custom Pack",
+      "buildPackLink": "View options",
+      "buildPackCta": "Start building",
+      "buildPackAlt": "Custom cookie box",
+      "subscriptionTitle": "Monthly Subscription",
+      "subscriptionLink": "Discover the club",
+      "subscriptionClub": "OYS CLUB",
+      "subscriptionHeadline": "Weekly freshly baked deliveries",
+      "subscriptionSubcopy": "Cancel anytime · Shipping included",
+      "subscriptionPrice": "From $24/mo",
+      "flashTitle": "Flash Deals",
+      "flashLink": "See all deals",
+      "flashProduct": "Assorted 9-Cookie Pack",
+      "flashAlt": "9-cookie pack",
+      "flashClaimed": "Claimed: {{pct}}%",
+      "flashEndsIn": "Ends in {{time}}",
+      "best": {
+        "classic": "Classic",
+        "redVelvet": "Red Velvet",
+        "tripleChoc": "Triple Chocolate",
+        "oatRaisin": "Oatmeal Raisin"
+      }
+    }
   },
   "categories": {
     "cookies": "Cookies",
