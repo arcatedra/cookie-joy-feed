@@ -278,6 +278,11 @@ export function CookiesTV() {
     const reel = reelsRef.current.find((r) => r.id === reelId);
     if (!reel) return;
 
+    const confirmed = window.confirm(
+      "¿Estás seguro de que quieres eliminar este Reel de galletas?"
+    );
+    if (!confirmed) return;
+
     setReels((prev) => prev.filter((r) => r.id !== reelId));
 
     const timer = setTimeout(() => {
