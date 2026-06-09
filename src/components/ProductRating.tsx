@@ -55,7 +55,7 @@ export function ProductRating({ productId, productName, size = "md" }: ProductRa
     },
     onError: (e: Error) => {
       if (e.message === "not-auth") toast.error(t("ratings.signInToRate"));
-      else toast.error(e.message);
+      else { console.error("product-rating error", e); toast.error(t("common.errorOccurred")); }
     },
   });
 
