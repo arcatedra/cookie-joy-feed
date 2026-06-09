@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
 import {
   Heart,
   MessageCircle,
@@ -20,6 +20,7 @@ import {
   Music2,
   Twitter,
   Mail,
+  Youtube,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -206,6 +207,88 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
   }
 
   return null;
+}
+
+// ============ Native-app deep link per platform ============
+interface PlatformAppLink {
+  Icon: ComponentType<{ className?: string }>;
+  label: string;
+  colorClass: string; // brand color for the icon button
+  // Try app scheme first, then fall back to https URL.
+  appUrl: string | null;
+  webUrl: string;
+}
+
+function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
+  const url = embed.originalUrl;
+  switch (embed.platform) {
+    case "instagram": {
+      // /reel/{shortcode}/ or /p/{shortcode}/
+      const m = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
+      const appUrl = m ? `instagram://media?shortcode=${m[2]}` : null;
+      return {
+        Icon: Instagram,
+        label: "Abrir en Instagram",
+        colorClass: "text-pink-500",
+        appUrl,
+        webUrl: url,
+      };
+    }
+    case "tiktok": {
+      const m = url.match(/tiktok\.com\/@([\w.-]+)\/video\/(\d+)/i);
+      const appUrl = m ? `snssdk1233://aweme/detail/${m[2]}` : null;
+      return {
+        Icon: Music2,
+        label: "Abrir en TikTok",
+        colorClass: "text-black",
+        appUrl,
+        webUrl: url,
+      };
+    }
+    case "facebook":
+      return {
+        Icon: Facebook,
+        label: "Abrir en Facebook",
+        colorClass: "text-blue-500",
+        appUrl: `fb://facewebmodal/f?href=${encodeURIComponent(url)}`,
+        webUrl: url,
+      };
+    case "youtube": {
+      const m =
+        url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+        url.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/i) ||
+        url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+      const appUrl = m ? `vnd.youtube://${m[1]}` : null;
+      return {
+        Icon: Youtube,
+        label: "Abrir en YouTube",
+        colorClass: "text-red-500",
+        appUrl,
+        webUrl: url,
+      };
+    }
+  }
+}
+
+function openInNativeApp(link: PlatformAppLink) {
+  if (typeof window === "undefined") return;
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  // On mobile, App Links / Universal Links handle https URLs and route to the
+  // installed app automatically. We also attempt the custom scheme as a hint.
+  if (isMobile && link.appUrl) {
+    const fallback = window.setTimeout(() => {
+      window.location.href = link.webUrl;
+    }, 800);
+    // If app opens, the page is backgrounded and the timeout effectively cancels.
+    window.addEventListener(
+      "pagehide",
+      () => window.clearTimeout(fallback),
+      { once: true },
+    );
+    window.location.href = link.appUrl;
+    return;
+  }
+  window.open(link.webUrl, "_blank", "noopener,noreferrer");
 }
 
 // ============ Main: Facebook-style Reels row ============
@@ -804,6 +887,30 @@ function ReelCard({
             {formatCount(comments)}
           </span>
         </button>
+
+        {embed && (() => {
+          const appLink = getPlatformAppLink(embed);
+          const { Icon, label, colorClass } = appLink;
+          return (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                openInNativeApp(appLink);
+              }}
+              aria-label={label}
+              title={label}
+              className="flex flex-col items-center gap-0.5 transition active:scale-90"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-white/95 shadow-md ring-1 ring-black/10 backdrop-blur transition hover:bg-white">
+                <Icon className={`h-5 w-5 ${colorClass}`} />
+              </span>
+              <span className="text-[10px] font-bold text-white drop-shadow">
+                {embed.label}
+              </span>
+            </button>
+          );
+        })()}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
