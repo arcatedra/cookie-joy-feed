@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { CookiesTV } from "@/components/CookiesTV";
@@ -86,6 +87,7 @@ const sliderProducts: SliderProduct[] = [
 ];
 
 function Home() {
+  const { t } = useTranslation();
   return (
     <main
       className="min-h-screen"
@@ -104,25 +106,21 @@ function Home() {
         <CategoryCardGrid />
       </section>
 
-
-
       {/* Secondary band */}
       <section className="mx-auto mt-6 max-w-[1500px] px-3 pb-12 md:px-6">
         <div className="rounded-md bg-white p-5 shadow-sm ring-1 ring-black/5 md:p-7">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h3 className="text-lg font-extrabold text-[#1a0f0a] md:text-xl">
-                ¿Listo para probar lo nuevo?
+                {t("home.promoTitle")}
               </h3>
-              <p className="mt-1 text-sm text-[#444]">
-                Descubre nuestras ediciones limitadas y los favoritos del mes.
-              </p>
+              <p className="mt-1 text-sm text-[#444]">{t("home.promoSubtitle")}</p>
             </div>
             <Link
               to="/menu"
               className="rounded-full bg-amber-400 px-6 py-2.5 text-sm font-bold text-[#1a0f0a] shadow transition hover:bg-amber-300"
             >
-              Ver menú completo
+              {t("home.promoCta")}
             </Link>
           </div>
         </div>
@@ -276,27 +274,31 @@ function CardShell({
 }
 
 function BestSellersCard() {
+  const { t } = useTranslation();
   const items = [
-    { name: "Clásica", img: imgChocChunk },
-    { name: "Red Velvet", img: imgCookiesCream },
-    { name: "Triple Chocolate", img: imgDoubleChoc },
-    { name: "Avena y Pasas", img: imgOatmeal },
-  ];
+    { key: "classic", img: imgChocChunk },
+    { key: "redVelvet", img: imgCookiesCream },
+    { key: "tripleChoc", img: imgDoubleChoc },
+    { key: "oatRaisin", img: imgOatmeal },
+  ] as const;
   return (
-    <CardShell title="Las Más Vendidas" link={{ to: "/menu", label: "Ver más" }}>
+    <CardShell
+      title={t("home.cards.bestSellersTitle")}
+      link={{ to: "/menu", label: t("home.cards.bestSellersLink") }}
+    >
       <div className="grid grid-cols-2 gap-2">
         {items.map((it) => (
-          <Link key={it.name} to="/menu" className="group">
+          <Link key={it.key} to="/menu" className="group">
             <div className="aspect-square overflow-hidden rounded-sm bg-[#f7f7f7]">
               <img
                 src={it.img}
-                alt={it.name}
+                alt={t(`home.cards.best.${it.key}`)}
                 loading="lazy"
                 className="h-full w-full object-cover transition group-hover:scale-105"
               />
             </div>
             <p className="mt-1 line-clamp-1 text-[11px] text-[#444] group-hover:text-[#c7511f]">
-              {it.name}
+              {t(`home.cards.best.${it.key}`)}
             </p>
           </Link>
         ))}
@@ -306,13 +308,17 @@ function BestSellersCard() {
 }
 
 function BuildPackCard() {
+  const { t } = useTranslation();
   return (
-    <CardShell title="Arma tu Pack Personalizado" link={{ to: "/menu", label: "Ver opciones" }}>
+    <CardShell
+      title={t("home.cards.buildPackTitle")}
+      link={{ to: "/menu", label: t("home.cards.buildPackLink") }}
+    >
       <Link to="/menu" className="block">
         <div className="aspect-[4/3] overflow-hidden rounded-sm bg-[#f7f7f7]">
           <img
             src={imgBox}
-            alt="Caja de galletas personalizada"
+            alt={t("home.cards.buildPackAlt")}
             loading="lazy"
             className="h-full w-full object-cover transition hover:scale-[1.03]"
           />
@@ -322,32 +328,36 @@ function BuildPackCard() {
         to="/menu"
         className="mt-3 inline-flex w-full items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
       >
-        Empezar a armar
+        {t("home.cards.buildPackCta")}
       </Link>
     </CardShell>
   );
 }
 
 function SubscriptionCard() {
+  const { t } = useTranslation();
   return (
-    <CardShell title="Suscripción Mensual" link={{ to: "/subscribe", label: "Conocer el club" }}>
+    <CardShell
+      title={t("home.cards.subscriptionTitle")}
+      link={{ to: "/subscribe", label: t("home.cards.subscriptionLink") }}
+    >
       <Link to="/subscribe" className="block">
         <div className="aspect-[4/3] overflow-hidden rounded-sm bg-gradient-to-br from-[#3d2418] to-[#1a0f0a] p-3 text-white">
           <div className="flex h-full flex-col justify-between">
             <p className="text-[10px] font-bold tracking-[0.2em] text-amber-300">
-              CLUB OYS
+              {t("home.cards.subscriptionClub")}
             </p>
             <div>
               <p className="text-xl font-extrabold leading-tight md:text-2xl">
-                Entregas semanales recién horneadas
+                {t("home.cards.subscriptionHeadline")}
               </p>
               <p className="mt-1 text-[11px] text-white/80">
-                Cancela cuando quieras · Envío incluido
+                {t("home.cards.subscriptionSubcopy")}
               </p>
             </div>
             <div className="flex items-end justify-between">
               <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#1a0f0a]">
-                Desde $24/mes
+                {t("home.cards.subscriptionPrice")}
               </span>
             </div>
           </div>
@@ -372,6 +382,7 @@ function useCountdown(targetMs: number) {
 }
 
 function FlashDealCard() {
+  const { t } = useTranslation();
   // Stable midnight-based target (avoids hydration mismatch)
   const target = useMemo(() => {
     const t = new Date();
@@ -380,16 +391,20 @@ function FlashDealCard() {
   }, []);
   const { h, m, s } = useCountdown(target);
   const stockPct = 38;
+  const time = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   return (
-    <CardShell title="Ofertas Relámpago" link={{ to: "/menu", label: "Ver todas las ofertas" }}>
+    <CardShell
+      title={t("home.cards.flashTitle")}
+      link={{ to: "/menu", label: t("home.cards.flashLink") }}
+    >
       <Link to="/menu" className="block">
         <div className="flex gap-3">
           <div className="h-24 w-24 shrink-0 overflow-hidden rounded-sm bg-[#f7f7f7]">
-            <img src={imgPack9} alt="Pack 9 galletas" loading="lazy" className="h-full w-full object-cover" />
+            <img src={imgPack9} alt={t("home.cards.flashAlt")} loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-xs font-semibold text-[#1a0f0a]">
-              Pack 9 Galletas Surtidas
+              {t("home.cards.flashProduct")}
             </p>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-lg font-extrabold text-[#b12704]">$19.99</span>
@@ -405,11 +420,11 @@ function FlashDealCard() {
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#eee]">
           <div className="h-full rounded-full bg-[#cc0c39]" style={{ width: `${stockPct}%` }} />
         </div>
-        <p className="mt-1 text-[10px] text-[#666]">Reclamadas: {100 - stockPct}%</p>
+        <p className="mt-1 text-[10px] text-[#666]">{t("home.cards.flashClaimed", { pct: 100 - stockPct })}</p>
       </div>
       <div className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-[#b12704]">
         <Clock className="h-3.5 w-3.5" />
-        Termina en {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
+        {t("home.cards.flashEndsIn", { time })}
       </div>
     </CardShell>
   );
