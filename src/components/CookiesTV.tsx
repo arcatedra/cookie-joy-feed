@@ -854,7 +854,7 @@ function ReelCard({
               <Trash2 className="h-4 w-4" />
             </button>
           )}
-          {!isEmbed && (
+          {!isEmbed && !isFirst && (
             <button
               type="button"
               onClick={(e) => {
@@ -871,7 +871,7 @@ function ReelCard({
       </div>
 
       {/* Center play overlay when paused (native video only) */}
-      {!isEmbed && !playing && videoSrc && (
+      {!isEmbed && !isFirst && !playing && videoSrc && (
         <button
           type="button"
           onClick={togglePlay}
