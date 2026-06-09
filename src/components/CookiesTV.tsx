@@ -316,6 +316,24 @@ export function CookiesTV() {
     };
   }, []);
 
+  // Scroll to a specific reel when arriving via ?reel=<id> deep link
+  useEffect(() => {
+    if (loading || reels.length === 0) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const targetId = params.get("reel");
+    if (!targetId) return;
+    const tryScroll = () => {
+      const el = document.getElementById(`reel-${targetId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        el.classList.add("ring-2", "ring-amber-400");
+        window.setTimeout(() => el.classList.remove("ring-2", "ring-amber-400"), 2500);
+      }
+    };
+    window.setTimeout(tryScroll, 150);
+  }, [loading, reels]);
+
   const toggleLike = async (reelId: string) => {
     if (!user) {
       toast.error("Inicia sesión para dar me gusta");
