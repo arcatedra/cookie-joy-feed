@@ -14,7 +14,21 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
+  Facebook,
+  Instagram,
+  MessageCircle as WhatsAppIcon,
+  Music2,
+  Twitter,
+  Mail,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
