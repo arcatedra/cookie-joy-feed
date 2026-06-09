@@ -20,7 +20,7 @@ import { useCart } from "@/lib/cart";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Secure Checkout — OyS Cookies" },
+      { title: "Secure Checkout — ZENDA Cookies" },
       { name: "description", content: "Complete your cookie order securely." },
     ],
   }),
@@ -434,12 +434,12 @@ function MiniHeader() {
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-        <Link to="/" className="flex items-center gap-2" aria-label="OyS Cookies">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-amber-500">
-            <Cookie className="h-5 w-5 text-[#1a0f0a]" />
-          </span>
+        <Link to="/" className="flex items-center gap-2" aria-label="ZENDA Cookies">
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-amber-500">
+              <span className="text-[17px] font-black text-[#1a0f0a] leading-none">Z</span>
+            </span>
           <span className="text-xl font-extrabold tracking-tight text-[#1a0f0a]">
-            OyS<span className="text-amber-500">.</span>
+            ZENDA<span className="text-amber-500">.</span>
             <span className="ml-2 text-sm font-semibold text-gray-500">Checkout</span>
           </span>
         </Link>

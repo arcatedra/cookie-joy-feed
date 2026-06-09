@@ -24,8 +24,8 @@ import imgBox from "@/assets/cookie-box.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OyS — Galletas Artesanales Premium" },
-      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en OyS." },
+      { title: "ZENDA — Galletas Artesanales Premium" },
+      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en ZENDA." },
     ],
   }),
   component: Home,

@@ -29,8 +29,8 @@ import {
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — Oys" },
-      { name: "description", content: "Manage your Oys account, orders, and subscription." },
+      { title: "My Profile — Zenda" },
+      { name: "description", content: "Manage your Zenda account, orders, and subscription." },
     ],
   }),
   component: ProfilePage,

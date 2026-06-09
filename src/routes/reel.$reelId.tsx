@@ -55,12 +55,12 @@ export const Route = createFileRoute("/reel/$reelId")({
   },
   head: ({ loaderData }) => {
     const reel = loaderData?.reel;
-    if (!reel) return { meta: [{ title: "Reel · OyS Cookies" }] };
+    if (!reel) return { meta: [{ title: "Reel · ZENDA Cookies" }] };
     const title = reel.title || reel.product_name || "Mira este reel";
-    const fullTitle = `${title} · OyS Cookies`;
+    const fullTitle = `${title} · ZENDA Cookies`;
     const description = reel.product_name
-      ? `${reel.product_name} en OyS Cookies. Mira el reel y descubre nuestras galletas artesanales.`
-      : "Mira este reel de OyS Cookies — galletas artesanales premium.";
+      ? `${reel.product_name} en ZENDA Cookies. Mira el reel y descubre nuestras galletas artesanales.`
+      : "Mira este reel de ZENDA Cookies — galletas artesanales premium.";
     const image = reel.thumb_url || reel.product_image || undefined;
     const meta: Array<Record<string, string>> = [
       { title: fullTitle },

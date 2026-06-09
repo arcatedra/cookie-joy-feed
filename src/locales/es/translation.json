@@ -121,8 +121,8 @@
     "didNotLoadDesc": "Algo salió mal por nuestra parte. Prueba a recargar o vuelve al inicio."
   },
   "home": {
-    "metaTitle": "Oys — Galletas gourmet, entregadas cada mes",
-    "metaDesc": "Descubre galletas gourmet artesanales y únete a la suscripción mensual de Oys para recibir delicias recién horneadas en tu puerta.",
+    "metaTitle": "Zenda — Galletas gourmet, entregadas cada mes",
+    "metaDesc": "Descubre galletas gourmet artesanales y únete a la suscripción mensual de Zenda para recibir delicias recién horneadas en tu puerta.",
     "welcome": "Bienvenido de nuevo",
     "greeting": "¡Buenos días, {{name}}!",
     "freshToday": "Nuevas hornadas frescas hoy",
@@ -147,7 +147,7 @@
       "buildPackAlt": "Caja de galletas personalizada",
       "subscriptionTitle": "Suscripción Mensual",
       "subscriptionLink": "Conocer el club",
-      "subscriptionClub": "CLUB OYS",
+      "subscriptionClub": "CLUB ZENDA",
       "subscriptionHeadline": "Entregas semanales recién horneadas",
       "subscriptionSubcopy": "Cancela cuando quieras · Envío incluido",
       "subscriptionPrice": "Desde $24/mes",
@@ -174,14 +174,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Explorar galletas — Oys",
-    "metaDesc": "Explora toda nuestra gama de galletas gourmet artesanales en Oys.",
+    "metaTitle": "Explorar galletas — Zenda",
+    "metaDesc": "Explora toda nuestra gama de galletas gourmet artesanales en Zenda.",
     "title": "Explorar galletas",
     "sort": "Ordenar",
     "price": "Precio"
   },
   "menu": {
-    "metaTitle": "Menú — Oys",
+    "metaTitle": "Menú — Zenda",
     "metaDesc": "Explora nuestras galletas clásicas.",
     "title": "Cookies",
     "tabs": {
@@ -225,8 +225,8 @@
     "peanuts": "CACAHUETES"
   },
   "subscribe": {
-    "metaTitle": "Planes de suscripción — Oys",
-    "metaDesc": "Elige tu plan de suscripción de galletas Oys. Entregas solo lunes y viernes.",
+    "metaTitle": "Planes de suscripción — Zenda",
+    "metaDesc": "Elige tu plan de suscripción de galletas Zenda. Entregas solo lunes y viernes.",
     "title": "Planes de suscripción",
     "deliveryBadge": "Entregas solo lunes y viernes",
     "activePlan": "Plan activo",
@@ -251,8 +251,8 @@
     }
   },
   "profile": {
-    "metaTitle": "Mi perfil — Oys",
-    "metaDesc": "Gestiona tu cuenta, pedidos y suscripción de Oys.",
+    "metaTitle": "Mi perfil — Zenda",
+    "metaDesc": "Gestiona tu cuenta, pedidos y suscripción de Zenda.",
     "title": "Mi perfil",
     "settings": "Ajustes",
     "city": "Nueva York",
@@ -276,7 +276,7 @@
     },
     "qr": {
       "title": "Tu código QR",
-      "description": "Escanea para visitar la tienda Oys directamente desde cualquier dispositivo.",
+      "description": "Escanea para visitar la tienda Zenda directamente desde cualquier dispositivo.",
       "download": "Descargar QR",
       "copyLink": "Copiar enlace",
       "downloaded": "QR descargado",
