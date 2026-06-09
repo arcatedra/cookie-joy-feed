@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
+import { QRCodeSection } from "@/components/QRCodeSection";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
@@ -150,6 +151,8 @@ function ProfilePage() {
           </div>
         </div>
       </section>
+
+      <QRCodeSection />
 
       {/* Account Navigation */}
       <section className="mt-6 px-5">

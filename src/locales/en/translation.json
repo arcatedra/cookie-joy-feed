@@ -273,6 +273,16 @@
       "payment": "Payment Methods",
       "general": "General Settings",
       "help": "Help & Support"
+    },
+    "qr": {
+      "title": "Your QR Code",
+      "description": "Scan to visit the Oys store directly from any device.",
+      "download": "Download QR",
+      "copyLink": "Copy link",
+      "downloaded": "QR downloaded",
+      "downloadError": "Could not download QR",
+      "copied": "Link copied to clipboard",
+      "copyError": "Could not copy link"
     }
   },
   "cart": {
