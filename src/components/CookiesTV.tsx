@@ -14,14 +14,11 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
-  Facebook,
-  Instagram,
   MessageCircle as WhatsAppIcon,
   Music2,
-  Twitter,
   Mail,
-  Youtube,
 } from "lucide-react";
+import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "@/components/BrandIcons";
 import {
   DropdownMenu,
   DropdownMenuContent,
