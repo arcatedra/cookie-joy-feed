@@ -88,7 +88,7 @@ export function TopNav() {
             aria-label="ZENDA Cookies"
           >
             <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500">
-              <Cookie className="h-5 w-5 text-[#F4F1EA]" />
+              <span className="text-[15px] font-black text-[#F4F1EA] leading-none">Z</span>
             </span>
             <span className="hidden text-lg font-extrabold tracking-tight text-amber-50 sm:inline">
               ZENDA<span className="text-amber-400">.</span>
