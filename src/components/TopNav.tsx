@@ -157,14 +157,14 @@ export function TopNav() {
                 onKeyDown={(e) => { if (e.key === "Enter") goSearch(); }}
                 placeholder={t("topnav.searchPlaceholder")}
                 aria-label={t("common.search")}
-                className="min-w-0 flex-1 bg-white px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                className="min-w-0 flex-1 bg-[#4A3525] px-3 py-2 text-sm text-[#F4F1EA] placeholder:text-[#F4F1EA]/60 focus:outline-none"
               />
 
               <button
                 type="button"
                 onClick={goSearch}
                 aria-label={t("common.search")}
-                className="grid w-12 shrink-0 place-items-center bg-emerald-400 text-[#F4F1EA] transition hover:bg-emerald-300"
+                className="grid w-12 shrink-0 place-items-center bg-[#3a2a1d] text-[#F4F1EA] transition hover:bg-[#2e2117]"
               >
                 <Search className="h-5 w-5" strokeWidth={2.5} />
               </button>
