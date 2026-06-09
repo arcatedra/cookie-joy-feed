@@ -675,6 +675,7 @@ function ReelCard({
   };
 
   const shareUrl = () => {
+    if (firstExternalOnly && embed) return embed.originalUrl;
     // Always share a link to the dedicated reel page so social platforms
     // (WhatsApp, Facebook, Instagram, etc.) preview THIS reel — title,
     // thumbnail and video — instead of the full website homepage.
@@ -761,7 +762,7 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {isFirst ? (
+      {firstExternalOnly ? (
         <>
           {productImg ? (
             <img
@@ -772,21 +773,23 @@ function ReelCard({
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
           )}
-          {embed && (() => {
+          <div className="absolute inset-0 bg-black/35" />
+          {(() => {
             const appLink = getPlatformAppLink(embed);
             const { Icon, label, colorClass } = appLink;
             return (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-28">
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
+                <PlatformMark embed={embed} className="h-20 w-20" />
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     openInNativeApp(appLink);
                   }}
-                  className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold shadow-lg ring-1 ring-black/5 transition hover:scale-105 active:scale-95"
+                  className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#1a0f0a] shadow-xl ring-1 ring-black/10 transition hover:scale-105 active:scale-95"
                 >
                   <Icon className={`h-5 w-5 ${colorClass}`} />
-                  Ver en {embed.label}
+                  {label}
                 </button>
               </div>
             );
