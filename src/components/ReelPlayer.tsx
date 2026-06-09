@@ -77,7 +77,7 @@ export function ReelPlayer({ reelId, poster, src, title }: ReelPlayerProps) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["reel-likes", reelId] }),
     onError: (e: Error) => {
       if (e.message === "not-auth") toast.error(t("reels.signInToLike"));
-      else toast.error(e.message);
+      else { console.error("reel-like error", e); toast.error(t("common.errorOccurred")); }
     },
   });
 
