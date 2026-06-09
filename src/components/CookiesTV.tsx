@@ -224,7 +224,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
       const m = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
       const appUrl = m ? `instagram://media?shortcode=${m[2]}` : null;
       return {
-        Icon: Instagram,
+        Icon: InstagramIcon,
         label: "Abrir en Instagram",
         colorClass: "text-pink-500",
         appUrl,
@@ -244,7 +244,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
     }
     case "facebook":
       return {
-        Icon: Facebook,
+        Icon: FacebookIcon,
         label: "Abrir en Facebook",
         colorClass: "text-blue-500",
         appUrl: `fb://facewebmodal/f?href=${encodeURIComponent(url)}`,
@@ -257,7 +257,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
         url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
       const appUrl = m ? `vnd.youtube://${m[1]}` : null;
       return {
-        Icon: Youtube,
+        Icon: YoutubeIcon,
         label: "Abrir en YouTube",
         colorClass: "text-red-500",
         appUrl,
