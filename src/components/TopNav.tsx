@@ -85,13 +85,13 @@ export function TopNav() {
           <Link
             to="/"
             className="flex shrink-0 items-center gap-2 rounded px-1 py-1 hover:ring-1 hover:ring-white/40"
-            aria-label="OyS Cookies"
+            aria-label="ZENDA Cookies"
           >
             <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500">
               <Cookie className="h-5 w-5 text-[#F4F1EA]" />
             </span>
             <span className="hidden text-lg font-extrabold tracking-tight text-amber-50 sm:inline">
-              OyS<span className="text-amber-400">.</span>
+              ZENDA<span className="text-amber-400">.</span>
             </span>
           </Link>
 

@@ -8,11 +8,11 @@ import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plans — Oys" },
+      { title: "Subscription Plans — Zenda" },
       {
         name: "description",
         content:
-          "Choose your Oys cookie subscription plan. Delivered Mondays and Fridays only.",
+          "Choose your Zenda cookie subscription plan. Delivered Mondays and Fridays only.",
       },
     ],
   }),
