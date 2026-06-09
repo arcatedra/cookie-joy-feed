@@ -437,8 +437,10 @@ function MiniHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
         <Link to="/" className="flex items-center gap-3" aria-label="ZENDA">
           <ZendaLogo
-            size={36}
-            nameClassName="text-lg font-extrabold tracking-tighter text-[#1a0f0a]"
+            size={34}
+            showTagline
+            nameClassName="text-lg font-bold tracking-[0.22em] text-[#1a0f0a]"
+            taglineClassName="text-[7px] tracking-[0.28em] text-[#4A3525]/70"
           />
           <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
         </Link>

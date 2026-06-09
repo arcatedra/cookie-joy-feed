@@ -89,8 +89,10 @@ export function TopNav() {
             aria-label="ZENDA"
           >
             <ZendaLogo
-              size={34}
-              nameClassName="text-[17px] font-extrabold tracking-tighter text-amber-300"
+              size={30}
+              showTagline
+              nameClassName="text-[16px] font-bold tracking-[0.22em] text-amber-300"
+              taglineClassName="text-[7px] tracking-[0.28em] text-amber-200/70"
             />
           </Link>
 
