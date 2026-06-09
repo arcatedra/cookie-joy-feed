@@ -517,10 +517,11 @@ export function CookiesTV() {
             </div>
           )}
           {!loading &&
-            reels.map((r) => (
+            reels.map((r, index) => (
               <ReelCard
                 key={r.id}
                 reel={r}
+                isFirst={index === 0}
                 likes={likeCounts[r.id] ?? 0}
                 comments={commentCounts[r.id] ?? 0}
                 liked={myLikes.has(r.id)}
@@ -568,6 +569,7 @@ function ReelCard({
   onToggleMuted,
   canDelete,
   onDelete,
+  isFirst,
 }: {
   reel: DbReel;
   likes: number;
@@ -579,6 +581,7 @@ function ReelCard({
   onToggleMuted: () => void;
   canDelete: boolean;
   onDelete: () => void;
+  isFirst?: boolean;
 }) {
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
@@ -748,7 +751,38 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {isEmbed ? (
+      {isFirst ? (
+        <>
+          {productImg ? (
+            <img
+              src={productImg}
+              alt={reel.product_name ?? ""}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
+          )}
+          {embed && (() => {
+            const appLink = getPlatformAppLink(embed);
+            const { Icon, label, colorClass } = appLink;
+            return (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-28">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openInNativeApp(appLink);
+                  }}
+                  className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold shadow-lg ring-1 ring-black/5 transition hover:scale-105 active:scale-95"
+                >
+                  <Icon className={`h-5 w-5 ${colorClass}`} />
+                  Ver en {embed.label}
+                </button>
+              </div>
+            );
+          })()}
+        </>
+      ) : isEmbed ? (
         <iframe
           src={embed!.embedUrl}
           title={reel.title ?? `${embed!.label} reel`}
