@@ -87,6 +87,7 @@ const sliderProducts: SliderProduct[] = [
 ];
 
 function Home() {
+  const { t } = useTranslation();
   return (
     <main
       className="min-h-screen"
@@ -105,25 +106,21 @@ function Home() {
         <CategoryCardGrid />
       </section>
 
-
-
       {/* Secondary band */}
       <section className="mx-auto mt-6 max-w-[1500px] px-3 pb-12 md:px-6">
         <div className="rounded-md bg-white p-5 shadow-sm ring-1 ring-black/5 md:p-7">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h3 className="text-lg font-extrabold text-[#1a0f0a] md:text-xl">
-                ¿Listo para probar lo nuevo?
+                {t("home.promoTitle")}
               </h3>
-              <p className="mt-1 text-sm text-[#444]">
-                Descubre nuestras ediciones limitadas y los favoritos del mes.
-              </p>
+              <p className="mt-1 text-sm text-[#444]">{t("home.promoSubtitle")}</p>
             </div>
             <Link
               to="/menu"
               className="rounded-full bg-amber-400 px-6 py-2.5 text-sm font-bold text-[#1a0f0a] shadow transition hover:bg-amber-300"
             >
-              Ver menú completo
+              {t("home.promoCta")}
             </Link>
           </div>
         </div>
