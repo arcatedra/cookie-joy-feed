@@ -15,6 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
+import { ZendaLogo } from "@/components/ZendaLogo";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
@@ -84,15 +85,15 @@ export function TopNav() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-2 rounded px-1 py-1 hover:ring-1 hover:ring-white/40"
-            aria-label="ZENDA Cookies"
+            className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
+            aria-label="ZENDA Artisanal Gourmet Market"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-500">
-              <span className="text-[15px] font-black text-[#F4F1EA] leading-none">Z</span>
-            </span>
-            <span className="hidden text-lg font-extrabold tracking-tight text-amber-50 sm:inline">
-              ZENDA<span className="text-amber-400">.</span>
-            </span>
+            <ZendaLogo
+              size={34}
+              nameClassName="text-[17px] text-amber-300"
+              tagline="ARTISANAL GOURMET MARKET"
+              taglineClassName="text-[7px] text-amber-200/70 hidden sm:block"
+            />
           </Link>
 
           {/* Delivery address — desktop */}
