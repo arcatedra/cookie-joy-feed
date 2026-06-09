@@ -133,7 +133,36 @@
     "subscriptionEyebrow": "Caja mensual",
     "subscriptionHeadline": "12 galletas frescas, entregadas en tu puerta.",
     "subscriptionSubcopy": "Cancela cuando quieras · Envío gratis",
-    "startSubscription": "Iniciar suscripción"
+    "startSubscription": "Iniciar suscripción",
+    "promoTitle": "¿Listo para probar lo nuevo?",
+    "promoSubtitle": "Descubre nuestras ediciones limitadas y los favoritos del mes.",
+    "promoCta": "Ver menú completo",
+    "cards": {
+      "bestSellersTitle": "Las Más Vendidas",
+      "bestSellersLink": "Ver más",
+      "buildPackTitle": "Arma tu Pack Personalizado",
+      "buildPackLink": "Ver opciones",
+      "buildPackCta": "Empezar a armar",
+      "buildPackAlt": "Caja de galletas personalizada",
+      "subscriptionTitle": "Suscripción Mensual",
+      "subscriptionLink": "Conocer el club",
+      "subscriptionClub": "CLUB OYS",
+      "subscriptionHeadline": "Entregas semanales recién horneadas",
+      "subscriptionSubcopy": "Cancela cuando quieras · Envío incluido",
+      "subscriptionPrice": "Desde $24/mes",
+      "flashTitle": "Ofertas Relámpago",
+      "flashLink": "Ver todas las ofertas",
+      "flashProduct": "Pack 9 Galletas Surtidas",
+      "flashAlt": "Pack 9 galletas",
+      "flashClaimed": "Reclamadas: {{pct}}%",
+      "flashEndsIn": "Termina en {{time}}",
+      "best": {
+        "classic": "Clásica",
+        "redVelvet": "Red Velvet",
+        "tripleChoc": "Triple Chocolate",
+        "oatRaisin": "Avena y Pasas"
+      }
+    }
   },
   "categories": {
     "cookies": "Galletas",
