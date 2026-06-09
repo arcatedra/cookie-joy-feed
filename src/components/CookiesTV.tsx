@@ -579,12 +579,11 @@ function ReelCard({
   };
 
   const shareUrl = () => {
-    // Share the actual video/reel link, not the website page.
-    // 1) If it's an embedded reel (YouTube, Instagram, TikTok, Facebook), share the original source URL.
-    // 2) Otherwise share the direct video file URL.
-    if (embed?.originalUrl) return embed.originalUrl;
-    if (reel.video_url) return reel.video_url;
-    return typeof window !== "undefined" ? window.location.href : "";
+    // Deep link back to Cookies TV pointing at this specific reel.
+    // Prefer the published domain so it works outside the preview.
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
+    return `${origin}/?reel=${encodeURIComponent(reel.id)}#reel-${encodeURIComponent(reel.id)}`;
   };
   const shareTitle = () =>
     reel.title
