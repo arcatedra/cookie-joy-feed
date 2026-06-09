@@ -270,6 +270,15 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
   }
 }
 
+function PlatformMark({ embed, className = "h-14 w-14" }: { embed: EmbedInfo; className?: string }) {
+  const { Icon, colorClass } = getPlatformAppLink(embed);
+  return (
+    <span className={`grid place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10 ${className}`}>
+      <Icon className={`h-1/2 w-1/2 ${colorClass}`} />
+    </span>
+  );
+}
+
 function openInNativeApp(link: PlatformAppLink) {
   if (typeof window === "undefined") return;
   const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -597,21 +606,22 @@ function ReelCard({
     "";
   const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
   const isEmbed = !!embed;
+  const firstExternalOnly = Boolean(isFirst && embed);
 
   // Autoplay native <video> when visible
   useEffect(() => {
     const el = cardRef.current;
-    if (!el || isEmbed) return;
+    if (!el || isEmbed || firstExternalOnly) return;
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.5),
       { threshold: [0, 0.5, 1] },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [isEmbed]);
+  }, [isEmbed, firstExternalOnly]);
 
   useEffect(() => {
-    if (isEmbed) return;
+    if (isEmbed || firstExternalOnly) return;
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
@@ -621,10 +631,10 @@ function ReelCard({
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc, isEmbed]);
+  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly]);
 
   const togglePlay = () => {
-    if (isEmbed) return;
+    if (isEmbed || firstExternalOnly) return;
     const v = videoRef.current;
     if (!v) return;
     // Quitar mute en la primera interacción del usuario para garantizar reproducción
