@@ -68,6 +68,49 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-pista": imgWhiteMac,
 };
 
+const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
+
+function getReelStoragePath(videoUrl: string | null | undefined) {
+  if (!videoUrl) return null;
+  const markerIndex = videoUrl.indexOf(REELS_STORAGE_MARKER);
+  if (markerIndex === -1) return null;
+  const encodedPath = videoUrl.slice(markerIndex + REELS_STORAGE_MARKER.length).split("?")[0];
+  try {
+    return decodeURIComponent(encodedPath);
+  } catch {
+    return encodedPath;
+  }
+}
+
+async function signStoredReelVideos(rows: DbReel[]) {
+  const paths = Array.from(
+    new Set(rows.map((r) => getReelStoragePath(r.video_url)).filter(Boolean) as string[]),
+  );
+  if (!paths.length) return rows;
+
+  const { data, error } = await supabase.storage.from("reels").createSignedUrls(paths, 60 * 60);
+  if (error || !data) return rows;
+
+  const signedByPath = new Map<string, string>();
+  data.forEach((item) => {
+    if (item.path && item.signedUrl) signedByPath.set(item.path, item.signedUrl);
+  });
+
+  return rows.map((row) => {
+    const path = getReelStoragePath(row.video_url);
+    return path && signedByPath.has(path) ? { ...row, video_url: signedByPath.get(path)! } : row;
+  });
+}
+
+function hasPlayableSource(reel: DbReel) {
+  const url = reel.video_url?.trim();
+  if (url) {
+    if (parseEmbed(url)) return true;
+    return /\.(mp4|m4v|mov|webm)(\?|#|$)/i.test(url) || url.includes("/storage/v1/object/");
+  }
+  return Boolean(FALLBACK_VIDEO[reel.slug]);
+}
+
 const PRODUCT_OPTIONS = [
   { slug: "p-doublechoc", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
   { slug: "p-cc", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
@@ -165,6 +208,27 @@ export function CookiesTV() {
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [myLikes, setMyLikes] = useState<Set<string>>(new Set());
+  const [canManageAllReels, setCanManageAllReels] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (!user) {
+        setCanManageAllReels(false);
+        return;
+      }
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!cancelled) setCanManageAllReels(Boolean(data));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   // Fetch reels + aggregates
   useEffect(() => {
@@ -180,12 +244,9 @@ export function CookiesTV() {
         setLoading(false);
         return;
       }
-      // Mostrar solo reels que tengan un video reproducible (archivo, fallback o embed válido)
-      const playable = ((data ?? []) as DbReel[]).filter((r) => {
-        if (r.video_url && r.video_url.trim()) return true;
-        if (FALLBACK_VIDEO[r.slug]) return true;
-        return false;
-      });
+      const signedRows = await signStoredReelVideos((data ?? []) as DbReel[]);
+      if (cancelled) return;
+      const playable = signedRows.filter(hasPlayableSource);
       setReels(playable);
       setLoading(false);
       const ids = playable.map((r) => r.id);
@@ -352,6 +413,7 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
+                canDelete={canManageAllReels || user?.id === r.author_id}
                 onDelete={() => handleDelete(r.id)}
               />
             ))}
@@ -389,6 +451,7 @@ function ReelCard({
   onOpenComments,
   globalMuted,
   onToggleMuted,
+  canDelete,
   onDelete,
 }: {
   reel: DbReel;
@@ -399,10 +462,9 @@ function ReelCard({
   onOpenComments: () => void;
   globalMuted: boolean;
   onToggleMuted: () => void;
+  canDelete: boolean;
   onDelete: () => void;
 }) {
-  const { user } = useAuth();
-  const isOwner = user?.id === reel.author_id;
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -561,7 +623,7 @@ function ReelCard({
           )}
         </div>
         <div className="pointer-events-auto flex items-center gap-2">
-          {isOwner && (
+          {canDelete && (
             <button
               type="button"
               onClick={(e) => {
