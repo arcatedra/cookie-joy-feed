@@ -121,8 +121,8 @@
     "didNotLoadDesc": "Something went wrong on our end. You can try refreshing or head back home."
   },
   "home": {
-    "metaTitle": "Oys — Gourmet Cookies, Delivered Monthly",
-    "metaDesc": "Discover artisanal gourmet cookies and join the Oys monthly subscription for freshly baked treats at your door.",
+    "metaTitle": "Zenda — Gourmet Cookies, Delivered Monthly",
+    "metaDesc": "Discover artisanal gourmet cookies and join the Zenda monthly subscription for freshly baked treats at your door.",
     "welcome": "Welcome back",
     "greeting": "Good Morning, {{name}}!",
     "freshToday": "Fresh batches dropped today",
@@ -147,7 +147,7 @@
       "buildPackAlt": "Custom cookie box",
       "subscriptionTitle": "Monthly Subscription",
       "subscriptionLink": "Discover the club",
-      "subscriptionClub": "OYS CLUB",
+      "subscriptionClub": "ZENDA CLUB",
       "subscriptionHeadline": "Weekly freshly baked deliveries",
       "subscriptionSubcopy": "Cancel anytime · Shipping included",
       "subscriptionPrice": "From $24/mo",
@@ -174,14 +174,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Browse Cookies — Oys",
-    "metaDesc": "Explore our full range of artisanal gourmet cookies at Oys.",
+    "metaTitle": "Browse Cookies — Zenda",
+    "metaDesc": "Explore our full range of artisanal gourmet cookies at Zenda.",
     "title": "Browse Cookies",
     "sort": "Sort",
     "price": "Price"
   },
   "menu": {
-    "metaTitle": "Menu — Oys",
+    "metaTitle": "Menu — Zenda",
     "metaDesc": "Browse our classic cookies.",
     "title": "Cookies",
     "tabs": {
@@ -225,8 +225,8 @@
     "peanuts": "PEANUTS"
   },
   "subscribe": {
-    "metaTitle": "Subscription Plans — Oys",
-    "metaDesc": "Choose your Oys cookie subscription plan. Delivered Mondays and Fridays only.",
+    "metaTitle": "Subscription Plans — Zenda",
+    "metaDesc": "Choose your Zenda cookie subscription plan. Delivered Mondays and Fridays only.",
     "title": "Subscription Plans",
     "deliveryBadge": "Monday & Friday Delivery Only",
     "activePlan": "Active Plan",
@@ -251,8 +251,8 @@
     }
   },
   "profile": {
-    "metaTitle": "My Profile — Oys",
-    "metaDesc": "Manage your Oys account, orders, and subscription.",
+    "metaTitle": "My Profile — Zenda",
+    "metaDesc": "Manage your Zenda account, orders, and subscription.",
     "title": "My Profile",
     "settings": "Settings",
     "city": "New York",
@@ -276,7 +276,7 @@
     },
     "qr": {
       "title": "Your QR Code",
-      "description": "Scan to visit the Oys store directly from any device.",
+      "description": "Scan to visit the Zenda store directly from any device.",
       "download": "Download QR",
       "copyLink": "Copy link",
       "downloaded": "QR downloaded",
