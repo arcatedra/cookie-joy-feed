@@ -465,7 +465,6 @@ function ReelCard({
   canDelete: boolean;
   onDelete: () => void;
 }) {
-  const { user } = useAuth();
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
