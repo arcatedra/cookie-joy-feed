@@ -240,7 +240,7 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
       return {
         Icon: Music2,
         label: "Abrir en TikTok",
-        colorClass: "text-white",
+        colorClass: "text-black",
         appUrl,
         webUrl: url,
       };
