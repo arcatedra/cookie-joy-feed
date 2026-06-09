@@ -270,6 +270,15 @@ function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
   }
 }
 
+function PlatformMark({ embed, className = "h-14 w-14" }: { embed: EmbedInfo; className?: string }) {
+  const { Icon, colorClass } = getPlatformAppLink(embed);
+  return (
+    <span className={`grid place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10 ${className}`}>
+      <Icon className={`h-1/2 w-1/2 ${colorClass}`} />
+    </span>
+  );
+}
+
 function openInNativeApp(link: PlatformAppLink) {
   if (typeof window === "undefined") return;
   const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -597,21 +606,22 @@ function ReelCard({
     "";
   const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
   const isEmbed = !!embed;
+  const firstExternalOnly = Boolean(isFirst);
 
   // Autoplay native <video> when visible
   useEffect(() => {
     const el = cardRef.current;
-    if (!el || isEmbed) return;
+    if (!el || isEmbed || firstExternalOnly) return;
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio > 0.5),
       { threshold: [0, 0.5, 1] },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [isEmbed]);
+  }, [isEmbed, firstExternalOnly]);
 
   useEffect(() => {
-    if (isEmbed) return;
+    if (isEmbed || firstExternalOnly) return;
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
@@ -621,10 +631,10 @@ function ReelCard({
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc, isEmbed]);
+  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly]);
 
   const togglePlay = () => {
-    if (isEmbed) return;
+    if (isEmbed || firstExternalOnly) return;
     const v = videoRef.current;
     if (!v) return;
     // Quitar mute en la primera interacción del usuario para garantizar reproducción
@@ -665,6 +675,7 @@ function ReelCard({
   };
 
   const shareUrl = () => {
+    if (firstExternalOnly && embed) return embed.originalUrl;
     // Always share a link to the dedicated reel page so social platforms
     // (WhatsApp, Facebook, Instagram, etc.) preview THIS reel — title,
     // thumbnail and video — instead of the full website homepage.
@@ -751,7 +762,7 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {isFirst ? (
+      {firstExternalOnly ? (
         <>
           {productImg ? (
             <img
@@ -762,25 +773,36 @@ function ReelCard({
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
           )}
-          {embed && (() => {
-            const appLink = getPlatformAppLink(embed);
+          <div className="absolute inset-0 bg-black/55" />
+          {embed ? (() => {
+            const appLink = getPlatformAppLink(embed!);
             const { Icon, label, colorClass } = appLink;
             return (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-28">
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
+                <PlatformMark embed={embed!} className="h-20 w-20" />
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     openInNativeApp(appLink);
                   }}
-                  className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold shadow-lg ring-1 ring-black/5 transition hover:scale-105 active:scale-95"
+                  className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#1a0f0a] shadow-xl ring-1 ring-black/10 transition hover:scale-105 active:scale-95"
                 >
                   <Icon className={`h-5 w-5 ${colorClass}`} />
-                  Ver en {embed.label}
+                  {label}
                 </button>
               </div>
             );
-          })()}
+          })() : (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 px-6 text-center">
+              <span className="grid h-20 w-20 place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10">
+                <ExternalLink className="h-10 w-10 text-[#1a0f0a]" />
+              </span>
+              <span className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-[#1a0f0a] shadow-lg ring-1 ring-black/10">
+                Solo enlace externo
+              </span>
+            </div>
+          )}
         </>
       ) : isEmbed ? (
         <iframe
@@ -885,7 +907,7 @@ function ReelCard({
       )}
 
       {/* Right rail actions */}
-      <div className="absolute bottom-32 right-2.5 z-20 flex flex-col items-center gap-3">
+      {!firstExternalOnly && <div className="absolute bottom-32 right-2.5 z-20 flex flex-col items-center gap-3">
         <button
           type="button"
           onClick={handleLike}
@@ -922,7 +944,7 @@ function ReelCard({
           </span>
         </button>
 
-        {embed && (() => {
+        {embed && !firstExternalOnly && (() => {
           const appLink = getPlatformAppLink(embed);
           const { Icon, label, colorClass } = appLink;
           return (
@@ -986,17 +1008,15 @@ function ReelCard({
             <DropdownMenuItem onClick={copyLink}>
               <LinkIcon /> Copiar enlace
             </DropdownMenuItem>
-            {typeof navigator !== "undefined" && "share" in navigator && (
-              <DropdownMenuItem onClick={nativeShare}>
-                <Share2 /> Más opciones…
-              </DropdownMenuItem>
-            )}
+            <DropdownMenuItem onClick={nativeShare}>
+              <Share2 /> Más opciones…
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div>}
 
       {/* Bottom fixed info */}
-      <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
+      {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
           {reel.title ?? "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
@@ -1027,7 +1047,7 @@ function ReelCard({
             </span>
           </button>
         )}
-      </div>
+      </div>}
     </article>
   );
 }
