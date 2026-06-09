@@ -810,12 +810,12 @@ function ReelCard({
       {/* gradient overlays — softer over iframe so native controls remain visible */}
       <div
         className={`pointer-events-none absolute inset-x-0 top-0 ${
-          isEmbed ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
+          isEmbed && !isFirst ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
         }`}
       />
       <div
         className={`pointer-events-none absolute inset-x-0 bottom-0 ${
-          isEmbed
+          isEmbed && !isFirst
             ? "h-32 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
             : "h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
         }`}
