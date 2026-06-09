@@ -768,28 +768,60 @@ function ReelCard({
             <img
               src={productImg}
               alt={reel.product_name ?? ""}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px] transition-transform duration-[6000ms] ease-out group-hover:scale-125"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-rose-400" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-300 via-rose-500 to-fuchsia-600" />
           )}
-          <div className="absolute inset-0 bg-black/55" />
+          {/* Cinematic gradient layers */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,90,140,0.45),_transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(120,80,255,0.45),_transparent_55%)] mix-blend-screen" />
+          {/* Animated light beam */}
+          <div className="pointer-events-none absolute -inset-x-10 top-0 h-40 -translate-y-full bg-gradient-to-b from-white/40 via-white/10 to-transparent blur-xl transition-transform duration-1000 ease-out group-hover:translate-y-full" />
+          {/* Film grain via subtle noise */}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:3px_3px]" />
+          {/* LIVE badge */}
+          <div className="absolute left-3 top-3 z-20 flex items-center gap-1.5 rounded-full bg-red-600/95 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-red-500/40">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+            </span>
+            Exclusivo
+          </div>
+
           {embed ? (() => {
             const appLink = getPlatformAppLink(embed!);
             const { Icon, label, colorClass } = appLink;
             return (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
-                <PlatformMark embed={embed!} className="h-20 w-20" />
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-end gap-4 px-5 pb-7 pt-6 text-center">
+                {/* Pulsing platform mark */}
+                <div className="relative flex-1 flex items-center justify-center">
+                  <div className="absolute inset-0 m-auto h-28 w-28 animate-ping rounded-full bg-white/20" />
+                  <div className="absolute inset-0 m-auto h-24 w-24 rounded-full bg-gradient-to-br from-white/30 to-white/5 backdrop-blur-md" />
+                  <PlatformMark embed={embed!} className="relative h-16 w-16 drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/70">
+                    Disponible solo en
+                  </p>
+                  <p className="text-xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                    {embed!.label}
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     openInNativeApp(appLink);
                   }}
-                  className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#1a0f0a] shadow-xl ring-1 ring-black/10 transition hover:scale-105 active:scale-95"
+                  className="group/cta relative w-full overflow-hidden rounded-full bg-gradient-to-r from-fuchsia-500 via-rose-500 to-orange-400 p-[2px] shadow-[0_10px_40px_-5px_rgba(244,63,94,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95"
                 >
-                  <Icon className={`h-5 w-5 ${colorClass}`} />
-                  {label}
+                  <span className="relative flex items-center justify-center gap-2 rounded-full bg-black/85 px-5 py-3 text-sm font-extrabold uppercase tracking-wider text-white backdrop-blur-sm">
+                    <Icon className={`h-5 w-5 ${colorClass}`} />
+                    {label}
+                    <span className="absolute inset-y-0 -left-12 w-12 -skew-x-12 bg-white/30 blur-md transition-transform duration-700 group-hover/cta:translate-x-[300px]" />
+                  </span>
                 </button>
               </div>
             );
@@ -797,23 +829,31 @@ function ReelCard({
             const rawUrl = (reel.video_url ?? "").trim();
             const isHttp = /^https?:\/\//i.test(rawUrl);
             return (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
-                <span className="grid h-20 w-20 place-items-center rounded-full bg-white shadow-xl ring-1 ring-black/10">
-                  <ExternalLink className="h-10 w-10 text-[#1a0f0a]" />
-                </span>
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-end gap-4 px-5 pb-7 pt-6 text-center">
+                <div className="relative flex-1 flex items-center justify-center">
+                  <div className="absolute inset-0 m-auto h-28 w-28 animate-ping rounded-full bg-white/20" />
+                  <div className="absolute inset-0 m-auto h-24 w-24 rounded-full bg-gradient-to-br from-white/30 to-white/5 backdrop-blur-md" />
+                  <ExternalLink className="relative h-14 w-14 text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]" />
+                </div>
+                <p className="text-xl font-black uppercase tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                  Mira el video original
+                </p>
                 {isHttp ? (
                   <a
                     href={rawUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#1a0f0a] shadow-xl ring-1 ring-black/10 transition hover:scale-105 active:scale-95"
+                    className="group/cta relative w-full overflow-hidden rounded-full bg-gradient-to-r from-fuchsia-500 via-rose-500 to-orange-400 p-[2px] shadow-[0_10px_40px_-5px_rgba(244,63,94,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95"
                   >
-                    <ExternalLink className="h-4 w-4" />
-                    Abrir enlace
+                    <span className="relative flex items-center justify-center gap-2 rounded-full bg-black/85 px-5 py-3 text-sm font-extrabold uppercase tracking-wider text-white backdrop-blur-sm">
+                      <ExternalLink className="h-4 w-4" />
+                      Abrir enlace
+                      <span className="absolute inset-y-0 -left-12 w-12 -skew-x-12 bg-white/30 blur-md transition-transform duration-700 group-hover/cta:translate-x-[300px]" />
+                    </span>
                   </a>
                 ) : (
-                  <span className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-[#1a0f0a] shadow-lg ring-1 ring-black/10">
+                  <span className="rounded-full bg-white/95 px-4 py-2 text-xs font-extrabold text-[#1a0f0a] shadow-lg ring-1 ring-black/10">
                     Sin enlace · edita el reel y pega la URL
                   </span>
                 )}
