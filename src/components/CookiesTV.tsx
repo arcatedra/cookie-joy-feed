@@ -316,6 +316,24 @@ export function CookiesTV() {
     };
   }, []);
 
+  // Scroll to a specific reel when arriving via ?reel=<id> deep link
+  useEffect(() => {
+    if (loading || reels.length === 0) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const targetId = params.get("reel");
+    if (!targetId) return;
+    const tryScroll = () => {
+      const el = document.getElementById(`reel-${targetId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        el.classList.add("ring-2", "ring-amber-400");
+        window.setTimeout(() => el.classList.remove("ring-2", "ring-amber-400"), 2500);
+      }
+    };
+    window.setTimeout(tryScroll, 150);
+  }, [loading, reels]);
+
   const toggleLike = async (reelId: string) => {
     if (!user) {
       toast.error("Inicia sesión para dar me gusta");
@@ -560,9 +578,18 @@ function ReelCard({
     toast.success(`${reel.product_name} agregado al carrito`);
   };
 
-  const shareUrl = () =>
-    embed?.originalUrl || (typeof window !== "undefined" ? window.location.href : "");
-  const shareTitle = () => reel.title ?? BRAND;
+  const shareUrl = () => {
+    if (typeof window === "undefined") return "";
+    const origin = window.location.origin;
+    // Always link back to this specific reel on Cookies TV
+    return `${origin}/?reel=${encodeURIComponent(reel.id)}#reel-${encodeURIComponent(reel.id)}`;
+  };
+  const shareTitle = () =>
+    reel.title
+      ? `${reel.title} · ${BRAND}`
+      : reel.product_name
+        ? `${reel.product_name} · ${BRAND}`
+        : `Mira este reel en ${BRAND}`;
 
   const copyLink = async () => {
     try {
@@ -632,6 +659,8 @@ function ReelCard({
   return (
     <article
       ref={cardRef}
+      id={`reel-${reel.id}`}
+      data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
       {isEmbed ? (
