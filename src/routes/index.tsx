@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { CookiesTV } from "@/components/CookiesTV";
