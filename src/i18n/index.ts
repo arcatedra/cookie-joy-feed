@@ -6,6 +6,10 @@ import es from "@/locales/es/translation.json";
 export const SUPPORTED_LANGS = ["en", "es"] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
 const STORAGE_KEY = "oys.lang";
+const resources = {
+  en: { translation: en },
+  es: { translation: es },
+};
 
 function detectInitialLang(): Lang {
   if (typeof window === "undefined") return "en";
@@ -24,10 +28,7 @@ if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .init({
-      resources: {
-        en: { translation: en },
-        es: { translation: es },
-      },
+      resources,
       lng: "en", // SSR-stable; switched on the client after hydration
       fallbackLng: "en",
       initAsync: false,
@@ -35,6 +36,11 @@ if (!i18n.isInitialized) {
       react: { useSuspense: false },
     });
 }
+
+// Keep server/client bundles fresh after hot updates so SSR never renders raw keys.
+SUPPORTED_LANGS.forEach((lang) => {
+  i18n.addResourceBundle(lang, "translation", resources[lang].translation, true, true);
+});
 
 /** Call from a useEffect after hydration to switch to the user's preferred language. */
 export function syncClientLanguage() {
