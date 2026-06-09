@@ -119,7 +119,7 @@ export function TopNav() {
                 <button
                   type="button"
                   onClick={() => setCatOpen((o) => !o)}
-                  className="flex h-full items-center gap-1 border-r border-border bg-muted px-3 text-xs font-semibold text-foreground hover:bg-muted/80"
+                  className="flex h-full items-center gap-1 border-r border-[#3a2a1d] bg-[#3a2a1d] px-3 text-xs font-semibold text-[#F4F1EA] hover:bg-[#2e2117]"
                   aria-haspopup="listbox"
                   aria-expanded={catOpen}
                 >
