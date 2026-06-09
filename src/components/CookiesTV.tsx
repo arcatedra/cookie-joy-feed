@@ -641,6 +641,8 @@ function ReelCard({
   return (
     <article
       ref={cardRef}
+      id={`reel-${reel.id}`}
+      data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
       {isEmbed ? (
