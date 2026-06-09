@@ -86,13 +86,11 @@ export function TopNav() {
           <Link
             to="/"
             className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
-            aria-label="ZENDA Artisanal Gourmet Market"
+            aria-label="ZENDA"
           >
             <ZendaLogo
               size={34}
-              nameClassName="text-[17px] text-amber-300"
-              tagline="ARTISANAL GOURMET MARKET"
-              taglineClassName="text-[7px] text-amber-200/70 hidden sm:block"
+              nameClassName="text-[17px] font-extrabold tracking-tighter text-amber-300"
             />
           </Link>
 
