@@ -565,6 +565,19 @@ export function CookiesTV() {
           }}
         />
       )}
+
+      {expandedIndex !== null && reels[expandedIndex] && (
+        <ExpandedReelModal
+          reel={reels[expandedIndex]}
+          hasPrev={expandedIndex > 0}
+          hasNext={expandedIndex < reels.length - 1}
+          onPrev={() => setExpandedIndex((i) => (i !== null && i > 0 ? i - 1 : i))}
+          onNext={() =>
+            setExpandedIndex((i) => (i !== null && i < reels.length - 1 ? i + 1 : i))
+          }
+          onClose={() => setExpandedIndex(null)}
+        />
+      )}
     </section>
   );
 }
