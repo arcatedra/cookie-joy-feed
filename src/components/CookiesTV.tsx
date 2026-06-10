@@ -1494,9 +1494,28 @@ function ExpandedReelModal({
           </span>
         </button>
 
-        <DropdownMenu>
+        <DropdownMenu open={shareMenuOpen} onOpenChange={setShareMenuOpen}>
           <DropdownMenuTrigger asChild>
-            <button type="button" aria-label="Compartir" className="flex flex-col items-center gap-0.5">
+            <button
+              type="button"
+              aria-label="Compartir"
+              className="flex flex-col items-center gap-0.5"
+              onClick={async (e) => {
+                // Prefer native OS share sheet (Instagram, TikTok, WhatsApp, etc.)
+                if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+                  e.preventDefault();
+                  try {
+                    await navigator.share({ title: shareTitle(), url: shareUrl() });
+                  } catch (err) {
+                    // User cancelled — do nothing. Other errors → fall back to menu.
+                    if ((err as { name?: string })?.name !== "AbortError") {
+                      setShareMenuOpen(true);
+                    }
+                  }
+                }
+                // No native share → let the dropdown open normally.
+              }}
+            >
               <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-500/80 backdrop-blur transition hover:bg-emerald-500">
                 <Share2 className="h-5 w-5 text-white" />
               </span>
@@ -1530,9 +1549,6 @@ function ExpandedReelModal({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={copyLink}>
               <LinkIcon /> Copiar enlace
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={nativeShare}>
-              <Share2 /> Más opciones…
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
