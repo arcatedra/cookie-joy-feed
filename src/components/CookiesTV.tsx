@@ -18,6 +18,7 @@ import {
   Music2,
   Mail,
   HandHeart,
+  Maximize2,
 } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "@/components/BrandIcons";
 import {
@@ -596,6 +597,7 @@ function ReelCard({
   const [playing, setPlaying] = useState(false);
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
   const productImg =
@@ -945,6 +947,19 @@ function ReelCard({
               {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
             </button>
           )}
+          {!firstExternalOnly && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(true);
+              }}
+              aria-label="Ver en grande"
+              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+            >
+              <Maximize2 className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -1150,6 +1165,52 @@ function ReelCard({
           </button>
         )}
       </div>}
+
+      {expanded && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-2 sm:p-6"
+          onClick={() => setExpanded(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Video en grande"
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpanded(false);
+            }}
+            aria-label="Cerrar"
+            className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <div
+            className="relative h-full w-full max-w-[min(95vw,calc(95vh*9/16))] aspect-[9/16] overflow-hidden rounded-2xl bg-black shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {isEmbed ? (
+              <iframe
+                src={embed!.embedUrl}
+                title={reel.title ?? `${embed!.label} reel`}
+                allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="h-full w-full border-0"
+              />
+            ) : videoSrc ? (
+              <video
+                src={videoSrc}
+                controls
+                autoPlay
+                playsInline
+                loop
+                className="h-full w-full object-contain bg-black"
+              />
+            ) : null}
+          </div>
+        </div>
+      )}
     </article>
   );
 }
