@@ -18,6 +18,7 @@ import {
   Music2,
   Mail,
   HandHeart,
+  Maximize2,
 } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "@/components/BrandIcons";
 import {
