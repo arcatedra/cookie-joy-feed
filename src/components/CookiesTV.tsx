@@ -1246,65 +1246,12 @@ function ExpandedReelModal({
     };
   }, [emblaApi]);
 
-  // Play active video, pause all others (no audio overlap).
-  // Robust against late-mounted refs, not-yet-loaded media, and tab visibility.
+  // Play active video, pause + mute all others. Single source of truth for
+  // "only the active reel plays" — covered by src/lib/reel-playback.test.ts.
   useEffect(() => {
-    const videos = videoRefs.current;
-
-    // 1. Pause + mute every non-active video synchronously.
-    videos.forEach((v, i) => {
-      if (!v || i === selectedIndex) return;
-      try {
-        v.pause();
-      } catch {
-        /* noop */
-      }
-      v.muted = true;
-    });
-
-    const active = videos[selectedIndex];
-    if (!active) return;
-
-    let cancelled = false;
-    const tryPlay = () => {
-      if (cancelled) return;
-      active.muted = false;
-      const p = active.play();
-      if (p && typeof p.catch === "function") {
-        p.catch(() => {
-          if (cancelled) return;
-          // Autoplay with sound may be blocked — fall back to muted.
-          active.muted = true;
-          active.play().catch(() => {});
-        });
-      }
-    };
-
-    active.currentTime = 0;
-    if (active.readyState >= 2) {
-      tryPlay();
-    } else {
-      const onReady = () => {
-        active.removeEventListener("loadeddata", onReady);
-        tryPlay();
-      };
-      active.addEventListener("loadeddata", onReady);
-      // Nudge the browser to start fetching.
-      try {
-        active.load();
-      } catch {
-        /* noop */
-      }
-      return () => {
-        cancelled = true;
-        active.removeEventListener("loadeddata", onReady);
-      };
-    }
-
-    return () => {
-      cancelled = true;
-    };
+    return syncReelPlayback(videoRefs.current, selectedIndex);
   }, [selectedIndex]);
+
 
   // Pause the active video when the tab is hidden; resume when visible.
   useEffect(() => {
