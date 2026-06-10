@@ -18,6 +18,10 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { QRCodeSection } from "@/components/QRCodeSection";
+import { TierBadge } from "@/components/TierBadge";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import type { DonationTier } from "@/lib/donation-tier";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
@@ -92,6 +96,7 @@ function ProfilePage() {
             <h2 className="text-xl font-bold text-foreground">{displayName}</h2>
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
+            <DonorBadge userId={user?.id ?? null} />
           </div>
 
           <div className="mt-5 flex items-center justify-around">
@@ -216,5 +221,26 @@ function ProfilePage() {
 
 
     </main>
+  );
+}
+
+function DonorBadge({ userId }: { userId: string | null }) {
+  const { data } = useQuery({
+    queryKey: ["profile-donation-tier", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("donation_tier")
+        .eq("id", userId!)
+        .maybeSingle();
+      return (data?.donation_tier as DonationTier | null) ?? null;
+    },
+  });
+  if (!data) return null;
+  return (
+    <div className="mt-3 flex justify-center">
+      <TierBadge tier={data} size="md" />
+    </div>
   );
 }

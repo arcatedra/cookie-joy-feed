@@ -14,10 +14,12 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
@@ -44,6 +46,11 @@ const ExploreRoute = ExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
@@ -64,40 +71,52 @@ const ReelReelIdRoute = ReelReelIdRouteImport.update({
   path: '/reel/$reelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
+  '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/subscribe': typeof SubscribeRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,46 +124,54 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cart'
+    | '/donate'
     | '/explore'
     | '/menu'
     | '/profile'
     | '/search'
     | '/subscribe'
     | '/reel/$reelId'
+    | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/cart'
+    | '/donate'
     | '/explore'
     | '/menu'
     | '/profile'
     | '/search'
     | '/subscribe'
     | '/reel/$reelId'
+    | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/cart'
+    | '/donate'
     | '/explore'
     | '/menu'
     | '/profile'
     | '/search'
     | '/subscribe'
     | '/reel/$reelId'
+    | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
+  DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
   MenuRoute: typeof MenuRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   SubscribeRoute: typeof SubscribeRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cart': {
       id: '/cart'
       path: '/cart'
@@ -212,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReelReelIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -219,12 +260,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
+  DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,
   MenuRoute: MenuRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   SubscribeRoute: SubscribeRoute,
   ReelReelIdRoute: ReelReelIdRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
