@@ -1436,10 +1436,13 @@ function ExpandedReelModal({
                 {/* Subtle bottom gradient for overlay legibility */}
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-                {/* Title overlay (per-video) — bottom-left */}
+                {/* Title overlay (per-video) — bottom-left, lifted clear of bottom edge */}
                 <div
                   className="pointer-events-none absolute left-0 z-10 pl-5"
-                  style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)", right: "5.5rem" }}
+                  style={{
+                    bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)",
+                    right: "5.5rem",
+                  }}
                 >
                   <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
                     {r.title ?? ""}
@@ -1453,8 +1456,8 @@ function ExpandedReelModal({
 
       {/* Right-side action rail — overlay, vertical (Reels/TikTok style) */}
       <div
-        className="absolute right-2 z-20 flex flex-col items-center gap-4"
-        style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)" }}
+        className="absolute right-3 z-20 flex flex-col items-center gap-4"
+        style={{ bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)" }}
       >
         <button
           type="button"
