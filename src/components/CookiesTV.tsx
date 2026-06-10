@@ -569,11 +569,15 @@ export function CookiesTV() {
       {expandedIndex !== null && reels[expandedIndex] && (
         <ExpandedReelModal
           reel={reels[expandedIndex]}
-          hasPrev={expandedIndex > 0}
-          hasNext={expandedIndex < reels.length - 1}
-          onPrev={() => setExpandedIndex((i) => (i !== null && i > 0 ? i - 1 : i))}
+          hasPrev={reels.length > 1}
+          hasNext={reels.length > 1}
+          onPrev={() =>
+            setExpandedIndex((i) =>
+              i === null ? i : (i - 1 + reels.length) % reels.length,
+            )
+          }
           onNext={() =>
-            setExpandedIndex((i) => (i !== null && i < reels.length - 1 ? i + 1 : i))
+            setExpandedIndex((i) => (i === null ? i : (i + 1) % reels.length))
           }
           onClose={() => setExpandedIndex(null)}
           likes={likeCounts[reels[expandedIndex]!.id] ?? 0}
