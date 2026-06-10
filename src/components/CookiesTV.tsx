@@ -904,7 +904,7 @@ function ReelCard({
           className="absolute inset-0 h-full w-full object-cover"
           onClick={(e) => {
             e.stopPropagation();
-            onExpand();
+            togglePlay();
           }}
         />
       ) : (
@@ -925,77 +925,15 @@ function ReelCard({
         }`}
       />
 
-      {/* Top: brand + mute/source */}
-      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between">
-        <div className="pointer-events-auto flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-rose-500 text-xs font-extrabold text-white ring-2 ring-white/80">
-            🍪
-          </span>
-          <span className="text-[12px] font-bold text-white drop-shadow">{BRAND}</span>
-          {isEmbed && (
-            <a
-              href={embed!.originalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-1 inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25"
-            >
-              {embed!.label}
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          )}
-        </div>
-        <div className="pointer-events-auto flex items-center gap-2">
-          {canDelete && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete();
-              }}
-              aria-label="Eliminar reel"
-              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-red-600/80"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          )}
-          {!isEmbed && !isFirst && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleMuted();
-              }}
-              aria-label={globalMuted ? "Activar sonido" : "Silenciar"}
-              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-            >
-              {globalMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-            </button>
-          )}
-          {!firstExternalOnly && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onExpand();
-              }}
-              aria-label="Ver en grande"
-              className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
-            >
-              <Maximize2 className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Center play overlay when paused (native video only) */}
+      {/* Center play overlay when paused — tap to resume (does NOT expand) */}
       {!isEmbed && !isFirst && !playing && videoSrc && (
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            onExpand();
+            togglePlay();
           }}
-          aria-label="Ver en grande"
+          aria-label="Reproducir"
           className="absolute inset-0 z-10 grid place-items-center"
         >
           <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg">
