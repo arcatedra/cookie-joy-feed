@@ -1185,54 +1185,168 @@ function ReelCard({
         )}
       </div>}
 
-      {expanded && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-2 sm:p-6"
-          onClick={() => setExpanded(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Video en grande"
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpanded(false);
-            }}
-            aria-label="Cerrar"
-            className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-          >
-            <X className="h-5 w-5" />
-          </button>
-          <div
-            className="relative h-full w-full max-w-[min(95vw,calc(95vh*9/16))] aspect-[9/16] overflow-hidden rounded-2xl bg-black shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {isEmbed ? (
-              <iframe
-                src={embed!.embedUrl}
-                title={reel.title ?? `${embed!.label} reel`}
-                allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-                className="h-full w-full border-0"
-              />
-            ) : videoSrc ? (
-              <video
-                src={videoSrc}
-                controls
-                autoPlay
-                playsInline
-                loop
-                className="h-full w-full object-contain bg-black"
-              />
-            ) : null}
-          </div>
-        </div>
-      )}
     </article>
   );
 }
+
+// ============ Fullscreen modal with swipe between reels ============
+function ExpandedReelModal({
+  reel,
+  hasPrev,
+  hasNext,
+  onPrev,
+  onNext,
+  onClose,
+}: {
+  reel: DbReel;
+  hasPrev: boolean;
+  hasNext: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+  onClose: () => void;
+}) {
+  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
+  const isEmbed = !!embed;
+  const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+
+  // Lock body scroll
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
+  // Keyboard nav
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        if (hasPrev) onPrev();
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        if (hasNext) onNext();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [hasPrev, hasNext, onPrev, onNext, onClose]);
+
+  // Touch swipe (horizontal or vertical, like Facebook reels)
+  const touchStart = useRef<{ x: number; y: number; t: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    const threshold = 60;
+    if (Math.max(absX, absY) < threshold) return;
+    if (absX > absY) {
+      if (dx < 0 && hasNext) onNext();
+      else if (dx > 0 && hasPrev) onPrev();
+    } else {
+      if (dy < 0 && hasNext) onNext();
+      else if (dy > 0 && hasPrev) onPrev();
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      style={{
+        paddingTop: "max(env(safe-area-inset-top), 0.5rem)",
+        paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)",
+        paddingLeft: "max(env(safe-area-inset-left), 0.5rem)",
+        paddingRight: "max(env(safe-area-inset-right), 0.5rem)",
+      }}
+      onClick={onClose}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Video en grande"
+    >
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        aria-label="Cerrar"
+        className="absolute z-20 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+        style={{
+          top: "max(env(safe-area-inset-top), 0.75rem)",
+          right: "max(env(safe-area-inset-right), 0.75rem)",
+        }}
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {hasPrev && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onPrev();
+          }}
+          aria-label="Anterior"
+          className="absolute left-2 top-1/2 z-20 hidden -translate-y-1/2 sm:grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+        >
+          ‹
+        </button>
+      )}
+      {hasNext && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onNext();
+          }}
+          aria-label="Siguiente"
+          className="absolute right-2 top-1/2 z-20 hidden -translate-y-1/2 sm:grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+        >
+          ›
+        </button>
+      )}
+
+      <div
+        key={reel.id}
+        className="relative flex h-full w-full items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {isEmbed ? (
+          <iframe
+            src={embed!.embedUrl}
+            title={reel.title ?? `${embed!.label} reel`}
+            allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="h-full w-full max-h-full max-w-full border-0"
+            style={{ aspectRatio: "9 / 16" }}
+          />
+        ) : videoSrc ? (
+          <video
+            src={videoSrc}
+            controls
+            autoPlay
+            playsInline
+            loop
+            className="h-full w-full max-h-full max-w-full object-contain bg-black"
+          />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 
 // ============ Comments panel (slides from right / bottom on mobile) ============
 function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => void }) {
