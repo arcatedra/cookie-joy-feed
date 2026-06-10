@@ -1452,21 +1452,59 @@ function ExpandedReelModal({
                       style={{ aspectRatio: "9 / 16" }}
                     />
                   ) : src ? (
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[i] = el;
-                      }}
-                      src={src}
-                      playsInline
-                      loop
-                      preload={Math.abs(i - selectedIndex) <= 1 ? "auto" : "metadata"}
-                      className="h-full w-full object-contain"
-                    />
+                    <>
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[i] = el;
+                        }}
+                        src={src}
+                        playsInline
+                        loop
+                        preload={Math.abs(i - selectedIndex) <= 1 ? "auto" : "metadata"}
+                        onClick={() => {
+                          if (i !== selectedIndex) return;
+                          const v = videoRefs.current[i];
+                          if (!v) return;
+                          if (v.paused) {
+                            v.play().catch(() => {
+                              v.muted = true;
+                              v.play().catch(() => {});
+                            });
+                          } else {
+                            v.pause();
+                          }
+                          // Force re-render so the play overlay updates.
+                          setPlayTick((n) => n + 1);
+                        }}
+                        className="h-full w-full cursor-pointer object-contain"
+                      />
+                      {i === selectedIndex && videoRefs.current[i]?.paused && (
+                        <button
+                          type="button"
+                          aria-label="Reproducir"
+                          onClick={() => {
+                            const v = videoRefs.current[i];
+                            v?.play().catch(() => {
+                              if (!v) return;
+                              v.muted = true;
+                              v.play().catch(() => {});
+                            });
+                            setPlayTick((n) => n + 1);
+                          }}
+                          className="pointer-events-auto absolute inset-0 z-10 grid place-items-center bg-black/20"
+                        >
+                          <span className="grid h-20 w-20 place-items-center rounded-full bg-white/90 shadow-2xl backdrop-blur">
+                            <Play className="h-8 w-8 fill-black text-black" />
+                          </span>
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="grid h-full w-full place-items-center text-white/60">
                       Sin video
                     </div>
                   )}
+
 
                   {/* Subtle bottom gradient for overlay legibility */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
