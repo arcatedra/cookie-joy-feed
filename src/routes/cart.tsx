@@ -436,12 +436,7 @@ function MiniHeader() {
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
         <Link to="/" className="flex items-center gap-3" aria-label="OriGen">
-          <OriGenLogo
-            size={34}
-            showTagline
-            nameClassName="text-lg font-bold tracking-[0.22em] text-[#1a0f0a]"
-            taglineClassName="text-[7px] tracking-[0.28em] text-[#4A3525]/70"
-          />
+          <OriGenLogo size={28} nameClassName="text-[#1f3a5f]" />
           <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
         </Link>
         <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">

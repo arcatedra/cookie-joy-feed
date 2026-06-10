@@ -1,110 +1,99 @@
 interface OriGenLogoProps {
+  /** Font size of the wordmark in px */
   size?: number;
   showName?: boolean;
   showTagline?: boolean;
   nameClassName?: string;
   taglineClassName?: string;
-  starClassName?: string;
-  layout?: "horizontal" | "vertical";
   className?: string;
 }
 
 /**
- * OriGen logo — elegant gold-foil star + serif wordmark, ORIGEN-inspired.
+ * OriGen logo — gold crown perched on the "O" of an elegant serif "Origen"
+ * wordmark, matching the brand reference (gold O + crown, navy "rigen").
  */
-export function OriGenStar({ size = 28, className }: { size?: number; className?: string }) {
+export function OriGenCrown({ size = 24, className }: { size?: number; className?: string }) {
   return (
     <svg
       width={size}
-      height={size}
-      viewBox="0 0 100 100"
+      height={size * 0.75}
+      viewBox="0 0 120 90"
       className={className}
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="origen-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f7e7a8" />
-          <stop offset="45%" stopColor="#d4a84a" />
-          <stop offset="100%" stopColor="#7a5618" />
-        </linearGradient>
-        <linearGradient id="origen-gold-shine" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#fff4c2" stopOpacity="0.9" />
-          <stop offset="50%" stopColor="#e8c769" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#8a6420" stopOpacity="0.9" />
+        <linearGradient id="origen-crown-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#d9b45c" />
+          <stop offset="50%" stopColor="#b3873e" />
+          <stop offset="100%" stopColor="#8a6420" />
         </linearGradient>
       </defs>
-      {/* 5-point star with faceted highlights */}
-      <polygon
-        points="50,6 61,38 95,38 67,58 78,92 50,72 22,92 33,58 5,38 39,38"
-        fill="url(#origen-gold)"
-        stroke="#5a3f12"
-        strokeWidth="1"
-        strokeLinejoin="miter"
+      {/* tip balls */}
+      <circle cx="14" cy="18" r="7" fill="url(#origen-crown-gold)" />
+      <circle cx="60" cy="10" r="7" fill="url(#origen-crown-gold)" />
+      <circle cx="106" cy="18" r="7" fill="url(#origen-crown-gold)" />
+      {/* crown body */}
+      <path
+        d="M14 28 L38 48 L60 18 L82 48 L106 28 L97 68 L23 68 Z"
+        fill="url(#origen-crown-gold)"
       />
-      <polygon
-        points="50,6 61,38 50,50 39,38"
-        fill="url(#origen-gold-shine)"
-        opacity="0.85"
-      />
-      <polygon
-        points="50,50 67,58 50,72 33,58"
-        fill="#fff4c2"
-        opacity="0.25"
+      {/* base band */}
+      <rect x="21" y="68" width="78" height="13" rx="5" fill="url(#origen-crown-gold)" />
+      {/* white star detail */}
+      <path
+        d="M60 40 L63.2 49 L72 52.5 L63.2 56 L60 65 L56.8 56 L48 52.5 L56.8 49 Z"
+        fill="#fdfaf2"
       />
     </svg>
   );
 }
 
+const serifStack = "'Cormorant Garamond', 'Cinzel', Georgia, serif";
+const GOLD = "#b3873e";
+
 export function OriGenLogo({
-  size = 34,
+  size = 28,
   showName = true,
   showTagline = false,
-  nameClassName = "text-lg font-bold tracking-[0.18em] text-amber-400",
-  taglineClassName = "text-[8px] tracking-[0.25em] text-amber-300/80",
-  starClassName,
-  layout = "horizontal",
+  nameClassName = "text-[#1f3a5f]",
+  taglineClassName = "text-[8px] tracking-[0.25em] text-[#1f3a5f]/70",
   className = "",
 }: OriGenLogoProps) {
-  const serifStack = "'Cinzel', 'Cormorant Garamond', 'Playfair Display', Georgia, serif";
-
-  if (layout === "vertical") {
-    return (
-      <span className={`inline-flex flex-col items-center gap-1 ${className}`}>
-        <OriGenStar size={size} className={starClassName} />
-        {showName && (
-          <span className={nameClassName} style={{ fontFamily: serifStack }}>
-            OriGen
-          </span>
-        )}
-        {showTagline && (
-          <span className="flex flex-col items-center leading-tight">
-            <span className={taglineClassName} style={{ fontFamily: serifStack, fontStyle: "italic" }}>
-              ALIMENTOS ARTESANALES DE CALIDAD
-            </span>
-            <span className={taglineClassName} style={{ fontFamily: serifStack, fontStyle: "italic" }}>
-              PANADERÍA REFINADA CO.
-            </span>
-          </span>
-        )}
-      </span>
-    );
+  if (!showName) {
+    return <OriGenCrown size={size} className={className} />;
   }
 
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
-      <OriGenStar size={size} className={starClassName} />
-      <span className="flex flex-col leading-none">
-        {showName && (
-          <span className={nameClassName} style={{ fontFamily: serifStack }}>
-            OriGen
+    <span className={`inline-flex flex-col items-start ${className}`}>
+      <span
+        className={`relative inline-flex items-baseline leading-none ${nameClassName}`}
+        style={{
+          fontFamily: serifStack,
+          fontWeight: 600,
+          fontSize: size,
+          paddingTop: size * 0.5,
+        }}
+      >
+        <span className="relative inline-block">
+          {/* Crown perched on the O, slightly tilted like the reference */}
+          <span
+            className="absolute left-1/2 -translate-x-[58%] -rotate-[10deg]"
+            style={{ top: -size * 0.52 }}
+          >
+            <OriGenCrown size={size * 0.78} />
           </span>
-        )}
-        {showTagline && (
-          <span className={`${taglineClassName} mt-0.5`} style={{ fontFamily: serifStack, fontStyle: "italic" }}>
-            ALIMENTOS ARTESANALES
-          </span>
-        )}
+          <span style={{ color: GOLD }}>O</span>
+        </span>
+        <span>rigen</span>
       </span>
+      {showTagline && (
+        <span
+          className={taglineClassName}
+          style={{ fontFamily: serifStack, fontStyle: "italic" }}
+        >
+          ALIMENTOS ARTESANALES
+        </span>
+      )}
     </span>
   );
 }
