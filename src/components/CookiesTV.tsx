@@ -595,6 +595,7 @@ function ReelCard({
   canDelete,
   onDelete,
   isFirst,
+  onExpand,
 }: {
   reel: DbReel;
   likes: number;
@@ -607,6 +608,7 @@ function ReelCard({
   canDelete: boolean;
   onDelete: () => void;
   isFirst?: boolean;
+  onExpand: () => void;
 }) {
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
@@ -614,7 +616,7 @@ function ReelCard({
   const [playing, setPlaying] = useState(false);
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
   const productImg =
