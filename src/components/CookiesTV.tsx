@@ -925,18 +925,18 @@ function ReelCard({
         }`}
       />
 
-      {/* Center play overlay when paused — tap to resume (does NOT expand) */}
+      {/* Center play overlay when paused — tap to open fullscreen with all features */}
       {!isEmbed && !isFirst && !playing && videoSrc && (
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            togglePlay();
+            onExpand();
           }}
-          aria-label="Reproducir"
+          aria-label="Reproducir en pantalla completa"
           className="absolute inset-0 z-10 grid place-items-center"
         >
-          <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg">
+          <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg ring-2 ring-white/40">
             <Play className="h-6 w-6 fill-[#1a0f0a] text-[#1a0f0a]" />
           </span>
         </button>
