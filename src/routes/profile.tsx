@@ -223,3 +223,24 @@ function ProfilePage() {
     </main>
   );
 }
+
+function DonorBadge({ userId }: { userId: string | null }) {
+  const { data } = useQuery({
+    queryKey: ["profile-donation-tier", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("donation_tier")
+        .eq("id", userId!)
+        .maybeSingle();
+      return (data?.donation_tier as DonationTier | null) ?? null;
+    },
+  });
+  if (!data) return null;
+  return (
+    <div className="mt-3 flex justify-center">
+      <TierBadge tier={data} size="md" />
+    </div>
+  );
+}
