@@ -25,6 +25,7 @@ const quickLinkKeys = [
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
+  { key: "donate", to: "/donate", label: "❤ Donar" },
 ] as const;
 
 export function TopNav() {
@@ -287,9 +288,13 @@ export function TopNav() {
               <Link
                 key={l.key}
                 to={l.to}
-                className="shrink-0 rounded px-2 py-1 text-white/90 transition hover:ring-1 hover:ring-white/40"
+                className={`shrink-0 rounded px-2 py-1 transition hover:ring-1 hover:ring-white/40 ${
+                  l.key === "donate"
+                    ? "bg-amber-400/90 font-bold text-[#1a0f0a] hover:bg-amber-300"
+                    : "text-white/90"
+                }`}
               >
-                {t(`topnav.links.${l.key}`)}
+                {"label" in l && l.label ? l.label : t(`topnav.links.${l.key}`)}
               </Link>
             ))}
           </div>
