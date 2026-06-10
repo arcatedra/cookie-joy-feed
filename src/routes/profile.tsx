@@ -18,6 +18,10 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { QRCodeSection } from "@/components/QRCodeSection";
+import { TierBadge } from "@/components/TierBadge";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import type { DonationTier } from "@/lib/donation-tier";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
@@ -92,6 +96,7 @@ function ProfilePage() {
             <h2 className="text-xl font-bold text-foreground">{displayName}</h2>
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
+            <DonorBadge userId={user?.id ?? null} />
           </div>
 
           <div className="mt-5 flex items-center justify-around">
