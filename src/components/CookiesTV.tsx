@@ -1268,11 +1268,11 @@ function ExpandedReelModal({
     });
   }, [selectedIndex]);
 
-  // Body scroll lock + keyboard nav + best-effort fullscreen (hides browser chrome)
+  // Body scroll lock + keyboard nav + mouse wheel nav + best-effort fullscreen
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    // Try to enter fullscreen so the browser toolbar disappears.
+    // Try to enter fullscreen so the browser toolbar disappears (mobile + desktop).
     const docEl = document.documentElement as HTMLElement & {
       webkitRequestFullscreen?: () => Promise<void>;
     };
@@ -1294,6 +1294,28 @@ function ExpandedReelModal({
       }
     };
   }, [emblaApi, onClose]);
+
+  // Mouse wheel navigation (desktop) — throttled to one snap per gesture
+  useEffect(() => {
+    if (!emblaApi) return;
+    let cooling = false;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (cooling) return;
+      if (Math.abs(e.deltaY) < 10 && Math.abs(e.deltaX) < 10) return;
+      const forward = (Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX) > 0;
+      if (forward) emblaApi.scrollNext();
+      else emblaApi.scrollPrev();
+      cooling = true;
+      window.setTimeout(() => {
+        cooling = false;
+      }, 450);
+    };
+    const node = emblaApi.rootNode();
+    node.addEventListener("wheel", onWheel, { passive: false });
+    return () => node.removeEventListener("wheel", onWheel);
+  }, [emblaApi]);
+
 
   const handleLike = useCallback(() => {
     if (!currentLiked) {
