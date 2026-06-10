@@ -910,8 +910,7 @@ function ReelCard({
           muted
           preload="metadata"
           className="absolute inset-0 h-full w-full object-cover"
-          onClick={togglePlay}
-          onDoubleClick={(e) => {
+          onClick={(e) => {
             e.stopPropagation();
             onExpand();
           }}
