@@ -539,8 +539,10 @@ export function CookiesTV() {
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
                 canDelete={canManageAllReels || user?.id === r.author_id}
                 onDelete={() => handleDelete(r.id)}
+                onExpand={() => setExpandedIndex(index)}
               />
             ))}
+
           {!loading && reels.length === 0 && (
             <p className="py-10 text-xs text-[#666]">Aún no hay reels. ¡Sé el primero!</p>
           )}
