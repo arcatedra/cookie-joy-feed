@@ -1225,6 +1225,7 @@ function ExpandedReelModal({
   });
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [burst, setBurst] = useState(false);
+  const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
   const current = reels[selectedIndex] ?? reels[0];
