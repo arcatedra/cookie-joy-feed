@@ -1269,14 +1269,14 @@ function ExpandedReelModal({
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
     const swipeThreshold = 50;
-    // Swipe
+    // Swipe — left or down = next; right or up = prev (Facebook-style)
     if (Math.max(absX, absY) >= swipeThreshold) {
       if (absX > absY) {
         if (dx < 0 && hasNext) onNext();
         else if (dx > 0 && hasPrev) onPrev();
       } else {
-        if (dy < 0 && hasNext) onNext();
-        else if (dy > 0 && hasPrev) onPrev();
+        if (dy > 0 && hasNext) onNext();
+        else if (dy < 0 && hasPrev) onPrev();
       }
       return;
     }
@@ -1285,6 +1285,9 @@ function ExpandedReelModal({
     if (t.clientX > w * 0.75 && hasNext) onNext();
     else if (t.clientX < w * 0.25 && hasPrev) onPrev();
   };
+
+  // Block touch-nav from firing when interacting with the action rail / close btn
+  const stopTouch = (e: React.TouchEvent) => e.stopPropagation();
 
   const handleLike = () => {
     if (!liked) {
