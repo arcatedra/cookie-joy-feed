@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Heart,
   MessageCircle,
@@ -568,23 +569,14 @@ export function CookiesTV() {
 
       {expandedIndex !== null && reels[expandedIndex] && (
         <ExpandedReelModal
-          reel={reels[expandedIndex]}
-          hasPrev={reels.length > 1}
-          hasNext={reels.length > 1}
-          onPrev={() =>
-            setExpandedIndex((i) =>
-              i === null ? i : (i - 1 + reels.length) % reels.length,
-            )
-          }
-          onNext={() =>
-            setExpandedIndex((i) => (i === null ? i : (i + 1) % reels.length))
-          }
+          reels={reels}
+          initialIndex={expandedIndex}
           onClose={() => setExpandedIndex(null)}
-          likes={likeCounts[reels[expandedIndex]!.id] ?? 0}
-          comments={commentCounts[reels[expandedIndex]!.id] ?? 0}
-          liked={myLikes.has(reels[expandedIndex]!.id)}
-          onToggleLike={() => toggleLike(reels[expandedIndex]!.id)}
-          onOpenComments={() => setCommentsFor(reels[expandedIndex]!.id)}
+          likeCounts={likeCounts}
+          commentCounts={commentCounts}
+          myLikes={myLikes}
+          onToggleLike={(id) => toggleLike(id)}
+          onOpenComments={(id) => setCommentsFor(id)}
         />
       )}
     </section>
@@ -909,8 +901,7 @@ function ReelCard({
           muted
           preload="metadata"
           className="absolute inset-0 h-full w-full object-cover"
-          onClick={togglePlay}
-          onDoubleClick={(e) => {
+          onClick={(e) => {
             e.stopPropagation();
             onExpand();
           }}
@@ -999,8 +990,11 @@ function ReelCard({
       {!isEmbed && !isFirst && !playing && videoSrc && (
         <button
           type="button"
-          onClick={togglePlay}
-          aria-label="Reproducir"
+          onClick={(e) => {
+            e.stopPropagation();
+            onExpand();
+          }}
+          aria-label="Ver en grande"
           className="absolute inset-0 z-10 grid place-items-center"
         >
           <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg">
@@ -1202,115 +1196,111 @@ function ReelCard({
   );
 }
 
-// ============ Fullscreen modal with swipe between reels ============
+// ============ Fullscreen vertical swiper through all reels ============
 function ExpandedReelModal({
-  reel,
-  hasPrev,
-  hasNext,
-  onPrev,
-  onNext,
+  reels,
+  initialIndex,
   onClose,
-  likes,
-  comments,
-  liked,
+  likeCounts,
+  commentCounts,
+  myLikes,
   onToggleLike,
   onOpenComments,
 }: {
-  reel: DbReel;
-  hasPrev: boolean;
-  hasNext: boolean;
-  onPrev: () => void;
-  onNext: () => void;
+  reels: DbReel[];
+  initialIndex: number;
   onClose: () => void;
-  likes: number;
-  comments: number;
-  liked: boolean;
-  onToggleLike: () => void;
-  onOpenComments: () => void;
+  likeCounts: Record<string, number>;
+  commentCounts: Record<string, number>;
+  myLikes: Set<string>;
+  onToggleLike: (reelId: string) => void;
+  onOpenComments: (reelId: string) => void;
 }) {
-  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
-  const isEmbed = !!embed;
-  const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    axis: "y",
+    loop: reels.length > 1,
+    startIndex: initialIndex,
+    dragFree: false,
+    skipSnaps: false,
+  });
+  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [burst, setBurst] = useState(false);
+  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
-  // Lock body scroll
+  const current = reels[selectedIndex] ?? reels[0];
+  const currentLikes = likeCounts[current.id] ?? 0;
+  const currentComments = commentCounts[current.id] ?? 0;
+  const currentLiked = myLikes.has(current.id);
+
+  // Track selected slide
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
+
+  // Play active video, pause all others (no audio overlap)
+  useEffect(() => {
+    videoRefs.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === selectedIndex) {
+        v.currentTime = 0;
+        v.muted = false;
+        const p = v.play();
+        if (p && typeof p.catch === "function") {
+          p.catch(() => {
+            // Autoplay with sound may be blocked — fall back to muted
+            v.muted = true;
+            v.play().catch(() => {});
+          });
+        }
+      } else {
+        v.pause();
+        v.muted = true;
+      }
+    });
+  }, [selectedIndex]);
+
+  // Body scroll lock + keyboard nav
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
-
-  // Keyboard nav
-  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        if (hasPrev) onPrev();
-      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        if (hasNext) onNext();
-      }
+      else if (e.key === "ArrowUp" || e.key === "ArrowLeft") emblaApi?.scrollPrev();
+      else if (e.key === "ArrowDown" || e.key === "ArrowRight") emblaApi?.scrollNext();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [hasPrev, hasNext, onPrev, onNext, onClose]);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [emblaApi, onClose]);
 
-  // Tap-on-side navigation (Facebook-style): single tap on left/right edge.
-  // Distinguish tap (no movement) from swipe; both navigate.
-  const touchStart = useRef<{ x: number; y: number; t: number } | null>(null);
-  const onTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    touchStart.current = { x: t.clientX, y: t.clientY, t: Date.now() };
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const start = touchStart.current;
-    touchStart.current = null;
-    if (!start) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - start.x;
-    const dy = t.clientY - start.y;
-    const absX = Math.abs(dx);
-    const absY = Math.abs(dy);
-    const swipeThreshold = 50;
-    // Swipe — left or down = next; right or up = prev (Facebook-style)
-    if (Math.max(absX, absY) >= swipeThreshold) {
-      if (absX > absY) {
-        if (dx < 0 && hasNext) onNext();
-        else if (dx > 0 && hasPrev) onPrev();
-      } else {
-        if (dy > 0 && hasNext) onNext();
-        else if (dy < 0 && hasPrev) onPrev();
-      }
-      return;
-    }
-    // Tap on edge
-    const w = window.innerWidth;
-    if (t.clientX > w * 0.75 && hasNext) onNext();
-    else if (t.clientX < w * 0.25 && hasPrev) onPrev();
-  };
-
-  // Block touch-nav from firing when interacting with the action rail / close btn
-  const stopTouch = (e: React.TouchEvent) => e.stopPropagation();
-
-  const handleLike = () => {
-    if (!liked) {
+  const handleLike = useCallback(() => {
+    if (!currentLiked) {
       setBurst(true);
       window.setTimeout(() => setBurst(false), 600);
     }
-    onToggleLike();
-  };
+    onToggleLike(current.id);
+  }, [currentLiked, current.id, onToggleLike]);
 
   const shareUrl = () => {
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
-    return `${origin}/reel/${encodeURIComponent(reel.id)}`;
+    return `${origin}/reel/${encodeURIComponent(current.id)}`;
   };
   const shareTitle = () =>
-    reel.title
-      ? `${reel.title} · ${BRAND}`
-      : reel.product_name
-        ? `${reel.product_name} · ${BRAND}`
+    current.title
+      ? `${current.title} · ${BRAND}`
+      : current.product_name
+        ? `${current.product_name} · ${BRAND}`
         : `Mira este reel de ${BRAND}`;
   const copyLink = async () => {
     try {
@@ -1328,7 +1318,9 @@ function ExpandedReelModal({
       /* cancelled */
     }
   };
-  const openShare = (target: "facebook" | "whatsapp" | "twitter" | "telegram" | "email" | "instagram" | "tiktok") => {
+  const openShare = (
+    target: "facebook" | "whatsapp" | "twitter" | "telegram" | "email" | "instagram" | "tiktok",
+  ) => {
     const url = shareUrl();
     const text = shareTitle();
     const enc = encodeURIComponent;
@@ -1371,28 +1363,15 @@ function ExpandedReelModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
-      style={{
-        paddingTop: "max(env(safe-area-inset-top), 0.5rem)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)",
-        paddingLeft: "max(env(safe-area-inset-left), 0.5rem)",
-        paddingRight: "max(env(safe-area-inset-right), 0.5rem)",
-      }}
-      onClick={onClose}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
+      className="fixed inset-0 z-[100] bg-black"
       role="dialog"
       aria-modal="true"
-      aria-label="Video en grande"
+      aria-label="Reproductor en pantalla completa"
     >
+      {/* Close button */}
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose();
-        }}
-        onTouchStart={stopTouch}
-        onTouchEnd={stopTouch}
+        onClick={onClose}
         aria-label="Cerrar"
         className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
         style={{
@@ -1403,154 +1382,185 @@ function ExpandedReelModal({
         <X className="h-5 w-5" />
       </button>
 
-      <div
-        key={reel.id}
-        className="relative flex h-full w-full items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {isEmbed ? (
-          <iframe
-            src={embed!.embedUrl}
-            title={reel.title ?? `${embed!.label} reel`}
-            allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="h-full w-full max-h-full max-w-full border-0"
-            style={{ aspectRatio: "9 / 16" }}
-          />
-        ) : videoSrc ? (
-          <video
-            src={videoSrc}
-            controls
-            autoPlay
-            playsInline
-            loop
-            className="h-full w-full max-h-full max-w-full object-contain bg-black"
-          />
-        ) : null}
+      {/* Embla vertical swiper — one full-screen slide per reel */}
+      <div ref={emblaRef} className="h-full w-full overflow-hidden">
+        <div className="flex h-full w-full flex-col">
+          {reels.map((r, i) => {
+            const embed = parseEmbed(r.video_url);
+            const src = r.video_url || FALLBACK_VIDEO[r.slug] || "";
+            return (
+              <div
+                key={r.id}
+                className="relative flex h-full w-full shrink-0 grow-0 basis-full items-center justify-center bg-black"
+                style={{ minHeight: "100dvh" }}
+              >
+                {embed ? (
+                  <iframe
+                    src={embed.embedUrl}
+                    title={r.title ?? `${embed.label} reel`}
+                    allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    className="h-full w-full border-0"
+                    style={{ aspectRatio: "9 / 16" }}
+                  />
+                ) : src ? (
+                  <video
+                    ref={(el) => {
+                      videoRefs.current[i] = el;
+                    }}
+                    src={src}
+                    playsInline
+                    loop
+                    preload={Math.abs(i - selectedIndex) <= 1 ? "auto" : "metadata"}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <div className="grid h-full w-full place-items-center text-white/60">
+                    Sin video
+                  </div>
+                )}
 
-        {/* Action rail (like / comment / share / thanks) */}
-        <div
-          className="absolute z-20 flex flex-col items-center gap-3"
-          style={{
-            right: "max(env(safe-area-inset-right), 0.75rem)",
-            bottom: "max(env(safe-area-inset-bottom), 5rem)",
-          }}
-          onClick={(e) => e.stopPropagation()}
-          onTouchStart={stopTouch}
-          onTouchEnd={stopTouch}
-        >
-          <button
-            type="button"
-            onClick={handleLike}
-            aria-label="Me gusta"
-            className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
-              <Heart className={`h-5 w-5 transition ${liked ? "fill-rose-500 text-rose-500" : "text-white"}`} />
-            </span>
-            <span className="text-[10px] font-bold text-white drop-shadow">{formatCount(likes)}</span>
-            {burst && (
-              <span className="pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 animate-ping text-rose-400">
-                <Heart className="h-8 w-8 fill-rose-500 text-rose-500" />
-              </span>
-            )}
-          </button>
+                {/* Bottom gradient for readability of overlay */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
 
-          <button
-            type="button"
-            onClick={onOpenComments}
-            aria-label="Comentarios"
-            className="flex flex-col items-center gap-0.5"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
-              <MessageCircle className="h-5 w-5 text-white" />
-            </span>
-            <span className="text-[10px] font-bold text-white drop-shadow">{formatCount(comments)}</span>
-          </button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button type="button" aria-label="Compartir" className="flex flex-col items-center gap-0.5">
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
-                  <Share2 className="h-4 w-4 text-white" />
-                </span>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => openShare("whatsapp")}>
-                <WhatsAppIcon className="text-green-600" /> WhatsApp
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("facebook")}>
-                <FacebookIcon className="h-4 w-4 text-blue-600" /> Facebook
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("instagram")}>
-                <InstagramIcon className="h-4 w-4 text-pink-600" /> Instagram
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("tiktok")}>
-                <Music2 className="text-foreground" /> TikTok
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("twitter")}>
-                <TwitterIcon className="h-4 w-4 text-sky-500" /> X / Twitter
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("telegram")}>
-                <Send className="text-sky-600" /> Telegram
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => openShare("email")}>
-                <Mail /> Correo
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={copyLink}>
-                <LinkIcon /> Copiar enlace
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={nativeShare}>
-                <Share2 /> Más opciones…
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button type="button" aria-label="Dar las gracias" className="flex flex-col items-center gap-0.5">
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.55)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
-                  <HandHeart className="h-4 w-4 text-amber-950" strokeWidth={2.4} />
-                </span>
-                <span className="text-[10px] font-semibold text-white drop-shadow">Gracias</span>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel className="flex items-center gap-2">
-                <HandHeart className="h-4 w-4 text-amber-500" /> Enviar Gracias
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {[1, 3, 5, 10].map((amount) => (
-                <DropdownMenuItem
-                  key={amount}
-                  onClick={() =>
-                    toast.success("¡Gracias enviado! 🧡", {
-                      description: `Has apoyado este reel con ${amount} €.`,
-                    })
-                  }
+                {/* Title overlay (per-video) */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 z-10 px-5"
+                  style={{ bottom: "calc(max(env(safe-area-inset-bottom), 1rem) + 5.5rem)" }}
                 >
-                  <span className="grid h-6 w-6 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-700">€</span>
-                  {amount} €
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuSeparator />
+                  <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow">
+                    {r.title ?? ""}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Bottom action bar — bound to currently visible reel */}
+      <div
+        className="absolute inset-x-0 z-20 flex items-center justify-center gap-6 px-4"
+        style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)" }}
+      >
+        <button
+          type="button"
+          onClick={handleLike}
+          aria-label="Me gusta"
+          className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
+        >
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/55 backdrop-blur transition hover:bg-black/75">
+            <Heart
+              className={`h-6 w-6 transition ${currentLiked ? "fill-rose-500 text-rose-500" : "text-white"}`}
+            />
+          </span>
+          <span className="text-[11px] font-bold text-white drop-shadow">
+            {formatCount(currentLikes)}
+          </span>
+          {burst && (
+            <span className="pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 animate-ping text-rose-400">
+              <Heart className="h-9 w-9 fill-rose-500 text-rose-500" />
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onOpenComments(current.id)}
+          aria-label="Comentarios"
+          className="flex flex-col items-center gap-0.5"
+        >
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-sky-500/80 backdrop-blur transition hover:bg-sky-500">
+            <MessageCircle className="h-6 w-6 text-white" />
+          </span>
+          <span className="text-[11px] font-bold text-white drop-shadow">
+            {formatCount(currentComments)}
+          </span>
+        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button type="button" aria-label="Compartir" className="flex flex-col items-center gap-0.5">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-500/80 backdrop-blur transition hover:bg-emerald-500">
+                <Share2 className="h-5 w-5 text-white" />
+              </span>
+              <span className="text-[11px] font-bold text-white drop-shadow">Compartir</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => openShare("whatsapp")}>
+              <WhatsAppIcon className="text-green-600" /> WhatsApp
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("facebook")}>
+              <FacebookIcon className="h-4 w-4 text-blue-600" /> Facebook
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("instagram")}>
+              <InstagramIcon className="h-4 w-4 text-pink-600" /> Instagram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("tiktok")}>
+              <Music2 className="text-foreground" /> TikTok
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("twitter")}>
+              <TwitterIcon className="h-4 w-4 text-sky-500" /> X / Twitter
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("telegram")}>
+              <Send className="text-sky-600" /> Telegram
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openShare("email")}>
+              <Mail /> Correo
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={copyLink}>
+              <LinkIcon /> Copiar enlace
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={nativeShare}>
+              <Share2 /> Más opciones…
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button type="button" aria-label="Dar las gracias" className="flex flex-col items-center gap-0.5">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.6)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
+                <HandHeart className="h-5 w-5 text-amber-950" strokeWidth={2.4} />
+              </span>
+              <span className="text-[11px] font-semibold text-white drop-shadow">Gracias</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel className="flex items-center gap-2">
+              <HandHeart className="h-4 w-4 text-amber-500" /> Enviar Gracias
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {[1, 3, 5, 10].map((amount) => (
               <DropdownMenuItem
+                key={amount}
                 onClick={() =>
-                  toast.success("Pronto podrás elegir otro monto", {
-                    description: "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
+                  toast.success("¡Gracias enviado! 🧡", {
+                    description: `Has apoyado este reel con ${amount} €.`,
                   })
                 }
               >
-                <Plus /> Otro monto…
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-700">€</span>
+                {amount} €
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() =>
+                toast.success("Pronto podrás elegir otro monto", {
+                  description: "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
+                })
+              }
+            >
+              <Plus /> Otro monto…
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
