@@ -576,6 +576,11 @@ export function CookiesTV() {
             setExpandedIndex((i) => (i !== null && i < reels.length - 1 ? i + 1 : i))
           }
           onClose={() => setExpandedIndex(null)}
+          likes={likeCounts[reels[expandedIndex]!.id] ?? 0}
+          comments={commentCounts[reels[expandedIndex]!.id] ?? 0}
+          liked={myLikes.has(reels[expandedIndex]!.id)}
+          onToggleLike={() => toggleLike(reels[expandedIndex]!.id)}
+          onOpenComments={() => setCommentsFor(reels[expandedIndex]!.id)}
         />
       )}
     </section>
