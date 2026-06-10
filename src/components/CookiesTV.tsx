@@ -999,8 +999,11 @@ function ReelCard({
       {!isEmbed && !isFirst && !playing && videoSrc && (
         <button
           type="button"
-          onClick={togglePlay}
-          aria-label="Reproducir"
+          onClick={(e) => {
+            e.stopPropagation();
+            onExpand();
+          }}
+          aria-label="Ver en grande"
           className="absolute inset-0 z-10 grid place-items-center"
         >
           <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 shadow-lg">
