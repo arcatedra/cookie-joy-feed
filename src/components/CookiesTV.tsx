@@ -1424,12 +1424,12 @@ function ExpandedReelModal({
                 {/* Bottom gradient for readability of overlay */}
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
 
-                {/* Title overlay (per-video) */}
+                {/* Title overlay (per-video) — bottom-left */}
                 <div
-                  className="pointer-events-none absolute inset-x-0 z-10 px-5"
-                  style={{ bottom: "calc(max(env(safe-area-inset-bottom), 1rem) + 5.5rem)" }}
+                  className="pointer-events-none absolute left-0 z-10 pl-5"
+                  style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)", right: "5.5rem" }}
                 >
-                  <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow">
+                  <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
                     {r.title ?? ""}
                   </p>
                 </div>
