@@ -1430,9 +1430,11 @@ function ExpandedReelModal({
           className="absolute z-20 flex flex-col items-center gap-3"
           style={{
             right: "max(env(safe-area-inset-right), 0.75rem)",
-            bottom: "max(env(safe-area-inset-bottom), 1.25rem)",
+            bottom: "max(env(safe-area-inset-bottom), 5rem)",
           }}
           onClick={(e) => e.stopPropagation()}
+          onTouchStart={stopTouch}
+          onTouchEnd={stopTouch}
         >
           <button
             type="button"
