@@ -1414,7 +1414,7 @@ function ExpandedReelModal({
     >
       {/* Centered 9:16 stage — fullscreen on mobile, cinematic frame on desktop */}
       <div
-        className="relative h-full w-full overflow-hidden bg-black md:h-[100dvh] md:w-auto md:aspect-[9/16] md:max-h-[100dvh] md:max-w-[100vw] md:rounded-2xl md:shadow-2xl md:ring-1 md:ring-white/10"
+        className="relative h-full w-full overflow-hidden bg-black md:h-auto md:aspect-[9/16] md:w-[min(420px,calc(100dvh*9/16))] md:rounded-2xl md:shadow-2xl md:ring-1 md:ring-white/10"
       >
         {/* Close button (inside frame so it stays within video boundaries) */}
         <button
