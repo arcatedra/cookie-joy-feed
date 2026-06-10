@@ -906,6 +906,10 @@ function ReelCard({
           preload="metadata"
           className="absolute inset-0 h-full w-full object-cover"
           onClick={togglePlay}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            onExpand();
+          }}
         />
       ) : (
         <div className="grid h-full w-full place-items-center text-white/60">Sin video</div>
