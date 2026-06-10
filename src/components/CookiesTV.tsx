@@ -1206,6 +1206,11 @@ function ExpandedReelModal({
   onPrev,
   onNext,
   onClose,
+  likes,
+  comments,
+  liked,
+  onToggleLike,
+  onOpenComments,
 }: {
   reel: DbReel;
   hasPrev: boolean;
@@ -1213,10 +1218,16 @@ function ExpandedReelModal({
   onPrev: () => void;
   onNext: () => void;
   onClose: () => void;
+  likes: number;
+  comments: number;
+  liked: boolean;
+  onToggleLike: () => void;
+  onOpenComments: () => void;
 }) {
   const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
   const isEmbed = !!embed;
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+  const [burst, setBurst] = useState(false);
 
   // Lock body scroll
   useEffect(() => {
@@ -1241,7 +1252,8 @@ function ExpandedReelModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [hasPrev, hasNext, onPrev, onNext, onClose]);
 
-  // Touch swipe (horizontal or vertical, like Facebook reels)
+  // Tap-on-side navigation (Facebook-style): single tap on left/right edge.
+  // Distinguish tap (no movement) from swipe; both navigate.
   const touchStart = useRef<{ x: number; y: number; t: number } | null>(null);
   const onTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
@@ -1256,14 +1268,97 @@ function ExpandedReelModal({
     const dy = t.clientY - start.y;
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
-    const threshold = 60;
-    if (Math.max(absX, absY) < threshold) return;
-    if (absX > absY) {
-      if (dx < 0 && hasNext) onNext();
-      else if (dx > 0 && hasPrev) onPrev();
-    } else {
-      if (dy < 0 && hasNext) onNext();
-      else if (dy > 0 && hasPrev) onPrev();
+    const swipeThreshold = 50;
+    // Swipe
+    if (Math.max(absX, absY) >= swipeThreshold) {
+      if (absX > absY) {
+        if (dx < 0 && hasNext) onNext();
+        else if (dx > 0 && hasPrev) onPrev();
+      } else {
+        if (dy < 0 && hasNext) onNext();
+        else if (dy > 0 && hasPrev) onPrev();
+      }
+      return;
+    }
+    // Tap on edge
+    const w = window.innerWidth;
+    if (t.clientX > w * 0.75 && hasNext) onNext();
+    else if (t.clientX < w * 0.25 && hasPrev) onPrev();
+  };
+
+  const handleLike = () => {
+    if (!liked) {
+      setBurst(true);
+      window.setTimeout(() => setBurst(false), 600);
+    }
+    onToggleLike();
+  };
+
+  const shareUrl = () => {
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
+    return `${origin}/reel/${encodeURIComponent(reel.id)}`;
+  };
+  const shareTitle = () =>
+    reel.title
+      ? `${reel.title} · ${BRAND}`
+      : reel.product_name
+        ? `${reel.product_name} · ${BRAND}`
+        : `Mira este reel de ${BRAND}`;
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl());
+      toast.success("Enlace copiado");
+    } catch {
+      toast.error("No se pudo copiar el enlace");
+    }
+  };
+  const nativeShare = async () => {
+    try {
+      if (navigator.share) await navigator.share({ title: shareTitle(), url: shareUrl() });
+      else await copyLink();
+    } catch {
+      /* cancelled */
+    }
+  };
+  const openShare = (target: "facebook" | "whatsapp" | "twitter" | "telegram" | "email" | "instagram" | "tiktok") => {
+    const url = shareUrl();
+    const text = shareTitle();
+    const enc = encodeURIComponent;
+    let href = "";
+    switch (target) {
+      case "facebook":
+        href = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
+        break;
+      case "whatsapp": {
+        const msg = enc(`${text} ${url}`);
+        const isMobile =
+          typeof navigator !== "undefined" &&
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        href = isMobile ? `https://wa.me/?text=${msg}` : `https://web.whatsapp.com/send?text=${msg}`;
+        break;
+      }
+      case "twitter":
+        href = `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "telegram":
+        href = `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`;
+        break;
+      case "email":
+        href = `mailto:?subject=${enc(text)}&body=${enc(url)}`;
+        break;
+      case "instagram":
+      case "tiktok":
+        copyLink();
+        toast.info(
+          target === "instagram"
+            ? "Enlace copiado. Pégalo en tu historia o mensaje de Instagram."
+            : "Enlace copiado. Pégalo en TikTok para compartir.",
+        );
+        return;
+    }
+    if (typeof window !== "undefined") {
+      window.open(href, "_blank", "noopener,noreferrer,width=600,height=600");
     }
   };
 
@@ -1290,7 +1385,7 @@ function ExpandedReelModal({
           onClose();
         }}
         aria-label="Cerrar"
-        className="absolute z-20 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+        className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
         style={{
           top: "max(env(safe-area-inset-top), 0.75rem)",
           right: "max(env(safe-area-inset-right), 0.75rem)",
@@ -1298,33 +1393,6 @@ function ExpandedReelModal({
       >
         <X className="h-5 w-5" />
       </button>
-
-      {hasPrev && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onPrev();
-          }}
-          aria-label="Anterior"
-          className="absolute left-2 top-1/2 z-20 hidden -translate-y-1/2 sm:grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-        >
-          ‹
-        </button>
-      )}
-      {hasNext && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onNext();
-          }}
-          aria-label="Siguiente"
-          className="absolute right-2 top-1/2 z-20 hidden -translate-y-1/2 sm:grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-        >
-          ›
-        </button>
-      )}
 
       <div
         key={reel.id}
@@ -1351,6 +1419,127 @@ function ExpandedReelModal({
             className="h-full w-full max-h-full max-w-full object-contain bg-black"
           />
         ) : null}
+
+        {/* Action rail (like / comment / share / thanks) */}
+        <div
+          className="absolute z-20 flex flex-col items-center gap-3"
+          style={{
+            right: "max(env(safe-area-inset-right), 0.75rem)",
+            bottom: "max(env(safe-area-inset-bottom), 1.25rem)",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={handleLike}
+            aria-label="Me gusta"
+            className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+              <Heart className={`h-5 w-5 transition ${liked ? "fill-rose-500 text-rose-500" : "text-white"}`} />
+            </span>
+            <span className="text-[10px] font-bold text-white drop-shadow">{formatCount(likes)}</span>
+            {burst && (
+              <span className="pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 animate-ping text-rose-400">
+                <Heart className="h-8 w-8 fill-rose-500 text-rose-500" />
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenComments}
+            aria-label="Comentarios"
+            className="flex flex-col items-center gap-0.5"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+              <MessageCircle className="h-5 w-5 text-white" />
+            </span>
+            <span className="text-[10px] font-bold text-white drop-shadow">{formatCount(comments)}</span>
+          </button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button" aria-label="Compartir" className="flex flex-col items-center gap-0.5">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
+                  <Share2 className="h-4 w-4 text-white" />
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => openShare("whatsapp")}>
+                <WhatsAppIcon className="text-green-600" /> WhatsApp
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("facebook")}>
+                <FacebookIcon className="h-4 w-4 text-blue-600" /> Facebook
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("instagram")}>
+                <InstagramIcon className="h-4 w-4 text-pink-600" /> Instagram
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("tiktok")}>
+                <Music2 className="text-foreground" /> TikTok
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("twitter")}>
+                <TwitterIcon className="h-4 w-4 text-sky-500" /> X / Twitter
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("telegram")}>
+                <Send className="text-sky-600" /> Telegram
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openShare("email")}>
+                <Mail /> Correo
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={copyLink}>
+                <LinkIcon /> Copiar enlace
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={nativeShare}>
+                <Share2 /> Más opciones…
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button" aria-label="Dar las gracias" className="flex flex-col items-center gap-0.5">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.55)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
+                  <HandHeart className="h-4 w-4 text-amber-950" strokeWidth={2.4} />
+                </span>
+                <span className="text-[10px] font-semibold text-white drop-shadow">Gracias</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="flex items-center gap-2">
+                <HandHeart className="h-4 w-4 text-amber-500" /> Enviar Gracias
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {[1, 3, 5, 10].map((amount) => (
+                <DropdownMenuItem
+                  key={amount}
+                  onClick={() =>
+                    toast.success("¡Gracias enviado! 🧡", {
+                      description: `Has apoyado este reel con ${amount} €.`,
+                    })
+                  }
+                >
+                  <span className="grid h-6 w-6 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-700">€</span>
+                  {amount} €
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  toast.success("Pronto podrás elegir otro monto", {
+                    description: "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
+                  })
+                }
+              >
+                <Plus /> Otro monto…
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </div>
   );
