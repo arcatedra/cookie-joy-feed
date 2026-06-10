@@ -1397,86 +1397,89 @@ function ExpandedReelModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black"
+      className="fixed inset-0 z-[100] grid place-items-center bg-black md:bg-gradient-to-b md:from-zinc-950 md:via-black md:to-zinc-950"
       role="dialog"
       aria-modal="true"
       aria-label="Reproductor en pantalla completa"
     >
-      {/* Close button */}
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Cerrar"
-        className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-        style={{
-          top: "max(env(safe-area-inset-top), 0.75rem)",
-          right: "max(env(safe-area-inset-right), 0.75rem)",
-        }}
+      {/* Centered 9:16 stage — fullscreen on mobile, cinematic frame on desktop */}
+      <div
+        className="relative h-full w-full overflow-hidden bg-black md:h-[100dvh] md:w-auto md:aspect-[9/16] md:max-h-[100dvh] md:max-w-[100vw] md:rounded-2xl md:shadow-2xl md:ring-1 md:ring-white/10"
       >
-        <X className="h-5 w-5" />
-      </button>
+        {/* Close button (inside frame so it stays within video boundaries) */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
+          style={{
+            top: "max(env(safe-area-inset-top), 0.75rem)",
+            right: "max(env(safe-area-inset-right), 0.75rem)",
+          }}
+        >
+          <X className="h-5 w-5" />
+        </button>
 
-      {/* Embla vertical swiper — one full-screen slide per reel */}
-      <div ref={emblaRef} className="h-full w-full overflow-hidden">
-        <div className="flex h-full w-full flex-col">
-          {reels.map((r, i) => {
-            const embed = parseEmbed(r.video_url);
-            const src = r.video_url || FALLBACK_VIDEO[r.slug] || "";
-            return (
-              <div
-                key={r.id}
-                className="relative flex h-full w-full shrink-0 grow-0 basis-full items-center justify-center bg-black"
-                style={{ minHeight: "100dvh" }}
-              >
-                {embed ? (
-                  <iframe
-                    src={embed.embedUrl}
-                    title={r.title ?? `${embed.label} reel`}
-                    allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
-                    allowFullScreen
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    className="h-full w-full border-0"
-                    style={{ aspectRatio: "9 / 16" }}
-                  />
-                ) : src ? (
-                  <video
-                    ref={(el) => {
-                      videoRefs.current[i] = el;
-                    }}
-                    src={src}
-                    playsInline
-                    loop
-                    preload={Math.abs(i - selectedIndex) <= 1 ? "auto" : "metadata"}
-                    className="h-full w-full object-contain"
-                  />
-                ) : (
-                  <div className="grid h-full w-full place-items-center text-white/60">
-                    Sin video
-                  </div>
-                )}
-
-                {/* Subtle bottom gradient for overlay legibility */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                {/* Title overlay (per-video) — bottom-left, lifted clear of bottom edge */}
+        {/* Embla vertical swiper — one slide per reel */}
+        <div ref={emblaRef} className="h-full w-full overflow-hidden">
+          <div className="flex h-full w-full flex-col">
+            {reels.map((r, i) => {
+              const embed = parseEmbed(r.video_url);
+              const src = r.video_url || FALLBACK_VIDEO[r.slug] || "";
+              return (
                 <div
-                  className="pointer-events-none absolute left-0 z-10 pl-5"
-                  style={{
-                    bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)",
-                    right: "5.5rem",
-                  }}
+                  key={r.id}
+                  className="relative flex h-full w-full shrink-0 grow-0 basis-full items-center justify-center bg-black"
                 >
-                  <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
-                    {r.title ?? ""}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                  {embed ? (
+                    <iframe
+                      src={embed.embedUrl}
+                      title={r.title ?? `${embed.label} reel`}
+                      allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+                      allowFullScreen
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="h-full w-full border-0"
+                      style={{ aspectRatio: "9 / 16" }}
+                    />
+                  ) : src ? (
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[i] = el;
+                      }}
+                      src={src}
+                      playsInline
+                      loop
+                      preload={Math.abs(i - selectedIndex) <= 1 ? "auto" : "metadata"}
+                      className="h-full w-full object-contain"
+                    />
+                  ) : (
+                    <div className="grid h-full w-full place-items-center text-white/60">
+                      Sin video
+                    </div>
+                  )}
 
-      {/* Right-side action rail — overlay, vertical (Reels/TikTok style) */}
+                  {/* Subtle bottom gradient for overlay legibility */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                  {/* Title overlay (per-video) — bottom-left, inside the frame */}
+                  <div
+                    className="pointer-events-none absolute left-0 z-10 pl-5"
+                    style={{
+                      bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)",
+                      right: "5.5rem",
+                    }}
+                  >
+                    <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
+                      {r.title ?? ""}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      {/* Right-side action rail — overlay, vertical (inside 9:16 frame on desktop) */}
       <div
         className="absolute right-3 z-20 flex flex-col items-center gap-4"
         style={{ bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)" }}
@@ -1501,6 +1504,7 @@ function ExpandedReelModal({
             </span>
           )}
         </button>
+
 
         <button
           type="button"
