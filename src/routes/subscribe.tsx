@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X } from "lucide-react";
+import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
+import { useAuth } from "@/lib/auth";
+import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
+
 
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
@@ -85,13 +90,24 @@ function fmtKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
+const TIER_TO_PRICE: Record<Tier["id"], string> = {
+  starter: "plan_starter_monthly",
+  essential: "plan_essential_monthly",
+  intermediate: "plan_intermediate_monthly",
+  premium: "plan_premium_monthly",
+};
+
 function SubscribePage() {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const startCheckout = useServerFn(createSubscriptionCheckout);
+  const [checkoutLoadingId, setCheckoutLoadingId] = useState<Tier["id"] | null>(null);
   const today = useMemo(() => new Date(), []);
   const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+
 
   const selectedTier = tiers.find((t) => t.id === selectedTierId)!;
   const remaining = selectedTier.maxDeliveries - selectedDates.length;
@@ -137,6 +153,27 @@ function SubscribePage() {
     const max = tiers.find((t) => t.id === id)!.maxDeliveries;
     setSelectedDates((prev) => prev.slice(0, max));
   }
+
+  async function handleSubscribe(id: Tier["id"]) {
+    if (!user) {
+      toast.error(t("auth.signInToLike", { defaultValue: "Inicia sesión para suscribirte" }));
+      return;
+    }
+    setCheckoutLoadingId(id);
+    try {
+      const result = await startCheckout({ data: { priceId: TIER_TO_PRICE[id] } });
+      if (result?.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error("Stripe no devolvió una URL de checkout.");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error(e instanceof Error ? e.message : "No se pudo iniciar el checkout.");
+      setCheckoutLoadingId(null);
+    }
+  }
+
 
   return (
     <main className="min-h-screen bg-background pb-28">
@@ -233,21 +270,27 @@ function SubscribePage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => selectTier(tier.id)}
-                    className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all ${
+                    disabled={checkoutLoadingId === tier.id}
+                    onClick={() => (isSelected ? handleSubscribe(tier.id) : selectTier(tier.id))}
+                    className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all disabled:opacity-60 ${
                       isSelected
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-cta text-cta-foreground hover:brightness-105"
+                        ? "bg-cta text-cta-foreground hover:brightness-105"
+                        : "bg-primary text-primary-foreground hover:brightness-110"
                     }`}
                   >
-                    {isSelected ? (
+                    {checkoutLoadingId === tier.id ? (
                       <>
-                        <Check className="h-3.5 w-3.5" /> {t("common.selected")}
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
+                      </>
+                    ) : isSelected ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" /> {t("common.signUp")}
                       </>
                     ) : (
-                      t("common.signUp")
+                      t("common.selected", { defaultValue: "Elegir" })
                     )}
                   </button>
+
                 </div>
 
                 <div className={`absolute inset-x-0 bottom-0 h-1 ${tier.accentColor} opacity-70`} />
