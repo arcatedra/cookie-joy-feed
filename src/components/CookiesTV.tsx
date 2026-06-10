@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ComponentType } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Heart,
   MessageCircle,
