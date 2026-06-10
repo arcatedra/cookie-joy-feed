@@ -1421,8 +1421,8 @@ function ExpandedReelModal({
                   </div>
                 )}
 
-                {/* Bottom gradient for readability of overlay */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                {/* Subtle bottom gradient for overlay legibility */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                 {/* Title overlay (per-video) — bottom-left */}
                 <div
