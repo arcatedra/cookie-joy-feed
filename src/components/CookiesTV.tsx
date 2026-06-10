@@ -1427,7 +1427,7 @@ function ExpandedReelModal({
                 {/* Title overlay (per-video) */}
                 <div
                   className="pointer-events-none absolute inset-x-0 z-10 px-5"
-                  style={{ bottom: "max(env(safe-area-inset-bottom), 1rem) + 5.5rem" as unknown as string, paddingBottom: "calc(max(env(safe-area-inset-bottom), 1rem) + 5.5rem)" }}
+                  style={{ bottom: "calc(max(env(safe-area-inset-bottom), 1rem) + 5.5rem)" }}
                 >
                   <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow">
                     {r.title ?? ""}
