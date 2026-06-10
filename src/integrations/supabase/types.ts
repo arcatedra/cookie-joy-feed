@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      donations: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          tier: Database["public"]["Enums"]["donation_tier"]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          tier: Database["public"]["Enums"]["donation_tier"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          tier?: Database["public"]["Enums"]["donation_tier"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_ratings: {
         Row: {
           created_at: string
@@ -48,16 +87,19 @@ export type Database = {
         Row: {
           created_at: string
           display_name: string | null
+          donation_tier: Database["public"]["Enums"]["donation_tier"] | null
           id: string
         }
         Insert: {
           created_at?: string
           display_name?: string | null
+          donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
           id: string
         }
         Update: {
           created_at?: string
           display_name?: string | null
+          donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
           id?: string
         }
         Relationships: []
@@ -195,6 +237,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      donation_tier:
+        | "azul"
+        | "bronce"
+        | "oro"
+        | "premium"
+        | "corona"
+        | "estrella_suprema"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -323,6 +372,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      donation_tier: [
+        "azul",
+        "bronce",
+        "oro",
+        "premium",
+        "corona",
+        "estrella_suprema",
+      ],
     },
   },
 } as const
