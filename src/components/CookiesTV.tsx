@@ -1387,6 +1387,8 @@ function ExpandedReelModal({
           e.stopPropagation();
           onClose();
         }}
+        onTouchStart={stopTouch}
+        onTouchEnd={stopTouch}
         aria-label="Cerrar"
         className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
         style={{
