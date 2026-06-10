@@ -154,6 +154,27 @@ function SubscribePage() {
     setSelectedDates((prev) => prev.slice(0, max));
   }
 
+  async function handleSubscribe(id: Tier["id"]) {
+    if (!user) {
+      toast.error(t("auth.signInToLike", { defaultValue: "Inicia sesión para suscribirte" }));
+      return;
+    }
+    setCheckoutLoadingId(id);
+    try {
+      const result = await startCheckout({ data: { priceId: TIER_TO_PRICE[id] } });
+      if (result?.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error("Stripe no devolvió una URL de checkout.");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error(e instanceof Error ? e.message : "No se pudo iniciar el checkout.");
+      setCheckoutLoadingId(null);
+    }
+  }
+
+
   return (
     <main className="min-h-screen bg-background pb-28">
       <header className="relative bg-primary px-5 pb-7 pt-12 text-primary-foreground">
