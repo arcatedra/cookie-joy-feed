@@ -1268,10 +1268,18 @@ function ExpandedReelModal({
     });
   }, [selectedIndex]);
 
-  // Body scroll lock + keyboard nav
+  // Body scroll lock + keyboard nav + best-effort fullscreen (hides browser chrome)
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Try to enter fullscreen so the browser toolbar disappears.
+    const docEl = document.documentElement as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>;
+    };
+    const req = docEl.requestFullscreen ?? docEl.webkitRequestFullscreen;
+    if (req && !document.fullscreenElement) {
+      req.call(docEl).catch(() => {});
+    }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       else if (e.key === "ArrowUp" || e.key === "ArrowLeft") emblaApi?.scrollPrev();
@@ -1281,6 +1289,9 @@ function ExpandedReelModal({
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.().catch(() => {});
+      }
     };
   }, [emblaApi, onClose]);
 
