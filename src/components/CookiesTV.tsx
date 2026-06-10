@@ -1549,7 +1549,7 @@ function ExpandedReelModal({
               <span className="text-[11px] font-bold text-white drop-shadow">Compartir</span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuContent align="end" className="z-[110] w-52">
             <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => openShare("whatsapp")}>
@@ -1589,7 +1589,7 @@ function ExpandedReelModal({
               <span className="text-[11px] font-semibold text-white drop-shadow">Gracias</span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="z-[110] w-56">
             <DropdownMenuLabel className="flex items-center gap-2">
               <HandHeart className="h-4 w-4 text-amber-500" /> Enviar Gracias
             </DropdownMenuLabel>
