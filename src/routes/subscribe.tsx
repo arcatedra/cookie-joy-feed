@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X } from "lucide-react";
+import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
+import { useAuth } from "@/lib/auth";
+import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
+
 
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
