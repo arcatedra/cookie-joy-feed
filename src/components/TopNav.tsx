@@ -21,6 +21,7 @@ const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
   { key: "deals", to: "/explore" },
+  { key: "shop", to: "/shop", label: "🛍️ Tienda" },
   { key: "bestSellers", to: "/menu" },
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
@@ -284,19 +285,25 @@ export function TopNav() {
             {t("topnav.all")}
           </button>
           <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
-            {quickLinkKeys.map((l) => (
-              <Link
-                key={l.key}
-                to={l.to}
-                className={`shrink-0 rounded px-2 py-1 transition hover:ring-1 hover:ring-white/40 ${
-                  l.key === "donate"
-                    ? "bg-amber-400/90 font-bold text-[#1a0f0a] hover:bg-amber-300"
-                    : "text-white/90"
-                }`}
-              >
-                {"label" in l && l.label ? l.label : t(`topnav.links.${l.key}`)}
-              </Link>
-            ))}
+            {quickLinkKeys.map((l) => {
+              const isDonate = l.key === "donate";
+              const isShop = l.key === "shop";
+              return (
+                <Link
+                  key={l.key}
+                  to={l.to}
+                  className={`shrink-0 rounded px-2 py-1 transition hover:ring-1 hover:ring-white/40 ${
+                    isDonate
+                      ? "bg-amber-400/90 font-bold text-[#1a0f0a] hover:bg-amber-300"
+                      : isShop
+                        ? "bg-amber-300/20 font-bold text-amber-200 hover:bg-amber-300/30"
+                        : "text-white/90"
+                  }`}
+                >
+                  {"label" in l && l.label ? l.label : t(`topnav.links.${l.key}`)}
+                </Link>
+              );
+            })}
           </div>
         </nav>
       </header>

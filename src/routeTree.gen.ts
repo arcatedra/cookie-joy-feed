@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenuRouteImport } from './routes/menu'
@@ -19,11 +20,17 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
+import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
   path: '/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -71,6 +78,11 @@ const ReelReelIdRoute = ReelReelIdRouteImport.update({
   path: '/reel/$reelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductHandleRoute = ProductHandleRouteImport.update({
+  id: '/product/$handle',
+  path: '/product/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -87,7 +99,9 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -100,7 +114,9 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -114,7 +130,9 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -129,7 +147,9 @@ export interface FileRouteTypes {
     | '/menu'
     | '/profile'
     | '/search'
+    | '/shop'
     | '/subscribe'
+    | '/product/$handle'
     | '/reel/$reelId'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -142,7 +162,9 @@ export interface FileRouteTypes {
     | '/menu'
     | '/profile'
     | '/search'
+    | '/shop'
     | '/subscribe'
+    | '/product/$handle'
     | '/reel/$reelId'
     | '/api/public/payments/webhook'
   id:
@@ -155,7 +177,9 @@ export interface FileRouteTypes {
     | '/menu'
     | '/profile'
     | '/search'
+    | '/shop'
     | '/subscribe'
+    | '/product/$handle'
     | '/reel/$reelId'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -169,7 +193,9 @@ export interface RootRouteChildren {
   MenuRoute: typeof MenuRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
+  ShopRoute: typeof ShopRoute
   SubscribeRoute: typeof SubscribeRoute
+  ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -181,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/subscribe'
       fullPath: '/subscribe'
       preLoaderRoute: typeof SubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -246,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReelReelIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/product/$handle': {
+      id: '/product/$handle'
+      path: '/product/$handle'
+      fullPath: '/product/$handle'
+      preLoaderRoute: typeof ProductHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -265,7 +305,9 @@ const rootRouteChildren: RootRouteChildren = {
   MenuRoute: MenuRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
+  ShopRoute: ShopRoute,
   SubscribeRoute: SubscribeRoute,
+  ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
