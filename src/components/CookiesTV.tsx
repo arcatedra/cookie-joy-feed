@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
+import { syncReelPlayback } from "@/lib/reel-playback";
 import reel1 from "@/assets/reel-cookie-1.mp4.asset.json";
 import reel2 from "@/assets/reel-cookie-2.mp4.asset.json";
 import reel3 from "@/assets/reel-cookie-3.mp4.asset.json";
