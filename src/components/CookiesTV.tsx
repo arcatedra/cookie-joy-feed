@@ -1439,9 +1439,9 @@ function ExpandedReelModal({
         </div>
       </div>
 
-      {/* Bottom action bar — bound to currently visible reel */}
+      {/* Right-side action rail — overlay, vertical (Reels/TikTok style) */}
       <div
-        className="absolute inset-x-0 z-20 flex items-center justify-center gap-6 px-4"
+        className="absolute right-2 z-20 flex flex-col items-center gap-4"
         style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)" }}
       >
         <button
