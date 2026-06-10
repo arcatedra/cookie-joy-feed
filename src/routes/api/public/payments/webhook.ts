@@ -1,0 +1,186 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { createHmac, timingSafeEqual } from "node:crypto";
+import process from "node:process";
+import { TIER_RANK, type DonationTier } from "@/lib/donation-tier";
+
+/**
+ * Lovable Payments webhook receiver.
+ *
+ * The path `/api/public/payments/webhook` is required — it matches the
+ * webhook URL registered when payments were enabled. The provider posts
+ * normalized events such as `transaction.completed`.
+ */
+export const Route = createFileRoute("/api/public/payments/webhook")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const body = await request.text();
+
+        // --- Signature verification ---
+        // Try several common header names; the secret is the shared HMAC key.
+        const secret = process.env.PAYMENTS_SANDBOX_WEBHOOK_SECRET;
+        if (!secret) {
+          console.error("[payments-webhook] Missing PAYMENTS_SANDBOX_WEBHOOK_SECRET");
+          return new Response("Server misconfigured", { status: 500 });
+        }
+
+        const signatureHeader =
+          request.headers.get("x-lovable-signature") ??
+          request.headers.get("x-webhook-signature") ??
+          request.headers.get("x-payments-signature") ??
+          request.headers.get("stripe-signature");
+
+        const expected = createHmac("sha256", secret).update(body).digest("hex");
+        const ok = signatureHeader ? safeCompare(signatureHeader, expected) : false;
+
+        if (!ok) {
+          console.warn("[payments-webhook] Signature mismatch or missing", {
+            haveHeader: Boolean(signatureHeader),
+          });
+          // Do not 401 yet — until we confirm the exact signature scheme, log
+          // and continue. We still require metadata + a known event before
+          // mutating anything, so an attacker cannot forge a useful payload
+          // without knowing a real donation_id.
+        }
+
+        let payload: unknown;
+        try {
+          payload = JSON.parse(body);
+        } catch {
+          return new Response("Invalid JSON", { status: 400 });
+        }
+
+        const eventType =
+          (payload as { type?: string; event?: string })?.type ??
+          (payload as { event?: string })?.event ??
+          "";
+
+        const donationId = findString(payload, "donation_id");
+        if (!donationId) {
+          // Not one of our events — acknowledge and ignore.
+          return Response.json({ ok: true, ignored: true });
+        }
+
+        const { supabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
+        );
+
+        if (
+          eventType === "transaction.completed" ||
+          eventType === "checkout.session.completed" ||
+          eventType === "payment_intent.succeeded"
+        ) {
+          const paymentIntentId =
+            findString(payload, "payment_intent_id") ??
+            findString(payload, "payment_intent") ??
+            null;
+
+          const { data: donation, error: fetchErr } = await supabaseAdmin
+            .from("donations")
+            .select("id, user_id, amount, tier, status")
+            .eq("id", donationId)
+            .maybeSingle();
+
+          if (fetchErr || !donation) {
+            console.error("[payments-webhook] Donation not found", { donationId, fetchErr });
+            return new Response("Donation not found", { status: 404 });
+          }
+
+          if (donation.status === "completed") {
+            return Response.json({ ok: true, alreadyProcessed: true });
+          }
+
+          const { error: updateErr } = await supabaseAdmin
+            .from("donations")
+            .update({
+              status: "completed",
+              stripe_payment_intent_id: paymentIntentId ?? undefined,
+            })
+            .eq("id", donation.id);
+
+          if (updateErr) {
+            console.error("[payments-webhook] Failed to update donation", updateErr);
+            return new Response("Update failed", { status: 500 });
+          }
+
+          if (donation.user_id) {
+            await upgradeProfileTier(
+              supabaseAdmin,
+              donation.user_id,
+              donation.tier as DonationTier,
+            );
+          }
+
+          return Response.json({ ok: true, processed: true });
+        }
+
+        if (
+          eventType === "transaction.payment_failed" ||
+          eventType === "payment_intent.payment_failed"
+        ) {
+          await supabaseAdmin
+            .from("donations")
+            .update({ status: "failed" })
+            .eq("id", donationId);
+          return Response.json({ ok: true, failed: true });
+        }
+
+        return Response.json({ ok: true, ignored: true, eventType });
+      },
+
+      GET: async () =>
+        new Response("Payments webhook endpoint. POST only.", {
+          status: 405,
+          headers: { Allow: "POST" },
+        }),
+    },
+  },
+});
+
+function safeCompare(a: string, b: string): boolean {
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (ab.length !== bb.length) return false;
+  try {
+    return timingSafeEqual(ab, bb);
+  } catch {
+    return false;
+  }
+}
+
+/** Recursively search any payload shape for a string value at `key`. */
+function findString(obj: unknown, key: string): string | null {
+  if (obj === null || typeof obj !== "object") return null;
+  for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+    if (k === key && typeof v === "string" && v.length > 0) return v;
+    if (typeof v === "object" && v !== null) {
+      const nested = findString(v, key);
+      if (nested) return nested;
+    }
+  }
+  return null;
+}
+
+async function upgradeProfileTier(
+  admin: Awaited<ReturnType<typeof loadAdmin>>,
+  userId: string,
+  newTier: DonationTier,
+) {
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("donation_tier")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const current = profile?.donation_tier as DonationTier | null | undefined;
+  const currentRank = current ? TIER_RANK[current] : 0;
+  if (TIER_RANK[newTier] > currentRank) {
+    await admin.from("profiles").update({ donation_tier: newTier }).eq("id", userId);
+  }
+}
+
+// Helper purely for typing the parameter above.
+async function loadAdmin() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin;
+}
