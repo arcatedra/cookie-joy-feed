@@ -1619,9 +1619,11 @@ function ExpandedReelModal({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      </div>
     </div>
   );
 }
+
 
 
 // ============ Comments panel (slides from right / bottom on mobile) ============
