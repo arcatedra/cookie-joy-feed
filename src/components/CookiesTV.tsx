@@ -971,7 +971,7 @@ function ReelCard({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setExpanded(true);
+                onExpand();
               }}
               aria-label="Ver en grande"
               className="grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
