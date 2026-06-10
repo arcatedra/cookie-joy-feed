@@ -90,13 +90,24 @@ function fmtKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
+const TIER_TO_PRICE: Record<Tier["id"], string> = {
+  starter: "plan_starter_monthly",
+  essential: "plan_essential_monthly",
+  intermediate: "plan_intermediate_monthly",
+  premium: "plan_premium_monthly",
+};
+
 function SubscribePage() {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const startCheckout = useServerFn(createSubscriptionCheckout);
+  const [checkoutLoadingId, setCheckoutLoadingId] = useState<Tier["id"] | null>(null);
   const today = useMemo(() => new Date(), []);
   const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+
 
   const selectedTier = tiers.find((t) => t.id === selectedTierId)!;
   const remaining = selectedTier.maxDeliveries - selectedDates.length;
