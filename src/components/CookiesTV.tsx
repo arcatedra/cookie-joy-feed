@@ -309,6 +309,8 @@ export function CookiesTV() {
   const [adminOpen, setAdminOpen] = useState(false);
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
   const [globalMuted, setGlobalMuted] = useState(true);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
 
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
