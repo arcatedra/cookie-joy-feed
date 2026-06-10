@@ -88,12 +88,7 @@ export function TopNav() {
             className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
             aria-label="OriGen"
           >
-            <OriGenLogo
-              size={30}
-              showTagline
-              nameClassName="text-[16px] font-bold tracking-[0.22em] text-amber-300"
-              taglineClassName="text-[7px] tracking-[0.28em] text-amber-200/70"
-            />
+            <OriGenLogo size={24} nameClassName="text-white" />
           </Link>
 
           {/* Delivery address — desktop */}
@@ -114,13 +109,13 @@ export function TopNav() {
 
           {/* Search bar */}
           <div ref={searchRef} className="relative flex-1 min-w-0">
-            <div className="flex items-stretch overflow-hidden rounded-md bg-[#4A3525] text-[#F4F1EA] shadow-sm focus-within:ring-2 focus-within:ring-amber-300">
+            <div className="flex items-stretch overflow-hidden rounded-md bg-white text-gray-900 shadow-sm focus-within:ring-2 focus-within:ring-amber-300">
               {/* Category dropdown */}
               <div ref={catRef} className="relative hidden sm:block">
                 <button
                   type="button"
                   onClick={() => setCatOpen((o) => !o)}
-                  className="flex h-full items-center gap-1 border-r border-[#3a2a1d] bg-[#3a2a1d] px-3 text-xs font-semibold text-[#F4F1EA] hover:bg-[#2e2117]"
+                  className="flex h-full items-center gap-1 border-r border-[#16294a] bg-[#1f3a5f] px-3 text-xs font-semibold text-white hover:bg-[#16294a]"
                   aria-haspopup="listbox"
                   aria-expanded={catOpen}
                 >
