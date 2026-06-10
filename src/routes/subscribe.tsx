@@ -270,21 +270,27 @@ function SubscribePage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => selectTier(tier.id)}
-                    className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all ${
+                    disabled={checkoutLoadingId === tier.id}
+                    onClick={() => (isSelected ? handleSubscribe(tier.id) : selectTier(tier.id))}
+                    className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all disabled:opacity-60 ${
                       isSelected
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-cta text-cta-foreground hover:brightness-105"
+                        ? "bg-cta text-cta-foreground hover:brightness-105"
+                        : "bg-primary text-primary-foreground hover:brightness-110"
                     }`}
                   >
-                    {isSelected ? (
+                    {checkoutLoadingId === tier.id ? (
                       <>
-                        <Check className="h-3.5 w-3.5" /> {t("common.selected")}
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
+                      </>
+                    ) : isSelected ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" /> {t("common.signUp")}
                       </>
                     ) : (
-                      t("common.signUp")
+                      t("common.selected", { defaultValue: "Elegir" })
                     )}
                   </button>
+
                 </div>
 
                 <div className={`absolute inset-x-0 bottom-0 h-1 ${tier.accentColor} opacity-70`} />
