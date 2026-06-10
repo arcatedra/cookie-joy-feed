@@ -1254,6 +1254,20 @@ function ExpandedReelModal({
     return syncReelPlayback(videoRefs.current, selectedIndex);
   }, [selectedIndex]);
 
+  // Reflect the active video's actual play/pause state in the overlay.
+  useEffect(() => {
+    const v = videoRefs.current[selectedIndex];
+    if (!v) return;
+    const tick = () => setPlayTick((n) => n + 1);
+    v.addEventListener("play", tick);
+    v.addEventListener("pause", tick);
+    return () => {
+      v.removeEventListener("play", tick);
+      v.removeEventListener("pause", tick);
+    };
+  }, [selectedIndex]);
+
+
 
   // Pause the active video when the tab is hidden; resume when visible.
   useEffect(() => {
