@@ -17,6 +17,7 @@ import {
   MessageCircle as WhatsAppIcon,
   Music2,
   Mail,
+  HandHeart,
 } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from "@/components/BrandIcons";
 import {
