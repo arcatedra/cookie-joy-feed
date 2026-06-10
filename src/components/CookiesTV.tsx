@@ -1225,6 +1225,7 @@ function ExpandedReelModal({
   });
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [burst, setBurst] = useState(false);
+  const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
   const current = reels[selectedIndex] ?? reels[0];
@@ -1267,10 +1268,18 @@ function ExpandedReelModal({
     });
   }, [selectedIndex]);
 
-  // Body scroll lock + keyboard nav
+  // Body scroll lock + keyboard nav + best-effort fullscreen (hides browser chrome)
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Try to enter fullscreen so the browser toolbar disappears.
+    const docEl = document.documentElement as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>;
+    };
+    const req = docEl.requestFullscreen ?? docEl.webkitRequestFullscreen;
+    if (req && !document.fullscreenElement) {
+      req.call(docEl).catch(() => {});
+    }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       else if (e.key === "ArrowUp" || e.key === "ArrowLeft") emblaApi?.scrollPrev();
@@ -1280,6 +1289,9 @@ function ExpandedReelModal({
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.().catch(() => {});
+      }
     };
   }, [emblaApi, onClose]);
 
@@ -1424,10 +1436,13 @@ function ExpandedReelModal({
                 {/* Subtle bottom gradient for overlay legibility */}
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-                {/* Title overlay (per-video) — bottom-left */}
+                {/* Title overlay (per-video) — bottom-left, lifted clear of bottom edge */}
                 <div
                   className="pointer-events-none absolute left-0 z-10 pl-5"
-                  style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)", right: "5.5rem" }}
+                  style={{
+                    bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)",
+                    right: "5.5rem",
+                  }}
                 >
                   <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
                     {r.title ?? ""}
@@ -1441,8 +1456,8 @@ function ExpandedReelModal({
 
       {/* Right-side action rail — overlay, vertical (Reels/TikTok style) */}
       <div
-        className="absolute right-2 z-20 flex flex-col items-center gap-4"
-        style={{ bottom: "max(env(safe-area-inset-bottom), 1rem)" }}
+        className="absolute right-3 z-20 flex flex-col items-center gap-4"
+        style={{ bottom: "calc(max(env(safe-area-inset-bottom), 0px) + 4.5rem)" }}
       >
         <button
           type="button"
@@ -1479,9 +1494,28 @@ function ExpandedReelModal({
           </span>
         </button>
 
-        <DropdownMenu>
+        <DropdownMenu open={shareMenuOpen} onOpenChange={setShareMenuOpen}>
           <DropdownMenuTrigger asChild>
-            <button type="button" aria-label="Compartir" className="flex flex-col items-center gap-0.5">
+            <button
+              type="button"
+              aria-label="Compartir"
+              className="flex flex-col items-center gap-0.5"
+              onClick={async (e) => {
+                // Prefer native OS share sheet (Instagram, TikTok, WhatsApp, etc.)
+                if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+                  e.preventDefault();
+                  try {
+                    await navigator.share({ title: shareTitle(), url: shareUrl() });
+                  } catch (err) {
+                    // User cancelled — do nothing. Other errors → fall back to menu.
+                    if ((err as { name?: string })?.name !== "AbortError") {
+                      setShareMenuOpen(true);
+                    }
+                  }
+                }
+                // No native share → let the dropdown open normally.
+              }}
+            >
               <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-500/80 backdrop-blur transition hover:bg-emerald-500">
                 <Share2 className="h-5 w-5 text-white" />
               </span>
@@ -1515,9 +1549,6 @@ function ExpandedReelModal({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={copyLink}>
               <LinkIcon /> Copiar enlace
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={nativeShare}>
-              <Share2 /> Más opciones…
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
