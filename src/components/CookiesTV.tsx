@@ -569,23 +569,14 @@ export function CookiesTV() {
 
       {expandedIndex !== null && reels[expandedIndex] && (
         <ExpandedReelModal
-          reel={reels[expandedIndex]}
-          hasPrev={reels.length > 1}
-          hasNext={reels.length > 1}
-          onPrev={() =>
-            setExpandedIndex((i) =>
-              i === null ? i : (i - 1 + reels.length) % reels.length,
-            )
-          }
-          onNext={() =>
-            setExpandedIndex((i) => (i === null ? i : (i + 1) % reels.length))
-          }
+          reels={reels}
+          initialIndex={expandedIndex}
           onClose={() => setExpandedIndex(null)}
-          likes={likeCounts[reels[expandedIndex]!.id] ?? 0}
-          comments={commentCounts[reels[expandedIndex]!.id] ?? 0}
-          liked={myLikes.has(reels[expandedIndex]!.id)}
-          onToggleLike={() => toggleLike(reels[expandedIndex]!.id)}
-          onOpenComments={() => setCommentsFor(reels[expandedIndex]!.id)}
+          likeCounts={likeCounts}
+          commentCounts={commentCounts}
+          myLikes={myLikes}
+          onToggleLike={(id) => toggleLike(id)}
+          onOpenComments={(id) => setCommentsFor(id)}
         />
       )}
     </section>
