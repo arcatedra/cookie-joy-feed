@@ -1269,14 +1269,14 @@ function ExpandedReelModal({
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
     const swipeThreshold = 50;
-    // Swipe
+    // Swipe — left or down = next; right or up = prev (Facebook-style)
     if (Math.max(absX, absY) >= swipeThreshold) {
       if (absX > absY) {
         if (dx < 0 && hasNext) onNext();
         else if (dx > 0 && hasPrev) onPrev();
       } else {
-        if (dy < 0 && hasNext) onNext();
-        else if (dy > 0 && hasPrev) onPrev();
+        if (dy > 0 && hasNext) onNext();
+        else if (dy < 0 && hasPrev) onPrev();
       }
       return;
     }
@@ -1285,6 +1285,9 @@ function ExpandedReelModal({
     if (t.clientX > w * 0.75 && hasNext) onNext();
     else if (t.clientX < w * 0.25 && hasPrev) onPrev();
   };
+
+  // Block touch-nav from firing when interacting with the action rail / close btn
+  const stopTouch = (e: React.TouchEvent) => e.stopPropagation();
 
   const handleLike = () => {
     if (!liked) {
@@ -1384,6 +1387,8 @@ function ExpandedReelModal({
           e.stopPropagation();
           onClose();
         }}
+        onTouchStart={stopTouch}
+        onTouchEnd={stopTouch}
         aria-label="Cerrar"
         className="absolute z-30 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
         style={{
@@ -1425,9 +1430,11 @@ function ExpandedReelModal({
           className="absolute z-20 flex flex-col items-center gap-3"
           style={{
             right: "max(env(safe-area-inset-right), 0.75rem)",
-            bottom: "max(env(safe-area-inset-bottom), 1.25rem)",
+            bottom: "max(env(safe-area-inset-bottom), 5rem)",
           }}
           onClick={(e) => e.stopPropagation()}
+          onTouchStart={stopTouch}
+          onTouchEnd={stopTouch}
         >
           <button
             type="button"
