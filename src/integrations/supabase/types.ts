@@ -41,6 +41,59 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_bookings: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          price_id: string
+          scheduled_date: string
+          status: string
+          subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          period_end: string
+          period_start: string
+          price_id: string
+          scheduled_date: string
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          period_end?: string
+          period_start?: string
+          price_id?: string
+          scheduled_date?: string
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_bookings_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donations: {
         Row: {
           amount: number
@@ -363,6 +416,39 @@ export type Database = {
           to_lng?: number
           total?: number
           user_id?: string
+        }
+        Relationships: []
+      }
+      subscription_plans: {
+        Row: {
+          active: boolean
+          created_at: string
+          deliveries_per_month: number
+          name: string
+          price_cents: number
+          price_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          deliveries_per_month: number
+          name: string
+          price_cents: number
+          price_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          deliveries_per_month?: number
+          name?: string
+          price_cents?: number
+          price_id?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
