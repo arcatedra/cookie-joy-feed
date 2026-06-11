@@ -76,8 +76,71 @@ export const quoteShippingFn = createServerFn({ method: "POST" })
       .maybeSingle<AppSettingsRow>();
     if (error) throw new Error(error.message);
     if (!settings?.mile_shipping_enabled) return null;
-    return quoteShipping(data.from, data.to, {
+    const quote = quoteShipping(data.from, data.to, {
       basePrice: Number(settings.shipping_base_price),
       pricePerMile: Number(settings.shipping_price_per_mile),
     });
+
+    // Persist to history (best-effort; don't fail the quote if logging fails).
+    const { error: logErr } = await context.supabase.from("shipping_quotes").insert({
+      user_id: context.userId,
+      from_lat: data.from.lat,
+      from_lng: data.from.lng,
+      to_lat: data.to.lat,
+      to_lng: data.to.lng,
+      distance_miles: quote.distanceMiles,
+      base_price: quote.basePrice,
+      price_per_mile: quote.pricePerMile,
+      total: quote.total,
+    });
+    if (logErr) console.error("[shipping] failed to log quote:", logErr.message);
+
+    return quote;
+  });
+
+interface ShippingQuoteRow {
+  id: string;
+  user_id: string;
+  from_lat: number | string;
+  from_lng: number | string;
+  to_lat: number | string;
+  to_lng: number | string;
+  distance_miles: number | string;
+  base_price: number | string;
+  price_per_mile: number | string;
+  total: number | string;
+  created_at: string;
+}
+
+/** Admin only: list recent shipping quotes (history). */
+export const listShippingQuotes = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin, error: roleErr } = await context.supabase.rpc(
+      "has_role",
+      { _user_id: context.userId, _role: "admin" },
+    );
+    if (roleErr) throw new Error(roleErr.message);
+    if (!isAdmin) throw new Error("Forbidden");
+
+    const { data, error } = await context.supabase
+      .from("shipping_quotes")
+      .select(
+        "id, user_id, from_lat, from_lng, to_lat, to_lng, distance_miles, base_price, price_per_mile, total, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(100)
+      .returns<ShippingQuoteRow[]>();
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((r) => ({
+      id: r.id,
+      userId: r.user_id,
+      from: { lat: Number(r.from_lat), lng: Number(r.from_lng) },
+      to: { lat: Number(r.to_lat), lng: Number(r.to_lng) },
+      distanceMiles: Number(r.distance_miles),
+      basePrice: Number(r.base_price),
+      pricePerMile: Number(r.price_per_mile),
+      total: Number(r.total),
+      createdAt: r.created_at,
+    }));
   });
