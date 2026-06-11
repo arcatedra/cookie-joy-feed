@@ -350,14 +350,56 @@ function DeliveriesPage() {
                         <p className="truncate text-xs text-muted-foreground">{d.address}</p>
                       )}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => cancelMut.mutate(d.id)}
-                      disabled={cancelMut.isPending}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={rescheduleMut.isPending}
+                            title="Cambiar fecha"
+                          >
+                            <Pencil className="size-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(`${d.scheduled_date}T12:00:00`)}
+                            onSelect={(date) => {
+                              if (!date) return;
+                              const key = fmtKey(date);
+                              if (key === d.scheduled_date) return;
+                              if (scheduledKeys.has(key)) {
+                                toast.error("Ya tienes una entrega ese día");
+                                return;
+                              }
+                              rescheduleMut.mutate({ id: d.id, date: key });
+                            }}
+                            disabled={(date) => {
+                              const past = date < todayStart;
+                              const monFri = isMondayOrFriday(date);
+                              const outOfPeriod =
+                                (periodStart && date < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
+                                (periodEnd && date > periodEnd);
+                              const otherBooked =
+                                scheduledKeys.has(fmtKey(date)) && fmtKey(date) !== d.scheduled_date;
+                              return past || !monFri || !!outOfPeriod || otherBooked;
+                            }}
+                            initialFocus
+                            className="pointer-events-auto p-3"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => cancelMut.mutate(d.id)}
+                        disabled={cancelMut.isPending}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
