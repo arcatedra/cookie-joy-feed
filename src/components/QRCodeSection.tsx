@@ -8,7 +8,7 @@ interface QRCodeSectionProps {
   url?: string;
 }
 
-export function QRCodeSection({ url = "https://oys1.lovable.app" }: QRCodeSectionProps) {
+export function QRCodeSection({ url = "https://origen.management" }: QRCodeSectionProps) {
   const { t } = useTranslation();
   const svgRef = useRef<SVGSVGElement | null>(null);
 
