@@ -687,15 +687,17 @@ function ReelCard({
   };
 
   const buy = () => {
-    if (!reel.product_name || reel.product_price == null) return;
+    const name = reel.product_name;
+    const price = reel.product_price;
+    if (!name || price == null) return;
     gate.guard(() => {
       cart.add({
         id: `reel-${reel.product_slug || reel.id}`,
-        name: reel.product_name,
-        price: Number(reel.product_price),
+        name,
+        price: Number(price),
         image: productImg,
       });
-      toast.success(`${reel.product_name} agregado al carrito`);
+      toast.success(`${name} agregado al carrito`);
     });
   };
 
