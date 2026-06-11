@@ -1,6 +1,10 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home as HomeIcon, Search, Package, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useAuth } from "@/lib/auth";
+import { getMyDeliveryStatus } from "@/lib/deliveries.functions";
 
 const tabs = [
   { to: "/", key: "home", Icon: HomeIcon },
