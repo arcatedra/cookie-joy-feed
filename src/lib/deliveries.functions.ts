@@ -203,3 +203,74 @@ export const cancelDelivery = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const rescheduleSchema = z.object({
+  id: z.string().uuid(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+});
+
+export const rescheduleDelivery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => rescheduleSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const ctx = await loadActiveContext(context.supabase, context.userId);
+    if (!ctx) throw new Error("Necesitas una suscripción activa.");
+
+    const date = new Date(`${data.date}T12:00:00Z`);
+    if (Number.isNaN(date.getTime())) throw new Error("Fecha inválida.");
+    if (!isMondayOrFriday(date)) {
+      throw new Error("Solo puedes programar entregas en lunes o viernes.");
+    }
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    if (date < today) throw new Error("No puedes mover una entrega al pasado.");
+    if (date < ctx.periodStart || date > ctx.periodEnd) {
+      throw new Error("La fecha está fuera de tu período de suscripción actual.");
+    }
+
+    const { data: existing, error: exErr } = await context.supabase
+      .from("delivery_bookings")
+      .select("id, scheduled_date, status")
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (exErr) throw new Error(exErr.message);
+    if (!existing || existing.status !== "scheduled") {
+      throw new Error("La entrega no está activa o no existe.");
+    }
+    if (existing.scheduled_date === data.date) {
+      return { ok: true, unchanged: true };
+    }
+
+    const { count } = await context.supabase
+      .from("delivery_bookings")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", context.userId)
+      .eq("status", "scheduled")
+      .gte("period_start", ctx.periodStart.toISOString())
+      .lte("period_end", ctx.periodEnd.toISOString());
+    if ((count ?? 0) > ctx.deliveriesPerMonth) {
+      throw new Error(
+        `Excedes el límite de ${ctx.deliveriesPerMonth} entregas del mes.`,
+      );
+    }
+
+    const { data: dup } = await context.supabase
+      .from("delivery_bookings")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("scheduled_date", data.date)
+      .eq("status", "scheduled")
+      .neq("id", data.id)
+      .maybeSingle();
+    if (dup) throw new Error("Ya tienes otra entrega ese día.");
+
+    const { error } = await context.supabase
+      .from("delivery_bookings")
+      .update({ scheduled_date: data.date })
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .eq("status", "scheduled");
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
