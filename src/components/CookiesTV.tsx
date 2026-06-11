@@ -614,6 +614,7 @@ function ReelCard({
   onExpand: () => void;
 }) {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
