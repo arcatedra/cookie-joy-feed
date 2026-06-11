@@ -31,10 +31,9 @@ function isMondayOrFriday(d: Date) {
 }
 
 async function loadActiveContext(
-  supabase: ReturnType<typeof Object>,
+  supabase: any,
   userId: string,
 ) {
-  // @ts-expect-error supabase is the authenticated client from context
   const { data: sub } = await supabase
     .from("subscriptions")
     .select("id, price_id, status, current_period_start, current_period_end")
@@ -46,12 +45,12 @@ async function loadActiveContext(
 
   if (!sub) return null;
 
-  // @ts-expect-error
   const { data: plan } = await supabase
     .from("subscription_plans")
     .select("name, deliveries_per_month")
     .eq("price_id", sub.price_id)
     .maybeSingle();
+
 
   // Fallback to current calendar month if Stripe period is missing
   const now = new Date();
