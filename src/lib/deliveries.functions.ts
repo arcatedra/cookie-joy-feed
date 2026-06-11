@@ -156,8 +156,15 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
       .lte("period_end", ctx.periodEnd.toISOString());
 
     if ((count ?? 0) >= ctx.deliveriesPerMonth) {
+      const maxDate = ctx.periodEnd.toLocaleDateString("es-ES", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
       throw new Error(
-        `Ya usaste todas tus ${ctx.deliveriesPerMonth} entregas del mes.`,
+        `Has alcanzado el límite de ${ctx.deliveriesPerMonth} entregas para este período. ` +
+        `Puedes programar hasta el ${maxDate}.`,
       );
     }
 
@@ -250,8 +257,15 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
       .gte("period_start", ctx.periodStart.toISOString())
       .lte("period_end", ctx.periodEnd.toISOString());
     if ((count ?? 0) > ctx.deliveriesPerMonth) {
+      const maxDate = ctx.periodEnd.toLocaleDateString("es-ES", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
       throw new Error(
-        `Excedes el límite de ${ctx.deliveriesPerMonth} entregas del mes.`,
+        `Has alcanzado el límite de ${ctx.deliveriesPerMonth} entregas para este período. ` +
+        `Puedes programar hasta el ${maxDate}.`,
       );
     }
 
