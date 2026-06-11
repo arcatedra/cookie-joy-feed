@@ -262,3 +262,82 @@ export const listShippingQuotes = createServerFn({ method: "POST" })
       errorMessage: r.error_message,
     }));
   });
+
+/** Admin only: export filtered shipping quotes as CSV text. */
+export const exportShippingQuotesCSV = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => listFiltersSchema.parse(d))
+  .handler(async ({ data: filters, context }) => {
+    const { data: isAdmin, error: roleErr } = await context.supabase.rpc(
+      "has_role",
+      { _user_id: context.userId, _role: "admin" },
+    );
+    if (roleErr) throw new Error(roleErr.message);
+    if (!isAdmin) throw new Error("Forbidden");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    let matchingUserIds: string[] = [];
+    const q = filters.userQuery?.trim();
+    if (q) {
+      const { data: profileMatches } = await supabaseAdmin
+        .from("profiles")
+        .select("id")
+        .ilike("display_name", `%${q}%`);
+      matchingUserIds = (profileMatches ?? []).map((p) => p.id);
+    }
+
+    let dbQuery = supabaseAdmin
+      .from("shipping_quotes")
+      .select(
+        "id, user_id, from_lat, from_lng, to_lat, to_lng, distance_miles, base_price, price_per_mile, total, created_at, status, error_message",
+      )
+      .order("created_at", { ascending: false })
+      .limit(5000);
+
+    if (filters.status) {
+      dbQuery = dbQuery.eq("status", filters.status);
+    }
+    if (filters.dateFrom) {
+      dbQuery = dbQuery.gte("created_at", filters.dateFrom);
+    }
+    if (filters.dateTo) {
+      dbQuery = dbQuery.lte("created_at", filters.dateTo);
+    }
+
+    if (q) {
+      const ids = new Set<string>(matchingUserIds);
+      if (q.length >= 8) {
+        const { data: idMatches } = await supabaseAdmin
+          .from("shipping_quotes")
+          .select("user_id")
+          .ilike("user_id", `%${q}%`);
+        (idMatches ?? []).forEach((r) => ids.add(r.user_id));
+      }
+      if (ids.size === 0) {
+        return { csv: "", count: 0 };
+      }
+      dbQuery = dbQuery.in("user_id", Array.from(ids));
+    }
+
+    const { data, error } = await dbQuery.returns<ShippingQuoteRow[]>();
+    if (error) throw new Error(error.message);
+
+    const rows = (data ?? []).map((r) => ({
+      ID: r.id,
+      "User ID": r.user_id,
+      "From Lat": r.from_lat,
+      "From Lng": r.from_lng,
+      "To Lat": r.to_lat,
+      "To Lng": r.to_lng,
+      "Distance (mi)": r.distance_miles,
+      "Base Price": r.base_price,
+      "Price / Mile": r.price_per_mile,
+      Total: r.total,
+      Status: r.status,
+      "Error Message": r.error_message ?? "",
+      "Created At": r.created_at,
+    }));
+
+    return { csv: toCSV(rows), count: rows.length };
+  });
