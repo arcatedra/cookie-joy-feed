@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -60,6 +61,7 @@ function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
 function ExplorePage() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   return (
     <main className="min-h-screen bg-background pb-24">
       {/* Header */}
@@ -133,7 +135,7 @@ function ExplorePage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => cart.add({ id: `exp-${p.id}`, name, price: p.price, image: p.image })}
+                  onClick={() => gate.guard(() => cart.add({ id: `exp-${p.id}`, name, price: p.price, image: p.image }))}
                   className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-orange text-white shadow-md active:scale-90 transition"
                   aria-label={`${t("common.add")} ${name}`}
                 >

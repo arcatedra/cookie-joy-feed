@@ -22,6 +22,7 @@ import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import type { DonationTier } from "@/lib/donation-tier";
+import { SubscribePromoBanner } from "@/lib/subscription-gate";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
@@ -117,6 +118,12 @@ function ProfilePage() {
           </div>
         </div>
       </section>
+
+      {/* Subscription promo (hidden when active) */}
+      <section className="mt-6 px-5">
+        <SubscribePromoBanner />
+      </section>
+
 
       {/* Active Plan */}
       <section className="mt-6 px-5">

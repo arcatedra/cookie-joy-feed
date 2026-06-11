@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
@@ -101,6 +102,12 @@ function Home() {
     >
       {/* Reels stories bar (Instagram-style, above the hero) */}
       <CookiesTV />
+
+      {/* Subscription promo banner (hidden when already subscribed) */}
+      <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
+        <SubscribePromoBanner />
+      </section>
+
 
       {/* Category grid */}
       <section className="relative pt-4">
@@ -436,6 +443,7 @@ function FlashDealCard() {
  * ========================================================== */
 function ProductSlider() {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   return (
     <section className="mx-auto mt-6 max-w-[1500px] px-3 md:px-6">
       <div className="rounded-md bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-6">
@@ -486,7 +494,9 @@ function ProductSlider() {
                 <button
                   type="button"
                   onClick={() =>
-                    cart.add({ id: `slider-${p.id}`, name: p.name, price: p.price, image: p.image })
+                    gate.guard(() =>
+                      cart.add({ id: `slider-${p.id}`, name: p.name, price: p.price, image: p.image }),
+                    )
                   }
                   className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-[#c8956d] px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-[#a87852] active:scale-95"
                 >

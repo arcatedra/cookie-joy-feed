@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
+import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
 import { Toaster } from "sonner";
 
@@ -138,14 +139,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          <div className="min-h-screen bg-background">
-            <TopNav />
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-          </div>
-          <Toaster position="top-center" richColors />
-        </CartProvider>
+        <SubscriptionGateProvider>
+          <CartProvider>
+            <div className="min-h-screen bg-background">
+              <TopNav />
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <Outlet />
+            </div>
+            <Toaster position="top-center" richColors />
+          </CartProvider>
+        </SubscriptionGateProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

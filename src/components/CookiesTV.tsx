@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { syncReelPlayback } from "@/lib/reel-playback";
@@ -613,6 +614,7 @@ function ReelCard({
   onExpand: () => void;
 }) {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -685,14 +687,18 @@ function ReelCard({
   };
 
   const buy = () => {
-    if (!reel.product_name || reel.product_price == null) return;
-    cart.add({
-      id: `reel-${reel.product_slug || reel.id}`,
-      name: reel.product_name,
-      price: Number(reel.product_price),
-      image: productImg,
+    const name = reel.product_name;
+    const price = reel.product_price;
+    if (!name || price == null) return;
+    gate.guard(() => {
+      cart.add({
+        id: `reel-${reel.product_slug || reel.id}`,
+        name,
+        price: Number(price),
+        image: productImg,
+      });
+      toast.success(`${name} agregado al carrito`);
     });
-    toast.success(`${reel.product_name} agregado al carrito`);
   };
 
   const shareUrl = () => {
