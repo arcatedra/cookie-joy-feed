@@ -229,6 +229,7 @@ function FiltersPanel({
 
 function SearchPage() {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const [cat, setCat] = useState<"all" | Category>("all");
   const [minRating, setMinRating] = useState(0);
   const [allergens, setAllergens] = useState<Allergen[]>([]);
