@@ -13,6 +13,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -89,19 +97,40 @@ function AdminShippingPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  // Filters state
+  const [userQuery, setUserQuery] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "saved" | "failed">("all");
+
   const fetchHistory = useServerFn(listShippingQuotes);
   const { data: history } = useQuery({
-    queryKey: ["admin", "shipping-quotes"],
-    queryFn: () => fetchHistory(),
+    queryKey: ["admin", "shipping-quotes", userQuery, dateFrom, dateTo, statusFilter],
+    queryFn: () =>
+      fetchHistory({
+        data: {
+          userQuery: userQuery.trim() || undefined,
+          dateFrom: dateFrom || undefined,
+          dateTo: dateTo || undefined,
+          status: statusFilter === "all" ? undefined : statusFilter,
+        },
+      }),
     enabled: allowed === true,
     refetchInterval: 15_000,
   });
+
+  const clearFilters = () => {
+    setUserQuery("");
+    setDateFrom("");
+    setDateTo("");
+    setStatusFilter("all");
+  };
 
   if (allowed === null) return <div className="p-8">Verificando acceso…</div>;
   if (!allowed) return <div className="p-8">No autorizado.</div>;
 
   return (
-    <div className="container max-w-3xl py-10 space-y-6">
+    <div className="container max-w-5xl py-10 space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Configuración de envíos</h1>
         <p className="text-sm text-muted-foreground">
@@ -162,10 +191,57 @@ function AdminShippingPage() {
         <CardHeader>
           <CardTitle>Historial de cotizaciones</CardTitle>
           <CardDescription>
-            Cada cotización calculada cuando el interruptor está activo se guarda aquí (últimas 100).
+            Cotizaciones guardadas y fallidas. Usa los filtros para buscar por usuario, fechas o estado.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {/* Filters */}
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex-1 min-w-[200px] space-y-1">
+              <Label htmlFor="userFilter">Usuario</Label>
+              <Input
+                id="userFilter"
+                placeholder="Nombre o ID de usuario"
+                value={userQuery}
+                onChange={(e) => setUserQuery(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="dateFrom">Desde</Label>
+              <Input
+                id="dateFrom"
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="dateTo">Hasta</Label>
+              <Input
+                id="dateTo"
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="statusFilter">Estado</Label>
+              <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
+                <SelectTrigger id="statusFilter" className="w-[160px]">
+                  <SelectValue placeholder="Todos" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="saved">Guardadas</SelectItem>
+                  <SelectItem value="failed">Fallidas</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="outline" onClick={clearFilters}>
+              Limpiar
+            </Button>
+          </div>
+
           {!history || history.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               Aún no hay cotizaciones registradas.
@@ -176,11 +252,14 @@ function AdminShippingPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Fecha</TableHead>
+                    <TableHead>Usuario</TableHead>
                     <TableHead>Origen</TableHead>
                     <TableHead>Destino</TableHead>
                     <TableHead className="text-right">Millas</TableHead>
                     <TableHead className="text-right">$/milla</TableHead>
                     <TableHead className="text-right">Total</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Motivo</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -188,6 +267,9 @@ function AdminShippingPage() {
                     <TableRow key={q.id}>
                       <TableCell className="whitespace-nowrap text-xs">
                         {new Date(q.createdAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-xs max-w-[140px] truncate" title={q.userName ?? q.userId}>
+                        {q.userName ?? q.userId.slice(0, 8) + "…"}
                       </TableCell>
                       <TableCell className="font-mono text-xs">
                         {q.from.lat.toFixed(3)}, {q.from.lng.toFixed(3)}
@@ -199,6 +281,14 @@ function AdminShippingPage() {
                       <TableCell className="text-right">${q.pricePerMile.toFixed(2)}</TableCell>
                       <TableCell className="text-right font-semibold">
                         ${q.total.toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={q.status === "saved" ? "default" : "destructive"}>
+                          {q.status === "saved" ? "Guardada" : "Fallida"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground max-w-[180px] truncate">
+                        {q.errorMessage ?? "—"}
                       </TableCell>
                     </TableRow>
                   ))}
