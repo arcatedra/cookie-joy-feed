@@ -127,6 +127,32 @@ function AdminShippingPage() {
     setStatusFilter("all");
   };
 
+  const exportCsvFn = useServerFn(exportShippingQuotesCSV);
+  const exportMutation = useMutation({
+    mutationFn: async () => {
+      const res = await exportCsvFn({
+        data: {
+          userQuery: userQuery.trim() || undefined,
+          dateFrom: dateFrom || undefined,
+          dateTo: dateTo || undefined,
+          status: statusFilter === "all" ? undefined : statusFilter,
+        },
+      });
+      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cotizaciones-envio-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      return res.count;
+    },
+    onSuccess: (count) => toast.success(`${count} cotizaciones exportadas`),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   if (allowed === null) return <div className="p-8">Verificando acceso…</div>;
   if (!allowed) return <div className="p-8">No autorizado.</div>;
 
