@@ -89,11 +89,19 @@ function AdminShippingPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const fetchHistory = useServerFn(listShippingQuotes);
+  const { data: history } = useQuery({
+    queryKey: ["admin", "shipping-quotes"],
+    queryFn: () => fetchHistory(),
+    enabled: allowed === true,
+    refetchInterval: 15_000,
+  });
+
   if (allowed === null) return <div className="p-8">Verificando acceso…</div>;
   if (!allowed) return <div className="p-8">No autorizado.</div>;
 
   return (
-    <div className="container max-w-2xl py-10 space-y-6">
+    <div className="container max-w-3xl py-10 space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Configuración de envíos</h1>
         <p className="text-sm text-muted-foreground">
