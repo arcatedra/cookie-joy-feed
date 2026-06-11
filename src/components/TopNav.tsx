@@ -246,6 +246,9 @@ export function TopNav() {
             </span>
           </Link>
 
+          {/* Delivery counter */}
+          <DeliveryCounter />
+
           {/* Cart */}
           <Link
             to="/cart"
