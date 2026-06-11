@@ -221,7 +221,7 @@ export const listShippingQuotes = createServerFn({ method: "POST" })
 
     // Resolve display names for the returned rows.
     const userIds = [...new Set((data ?? []).map((r) => r.user_id))];
-    let nameMap = new Map<string, string>();
+    let nameMap = new Map<string, string | null>();
     if (userIds.length > 0) {
       const { data: profiles } = await supabaseAdmin
         .from("profiles")
