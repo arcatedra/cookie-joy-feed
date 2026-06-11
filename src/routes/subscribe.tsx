@@ -105,7 +105,7 @@ function SubscribePage() {
   const gate = useSubscriptionGate();
   const startCheckout = useServerFn(createSubscriptionCheckout);
   const [checkoutLoadingId, setCheckoutLoadingId] = useState<Tier["id"] | null>(null);
-  const [activating, setActivating] = useState(false);
+  const [, setActivating] = useState(false);
   const today = useMemo(() => new Date(), []);
   const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
