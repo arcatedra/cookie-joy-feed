@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getShippingSettings,
+  listShippingQuotes,
   updateShippingSettings,
 } from "@/lib/shipping.functions";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/admin/shipping")({
   component: AdminShippingPage,
@@ -80,11 +89,19 @@ function AdminShippingPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const fetchHistory = useServerFn(listShippingQuotes);
+  const { data: history } = useQuery({
+    queryKey: ["admin", "shipping-quotes"],
+    queryFn: () => fetchHistory(),
+    enabled: allowed === true,
+    refetchInterval: 15_000,
+  });
+
   if (allowed === null) return <div className="p-8">Verificando acceso…</div>;
   if (!allowed) return <div className="p-8">No autorizado.</div>;
 
   return (
-    <div className="container max-w-2xl py-10 space-y-6">
+    <div className="container max-w-3xl py-10 space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Configuración de envíos</h1>
         <p className="text-sm text-muted-foreground">
@@ -138,6 +155,57 @@ function AdminShippingPage() {
           <Button onClick={() => mutation.mutate()} disabled={mutation.isPending || isLoading}>
             {mutation.isPending ? "Guardando…" : "Guardar cambios"}
           </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Historial de cotizaciones</CardTitle>
+          <CardDescription>
+            Cada cotización calculada cuando el interruptor está activo se guarda aquí (últimas 100).
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!history || history.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aún no hay cotizaciones registradas.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Origen</TableHead>
+                    <TableHead>Destino</TableHead>
+                    <TableHead className="text-right">Millas</TableHead>
+                    <TableHead className="text-right">$/milla</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {history.map((q) => (
+                    <TableRow key={q.id}>
+                      <TableCell className="whitespace-nowrap text-xs">
+                        {new Date(q.createdAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {q.from.lat.toFixed(3)}, {q.from.lng.toFixed(3)}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {q.to.lat.toFixed(3)}, {q.to.lng.toFixed(3)}
+                      </TableCell>
+                      <TableCell className="text-right">{q.distanceMiles.toFixed(2)}</TableCell>
+                      <TableCell className="text-right">${q.pricePerMile.toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-semibold">
+                        ${q.total.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
