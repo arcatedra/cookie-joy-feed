@@ -363,33 +363,69 @@ function DeliveriesPage() {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="end">
-                          <Calendar
-                            mode="single"
-                            selected={new Date(`${d.scheduled_date}T12:00:00`)}
-                            onSelect={(date) => {
-                              if (!date) return;
-                              const key = fmtKey(date);
-                              if (key === d.scheduled_date) return;
-                              if (scheduledKeys.has(key)) {
-                                toast.error("Ya tienes una entrega ese día");
-                                return;
+                          {(() => {
+                            const maxDate = (() => {
+                              if (!periodEnd) return null;
+                              const m = new Date(periodEnd);
+                              m.setHours(0, 0, 0, 0);
+                              for (let i = 0; i < 7; i++) {
+                                if (isMondayOrFriday(m)) return new Date(m);
+                                m.setDate(m.getDate() - 1);
                               }
-                              rescheduleMut.mutate({ id: d.id, date: key });
-                            }}
-                            disabled={(date) => {
-                              const past = date < todayStart;
-                              const monFri = isMondayOrFriday(date);
-                              const outOfPeriod =
-                                (periodStart && date < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
-                                (periodEnd && date > periodEnd);
-                              const otherBooked =
-                                scheduledKeys.has(fmtKey(date)) && fmtKey(date) !== d.scheduled_date;
-                              return past || !monFri || !!outOfPeriod || otherBooked;
-                            }}
-                            initialFocus
-                            className="pointer-events-auto p-3"
-                          />
+                              return null;
+                            })();
+                            return (
+                              <>
+                                <Calendar
+                                  mode="single"
+                                  selected={new Date(`${d.scheduled_date}T12:00:00`)}
+                                  onSelect={(date) => {
+                                    if (!date) return;
+                                    const key = fmtKey(date);
+                                    if (key === d.scheduled_date) return;
+                                    if (scheduledKeys.has(key)) {
+                                      toast.error("Ya tienes una entrega ese día");
+                                      return;
+                                    }
+                                    rescheduleMut.mutate({ id: d.id, date: key });
+                                  }}
+                                  disabled={(date) => {
+                                    const past = date < todayStart;
+                                    const monFri = isMondayOrFriday(date);
+                                    const afterMax = !!maxDate && date > maxDate;
+                                    const outOfPeriod =
+                                      (periodStart && date < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
+                                      (periodEnd && date > periodEnd);
+                                    const otherBooked =
+                                      scheduledKeys.has(fmtKey(date)) && fmtKey(date) !== d.scheduled_date;
+                                    return past || !monFri || !!outOfPeriod || afterMax || otherBooked;
+                                  }}
+                                  modifiers={maxDate ? { maxAllowed: maxDate } : undefined}
+                                  modifiersClassNames={{
+                                    maxAllowed:
+                                      "ring-2 ring-amber-500 text-amber-700 font-bold rounded-md",
+                                  }}
+                                  toDate={maxDate ?? undefined}
+                                  initialFocus
+                                  className="pointer-events-auto p-3"
+                                />
+                                {maxDate && (
+                                  <p className="border-t px-3 py-2 text-[11px] text-muted-foreground">
+                                    Fecha máxima de tu plan:{" "}
+                                    <span className="font-semibold text-amber-700">
+                                      {maxDate.toLocaleDateString("es-ES", {
+                                        weekday: "long",
+                                        day: "numeric",
+                                        month: "long",
+                                      })}
+                                    </span>
+                                  </p>
+                                )}
+                              </>
+                            );
+                          })()}
                         </PopoverContent>
+
                       </Popover>
                       <Button
                         variant="ghost"
