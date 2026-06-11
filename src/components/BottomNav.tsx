@@ -50,6 +50,7 @@ export function BottomNav() {
               </Link>
             );
           }
+          const isSubscribe = key === "subscribe";
           return (
             <Link
               key={to}
@@ -57,11 +58,19 @@ export function BottomNav() {
               className="group flex flex-1 justify-center"
               aria-label={label}
             >
-              <div className="rounded-full p-2.5 transition-colors hover:bg-primary-foreground/5">
+              <div className="relative rounded-full p-2.5 transition-colors hover:bg-primary-foreground/5">
                 <Icon
                   className="h-[22px] w-[22px] text-primary-foreground opacity-60 transition-opacity group-hover:opacity-100"
                   strokeWidth={1.5}
                 />
+                {isSubscribe && remaining !== null && remaining > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 grid h-4.5 min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[10px] font-bold text-[#1a0f0a]">
+                    {remaining}
+                  </span>
+                )}
+                {isSubscribe && remaining === 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-red-500" />
+                )}
               </div>
             </Link>
           );
