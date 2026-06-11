@@ -103,6 +103,12 @@ function Home() {
       {/* Reels stories bar (Instagram-style, above the hero) */}
       <CookiesTV />
 
+      {/* Subscription promo banner (hidden when already subscribed) */}
+      <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
+        <SubscribePromoBanner />
+      </section>
+
+
       {/* Category grid */}
       <section className="relative pt-4">
         <CategoryCardGrid />
