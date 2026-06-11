@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
+import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
 import { Toaster } from "sonner";
 
