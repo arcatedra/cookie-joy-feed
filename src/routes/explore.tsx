@@ -135,7 +135,7 @@ function ExplorePage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => cart.add({ id: `exp-${p.id}`, name, price: p.price, image: p.image })}
+                  onClick={() => gate.guard(() => cart.add({ id: `exp-${p.id}`, name, price: p.price, image: p.image }))}
                   className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-orange text-white shadow-md active:scale-90 transition"
                   aria-label={`${t("common.add")} ${name}`}
                 >
