@@ -17,6 +17,17 @@ export function BottomNav() {
   const location = useLocation();
   const pathname = location.pathname;
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const getStatus = useServerFn(getMyDeliveryStatus);
+
+  const { data: status } = useQuery({
+    queryKey: ["delivery-status"],
+    queryFn: () => getStatus(),
+    enabled: !!user,
+    staleTime: 30_000,
+  });
+
+  const remaining = status?.hasActiveSubscription ? status.remaining : null;
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
