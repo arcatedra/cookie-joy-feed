@@ -22,6 +22,7 @@ import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import type { DonationTier } from "@/lib/donation-tier";
+import { SubscribePromoBanner } from "@/lib/subscription-gate";
 import avatar from "@/assets/avatar.jpg";
 import {
   Sheet,
