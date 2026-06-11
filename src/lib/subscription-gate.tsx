@@ -34,9 +34,17 @@ interface GateValue {
   openPrompt: () => void;
   /** Force a refresh of the subscription status (e.g. after returning from Stripe). */
   refresh: () => Promise<void>;
-  /** Refresh repeatedly for up to `timeoutMs` until `canPurchase` becomes true. */
-  refreshUntilActive: (timeoutMs?: number) => Promise<boolean>;
+  /** Refresh repeatedly until `canPurchase` becomes true, returning a structured result. */
+  refreshUntilActive: (timeoutMs?: number) => Promise<RefreshResult>;
 }
+
+export interface RefreshResult {
+  active: boolean;
+  attempts: number;
+  errors: number;
+  lastError?: string;
+}
+
 
 const Ctx = createContext<GateValue | null>(null);
 
