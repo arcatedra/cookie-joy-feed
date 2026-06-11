@@ -688,13 +688,15 @@ function ReelCard({
 
   const buy = () => {
     if (!reel.product_name || reel.product_price == null) return;
-    cart.add({
-      id: `reel-${reel.product_slug || reel.id}`,
-      name: reel.product_name,
-      price: Number(reel.product_price),
-      image: productImg,
+    gate.guard(() => {
+      cart.add({
+        id: `reel-${reel.product_slug || reel.id}`,
+        name: reel.product_name,
+        price: Number(reel.product_price),
+        image: productImg,
+      });
+      toast.success(`${reel.product_name} agregado al carrito`);
     });
-    toast.success(`${reel.product_name} agregado al carrito`);
   };
 
   const shareUrl = () => {
