@@ -19,11 +19,13 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
+import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -80,6 +82,10 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -104,6 +110,11 @@ const AdminShippingRoute = AdminShippingRouteImport.update({
   id: '/admin/shipping',
   path: '/admin/shipping',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
+  id: '/deliveries',
+  path: '/deliveries',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -147,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -169,6 +181,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -182,6 +195,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/donate': typeof DonateRoute
@@ -192,6 +206,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
@@ -216,6 +231,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/deliveries'
     | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
@@ -238,6 +254,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/deliveries'
     | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
@@ -250,6 +267,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/cart'
     | '/donate'
@@ -260,6 +278,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/_authenticated/deliveries'
     | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
@@ -273,6 +292,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   DonateRoute: typeof DonateRoute
@@ -366,6 +386,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -400,6 +427,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/shipping'
       preLoaderRoute: typeof AdminShippingRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/deliveries': {
+      id: '/_authenticated/deliveries'
+      path: '/deliveries'
+      fullPath: '/deliveries'
+      preLoaderRoute: typeof AuthenticatedDeliveriesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -439,8 +473,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   DonateRoute: DonateRoute,
@@ -464,13 +510,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

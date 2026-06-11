@@ -1,0 +1,205 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
+
+export interface DeliveryStatus {
+  hasActiveSubscription: boolean;
+  planName: string | null;
+  priceId: string | null;
+  deliveriesPerMonth: number;
+  used: number;
+  remaining: number;
+  periodStart: string | null;
+  periodEnd: string | null;
+  subscriptionId: string | null;
+}
+
+export interface DeliveryBookingRow {
+  id: string;
+  scheduled_date: string;
+  status: string;
+  address: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+function isMondayOrFriday(d: Date) {
+  const day = d.getUTCDay();
+  return day === 1 || day === 5;
+}
+
+async function loadActiveContext(
+  supabase: any,
+  userId: string,
+) {
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("id, price_id, status, current_period_start, current_period_end")
+    .eq("user_id", userId)
+    .in("status", ACTIVE_STATUSES as unknown as string[])
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!sub) return null;
+
+  const { data: plan } = await supabase
+    .from("subscription_plans")
+    .select("name, deliveries_per_month")
+    .eq("price_id", sub.price_id)
+    .maybeSingle();
+
+
+  // Fallback to current calendar month if Stripe period is missing
+  const now = new Date();
+  const start = sub.current_period_start
+    ? new Date(sub.current_period_start)
+    : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const end = sub.current_period_end
+    ? new Date(sub.current_period_end)
+    : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+
+  return {
+    sub,
+    planName: plan?.name ?? "Plan",
+    deliveriesPerMonth: plan?.deliveries_per_month ?? 0,
+    periodStart: start,
+    periodEnd: end,
+  };
+}
+
+export const getMyDeliveryStatus = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<DeliveryStatus> => {
+    const ctx = await loadActiveContext(context.supabase, context.userId);
+    if (!ctx) {
+      return {
+        hasActiveSubscription: false,
+        planName: null,
+        priceId: null,
+        deliveriesPerMonth: 0,
+        used: 0,
+        remaining: 0,
+        periodStart: null,
+        periodEnd: null,
+        subscriptionId: null,
+      };
+    }
+
+    const { count } = await context.supabase
+      .from("delivery_bookings")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", context.userId)
+      .eq("status", "scheduled")
+      .gte("period_start", ctx.periodStart.toISOString())
+      .lte("period_end", ctx.periodEnd.toISOString());
+
+    const used = count ?? 0;
+    return {
+      hasActiveSubscription: true,
+      planName: ctx.planName,
+      priceId: ctx.sub.price_id,
+      deliveriesPerMonth: ctx.deliveriesPerMonth,
+      used,
+      remaining: Math.max(0, ctx.deliveriesPerMonth - used),
+      periodStart: ctx.periodStart.toISOString(),
+      periodEnd: ctx.periodEnd.toISOString(),
+      subscriptionId: ctx.sub.id,
+    };
+  });
+
+export const listMyDeliveries = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<DeliveryBookingRow[]> => {
+    const { data, error } = await context.supabase
+      .from("delivery_bookings")
+      .select("id, scheduled_date, status, address, notes, created_at")
+      .eq("user_id", context.userId)
+      .order("scheduled_date", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (data ?? []) as DeliveryBookingRow[];
+  });
+
+const scheduleSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+  address: z.string().min(1).max(500).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+export const scheduleDelivery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => scheduleSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const ctx = await loadActiveContext(context.supabase, context.userId);
+    if (!ctx) throw new Error("Necesitas una suscripción activa para programar entregas.");
+
+    const date = new Date(`${data.date}T12:00:00Z`);
+    if (Number.isNaN(date.getTime())) throw new Error("Fecha inválida.");
+    if (!isMondayOrFriday(date)) {
+      throw new Error("Solo puedes programar entregas en lunes o viernes.");
+    }
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    if (date < today) throw new Error("No puedes programar una entrega en el pasado.");
+    if (date < ctx.periodStart || date > ctx.periodEnd) {
+      throw new Error("La fecha está fuera de tu período de suscripción actual.");
+    }
+
+    const { count } = await context.supabase
+      .from("delivery_bookings")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", context.userId)
+      .eq("status", "scheduled")
+      .gte("period_start", ctx.periodStart.toISOString())
+      .lte("period_end", ctx.periodEnd.toISOString());
+
+    if ((count ?? 0) >= ctx.deliveriesPerMonth) {
+      throw new Error(
+        `Ya usaste todas tus ${ctx.deliveriesPerMonth} entregas del mes.`,
+      );
+    }
+
+    // Prevent duplicate same-day scheduling
+    const { data: dup } = await context.supabase
+      .from("delivery_bookings")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("scheduled_date", data.date)
+      .eq("status", "scheduled")
+      .maybeSingle();
+    if (dup) throw new Error("Ya tienes una entrega programada para ese día.");
+
+    const { data: row, error } = await context.supabase
+      .from("delivery_bookings")
+      .insert({
+        user_id: context.userId,
+        subscription_id: ctx.sub.id,
+        price_id: ctx.sub.price_id,
+        scheduled_date: data.date,
+        period_start: ctx.periodStart.toISOString(),
+        period_end: ctx.periodEnd.toISOString(),
+        address: data.address ?? null,
+        notes: data.notes ?? null,
+      })
+      .select("id")
+      .single();
+
+    if (error) throw new Error(error.message);
+    return { id: row.id };
+  });
+
+export const cancelDelivery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string }) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("delivery_bookings")
+      .update({ status: "canceled" })
+      .eq("id", data.id)
+      .eq("user_id", context.userId)
+      .eq("status", "scheduled");
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
