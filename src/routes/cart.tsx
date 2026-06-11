@@ -388,17 +388,28 @@ function CheckoutPage() {
           {/* ============ RIGHT: Order summary ============ */}
           <aside className="lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-black/5">
+              {!gate.canPurchase && !gate.loading && (
+                <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-900">
+                  Necesitas una suscripción activa para finalizar la compra.{" "}
+                  <a href="/subscribe" className="underline">Ver planes</a>
+                </div>
+              )}
               <button
                 onClick={handleConfirm}
-                disabled={processing}
+                disabled={processing || !gate.canPurchase}
                 className="w-full rounded-lg bg-gradient-to-b from-amber-400 to-amber-500 py-3.5 text-sm font-extrabold text-[#1a0f0a] shadow-md transition hover:from-amber-300 hover:to-amber-400 disabled:opacity-60"
               >
-                {processing ? "Procesando…" : "Confirmar y Pagar Pedido"}
+                {processing
+                  ? "Procesando…"
+                  : gate.canPurchase
+                    ? "Confirmar y Pagar Pedido"
+                    : "Suscríbete para comprar"}
               </button>
 
               <p className="mt-3 text-center text-[11px] text-gray-500">
                 Al confirmar tu pedido, aceptas los términos de servicio de la tienda.
               </p>
+
 
               <div className="my-4 h-px bg-gray-200" />
 
