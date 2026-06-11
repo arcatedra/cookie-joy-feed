@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useServerFn } from "@tanstack/react-start";
@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 import { useAuth } from "@/lib/auth";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
+
 
 
 export const Route = createFileRoute("/subscribe")({
@@ -100,13 +102,47 @@ const TIER_TO_PRICE: Record<Tier["id"], string> = {
 function SubscribePage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const gate = useSubscriptionGate();
   const startCheckout = useServerFn(createSubscriptionCheckout);
   const [checkoutLoadingId, setCheckoutLoadingId] = useState<Tier["id"] | null>(null);
+  const [, setActivating] = useState(false);
   const today = useMemo(() => new Date(), []);
   const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+
+  // On return from Stripe checkout (?status=success), poll the subscription
+  // status until the webhook upserts the row, then update the UI without a reload.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get("status");
+    if (!status) return;
+    // Clean the URL so a refresh doesn't re-trigger this effect.
+    params.delete("status");
+    params.delete("session_id");
+    const clean = window.location.pathname + (params.toString() ? `?${params}` : "");
+    window.history.replaceState({}, "", clean);
+
+    if (status === "success") {
+      setActivating(true);
+      const toastId = toast.loading("Activando tu suscripción…");
+      gate
+        .refreshUntilActive(20_000)
+        .then((ok) => {
+          if (ok) {
+            toast.success("¡Suscripción activada! Ya puedes comprar y programar entregas.", { id: toastId });
+          } else {
+            toast.message("Tu pago se procesó. La activación puede tardar unos segundos.", { id: toastId });
+          }
+        })
+        .finally(() => setActivating(false));
+    } else if (status === "cancel") {
+      toast.message("Checkout cancelado.");
+    }
+  }, [gate]);
+
 
 
   const selectedTier = tiers.find((t) => t.id === selectedTierId)!;

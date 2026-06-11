@@ -2,11 +2,12 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { Lock, Sparkles, Truck } from "lucide-react";
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { getMySubscription } from "@/lib/subscriptions.functions";
 
 const ACTIVE = new Set(["active", "trialing", "past_due"]);
@@ -30,6 +32,10 @@ interface GateValue {
   /** Returns true and runs `action` if the user can purchase; otherwise opens the prompt and returns false. */
   guard: (action?: () => void) => boolean;
   openPrompt: () => void;
+  /** Force a refresh of the subscription status (e.g. after returning from Stripe). */
+  refresh: () => Promise<void>;
+  /** Refresh repeatedly for up to `timeoutMs` until `canPurchase` becomes true. */
+  refreshUntilActive: (timeoutMs?: number) => Promise<boolean>;
 }
 
 const Ctx = createContext<GateValue | null>(null);
@@ -37,13 +43,17 @@ const Ctx = createContext<GateValue | null>(null);
 export function SubscriptionGateProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const getSub = useServerFn(getMySubscription);
+  const qc = useQueryClient();
   const [open, setOpen] = useState(false);
 
+  const queryKey = useMemo(() => ["my-subscription", user?.id ?? null] as const, [user?.id]);
+
   const query = useQuery({
-    queryKey: ["my-subscription", user?.id ?? null],
+    queryKey,
     queryFn: () => getSub(),
     enabled: !!user,
     staleTime: 30_000,
+    refetchOnWindowFocus: true,
   });
 
   const canPurchase = useMemo(() => {
@@ -65,14 +75,71 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
     [canPurchase],
   );
 
+  const refresh = useCallback(async () => {
+    if (!user) return;
+    await qc.invalidateQueries({ queryKey });
+    await qc.refetchQueries({ queryKey });
+  }, [qc, queryKey, user]);
+
+  const refreshUntilActive = useCallback(
+    async (timeoutMs = 20_000) => {
+      if (!user) return false;
+      const deadline = Date.now() + timeoutMs;
+      let delay = 800;
+      while (Date.now() < deadline) {
+        await qc.invalidateQueries({ queryKey });
+        const data = await qc.fetchQuery({ queryKey, queryFn: () => getSub() });
+        const sub = data?.subscription;
+        if (sub && ACTIVE.has(sub.status ?? "")) return true;
+        await new Promise((r) => setTimeout(r, delay));
+        delay = Math.min(delay * 1.5, 3000);
+      }
+      return false;
+    },
+    [getSub, qc, queryKey, user],
+  );
+
+  // Refresh when tab becomes visible (covers return from Stripe in same tab).
+  useEffect(() => {
+    if (!user) return;
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        qc.invalidateQueries({ queryKey });
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, [qc, queryKey, user]);
+
+  // Realtime: react instantly when the webhook upserts the user's subscription row.
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel(`subscriptions:user:${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` },
+        () => {
+          qc.invalidateQueries({ queryKey });
+          qc.invalidateQueries({ queryKey: ["delivery-status"] });
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [qc, queryKey, user]);
+
   const value = useMemo<GateValue>(
     () => ({
       canPurchase,
       loading: authLoading || (!!user && query.isLoading),
       guard,
       openPrompt,
+      refresh,
+      refreshUntilActive,
     }),
-    [canPurchase, authLoading, user, query.isLoading, guard, openPrompt],
+    [canPurchase, authLoading, user, query.isLoading, guard, openPrompt, refresh, refreshUntilActive],
   );
 
   return (
@@ -92,10 +159,13 @@ export function useSubscriptionGate(): GateValue {
       loading: false,
       guard: () => false,
       openPrompt: () => {},
+      refresh: async () => {},
+      refreshUntilActive: async () => false,
     };
   }
   return ctx;
 }
+
 
 function SubscribeRequiredDialog({
   open,
