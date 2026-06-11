@@ -267,6 +267,13 @@ function AdminShippingPage() {
             <Button variant="outline" onClick={clearFilters}>
               Limpiar
             </Button>
+            <Button
+              variant="secondary"
+              onClick={() => exportMutation.mutate()}
+              disabled={exportMutation.isPending}
+            >
+              {exportMutation.isPending ? "Exportando…" : "Exportar CSV"}
+            </Button>
           </div>
 
           {!history || history.length === 0 ? (
