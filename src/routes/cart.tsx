@@ -35,6 +35,7 @@ type PayMethod = "card" | "wallet";
 
 function CheckoutPage() {
   const { items, total, setQty, remove, clear, count } = useCart();
+  const gate = useSubscriptionGate();
   const navigate = useNavigate();
 
   const [openStep, setOpenStep] = useState<StepKey>("address");
