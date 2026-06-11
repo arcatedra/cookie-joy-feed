@@ -71,6 +71,7 @@ function CheckoutPage() {
   const fmt = (n: number) => `$${n.toFixed(2)}`;
 
   const handleConfirm = async () => {
+    if (!gate.guard()) return;
     setProcessing(true);
     await new Promise((r) => setTimeout(r, 1400));
     clear();
