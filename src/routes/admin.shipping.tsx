@@ -157,6 +157,57 @@ function AdminShippingPage() {
           </Button>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Historial de cotizaciones</CardTitle>
+          <CardDescription>
+            Cada cotización calculada cuando el interruptor está activo se guarda aquí (últimas 100).
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!history || history.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aún no hay cotizaciones registradas.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Origen</TableHead>
+                    <TableHead>Destino</TableHead>
+                    <TableHead className="text-right">Millas</TableHead>
+                    <TableHead className="text-right">$/milla</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {history.map((q) => (
+                    <TableRow key={q.id}>
+                      <TableCell className="whitespace-nowrap text-xs">
+                        {new Date(q.createdAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {q.from.lat.toFixed(3)}, {q.from.lng.toFixed(3)}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {q.to.lat.toFixed(3)}, {q.to.lng.toFixed(3)}
+                      </TableCell>
+                      <TableCell className="text-right">{q.distanceMiles.toFixed(2)}</TableCell>
+                      <TableCell className="text-right">${q.pricePerMile.toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-semibold">
+                        ${q.total.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
