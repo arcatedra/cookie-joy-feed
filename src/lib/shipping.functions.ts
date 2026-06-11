@@ -3,6 +3,23 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { quoteShipping, type ShippingQuote } from "./shipping";
 
+function toCSV(rows: Record<string, string | number | null>[]) {
+  if (rows.length === 0) return "";
+  const headers = Object.keys(rows[0]);
+  const escape = (v: unknown) => {
+    const s = v == null ? "" : String(v);
+    if (s.includes(",") || s.includes("\n") || s.includes('"')) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  };
+  const lines = [
+    headers.join(","),
+    ...rows.map((r) => headers.map((h) => escape(r[h])).join(",")),
+  ];
+  return lines.join("\n");
+}
+
 interface AppSettingsRow {
   mile_shipping_enabled: boolean;
   shipping_base_price: number | string;
