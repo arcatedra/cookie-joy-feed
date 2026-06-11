@@ -437,6 +437,7 @@ function FlashDealCard() {
  * ========================================================== */
 function ProductSlider() {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   return (
     <section className="mx-auto mt-6 max-w-[1500px] px-3 md:px-6">
       <div className="rounded-md bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-6">
