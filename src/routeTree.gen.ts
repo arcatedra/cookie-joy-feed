@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -99,6 +100,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminShippingRoute = AdminShippingRouteImport.update({
+  id: '/admin/shipping',
+  path: '/admin/shipping',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/shipping': typeof AdminShippingRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -249,6 +260,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/subscribe'
     | '/unsubscribe'
+    | '/admin/shipping'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -271,6 +283,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   SubscribeRoute: typeof SubscribeRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
+  AdminShippingRoute: typeof AdminShippingRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
@@ -381,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/shipping': {
+      id: '/admin/shipping'
+      path: '/admin/shipping'
+      fullPath: '/admin/shipping'
+      preLoaderRoute: typeof AdminShippingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -431,6 +451,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   SubscribeRoute: SubscribeRoute,
   UnsubscribeRoute: UnsubscribeRoute,
+  AdminShippingRoute: AdminShippingRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
