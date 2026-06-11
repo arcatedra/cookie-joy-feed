@@ -318,6 +318,48 @@ export type Database = {
         }
         Relationships: []
       }
+      shipping_quotes: {
+        Row: {
+          base_price: number
+          created_at: string
+          distance_miles: number
+          from_lat: number
+          from_lng: number
+          id: string
+          price_per_mile: number
+          to_lat: number
+          to_lng: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          base_price: number
+          created_at?: string
+          distance_miles: number
+          from_lat: number
+          from_lng: number
+          id?: string
+          price_per_mile: number
+          to_lat: number
+          to_lng: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          distance_miles?: number
+          from_lat?: number
+          from_lng?: number
+          id?: string
+          price_per_mile?: number
+          to_lat?: number
+          to_lng?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean
