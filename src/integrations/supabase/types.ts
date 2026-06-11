@@ -323,10 +323,12 @@ export type Database = {
           base_price: number
           created_at: string
           distance_miles: number
+          error_message: string | null
           from_lat: number
           from_lng: number
           id: string
           price_per_mile: number
+          status: string
           to_lat: number
           to_lng: number
           total: number
@@ -336,10 +338,12 @@ export type Database = {
           base_price: number
           created_at?: string
           distance_miles: number
+          error_message?: string | null
           from_lat: number
           from_lng: number
           id?: string
           price_per_mile: number
+          status?: string
           to_lat: number
           to_lng: number
           total: number
@@ -349,10 +353,12 @@ export type Database = {
           base_price?: number
           created_at?: string
           distance_miles?: number
+          error_message?: string | null
           from_lat?: number
           from_lng?: number
           id?: string
           price_per_mile?: number
+          status?: string
           to_lat?: number
           to_lng?: number
           total?: number
