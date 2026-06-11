@@ -90,22 +90,35 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
   }, [qc, queryKey, user]);
 
   const refreshUntilActive = useCallback(
-    async (timeoutMs = 20_000) => {
-      if (!user) return false;
+    async (timeoutMs = 20_000): Promise<RefreshResult> => {
+      if (!user) return { active: false, attempts: 0, errors: 0 };
       const deadline = Date.now() + timeoutMs;
       let delay = 800;
+      let attempts = 0;
+      let errors = 0;
+      let lastError: string | undefined;
       while (Date.now() < deadline) {
-        await qc.invalidateQueries({ queryKey });
-        const data = await qc.fetchQuery({ queryKey, queryFn: () => getSub() });
-        const sub = data?.subscription;
-        if (sub && ACTIVE.has(sub.status ?? "")) return true;
+        attempts++;
+        try {
+          await qc.invalidateQueries({ queryKey });
+          const data = await qc.fetchQuery({ queryKey, queryFn: () => getSub() });
+          const sub = data?.subscription;
+          if (sub && ACTIVE.has(sub.status ?? "")) {
+            return { active: true, attempts, errors, lastError };
+          }
+        } catch (e) {
+          errors++;
+          lastError = e instanceof Error ? e.message : String(e);
+          console.warn("[subscription-gate] refresh attempt failed", lastError);
+        }
         await new Promise((r) => setTimeout(r, delay));
         delay = Math.min(delay * 1.5, 3000);
       }
-      return false;
+      return { active: false, attempts, errors, lastError };
     },
     [getSub, qc, queryKey, user],
   );
+
 
   // Refresh when tab becomes visible (covers return from Stripe in same tab).
   useEffect(() => {
