@@ -16,6 +16,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { OriGenLogo } from "@/components/OriGenLogo";
 
 export const Route = createFileRoute("/cart")({
