@@ -120,6 +120,17 @@ function DeliveriesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const rescheduleMut = useMutation({
+    mutationFn: ({ id, date }: { id: string; date: string }) =>
+      rescheduleFn({ data: { id, date } }),
+    onSuccess: () => {
+      toast.success("Fecha actualizada");
+      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      qc.invalidateQueries({ queryKey: ["delivery-list"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   function changeMonth(delta: number) {
     let m = viewMonth + delta;
     let y = viewYear;
