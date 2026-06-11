@@ -3,18 +3,21 @@ import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CalendarDays, ChevronLeft, Loader2, Sparkles, Trash2 } from "lucide-react";
+import { CalendarDays, ChevronLeft, Loader2, Pencil, Sparkles, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   getMyDeliveryStatus,
   listMyDeliveries,
   scheduleDelivery,
   cancelDelivery,
+  rescheduleDelivery,
 } from "@/lib/deliveries.functions";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
@@ -56,6 +59,7 @@ function DeliveriesPage() {
   const getList = useServerFn(listMyDeliveries);
   const scheduleFn = useServerFn(scheduleDelivery);
   const cancelFn = useServerFn(cancelDelivery);
+  const rescheduleFn = useServerFn(rescheduleDelivery);
 
   const statusQuery = useQuery({ queryKey: ["delivery-status"], queryFn: () => getStatus() });
   const listQuery = useQuery({ queryKey: ["delivery-list"], queryFn: () => getList() });
@@ -110,6 +114,17 @@ function DeliveriesPage() {
     mutationFn: (id: string) => cancelFn({ data: { id } }),
     onSuccess: () => {
       toast.success("Entrega cancelada");
+      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      qc.invalidateQueries({ queryKey: ["delivery-list"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const rescheduleMut = useMutation({
+    mutationFn: ({ id, date }: { id: string; date: string }) =>
+      rescheduleFn({ data: { id, date } }),
+    onSuccess: () => {
+      toast.success("Fecha actualizada");
       qc.invalidateQueries({ queryKey: ["delivery-status"] });
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
@@ -335,14 +350,56 @@ function DeliveriesPage() {
                         <p className="truncate text-xs text-muted-foreground">{d.address}</p>
                       )}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => cancelMut.mutate(d.id)}
-                      disabled={cancelMut.isPending}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={rescheduleMut.isPending}
+                            title="Cambiar fecha"
+                          >
+                            <Pencil className="size-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(`${d.scheduled_date}T12:00:00`)}
+                            onSelect={(date) => {
+                              if (!date) return;
+                              const key = fmtKey(date);
+                              if (key === d.scheduled_date) return;
+                              if (scheduledKeys.has(key)) {
+                                toast.error("Ya tienes una entrega ese día");
+                                return;
+                              }
+                              rescheduleMut.mutate({ id: d.id, date: key });
+                            }}
+                            disabled={(date) => {
+                              const past = date < todayStart;
+                              const monFri = isMondayOrFriday(date);
+                              const outOfPeriod =
+                                (periodStart && date < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
+                                (periodEnd && date > periodEnd);
+                              const otherBooked =
+                                scheduledKeys.has(fmtKey(date)) && fmtKey(date) !== d.scheduled_date;
+                              return past || !monFri || !!outOfPeriod || otherBooked;
+                            }}
+                            initialFocus
+                            className="pointer-events-auto p-3"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => cancelMut.mutate(d.id)}
+                        disabled={cancelMut.isPending}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
