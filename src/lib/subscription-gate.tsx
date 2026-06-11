@@ -181,7 +181,7 @@ export function useSubscriptionGate(): GateValue {
       guard: () => false,
       openPrompt: () => {},
       refresh: async () => {},
-      refreshUntilActive: async () => false,
+      refreshUntilActive: async () => ({ active: false, attempts: 0, errors: 0 }),
     };
   }
   return ctx;
