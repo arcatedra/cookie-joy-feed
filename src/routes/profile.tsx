@@ -119,6 +119,12 @@ function ProfilePage() {
         </div>
       </section>
 
+      {/* Subscription promo (hidden when active) */}
+      <section className="mt-6 px-5">
+        <SubscribePromoBanner />
+      </section>
+
+
       {/* Active Plan */}
       <section className="mt-6 px-5">
         <div className="flex items-center justify-between rounded-2xl bg-primary p-4 text-primary-foreground shadow-lg">
