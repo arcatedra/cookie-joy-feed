@@ -125,23 +125,86 @@ function SubscribePage() {
     const clean = window.location.pathname + (params.toString() ? `?${params}` : "");
     window.history.replaceState({}, "", clean);
 
-    if (status === "success") {
-      setActivating(true);
-      const toastId = toast.loading("Activando tu suscripción…");
-      gate
-        .refreshUntilActive(20_000)
-        .then((ok) => {
-          if (ok) {
-            toast.success("¡Suscripción activada! Ya puedes comprar y programar entregas.", { id: toastId });
-          } else {
-            toast.message("Tu pago se procesó. La activación puede tardar unos segundos.", { id: toastId });
-          }
-        })
-        .finally(() => setActivating(false));
-    } else if (status === "cancel") {
+    if (status === "cancel") {
       toast.message("Checkout cancelado.");
+      return;
     }
+    if (status !== "success") return;
+
+    setActivating(true);
+    const toastId = toast.loading("Activando tu suscripción…");
+
+    const verify = async () => {
+      // First attempt: 20s window.
+      const first = await gate.refreshUntilActive(20_000);
+      if (first.active) return first;
+
+      // Auto-retry once with a longer window and a clear message.
+      toast.loading(
+        first.errors > 0
+          ? "Reintentando verificación… estamos confirmando tu pago."
+          : "Aún esperando confirmación del pago… reintentando.",
+        { id: toastId },
+      );
+      const second = await gate.refreshUntilActive(20_000);
+      return second;
+    };
+
+    verify()
+      .then((result) => {
+        if (result.active) {
+          toast.success(
+            "¡Suscripción activada! Ya puedes comprar y programar entregas.",
+            { id: toastId },
+          );
+        } else if (result.errors > 0) {
+          toast.error(
+            "No pudimos verificar la activación automáticamente. Tu pago llegó a Stripe; pulsa Reintentar.",
+            {
+              id: toastId,
+              duration: Infinity,
+              action: {
+                label: "Reintentar",
+                onClick: () => {
+                  const retryId = toast.loading("Verificando suscripción…");
+                  gate
+                    .refreshUntilActive(25_000)
+                    .then((r) => {
+                      if (r.active) {
+                        toast.success("¡Suscripción activada!", { id: retryId });
+                      } else {
+                        toast.error(
+                          "Sigue sin confirmarse. Contáctanos si el cobro ya aparece en tu banco.",
+                          { id: retryId },
+                        );
+                      }
+                    })
+                    .catch((e) => {
+                      toast.error(
+                        e instanceof Error ? e.message : "Error verificando la suscripción.",
+                        { id: retryId },
+                      );
+                    });
+                },
+              },
+            },
+          );
+        } else {
+          toast.message(
+            "Tu pago se procesó. La activación puede tardar unos segundos — actualizaremos esta página automáticamente.",
+            { id: toastId, duration: 8000 },
+          );
+        }
+      })
+      .catch((e) => {
+        toast.error(
+          e instanceof Error ? e.message : "Error inesperado verificando la suscripción.",
+          { id: toastId },
+        );
+      })
+      .finally(() => setActivating(false));
   }, [gate]);
+
 
 
 
