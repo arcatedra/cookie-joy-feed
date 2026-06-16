@@ -108,6 +108,7 @@ export const createBillingPortalSession = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (error || !sub?.stripe_customer_id) {
+      if (error) console.error("[subscriptions] portal lookup failed", error);
       throw new Error("No tienes una suscripción activa.");
     }
     const host = getRequestHost();
