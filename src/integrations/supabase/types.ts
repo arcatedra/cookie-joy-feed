@@ -333,6 +333,7 @@ export type Database = {
         Row: {
           author_id: string | null
           created_at: string
+          expires_at: string | null
           id: string
           product_image: string | null
           product_name: string | null
@@ -346,6 +347,7 @@ export type Database = {
         Insert: {
           author_id?: string | null
           created_at?: string
+          expires_at?: string | null
           id?: string
           product_image?: string | null
           product_name?: string | null
@@ -359,6 +361,7 @@ export type Database = {
         Update: {
           author_id?: string | null
           created_at?: string
+          expires_at?: string | null
           id?: string
           product_image?: string | null
           product_name?: string | null
