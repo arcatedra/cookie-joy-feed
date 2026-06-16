@@ -25,8 +25,8 @@ import imgBox from "@/assets/cookie-box.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OriGen — Galletas Artesanales Premium" },
-      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en OriGen." },
+      { title: "AMYRAX — Galletas Artesanales Premium" },
+      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en AMYRAX." },
     ],
   }),
   component: Home,

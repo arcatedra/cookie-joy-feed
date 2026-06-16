@@ -29,11 +29,11 @@ const AdminNewSubscription = ({
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
-    <Preview>{labels[action]} en OriGen</Preview>
+    <Preview>{labels[action]} en AMYRAX</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>OriGen · Admin</Heading>
+          <Heading as="h1" style={brand}>AMYRAX · Admin</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>{labels[action]}</Heading>
@@ -51,7 +51,7 @@ const AdminNewSubscription = ({
           <Text style={meta}>Próximo cobro</Text>
           <Text style={metaValue}>{nextChargeDate}</Text>
         </Section>
-        <Text style={footerSmall}>Notificación interna · OriGen</Text>
+        <Text style={footerSmall}>Notificación interna · AMYRAX</Text>
       </Container>
     </Body>
   </Html>

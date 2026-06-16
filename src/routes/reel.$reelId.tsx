@@ -55,12 +55,12 @@ export const Route = createFileRoute("/reel/$reelId")({
   },
   head: ({ loaderData }) => {
     const reel = loaderData?.reel;
-    if (!reel) return { meta: [{ title: "Reel · OriGen Cookies" }] };
+    if (!reel) return { meta: [{ title: "Reel · AMYRAX Cookies" }] };
     const title = reel.title || reel.product_name || "Mira este reel";
-    const fullTitle = `${title} · OriGen Cookies`;
+    const fullTitle = `${title} · AMYRAX Cookies`;
     const description = reel.product_name
-      ? `${reel.product_name} en OriGen Cookies. Mira el reel y descubre nuestras galletas artesanales.`
-      : "Mira este reel de OriGen Cookies — galletas artesanales premium.";
+      ? `${reel.product_name} en AMYRAX Cookies. Mira el reel y descubre nuestras galletas artesanales.`
+      : "Mira este reel de AMYRAX Cookies — galletas artesanales premium.";
     const image = reel.thumb_url || reel.product_image || undefined;
     const meta: Array<Record<string, string>> = [
       { title: fullTitle },

@@ -23,7 +23,7 @@ import {
 export const Route = createFileRoute("/_authenticated/deliveries")({
   head: () => ({
     meta: [
-      { title: "Mis entregas — OriGen" },
+      { title: "Mis entregas — AMYRAX" },
       { name: "description", content: "Programa tus entregas de lunes o viernes según tu plan." },
     ],
   }),

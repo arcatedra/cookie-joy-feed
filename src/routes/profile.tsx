@@ -34,8 +34,8 @@ import {
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — OriGen" },
-      { name: "description", content: "Manage your OriGen account, orders, and subscription." },
+      { title: "My Profile — AMYRAX" },
+      { name: "description", content: "Manage your AMYRAX account, orders, and subscription." },
     ],
   }),
   component: ProfilePage,
