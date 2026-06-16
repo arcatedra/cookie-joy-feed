@@ -15,6 +15,8 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
+  Pencil,
+  Clock,
   MessageCircle as WhatsAppIcon,
   Music2,
   Mail,
@@ -58,7 +60,10 @@ interface DbReel {
   product_slug: string | null;
   author_id: string | null;
   created_at: string;
+  expires_at?: string | null;
 }
+
+const REEL_LIFETIME_MS = 60 * 60 * 1000; // 1 hora
 
 interface DbComment {
   id: string;
@@ -343,6 +348,7 @@ export function CookiesTV() {
   useEffect(() => { reelsRef.current = reels; }, [reels]);
   const [loading, setLoading] = useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [editingReel, setEditingReel] = useState<DbReel | null>(null);
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
   const [globalMuted, setGlobalMuted] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -574,6 +580,8 @@ export function CookiesTV() {
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
                 canDelete={canManageAllReels || user?.id === r.author_id}
                 onDelete={() => handleDelete(r.id)}
+                canEdit={canManageAllReels || user?.id === r.author_id}
+                onEdit={() => setEditingReel(r)}
                 onExpand={() => setExpandedIndex(index)}
               />
             ))}
@@ -595,6 +603,18 @@ export function CookiesTV() {
             setReels((prev) => [r, ...prev]);
             setAdminOpen(false);
             toast.success("¡Reel publicado!");
+          }}
+        />
+      )}
+
+      {editingReel && (
+        <AdminModal
+          editing={editingReel}
+          onClose={() => setEditingReel(null)}
+          onPublish={(updated) => {
+            setReels((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+            setEditingReel(null);
+            toast.success("¡Reel actualizado! Contador reiniciado a 1 hora.");
           }}
         />
       )}
@@ -627,6 +647,8 @@ function ReelCard({
   onToggleMuted,
   canDelete,
   onDelete,
+  canEdit,
+  onEdit,
   isFirst,
   onExpand,
 }: {
@@ -640,6 +662,8 @@ function ReelCard({
   onToggleMuted: () => void;
   canDelete: boolean;
   onDelete: () => void;
+  canEdit: boolean;
+  onEdit: () => void;
   isFirst?: boolean;
   onExpand: () => void;
 }) {
@@ -650,6 +674,29 @@ function ReelCard({
   const [playing, setPlaying] = useState(false);
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
+
+  // === Expiración de 1 hora por reel ===
+  const expiresAtMs = useMemo(() => {
+    if (reel.expires_at) return Date.parse(reel.expires_at);
+    if (reel.created_at) return Date.parse(reel.created_at) + REEL_LIFETIME_MS;
+    return null;
+  }, [reel.expires_at, reel.created_at]);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!expiresAtMs) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [expiresAtMs]);
+  const expired = expiresAtMs !== null && now >= expiresAtMs;
+  const msLeft = expiresAtMs ? Math.max(0, expiresAtMs - now) : 0;
+  const countdownLabel = useMemo(() => {
+    const s = Math.floor(msLeft / 1000);
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  }, [msLeft]);
+
+
 
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
@@ -678,16 +725,25 @@ function ReelCard({
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
+    if (expired) {
+      v.pause();
+      setPlaying(false);
+      return;
+    }
     if (inView) {
       v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     } else {
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly]);
+  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly, expired]);
 
   const togglePlay = () => {
     if (isEmbed || firstExternalOnly) return;
+    if (expired) {
+      toast.info("Este reel expiró. Pídele al creador que lo renueve.");
+      return;
+    }
     const v = videoRef.current;
     if (!v) return;
     // Quitar mute en la primera interacción del usuario para garantizar reproducción
@@ -819,6 +875,40 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
+      {/* Contador de 1 hora visible para todos */}
+      {expiresAtMs !== null && !expired && (
+        <div className="pointer-events-none absolute left-2 top-2 z-30 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold text-white shadow ring-1 ring-white/20 backdrop-blur">
+          <Clock className="h-3 w-3" />
+          {countdownLabel}
+        </div>
+      )}
+
+      {/* Sello "Expirado" cuando se acaba la hora */}
+      {expired && (
+        <>
+          <div className="pointer-events-none absolute inset-0 z-20 bg-black/55" />
+          <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center">
+            <div className="rotate-[-12deg] rounded-md border-4 border-red-500 bg-red-500/15 px-4 py-1.5 text-base font-black uppercase tracking-widest text-red-100 shadow-2xl">
+              Expirado
+            </div>
+          </div>
+        </>
+      )}
+
+      {canEdit && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}
+          aria-label="Editar reel"
+          title="Editar / reemplazar reel"
+          className="absolute right-12 top-2 z-40 grid h-9 w-9 place-items-center rounded-full bg-amber-400 text-[#1a0f0a] shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-amber-300 active:scale-95"
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+      )}
       {canDelete && (
         <button
           type="button"
@@ -828,7 +918,7 @@ function ReelCard({
           }}
           aria-label="Eliminar reel"
           title="Eliminar reel"
-          className="absolute right-2 top-2 z-30 grid h-9 w-9 place-items-center rounded-full bg-red-600/90 text-white shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-red-700 active:scale-95"
+          className="absolute right-2 top-2 z-40 grid h-9 w-9 place-items-center rounded-full bg-red-600/90 text-white shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-red-700 active:scale-95"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -1842,15 +1932,19 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
 function AdminModal({
   onClose,
   onPublish,
+  editing,
 }: {
   onClose: () => void;
   onPublish: (r: DbReel) => void;
+  editing?: DbReel | null;
 }) {
   const { user } = useAuth();
-  const [mode, setMode] = useState<"file" | "embed">("file");
-  const [title, setTitle] = useState("");
-  const [productSlug, setProductSlug] = useState(PRODUCT_OPTIONS[0].slug);
-  const [link, setLink] = useState("");
+  const isEdit = Boolean(editing);
+  const initialMode: "file" | "embed" = editing?.video_url && /^https?:\/\//i.test(editing.video_url) && !editing.video_url.includes("blob:") ? "embed" : "file";
+  const [mode, setMode] = useState<"file" | "embed">(initialMode);
+  const [title, setTitle] = useState(editing?.title ?? "");
+  const [productSlug, setProductSlug] = useState(editing?.product_slug ?? PRODUCT_OPTIONS[0].slug);
+  const [link, setLink] = useState(editing && initialMode === "embed" ? (editing.video_url ?? "") : "");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadPct, setUploadPct] = useState(0);
@@ -1861,6 +1955,7 @@ function AdminModal({
   const fileUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
   useEffect(() => () => { if (fileUrl) URL.revokeObjectURL(fileUrl); }, [fileUrl]);
 
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!title.trim()) { toast.error("Añade un título"); return; }
@@ -1870,18 +1965,27 @@ function AdminModal({
 
     if (mode === "embed") {
       const trimmed = link.trim();
-      if (!trimmed || !linkIsValid) {
+      if (!trimmed && isEdit) {
+        // En modo edición: mantener el video actual si no se cambió
+        videoUrl = editing?.video_url ?? "";
+      } else if (!trimmed || !linkIsValid) {
         toast.error("Pega un enlace válido (Instagram, TikTok, Facebook, YouTube o un .mp4)");
         setSubmitting(false);
         return;
+      } else {
+        videoUrl = trimmed;
       }
-      videoUrl = trimmed;
     } else {
       if (!file) {
-        toast.error("Selecciona un archivo de video");
-        setSubmitting(false);
-        return;
-      }
+        if (isEdit) {
+          // En modo edición: conservar el video actual si no se sube uno nuevo
+          videoUrl = editing?.video_url ?? "";
+        } else {
+          toast.error("Selecciona un archivo de video");
+          setSubmitting(false);
+          return;
+        }
+      } else {
       if (file.size > 100 * 1024 * 1024) {
         toast.error("El archivo supera los 100 MB");
         setSubmitting(false);
@@ -1914,11 +2018,50 @@ function AdminModal({
             if (pub?.publicUrl) videoUrl = pub.publicUrl;
           });
       }
+      }
     }
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
+    const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
-    // Reel optimista — aparece al instante en el feed
+    if (isEdit && editing) {
+      // EDITAR: reemplazar reel existente y reiniciar la hora
+      // Si no se cambió el video, conservar el actual
+      const finalVideoUrl = mode === "embed"
+        ? videoUrl
+        : (file ? videoUrl : (editing.video_url ?? ""));
+
+      const updatedReel: DbReel = {
+        ...editing,
+        title: title.trim(),
+        video_url: finalVideoUrl,
+        product_name: product.name,
+        product_price: product.price,
+        product_image: product.image,
+        product_slug: product.slug,
+        expires_at: newExpiresAt,
+      };
+      onPublish(updatedReel);
+      setSubmitting(false);
+
+      if (user && !editing.id.startsWith("local-")) {
+        void supabase
+          .from("reels")
+          .update({
+            title: updatedReel.title,
+            video_url: finalVideoUrl,
+            product_name: product.name,
+            product_price: product.price,
+            product_image: product.image,
+            product_slug: product.slug,
+            expires_at: newExpiresAt,
+          })
+          .eq("id", editing.id);
+      }
+      return;
+    }
+
+    // CREAR: reel optimista — aparece al instante en el feed
     const localReel: DbReel = {
       id: `local-${Date.now()}`,
       slug: `r-${Date.now()}`,
@@ -1930,6 +2073,7 @@ function AdminModal({
       product_slug: product.slug,
       author_id: user?.id ?? null,
       created_at: new Date().toISOString(),
+      expires_at: newExpiresAt,
     };
     onPublish(localReel);
     setSubmitting(false);
@@ -1945,9 +2089,11 @@ function AdminModal({
         product_image: product.image,
         product_slug: product.slug,
         author_id: user.id,
+        expires_at: newExpiresAt,
       });
     }
   };
+
 
   return (
     <div
@@ -1959,7 +2105,7 @@ function AdminModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🎬 Nuevo Reel</h3>
+          <h3 className="text-lg font-extrabold text-[#1a0f0a]">{isEdit ? "✏️ Editar Reel" : "🎬 Nuevo Reel"}</h3>
           <button
             type="button"
             onClick={onClose}
@@ -2122,7 +2268,7 @@ function AdminModal({
               ) : (
                 <Plus className="h-3.5 w-3.5" />
               )}
-              Publicar
+              {isEdit ? "Guardar cambios" : "Publicar"}
             </button>
           </div>
         </form>
