@@ -15,7 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import { OriGenLogo } from "@/components/OriGenLogo";
+import { AmyraXLogo } from "@/components/AmyraXLogo";
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
@@ -89,9 +89,9 @@ export function TopNav() {
           <Link
             to="/"
             className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
-            aria-label="OriGen"
+            aria-label="AMYRAX"
           >
-            <OriGenLogo size={24} nameClassName="text-white" />
+            <AmyraXLogo size={24} nameClassName="text-white" />
           </Link>
 
           {/* Delivery address — desktop */}
