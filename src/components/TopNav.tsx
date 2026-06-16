@@ -88,10 +88,10 @@ export function TopNav() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex shrink-0 items-center px-2 py-1 md:px-3"
+            className="flex shrink-0 items-center py-1 md:py-1.5"
             aria-label="AMYRAX"
           >
-            <AmyraXLogo size={34} />
+            <AmyraXLogo size={52} />
           </Link>
 
 
