@@ -101,6 +101,6 @@ export const getMyDonations = createServerFn({ method: "GET" })
       .select("id, amount, currency, tier, status, created_at")
       .order("created_at", { ascending: false })
       .limit(50);
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[donations] list failed", error); throw new Error("No se pudieron cargar las donaciones."); }
     return { donations: data ?? [] };
   });
