@@ -41,30 +41,29 @@
   --background: #f4f1ea;
   --foreground: #1a1a1a;
 
-  /* Deep elegant blue */
-  --primary: #1e3a8a;
-  --primary-foreground: #f4f1ea;
+  /* Obsidiana profunda */
+  --primary: #0B0B0F;
+  --primary-foreground: #F4F1EA;
 
-  /* Clean white cards so cookies pop on beige */
   --card: #ffffff;
   --card-foreground: #1a1a1a;
   --cream: #f5f5dc;
 
-  --secondary: #1e3a8a;
-  --secondary-foreground: #f4f1ea;
+  --secondary: #0B0B0F;
+  --secondary-foreground: #F4F1EA;
 
   --muted: #ece7dc;
   --muted-foreground: #5a4a3a;
 
-  --accent: #4a3525;
-  --accent-foreground: #f4f1ea;
+  /* Oro cobrizo profundo — saturado, alto contraste */
+  --accent: #C8862E;
+  --accent-foreground: #0B0B0F;
 
-  /* Wood brown CTA */
-  --cta: #4a3525;
-  --cta-foreground: #f4f1ea;
+  --cta: #C8862E;
+  --cta-foreground: #0B0B0F;
 
-  --orange: #4a3525;
-  --orange-foreground: #f4f1ea;
+  --orange: #C8862E;
+  --orange-foreground: #0B0B0F;
 
   --brown: #4a3525;
 
@@ -72,7 +71,7 @@
   --destructive-foreground: oklch(0.98 0 0);
   --border: #d9d2c2;
   --input: #d9d2c2;
-  --ring: #1e3a8a;
+  --ring: #C8862E;
   --popover: #ffffff;
   --popover-foreground: #1a1a1a;
 }
