@@ -85,13 +85,16 @@ export function TopNav() {
             <Menu className="h-5 w-5" />
           </button>
 
-          {/* Logo */}
+          {/* Logo — estilo Amazon: nombre grande, símbolo pequeño */}
           <Link
             to="/"
-            className="flex shrink-0 items-center py-1 md:py-1.5"
+            className="flex shrink-0 items-center gap-1.5 py-1 md:py-1.5"
             aria-label="AMYRAX"
           >
-            <AmyraXLogo size={52} />
+            <AmyraXSymbolOnly size={26} className="mt-1 hidden sm:block" />
+            <span className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-2xl font-black tracking-[0.2em] text-transparent md:text-3xl">
+              AMYRAX
+            </span>
           </Link>
 
 
