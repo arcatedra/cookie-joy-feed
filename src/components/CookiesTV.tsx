@@ -1841,17 +1841,26 @@ function AdminModal({
         setSubmitting(false);
         return;
       }
+      const ALLOWED_MIME = ["video/mp4", "video/webm", "video/quicktime", "video/x-m4v"];
+      const ALLOWED_EXT = ["mp4", "webm", "mov", "m4v"];
+      const ext = (file.name.split(".").pop() || "").toLowerCase();
+      if (!ALLOWED_MIME.includes(file.type) || !ALLOWED_EXT.includes(ext)) {
+        toast.error("Formato no soportado. Usa MP4, WebM, MOV o M4V.");
+        setSubmitting(false);
+        return;
+      }
       // Object URL = instantánea, se muestra en el feed inmediatamente
       videoUrl = URL.createObjectURL(file);
 
       // Intento de subida a Storage en segundo plano (best-effort, requiere auth)
       if (user) {
-        const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
         const path = `${user.id}/${Date.now()}.${ext}`;
         setUploadPct(20);
+        // Force a safe video content-type regardless of the browser-supplied value.
+        const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
         void supabase.storage
           .from("reels")
-          .upload(path, file, { contentType: file.type || "video/mp4", upsert: false })
+          .upload(path, file, { contentType: safeContentType, upsert: false })
           .then(({ error: upErr }) => {
             setUploadPct(100);
             if (upErr) return;
