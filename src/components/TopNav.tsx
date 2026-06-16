@@ -15,7 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import { AmyraXLogo } from "@/components/AmyraXLogo";
+import { AmyraXLogo, AmyraXSymbolOnly } from "@/components/AmyraXLogo";
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
