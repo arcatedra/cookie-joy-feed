@@ -148,22 +148,43 @@ interface EmbedInfo {
 
 function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
   if (!raw) return null;
-  const url = raw.trim();
-  if (!/^https?:\/\//i.test(url)) return null;
+  let url = raw.trim();
+  if (!url) return null;
+  // Tolerate URLs pegadas sin protocolo
+  if (!/^https?:\/\//i.test(url)) {
+    if (/^(www\.)?(instagram|tiktok|facebook|fb|youtube|youtu|vm\.tiktok|vt\.tiktok|m\.tiktok|m\.facebook|m\.youtube)\./i.test(url)) {
+      url = `https://${url}`;
+    } else {
+      return null;
+    }
+  }
 
-  // Instagram: /reel/{id}, /p/{id}, /tv/{id}
-  const ig = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
+  // Normaliza subdominios móviles
+  const normalized = url
+    .replace(/^https?:\/\/m\.facebook\.com/i, "https://www.facebook.com")
+    .replace(/^https?:\/\/m\.youtube\.com/i, "https://www.youtube.com")
+    .replace(/^https?:\/\/music\.youtube\.com/i, "https://www.youtube.com")
+    .replace(/^https?:\/\/m\.tiktok\.com/i, "https://www.tiktok.com");
+
+  // Instagram: /reel/, /reels/, /p/, /tv/, /share/reel/
+  const ig =
+    normalized.match(/instagram\.com\/(?:[\w.-]+\/)?(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i) ||
+    normalized.match(/instagram\.com\/share\/(?:reel\/)?([A-Za-z0-9_-]+)/i);
   if (ig) {
+    const kindRaw = ig.length === 3 ? ig[1] : "reel";
+    const kind = kindRaw.toLowerCase() === "reels" ? "reel" : kindRaw.toLowerCase();
+    const code = ig.length === 3 ? ig[2] : ig[1];
     return {
       platform: "instagram",
-      embedUrl: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/captioned/`,
+      embedUrl: `https://www.instagram.com/${kind}/${code}/embed/captioned/`,
       originalUrl: url,
       label: "Instagram",
     };
   }
 
-  // TikTok: /@user/video/{id} or vm.tiktok.com short links
-  const tt = url.match(/tiktok\.com\/(?:@[\w.-]+\/video\/|v\/|embed\/v2\/)(\d+)/i);
+  // TikTok: /@user/video/{id}, /v/{id}, /embed/v2/{id}, /t/{code}, /photo/{id}
+  const tt =
+    normalized.match(/tiktok\.com\/(?:@[\w.-]+\/(?:video|photo)\/|v\/|embed\/v2\/)(\d+)/i);
   if (tt) {
     return {
       platform: "tiktok",
@@ -172,8 +193,7 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
       label: "TikTok",
     };
   }
-  if (/(?:vm|vt)\.tiktok\.com\//i.test(url)) {
-    // Short link — let TikTok resolve via the generic player
+  if (/(?:vm|vt)\.tiktok\.com\//i.test(url) || /tiktok\.com\/t\//i.test(normalized)) {
     return {
       platform: "tiktok",
       embedUrl: `https://www.tiktok.com/embed?lang=en&url=${encodeURIComponent(url)}`,
@@ -182,8 +202,11 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
     };
   }
 
-  // Facebook: any fb.watch / facebook.com video/reel link
-  if (/facebook\.com\/(?:reel|watch|.+\/videos)|fb\.watch\//i.test(url)) {
+  // Facebook: reel, watch, videos, share/v|r, fb.watch
+  if (
+    /facebook\.com\/(?:reel|watch|share\/(?:v|r|video)|[\w.-]+\/videos|video\.php)/i.test(normalized) ||
+    /fb\.watch\//i.test(url)
+  ) {
     return {
       platform: "facebook",
       embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
@@ -194,10 +217,10 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
     };
   }
 
-  // YouTube Shorts / watch
+  // YouTube Shorts / watch / live / embed / youtu.be
   const yt =
-    url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
-    url.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/i) ||
+    normalized.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    normalized.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i) ||
     url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
   if (yt) {
     return {
@@ -209,6 +232,16 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
   }
 
   return null;
+}
+
+// Acepta enlaces directos a un archivo de video (.mp4, .webm, .mov, .m4v),
+// incluyendo Lovable Cloud Storage signed URLs.
+function isDirectVideoUrl(raw: string | null | undefined): boolean {
+  if (!raw) return false;
+  const url = raw.trim();
+  if (!/^https?:\/\//i.test(url)) return false;
+  const path = url.split("?")[0].toLowerCase();
+  return /\.(mp4|webm|mov|m4v)$/i.test(path);
 }
 
 // ============ Native-app deep link per platform ============
