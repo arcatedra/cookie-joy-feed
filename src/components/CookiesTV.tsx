@@ -786,6 +786,20 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
+      {canDelete && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          aria-label="Eliminar reel"
+          title="Eliminar reel"
+          className="absolute right-2 top-2 z-30 grid h-9 w-9 place-items-center rounded-full bg-red-600/90 text-white shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-red-700 active:scale-95"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
       {firstExternalOnly ? (
         <>
           {productImg ? (
