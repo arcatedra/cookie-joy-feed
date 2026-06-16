@@ -12,7 +12,7 @@ interface Props {
 
 const SubscriptionConfirmation = ({
   customerName = 'Cliente',
-  planName = 'Plan OriGen',
+  planName = 'Plan AMYRAX',
   planPrice = '$15.00 / mes',
   deliveryDays = 'Lunes y Viernes',
   nextChargeDate = '—',
