@@ -1856,6 +1856,8 @@ function AdminModal({
   const [uploadPct, setUploadPct] = useState(0);
 
   const preview = useMemo(() => parseEmbed(link), [link]);
+  const directVideo = useMemo(() => isDirectVideoUrl(link), [link]);
+  const linkIsValid = Boolean(preview) || directVideo;
   const fileUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
   useEffect(() => () => { if (fileUrl) URL.revokeObjectURL(fileUrl); }, [fileUrl]);
 
@@ -1868,8 +1870,8 @@ function AdminModal({
 
     if (mode === "embed") {
       const trimmed = link.trim();
-      if (!trimmed || !preview) {
-        toast.error("Pega un enlace válido de Instagram, TikTok, Facebook o YouTube");
+      if (!trimmed || !linkIsValid) {
+        toast.error("Pega un enlace válido (Instagram, TikTok, Facebook, YouTube o un .mp4)");
         setSubmitting(false);
         return;
       }
