@@ -39,7 +39,8 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
       .single();
 
     if (insertErr || !donation) {
-      throw new Error(`No se pudo crear la donación: ${insertErr?.message ?? "desconocido"}`);
+      console.error("[donations] insert failed", insertErr);
+      throw new Error("No se pudo crear la donación. Inténtalo de nuevo.");
     }
 
     // Build origin from the incoming request so dev/preview/prod all work.
