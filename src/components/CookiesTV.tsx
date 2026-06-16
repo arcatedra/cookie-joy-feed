@@ -1965,18 +1965,27 @@ function AdminModal({
 
     if (mode === "embed") {
       const trimmed = link.trim();
-      if (!trimmed || !linkIsValid) {
+      if (!trimmed && isEdit) {
+        // En modo edición: mantener el video actual si no se cambió
+        videoUrl = editing?.video_url ?? "";
+      } else if (!trimmed || !linkIsValid) {
         toast.error("Pega un enlace válido (Instagram, TikTok, Facebook, YouTube o un .mp4)");
         setSubmitting(false);
         return;
+      } else {
+        videoUrl = trimmed;
       }
-      videoUrl = trimmed;
     } else {
       if (!file) {
-        toast.error("Selecciona un archivo de video");
-        setSubmitting(false);
-        return;
-      }
+        if (isEdit) {
+          // En modo edición: conservar el video actual si no se sube uno nuevo
+          videoUrl = editing?.video_url ?? "";
+        } else {
+          toast.error("Selecciona un archivo de video");
+          setSubmitting(false);
+          return;
+        }
+      } else {
       if (file.size > 100 * 1024 * 1024) {
         toast.error("El archivo supera los 100 MB");
         setSubmitting(false);
