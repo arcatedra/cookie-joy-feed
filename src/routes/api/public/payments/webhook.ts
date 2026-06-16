@@ -34,13 +34,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         const ok = signatureHeader ? safeCompare(signatureHeader, expected) : false;
 
         if (!ok) {
-          console.warn("[payments-webhook] Signature mismatch or missing", {
+          console.warn("[payments-webhook] Signature verification failed", {
             haveHeader: Boolean(signatureHeader),
           });
-          // Do not 401 yet — until we confirm the exact signature scheme, log
-          // and continue. We still require metadata + a known event before
-          // mutating anything, so an attacker cannot forge a useful payload
-          // without knowing a real donation_id.
+          return new Response("Signature verification failed", { status: 401 });
         }
 
         let payload: unknown;
