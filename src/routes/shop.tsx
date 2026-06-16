@@ -14,13 +14,13 @@ import { useShopifyCartSync } from "@/hooks/useShopifyCartSync";
 export const Route = createFileRoute("/shop")({
   head: () => ({
     meta: [
-      { title: "Shop · OriGen Cookies" },
+      { title: "Shop · AMYRAX Cookies" },
       {
         name: "description",
         content:
-          "Order gourmet OriGen cookies. Curated boxes, monthly favorites, and gift packs shipped to your door.",
+          "Order gourmet AMYRAX cookies. Curated boxes, monthly favorites, and gift packs shipped to your door.",
       },
-      { property: "og:title", content: "Shop · OriGen Cookies" },
+      { property: "og:title", content: "Shop · AMYRAX Cookies" },
       {
         property: "og:description",
         content: "Curated boxes, monthly favorites, and gift packs shipped to your door.",

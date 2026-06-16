@@ -15,11 +15,11 @@ import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plans — OriGen" },
+      { title: "Subscription Plans — AMYRAX" },
       {
         name: "description",
         content:
-          "Choose your OriGen cookie subscription plan. Delivered Mondays and Fridays only.",
+          "Choose your AMYRAX cookie subscription plan. Delivered Mondays and Fridays only.",
       },
     ],
   }),

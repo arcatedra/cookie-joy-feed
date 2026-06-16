@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/unsubscribe')({
   component: UnsubscribePage,
-  head: () => ({ meta: [{ title: 'Cancelar suscripción · OriGen' }] }),
+  head: () => ({ meta: [{ title: 'Cancelar suscripción · AMYRAX' }] }),
 })
 
 type State = 'loading' | 'valid' | 'invalid' | 'already' | 'done' | 'error'
@@ -46,13 +46,13 @@ function UnsubscribePage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-md bg-card rounded-2xl p-8 shadow-sm text-center">
-        <h1 className="font-display text-2xl text-primary tracking-widest mb-2">OriGen</h1>
+        <h1 className="font-display text-2xl text-primary tracking-widest mb-2">AMYRAX</h1>
         <h2 className="text-lg font-semibold mb-4">Cancelar suscripción de correo</h2>
         {state === 'loading' && <p className="text-muted-foreground">Cargando…</p>}
         {state === 'valid' && (
           <>
             <p className="text-muted-foreground mb-6">
-              ¿Confirmas que deseas dejar de recibir correos de OriGen?
+              ¿Confirmas que deseas dejar de recibir correos de AMYRAX?
             </p>
             <button onClick={confirm} className="bg-primary text-primary-foreground rounded-full px-6 py-3 font-medium">
               Confirmar cancelación

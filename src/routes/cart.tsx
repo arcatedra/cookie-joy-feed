@@ -17,12 +17,12 @@ import {
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
-import { OriGenLogo } from "@/components/OriGenLogo";
+import { AMYRAXLogo } from "@/components/AMYRAXLogo";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Secure Checkout — OriGen Cookies" },
+      { title: "Secure Checkout — AMYRAX Cookies" },
       { name: "description", content: "Complete your cookie order securely." },
     ],
   }),
@@ -449,8 +449,8 @@ function MiniHeader() {
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-        <Link to="/" className="flex items-center gap-3" aria-label="OriGen">
-          <OriGenLogo size={28} nameClassName="text-[#1f3a5f]" />
+        <Link to="/" className="flex items-center gap-3" aria-label="AMYRAX">
+          <AMYRAXLogo size={28} nameClassName="text-[#1f3a5f]" />
           <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
         </Link>
         <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">

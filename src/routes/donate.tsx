@@ -23,11 +23,11 @@ export const Route = createFileRoute("/donate")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Donar — OriGen" },
+      { title: "Donar — AMYRAX" },
       {
         name: "description",
         content:
-          "Apoya a OriGen con una donación y desbloquea insignias exclusivas: Azul, Bronce, Oro, Premium, Corona y Estrella Suprema.",
+          "Apoya a AMYRAX con una donación y desbloquea insignias exclusivas: Azul, Bronce, Oro, Premium, Corona y Estrella Suprema.",
       },
     ],
   }),
@@ -106,7 +106,7 @@ function DonatePage() {
             <Heart className="h-7 w-7 text-amber-300" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Apoya a OriGen
+            Apoya a AMYRAX
           </h1>
           <p className="mt-3 text-sm text-white/80 md:text-base">
             Cada donación nos ayuda a seguir creando experiencias artesanales.
