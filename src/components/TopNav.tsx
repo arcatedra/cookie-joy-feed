@@ -91,7 +91,7 @@ export function TopNav() {
             className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
             aria-label="AMYRAX"
           >
-            <AmyraXLogo size={24} />
+            <AmyraXLogo size={36} />
           </Link>
 
           {/* Delivery address — desktop */}
