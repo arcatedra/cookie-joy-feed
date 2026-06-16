@@ -31,8 +31,8 @@ interface ProductDetail {
 export const Route = createFileRoute("/product/$handle")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.handle} · OriGen Shop` },
-      { name: "description", content: `Order ${params.handle} from OriGen Cookies.` },
+      { title: `${params.handle} · AMYRAX Shop` },
+      { name: "description", content: `Order ${params.handle} from AMYRAX Cookies.` },
     ],
   }),
   component: ProductPage,
