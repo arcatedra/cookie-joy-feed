@@ -39,7 +39,7 @@ export function QRCodeSection({ url = "https://origen.management" }: QRCodeSecti
       const pngUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = pngUrl;
-      link.download = "origen-qr-code.png";
+      link.download = "amyrax-qr-code.png";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

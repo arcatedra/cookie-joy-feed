@@ -19,17 +19,17 @@ const OrderConfirmation = ({
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
-    <Preview>Tu pedido en OriGen ha sido confirmado</Preview>
+    <Preview>Tu pedido en AMYRAX ha sido confirmado</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>OriGen</Heading>
+          <Heading as="h1" style={brand}>AMYRAX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>¡Gracias por tu pedido, {customerName}!</Heading>
           <Text style={text}>
             Hemos recibido tu pedido y comenzaremos a prepararlo con la dedicación y el cariño
-            que distingue a OriGen.
+            que distingue a AMYRAX.
           </Text>
 
           <Hr style={hr} />
@@ -63,7 +63,7 @@ const OrderConfirmation = ({
           Te avisaremos por correo cuando tu pedido esté listo. Para cualquier consulta,
           responde a este mensaje.
         </Text>
-        <Text style={footerSmall}>OriGen · origen.management</Text>
+        <Text style={footerSmall}>AMYRAX · origen.management</Text>
       </Container>
     </Body>
   </Html>
@@ -71,7 +71,7 @@ const OrderConfirmation = ({
 
 export const template = {
   component: OrderConfirmation,
-  subject: 'Confirmación de tu pedido en OriGen',
+  subject: 'Confirmación de tu pedido en AMYRAX',
   displayName: 'Order Confirmation (Customer)',
   previewData: {
     customerName: 'María',
