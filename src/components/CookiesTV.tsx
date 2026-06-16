@@ -875,6 +875,40 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
+      {/* Contador de 1 hora visible para todos */}
+      {expiresAtMs !== null && !expired && (
+        <div className="pointer-events-none absolute left-2 top-2 z-30 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold text-white shadow ring-1 ring-white/20 backdrop-blur">
+          <Clock className="h-3 w-3" />
+          {countdownLabel}
+        </div>
+      )}
+
+      {/* Sello "Expirado" cuando se acaba la hora */}
+      {expired && (
+        <>
+          <div className="pointer-events-none absolute inset-0 z-20 bg-black/55" />
+          <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center">
+            <div className="rotate-[-12deg] rounded-md border-4 border-red-500 bg-red-500/15 px-4 py-1.5 text-base font-black uppercase tracking-widest text-red-100 shadow-2xl">
+              Expirado
+            </div>
+          </div>
+        </>
+      )}
+
+      {canEdit && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}
+          aria-label="Editar reel"
+          title="Editar / reemplazar reel"
+          className="absolute right-12 top-2 z-40 grid h-9 w-9 place-items-center rounded-full bg-amber-400 text-[#1a0f0a] shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-amber-300 active:scale-95"
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+      )}
       {canDelete && (
         <button
           type="button"
@@ -884,7 +918,7 @@ function ReelCard({
           }}
           aria-label="Eliminar reel"
           title="Eliminar reel"
-          className="absolute right-2 top-2 z-30 grid h-9 w-9 place-items-center rounded-full bg-red-600/90 text-white shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-red-700 active:scale-95"
+          className="absolute right-2 top-2 z-40 grid h-9 w-9 place-items-center rounded-full bg-red-600/90 text-white shadow-lg ring-1 ring-white/30 backdrop-blur transition hover:bg-red-700 active:scale-95"
         >
           <Trash2 className="h-4 w-4" />
         </button>
