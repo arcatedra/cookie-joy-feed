@@ -2018,6 +2018,7 @@ function AdminModal({
             if (pub?.publicUrl) videoUrl = pub.publicUrl;
           });
       }
+      }
     }
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
