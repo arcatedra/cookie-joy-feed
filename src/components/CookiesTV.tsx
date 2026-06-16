@@ -1932,15 +1932,19 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
 function AdminModal({
   onClose,
   onPublish,
+  editing,
 }: {
   onClose: () => void;
   onPublish: (r: DbReel) => void;
+  editing?: DbReel | null;
 }) {
   const { user } = useAuth();
-  const [mode, setMode] = useState<"file" | "embed">("file");
-  const [title, setTitle] = useState("");
-  const [productSlug, setProductSlug] = useState(PRODUCT_OPTIONS[0].slug);
-  const [link, setLink] = useState("");
+  const isEdit = Boolean(editing);
+  const initialMode: "file" | "embed" = editing?.video_url && /^https?:\/\//i.test(editing.video_url) && !editing.video_url.includes("blob:") ? "embed" : "file";
+  const [mode, setMode] = useState<"file" | "embed">(initialMode);
+  const [title, setTitle] = useState(editing?.title ?? "");
+  const [productSlug, setProductSlug] = useState(editing?.product_slug ?? PRODUCT_OPTIONS[0].slug);
+  const [link, setLink] = useState(editing && initialMode === "embed" ? (editing.video_url ?? "") : "");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadPct, setUploadPct] = useState(0);
@@ -1950,6 +1954,7 @@ function AdminModal({
   const linkIsValid = Boolean(preview) || directVideo;
   const fileUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
   useEffect(() => () => { if (fileUrl) URL.revokeObjectURL(fileUrl); }, [fileUrl]);
+
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -2007,8 +2012,46 @@ function AdminModal({
     }
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
+    const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
-    // Reel optimista — aparece al instante en el feed
+    if (isEdit && editing) {
+      // EDITAR: reemplazar reel existente y reiniciar la hora
+      // Si no se cambió el video, conservar el actual
+      const finalVideoUrl = mode === "embed"
+        ? videoUrl
+        : (file ? videoUrl : (editing.video_url ?? ""));
+
+      const updatedReel: DbReel = {
+        ...editing,
+        title: title.trim(),
+        video_url: finalVideoUrl,
+        product_name: product.name,
+        product_price: product.price,
+        product_image: product.image,
+        product_slug: product.slug,
+        expires_at: newExpiresAt,
+      };
+      onPublish(updatedReel);
+      setSubmitting(false);
+
+      if (user && !editing.id.startsWith("local-")) {
+        void supabase
+          .from("reels")
+          .update({
+            title: updatedReel.title,
+            video_url: finalVideoUrl,
+            product_name: product.name,
+            product_price: product.price,
+            product_image: product.image,
+            product_slug: product.slug,
+            expires_at: newExpiresAt,
+          })
+          .eq("id", editing.id);
+      }
+      return;
+    }
+
+    // CREAR: reel optimista — aparece al instante en el feed
     const localReel: DbReel = {
       id: `local-${Date.now()}`,
       slug: `r-${Date.now()}`,
@@ -2020,6 +2063,7 @@ function AdminModal({
       product_slug: product.slug,
       author_id: user?.id ?? null,
       created_at: new Date().toISOString(),
+      expires_at: newExpiresAt,
     };
     onPublish(localReel);
     setSubmitting(false);
@@ -2035,9 +2079,11 @@ function AdminModal({
         product_image: product.image,
         product_slug: product.slug,
         author_id: user.id,
+        expires_at: newExpiresAt,
       });
     }
   };
+
 
   return (
     <div
