@@ -2105,7 +2105,7 @@ function AdminModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-extrabold text-[#1a0f0a]">🎬 Nuevo Reel</h3>
+          <h3 className="text-lg font-extrabold text-[#1a0f0a]">{isEdit ? "✏️ Editar Reel" : "🎬 Nuevo Reel"}</h3>
           <button
             type="button"
             onClick={onClose}
@@ -2268,7 +2268,7 @@ function AdminModal({
               ) : (
                 <Plus className="h-3.5 w-3.5" />
               )}
-              Publicar
+              {isEdit ? "Guardar cambios" : "Publicar"}
             </button>
           </div>
         </form>
