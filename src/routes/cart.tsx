@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
-import { AMYRAXLogo } from "@/components/AMYRAXLogo";
+import { AmyraXLogo } from "@/components/AmyraXLogo";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
