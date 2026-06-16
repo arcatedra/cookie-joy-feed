@@ -72,7 +72,7 @@ export function TopNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#1E3A8A] text-white shadow-md">
+      <header className="sticky top-0 z-40 border-b border-[#C8862E]/30 bg-[#0B0B0F] text-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.6)]">
         {/* Top row */}
         <div className="flex items-center gap-2 px-3 py-2 md:gap-4 md:px-6 md:py-2.5">
           {/* Mobile hamburger */}
