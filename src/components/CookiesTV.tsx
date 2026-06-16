@@ -510,7 +510,7 @@ export function CookiesTV() {
               Reels
             </span>
             <h2 className="text-base font-extrabold text-[#1a0f0a] md:text-lg">
-              Cookies TV · Galleta Reels
+              Reels
             </h2>
           </div>
           <button
