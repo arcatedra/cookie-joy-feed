@@ -72,7 +72,7 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     const prices = await stripeGet<StripePriceList>(
       `/v1/prices/search?query=${encodeURIComponent(`lookup_key:'${data.priceId}'`)}&limit=1`,
     );
-    if (!prices.data.length) throw new Error(`Plan no encontrado: ${data.priceId}`);
+    if (!prices.data.length) { console.error("[subscriptions] price lookup failed", data.priceId); throw new Error("Plan no disponible. Inténtalo más tarde."); }
     const stripePrice = prices.data[0];
 
     const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId });
@@ -108,6 +108,7 @@ export const createBillingPortalSession = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (error || !sub?.stripe_customer_id) {
+      if (error) console.error("[subscriptions] portal lookup failed", error);
       throw new Error("No tienes una suscripción activa.");
     }
     const host = getRequestHost();
@@ -133,7 +134,7 @@ export const getMySubscription = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[subscriptions] read failed", error); throw new Error("No se pudo cargar la suscripción."); }
     return { subscription: data ?? null };
   });
 

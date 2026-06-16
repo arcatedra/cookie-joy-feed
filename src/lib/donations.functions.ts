@@ -39,7 +39,8 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
       .single();
 
     if (insertErr || !donation) {
-      throw new Error(`No se pudo crear la donación: ${insertErr?.message ?? "desconocido"}`);
+      console.error("[donations] insert failed", insertErr);
+      throw new Error("No se pudo crear la donación. Inténtalo de nuevo.");
     }
 
     // Build origin from the incoming request so dev/preview/prod all work.
@@ -100,6 +101,6 @@ export const getMyDonations = createServerFn({ method: "GET" })
       .select("id, amount, currency, tier, status, created_at")
       .order("created_at", { ascending: false })
       .limit(50);
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[donations] list failed", error); throw new Error("No se pudieron cargar las donaciones."); }
     return { donations: data ?? [] };
   });

@@ -236,12 +236,8 @@ function DonorBadge({ userId }: { userId: string | null }) {
     queryKey: ["profile-donation-tier", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("donation_tier")
-        .eq("id", userId!)
-        .maybeSingle();
-      return (data?.donation_tier as DonationTier | null) ?? null;
+      const { data } = await supabase.rpc("get_my_donation_tier");
+      return (data as DonationTier | null) ?? null;
     },
   });
   if (!data) return null;
