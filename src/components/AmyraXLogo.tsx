@@ -1,6 +1,8 @@
 import logoUrl from "@/assets/amyrax-logo-transparent.png";
+import symbolUrl from "@/assets/amyrax-symbol-only.png";
 
 const logoAsset = { url: logoUrl };
+const symbolAsset = { url: symbolUrl };
 
 interface AmyraXLogoProps {
   size?: number;
@@ -26,7 +28,7 @@ export function AmyraXLogo({ size = 40, className = "" }: AmyraXLogoProps) {
   );
 }
 
-/** Variante símbolo (misma imagen, recortada al cuadrado superior si se quiere) */
+/** Variante símbolo solo (Y+X sin texto) — imagen ya editada limpia */
 export function AmyraXSymbol({
   size = 36,
   className = "",
@@ -36,10 +38,10 @@ export function AmyraXSymbol({
 }) {
   return (
     <img
-      src={logoAsset.url}
+      src={symbolAsset.url}
       alt="AMYRAX"
       draggable={false}
-      className={`block select-none object-cover object-top ${className}`}
+      className={`block select-none object-contain ${className}`}
       style={{ height: size, width: size }}
     />
   );

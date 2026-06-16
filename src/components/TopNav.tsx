@@ -91,8 +91,8 @@ export function TopNav() {
             className="flex shrink-0 items-center gap-1 py-1 md:gap-1.5 md:py-1.5"
             aria-label="AMYRAX"
           >
-            <AmyraXSymbol size={32} className="sm:hidden" />
-            <AmyraXSymbol size={44} className="hidden sm:block" />
+            <AmyraXSymbol size={40} className="sm:hidden" />
+            <AmyraXSymbol size={52} className="hidden sm:block" />
             <span className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-xl font-black tracking-[0.15em] text-transparent sm:text-2xl md:text-3xl">
               AMYRAX
             </span>
