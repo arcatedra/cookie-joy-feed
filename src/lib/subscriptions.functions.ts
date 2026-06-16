@@ -72,7 +72,7 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     const prices = await stripeGet<StripePriceList>(
       `/v1/prices/search?query=${encodeURIComponent(`lookup_key:'${data.priceId}'`)}&limit=1`,
     );
-    if (!prices.data.length) throw new Error(`Plan no encontrado: ${data.priceId}`);
+    if (!prices.data.length) { console.error("[subscriptions] price lookup failed", data.priceId); throw new Error("Plan no disponible. Inténtalo más tarde."); }
     const stripePrice = prices.data[0];
 
     const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId });
