@@ -88,11 +88,12 @@ export function TopNav() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex shrink-0 items-center rounded px-1 py-1 hover:ring-1 hover:ring-amber-300/40"
+            className="flex shrink-0 items-center px-2 py-1 md:px-3"
             aria-label="AMYRAX"
           >
-            <AmyraXLogo size={36} />
+            <AmyraXLogo size={34} />
           </Link>
+
 
           {/* Delivery address — desktop */}
           <button
