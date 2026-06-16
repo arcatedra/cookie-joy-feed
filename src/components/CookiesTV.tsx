@@ -580,6 +580,8 @@ export function CookiesTV() {
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
                 canDelete={canManageAllReels || user?.id === r.author_id}
                 onDelete={() => handleDelete(r.id)}
+                canEdit={canManageAllReels || user?.id === r.author_id}
+                onEdit={() => setEditingReel(r)}
                 onExpand={() => setExpandedIndex(index)}
               />
             ))}
@@ -601,6 +603,18 @@ export function CookiesTV() {
             setReels((prev) => [r, ...prev]);
             setAdminOpen(false);
             toast.success("¡Reel publicado!");
+          }}
+        />
+      )}
+
+      {editingReel && (
+        <AdminModal
+          editing={editingReel}
+          onClose={() => setEditingReel(null)}
+          onPublish={(updated) => {
+            setReels((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+            setEditingReel(null);
+            toast.success("¡Reel actualizado! Contador reiniciado a 1 hora.");
           }}
         />
       )}
@@ -633,6 +647,8 @@ function ReelCard({
   onToggleMuted,
   canDelete,
   onDelete,
+  canEdit,
+  onEdit,
   isFirst,
   onExpand,
 }: {
@@ -646,6 +662,8 @@ function ReelCard({
   onToggleMuted: () => void;
   canDelete: boolean;
   onDelete: () => void;
+  canEdit: boolean;
+  onEdit: () => void;
   isFirst?: boolean;
   onExpand: () => void;
 }) {
