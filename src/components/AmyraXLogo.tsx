@@ -39,7 +39,7 @@ export function AmyraXSymbol({
       src={logoAsset.url}
       alt="AMYRAX"
       draggable={false}
-      className={`block select-none object-contain ${className}`}
+      className={`block select-none object-cover object-top ${className}`}
       style={{ height: size, width: size }}
     />
   );
