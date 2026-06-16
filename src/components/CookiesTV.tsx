@@ -509,9 +509,6 @@ export function CookiesTV() {
             <span className="inline-flex h-5 items-center rounded-full bg-rose-500 px-2 text-[10px] font-extrabold uppercase tracking-wider text-white">
               Reels
             </span>
-            <h2 className="text-base font-extrabold text-[#1a0f0a] md:text-lg">
-              Reels
-            </h2>
           </div>
           <button
             type="button"
