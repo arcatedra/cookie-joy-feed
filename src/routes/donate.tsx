@@ -83,7 +83,7 @@ function DonatePage() {
       }
     } catch (e) {
       console.error(e);
-      toast.error(e instanceof Error ? e.message : "No se pudo iniciar el pago.");
+      toast.error("No se pudo iniciar el pago. Inténtalo de nuevo.");
       setLoading(false);
     }
   };
