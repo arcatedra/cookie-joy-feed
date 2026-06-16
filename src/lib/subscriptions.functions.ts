@@ -134,7 +134,7 @@ export const getMySubscription = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) { console.error("[subscriptions] read failed", error); throw new Error("No se pudo cargar la suscripción."); }
     return { subscription: data ?? null };
   });
 
