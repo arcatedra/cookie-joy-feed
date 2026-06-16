@@ -23,11 +23,11 @@ const AdminNewOrder = ({
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
-    <Preview>Nuevo pedido #{orderNumber} en OriGen</Preview>
+    <Preview>Nuevo pedido #{orderNumber} en AMYRAX</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>OriGen · Admin</Heading>
+          <Heading as="h1" style={brand}>AMYRAX · Admin</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>Nuevo pedido recibido</Heading>
@@ -73,7 +73,7 @@ const AdminNewOrder = ({
             <Column style={totalValue}>{orderTotal}</Column>
           </Row>
         </Section>
-        <Text style={footerSmall}>Notificación interna · OriGen</Text>
+        <Text style={footerSmall}>Notificación interna · AMYRAX</Text>
       </Container>
     </Body>
   </Html>
