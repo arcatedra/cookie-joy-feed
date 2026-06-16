@@ -555,6 +555,10 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_my_donation_tier: {
+        Args: never
+        Returns: Database["public"]["Enums"]["donation_tier"]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
