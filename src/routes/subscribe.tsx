@@ -268,7 +268,7 @@ function SubscribePage() {
       }
     } catch (e) {
       console.error(e);
-      toast.error(e instanceof Error ? e.message : "No se pudo iniciar el checkout.");
+      toast.error("No se pudo iniciar el checkout. Inténtalo de nuevo.");
       setCheckoutLoadingId(null);
     }
   }
