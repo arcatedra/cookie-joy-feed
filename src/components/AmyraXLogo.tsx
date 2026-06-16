@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/amyrax-logo.jpeg.asset.json";
+import logoImage from "@/assets/amyrax-logo-new.png";
 
 interface AmyraXLogoProps {
   size?: number;
@@ -10,18 +10,19 @@ interface AmyraXLogoProps {
 }
 
 /**
- * Official AMYRAX brand mark — uses the real uploaded logo image.
- * The image already contains the metallic X + "OMYRAX" wordmark,
- * so we render it as-is to guarantee an identical look everywhere.
+ * Official AMYRAX brand mark — updated with terracotta/copper palette
+ * that matches the site's design tokens (#4A3525 brown/terracotta).
+ * Transparent PNG works on any background: dark blue navbar, cream pages,
+ * white cards, etc.
  */
 export function AmyraXLogo({
   size = 28,
   className = "",
 }: AmyraXLogoProps) {
-  // The source image is roughly square; render at ~2.6× the requested
+  // The source image is landscape (~2:1); render at ~2.6× the requested
   // base size so the wordmark stays readable next to nav text.
   const width = Math.round(size * 2.6);
-  const height = Math.round(size * 2.6);
+  const height = Math.round(size * 1.1);
 
   return (
     <span
@@ -29,7 +30,7 @@ export function AmyraXLogo({
       style={{ height }}
     >
       <img
-        src={logoAsset.url}
+        src={logoImage}
         alt="AMYRAX"
         width={width}
         height={height}
@@ -40,7 +41,7 @@ export function AmyraXLogo({
   );
 }
 
-/** Symbol-only variant — same image, no separate SVG */
+/** Symbol-only variant — same image, cropped feel via sizing */
 export function AmyraXSymbol({
   size = 32,
   className = "",
@@ -50,7 +51,7 @@ export function AmyraXSymbol({
 }) {
   return (
     <img
-      src={logoAsset.url}
+      src={logoImage}
       alt="AMYRAX"
       width={size}
       height={size}
