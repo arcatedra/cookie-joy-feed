@@ -2051,16 +2051,22 @@ function AdminModal({
                 />
               </div>
               <p className="mt-1 text-[10px] text-[#666]">
-                Soporta Instagram, TikTok, Facebook y YouTube Shorts.
+                Instagram (/reel/, /reels/, /p/, /tv/, /share/), TikTok (vm.tiktok, /t/, /@user/video/),
+                Facebook (/reel/, /watch, /share/v/, fb.watch), YouTube (Shorts, watch, youtu.be) o un enlace directo .mp4 / .webm / .mov.
               </p>
-              {link && !preview && (
+              {link && !linkIsValid && (
                 <p className="mt-1 text-[10px] font-semibold text-rose-600">
-                  ⚠️ No reconocemos este enlace. Verifica que sea público.
+                  ⚠️ No reconocemos este enlace. Asegúrate de copiarlo desde "Compartir → Copiar enlace" y que sea público.
                 </p>
               )}
               {preview && (
                 <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
                   ✓ {preview.label} detectado
+                </div>
+              )}
+              {!preview && directVideo && (
+                <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-200">
+                  ✓ Video directo detectado
                 </div>
               )}
             </label>
