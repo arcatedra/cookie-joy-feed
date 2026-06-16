@@ -27,7 +27,6 @@ const quickLinkKeys = [
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
-  { key: "donate", to: "/donate", label: "❤ Donar" },
 ] as const;
 
 export function TopNav() {
