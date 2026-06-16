@@ -15,6 +15,8 @@ import {
   Link as LinkIcon,
   ExternalLink,
   Trash2,
+  Pencil,
+  Clock,
   MessageCircle as WhatsAppIcon,
   Music2,
   Mail,
@@ -58,7 +60,10 @@ interface DbReel {
   product_slug: string | null;
   author_id: string | null;
   created_at: string;
+  expires_at?: string | null;
 }
+
+const REEL_LIFETIME_MS = 60 * 60 * 1000; // 1 hora
 
 interface DbComment {
   id: string;
@@ -343,6 +348,7 @@ export function CookiesTV() {
   useEffect(() => { reelsRef.current = reels; }, [reels]);
   const [loading, setLoading] = useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [editingReel, setEditingReel] = useState<DbReel | null>(null);
   const [commentsFor, setCommentsFor] = useState<string | null>(null);
   const [globalMuted, setGlobalMuted] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
