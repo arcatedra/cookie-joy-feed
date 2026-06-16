@@ -1,4 +1,6 @@
-import logoAsset from "@/assets/amyrax-logo-official.png.asset.json";
+import logoUrl from "@/assets/amyrax-logo-transparent.png";
+
+const logoAsset = { url: logoUrl };
 
 interface AmyraXLogoProps {
   size?: number;
