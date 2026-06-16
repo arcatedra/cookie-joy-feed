@@ -675,6 +675,29 @@ function ReelCard({
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
 
+  // === Expiración de 1 hora por reel ===
+  const expiresAtMs = useMemo(() => {
+    if (reel.expires_at) return Date.parse(reel.expires_at);
+    if (reel.created_at) return Date.parse(reel.created_at) + REEL_LIFETIME_MS;
+    return null;
+  }, [reel.expires_at, reel.created_at]);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!expiresAtMs) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [expiresAtMs]);
+  const expired = expiresAtMs !== null && now >= expiresAtMs;
+  const msLeft = expiresAtMs ? Math.max(0, expiresAtMs - now) : 0;
+  const countdownLabel = useMemo(() => {
+    const s = Math.floor(msLeft / 1000);
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  }, [msLeft]);
+
+
+
 
   const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
   const productImg =
