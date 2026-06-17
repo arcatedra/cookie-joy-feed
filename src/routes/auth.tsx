@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth")({
@@ -59,17 +60,16 @@ function AuthPage() {
 
   const onGoogle = async () => {
     setBusy(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin,
-      },
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) {
-      toast.error(error.message ?? "Google sign-in failed");
+    if (result.error) {
+      toast.error(result.error.message ?? "Google sign-in failed");
       setBusy(false);
       return;
     }
+    if (result.redirected) return;
+    navigate({ to: "/" });
   };
 
   return (
