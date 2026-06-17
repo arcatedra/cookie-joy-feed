@@ -38,7 +38,9 @@ interface StripeSubscription {
   current_period_start?: number;
   current_period_end?: number;
   metadata?: Record<string, string>;
-  items: { data: Array<{ price: { id: string; lookup_key: string | null; product: string } }> };
+  items: {
+    data: Array<{ price: { id: string; lookup_key: string | null; product: string } }>;
+  };
 }
 interface StripeSubscriptionList {
   data: StripeSubscription[];
@@ -49,7 +51,11 @@ interface StripeBillingPortalSession {
 }
 
 async function resolveOrCreateCustomer(
-  stripePost: <T = unknown>(p: string, b: Record<string, unknown>, env?: "sandbox" | "live") => Promise<T>,
+  stripePost: <T = unknown>(
+    p: string,
+    b: Record<string, unknown>,
+    env?: "sandbox" | "live",
+  ) => Promise<T>,
   stripeGet: <T = unknown>(p: string, env?: "sandbox" | "live") => Promise<T>,
   opts: { email?: string | null; userId: string },
   env: "sandbox" | "live",
@@ -69,10 +75,14 @@ async function resolveOrCreateCustomer(
     return existing.id;
   }
   // Create new
-  const created = await stripePost<{ id: string }>("/v1/customers", {
-    ...(opts.email ? { email: opts.email } : {}),
-    metadata: { userId: opts.userId },
-  }, env);
+  const created = await stripePost<{ id: string }>(
+    "/v1/customers",
+    {
+      ...(opts.email ? { email: opts.email } : {}),
+      metadata: { userId: opts.userId },
+    },
+    env,
+  );
   return created.id;
 }
 
