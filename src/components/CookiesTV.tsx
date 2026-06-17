@@ -676,11 +676,11 @@ function ReelCard({
   const [burst, setBurst] = useState(false);
 
   // === Expiración de 1 hora por reel ===
+  // expires_at === null  =>  no expira nunca (reels semilla / permanentes)
   const expiresAtMs = useMemo(() => {
     if (reel.expires_at) return Date.parse(reel.expires_at);
-    if (reel.created_at) return Date.parse(reel.created_at) + REEL_LIFETIME_MS;
     return null;
-  }, [reel.expires_at, reel.created_at]);
+  }, [reel.expires_at]);
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (!expiresAtMs) return;
