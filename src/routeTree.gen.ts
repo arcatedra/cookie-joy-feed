@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
@@ -35,6 +36,11 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrustRoute = TrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubscribeRoute = SubscribeRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/trust'
     | '/unsubscribe'
     | '/deliveries'
     | '/admin/shipping'
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/trust'
     | '/unsubscribe'
     | '/deliveries'
     | '/admin/shipping'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
     | '/admin/shipping'
@@ -302,6 +314,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
   SubscribeRoute: typeof SubscribeRoute
+  TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       path: '/unsubscribe'
       fullPath: '/unsubscribe'
       preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trust': {
+      id: '/trust'
+      path: '/trust'
+      fullPath: '/trust'
+      preLoaderRoute: typeof TrustRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subscribe': {
@@ -496,6 +516,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
   SubscribeRoute: SubscribeRoute,
+  TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,

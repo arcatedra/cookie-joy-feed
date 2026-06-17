@@ -101,15 +101,19 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           )
         }
 
-        // Resolve effective recipient: template-level `to` takes precedence over
-        // the caller-provided recipientEmail. This allows notification templates
-        // to always send to a fixed address (e.g., site owner from env var).
-        const effectiveRecipient = template.to || recipientEmail
+        // SECURITY: To prevent abuse (spam/phishing via authenticated users),
+        // the caller-supplied recipientEmail is IGNORED. Recipient is either:
+        //  - the template's fixed `to` (admin notifications), or
+        //  - the authenticated caller's own verified email address.
+        const callerEmail = user.email ?? null
+        const effectiveRecipient = template.to || callerEmail
+        void recipientEmail // intentionally unused — do not honor caller-supplied recipient
 
         if (!effectiveRecipient) {
           return Response.json(
             {
-              error: 'recipientEmail is required (unless the template defines a fixed recipient)',
+              error:
+                'No recipient available: template has no fixed recipient and caller has no verified email.',
             },
             { status: 400 }
           )
