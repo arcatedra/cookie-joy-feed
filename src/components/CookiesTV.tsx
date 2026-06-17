@@ -1041,19 +1041,19 @@ function ReelCard({
       {/* gradient overlays — softer over iframe so native controls remain visible */}
       <div
         className={`pointer-events-none absolute inset-x-0 top-0 ${
-          isEmbed && !isFirst ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
+          isEmbed ? "h-14 bg-gradient-to-b from-black/40 to-transparent" : "h-24 bg-gradient-to-b from-black/50 to-transparent"
         }`}
       />
       <div
         className={`pointer-events-none absolute inset-x-0 bottom-0 ${
-          isEmbed && !isFirst
+          isEmbed
             ? "h-32 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
             : "h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
         }`}
       />
 
       {/* Center play overlay when paused — tap to open fullscreen with all features */}
-      {!isEmbed && !isFirst && !playing && videoSrc && (
+      {!isEmbed && !playing && videoSrc && (
         <button
           type="button"
           onClick={(e) => {
