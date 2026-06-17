@@ -699,12 +699,17 @@ function ReelCard({
 
 
 
-  const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+  // Al expirar volvemos al video original de galletas (seed) en lugar de bloquear
+  const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
+  const videoSrc = expired
+    ? fallbackCookieVideo
+    : reel.video_url || fallbackCookieVideo || "";
   const productImg =
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
-  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
+  const effectiveVideoUrl = expired ? null : reel.video_url;
+  const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
   const firstExternalOnly = Boolean(isFirst);
 
@@ -725,25 +730,16 @@ function ReelCard({
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
-    if (expired) {
-      v.pause();
-      setPlaying(false);
-      return;
-    }
     if (inView) {
       v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     } else {
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly, expired]);
+  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly]);
 
   const togglePlay = () => {
     if (isEmbed || firstExternalOnly) return;
-    if (expired) {
-      toast.info("Este reel expiró. Pídele al creador que lo renueve.");
-      return;
-    }
     const v = videoRef.current;
     if (!v) return;
     // Quitar mute en la primera interacción del usuario para garantizar reproducción
@@ -883,17 +879,8 @@ function ReelCard({
         </div>
       )}
 
-      {/* Sello "Expirado" cuando se acaba la hora */}
-      {expired && (
-        <>
-          <div className="pointer-events-none absolute inset-0 z-20 bg-black/55" />
-          <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center">
-            <div className="rotate-[-12deg] rounded-md border-4 border-red-500 bg-red-500/15 px-4 py-1.5 text-base font-black uppercase tracking-widest text-red-100 shadow-2xl">
-              Expirado
-            </div>
-          </div>
-        </>
-      )}
+      {/* Al expirar volvemos al video original de galletas — sin bloqueo */}
+
 
       {canEdit && (
         <button
