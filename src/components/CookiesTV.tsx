@@ -1307,6 +1307,7 @@ function ExpandedReelModal({
   onToggleLike: (reelId: string) => void;
   onOpenComments: (reelId: string) => void;
 }) {
+  useTranslation(); // re-render reel labels on language change
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: "y",
     loop: reels.length > 1,
