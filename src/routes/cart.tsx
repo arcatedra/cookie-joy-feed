@@ -38,6 +38,8 @@ function CheckoutPage() {
   const { items, total, setQty, remove, clear, count } = useCart();
   const gate = useSubscriptionGate();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   const [openStep, setOpenStep] = useState<StepKey>("address");
   const [shipping, setShipping] = useState<Shipping>("standard");
