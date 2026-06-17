@@ -699,12 +699,17 @@ function ReelCard({
 
 
 
-  const videoSrc = reel.video_url || FALLBACK_VIDEO[reel.slug] || "";
+  // Al expirar volvemos al video original de galletas (seed) en lugar de bloquear
+  const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
+  const videoSrc = expired
+    ? fallbackCookieVideo
+    : reel.video_url || fallbackCookieVideo || "";
   const productImg =
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
-  const embed = useMemo(() => parseEmbed(reel.video_url), [reel.video_url]);
+  const effectiveVideoUrl = expired ? null : reel.video_url;
+  const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
   const firstExternalOnly = Boolean(isFirst);
 
