@@ -2249,6 +2249,65 @@ function AdminModal({
             </p>
           </label>
 
+          <div className="block rounded-md bg-amber-50/50 p-3 ring-1 ring-amber-200">
+            <span className="mb-2 block text-xs font-semibold text-[#1a0f0a]">
+              ⏱️ Duración del reel
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { label: "15 min", v: 15 },
+                { label: "30 min", v: 30 },
+                { label: "1 h", v: 60 },
+                { label: "3 h", v: 180 },
+                { label: "12 h", v: 720 },
+                { label: "24 h", v: 1440 },
+              ].map((opt) => (
+                <button
+                  key={opt.v}
+                  type="button"
+                  onClick={() => { setNeverExpires(false); setDurationMin(opt.v); }}
+                  className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                    !neverExpires && durationMin === opt.v
+                      ? "bg-[#1a0f0a] text-white"
+                      : "bg-white text-[#1a0f0a] ring-1 ring-[#ddd] hover:bg-amber-100"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setNeverExpires(true)}
+                className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                  neverExpires
+                    ? "bg-[#1a0f0a] text-white"
+                    : "bg-white text-[#1a0f0a] ring-1 ring-[#ddd] hover:bg-amber-100"
+                }`}
+              >
+                ∞ Sin expirar
+              </button>
+            </div>
+            {!neverExpires && (
+              <div className="mt-2 flex items-center gap-2">
+                <label className="text-[11px] font-semibold text-[#1a0f0a]">
+                  Personalizado (minutos):
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={10080}
+                  value={durationMin}
+                  onChange={(e) => setDurationMin(Math.max(1, Number(e.target.value) || 1))}
+                  className="w-24 rounded-md border border-[#ddd] px-2 py-1 text-xs focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                />
+              </div>
+            )}
+            <p className="mt-1 text-[10px] text-[#666]">
+              El conteo empieza al guardar. Al expirar se vuelve al video por defecto.
+            </p>
+          </div>
+
+
           <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
