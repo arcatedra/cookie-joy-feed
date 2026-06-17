@@ -224,9 +224,15 @@ function CheckoutPage() {
                 />
                 Hacer esta mi dirección predeterminada
               </label>
+              {!addressComplete && (
+                <p className="mt-3 text-xs font-semibold text-red-600">
+                  Debes completar tu dirección (nombre, calle, ciudad, código postal y teléfono) para poder comprar.
+                </p>
+              )}
               <button
                 onClick={() => setOpenStep("payment")}
-                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
+                disabled={!addressComplete}
+                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Usar esta dirección
               </button>
