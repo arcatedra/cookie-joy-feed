@@ -98,33 +98,25 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             eventType === "customer.subscription.deleted"
               ? "canceled"
               : ((sub.status as string) ?? "active");
-          const periodStart =
-            firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
-          const periodEnd =
-            firstItem?.current_period_end ?? (sub.current_period_end as number | undefined);
+          const periodStart = firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
+          const periodEnd = firstItem?.current_period_end ?? (sub.current_period_end as number | undefined);
 
-          const { error: upsertErr } = await supabaseAdmin
-            .from("subscriptions")
-            .upsert(
-              {
-                user_id: userId,
-                stripe_subscription_id: sub.id as string,
-                stripe_customer_id: sub.customer as string,
-                price_id: priceId,
-                product_id: productId,
-                status,
-                current_period_start: periodStart
-                  ? new Date(periodStart * 1000).toISOString()
-                  : null,
-                current_period_end: periodEnd
-                  ? new Date(periodEnd * 1000).toISOString()
-                  : null,
-                cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-                environment,
-                updated_at: new Date().toISOString(),
-              },
-              { onConflict: "stripe_subscription_id" },
-            );
+          const { error: upsertErr } = await supabaseAdmin.from("subscriptions").upsert(
+            {
+              user_id: userId,
+              stripe_subscription_id: sub.id as string,
+              stripe_customer_id: sub.customer as string,
+              price_id: priceId,
+              product_id: productId,
+              status,
+              current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+              current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+              cancel_at_period_end: Boolean(sub.cancel_at_period_end),
+              environment,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "stripe_subscription_id" },
+          );
           if (upsertErr) {
             console.error("[payments-webhook] subscription upsert failed", upsertErr);
             return new Response("Upsert failed", { status: 500 });
@@ -199,7 +191,6 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         }
 
         return Response.json({ ok: true, ignored: true, eventType });
-
       },
 
       GET: async () =>
