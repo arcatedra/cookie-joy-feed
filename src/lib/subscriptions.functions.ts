@@ -53,7 +53,15 @@ async function resolveOrCreateCustomer(
     `/v1/customers/search?query=${encodeURIComponent(`metadata['userId']:'${opts.userId}'`)}&limit=1`,
     env,
   );
-  if (search.data.length) return search.data[0].id;
+  if (search.data.length) {
+    const existing = search.data[0];
+    // Backfill email on the Stripe Customer so Checkout prefills it
+    // and the buyer doesn't need to retype it.
+    if (opts.email && existing.email !== opts.email) {
+      await stripePost(`/v1/customers/${existing.id}`, { email: opts.email }, env);
+    }
+    return existing.id;
+  }
   // Create new
   const created = await stripePost<{ id: string }>("/v1/customers", {
     ...(opts.email ? { email: opts.email } : {}),
