@@ -4,16 +4,28 @@ import process from "node:process";
 
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev/stripe";
 
+export type StripeEnv = "sandbox" | "live";
+
+export function paymentsEnvironmentForHost(host?: string | null): StripeEnv {
+  const normalized = (host ?? "").toLowerCase();
+  if (!normalized || normalized.includes("localhost") || normalized.includes("preview")) {
+    return "sandbox";
+  }
+  return "live";
+}
+
 function requireEnv(name: string): string {
   const v = process.env[name];
   if (!v) throw new Error(`Missing required env var: ${name}`);
   return v;
 }
 
-function gatewayHeaders() {
+function gatewayHeaders(env: StripeEnv = "sandbox") {
+  const connectionKey = env === "live" ? "STRIPE_LIVE_API_KEY" : "STRIPE_SANDBOX_API_KEY";
   return {
     Authorization: `Bearer ${requireEnv("LOVABLE_API_KEY")}`,
-    "X-Connection-Api-Key": requireEnv("STRIPE_SANDBOX_API_KEY"),
+    "Lovable-API-Key": requireEnv("LOVABLE_API_KEY"),
+    "X-Connection-Api-Key": requireEnv(connectionKey),
   };
 }
 
@@ -46,11 +58,12 @@ function encodeForm(
 export async function stripePost<T = unknown>(
   path: string,
   body: Record<string, unknown>,
+  env: StripeEnv = "sandbox",
 ): Promise<T> {
   const res = await fetch(`${GATEWAY_BASE}${path}`, {
     method: "POST",
     headers: {
-      ...gatewayHeaders(),
+      ...gatewayHeaders(env),
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: encodeForm(body).toString(),
@@ -62,10 +75,10 @@ export async function stripePost<T = unknown>(
   return JSON.parse(text) as T;
 }
 
-export async function stripeGet<T = unknown>(path: string): Promise<T> {
+export async function stripeGet<T = unknown>(path: string, env: StripeEnv = "sandbox"): Promise<T> {
   const res = await fetch(`${GATEWAY_BASE}${path}`, {
     method: "GET",
-    headers: gatewayHeaders(),
+    headers: gatewayHeaders(env),
   });
   const text = await res.text();
   if (!res.ok) {
