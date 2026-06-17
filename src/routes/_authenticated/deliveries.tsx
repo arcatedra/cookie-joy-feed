@@ -102,7 +102,7 @@ function DeliveriesPage() {
       });
     },
     onSuccess: () => {
-      toast.success("Entrega programada");
+      toast.success(t("subscribeGate.scheduled"));
       setSelectedDate(null);
       setAddress("");
       setNotes("");
