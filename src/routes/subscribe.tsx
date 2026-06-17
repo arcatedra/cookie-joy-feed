@@ -515,6 +515,21 @@ function SubscribePage() {
       </footer>
 
 
+      {payingTierId && user?.email && (
+        <SubscriptionPaymentModal
+          priceId={TIER_TO_PRICE[payingTierId]}
+          email={user.email}
+          onClose={() => setPayingTierId(null)}
+          onSuccess={() => {
+            setPayingTierId(null);
+            // Reuse the existing success polling via the query param effect.
+            const url = new URL(window.location.href);
+            url.searchParams.set("status", "success");
+            window.history.replaceState({}, "", url.toString());
+            window.location.reload();
+          }}
+        />
+      )}
     </main>
   );
 }
