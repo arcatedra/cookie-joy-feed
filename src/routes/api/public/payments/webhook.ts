@@ -17,17 +17,20 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         const body = await request.text();
         const requestUrl = new URL(request.url);
         const envParam = requestUrl.searchParams.get("env");
-        const environment = envParam === "live" || envParam === "sandbox"
-          ? envParam
-          : requestUrl.hostname.toLowerCase().includes("preview") || requestUrl.hostname.toLowerCase().includes("localhost")
-          ? "sandbox"
-          : "live";
+        const environment =
+          envParam === "live" || envParam === "sandbox"
+            ? envParam
+            : requestUrl.hostname.toLowerCase().includes("preview") ||
+                requestUrl.hostname.toLowerCase().includes("localhost")
+              ? "sandbox"
+              : "live";
 
         // --- Signature verification ---
         // Try several common header names; the secret is the shared HMAC key.
-        const secret = environment === "live"
-          ? process.env.PAYMENTS_LIVE_WEBHOOK_SECRET
-          : process.env.PAYMENTS_SANDBOX_WEBHOOK_SECRET;
+        const secret =
+          environment === "live"
+            ? process.env.PAYMENTS_LIVE_WEBHOOK_SECRET
+            : process.env.PAYMENTS_SANDBOX_WEBHOOK_SECRET;
         if (!secret) {
           console.error("[payments-webhook] Missing webhook secret", { environment });
           return new Response("Server misconfigured", { status: 500 });
@@ -39,8 +42,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           request.headers.get("x-payments-signature") ??
           request.headers.get("stripe-signature");
 
-        const expected = createHmac("sha256", secret).update(body).digest("hex");
-        const ok = signatureHeader ? safeCompare(signatureHeader, expected) : false;
+        const ok = signatureHeader ? verifyPaymentSignature(body, signatureHeader, secret) : false;
 
         if (!ok) {
           console.warn("[payments-webhook] Signature verification failed", {
@@ -61,9 +63,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (payload as { event?: string })?.event ??
           "";
 
-        const { supabaseAdmin } = await import(
-          "@/integrations/supabase/client.server"
-        );
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         // --- Subscription lifecycle events ---
         if (
@@ -71,8 +71,9 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           eventType === "customer.subscription.updated" ||
           eventType === "customer.subscription.deleted"
         ) {
-          const sub = (payload as { data?: { object?: Record<string, unknown> } })
-            ?.data?.object as Record<string, unknown> | undefined;
+          const sub = (payload as { data?: { object?: Record<string, unknown> } })?.data?.object as
+            | Record<string, unknown>
+            | undefined;
           if (!sub?.id) {
             return Response.json({ ok: true, ignored: "no subscription object" });
           }
@@ -83,48 +84,43 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return Response.json({ ok: true, ignored: "no userId" });
           }
           const items =
-            ((sub.items as { data?: Array<Record<string, unknown>> } | undefined)?.data) ?? [];
+            (sub.items as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
           const firstItem = items[0] as
-            | { price?: { id?: string; lookup_key?: string | null; product?: string }; current_period_start?: number; current_period_end?: number }
+            | {
+                price?: { id?: string; lookup_key?: string | null; product?: string };
+                current_period_start?: number;
+                current_period_end?: number;
+              }
             | undefined;
           const price = firstItem?.price;
           const priceId =
-            price?.lookup_key ||
-            (metadata.plan_price_id as string | undefined) ||
-            price?.id ||
-            "";
+            price?.lookup_key || (metadata.plan_price_id as string | undefined) || price?.id || "";
           const productId = price?.product ?? null;
           const status =
             eventType === "customer.subscription.deleted"
               ? "canceled"
-              : (sub.status as string) ?? "active";
+              : ((sub.status as string) ?? "active");
           const periodStart =
             firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
           const periodEnd =
             firstItem?.current_period_end ?? (sub.current_period_end as number | undefined);
 
-          const { error: upsertErr } = await supabaseAdmin
-            .from("subscriptions")
-            .upsert(
-              {
-                user_id: userId,
-                stripe_subscription_id: sub.id as string,
-                stripe_customer_id: sub.customer as string,
-                price_id: priceId,
-                product_id: productId,
-                status,
-                current_period_start: periodStart
-                  ? new Date(periodStart * 1000).toISOString()
-                  : null,
-                current_period_end: periodEnd
-                  ? new Date(periodEnd * 1000).toISOString()
-                  : null,
-                cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-                environment,
-                updated_at: new Date().toISOString(),
-              },
-              { onConflict: "stripe_subscription_id" },
-            );
+          const { error: upsertErr } = await supabaseAdmin.from("subscriptions").upsert(
+            {
+              user_id: userId,
+              stripe_subscription_id: sub.id as string,
+              stripe_customer_id: sub.customer as string,
+              price_id: priceId,
+              product_id: productId,
+              status,
+              current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+              current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+              cancel_at_period_end: Boolean(sub.cancel_at_period_end),
+              environment,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "stripe_subscription_id" },
+          );
           if (upsertErr) {
             console.error("[payments-webhook] subscription upsert failed", upsertErr);
             return new Response("Upsert failed", { status: 500 });
@@ -191,15 +187,11 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           eventType === "transaction.payment_failed" ||
           eventType === "payment_intent.payment_failed"
         ) {
-          await supabaseAdmin
-            .from("donations")
-            .update({ status: "failed" })
-            .eq("id", donationId);
+          await supabaseAdmin.from("donations").update({ status: "failed" }).eq("id", donationId);
           return Response.json({ ok: true, failed: true });
         }
 
         return Response.json({ ok: true, ignored: true, eventType });
-
       },
 
       GET: async () =>
@@ -210,6 +202,25 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
     },
   },
 });
+
+function verifyPaymentSignature(body: string, signatureHeader: string, secret: string): boolean {
+  // Stripe-style header: t=<timestamp>,v1=<hex hmac of "timestamp.body">
+  if (signatureHeader.includes("v1=") && signatureHeader.includes("t=")) {
+    const parts = signatureHeader.split(",").map((part) => part.trim());
+    const timestamp = parts.find((part) => part.startsWith("t="))?.slice(2);
+    const signatures = parts.filter((part) => part.startsWith("v1=")).map((part) => part.slice(3));
+
+    if (!timestamp || signatures.length === 0) return false;
+    const expected = createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
+    return signatures.some((sig) => safeCompare(sig, expected));
+  }
+
+  // Lovable/gateway-style headers may contain the raw HMAC or sha256=<hmac>.
+  const expectedHex = createHmac("sha256", secret).update(body).digest("hex");
+  const expectedBase64 = createHmac("sha256", secret).update(body).digest("base64");
+  const provided = signatureHeader.replace(/^sha256=/i, "").trim();
+  return safeCompare(provided, expectedHex) || safeCompare(provided, expectedBase64);
+}
 
 function safeCompare(a: string, b: string): boolean {
   const ab = Buffer.from(a);

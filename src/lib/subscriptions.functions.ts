@@ -34,8 +34,16 @@ interface StripeSubscription {
   customer: string;
   status: string;
   cancel_at_period_end: boolean;
+  created?: number;
+  current_period_start?: number;
   current_period_end?: number;
-  items: { data: Array<{ price: { id: string; lookup_key: string | null; product: string } }> };
+  metadata?: Record<string, string>;
+  items: {
+    data: Array<{ price: { id: string; lookup_key: string | null; product: string } }>;
+  };
+}
+interface StripeSubscriptionList {
+  data: StripeSubscription[];
 }
 interface StripeBillingPortalSession {
   id: string;
@@ -43,7 +51,11 @@ interface StripeBillingPortalSession {
 }
 
 async function resolveOrCreateCustomer(
-  stripePost: <T = unknown>(p: string, b: Record<string, unknown>, env?: "sandbox" | "live") => Promise<T>,
+  stripePost: <T = unknown>(
+    p: string,
+    b: Record<string, unknown>,
+    env?: "sandbox" | "live",
+  ) => Promise<T>,
   stripeGet: <T = unknown>(p: string, env?: "sandbox" | "live") => Promise<T>,
   opts: { email?: string | null; userId: string },
   env: "sandbox" | "live",
@@ -63,11 +75,92 @@ async function resolveOrCreateCustomer(
     return existing.id;
   }
   // Create new
-  const created = await stripePost<{ id: string }>("/v1/customers", {
-    ...(opts.email ? { email: opts.email } : {}),
-    metadata: { userId: opts.userId },
-  }, env);
+  const created = await stripePost<{ id: string }>(
+    "/v1/customers",
+    {
+      ...(opts.email ? { email: opts.email } : {}),
+      metadata: { userId: opts.userId },
+    },
+    env,
+  );
   return created.id;
+}
+
+const PURCHASE_STATUSES = new Set(["active", "trialing", "past_due"]);
+
+async function syncLatestSubscriptionFromStripe(userId: string, env: "sandbox" | "live") {
+  const { stripeGet } = await import("./stripe.server");
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const foundByMetadata = await stripeGet<StripeSubscriptionList>(
+    `/v1/subscriptions/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=10`,
+    env,
+  );
+
+  let subscriptions = foundByMetadata.data;
+
+  if (!subscriptions.length) {
+    const customers = await stripeGet<StripeCustomerSearch>(
+      `/v1/customers/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=1`,
+      env,
+    );
+    const customerId = customers.data[0]?.id;
+    if (customerId) {
+      const listed = await stripeGet<StripeSubscriptionList>(
+        `/v1/subscriptions?customer=${encodeURIComponent(customerId)}&status=all&limit=10`,
+        env,
+      );
+      subscriptions = listed.data;
+    }
+  }
+
+  const latest = subscriptions
+    .slice()
+    .sort(
+      (a, b) =>
+        Number(PURCHASE_STATUSES.has(b.status)) - Number(PURCHASE_STATUSES.has(a.status)) ||
+        (b.created ?? 0) - (a.created ?? 0),
+    )[0];
+
+  if (!latest) return null;
+
+  const item = latest.items?.data?.[0];
+  const price = item?.price;
+  const priceId = price?.lookup_key || latest.metadata?.plan_price_id || price?.id || "unknown";
+
+  const { data: row, error } = await supabaseAdmin
+    .from("subscriptions")
+    .upsert(
+      {
+        user_id: userId,
+        stripe_subscription_id: latest.id,
+        stripe_customer_id: latest.customer,
+        product_id: price?.product ?? null,
+        price_id: priceId,
+        status: latest.status,
+        current_period_start: latest.current_period_start
+          ? new Date(latest.current_period_start * 1000).toISOString()
+          : null,
+        current_period_end: latest.current_period_end
+          ? new Date(latest.current_period_end * 1000).toISOString()
+          : null,
+        cancel_at_period_end: Boolean(latest.cancel_at_period_end),
+        environment: env,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "stripe_subscription_id" },
+    )
+    .select(
+      "id, price_id, status, current_period_end, cancel_at_period_end, stripe_subscription_id",
+    )
+    .maybeSingle();
+
+  if (error) {
+    console.error("[subscriptions] stripe sync upsert failed", error);
+    return null;
+  }
+
+  return row ?? null;
 }
 
 export const createSubscriptionCheckout = createServerFn({ method: "POST" })
@@ -86,7 +179,10 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
       `/v1/prices/search?query=${encodeURIComponent(`lookup_key:'${data.priceId}'`)}&limit=1`,
       env,
     );
-    if (!prices.data.length) { console.error("[subscriptions] price lookup failed", data.priceId); throw new Error("Plan no disponible. Inténtalo más tarde."); }
+    if (!prices.data.length) {
+      console.error("[subscriptions] price lookup failed", data.priceId);
+      throw new Error("Plan no disponible. Inténtalo más tarde.");
+    }
     const stripePrice = prices.data[0];
 
     const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId }, env);
@@ -94,17 +190,21 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
-    const session = await stripePost<StripeCheckoutSession>("/v1/checkout/sessions", {
-      mode: "subscription",
-      customer: customerId,
-      success_url: `${origin}/subscribe?status=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/subscribe?status=cancel`,
-      line_items: [{ price: stripePrice.id, quantity: 1 }],
-      automatic_tax: { enabled: true },
-      customer_update: { address: "auto" },
-      metadata: { userId, plan_price_id: data.priceId },
-      subscription_data: { metadata: { userId, plan_price_id: data.priceId } },
-    }, env);
+    const session = await stripePost<StripeCheckoutSession>(
+      "/v1/checkout/sessions",
+      {
+        mode: "subscription",
+        customer: customerId,
+        success_url: `${origin}/subscribe?status=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/subscribe?status=cancel`,
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        automatic_tax: { enabled: true },
+        customer_update: { address: "auto" },
+        metadata: { userId, plan_price_id: data.priceId },
+        subscription_data: { metadata: { userId, plan_price_id: data.priceId } },
+      },
+      env,
+    );
 
     return { url: session.url };
   });
@@ -144,23 +244,22 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
     }
     const stripePrice = prices.data[0];
 
-    const customerId = await resolveOrCreateCustomer(
-      stripePost,
-      stripeGet,
-      { email, userId },
+    const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId }, env);
+
+    const sub = await stripePost<StripeInvoicePI>(
+      "/v1/subscriptions",
+      {
+        customer: customerId,
+        "items[0][price]": stripePrice.id,
+        payment_behavior: "default_incomplete",
+        "payment_settings[save_default_payment_method]": "on_subscription",
+        "payment_settings[payment_method_types][]": "card",
+        "expand[]": "latest_invoice.payment_intent",
+        "metadata[userId]": userId,
+        "metadata[plan_price_id]": data.priceId,
+      },
       env,
     );
-
-    const sub = await stripePost<StripeInvoicePI>("/v1/subscriptions", {
-      customer: customerId,
-      "items[0][price]": stripePrice.id,
-      payment_behavior: "default_incomplete",
-      "payment_settings[save_default_payment_method]": "on_subscription",
-      "payment_settings[payment_method_types][]": "card",
-      "expand[]": "latest_invoice.payment_intent",
-      "metadata[userId]": userId,
-      "metadata[plan_price_id]": data.priceId,
-    }, env);
 
     const clientSecret = sub.latest_invoice?.payment_intent?.client_secret;
     if (!clientSecret) {
@@ -175,7 +274,6 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
       environment: env,
     };
   });
-
 
 export const createBillingPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -223,8 +321,21 @@ export const getMySubscription = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error) { console.error("[subscriptions] read failed", error); throw new Error("No se pudo cargar la suscripción."); }
-    return { subscription: data ?? null };
+    if (error) {
+      console.error("[subscriptions] read failed", error);
+      throw new Error("No se pudo cargar la suscripción.");
+    }
+    if (data && PURCHASE_STATUSES.has(data.status ?? "")) {
+      return { subscription: data };
+    }
+
+    try {
+      const synced = await syncLatestSubscriptionFromStripe(context.userId, env);
+      return { subscription: synced ?? data ?? null };
+    } catch (syncError) {
+      console.error("[subscriptions] stripe fallback sync failed", syncError);
+      return { subscription: data ?? null };
+    }
   });
 
 export { PLAN_PRICE_IDS };
