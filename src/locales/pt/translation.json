@@ -50,7 +50,37 @@
     "reel3": "Massinha perfeita",
     "reel4": "Mágica de Aveia e Passas",
     "reel5": "Paraíso de Pasta de Amendoim",
-    "reel6": "Crocante de Menta e Chocolate"
+    "reel6": "Crocante de Menta e Chocolate",
+    "items": {
+      "pista": {
+        "title": "Pistache com chocolate branco 💚",
+        "product": "Pistache e Chocolate Branco"
+      },
+      "triple": {
+        "title": "Triplo chocolate derretido 🍫",
+        "product": "Triplo Chocolate Fudge"
+      },
+      "snicker": {
+        "title": "Magia de canela e açúcar 🌟",
+        "product": "Snickerdoodle Clássica"
+      },
+      "oatmeal": {
+        "title": "Aveia e passas reconfortantes 🍂",
+        "product": "Aveia e Passas com Canela"
+      },
+      "cchunk": {
+        "title": "Pedaços duplos de chocolate 🤎",
+        "product": "Pedaços Duplos de Chocolate"
+      },
+      "mint": {
+        "title": "Menta dark refrescante 🌿",
+        "product": "Menta e Chocolate Dark"
+      },
+      "mm": {
+        "title": "M&M festivos e crocantes 🎉",
+        "product": "M&M Festivo"
+      }
+    }
   },
   "topnav": {
     "deliverTo": "Entregar em",

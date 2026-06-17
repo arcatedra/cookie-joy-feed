@@ -50,7 +50,37 @@
     "reel3": "Teigige Köstlichkeit",
     "reel4": "Haferflocken & Rosinen-Magie",
     "reel5": "Erdnussbutter-Himmel",
-    "reel6": "Minz-Schoko-Crunch"
+    "reel6": "Minz-Schoko-Crunch",
+    "items": {
+      "pista": {
+        "title": "Pistazie trifft weiße Schoko 💚",
+        "product": "Pistazie & Weiße Schokolade"
+      },
+      "triple": {
+        "title": "Dreifach Schoko-Fudge 🍫",
+        "product": "Triple Chocolate Fudge"
+      },
+      "snicker": {
+        "title": "Zimt-Zucker-Zauber 🌟",
+        "product": "Klassischer Snickerdoodle"
+      },
+      "oatmeal": {
+        "title": "Gemütliche Hafer & Rosinen 🍂",
+        "product": "Haferflocken & Rosinen mit Zimt"
+      },
+      "cchunk": {
+        "title": "Doppelte Schoko-Stücke 🤎",
+        "product": "Doppelte Schoko-Stücke"
+      },
+      "mint": {
+        "title": "Dunkle Minz-Erfrischung 🌿",
+        "product": "Dunkle Minz-Schokolade"
+      },
+      "mm": {
+        "title": "Bunte M&M Crunch 🎉",
+        "product": "Festliche M&M"
+      }
+    }
   },
   "topnav": {
     "deliverTo": "Liefern nach",

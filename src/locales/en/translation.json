@@ -50,7 +50,37 @@
     "reel3": "Doughy Goodness",
     "reel4": "Oatmeal & Raisin Magic",
     "reel5": "Peanut Butter Heaven",
-    "reel6": "Mint Choc Crunch"
+    "reel6": "Mint Choc Crunch",
+    "items": {
+      "pista": {
+        "title": "Pistachio meets white choc 💚✨",
+        "product": "Pistachio & White Chocolate"
+      },
+      "triple": {
+        "title": "Triple chocolate fudge melt 🍫",
+        "product": "Triple Chocolate Fudge"
+      },
+      "snicker": {
+        "title": "Cinnamon sugar magic 🌟",
+        "product": "Classic Snickerdoodle"
+      },
+      "oatmeal": {
+        "title": "Cozy oats & raisins 🍂",
+        "product": "Oatmeal & Raisin Cinnamon"
+      },
+      "cchunk": {
+        "title": "Double choc chunks 🤎",
+        "product": "Double Chocolate Chunk"
+      },
+      "mint": {
+        "title": "Dark mint refreshment 🌿",
+        "product": "Dark Mint Chocolate"
+      },
+      "mm": {
+        "title": "Colorful M&M crunch 🎉",
+        "product": "Festive M&M"
+      }
+    }
   },
   "topnav": {
     "deliverTo": "Deliver to",
