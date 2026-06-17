@@ -203,23 +203,15 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
   },
 });
 
-function verifyPaymentSignature(
-  body: string,
-  signatureHeader: string,
-  secret: string,
-): boolean {
+function verifyPaymentSignature(body: string, signatureHeader: string, secret: string): boolean {
   // Stripe-style header: t=<timestamp>,v1=<hex hmac of "timestamp.body">
   if (signatureHeader.includes("v1=") && signatureHeader.includes("t=")) {
     const parts = signatureHeader.split(",").map((part) => part.trim());
     const timestamp = parts.find((part) => part.startsWith("t="))?.slice(2);
-    const signatures = parts
-      .filter((part) => part.startsWith("v1="))
-      .map((part) => part.slice(3));
+    const signatures = parts.filter((part) => part.startsWith("v1=")).map((part) => part.slice(3));
 
     if (!timestamp || signatures.length === 0) return false;
-    const expected = createHmac("sha256", secret)
-      .update(`${timestamp}.${body}`)
-      .digest("hex");
+    const expected = createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
     return signatures.some((sig) => safeCompare(sig, expected));
   }
 
@@ -227,9 +219,7 @@ function verifyPaymentSignature(
   const expectedHex = createHmac("sha256", secret).update(body).digest("hex");
   const expectedBase64 = createHmac("sha256", secret).update(body).digest("base64");
   const provided = signatureHeader.replace(/^sha256=/i, "").trim();
-  return (
-    safeCompare(provided, expectedHex) || safeCompare(provided, expectedBase64)
-  );
+  return safeCompare(provided, expectedHex) || safeCompare(provided, expectedBase64);
 }
 
 function safeCompare(a: string, b: string): boolean {
