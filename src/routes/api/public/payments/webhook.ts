@@ -16,7 +16,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
       POST: async ({ request }) => {
         const body = await request.text();
         const requestUrl = new URL(request.url);
-        const environment = requestUrl.hostname.toLowerCase().includes("preview") || requestUrl.hostname.toLowerCase().includes("localhost")
+        const envParam = requestUrl.searchParams.get("env");
+        const environment = envParam === "live" || envParam === "sandbox"
+          ? envParam
+          : requestUrl.hostname.toLowerCase().includes("preview") || requestUrl.hostname.toLowerCase().includes("localhost")
           ? "sandbox"
           : "live";
 
