@@ -73,8 +73,20 @@ function CheckoutPage() {
 
   const fmt = (n: number) => `$${n.toFixed(2)}`;
 
+  const addressComplete = Boolean(
+    addr.name.trim() &&
+      addr.street.trim() &&
+      addr.city.trim() &&
+      addr.zip.trim() &&
+      addr.phone.trim(),
+  );
+
   const handleConfirm = async () => {
     if (!gate.guard()) return;
+    if (!addressComplete) {
+      setOpenStep("address");
+      return;
+    }
     setProcessing(true);
     await new Promise((r) => setTimeout(r, 1400));
     clear();
@@ -212,9 +224,15 @@ function CheckoutPage() {
                 />
                 Hacer esta mi dirección predeterminada
               </label>
+              {!addressComplete && (
+                <p className="mt-3 text-xs font-semibold text-red-600">
+                  Debes completar tu dirección (nombre, calle, ciudad, código postal y teléfono) para poder comprar.
+                </p>
+              )}
               <button
                 onClick={() => setOpenStep("payment")}
-                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
+                disabled={!addressComplete}
+                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Usar esta dirección
               </button>
@@ -399,14 +417,16 @@ function CheckoutPage() {
               )}
               <button
                 onClick={handleConfirm}
-                disabled={processing || !gate.canPurchase}
+                disabled={processing || !gate.canPurchase || !addressComplete}
                 className="w-full rounded-lg bg-gradient-to-b from-amber-400 to-amber-500 py-3.5 text-sm font-extrabold text-[#1a0f0a] shadow-md transition hover:from-amber-300 hover:to-amber-400 disabled:opacity-60"
               >
                 {processing
                   ? t("subscribeGate.cartProcessing")
-                  : gate.canPurchase
-                    ? t("subscribeGate.cartConfirm")
-                    : t("subscribeGate.cartCta")}
+                  : !gate.canPurchase
+                    ? t("subscribeGate.cartCta")
+                    : !addressComplete
+                      ? "Agrega tu dirección para comprar"
+                      : t("subscribeGate.cartConfirm")}
               </button>
 
               <p className="mt-3 text-center text-[11px] text-gray-500">
