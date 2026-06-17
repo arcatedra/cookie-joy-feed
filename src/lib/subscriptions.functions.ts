@@ -88,23 +88,51 @@ async function resolveOrCreateCustomer(
 
 const PURCHASE_STATUSES = new Set(["active", "trialing", "past_due"]);
 
-async function syncLatestSubscriptionFromStripe(userId: string, env: "sandbox" | "live") {
+async function syncLatestSubscriptionFromStripe(
+  userId: string,
+  env: "sandbox" | "live",
+  opts: { knownSubscriptionId?: string; email?: string | null } = {},
+) {
   const { stripeGet } = await import("./stripe.server");
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const foundByMetadata = await stripeGet<StripeSubscriptionList>(
-    `/v1/subscriptions/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=10`,
-    env,
-  );
+  let subscriptions: StripeSubscription[] = [];
 
-  let subscriptions = foundByMetadata.data;
+  // Fast path: we already know the subscription id — fetch directly (no search-index delay).
+  if (opts.knownSubscriptionId) {
+    try {
+      const one = await stripeGet<StripeSubscription>(
+        `/v1/subscriptions/${encodeURIComponent(opts.knownSubscriptionId)}`,
+        env,
+      );
+      subscriptions = [one];
+    } catch (e) {
+      console.warn("[subscriptions] direct retrieve failed", e);
+    }
+  }
 
   if (!subscriptions.length) {
+    const foundByMetadata = await stripeGet<StripeSubscriptionList>(
+      `/v1/subscriptions/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=10`,
+      env,
+    );
+    subscriptions = foundByMetadata.data;
+  }
+
+  if (!subscriptions.length) {
+    // Customer search by userId metadata; fall back to email if no match.
     const customers = await stripeGet<StripeCustomerSearch>(
       `/v1/customers/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=1`,
       env,
     );
-    const customerId = customers.data[0]?.id;
+    let customerId = customers.data[0]?.id;
+    if (!customerId && opts.email) {
+      const byEmail = await stripeGet<StripeCustomerSearch>(
+        `/v1/customers/search?query=${encodeURIComponent(`email:'${opts.email}'`)}&limit=1`,
+        env,
+      );
+      customerId = byEmail.data[0]?.id;
+    }
     if (customerId) {
       const listed = await stripeGet<StripeSubscriptionList>(
         `/v1/subscriptions?customer=${encodeURIComponent(customerId)}&status=all&limit=10`,
