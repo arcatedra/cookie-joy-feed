@@ -295,6 +295,28 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
+    // Persist the subscription row immediately (status=incomplete) so the app
+    // can map this user → Stripe subscription even before the webhook fires.
+    // The webhook will upsert by stripe_subscription_id and flip status to active.
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin.from("subscriptions").upsert(
+        {
+          user_id: userId,
+          stripe_subscription_id: sub.id,
+          stripe_customer_id: customerId,
+          product_id: stripePrice.product,
+          price_id: data.priceId,
+          status: sub.status ?? "incomplete",
+          environment: env,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "stripe_subscription_id" },
+      );
+    } catch (e) {
+      console.warn("[subscriptions] pre-webhook upsert failed (non-fatal)", e);
+    }
+
     return {
       subscriptionId: sub.id,
       clientSecret,
