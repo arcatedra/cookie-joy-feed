@@ -39,8 +39,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           request.headers.get("x-payments-signature") ??
           request.headers.get("stripe-signature");
 
-        const expected = createHmac("sha256", secret).update(body).digest("hex");
-        const ok = signatureHeader ? safeCompare(signatureHeader, expected) : false;
+        const ok = signatureHeader ? verifyPaymentSignature(body, signatureHeader, secret) : false;
 
         if (!ok) {
           console.warn("[payments-webhook] Signature verification failed", {
@@ -210,6 +209,27 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
     },
   },
 });
+
+function verifyPaymentSignature(body: string, signatureHeader: string, secret: string): boolean {
+  // Stripe-style header: t=<timestamp>,v1=<hex hmac of "timestamp.body">
+  if (signatureHeader.includes("v1=") && signatureHeader.includes("t=")) {
+    const parts = signatureHeader.split(",").map((part) => part.trim());
+    const timestamp = parts.find((part) => part.startsWith("t="))?.slice(2);
+    const signatures = parts
+      .filter((part) => part.startsWith("v1="))
+      .map((part) => part.slice(3));
+
+    if (!timestamp || signatures.length === 0) return false;
+    const expected = createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
+    return signatures.some((sig) => safeCompare(sig, expected));
+  }
+
+  // Lovable/gateway-style headers may contain the raw HMAC or sha256=<hmac>.
+  const expectedHex = createHmac("sha256", secret).update(body).digest("hex");
+  const expectedBase64 = createHmac("sha256", secret).update(body).digest("base64");
+  const provided = signatureHeader.replace(/^sha256=/i, "").trim();
+  return safeCompare(provided, expectedHex) || safeCompare(provided, expectedBase64);
+}
 
 function safeCompare(a: string, b: string): boolean {
   const ab = Buffer.from(a);
