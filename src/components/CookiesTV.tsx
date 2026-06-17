@@ -457,18 +457,11 @@ export function CookiesTV() {
     };
   }, [user?.id]);
 
-  // Realtime aggregates
+  // Realtime aggregates — only subscribe to comments (reel_likes is not
+  // broadcast to avoid leaking other users' identities via Realtime).
   useEffect(() => {
     const ch = supabase
       .channel("reels-aggregates")
-      .on("postgres_changes", { event: "*", schema: "public", table: "reel_likes" }, (payload) => {
-        const row = (payload.new ?? payload.old) as { reel_id: string } | null;
-        if (!row) return;
-        setLikeCounts((prev) => {
-          const delta = payload.eventType === "INSERT" ? 1 : payload.eventType === "DELETE" ? -1 : 0;
-          return { ...prev, [row.reel_id]: Math.max(0, (prev[row.reel_id] ?? 0) + delta) };
-        });
-      })
       .on("postgres_changes", { event: "*", schema: "public", table: "reel_comments" }, (payload) => {
         const row = (payload.new ?? payload.old) as { reel_id: string } | null;
         if (!row) return;
@@ -482,6 +475,7 @@ export function CookiesTV() {
       void supabase.removeChannel(ch);
     };
   }, []);
+
 
   // Scroll to a specific reel when arriving via ?reel=<id> deep link
   useEffect(() => {
