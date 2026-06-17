@@ -73,8 +73,20 @@ function CheckoutPage() {
 
   const fmt = (n: number) => `$${n.toFixed(2)}`;
 
+  const addressComplete = Boolean(
+    addr.name.trim() &&
+      addr.street.trim() &&
+      addr.city.trim() &&
+      addr.zip.trim() &&
+      addr.phone.trim(),
+  );
+
   const handleConfirm = async () => {
     if (!gate.guard()) return;
+    if (!addressComplete) {
+      setOpenStep("address");
+      return;
+    }
     setProcessing(true);
     await new Promise((r) => setTimeout(r, 1400));
     clear();
