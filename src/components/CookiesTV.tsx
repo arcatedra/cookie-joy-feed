@@ -879,17 +879,8 @@ function ReelCard({
         </div>
       )}
 
-      {/* Sello "Expirado" cuando se acaba la hora */}
-      {expired && (
-        <>
-          <div className="pointer-events-none absolute inset-0 z-20 bg-black/55" />
-          <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center">
-            <div className="rotate-[-12deg] rounded-md border-4 border-red-500 bg-red-500/15 px-4 py-1.5 text-base font-black uppercase tracking-widest text-red-100 shadow-2xl">
-              Expirado
-            </div>
-          </div>
-        </>
-      )}
+      {/* Al expirar volvemos al video original de galletas — sin bloqueo */}
+
 
       {canEdit && (
         <button
