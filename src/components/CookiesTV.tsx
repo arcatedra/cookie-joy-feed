@@ -1445,12 +1445,11 @@ function ExpandedReelModal({
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
     return `${origin}/reel/${encodeURIComponent(current.id)}`;
   };
-  const shareTitle = () =>
-    current.title
-      ? `${current.title} · ${BRAND}`
-      : current.product_name
-        ? `${current.product_name} · ${BRAND}`
-        : `Mira este reel de ${BRAND}`;
+  const shareTitle = () => {
+    const tt = translateReelText(current.title);
+    const pp = translateReelText(current.product_name);
+    return tt ? `${tt} · ${BRAND}` : pp ? `${pp} · ${BRAND}` : `Mira este reel de ${BRAND}`;
+  };
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl());
