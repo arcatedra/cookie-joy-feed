@@ -730,25 +730,16 @@ function ReelCard({
     const v = videoRef.current;
     if (!v) return;
     v.muted = globalMuted;
-    if (expired) {
-      v.pause();
-      setPlaying(false);
-      return;
-    }
     if (inView) {
       v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
     } else {
       v.pause();
       setPlaying(false);
     }
-  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly, expired]);
+  }, [inView, globalMuted, videoSrc, isEmbed, firstExternalOnly]);
 
   const togglePlay = () => {
     if (isEmbed || firstExternalOnly) return;
-    if (expired) {
-      toast.info("Este reel expiró. Pídele al creador que lo renueve.");
-      return;
-    }
     const v = videoRef.current;
     if (!v) return;
     // Quitar mute en la primera interacción del usuario para garantizar reproducción
