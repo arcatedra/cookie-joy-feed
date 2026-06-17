@@ -581,13 +581,15 @@ export function CookiesTV() {
               Reels
             </span>
           </div>
-          <button
-            type="button"
-            onClick={() => setAdminOpen(true)}
-            className="shrink-0 rounded-full bg-[#1a0f0a] px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-[#3d2418]"
-          >
-            + Nuevo Reel
-          </button>
+          {canManageAllReels && (
+            <button
+              type="button"
+              onClick={() => setAdminOpen(true)}
+              className="shrink-0 rounded-full bg-[#1a0f0a] px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-[#3d2418]"
+            >
+              + Nuevo Reel
+            </button>
+          )}
         </div>
 
         <div className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 md:gap-4">
