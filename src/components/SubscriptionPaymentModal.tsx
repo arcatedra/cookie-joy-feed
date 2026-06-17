@@ -139,7 +139,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
     <form onSubmit={handleSubmit} className="space-y-4">
       <PaymentElement
         options={{
-          // Hide the email field entirely — we always use the account email.
+          layout: { type: "tabs", defaultCollapsed: false },
           fields: { billingDetails: { email: "never" } },
           wallets: { applePay: "auto", googlePay: "auto" },
         }}

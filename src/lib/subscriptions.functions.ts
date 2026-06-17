@@ -305,7 +305,9 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
         payment_behavior: "default_incomplete",
         payment_settings: {
           save_default_payment_method: "on_subscription",
-          payment_method_types: ["card"],
+          // Omit payment_method_types so Stripe uses every method
+          // enabled in the Dashboard (cards, Apple Pay, Google Pay,
+          // Link, wallets, etc.) — shown automatically by PaymentElement.
         },
         expand: [
           "latest_invoice.confirmation_secret",
