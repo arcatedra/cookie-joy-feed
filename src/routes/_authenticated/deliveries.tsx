@@ -182,11 +182,12 @@ function DeliveriesPage() {
             ) : !status?.hasActiveSubscription ? (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  No tienes una suscripción activa. Suscríbete para empezar a programar entregas.
+                  {t("subscribeGate.noActive")}
                 </p>
                 <Button asChild>
-                  <Link to="/subscribe">Ver planes</Link>
+                  <Link to="/subscribe">{t("subscribeGate.bannerCta")}</Link>
                 </Button>
+
               </div>
             ) : (
               <div className="space-y-3">
