@@ -17,17 +17,20 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         const body = await request.text();
         const requestUrl = new URL(request.url);
         const envParam = requestUrl.searchParams.get("env");
-        const environment = envParam === "live" || envParam === "sandbox"
-          ? envParam
-          : requestUrl.hostname.toLowerCase().includes("preview") || requestUrl.hostname.toLowerCase().includes("localhost")
-          ? "sandbox"
-          : "live";
+        const environment =
+          envParam === "live" || envParam === "sandbox"
+            ? envParam
+            : requestUrl.hostname.toLowerCase().includes("preview") ||
+                requestUrl.hostname.toLowerCase().includes("localhost")
+              ? "sandbox"
+              : "live";
 
         // --- Signature verification ---
         // Try several common header names; the secret is the shared HMAC key.
-        const secret = environment === "live"
-          ? process.env.PAYMENTS_LIVE_WEBHOOK_SECRET
-          : process.env.PAYMENTS_SANDBOX_WEBHOOK_SECRET;
+        const secret =
+          environment === "live"
+            ? process.env.PAYMENTS_LIVE_WEBHOOK_SECRET
+            : process.env.PAYMENTS_SANDBOX_WEBHOOK_SECRET;
         if (!secret) {
           console.error("[payments-webhook] Missing webhook secret", { environment });
           return new Response("Server misconfigured", { status: 500 });
@@ -60,9 +63,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (payload as { event?: string })?.event ??
           "";
 
-        const { supabaseAdmin } = await import(
-          "@/integrations/supabase/client.server"
-        );
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         // --- Subscription lifecycle events ---
         if (
