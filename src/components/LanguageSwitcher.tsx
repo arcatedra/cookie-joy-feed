@@ -1,5 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { setLanguage, type Lang } from "@/i18n";
+import { Check, Globe } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LANG_META, SUPPORTED_LANGS, setLanguage, type Lang } from "@/i18n";
 
 interface Props {
   className?: string;
@@ -8,52 +17,60 @@ interface Props {
 
 export function LanguageSwitcher({ className = "", variant = "dark" }: Props) {
   const { i18n, t } = useTranslation();
-  const current = (i18n.language?.startsWith("es") ? "es" : "en") as Lang;
+  const raw = (i18n.language ?? "en").toLowerCase();
+  const current = ((SUPPORTED_LANGS as readonly string[]).find((l) =>
+    raw.startsWith(l),
+  ) ?? "en") as Lang;
+  const meta = LANG_META[current];
 
-  const baseBtn =
-    "px-2 py-0.5 text-xs font-semibold uppercase tracking-wider rounded-md transition-colors";
-  const activeCls =
-    variant === "dark"
-      ? "bg-primary-foreground text-primary"
-      : "bg-primary text-primary-foreground";
-  const inactiveCls =
-    variant === "dark"
-      ? "text-primary-foreground/60 hover:text-primary-foreground"
-      : "text-primary/60 hover:text-primary";
-
-  const change = (l: Lang) => {
-    if (l !== current) setLanguage(l);
-  };
+  const triggerLight =
+    "bg-primary/10 text-primary hover:bg-primary/15 border-primary/20";
+  const triggerDark =
+    "bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 border-primary-foreground/20";
 
   return (
-    <div
-      className={`inline-flex items-center gap-1 rounded-lg ${
-        variant === "dark" ? "bg-primary-foreground/10" : "bg-primary/10"
-      } p-0.5 ${className}`}
-      role="group"
-      aria-label={t("language.switchTo")}
-    >
-      <button
-        type="button"
-        onClick={() => change("es")}
-        aria-label={t("language.spanish")}
-        aria-pressed={current === "es"}
-        className={`${baseBtn} ${current === "es" ? activeCls : inactiveCls}`}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label={t("language.switchTo")}
+        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors ${
+          variant === "dark" ? triggerDark : triggerLight
+        } ${className}`}
       >
-        ES
-      </button>
-      <span className={variant === "dark" ? "text-primary-foreground/30" : "text-primary/30"}>
-        |
-      </span>
-      <button
-        type="button"
-        onClick={() => change("en")}
-        aria-label={t("language.english")}
-        aria-pressed={current === "en"}
-        className={`${baseBtn} ${current === "en" ? activeCls : inactiveCls}`}
-      >
-        EN
-      </button>
-    </div>
+        <Globe className="h-3.5 w-3.5" aria-hidden />
+        <span aria-hidden>{meta.flag}</span>
+        <span>{meta.label}</span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[12rem]">
+        <DropdownMenuLabel className="text-xs uppercase tracking-wider text-muted-foreground">
+          {t("language.switchTo")}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {SUPPORTED_LANGS.map((lang) => {
+          const m = LANG_META[lang];
+          const active = lang === current;
+          return (
+            <DropdownMenuItem
+              key={lang}
+              onSelect={() => {
+                if (!active) setLanguage(lang);
+              }}
+              aria-pressed={active}
+              className="flex items-center justify-between gap-3 text-sm"
+            >
+              <span className="flex items-center gap-2">
+                <span aria-hidden className="text-base leading-none">
+                  {m.flag}
+                </span>
+                <span className="font-medium">{m.nativeName}</span>
+                <span className="text-xs text-muted-foreground">{m.label}</span>
+              </span>
+              {active ? (
+                <Check className="h-4 w-4 text-primary" aria-hidden />
+              ) : null}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
