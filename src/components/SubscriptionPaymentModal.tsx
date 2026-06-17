@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import {
   Elements,
+  ExpressCheckoutElement,
   PaymentElement,
   useElements,
   useStripe,
