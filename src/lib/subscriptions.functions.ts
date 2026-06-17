@@ -275,7 +275,6 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
     };
   });
 
-
 export const createBillingPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
