@@ -50,7 +50,37 @@
     "reel3": "Malambot na Sarap",
     "reel4": "Oatmeal at Raisin Magic",
     "reel5": "Peanut Butter Heaven",
-    "reel6": "Mint Choc Crunch"
+    "reel6": "Mint Choc Crunch",
+    "items": {
+      "pista": {
+        "title": "Pistachio at white choc 💚✨",
+        "product": "Pistachio at White Chocolate"
+      },
+      "triple": {
+        "title": "Triple chocolate fudge natutunaw 🍫",
+        "product": "Triple Chocolate Fudge"
+      },
+      "snicker": {
+        "title": "Cinnamon sugar magic 🌟",
+        "product": "Klasikong Snickerdoodle"
+      },
+      "oatmeal": {
+        "title": "Mainit na oats at pasas 🍂",
+        "product": "Oatmeal at Pasas na may Kanela"
+      },
+      "cchunk": {
+        "title": "Dobleng tsokolate chunks 🤎",
+        "product": "Doble Chocolate Chunk"
+      },
+      "mint": {
+        "title": "Dark mint refreshment 🌿",
+        "product": "Dark Mint Chocolate"
+      },
+      "mm": {
+        "title": "Makulay na M&M crunch 🎉",
+        "product": "Pistahang M&M"
+      }
+    }
   },
   "topnav": {
     "deliverTo": "Ipadala sa",

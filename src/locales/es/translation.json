@@ -50,7 +50,37 @@
     "reel3": "Pura masa deliciosa",
     "reel4": "Magia de avena y pasas",
     "reel5": "Paraíso de mantequilla de maní",
-    "reel6": "Crunch de chocolate y menta"
+    "reel6": "Crunch de chocolate y menta",
+    "items": {
+      "pista": {
+        "title": "Pistacho con choco blanco 💚✨",
+        "product": "Pistacho y Chocolate Blanco"
+      },
+      "triple": {
+        "title": "Triple chocolate fundido 🍫",
+        "product": "Triple Chocolate Fudge"
+      },
+      "snicker": {
+        "title": "Magia de canela y azúcar 🌟",
+        "product": "Snickerdoodle Clásica"
+      },
+      "oatmeal": {
+        "title": "Avena y pasas reconfortantes 🍂",
+        "product": "Avena y Pasas con Canela"
+      },
+      "cchunk": {
+        "title": "Doble chispas de chocolate 🤎",
+        "product": "Doble Chispas de Chocolate"
+      },
+      "mint": {
+        "title": "Frescor de menta y choco dark 🌿",
+        "product": "Menta y Chocolate Dark"
+      },
+      "mm": {
+        "title": "M&M crujientes y festivas 🎉",
+        "product": "M&M Festiva"
+      }
+    }
   },
   "topnav": {
     "deliverTo": "Entregar a",

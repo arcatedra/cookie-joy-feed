@@ -33,6 +33,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
@@ -47,6 +49,18 @@ import imgPB from "@/assets/ins-pb.jpg";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
 import imgWhiteMac from "@/assets/ins-white-mac.jpg";
+import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
+import imgOatmeal from "@/assets/ins-oatmeal.jpg";
+import imgMM from "@/assets/ins-mm.jpg";
+
+// Translate value if it matches a known i18n key (e.g. "reels.items.pista.title"),
+// otherwise return the raw value. This lets DB-stored reel titles / product names
+// be localized while remaining backwards-compatible with free-text values.
+function translateReelText(value: string | null | undefined): string {
+  if (!value) return "";
+  if (value.startsWith("reels.") && i18n.exists(value)) return i18n.t(value);
+  return value;
+}
 
 // ============ Types ============
 interface DbReel {
@@ -80,6 +94,13 @@ const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,
   "demo-cookies-cream": reel2.url,
   "demo-pb": reel3.url,
+  "reel-pista": reel1.url,
+  "reel-triple": reel2.url,
+  "reel-snicker": reel3.url,
+  "reel-oatmeal": reel1.url,
+  "reel-cchunk": reel2.url,
+  "reel-mint": reel3.url,
+  "reel-mm": reel1.url,
 };
 const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-doublechoc": imgDoubleChoc,
@@ -88,6 +109,10 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-cchunk": imgChocChunk,
   "p-mint": imgMint,
   "p-pista": imgWhiteMac,
+  "p-triple": imgDoubleChoc,
+  "p-snicker": imgSnicker,
+  "p-oatmeal": imgOatmeal,
+  "p-mm": imgMM,
 };
 
 const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
@@ -667,6 +692,7 @@ function ReelCard({
   isFirst?: boolean;
   onExpand: () => void;
 }) {
+  useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
   const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
@@ -769,7 +795,7 @@ function ReelCard({
   };
 
   const buy = () => {
-    const name = reel.product_name;
+    const name = translateReelText(reel.product_name);
     const price = reel.product_price;
     if (!name || price == null) return;
     gate.guard(() => {
@@ -792,12 +818,11 @@ function ReelCard({
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
     return `${origin}/reel/${encodeURIComponent(reel.id)}`;
   };
-  const shareTitle = () =>
-    reel.title
-      ? `${reel.title} · ${BRAND}`
-      : reel.product_name
-        ? `${reel.product_name} · ${BRAND}`
-        : `Mira este reel de ${BRAND}`;
+  const shareTitle = () => {
+    const t = translateReelText(reel.title);
+    const p = translateReelText(reel.product_name);
+    return t ? `${t} · ${BRAND}` : p ? `${p} · ${BRAND}` : `Mira este reel de ${BRAND}`;
+  };
 
   const copyLink = async () => {
     try {
@@ -915,7 +940,7 @@ function ReelCard({
           {productImg ? (
             <img
               src={productImg}
-              alt={reel.product_name ?? ""}
+              alt={translateReelText(reel.product_name) || ""}
               className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px] transition-transform duration-[6000ms] ease-out group-hover:scale-125"
             />
           ) : (
@@ -1013,7 +1038,7 @@ function ReelCard({
       ) : isEmbed ? (
         <iframe
           src={embed!.embedUrl}
-          title={reel.title ?? `${embed!.label} reel`}
+          title={translateReelText(reel.title) || `${embed!.label} reel`}
           loading="lazy"
           allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
           allowFullScreen
@@ -1227,7 +1252,7 @@ function ReelCard({
       {/* Bottom fixed info */}
       {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
-          {reel.title ?? "¡Saliendo del horno! 🍪 Temp. 1"}
+          {translateReelText(reel.title) || "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
         {reel.product_name && (
           <button
@@ -1244,7 +1269,7 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {reel.product_name}
+                {translateReelText(reel.product_name)}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(reel.product_price ?? 0).toFixed(2)}
@@ -1282,6 +1307,7 @@ function ExpandedReelModal({
   onToggleLike: (reelId: string) => void;
   onOpenComments: (reelId: string) => void;
 }) {
+  useTranslation(); // re-render reel labels on language change
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: "y",
     loop: reels.length > 1,
@@ -1420,12 +1446,11 @@ function ExpandedReelModal({
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
     return `${origin}/reel/${encodeURIComponent(current.id)}`;
   };
-  const shareTitle = () =>
-    current.title
-      ? `${current.title} · ${BRAND}`
-      : current.product_name
-        ? `${current.product_name} · ${BRAND}`
-        : `Mira este reel de ${BRAND}`;
+  const shareTitle = () => {
+    const tt = translateReelText(current.title);
+    const pp = translateReelText(current.product_name);
+    return tt ? `${tt} · ${BRAND}` : pp ? `${pp} · ${BRAND}` : `Mira este reel de ${BRAND}`;
+  };
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl());
@@ -1524,7 +1549,7 @@ function ExpandedReelModal({
                   {embed ? (
                     <iframe
                       src={embed.embedUrl}
-                      title={r.title ?? `${embed.label} reel`}
+                      title={translateReelText(r.title) || `${embed.label} reel`}
                       allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
                       allowFullScreen
                       referrerPolicy="strict-origin-when-cross-origin"
@@ -1598,7 +1623,7 @@ function ExpandedReelModal({
                     }}
                   >
                     <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
-                      {r.title ?? ""}
+                      {translateReelText(r.title)}
                     </p>
                   </div>
                 </div>
