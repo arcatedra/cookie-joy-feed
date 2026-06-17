@@ -1038,7 +1038,7 @@ function ReelCard({
       ) : isEmbed ? (
         <iframe
           src={embed!.embedUrl}
-          title={reel.title ?? `${embed!.label} reel`}
+          title={translateReelText(reel.title) || `${embed!.label} reel`}
           loading="lazy"
           allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
           allowFullScreen
