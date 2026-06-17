@@ -148,7 +148,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
           layout: {
             type: "accordion",
             defaultCollapsed: false,
-            radios: false,
+            radios: true,
             spacedAccordionItems: true,
           },
           fields: { billingDetails: { email: "never" } },
