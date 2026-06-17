@@ -2,25 +2,47 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "@/locales/en/translation.json";
 import es from "@/locales/es/translation.json";
+import pt from "@/locales/pt/translation.json";
+import de from "@/locales/de/translation.json";
+import fil from "@/locales/fil/translation.json";
 
-export const SUPPORTED_LANGS = ["en", "es"] as const;
+export const SUPPORTED_LANGS = ["en", "es", "pt", "de", "fil"] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
 const STORAGE_KEY = "origen.lang";
+
 const resources = {
   en: { translation: en },
   es: { translation: es },
+  pt: { translation: pt },
+  de: { translation: de },
+  fil: { translation: fil },
 };
+
+export const LANG_META: Record<Lang, { label: string; nativeName: string; flag: string; locale: string }> = {
+  en: { label: "EN", nativeName: "English", flag: "🇺🇸", locale: "en-US" },
+  es: { label: "ES", nativeName: "Español", flag: "🇪🇸", locale: "es-ES" },
+  pt: { label: "PT", nativeName: "Português (Brasil)", flag: "🇧🇷", locale: "pt-BR" },
+  de: { label: "DE", nativeName: "Deutsch", flag: "🇩🇪", locale: "de-DE" },
+  fil: { label: "FIL", nativeName: "Filipino", flag: "🇵🇭", locale: "fil-PH" },
+};
+
+function isSupported(value: string | null | undefined): value is Lang {
+  return !!value && (SUPPORTED_LANGS as readonly string[]).includes(value);
+}
 
 function detectInitialLang(): Lang {
   if (typeof window === "undefined") return "en";
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "es") return stored;
+    if (isSupported(stored)) return stored;
   } catch {
     /* ignore */
   }
   const nav = window.navigator?.language?.toLowerCase() ?? "";
   if (nav.startsWith("es")) return "es";
+  if (nav.startsWith("pt")) return "pt";
+  if (nav.startsWith("de")) return "de";
+  if (nav.startsWith("fil") || nav.startsWith("tl")) return "fil";
   return "en";
 }
 
@@ -69,7 +91,9 @@ export function setLanguage(lang: Lang) {
 }
 
 export function getLocale(lang?: string): string {
-  return (lang ?? i18n.language ?? "en").startsWith("es") ? "es-ES" : "en-US";
+  const key = (lang ?? i18n.language ?? "en").slice(0, 3);
+  const match = (Object.keys(LANG_META) as Lang[]).find((l) => key.startsWith(l));
+  return match ? LANG_META[match].locale : "en-US";
 }
 
 export function formatPrice(value: number, lang?: string): string {
