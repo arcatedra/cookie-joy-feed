@@ -7,10 +7,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { Lock, Sparkles, Truck } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
