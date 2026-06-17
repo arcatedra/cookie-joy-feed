@@ -225,38 +225,8 @@ function SubscribeRequiredDialog({
 }
 
 
-/** Promotional banner shown on Home and Profile when the user has no active subscription. */
-export function SubscribePromoBanner({ className = "" }: { className?: string }) {
-  const { canPurchase, loading } = useSubscriptionGate();
-  const { t } = useTranslation();
-  if (loading || canPurchase) return null;
-  return (
-    <Link
-      to="/subscribe"
-      className={`group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 p-5 text-white shadow-lg ring-1 ring-amber-900/20 transition hover:shadow-xl ${className}`}
-    >
-      <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
-      <div className="relative flex items-start gap-3">
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/15 ring-1 ring-white/20">
-          <Sparkles className="h-5 w-5" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-amber-100/90">
-            {t("subscribeGate.bannerEyebrow")}
-          </p>
-          <h3 className="mt-0.5 text-base font-extrabold leading-tight sm:text-lg">
-            {t("subscribeGate.bannerTitle")}
-          </h3>
-          <p className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-50">
-            <Truck className="h-3.5 w-3.5" />
-            {t("subscribeGate.bannerSubcopy")}
-          </p>
-        </div>
-        <span className="self-center rounded-full bg-white px-3 py-1.5 text-xs font-extrabold text-amber-700 shadow group-hover:bg-amber-50">
-          {t("subscribeGate.bannerCta")}
-        </span>
-      </div>
-    </Link>
-  );
+/** Banner promocional opcional. Oculto: la suscripción ya no es obligatoria para comprar. */
+export function SubscribePromoBanner(_: { className?: string }) {
+  return null;
 }
 
