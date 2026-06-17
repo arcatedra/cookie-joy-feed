@@ -417,14 +417,16 @@ function CheckoutPage() {
               )}
               <button
                 onClick={handleConfirm}
-                disabled={processing || !gate.canPurchase}
+                disabled={processing || !gate.canPurchase || !addressComplete}
                 className="w-full rounded-lg bg-gradient-to-b from-amber-400 to-amber-500 py-3.5 text-sm font-extrabold text-[#1a0f0a] shadow-md transition hover:from-amber-300 hover:to-amber-400 disabled:opacity-60"
               >
                 {processing
                   ? t("subscribeGate.cartProcessing")
-                  : gate.canPurchase
-                    ? t("subscribeGate.cartConfirm")
-                    : t("subscribeGate.cartCta")}
+                  : !gate.canPurchase
+                    ? t("subscribeGate.cartCta")
+                    : !addressComplete
+                      ? "Agrega tu dirección para comprar"
+                      : t("subscribeGate.cartConfirm")}
               </button>
 
               <p className="mt-3 text-center text-[11px] text-gray-500">
