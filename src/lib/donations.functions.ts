@@ -23,7 +23,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
 
     const { supabase, userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { stripePost } = await import("./stripe.server");
+    const { stripePost, paymentsEnvironmentForHost } = await import("./stripe.server");
 
     // Create the donation row first so we have an id to use as metadata.
     const { data: donation, error: insertErr } = await supabaseAdmin
@@ -45,6 +45,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
 
     // Build origin from the incoming request so dev/preview/prod all work.
     const host = getRequestHost();
+    const env = paymentsEnvironmentForHost(host);
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
@@ -73,7 +74,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
             },
           },
         ],
-      });
+      }, env);
     } catch (e) {
       // Roll back the donation row if Stripe rejected the session.
       await supabaseAdmin.from("donations").delete().eq("id", donation.id);
