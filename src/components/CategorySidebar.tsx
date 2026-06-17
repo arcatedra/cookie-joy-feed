@@ -1,12 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/lib/auth";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+
 
 interface Props {
   open: boolean;
@@ -47,14 +49,22 @@ const groups = [
 
 export function CategorySidebar({ open, onOpenChange }: Props) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const displayName =
+    (user?.user_metadata?.full_name as string | undefined) ??
+    (user?.user_metadata?.name as string | undefined) ??
+    user?.email?.split("@")[0];
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="w-[88%] max-w-sm overflow-y-auto bg-background p-0">
         <SheetHeader className="bg-[#1a0f0a] px-5 py-5 text-left">
           <SheetTitle className="text-base font-bold text-white">
-            {t("topnav.helloSignIn")}
+            {user
+              ? t("topnav.helloUser", { name: displayName ?? "" })
+              : t("topnav.helloSignIn")}
           </SheetTitle>
         </SheetHeader>
+
 
         {groups.map((g) => (
           <div key={g.key} className="border-b border-border py-2">
