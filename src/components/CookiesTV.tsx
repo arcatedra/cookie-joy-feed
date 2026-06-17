@@ -33,6 +33,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
@@ -47,6 +49,18 @@ import imgPB from "@/assets/ins-pb.jpg";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
 import imgWhiteMac from "@/assets/ins-white-mac.jpg";
+import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
+import imgOatmeal from "@/assets/ins-oatmeal.jpg";
+import imgMM from "@/assets/ins-mm.jpg";
+
+// Translate value if it matches a known i18n key (e.g. "reels.items.pista.title"),
+// otherwise return the raw value. This lets DB-stored reel titles / product names
+// be localized while remaining backwards-compatible with free-text values.
+function translateReelText(value: string | null | undefined): string {
+  if (!value) return "";
+  if (value.startsWith("reels.") && i18n.exists(value)) return i18n.t(value);
+  return value;
+}
 
 // ============ Types ============
 interface DbReel {
