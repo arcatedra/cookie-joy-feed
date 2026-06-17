@@ -244,23 +244,22 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
     }
     const stripePrice = prices.data[0];
 
-    const customerId = await resolveOrCreateCustomer(
-      stripePost,
-      stripeGet,
-      { email, userId },
+    const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId }, env);
+
+    const sub = await stripePost<StripeInvoicePI>(
+      "/v1/subscriptions",
+      {
+        customer: customerId,
+        "items[0][price]": stripePrice.id,
+        payment_behavior: "default_incomplete",
+        "payment_settings[save_default_payment_method]": "on_subscription",
+        "payment_settings[payment_method_types][]": "card",
+        "expand[]": "latest_invoice.payment_intent",
+        "metadata[userId]": userId,
+        "metadata[plan_price_id]": data.priceId,
+      },
       env,
     );
-
-    const sub = await stripePost<StripeInvoicePI>("/v1/subscriptions", {
-      customer: customerId,
-      "items[0][price]": stripePrice.id,
-      payment_behavior: "default_incomplete",
-      "payment_settings[save_default_payment_method]": "on_subscription",
-      "payment_settings[payment_method_types][]": "card",
-      "expand[]": "latest_invoice.payment_intent",
-      "metadata[userId]": userId,
-      "metadata[plan_price_id]": data.priceId,
-    }, env);
 
     const clientSecret = sub.latest_invoice?.payment_intent?.client_secret;
     if (!clientSecret) {
@@ -323,7 +322,10 @@ export const getMySubscription = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error) { console.error("[subscriptions] read failed", error); throw new Error("No se pudo cargar la suscripción."); }
+    if (error) {
+      console.error("[subscriptions] read failed", error);
+      throw new Error("No se pudo cargar la suscripción.");
+    }
     if (data && PURCHASE_STATUSES.has(data.status ?? "")) {
       return { subscription: data };
     }
