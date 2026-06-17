@@ -1252,7 +1252,7 @@ function ReelCard({
       {/* Bottom fixed info */}
       {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
-          {reel.title ?? "¡Saliendo del horno! 🍪 Temp. 1"}
+          {translateReelText(reel.title) || "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
         {reel.product_name && (
           <button
@@ -1269,7 +1269,7 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {reel.product_name}
+                {translateReelText(reel.product_name)}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(reel.product_price ?? 0).toFixed(2)}
