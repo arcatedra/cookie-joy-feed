@@ -940,7 +940,7 @@ function ReelCard({
           {productImg ? (
             <img
               src={productImg}
-              alt={reel.product_name ?? ""}
+              alt={translateReelText(reel.product_name) || ""}
               className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px] transition-transform duration-[6000ms] ease-out group-hover:scale-125"
             />
           ) : (
