@@ -391,8 +391,6 @@ export const getMySubscription = createServerFn({ method: "GET" })
       return { subscription: data ?? null };
     }
   });
-    }
-  });
 
 export { PLAN_PRICE_IDS };
 export type StripeSubscriptionEvent = StripeSubscription;
