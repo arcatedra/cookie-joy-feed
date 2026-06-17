@@ -55,6 +55,7 @@ function buildMonthGrid(year: number, month: number) {
 }
 
 function DeliveriesPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const getStatus = useServerFn(getMyDeliveryStatus);
   const getList = useServerFn(listMyDeliveries);
