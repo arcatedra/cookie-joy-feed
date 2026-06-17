@@ -88,23 +88,51 @@ async function resolveOrCreateCustomer(
 
 const PURCHASE_STATUSES = new Set(["active", "trialing", "past_due"]);
 
-async function syncLatestSubscriptionFromStripe(userId: string, env: "sandbox" | "live") {
+async function syncLatestSubscriptionFromStripe(
+  userId: string,
+  env: "sandbox" | "live",
+  opts: { knownSubscriptionId?: string; email?: string | null } = {},
+) {
   const { stripeGet } = await import("./stripe.server");
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const foundByMetadata = await stripeGet<StripeSubscriptionList>(
-    `/v1/subscriptions/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=10`,
-    env,
-  );
+  let subscriptions: StripeSubscription[] = [];
 
-  let subscriptions = foundByMetadata.data;
+  // Fast path: we already know the subscription id — fetch directly (no search-index delay).
+  if (opts.knownSubscriptionId) {
+    try {
+      const one = await stripeGet<StripeSubscription>(
+        `/v1/subscriptions/${encodeURIComponent(opts.knownSubscriptionId)}`,
+        env,
+      );
+      subscriptions = [one];
+    } catch (e) {
+      console.warn("[subscriptions] direct retrieve failed", e);
+    }
+  }
 
   if (!subscriptions.length) {
+    const foundByMetadata = await stripeGet<StripeSubscriptionList>(
+      `/v1/subscriptions/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=10`,
+      env,
+    );
+    subscriptions = foundByMetadata.data;
+  }
+
+  if (!subscriptions.length) {
+    // Customer search by userId metadata; fall back to email if no match.
     const customers = await stripeGet<StripeCustomerSearch>(
       `/v1/customers/search?query=${encodeURIComponent(`metadata['userId']:'${userId}'`)}&limit=1`,
       env,
     );
-    const customerId = customers.data[0]?.id;
+    let customerId = customers.data[0]?.id;
+    if (!customerId && opts.email) {
+      const byEmail = await stripeGet<StripeCustomerSearch>(
+        `/v1/customers/search?query=${encodeURIComponent(`email:'${opts.email}'`)}&limit=1`,
+        env,
+      );
+      customerId = byEmail.data[0]?.id;
+    }
     if (customerId) {
       const listed = await stripeGet<StripeSubscriptionList>(
         `/v1/subscriptions?customer=${encodeURIComponent(customerId)}&status=all&limit=10`,
@@ -267,6 +295,28 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
+    // Persist the subscription row immediately (status=incomplete) so the app
+    // can map this user → Stripe subscription even before the webhook fires.
+    // The webhook will upsert by stripe_subscription_id and flip status to active.
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin.from("subscriptions").upsert(
+        {
+          user_id: userId,
+          stripe_subscription_id: sub.id,
+          stripe_customer_id: customerId,
+          product_id: stripePrice.product,
+          price_id: data.priceId,
+          status: sub.status ?? "incomplete",
+          environment: env,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "stripe_subscription_id" },
+      );
+    } catch (e) {
+      console.warn("[subscriptions] pre-webhook upsert failed (non-fatal)", e);
+    }
+
     return {
       subscriptionId: sub.id,
       clientSecret,
@@ -330,7 +380,11 @@ export const getMySubscription = createServerFn({ method: "GET" })
     }
 
     try {
-      const synced = await syncLatestSubscriptionFromStripe(context.userId, env);
+      const email = (context.claims.email as string | undefined) ?? null;
+      const synced = await syncLatestSubscriptionFromStripe(context.userId, env, {
+        knownSubscriptionId: data?.stripe_subscription_id ?? undefined,
+        email,
+      });
       return { subscription: synced ?? data ?? null };
     } catch (syncError) {
       console.error("[subscriptions] stripe fallback sync failed", syncError);
