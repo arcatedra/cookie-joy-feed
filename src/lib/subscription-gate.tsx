@@ -199,6 +199,7 @@ function SubscribeRequiredDialog({
   onOpenChange: (v: boolean) => void;
   signedIn: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -207,29 +208,30 @@ function SubscribeRequiredDialog({
             <Lock className="h-6 w-6" />
           </div>
           <DialogTitle className="text-center text-xl">
-            Suscríbete para activar tus entregas y comprar
+            {t("subscribeGate.dialogTitle")}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Las compras y entregas están disponibles solo para miembros suscritos.
+            {t("subscribeGate.dialogDesc")}
             <span className="mt-2 block font-semibold text-emerald-700">
-              ¡Delivery GRATIS ($0) incluido en todos los planes!
+              {t("subscribeGate.freeShipping")}
             </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:flex-col sm:space-x-0 gap-2">
           <Button asChild className="w-full">
             <Link to={signedIn ? "/subscribe" : "/auth"} onClick={() => onOpenChange(false)}>
-              {signedIn ? "Ver planes de suscripción" : "Iniciar sesión y suscribirme"}
+              {signedIn ? t("subscribeGate.viewPlans") : t("subscribeGate.signInAndSubscribe")}
             </Link>
           </Button>
           <Button variant="ghost" className="w-full" onClick={() => onOpenChange(false)}>
-            Seguir explorando
+            {t("subscribeGate.keepBrowsing")}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
 
 /** Promotional banner shown on Home and Profile when the user has no active subscription. */
 export function SubscribePromoBanner({ className = "" }: { className?: string }) {
