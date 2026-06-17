@@ -1622,7 +1622,7 @@ function ExpandedReelModal({
                     }}
                   >
                     <p className="line-clamp-2 text-sm font-semibold text-white drop-shadow-lg">
-                      {r.title ?? ""}
+                      {translateReelText(r.title)}
                     </p>
                   </div>
                 </div>
