@@ -2,13 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SubscriptionPaymentModal } from "@/components/SubscriptionPaymentModal";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
-import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
 
 
 
