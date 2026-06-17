@@ -794,7 +794,7 @@ function ReelCard({
   };
 
   const buy = () => {
-    const name = reel.product_name;
+    const name = translateReelText(reel.product_name);
     const price = reel.product_price;
     if (!name || price == null) return;
     gate.guard(() => {
@@ -817,12 +817,11 @@ function ReelCard({
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
     return `${origin}/reel/${encodeURIComponent(reel.id)}`;
   };
-  const shareTitle = () =>
-    reel.title
-      ? `${reel.title} · ${BRAND}`
-      : reel.product_name
-        ? `${reel.product_name} · ${BRAND}`
-        : `Mira este reel de ${BRAND}`;
+  const shareTitle = () => {
+    const t = translateReelText(reel.title);
+    const p = translateReelText(reel.product_name);
+    return t ? `${t} · ${BRAND}` : p ? `${p} · ${BRAND}` : `Mira este reel de ${BRAND}`;
+  };
 
   const copyLink = async () => {
     try {
