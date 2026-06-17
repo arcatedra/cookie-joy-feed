@@ -305,8 +305,13 @@ export const getMySubscription = createServerFn({ method: "GET" })
       return { subscription: data };
     }
 
-    const synced = await syncLatestSubscriptionFromStripe(context.userId, env);
-    return { subscription: synced ?? data ?? null };
+    try {
+      const synced = await syncLatestSubscriptionFromStripe(context.userId, env);
+      return { subscription: synced ?? data ?? null };
+    } catch (syncError) {
+      console.error("[subscriptions] stripe fallback sync failed", syncError);
+      return { subscription: data ?? null };
+    }
   });
 
 export { PLAN_PRICE_IDS };
