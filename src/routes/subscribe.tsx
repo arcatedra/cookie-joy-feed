@@ -360,7 +360,7 @@ function SubscribePage() {
                   </div>
                   <button
                     type="button"
-                    disabled={checkoutLoadingId === tier.id}
+                    disabled={payingTierId === tier.id}
                     onClick={() => (isSelected ? handleSubscribe(tier.id) : selectTier(tier.id))}
                     className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all disabled:opacity-60 ${
                       isSelected
@@ -368,7 +368,7 @@ function SubscribePage() {
                         : "bg-primary text-primary-foreground hover:brightness-110"
                     }`}
                   >
-                    {checkoutLoadingId === tier.id ? (
+                    {payingTierId === tier.id ? (
                       <>
                         <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
                       </>
