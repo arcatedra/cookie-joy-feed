@@ -71,8 +71,8 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           eventType === "customer.subscription.updated" ||
           eventType === "customer.subscription.deleted"
         ) {
-          const sub = (payload as { data?: { object?: Record<string, unknown> } })
-            ?.data?.object as Record<string, unknown> | undefined;
+          const sub = (payload as { data?: { object?: Record<string, unknown> } })?.data
+            ?.object as Record<string, unknown> | undefined;
           if (!sub?.id) {
             return Response.json({ ok: true, ignored: "no subscription object" });
           }
@@ -82,22 +82,22 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             console.warn("[payments-webhook] subscription event without userId metadata", sub.id);
             return Response.json({ ok: true, ignored: "no userId" });
           }
-          const items =
-            ((sub.items as { data?: Array<Record<string, unknown>> } | undefined)?.data) ?? [];
+          const items = (sub.items as { data?: Array<Record<string, unknown>> } | undefined)
+            ?.data ?? [];
           const firstItem = items[0] as
-            | { price?: { id?: string; lookup_key?: string | null; product?: string }; current_period_start?: number; current_period_end?: number }
+            | {
+                price?: { id?: string; lookup_key?: string | null; product?: string };
+                current_period_start?: number;
+                current_period_end?: number;
+              }
             | undefined;
           const price = firstItem?.price;
-          const priceId =
-            price?.lookup_key ||
-            (metadata.plan_price_id as string | undefined) ||
-            price?.id ||
-            "";
+          const priceId = price?.lookup_key || (metadata.plan_price_id as string | undefined) || price?.id || "";
           const productId = price?.product ?? null;
           const status =
             eventType === "customer.subscription.deleted"
               ? "canceled"
-              : (sub.status as string) ?? "active";
+              : ((sub.status as string) ?? "active");
           const periodStart =
             firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
           const periodEnd =
