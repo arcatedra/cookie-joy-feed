@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import {
   Elements,
+  ExpressCheckoutElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -141,8 +142,57 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
     }
   }
 
+  async function handleExpressConfirm() {
+    if (!stripe || !elements) return;
+    setSubmitting(true);
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      toast.error(submitError.message ?? "Pago rechazado");
+      setSubmitting(false);
+      return;
+    }
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/subscribe?status=success`,
+      },
+      redirect: "if_required",
+    });
+    if (error) {
+      toast.error(error.message ?? "Pago rechazado");
+      setSubmitting(false);
+      return;
+    }
+    if (paymentIntent && (paymentIntent.status === "succeeded" || paymentIntent.status === "processing")) {
+      onSuccess();
+    } else {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <ExpressCheckoutElement
+        options={{
+          buttonHeight: 44,
+          paymentMethods: {
+            applePay: "auto",
+            googlePay: "auto",
+            link: "auto",
+            paypal: "auto",
+            amazonPay: "auto",
+          },
+          layout: { maxColumns: 1, maxRows: 4 },
+        }}
+        onConfirm={handleExpressConfirm}
+      />
+      <div className="relative flex items-center py-1">
+        <div className="flex-1 border-t border-border/40" />
+        <span className="mx-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          o paga con
+        </span>
+        <div className="flex-1 border-t border-border/40" />
+      </div>
       <PaymentElement
         options={{
           layout: {
