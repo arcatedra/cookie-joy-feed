@@ -236,6 +236,7 @@ function SubscribeRequiredDialog({
 /** Promotional banner shown on Home and Profile when the user has no active subscription. */
 export function SubscribePromoBanner({ className = "" }: { className?: string }) {
   const { canPurchase, loading } = useSubscriptionGate();
+  const { t } = useTranslation();
   if (loading || canPurchase) return null;
   return (
     <Link
@@ -249,20 +250,21 @@ export function SubscribePromoBanner({ className = "" }: { className?: string })
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-amber-100/90">
-            Hazte miembro
+            {t("subscribeGate.bannerEyebrow")}
           </p>
           <h3 className="mt-0.5 text-base font-extrabold leading-tight sm:text-lg">
-            Suscríbete para activar tus entregas
+            {t("subscribeGate.bannerTitle")}
           </h3>
           <p className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-50">
             <Truck className="h-3.5 w-3.5" />
-            ¡Delivery GRATIS ($0) incluido en todos tus planes!
+            {t("subscribeGate.bannerSubcopy")}
           </p>
         </div>
         <span className="self-center rounded-full bg-white px-3 py-1.5 text-xs font-extrabold text-amber-700 shadow group-hover:bg-amber-50">
-          Ver planes
+          {t("subscribeGate.bannerCta")}
         </span>
       </div>
     </Link>
   );
 }
+
