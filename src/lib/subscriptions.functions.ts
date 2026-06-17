@@ -43,20 +43,22 @@ interface StripeBillingPortalSession {
 }
 
 async function resolveOrCreateCustomer(
-  stripePost: <T = unknown>(p: string, b: Record<string, unknown>) => Promise<T>,
-  stripeGet: <T = unknown>(p: string) => Promise<T>,
+  stripePost: <T = unknown>(p: string, b: Record<string, unknown>, env?: "sandbox" | "live") => Promise<T>,
+  stripeGet: <T = unknown>(p: string, env?: "sandbox" | "live") => Promise<T>,
   opts: { email?: string | null; userId: string },
+  env: "sandbox" | "live",
 ): Promise<string> {
   // Search by metadata.userId first
   const search = await stripeGet<StripeCustomerSearch>(
     `/v1/customers/search?query=${encodeURIComponent(`metadata['userId']:'${opts.userId}'`)}&limit=1`,
+    env,
   );
   if (search.data.length) return search.data[0].id;
   // Create new
   const created = await stripePost<{ id: string }>("/v1/customers", {
     ...(opts.email ? { email: opts.email } : {}),
     metadata: { userId: opts.userId },
-  });
+  }, env);
   return created.id;
 }
 
@@ -79,11 +81,7 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     if (!prices.data.length) { console.error("[subscriptions] price lookup failed", data.priceId); throw new Error("Plan no disponible. Inténtalo más tarde."); }
     const stripePrice = prices.data[0];
 
-    const customerId = await resolveOrCreateCustomer(
-      (path, body) => stripePost(path, body, env),
-      (path) => stripeGet(path, env),
-      { email, userId },
-    );
+    const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId }, env);
 
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
