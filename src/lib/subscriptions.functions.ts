@@ -239,18 +239,40 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
 
 interface StripeInvoicePI {
   id: string;
-  latest_invoice: {
-    id: string;
-    confirmation_secret?: { client_secret: string } | null;
-    payment_intent: { id: string; client_secret: string; status: string } | null;
-  } | null;
+  latest_invoice:
+    | string
+    | {
+        id: string;
+        confirmation_secret?: { client_secret: string; type?: string } | null;
+        payment_intent?: { id: string; client_secret: string; status: string } | string | null;
+      }
+    | null;
+  status: string;
+  pending_setup_intent?: { id: string; client_secret: string } | string | null;
+}
+
+interface StripeInvoice {
+  id: string;
+  confirmation_secret?: { client_secret: string; type?: string } | null;
+  payment_intent?: { id: string; client_secret: string; status: string } | string | null;
+}
+
+interface StripePaymentIntent {
+  id: string;
+  client_secret: string;
+  status: string;
+}
+
+interface StripeSetupIntent {
+  id: string;
+  client_secret: string;
   status: string;
 }
 
 /**
  * Creates a subscription in `default_incomplete` state and returns the
- * PaymentIntent client_secret so the frontend can confirm payment with
- * Stripe Elements (no Checkout page, no editable email field).
+ * PaymentIntent (or SetupIntent) client_secret so the frontend can confirm
+ * payment with Stripe Elements.
  */
 export const createSubscriptionIntent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -279,22 +301,83 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
       "/v1/subscriptions",
       {
         customer: customerId,
-        "items[0][price]": stripePrice.id,
+        items: [{ price: stripePrice.id }],
         payment_behavior: "default_incomplete",
-        "payment_settings[save_default_payment_method]": "on_subscription",
-        "payment_settings[payment_method_types][]": "card",
-        expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
-        "metadata[userId]": userId,
-        "metadata[plan_price_id]": data.priceId,
+        payment_settings: {
+          save_default_payment_method: "on_subscription",
+          payment_method_types: ["card"],
+        },
+        expand: [
+          "latest_invoice.confirmation_secret",
+          "latest_invoice.payment_intent",
+          "pending_setup_intent",
+        ],
+        metadata: { userId, plan_price_id: data.priceId },
       },
       env,
     );
 
-    const clientSecret =
-      sub.latest_invoice?.confirmation_secret?.client_secret ??
-      sub.latest_invoice?.payment_intent?.client_secret;
+    let clientSecret: string | undefined;
+    const inv = sub.latest_invoice;
+    if (inv && typeof inv === "object") {
+      clientSecret = inv.confirmation_secret?.client_secret;
+      if (!clientSecret && inv.payment_intent && typeof inv.payment_intent === "object") {
+        clientSecret = inv.payment_intent.client_secret;
+      }
+    }
+
+    // Fallback 1: fetch the invoice directly with expansions.
     if (!clientSecret) {
-      console.error("[subscriptions] no client_secret on subscription", sub.id);
+      const invoiceId = typeof inv === "string" ? inv : inv?.id;
+      if (invoiceId) {
+        try {
+          const fetched = await stripeGet<StripeInvoice>(
+            `/v1/invoices/${encodeURIComponent(invoiceId)}?expand[]=confirmation_secret&expand[]=payment_intent`,
+            env,
+          );
+          clientSecret = fetched.confirmation_secret?.client_secret;
+          if (!clientSecret && fetched.payment_intent && typeof fetched.payment_intent === "object") {
+            clientSecret = fetched.payment_intent.client_secret;
+          }
+          if (!clientSecret && typeof fetched.payment_intent === "string") {
+            const pi = await stripeGet<StripePaymentIntent>(
+              `/v1/payment_intents/${encodeURIComponent(fetched.payment_intent)}`,
+              env,
+            );
+            clientSecret = pi.client_secret;
+          }
+        } catch (e) {
+          console.warn("[subscriptions] invoice fallback failed", e);
+        }
+      }
+    }
+
+    // Fallback 2: free trials / 100% off → use the SetupIntent.
+    if (!clientSecret && sub.pending_setup_intent) {
+      const si = sub.pending_setup_intent;
+      if (typeof si === "object") {
+        clientSecret = si.client_secret;
+      } else {
+        try {
+          const fetched = await stripeGet<StripeSetupIntent>(
+            `/v1/setup_intents/${encodeURIComponent(si)}`,
+            env,
+          );
+          clientSecret = fetched.client_secret;
+        } catch (e) {
+          console.warn("[subscriptions] setup_intent fallback failed", e);
+        }
+      }
+    }
+
+    if (!clientSecret) {
+      console.error("[subscriptions] no client_secret on subscription", {
+        subId: sub.id,
+        status: sub.status,
+        latestInvoiceType: typeof inv,
+        hasPendingSetupIntent: Boolean(sub.pending_setup_intent),
+        rawSub: JSON.stringify(sub).slice(0, 2000),
+      });
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
