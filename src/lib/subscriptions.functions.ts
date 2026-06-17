@@ -179,7 +179,10 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
       `/v1/prices/search?query=${encodeURIComponent(`lookup_key:'${data.priceId}'`)}&limit=1`,
       env,
     );
-    if (!prices.data.length) { console.error("[subscriptions] price lookup failed", data.priceId); throw new Error("Plan no disponible. Inténtalo más tarde."); }
+    if (!prices.data.length) {
+      console.error("[subscriptions] price lookup failed", data.priceId);
+      throw new Error("Plan no disponible. Inténtalo más tarde.");
+    }
     const stripePrice = prices.data[0];
 
     const customerId = await resolveOrCreateCustomer(stripePost, stripeGet, { email, userId }, env);
@@ -187,17 +190,21 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
-    const session = await stripePost<StripeCheckoutSession>("/v1/checkout/sessions", {
-      mode: "subscription",
-      customer: customerId,
-      success_url: `${origin}/subscribe?status=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/subscribe?status=cancel`,
-      line_items: [{ price: stripePrice.id, quantity: 1 }],
-      automatic_tax: { enabled: true },
-      customer_update: { address: "auto" },
-      metadata: { userId, plan_price_id: data.priceId },
-      subscription_data: { metadata: { userId, plan_price_id: data.priceId } },
-    }, env);
+    const session = await stripePost<StripeCheckoutSession>(
+      "/v1/checkout/sessions",
+      {
+        mode: "subscription",
+        customer: customerId,
+        success_url: `${origin}/subscribe?status=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/subscribe?status=cancel`,
+        line_items: [{ price: stripePrice.id, quantity: 1 }],
+        automatic_tax: { enabled: true },
+        customer_update: { address: "auto" },
+        metadata: { userId, plan_price_id: data.priceId },
+        subscription_data: { metadata: { userId, plan_price_id: data.priceId } },
+      },
+      env,
+    );
 
     return { url: session.url };
   });
