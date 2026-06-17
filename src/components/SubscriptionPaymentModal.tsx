@@ -65,37 +65,43 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="relative w-full max-w-md rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground"
-          aria-label="Cerrar"
-        >
-          <X className="h-4 w-4" />
-        </button>
-        <h2 className="mb-1 text-base font-bold uppercase tracking-wider text-foreground">
-          Confirmar pago
-        </h2>
-        <p className="mb-4 text-xs text-muted-foreground">
-          Cobramos al correo de tu cuenta: <span className="font-semibold">{email}</span>
-        </p>
-
-        {error && (
-          <div className="rounded-xl bg-destructive/10 p-3 text-xs text-destructive">{error}</div>
-        )}
-
-        {!error && !clientSecret && (
-          <div className="flex items-center justify-center py-10">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      <div className="relative flex max-h-[92vh] w-full max-w-md flex-col rounded-t-3xl bg-card shadow-2xl sm:max-h-[90vh] sm:rounded-3xl">
+        <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
+          <div className="min-w-0">
+            <h2 className="text-base font-bold uppercase tracking-wider text-foreground">
+              Confirmar pago
+            </h2>
+            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+              Cobramos a: <span className="font-semibold">{email}</span>
+            </p>
           </div>
-        )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="ml-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
+            aria-label="Cerrar"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
-        {options && (
-          <Elements stripe={getStripe()} options={options}>
-            <PayForm email={email} onSuccess={onSuccess} />
-          </Elements>
-        )}
+        <div className="flex-1 overflow-y-auto px-5 py-4">
+          {error && (
+            <div className="rounded-xl bg-destructive/10 p-3 text-xs text-destructive">{error}</div>
+          )}
+
+          {!error && !clientSecret && (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          )}
+
+          {options && (
+            <Elements stripe={getStripe()} options={options}>
+              <PayForm email={email} onSuccess={onSuccess} />
+            </Elements>
+          )}
+        </div>
       </div>
     </div>
   );
