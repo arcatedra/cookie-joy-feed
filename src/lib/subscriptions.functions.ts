@@ -116,7 +116,11 @@ async function syncLatestSubscriptionFromStripe(userId: string, env: "sandbox" |
 
   const latest = subscriptions
     .slice()
-    .sort((a, b) => Number(PURCHASE_STATUSES.has(b.status)) - Number(PURCHASE_STATUSES.has(a.status)) || (b.created ?? 0) - (a.created ?? 0))[0];
+    .sort(
+      (a, b) =>
+        Number(PURCHASE_STATUSES.has(b.status)) - Number(PURCHASE_STATUSES.has(a.status)) ||
+        (b.created ?? 0) - (a.created ?? 0),
+    )[0];
 
   if (!latest) return null;
 
@@ -146,7 +150,9 @@ async function syncLatestSubscriptionFromStripe(userId: string, env: "sandbox" |
       },
       { onConflict: "stripe_subscription_id" },
     )
-    .select("id, price_id, status, current_period_end, cancel_at_period_end, stripe_subscription_id")
+    .select(
+      "id, price_id, status, current_period_end, cancel_at_period_end, stripe_subscription_id",
+    )
     .maybeSingle();
 
   if (error) {
