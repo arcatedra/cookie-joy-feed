@@ -66,16 +66,22 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
     refetchOnWindowFocus: true,
   });
 
-  // Suscripción opcional: cualquiera puede comprar. La suscripción solo cubre el delivery.
-  void query;
-  const canPurchase = true;
+  const sub = query.data?.subscription;
+  const canPurchase = !!sub && ACTIVE.has(sub.status ?? "");
 
   const openPrompt = useCallback(() => setOpen(true), []);
 
-  const guard = useCallback((action?: () => void) => {
-    action?.();
-    return true;
-  }, []);
+  const guard = useCallback(
+    (action?: () => void) => {
+      if (canPurchase) {
+        action?.();
+        return true;
+      }
+      setOpen(true);
+      return false;
+    },
+    [canPurchase],
+  );
 
   const refresh = useCallback(async () => {
     if (!user) return;
