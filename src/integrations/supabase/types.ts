@@ -586,6 +586,20 @@ export type Database = {
           read_ct: number
         }[]
       }
+      reel_comment_counts: {
+        Args: { reel_ids: string[] }
+        Returns: {
+          comment_count: number
+          reel_id: string
+        }[]
+      }
+      reel_like_counts: {
+        Args: { reel_ids: string[] }
+        Returns: {
+          like_count: number
+          reel_id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user"
