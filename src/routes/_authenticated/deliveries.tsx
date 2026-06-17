@@ -115,7 +115,7 @@ function DeliveriesPage() {
   const cancelMut = useMutation({
     mutationFn: (id: string) => cancelFn({ data: { id } }),
     onSuccess: () => {
-      toast.success("Entrega cancelada");
+      toast.success(t("subscribeGate.canceled"));
       qc.invalidateQueries({ queryKey: ["delivery-status"] });
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
