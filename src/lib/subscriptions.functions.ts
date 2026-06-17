@@ -109,6 +109,74 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
     return { url: session.url };
   });
 
+interface StripeInvoicePI {
+  id: string;
+  latest_invoice: {
+    id: string;
+    payment_intent: { id: string; client_secret: string; status: string } | null;
+  } | null;
+  status: string;
+}
+
+/**
+ * Creates a subscription in `default_incomplete` state and returns the
+ * PaymentIntent client_secret so the frontend can confirm payment with
+ * Stripe Elements (no Checkout page, no editable email field).
+ */
+export const createSubscriptionIntent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => checkoutSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { userId, claims } = context;
+    const email = (claims.email as string | undefined) ?? null;
+    const { stripePost, stripeGet, paymentsEnvironmentForHost } = await import("./stripe.server");
+
+    const host = getRequestHost();
+    const env = paymentsEnvironmentForHost(host);
+
+    const prices = await stripeGet<StripePriceList>(
+      `/v1/prices/search?query=${encodeURIComponent(`lookup_key:'${data.priceId}'`)}&limit=1`,
+      env,
+    );
+    if (!prices.data.length) {
+      console.error("[subscriptions] price lookup failed", data.priceId);
+      throw new Error("Plan no disponible. Inténtalo más tarde.");
+    }
+    const stripePrice = prices.data[0];
+
+    const customerId = await resolveOrCreateCustomer(
+      stripePost,
+      stripeGet,
+      { email, userId },
+      env,
+    );
+
+    const sub = await stripePost<StripeInvoicePI>("/v1/subscriptions", {
+      customer: customerId,
+      "items[0][price]": stripePrice.id,
+      payment_behavior: "default_incomplete",
+      "payment_settings[save_default_payment_method]": "on_subscription",
+      "payment_settings[payment_method_types][]": "card",
+      "expand[]": "latest_invoice.payment_intent",
+      "metadata[userId]": userId,
+      "metadata[plan_price_id]": data.priceId,
+    }, env);
+
+    const clientSecret = sub.latest_invoice?.payment_intent?.client_secret;
+    if (!clientSecret) {
+      console.error("[subscriptions] no client_secret on subscription", sub.id);
+      throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
+    }
+
+    return {
+      subscriptionId: sub.id,
+      clientSecret,
+      customerEmail: email,
+      environment: env,
+    };
+  });
+
+
 export const createBillingPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

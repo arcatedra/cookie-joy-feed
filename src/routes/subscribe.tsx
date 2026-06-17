@@ -2,13 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SubscriptionPaymentModal } from "@/components/SubscriptionPaymentModal";
 import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
-import { createSubscriptionCheckout } from "@/lib/subscriptions.functions";
 
 
 
@@ -103,8 +102,7 @@ function SubscribePage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const gate = useSubscriptionGate();
-  const startCheckout = useServerFn(createSubscriptionCheckout);
-  const [checkoutLoadingId, setCheckoutLoadingId] = useState<Tier["id"] | null>(null);
+  const [payingTierId, setPayingTierId] = useState<Tier["id"] | null>(null);
   const [, setActivating] = useState(false);
   const today = useMemo(() => new Date(), []);
   const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
@@ -253,25 +251,18 @@ function SubscribePage() {
     setSelectedDates((prev) => prev.slice(0, max));
   }
 
-  async function handleSubscribe(id: Tier["id"]) {
+  function handleSubscribe(id: Tier["id"]) {
     if (!user) {
       toast.error(t("auth.signInToLike", { defaultValue: "Inicia sesión para suscribirte" }));
       return;
     }
-    setCheckoutLoadingId(id);
-    try {
-      const result = await startCheckout({ data: { priceId: TIER_TO_PRICE[id] } });
-      if (result?.url) {
-        window.location.href = result.url;
-      } else {
-        throw new Error("Stripe no devolvió una URL de checkout.");
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("No se pudo iniciar el checkout. Inténtalo de nuevo.");
-      setCheckoutLoadingId(null);
+    if (!user.email) {
+      toast.error("Tu cuenta no tiene un email asociado.");
+      return;
     }
+    setPayingTierId(id);
   }
+
 
 
   return (
@@ -369,7 +360,7 @@ function SubscribePage() {
                   </div>
                   <button
                     type="button"
-                    disabled={checkoutLoadingId === tier.id}
+                    disabled={payingTierId === tier.id}
                     onClick={() => (isSelected ? handleSubscribe(tier.id) : selectTier(tier.id))}
                     className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all disabled:opacity-60 ${
                       isSelected
@@ -377,7 +368,7 @@ function SubscribePage() {
                         : "bg-primary text-primary-foreground hover:brightness-110"
                     }`}
                   >
-                    {checkoutLoadingId === tier.id ? (
+                    {payingTierId === tier.id ? (
                       <>
                         <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
                       </>
@@ -524,6 +515,21 @@ function SubscribePage() {
       </footer>
 
 
+      {payingTierId && user?.email && (
+        <SubscriptionPaymentModal
+          priceId={TIER_TO_PRICE[payingTierId]}
+          email={user.email}
+          onClose={() => setPayingTierId(null)}
+          onSuccess={() => {
+            setPayingTierId(null);
+            // Reuse the existing success polling via the query param effect.
+            const url = new URL(window.location.href);
+            url.searchParams.set("status", "success");
+            window.history.replaceState({}, "", url.toString());
+            window.location.reload();
+          }}
+        />
+      )}
     </main>
   );
 }
