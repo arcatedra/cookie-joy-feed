@@ -1548,7 +1548,7 @@ function ExpandedReelModal({
                   {embed ? (
                     <iframe
                       src={embed.embedUrl}
-                      title={r.title ?? `${embed.label} reel`}
+                      title={translateReelText(r.title) || `${embed.label} reel`}
                       allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
                       allowFullScreen
                       referrerPolicy="strict-origin-when-cross-origin"
