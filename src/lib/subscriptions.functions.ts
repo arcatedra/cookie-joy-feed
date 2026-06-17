@@ -241,6 +241,7 @@ interface StripeInvoicePI {
   id: string;
   latest_invoice: {
     id: string;
+    confirmation_secret?: { client_secret: string } | null;
     payment_intent: { id: string; client_secret: string; status: string } | null;
   } | null;
   status: string;
@@ -282,14 +283,16 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
         payment_behavior: "default_incomplete",
         "payment_settings[save_default_payment_method]": "on_subscription",
         "payment_settings[payment_method_types][]": "card",
-        "expand[]": "latest_invoice.payment_intent",
+        expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
         "metadata[userId]": userId,
         "metadata[plan_price_id]": data.priceId,
       },
       env,
     );
 
-    const clientSecret = sub.latest_invoice?.payment_intent?.client_secret;
+    const clientSecret =
+      sub.latest_invoice?.confirmation_secret?.client_secret ??
+      sub.latest_invoice?.payment_intent?.client_secret;
     if (!clientSecret) {
       console.error("[subscriptions] no client_secret on subscription", sub.id);
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
