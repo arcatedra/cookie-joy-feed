@@ -205,21 +205,73 @@
     "detailOf": "Detalhe de {{name}}"
   },
   "cookies": {
-    "c1": { "name": "Pedaços de Chocolate", "desc": "Um cookie de baunilha amanteigado com pedaços de chocolate meio amargo.", "caption": "Baunilha amanteigada com pedaços meio amargos" },
-    "c2": { "name": "Snickerdoodle", "desc": "Um clássico: cookie macio e quentinho envolto em açúcar com canela.", "caption": "Macio, quentinho, com açúcar e canela" },
-    "c3": { "name": "Açúcar", "desc": "O melhor cookie de açúcar amanteigado que derrete na boca.", "caption": "Derrete na boca, amanteigado e doce" },
-    "c4": { "name": "Duplo Chocolate", "desc": "Nosso cookie de chocolate amargo recheado com pedaços de chocolate.", "caption": "Cacau intenso com pedaços de chocolate" },
-    "c5": { "name": "Aveia e Passas", "desc": "Um carinho em forma de cookie: aveia quentinha e passas em cada mordida.", "caption": "Aveia quentinha e passas suculentas" },
-    "c6": { "name": "Chocolate Branco e Macadâmia", "desc": "Vibe tropical: cookie amanteigado com coco, chocolate branco e macadâmia.", "caption": "Amanteigado com coco, vibe tropical" },
-    "c7": { "name": "Clássico com M&M'S®", "desc": "Uma versão colorida e doce do clássico de gotas de chocolate.", "caption": "Twist de chocolate com confeitos" },
-    "c8": { "name": "Gotas de Pasta de Amendoim", "desc": "Gotas de pasta de amendoim em um cookie macio de baunilha.", "caption": "Baunilha macia com pasta de amendoim" },
-    "c9": { "name": "Pedaços de Chocolate Vegano", "desc": "Cookie vegano cheio de pedaços de chocolate sem lactose.", "caption": "Pedaços de chocolate sem lactose" },
-    "c10": { "name": "Duplo Chocolate com Menta", "desc": "Cookie de chocolate quentinho com gotas refrescantes de menta.", "caption": "Chocolate quentinho com menta refrescante" }
+    "c1": {
+      "name": "Pedaços de Chocolate",
+      "desc": "Um cookie de baunilha amanteigado com pedaços de chocolate meio amargo.",
+      "caption": "Baunilha amanteigada com pedaços meio amargos"
+    },
+    "c2": {
+      "name": "Snickerdoodle",
+      "desc": "Um clássico: cookie macio e quentinho envolto em açúcar com canela.",
+      "caption": "Macio, quentinho, com açúcar e canela"
+    },
+    "c3": {
+      "name": "Açúcar",
+      "desc": "O melhor cookie de açúcar amanteigado que derrete na boca.",
+      "caption": "Derrete na boca, amanteigado e doce"
+    },
+    "c4": {
+      "name": "Duplo Chocolate",
+      "desc": "Nosso cookie de chocolate amargo recheado com pedaços de chocolate.",
+      "caption": "Cacau intenso com pedaços de chocolate"
+    },
+    "c5": {
+      "name": "Aveia e Passas",
+      "desc": "Um carinho em forma de cookie: aveia quentinha e passas em cada mordida.",
+      "caption": "Aveia quentinha e passas suculentas"
+    },
+    "c6": {
+      "name": "Chocolate Branco e Macadâmia",
+      "desc": "Vibe tropical: cookie amanteigado com coco, chocolate branco e macadâmia.",
+      "caption": "Amanteigado com coco, vibe tropical"
+    },
+    "c7": {
+      "name": "Clássico com M&M'S®",
+      "desc": "Uma versão colorida e doce do clássico de gotas de chocolate.",
+      "caption": "Twist de chocolate com confeitos"
+    },
+    "c8": {
+      "name": "Gotas de Pasta de Amendoim",
+      "desc": "Gotas de pasta de amendoim em um cookie macio de baunilha.",
+      "caption": "Baunilha macia com pasta de amendoim"
+    },
+    "c9": {
+      "name": "Pedaços de Chocolate Vegano",
+      "desc": "Cookie vegano cheio de pedaços de chocolate sem lactose.",
+      "caption": "Pedaços de chocolate sem lactose"
+    },
+    "c10": {
+      "name": "Duplo Chocolate com Menta",
+      "desc": "Cookie de chocolate quentinho com gotas refrescantes de menta.",
+      "caption": "Chocolate quentinho com menta refrescante"
+    }
   },
   "packs": {
-    "p6": { "name": "Pack 6", "desc": "6 cookies quentinhos e deliciosos em uma caixa.", "serves": "3 a 6 pessoas" },
-    "p9": { "name": "Pack 9", "desc": "O ponto certo da satisfação. Escolha 9 dos seus favoritos.", "serves": "5 a 9 pessoas" },
-    "p12": { "name": "Pack 12", "desc": "Cookies suficientes para compartilhar de verdade.", "serves": "6 a 12 pessoas" },
+    "p6": {
+      "name": "Pack 6",
+      "desc": "6 cookies quentinhos e deliciosos em uma caixa.",
+      "serves": "3 a 6 pessoas"
+    },
+    "p9": {
+      "name": "Pack 9",
+      "desc": "O ponto certo da satisfação. Escolha 9 dos seus favoritos.",
+      "serves": "5 a 9 pessoas"
+    },
+    "p12": {
+      "name": "Pack 12",
+      "desc": "Cookies suficientes para compartilhar de verdade.",
+      "serves": "6 a 12 pessoas"
+    },
     "ingredients": "Farinha de trigo enriquecida, manteiga, açúcar de cana, açúcar mascavo, ovos, pedaços de chocolate meio amargo, extrato de baunilha, bicarbonato e sal marinho.",
     "allergens": "Contém trigo, leite, ovos e soja. Pode conter traços de oleaginosas e amendoim."
   },
@@ -247,10 +299,26 @@
     "footnote": "*Disponível apenas às SEGUNDAS e SEXTAS",
     "removeDate": "Remover {{date}}",
     "tiers": {
-      "starter": { "title": "Plano Inicial", "cadence": "2 ENTREGAS / MÊS", "desc": "Perfeito para o essencial. Até 2 entregas por mês, segundas ou sextas." },
-      "essential": { "title": "Plano Essencial", "cadence": "4 ENTREGAS / MÊS", "desc": "Nosso plano mais popular. Até 4 entregas por mês com agendamento flexível." },
-      "intermediate": { "title": "Plano Intermediário", "cadence": "6 ENTREGAS / MÊS", "desc": "Mais flexibilidade para casas movimentadas. Até 6 entregas por mês." },
-      "premium": { "title": "Plano Premium", "cadence": "8 ENTREGAS / MÊS", "desc": "Cobertura mensal completa: até 8 entregas (duas vezes por semana, segundas e sextas)." }
+      "starter": {
+        "title": "Plano Inicial",
+        "cadence": "2 ENTREGAS / MÊS",
+        "desc": "Perfeito para o essencial. Até 2 entregas por mês, segundas ou sextas."
+      },
+      "essential": {
+        "title": "Plano Essencial",
+        "cadence": "4 ENTREGAS / MÊS",
+        "desc": "Nosso plano mais popular. Até 4 entregas por mês com agendamento flexível."
+      },
+      "intermediate": {
+        "title": "Plano Intermediário",
+        "cadence": "6 ENTREGAS / MÊS",
+        "desc": "Mais flexibilidade para casas movimentadas. Até 6 entregas por mês."
+      },
+      "premium": {
+        "title": "Plano Premium",
+        "cadence": "8 ENTREGAS / MÊS",
+        "desc": "Cobertura mensal completa: até 8 entregas (duas vezes por semana, segundas e sextas)."
+      }
     }
   },
   "profile": {
@@ -310,5 +378,25 @@
     "thanks": "Obrigado!",
     "thanksDesc": "Seus cookies estão a caminho. Enviamos a confirmação por e-mail.",
     "backHome": "Voltar ao início"
+  },
+  "subscribeGate": {
+    "dialogTitle": "Assine para ativar suas entregas e comprar",
+    "dialogDesc": "Compras e entregas estão disponíveis apenas para membros assinantes.",
+    "freeShipping": "Entrega GRÁTIS ($0) incluída em todos os planos!",
+    "viewPlans": "Ver planos de assinatura",
+    "signInAndSubscribe": "Entrar e assinar",
+    "keepBrowsing": "Continuar navegando",
+    "bannerEyebrow": "Torne-se membro",
+    "bannerTitle": "Assine para ativar suas entregas",
+    "bannerSubcopy": "Entrega GRÁTIS ($0) incluída em todos os planos!",
+    "bannerCta": "Ver planos",
+    "cartWarning": "Você precisa de uma assinatura ativa para finalizar a compra.",
+    "cartCta": "Assine para comprar",
+    "cartProcessing": "Processando…",
+    "cartConfirm": "Confirmar e Pagar Pedido",
+    "cartTerms": "Ao confirmar seu pedido, você aceita os termos de serviço da loja.",
+    "noActive": "Você não tem uma assinatura ativa. Assine para começar a agendar entregas.",
+    "scheduled": "Entrega agendada",
+    "canceled": "Entrega cancelada"
   }
 }

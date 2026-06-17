@@ -205,21 +205,73 @@
     "detailOf": "Detail von {{name}}"
   },
   "cookies": {
-    "c1": { "name": "Schokostückchen", "desc": "Ein buttriger Vanille-Cookie mit halbsüßen Schokostücken.", "caption": "Buttrige Vanille mit halbsüßen Stücken" },
-    "c2": { "name": "Snickerdoodle", "desc": "Ein Klassiker: weicher, warmer Cookie in Zimt-Zucker gewälzt.", "caption": "Weich, warm, Zimt-Zucker" },
-    "c3": { "name": "Zucker", "desc": "Der beste buttrig-zarte Zuckercookie, der auf der Zunge zergeht.", "caption": "Schmilzt auf der Zunge, buttrig-süß" },
-    "c4": { "name": "Doppelte Schokostückchen", "desc": "Dunkler Schoko-Cookie mit reichlich Schokostücken. Für echte Schoko-Fans.", "caption": "Dunkler Kakao voller Stücke" },
-    "c5": { "name": "Haferflocken-Rosinen", "desc": "Warme Hafer und saftige Rosinen in jedem Biss.", "caption": "Warme Hafer und saftige Rosinen" },
-    "c6": { "name": "Weiße Schokolade & Macadamia", "desc": "Tropisches Feeling: Kokos-Butter-Cookie mit weißer Schokolade und Macadamia.", "caption": "Kokos-buttrig, tropisches Feeling" },
-    "c7": { "name": "Klassisch mit M&M'S®", "desc": "Bunte Süßigkeiten-Variante unseres Klassikers.", "caption": "Bunte Schoko-Variante" },
-    "c8": { "name": "Erdnussbutter-Chips", "desc": "Erdnussbutter-Chips in weichem Vanille-Cookie.", "caption": "Weiche Vanille mit Erdnussbutter-Chips" },
-    "c9": { "name": "Vegane Schokostückchen", "desc": "Veganer Cookie mit reichlich milchfreien Schokostücken.", "caption": "Milchfreie Schokostücke" },
-    "c10": { "name": "Doppelt Schoko-Minze", "desc": "Warmer Schoko-Cookie mit kühlen Minz-Chips.", "caption": "Warme Schokolade mit kühler Minze" }
+    "c1": {
+      "name": "Schokostückchen",
+      "desc": "Ein buttriger Vanille-Cookie mit halbsüßen Schokostücken.",
+      "caption": "Buttrige Vanille mit halbsüßen Stücken"
+    },
+    "c2": {
+      "name": "Snickerdoodle",
+      "desc": "Ein Klassiker: weicher, warmer Cookie in Zimt-Zucker gewälzt.",
+      "caption": "Weich, warm, Zimt-Zucker"
+    },
+    "c3": {
+      "name": "Zucker",
+      "desc": "Der beste buttrig-zarte Zuckercookie, der auf der Zunge zergeht.",
+      "caption": "Schmilzt auf der Zunge, buttrig-süß"
+    },
+    "c4": {
+      "name": "Doppelte Schokostückchen",
+      "desc": "Dunkler Schoko-Cookie mit reichlich Schokostücken. Für echte Schoko-Fans.",
+      "caption": "Dunkler Kakao voller Stücke"
+    },
+    "c5": {
+      "name": "Haferflocken-Rosinen",
+      "desc": "Warme Hafer und saftige Rosinen in jedem Biss.",
+      "caption": "Warme Hafer und saftige Rosinen"
+    },
+    "c6": {
+      "name": "Weiße Schokolade & Macadamia",
+      "desc": "Tropisches Feeling: Kokos-Butter-Cookie mit weißer Schokolade und Macadamia.",
+      "caption": "Kokos-buttrig, tropisches Feeling"
+    },
+    "c7": {
+      "name": "Klassisch mit M&M'S®",
+      "desc": "Bunte Süßigkeiten-Variante unseres Klassikers.",
+      "caption": "Bunte Schoko-Variante"
+    },
+    "c8": {
+      "name": "Erdnussbutter-Chips",
+      "desc": "Erdnussbutter-Chips in weichem Vanille-Cookie.",
+      "caption": "Weiche Vanille mit Erdnussbutter-Chips"
+    },
+    "c9": {
+      "name": "Vegane Schokostückchen",
+      "desc": "Veganer Cookie mit reichlich milchfreien Schokostücken.",
+      "caption": "Milchfreie Schokostücke"
+    },
+    "c10": {
+      "name": "Doppelt Schoko-Minze",
+      "desc": "Warmer Schoko-Cookie mit kühlen Minz-Chips.",
+      "caption": "Warme Schokolade mit kühler Minze"
+    }
   },
   "packs": {
-    "p6": { "name": "6er-Pack", "desc": "Gönn dir 6 warme, köstliche Cookies in einer Box.", "serves": "3–6 Personen" },
-    "p9": { "name": "9er-Pack", "desc": "Der Sweet Spot: 9 deiner Lieblings-Cookies.", "serves": "5–9 Personen" },
-    "p12": { "name": "12er-Pack", "desc": "Genug für alle.", "serves": "6–12 Personen" },
+    "p6": {
+      "name": "6er-Pack",
+      "desc": "Gönn dir 6 warme, köstliche Cookies in einer Box.",
+      "serves": "3–6 Personen"
+    },
+    "p9": {
+      "name": "9er-Pack",
+      "desc": "Der Sweet Spot: 9 deiner Lieblings-Cookies.",
+      "serves": "5–9 Personen"
+    },
+    "p12": {
+      "name": "12er-Pack",
+      "desc": "Genug für alle.",
+      "serves": "6–12 Personen"
+    },
     "ingredients": "Weizenmehl, Butter, Rohrzucker, brauner Zucker, Eier, halbsüße Schokostücke, Vanilleextrakt, Natron, Meersalz.",
     "allergens": "Enthält Weizen, Milch, Eier, Soja. Kann Spuren von Schalenfrüchten und Erdnüssen enthalten."
   },
@@ -247,10 +299,26 @@
     "footnote": "*Nur MONTAGS & FREITAGS verfügbar",
     "removeDate": "{{date}} entfernen",
     "tiers": {
-      "starter": { "title": "Starter-Plan", "cadence": "2 LIEFERUNGEN / MONAT", "desc": "Perfekt für Einsteiger: bis zu 2 Lieferungen pro Monat, montags oder freitags." },
-      "essential": { "title": "Essential-Plan", "cadence": "4 LIEFERUNGEN / MONAT", "desc": "Unser beliebtester Plan: bis zu 4 Lieferungen pro Monat, flexibel planbar." },
-      "intermediate": { "title": "Intermediate-Plan", "cadence": "6 LIEFERUNGEN / MONAT", "desc": "Mehr Flexibilität: bis zu 6 Lieferungen pro Monat." },
-      "premium": { "title": "Premium-Plan", "cadence": "8 LIEFERUNGEN / MONAT", "desc": "Volle Versorgung: bis zu 8 Lieferungen pro Monat (montags und freitags)." }
+      "starter": {
+        "title": "Starter-Plan",
+        "cadence": "2 LIEFERUNGEN / MONAT",
+        "desc": "Perfekt für Einsteiger: bis zu 2 Lieferungen pro Monat, montags oder freitags."
+      },
+      "essential": {
+        "title": "Essential-Plan",
+        "cadence": "4 LIEFERUNGEN / MONAT",
+        "desc": "Unser beliebtester Plan: bis zu 4 Lieferungen pro Monat, flexibel planbar."
+      },
+      "intermediate": {
+        "title": "Intermediate-Plan",
+        "cadence": "6 LIEFERUNGEN / MONAT",
+        "desc": "Mehr Flexibilität: bis zu 6 Lieferungen pro Monat."
+      },
+      "premium": {
+        "title": "Premium-Plan",
+        "cadence": "8 LIEFERUNGEN / MONAT",
+        "desc": "Volle Versorgung: bis zu 8 Lieferungen pro Monat (montags und freitags)."
+      }
     }
   },
   "profile": {
@@ -310,5 +378,25 @@
     "thanks": "Danke!",
     "thanksDesc": "Deine Cookies sind unterwegs. Bestätigung wurde gesendet.",
     "backHome": "Zur Startseite"
+  },
+  "subscribeGate": {
+    "dialogTitle": "Abonniere, um deine Lieferungen zu aktivieren und einzukaufen",
+    "dialogDesc": "Käufe und Lieferungen sind nur für Abonnenten verfügbar.",
+    "freeShipping": "KOSTENLOSE Lieferung ($0) in jedem Plan enthalten!",
+    "viewPlans": "Abopläne ansehen",
+    "signInAndSubscribe": "Anmelden und abonnieren",
+    "keepBrowsing": "Weiter stöbern",
+    "bannerEyebrow": "Werde Mitglied",
+    "bannerTitle": "Abonniere, um deine Lieferungen zu aktivieren",
+    "bannerSubcopy": "KOSTENLOSE Lieferung ($0) in jedem Plan enthalten!",
+    "bannerCta": "Pläne ansehen",
+    "cartWarning": "Du benötigst ein aktives Abo, um zur Kasse zu gehen.",
+    "cartCta": "Abonniere zum Kaufen",
+    "cartProcessing": "Wird verarbeitet…",
+    "cartConfirm": "Bestellung bestätigen und bezahlen",
+    "cartTerms": "Mit der Bestätigung deiner Bestellung akzeptierst du die AGB des Shops.",
+    "noActive": "Du hast kein aktives Abo. Abonniere, um Lieferungen zu planen.",
+    "scheduled": "Lieferung geplant",
+    "canceled": "Lieferung storniert"
   }
 }

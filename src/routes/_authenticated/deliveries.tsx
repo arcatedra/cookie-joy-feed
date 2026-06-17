@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -54,6 +55,7 @@ function buildMonthGrid(year: number, month: number) {
 }
 
 function DeliveriesPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const getStatus = useServerFn(getMyDeliveryStatus);
   const getList = useServerFn(listMyDeliveries);
@@ -100,7 +102,7 @@ function DeliveriesPage() {
       });
     },
     onSuccess: () => {
-      toast.success("Entrega programada");
+      toast.success(t("subscribeGate.scheduled"));
       setSelectedDate(null);
       setAddress("");
       setNotes("");
@@ -113,7 +115,7 @@ function DeliveriesPage() {
   const cancelMut = useMutation({
     mutationFn: (id: string) => cancelFn({ data: { id } }),
     onSuccess: () => {
-      toast.success("Entrega cancelada");
+      toast.success(t("subscribeGate.canceled"));
       qc.invalidateQueries({ queryKey: ["delivery-status"] });
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
@@ -180,11 +182,12 @@ function DeliveriesPage() {
             ) : !status?.hasActiveSubscription ? (
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  No tienes una suscripción activa. Suscríbete para empezar a programar entregas.
+                  {t("subscribeGate.noActive")}
                 </p>
                 <Button asChild>
-                  <Link to="/subscribe">Ver planes</Link>
+                  <Link to="/subscribe">{t("subscribeGate.bannerCta")}</Link>
                 </Button>
+
               </div>
             ) : (
               <div className="space-y-3">

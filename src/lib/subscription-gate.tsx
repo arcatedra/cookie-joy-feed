@@ -7,10 +7,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { Lock, Sparkles, Truck } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -197,6 +199,7 @@ function SubscribeRequiredDialog({
   onOpenChange: (v: boolean) => void;
   signedIn: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -205,23 +208,23 @@ function SubscribeRequiredDialog({
             <Lock className="h-6 w-6" />
           </div>
           <DialogTitle className="text-center text-xl">
-            Suscríbete para activar tus entregas y comprar
+            {t("subscribeGate.dialogTitle")}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Las compras y entregas están disponibles solo para miembros suscritos.
+            {t("subscribeGate.dialogDesc")}
             <span className="mt-2 block font-semibold text-emerald-700">
-              ¡Delivery GRATIS ($0) incluido en todos los planes!
+              {t("subscribeGate.freeShipping")}
             </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:flex-col sm:space-x-0 gap-2">
           <Button asChild className="w-full">
             <Link to={signedIn ? "/subscribe" : "/auth"} onClick={() => onOpenChange(false)}>
-              {signedIn ? "Ver planes de suscripción" : "Iniciar sesión y suscribirme"}
+              {signedIn ? t("subscribeGate.viewPlans") : t("subscribeGate.signInAndSubscribe")}
             </Link>
           </Button>
           <Button variant="ghost" className="w-full" onClick={() => onOpenChange(false)}>
-            Seguir explorando
+            {t("subscribeGate.keepBrowsing")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -229,9 +232,11 @@ function SubscribeRequiredDialog({
   );
 }
 
+
 /** Promotional banner shown on Home and Profile when the user has no active subscription. */
 export function SubscribePromoBanner({ className = "" }: { className?: string }) {
   const { canPurchase, loading } = useSubscriptionGate();
+  const { t } = useTranslation();
   if (loading || canPurchase) return null;
   return (
     <Link
@@ -245,20 +250,21 @@ export function SubscribePromoBanner({ className = "" }: { className?: string })
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-amber-100/90">
-            Hazte miembro
+            {t("subscribeGate.bannerEyebrow")}
           </p>
           <h3 className="mt-0.5 text-base font-extrabold leading-tight sm:text-lg">
-            Suscríbete para activar tus entregas
+            {t("subscribeGate.bannerTitle")}
           </h3>
           <p className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-50">
             <Truck className="h-3.5 w-3.5" />
-            ¡Delivery GRATIS ($0) incluido en todos tus planes!
+            {t("subscribeGate.bannerSubcopy")}
           </p>
         </div>
         <span className="self-center rounded-full bg-white px-3 py-1.5 text-xs font-extrabold text-amber-700 shadow group-hover:bg-amber-50">
-          Ver planes
+          {t("subscribeGate.bannerCta")}
         </span>
       </div>
     </Link>
   );
 }
+

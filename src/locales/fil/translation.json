@@ -205,21 +205,73 @@
     "detailOf": "Detalye ng {{name}}"
   },
   "cookies": {
-    "c1": { "name": "Chocolate Chunk", "desc": "Mantikilyang vanilla cookie na may semi-sweet chocolate chunks.", "caption": "Mantikilyang vanilla na may chunks" },
-    "c2": { "name": "Snickerdoodle", "desc": "Klasikong malambot na cookie na binalot sa cinnamon sugar.", "caption": "Malambot, mainit, cinnamon sugar" },
-    "c3": { "name": "Sugar", "desc": "Pinakamasarap na sugar cookie na natutunaw sa bibig.", "caption": "Natutunaw sa bibig, mantikilyang tamis" },
-    "c4": { "name": "Double Chocolate Chunk", "desc": "Dark chocolate cookie na puno ng chocolate chunks.", "caption": "Dark cocoa na puno ng chunks" },
-    "c5": { "name": "Oatmeal Raisin", "desc": "Mainit na oats at masusulang pasas sa bawat kagat.", "caption": "Mainit na oats at pasas" },
-    "c6": { "name": "White Chocolate Macadamia", "desc": "Coconut-buttery cookie na may white chocolate at macadamia.", "caption": "Coconut-buttery, tropical vibes" },
-    "c7": { "name": "Klasiko na may M&M'S®", "desc": "Makulay na bersyon ng aming klasikong chocolate chip.", "caption": "Candy-coated chocolate twist" },
-    "c8": { "name": "Peanut Butter Chip", "desc": "Peanut butter chips sa malambot na vanilla cookie.", "caption": "Malambot na vanilla, peanut butter chips" },
-    "c9": { "name": "Vegan Chocolate Chunk", "desc": "Vegan cookie na puno ng dairy-free chocolate chunks.", "caption": "Dairy-free chocolate chunks" },
-    "c10": { "name": "Double Chocolate Mint", "desc": "Mainit na chocolate cookie na may cool mint chips.", "caption": "Mainit na chocolate na may mint" }
+    "c1": {
+      "name": "Chocolate Chunk",
+      "desc": "Mantikilyang vanilla cookie na may semi-sweet chocolate chunks.",
+      "caption": "Mantikilyang vanilla na may chunks"
+    },
+    "c2": {
+      "name": "Snickerdoodle",
+      "desc": "Klasikong malambot na cookie na binalot sa cinnamon sugar.",
+      "caption": "Malambot, mainit, cinnamon sugar"
+    },
+    "c3": {
+      "name": "Sugar",
+      "desc": "Pinakamasarap na sugar cookie na natutunaw sa bibig.",
+      "caption": "Natutunaw sa bibig, mantikilyang tamis"
+    },
+    "c4": {
+      "name": "Double Chocolate Chunk",
+      "desc": "Dark chocolate cookie na puno ng chocolate chunks.",
+      "caption": "Dark cocoa na puno ng chunks"
+    },
+    "c5": {
+      "name": "Oatmeal Raisin",
+      "desc": "Mainit na oats at masusulang pasas sa bawat kagat.",
+      "caption": "Mainit na oats at pasas"
+    },
+    "c6": {
+      "name": "White Chocolate Macadamia",
+      "desc": "Coconut-buttery cookie na may white chocolate at macadamia.",
+      "caption": "Coconut-buttery, tropical vibes"
+    },
+    "c7": {
+      "name": "Klasiko na may M&M'S®",
+      "desc": "Makulay na bersyon ng aming klasikong chocolate chip.",
+      "caption": "Candy-coated chocolate twist"
+    },
+    "c8": {
+      "name": "Peanut Butter Chip",
+      "desc": "Peanut butter chips sa malambot na vanilla cookie.",
+      "caption": "Malambot na vanilla, peanut butter chips"
+    },
+    "c9": {
+      "name": "Vegan Chocolate Chunk",
+      "desc": "Vegan cookie na puno ng dairy-free chocolate chunks.",
+      "caption": "Dairy-free chocolate chunks"
+    },
+    "c10": {
+      "name": "Double Chocolate Mint",
+      "desc": "Mainit na chocolate cookie na may cool mint chips.",
+      "caption": "Mainit na chocolate na may mint"
+    }
   },
   "packs": {
-    "p6": { "name": "6-Pack", "desc": "6 na mainit at masarap na cookies sa isang box.", "serves": "3–6 katao" },
-    "p9": { "name": "9-Pack", "desc": "Tamang dami ng kasiyahan. Pumili ng 9 na paborito.", "serves": "5–9 katao" },
-    "p12": { "name": "12-Pack", "desc": "Sapat para sa lahat.", "serves": "6–12 katao" },
+    "p6": {
+      "name": "6-Pack",
+      "desc": "6 na mainit at masarap na cookies sa isang box.",
+      "serves": "3–6 katao"
+    },
+    "p9": {
+      "name": "9-Pack",
+      "desc": "Tamang dami ng kasiyahan. Pumili ng 9 na paborito.",
+      "serves": "5–9 katao"
+    },
+    "p12": {
+      "name": "12-Pack",
+      "desc": "Sapat para sa lahat.",
+      "serves": "6–12 katao"
+    },
     "ingredients": "Enriched wheat flour, butter, cane sugar, brown sugar, itlog, semi-sweet chocolate chunks, vanilla extract, baking soda, sea salt.",
     "allergens": "May trigo, gatas, itlog, soy. Maaaring may bakas ng tree nuts at mani."
   },
@@ -247,10 +299,26 @@
     "footnote": "*Available tuwing LUNES at BIYERNES lamang",
     "removeDate": "Alisin ang {{date}}",
     "tiers": {
-      "starter": { "title": "Starter Plan", "cadence": "2 PADALA / BUWAN", "desc": "Perpekto sa mga simula: hanggang 2 padala bawat buwan, Lunes o Biyernes." },
-      "essential": { "title": "Essential Plan", "cadence": "4 PADALA / BUWAN", "desc": "Pinakasikat: hanggang 4 padala bawat buwan, flexible schedule." },
-      "intermediate": { "title": "Intermediate Plan", "cadence": "6 PADALA / BUWAN", "desc": "Mas flexible para sa aktibong tahanan: hanggang 6 padala bawat buwan." },
-      "premium": { "title": "Premium Plan", "cadence": "8 PADALA / BUWAN", "desc": "Buong buwang serbisyo: hanggang 8 padala (dalawang beses sa isang linggo, Lunes at Biyernes)." }
+      "starter": {
+        "title": "Starter Plan",
+        "cadence": "2 PADALA / BUWAN",
+        "desc": "Perpekto sa mga simula: hanggang 2 padala bawat buwan, Lunes o Biyernes."
+      },
+      "essential": {
+        "title": "Essential Plan",
+        "cadence": "4 PADALA / BUWAN",
+        "desc": "Pinakasikat: hanggang 4 padala bawat buwan, flexible schedule."
+      },
+      "intermediate": {
+        "title": "Intermediate Plan",
+        "cadence": "6 PADALA / BUWAN",
+        "desc": "Mas flexible para sa aktibong tahanan: hanggang 6 padala bawat buwan."
+      },
+      "premium": {
+        "title": "Premium Plan",
+        "cadence": "8 PADALA / BUWAN",
+        "desc": "Buong buwang serbisyo: hanggang 8 padala (dalawang beses sa isang linggo, Lunes at Biyernes)."
+      }
     }
   },
   "profile": {
@@ -310,5 +378,25 @@
     "thanks": "Salamat!",
     "thanksDesc": "Papunta na ang iyong cookies. Naipadala ang kumpirmasyon.",
     "backHome": "Bumalik sa home"
+  },
+  "subscribeGate": {
+    "dialogTitle": "Mag-subscribe para i-activate ang iyong mga delivery at bumili",
+    "dialogDesc": "Ang mga pagbili at delivery ay para lang sa mga subscribed na miyembro.",
+    "freeShipping": "LIBRENG delivery ($0) kasama sa lahat ng plano!",
+    "viewPlans": "Tingnan ang mga subscription plan",
+    "signInAndSubscribe": "Mag-sign in at mag-subscribe",
+    "keepBrowsing": "Magpatuloy sa pag-browse",
+    "bannerEyebrow": "Maging miyembro",
+    "bannerTitle": "Mag-subscribe para i-activate ang iyong mga delivery",
+    "bannerSubcopy": "LIBRENG delivery ($0) kasama sa lahat ng plano!",
+    "bannerCta": "Tingnan ang mga plano",
+    "cartWarning": "Kailangan mo ng aktibong subscription para mag-checkout.",
+    "cartCta": "Mag-subscribe para bumili",
+    "cartProcessing": "Pinoproseso…",
+    "cartConfirm": "Kumpirmahin at Bayaran ang Order",
+    "cartTerms": "Sa pag-confirm ng iyong order, tinatanggap mo ang mga tuntunin ng tindahan.",
+    "noActive": "Wala kang aktibong subscription. Mag-subscribe para magsimulang mag-schedule ng delivery.",
+    "scheduled": "Naka-schedule ang delivery",
+    "canceled": "Kinansela ang delivery"
   }
 }
