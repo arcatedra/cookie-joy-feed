@@ -380,11 +380,17 @@ export const getMySubscription = createServerFn({ method: "GET" })
     }
 
     try {
-      const synced = await syncLatestSubscriptionFromStripe(context.userId, env);
+      const email = (context.claims.email as string | undefined) ?? null;
+      const synced = await syncLatestSubscriptionFromStripe(context.userId, env, {
+        knownSubscriptionId: data?.stripe_subscription_id ?? undefined,
+        email,
+      });
       return { subscription: synced ?? data ?? null };
     } catch (syncError) {
       console.error("[subscriptions] stripe fallback sync failed", syncError);
       return { subscription: data ?? null };
+    }
+  });
     }
   });
 
