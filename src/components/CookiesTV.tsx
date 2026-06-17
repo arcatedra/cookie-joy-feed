@@ -2019,7 +2019,9 @@ function AdminModal({
     }
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
-    const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
+    const newExpiresAt = neverExpires
+      ? null
+      : new Date(Date.now() + Math.max(1, durationMin) * 60 * 1000).toISOString();
 
     if (isEdit && editing) {
       // EDITAR: reemplazar reel existente y reiniciar la hora
