@@ -43,6 +43,13 @@ import { syncReelPlayback } from "@/lib/reel-playback";
 import reel1 from "@/assets/reel-cookie-1.mp4.asset.json";
 import reel2 from "@/assets/reel-cookie-2.mp4.asset.json";
 import reel3 from "@/assets/reel-cookie-3.mp4.asset.json";
+import reelPista from "@/assets/reel-pista.mp4.asset.json";
+import reelTriple from "@/assets/reel-triple.mp4.asset.json";
+import reelSnicker from "@/assets/reel-snicker.mp4.asset.json";
+import reelOatmeal from "@/assets/reel-oatmeal.mp4.asset.json";
+import reelCchunk from "@/assets/reel-cchunk.mp4.asset.json";
+import reelMint from "@/assets/reel-mint.mp4.asset.json";
+import reelMM from "@/assets/reel-mm.mp4.asset.json";
 import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgPB from "@/assets/ins-pb.jpg";
@@ -94,13 +101,13 @@ const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,
   "demo-cookies-cream": reel2.url,
   "demo-pb": reel3.url,
-  "reel-pista": reel1.url,
-  "reel-triple": reel2.url,
-  "reel-snicker": reel3.url,
-  "reel-oatmeal": reel1.url,
-  "reel-cchunk": reel2.url,
-  "reel-mint": reel3.url,
-  "reel-mm": reel1.url,
+  "reel-pista": reelPista.url,
+  "reel-triple": reelTriple.url,
+  "reel-snicker": reelSnicker.url,
+  "reel-oatmeal": reelOatmeal.url,
+  "reel-cchunk": reelCchunk.url,
+  "reel-mint": reelMint.url,
+  "reel-mm": reelMM.url,
 };
 const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-doublechoc": imgDoubleChoc,
