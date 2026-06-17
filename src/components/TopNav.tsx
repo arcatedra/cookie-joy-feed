@@ -32,7 +32,7 @@ const quickLinkKeys = [
 export function TopNav() {
   const { t } = useTranslation();
   const cart = useCart();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
 
