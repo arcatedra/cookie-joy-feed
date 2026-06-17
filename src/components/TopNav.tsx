@@ -32,7 +32,7 @@ const quickLinkKeys = [
 export function TopNav() {
   const { t } = useTranslation();
   const cart = useCart();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
 
@@ -231,9 +231,23 @@ export function TopNav() {
                   {t("topnav.cats.subscriptions")}
                 </Link>
                 <div className="border-t border-border" />
-                <Link to="/auth" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50">
-                  {user ? t("auth.signOut") : t("auth.signIn")}
-                </Link>
+                {user ? (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setAcctOpen(false);
+                      await signOut();
+                      navigate({ to: "/" });
+                    }}
+                    className="block w-full px-3 py-2 text-left text-sm font-semibold text-amber-700 hover:bg-amber-50"
+                  >
+                    {t("auth.signOut")}
+                  </button>
+                ) : (
+                  <Link to="/auth" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50">
+                    {t("auth.signIn")}
+                  </Link>
+                )}
               </div>
             )}
           </div>
