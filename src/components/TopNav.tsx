@@ -232,17 +232,30 @@ export function TopNav() {
                 </Link>
                 <div className="border-t border-border" />
                 {user ? (
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setAcctOpen(false);
-                      await signOut();
-                      navigate({ to: "/" });
-                    }}
-                    className="block w-full px-3 py-2 text-left text-sm font-semibold text-amber-700 hover:bg-amber-50"
-                  >
-                    {t("auth.signOut")}
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setAcctOpen(false);
+                        await signOut();
+                        navigate({ to: "/auth" });
+                      }}
+                      className="block w-full px-3 py-2 text-left text-sm hover:bg-amber-50"
+                    >
+                      {t("auth.switchAccount", "Cambiar de cuenta")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setAcctOpen(false);
+                        await signOut();
+                        navigate({ to: "/" });
+                      }}
+                      className="block w-full px-3 py-2 text-left text-sm font-semibold text-amber-700 hover:bg-amber-50"
+                    >
+                      {t("auth.signOut")}
+                    </button>
+                  </>
                 ) : (
                   <Link to="/auth" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50">
                     {t("auth.signIn")}
