@@ -145,7 +145,12 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
     <form onSubmit={handleSubmit} className="space-y-4">
       <PaymentElement
         options={{
-          layout: { type: "tabs", defaultCollapsed: false },
+          layout: {
+            type: "accordion",
+            defaultCollapsed: false,
+            radios: false,
+            spacedAccordionItems: true,
+          },
           fields: { billingDetails: { email: "never" } },
           wallets: { applePay: "auto", googlePay: "auto" },
         }}
