@@ -1935,6 +1935,16 @@ function AdminModal({
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadPct, setUploadPct] = useState(0);
+  const initialDurationMin = (() => {
+    if (editing?.expires_at) {
+      const base = editing.created_at ? Date.parse(editing.created_at) : Date.now();
+      const diff = Math.round((Date.parse(editing.expires_at) - base) / 60000);
+      if (diff > 0) return diff;
+    }
+    return 60;
+  })();
+  const [durationMin, setDurationMin] = useState<number>(initialDurationMin);
+  const [neverExpires, setNeverExpires] = useState<boolean>(isEdit && editing?.expires_at === null);
 
   const preview = useMemo(() => parseEmbed(link), [link]);
   const directVideo = useMemo(() => isDirectVideoUrl(link), [link]);
