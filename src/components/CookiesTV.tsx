@@ -94,6 +94,13 @@ const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,
   "demo-cookies-cream": reel2.url,
   "demo-pb": reel3.url,
+  "reel-pista": reel1.url,
+  "reel-triple": reel2.url,
+  "reel-snicker": reel3.url,
+  "reel-oatmeal": reel1.url,
+  "reel-cchunk": reel2.url,
+  "reel-mint": reel3.url,
+  "reel-mm": reel1.url,
 };
 const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-doublechoc": imgDoubleChoc,
@@ -102,6 +109,10 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-cchunk": imgChocChunk,
   "p-mint": imgMint,
   "p-pista": imgWhiteMac,
+  "p-triple": imgDoubleChoc,
+  "p-snicker": imgSnicker,
+  "p-oatmeal": imgOatmeal,
+  "p-mm": imgMM,
 };
 
 const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
