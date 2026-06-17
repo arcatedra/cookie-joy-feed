@@ -251,25 +251,18 @@ function SubscribePage() {
     setSelectedDates((prev) => prev.slice(0, max));
   }
 
-  async function handleSubscribe(id: Tier["id"]) {
+  function handleSubscribe(id: Tier["id"]) {
     if (!user) {
       toast.error(t("auth.signInToLike", { defaultValue: "Inicia sesión para suscribirte" }));
       return;
     }
-    setCheckoutLoadingId(id);
-    try {
-      const result = await startCheckout({ data: { priceId: TIER_TO_PRICE[id] } });
-      if (result?.url) {
-        window.location.href = result.url;
-      } else {
-        throw new Error("Stripe no devolvió una URL de checkout.");
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("No se pudo iniciar el checkout. Inténtalo de nuevo.");
-      setCheckoutLoadingId(null);
+    if (!user.email) {
+      toast.error("Tu cuenta no tiene un email asociado.");
+      return;
     }
+    setPayingTierId(id);
   }
+
 
 
   return (
