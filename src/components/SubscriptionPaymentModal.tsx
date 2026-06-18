@@ -155,6 +155,9 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/subscribe?status=success`,
+        payment_method_data: {
+          billing_details: { email },
+        },
       },
       redirect: "if_required",
     });
