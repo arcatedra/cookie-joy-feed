@@ -412,15 +412,7 @@ function CheckoutPage() {
                     price="GRATIS"
                     priceClass="text-emerald-600"
                   />
-                  <ShippingOption
-                    active={shipping === "express"}
-                    onClick={() => setShipping("express")}
-                    icon={<Zap className="h-5 w-5 text-amber-500" />}
-                    title="Envío Express Dulce"
-                    sub="Llega HOY mismo en unas horas"
-                    price="+$4.99"
-                    priceClass="text-[#1a0f0a]"
-                  />
+                  {/* Envío Express Dulce desactivado temporalmente */}
                 </div>
               </div>
               <button
