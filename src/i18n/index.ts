@@ -38,11 +38,6 @@ function detectInitialLang(): Lang {
   } catch {
     /* ignore */
   }
-  const nav = window.navigator?.language?.toLowerCase() ?? "";
-  if (nav.startsWith("es")) return "es";
-  if (nav.startsWith("pt")) return "pt";
-  if (nav.startsWith("de")) return "de";
-  if (nav.startsWith("fil") || nav.startsWith("tl")) return "fil";
   return "en";
 }
 
