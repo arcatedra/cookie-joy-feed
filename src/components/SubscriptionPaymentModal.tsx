@@ -276,7 +276,7 @@ function PayForm({
       <div className="relative flex items-center py-1">
         <div className="flex-1 border-t border-border/40" />
         <span className="mx-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          o paga con
+          {strings.orPayWith}
         </span>
         <div className="flex-1 border-t border-border/40" />
       </div>
