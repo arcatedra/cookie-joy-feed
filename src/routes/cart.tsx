@@ -162,7 +162,7 @@ function CheckoutPage() {
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-2xl font-extrabold text-[#1a0f0a] lg:text-3xl">
-            Pago Seguro
+            {t("checkout.title")}
           </h1>
           <button
             type="button"
@@ -177,7 +177,7 @@ function CheckoutPage() {
             className="inline-flex items-center gap-2 rounded-full border-2 border-[#1a0f0a] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#1a0f0a] shadow-sm hover:bg-amber-50"
           >
             <ShoppingBag className="h-4 w-4" />
-            Ver mi carrito ({count})
+            {t("checkout.viewCart")} ({count})
           </button>
         </div>
 
