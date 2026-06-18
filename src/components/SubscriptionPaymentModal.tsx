@@ -12,6 +12,76 @@ import { useTranslation } from "react-i18next";
 import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { createSubscriptionIntent } from "@/lib/subscriptions.functions";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+
+const STRIPE_LOCALES: Record<string, string> = {
+  en: "en",
+  es: "es",
+  pt: "pt-BR",
+  de: "de",
+  fil: "auto",
+};
+
+const MODAL_STRINGS: Record<string, {
+  title: string;
+  chargingTo: string;
+  close: string;
+  orPayWith: string;
+  payButton: string;
+  paymentRejected: string;
+  initError: string;
+}> = {
+  en: {
+    title: "Confirm payment",
+    chargingTo: "Charging to:",
+    close: "Close",
+    orPayWith: "or pay with",
+    payButton: "Pay and subscribe",
+    paymentRejected: "Payment rejected",
+    initError: "Error starting payment",
+  },
+  es: {
+    title: "Confirmar pago",
+    chargingTo: "Cobramos a:",
+    close: "Cerrar",
+    orPayWith: "o paga con",
+    payButton: "Pagar y suscribirme",
+    paymentRejected: "Pago rechazado",
+    initError: "Error iniciando el pago",
+  },
+  pt: {
+    title: "Confirmar pagamento",
+    chargingTo: "Cobrando a:",
+    close: "Fechar",
+    orPayWith: "ou pague com",
+    payButton: "Pagar e assinar",
+    paymentRejected: "Pagamento recusado",
+    initError: "Erro ao iniciar o pagamento",
+  },
+  de: {
+    title: "Zahlung bestätigen",
+    chargingTo: "Belastet wird:",
+    close: "Schließen",
+    orPayWith: "oder zahle mit",
+    payButton: "Bezahlen und abonnieren",
+    paymentRejected: "Zahlung abgelehnt",
+    initError: "Fehler beim Starten der Zahlung",
+  },
+  fil: {
+    title: "Kumpirmahin ang bayad",
+    chargingTo: "Sisingilin sa:",
+    close: "Isara",
+    orPayWith: "o magbayad gamit ang",
+    payButton: "Magbayad at mag-subscribe",
+    paymentRejected: "Tinanggihan ang bayad",
+    initError: "May error sa pagsisimula ng bayad",
+  },
+};
+
+function getStrings(lang: string) {
+  const key = (lang ?? "en").slice(0, 3);
+  return MODAL_STRINGS[key.startsWith("fil") ? "fil" : key.slice(0, 2)] ?? MODAL_STRINGS.en;
+}
 
 let _stripePromise: Promise<Stripe | null> | null = null;
 function getStripe() {
