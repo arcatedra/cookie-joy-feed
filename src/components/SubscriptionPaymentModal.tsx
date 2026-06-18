@@ -178,6 +178,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
       <ExpressCheckoutElement
         options={{
           buttonHeight: 44,
+          defaultValues: { email },
           paymentMethods: {
             applePay: "auto",
             googlePay: "auto",
