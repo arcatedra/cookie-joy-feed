@@ -19,6 +19,7 @@ import {
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { AmyraXLogo } from "@/components/AmyraXLogo";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
