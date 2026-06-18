@@ -487,15 +487,19 @@ function CheckoutPage() {
 
 // ============ Minimal header (Amazon-style focus mode) ============
 function MiniHeader() {
+  const { t } = useTranslation();
   return (
     <header className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-6">
         <Link to="/" className="flex items-center gap-3" aria-label="AMYRAX">
           <AmyraXLogo size={28} nameClassName="text-[#1f3a5f]" />
-          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
+          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">{t("checkout.miniLabel")}</span>
         </Link>
-        <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
-          <Lock className="h-3.5 w-3.5" /> Pago Seguro
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher variant="light" />
+          <div className="hidden items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:flex">
+            <Lock className="h-3.5 w-3.5" /> {t("checkout.secure")}
+          </div>
         </div>
       </div>
     </header>
