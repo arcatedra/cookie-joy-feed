@@ -188,7 +188,7 @@ function CheckoutPage() {
             {/* STEP 1 — Address */}
             <StepCard
               num={1}
-              title="Dirección de Envío"
+              title={t("checkout.shippingAddress")}
               open={openStep === "address"}
               onToggle={() => setOpenStep(openStep === "address" ? "review" : "address")}
               summary={
@@ -200,34 +200,34 @@ function CheckoutPage() {
             >
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 <Field
-                  label="Nombre completo"
+                  label={t("checkout.fullName")}
                   value={addr.name}
                   onChange={(v) => setAddr({ ...addr, name: v })}
                   full
                 />
                 <Field
-                  label="Dirección (calle)"
+                  label={t("checkout.street")}
                   value={addr.street}
                   onChange={(v) => setAddr({ ...addr, street: v })}
                   full
                 />
                 <Field
-                  label="Apartamento / Unidad"
+                  label={t("checkout.apt")}
                   value={addr.apt}
                   onChange={(v) => setAddr({ ...addr, apt: v })}
                 />
                 <Field
-                  label="Ciudad"
+                  label={t("checkout.city")}
                   value={addr.city}
                   onChange={(v) => setAddr({ ...addr, city: v })}
                 />
                 <Field
-                  label="Código postal"
+                  label={t("checkout.zip")}
                   value={addr.zip}
                   onChange={(v) => setAddr({ ...addr, zip: v })}
                 />
                 <Field
-                  label="Teléfono"
+                  label={t("checkout.phone")}
                   value={addr.phone}
                   onChange={(v) => setAddr({ ...addr, phone: v })}
                 />
@@ -241,11 +241,11 @@ function CheckoutPage() {
                   }
                   className="h-4 w-4 accent-amber-500"
                 />
-                Hacer esta mi dirección predeterminada
+                {t("checkout.makeDefault")}
               </label>
               {!addressComplete && (
                 <p className="mt-3 text-xs font-semibold text-red-600">
-                  Debes completar tu dirección (nombre, calle, ciudad, código postal y teléfono) para poder comprar.
+                  {t("checkout.addressRequired")}
                 </p>
               )}
               <button
@@ -253,7 +253,7 @@ function CheckoutPage() {
                 disabled={!addressComplete}
                 className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Usar esta dirección
+                {t("checkout.useAddress")}
               </button>
             </StepCard>
 
