@@ -454,28 +454,28 @@ function CheckoutPage() {
 
               <div className="my-4 h-px bg-gray-200" />
 
-              <h2 className="text-base font-bold text-[#1a0f0a]">Resumen del Pedido</h2>
+              <h2 className="text-base font-bold text-[#1a0f0a]">{t("checkout.orderSummary")}</h2>
               <div className="mt-3 space-y-1.5 text-sm">
-                <SummaryRow label={`Productos (${count})`} value={fmt(total)} />
+                <SummaryRow label={`${t("checkout.productsCount")} (${count})`} value={fmt(total)} />
                 <SummaryRow
-                  label="Envío y manejo"
-                  value={shippingCost === 0 ? "GRATIS" : fmt(shippingCost)}
+                  label={t("checkout.shippingHandling")}
+                  value={shippingCost === 0 ? t("checkout.free") : fmt(shippingCost)}
                   valueClass={shippingCost === 0 ? "text-emerald-600 font-semibold" : ""}
                 />
-                <SummaryRow label="Impuestos estimados" value={fmt(taxes)} />
+                <SummaryRow label={t("checkout.taxes")} value={fmt(taxes)} />
               </div>
 
               <div className="my-3 h-px bg-gray-200" />
 
               <div className="flex items-baseline justify-between">
-                <span className="text-base font-bold text-red-700">Total del Pedido:</span>
+                <span className="text-base font-bold text-red-700">{t("checkout.orderTotal")}</span>
                 <span className="text-2xl font-extrabold text-red-700">
                   {fmt(grandTotal)}
                 </span>
               </div>
 
               <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-gray-500">
-                <Lock className="h-3 w-3" /> Pago 100% seguro y cifrado
+                <Lock className="h-3 w-3" /> {t("checkout.secureEncrypted")}
               </div>
             </div>
           </aside>
