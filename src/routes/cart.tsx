@@ -159,9 +159,27 @@ function CheckoutPage() {
       <MiniHeader />
 
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-        <h1 className="mb-5 text-2xl font-extrabold text-[#1a0f0a] lg:text-3xl">
-          Pago Seguro
-        </h1>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-extrabold text-[#1a0f0a] lg:text-3xl">
+            Pago Seguro
+          </h1>
+          <button
+            type="button"
+            onClick={() => {
+              setOpenStep("review");
+              setTimeout(() => {
+                document
+                  .getElementById("review-step")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 50);
+            }}
+            className="inline-flex items-center gap-2 rounded-full border-2 border-[#1a0f0a] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#1a0f0a] shadow-sm hover:bg-amber-50"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Ver mi carrito ({count})
+          </button>
+        </div>
+
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
           {/* ============ LEFT: Steps accordion ============ */}
@@ -326,6 +344,7 @@ function CheckoutPage() {
             </StepCard>
 
             {/* STEP 3 — Review */}
+            <div id="review-step">
             <StepCard
               num={3}
               title="Revisión y Logística"
@@ -333,6 +352,7 @@ function CheckoutPage() {
               onToggle={() => setOpenStep(openStep === "review" ? "address" : "review")}
               icon={<Truck className="h-5 w-5" />}
             >
+
               <ul className="flex flex-col divide-y divide-gray-100 rounded-lg border border-gray-200">
                 {items.map((it) => (
                   <li key={it.id} className="flex items-center gap-3 p-3">
@@ -403,8 +423,20 @@ function CheckoutPage() {
                   />
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenStep("payment");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
+              >
+                Volver al pago
+              </button>
             </StepCard>
+            </div>
           </div>
+
 
           {/* ============ RIGHT: Order summary ============ */}
           <aside className="lg:sticky lg:top-6 lg:self-start">
