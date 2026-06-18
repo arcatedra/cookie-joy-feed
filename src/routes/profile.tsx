@@ -234,12 +234,13 @@ function ProfilePage() {
 }
 
 function DonorBadge({ userId }: { userId: string | null }) {
+  const fetchTier = useServerFn(getMyDonationTier);
   const { data } = useQuery({
     queryKey: ["profile-donation-tier", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase.rpc("get_my_donation_tier");
-      return (data as DonationTier | null) ?? null;
+      const res = await fetchTier();
+      return (res.tier as DonationTier | null) ?? null;
     },
   });
   if (!data) return null;
