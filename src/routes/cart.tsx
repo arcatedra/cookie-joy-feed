@@ -106,14 +106,14 @@ function CheckoutPage() {
               <CheckCircle2 className="h-12 w-12" strokeWidth={2.2} />
             </div>
             <h1 className="mt-5 text-2xl font-extrabold text-[#1a0f0a]">
-              ¡Pedido Confirmado! <span className="text-3xl">🍪</span>
+              {t("checkout.orderConfirmed")} <span className="text-3xl">🍪</span>
             </h1>
             <p className="mt-3 text-sm text-gray-600">
-              Tus galletas se están horneando y van en camino.
+              {t("checkout.bakingMsg")}
             </p>
             <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
               <p className="text-xs uppercase tracking-wider text-amber-800">
-                Número de seguimiento
+                {t("checkout.trackingNumber")}
               </p>
               <p className="mt-1 font-mono text-lg font-bold text-[#1a0f0a]">
                 #{trackingId}
@@ -123,7 +123,7 @@ function CheckoutPage() {
               onClick={() => navigate({ to: "/" })}
               className="mt-7 w-full rounded-lg bg-amber-400 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
             >
-              Volver a la tienda
+              {t("checkout.backToStore")}
             </button>
           </div>
         </div>
