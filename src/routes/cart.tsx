@@ -423,8 +423,20 @@ function CheckoutPage() {
                   />
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenStep("payment");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
+              >
+                Volver al pago
+              </button>
             </StepCard>
+            </div>
           </div>
+
 
           {/* ============ RIGHT: Order summary ============ */}
           <aside className="lg:sticky lg:top-6 lg:self-start">
