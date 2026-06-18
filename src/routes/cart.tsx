@@ -140,15 +140,15 @@ function CheckoutPage() {
           <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-white shadow">
             <ShoppingBag className="h-9 w-9 text-[#1a0f0a]" />
           </div>
-          <h1 className="mt-5 text-xl font-bold text-[#1a0f0a]">Tu carrito está vacío</h1>
+          <h1 className="mt-5 text-xl font-bold text-[#1a0f0a]">{t("checkout.emptyTitle")}</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Agrega galletas para iniciar el pago.
+            {t("checkout.emptyDesc")}
           </p>
           <Link
             to="/"
             className="mt-6 inline-block rounded-lg bg-amber-400 px-6 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
           >
-            Explorar galletas
+            {t("checkout.exploreCookies")}
           </Link>
         </div>
       </main>
