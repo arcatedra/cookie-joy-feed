@@ -19,6 +19,7 @@ import {
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { AmyraXLogo } from "@/components/AmyraXLogo";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -105,14 +106,14 @@ function CheckoutPage() {
               <CheckCircle2 className="h-12 w-12" strokeWidth={2.2} />
             </div>
             <h1 className="mt-5 text-2xl font-extrabold text-[#1a0f0a]">
-              ¡Pedido Confirmado! <span className="text-3xl">🍪</span>
+              {t("checkout.orderConfirmed")} <span className="text-3xl">🍪</span>
             </h1>
             <p className="mt-3 text-sm text-gray-600">
-              Tus galletas se están horneando y van en camino.
+              {t("checkout.bakingMsg")}
             </p>
             <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
               <p className="text-xs uppercase tracking-wider text-amber-800">
-                Número de seguimiento
+                {t("checkout.trackingNumber")}
               </p>
               <p className="mt-1 font-mono text-lg font-bold text-[#1a0f0a]">
                 #{trackingId}
@@ -122,7 +123,7 @@ function CheckoutPage() {
               onClick={() => navigate({ to: "/" })}
               className="mt-7 w-full rounded-lg bg-amber-400 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
             >
-              Volver a la tienda
+              {t("checkout.backToStore")}
             </button>
           </div>
         </div>
@@ -139,15 +140,15 @@ function CheckoutPage() {
           <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-white shadow">
             <ShoppingBag className="h-9 w-9 text-[#1a0f0a]" />
           </div>
-          <h1 className="mt-5 text-xl font-bold text-[#1a0f0a]">Tu carrito está vacío</h1>
+          <h1 className="mt-5 text-xl font-bold text-[#1a0f0a]">{t("checkout.emptyTitle")}</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Agrega galletas para iniciar el pago.
+            {t("checkout.emptyDesc")}
           </p>
           <Link
             to="/"
             className="mt-6 inline-block rounded-lg bg-amber-400 px-6 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
           >
-            Explorar galletas
+            {t("checkout.exploreCookies")}
           </Link>
         </div>
       </main>
@@ -161,7 +162,7 @@ function CheckoutPage() {
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-2xl font-extrabold text-[#1a0f0a] lg:text-3xl">
-            Pago Seguro
+            {t("checkout.title")}
           </h1>
           <button
             type="button"
@@ -176,7 +177,7 @@ function CheckoutPage() {
             className="inline-flex items-center gap-2 rounded-full border-2 border-[#1a0f0a] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#1a0f0a] shadow-sm hover:bg-amber-50"
           >
             <ShoppingBag className="h-4 w-4" />
-            Ver mi carrito ({count})
+            {t("checkout.viewCart")} ({count})
           </button>
         </div>
 
@@ -187,7 +188,7 @@ function CheckoutPage() {
             {/* STEP 1 — Address */}
             <StepCard
               num={1}
-              title="Dirección de Envío"
+              title={t("checkout.shippingAddress")}
               open={openStep === "address"}
               onToggle={() => setOpenStep(openStep === "address" ? "review" : "address")}
               summary={
@@ -199,34 +200,34 @@ function CheckoutPage() {
             >
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 <Field
-                  label="Nombre completo"
+                  label={t("checkout.fullName")}
                   value={addr.name}
                   onChange={(v) => setAddr({ ...addr, name: v })}
                   full
                 />
                 <Field
-                  label="Dirección (calle)"
+                  label={t("checkout.street")}
                   value={addr.street}
                   onChange={(v) => setAddr({ ...addr, street: v })}
                   full
                 />
                 <Field
-                  label="Apartamento / Unidad"
+                  label={t("checkout.apt")}
                   value={addr.apt}
                   onChange={(v) => setAddr({ ...addr, apt: v })}
                 />
                 <Field
-                  label="Ciudad"
+                  label={t("checkout.city")}
                   value={addr.city}
                   onChange={(v) => setAddr({ ...addr, city: v })}
                 />
                 <Field
-                  label="Código postal"
+                  label={t("checkout.zip")}
                   value={addr.zip}
                   onChange={(v) => setAddr({ ...addr, zip: v })}
                 />
                 <Field
-                  label="Teléfono"
+                  label={t("checkout.phone")}
                   value={addr.phone}
                   onChange={(v) => setAddr({ ...addr, phone: v })}
                 />
@@ -240,11 +241,11 @@ function CheckoutPage() {
                   }
                   className="h-4 w-4 accent-amber-500"
                 />
-                Hacer esta mi dirección predeterminada
+                {t("checkout.makeDefault")}
               </label>
               {!addressComplete && (
                 <p className="mt-3 text-xs font-semibold text-red-600">
-                  Debes completar tu dirección (nombre, calle, ciudad, código postal y teléfono) para poder comprar.
+                  {t("checkout.addressRequired")}
                 </p>
               )}
               <button
@@ -252,21 +253,21 @@ function CheckoutPage() {
                 disabled={!addressComplete}
                 className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Usar esta dirección
+                {t("checkout.useAddress")}
               </button>
             </StepCard>
 
             {/* STEP 2 — Payment */}
             <StepCard
               num={2}
-              title="Método de Pago"
+              title={t("checkout.paymentMethod")}
               open={openStep === "payment"}
               onToggle={() => setOpenStep(openStep === "payment" ? "review" : "payment")}
               summary={
                 pay === "card" && card.number
-                  ? `Tarjeta •••• ${card.number.slice(-4)}`
+                  ? t("checkout.cardLast4", { last4: card.number.slice(-4) })
                   : pay === "wallet"
-                    ? "PayPal / Apple Pay"
+                    ? t("checkout.walletOption")
                     : undefined
               }
               icon={<CreditCard className="h-5 w-5" />}
@@ -281,7 +282,7 @@ function CheckoutPage() {
                   }`}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <CreditCard className="h-5 w-5" /> Tarjeta de Crédito / Débito
+                    <CreditCard className="h-5 w-5" /> {t("checkout.cardOption")}
                   </span>
                   <span
                     className={`h-4 w-4 rounded-full border-2 ${
@@ -295,7 +296,7 @@ function CheckoutPage() {
                   <div className="grid grid-cols-1 gap-3 rounded-lg bg-gray-50 p-3 md:grid-cols-3">
                     <div className="md:col-span-3">
                       <Field
-                        label="Número de tarjeta"
+                        label={t("checkout.cardNumber")}
                         value={card.number}
                         onChange={(v) =>
                           setCard({ ...card, number: v.replace(/\D/g, "").slice(0, 19) })
@@ -305,13 +306,13 @@ function CheckoutPage() {
                       />
                     </div>
                     <Field
-                      label="Vencimiento (MM/AA)"
+                      label={t("checkout.expiry")}
                       value={card.exp}
                       onChange={(v) => setCard({ ...card, exp: v.slice(0, 5) })}
                       placeholder="08/28"
                     />
                     <Field
-                      label="CVV"
+                      label={t("checkout.cvv")}
                       value={card.cvv}
                       onChange={(v) =>
                         setCard({ ...card, cvv: v.replace(/\D/g, "").slice(0, 4) })
@@ -330,16 +331,16 @@ function CheckoutPage() {
                   }`}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <Zap className="h-5 w-5 text-emerald-600" /> PayPal / Apple Pay
+                    <Zap className="h-5 w-5 text-emerald-600" /> {t("checkout.walletOption")}
                   </span>
-                  <span className="text-xs font-bold text-emerald-600">RÁPIDO</span>
+                  <span className="text-xs font-bold text-emerald-600">{t("checkout.fast")}</span>
                 </button>
               </div>
               <button
                 onClick={() => setOpenStep("review")}
                 className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
               >
-                Continuar
+                {t("checkout.continueBtn")}
               </button>
             </StepCard>
 
@@ -347,7 +348,7 @@ function CheckoutPage() {
             <div id="review-step">
             <StepCard
               num={3}
-              title="Revisión y Logística"
+              title={t("checkout.reviewLogistics")}
               open={openStep === "review"}
               onToggle={() => setOpenStep(openStep === "review" ? "address" : "review")}
               icon={<Truck className="h-5 w-5" />}
@@ -365,12 +366,12 @@ function CheckoutPage() {
                       <p className="truncate text-sm font-semibold text-[#1a0f0a]">
                         {it.name}
                       </p>
-                      <p className="text-xs text-gray-500">{fmt(it.price)} c/u</p>
+                      <p className="text-xs text-gray-500">{fmt(it.price)} {t("checkout.each")}</p>
                       <div className="mt-1.5 flex items-center gap-2">
                         <button
                           onClick={() => setQty(it.id, it.qty - 1)}
                           className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label="Reducir"
+                          aria-label={t("checkout.decrease")}
                         >
                           <Minus className="h-3 w-3" />
                         </button>
@@ -380,14 +381,14 @@ function CheckoutPage() {
                         <button
                           onClick={() => setQty(it.id, it.qty + 1)}
                           className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label="Aumentar"
+                          aria-label={t("checkout.increase")}
                         >
                           <Plus className="h-3 w-3" />
                         </button>
                         <button
                           onClick={() => remove(it.id)}
                           className="ml-2 text-gray-400 hover:text-red-500"
-                          aria-label="Eliminar"
+                          aria-label={t("checkout.remove")}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -401,15 +402,15 @@ function CheckoutPage() {
               </ul>
 
               <div className="mt-4">
-                <p className="mb-2 text-sm font-bold text-[#1a0f0a]">Tipo de envío</p>
+                <p className="mb-2 text-sm font-bold text-[#1a0f0a]">{t("checkout.shippingType")}</p>
                 <div className="flex flex-col gap-2">
                   <ShippingOption
                     active={shipping === "standard"}
                     onClick={() => setShipping("standard")}
                     icon={<Truck className="h-5 w-5" />}
-                    title="Envío Estándar"
-                    sub="Llega en 3 días"
-                    price="GRATIS"
+                    title={t("checkout.standardShipping")}
+                    sub={t("checkout.standardSub")}
+                    price={t("checkout.free")}
                     priceClass="text-emerald-600"
                   />
                   {/* Envío Express Dulce desactivado temporalmente */}
@@ -423,7 +424,7 @@ function CheckoutPage() {
                 }}
                 className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
               >
-                Volver al pago
+                {t("checkout.backToPayment")}
               </button>
             </StepCard>
             </div>
@@ -441,7 +442,7 @@ function CheckoutPage() {
                 {processing
                   ? t("subscribeGate.cartProcessing")
                   : !addressComplete
-                    ? "Agrega tu dirección para comprar"
+                    ? t("checkout.addAddressToBuy")
                     : t("subscribeGate.cartConfirm")}
               </button>
 
@@ -453,28 +454,28 @@ function CheckoutPage() {
 
               <div className="my-4 h-px bg-gray-200" />
 
-              <h2 className="text-base font-bold text-[#1a0f0a]">Resumen del Pedido</h2>
+              <h2 className="text-base font-bold text-[#1a0f0a]">{t("checkout.orderSummary")}</h2>
               <div className="mt-3 space-y-1.5 text-sm">
-                <SummaryRow label={`Productos (${count})`} value={fmt(total)} />
+                <SummaryRow label={`${t("checkout.productsCount")} (${count})`} value={fmt(total)} />
                 <SummaryRow
-                  label="Envío y manejo"
-                  value={shippingCost === 0 ? "GRATIS" : fmt(shippingCost)}
+                  label={t("checkout.shippingHandling")}
+                  value={shippingCost === 0 ? t("checkout.free") : fmt(shippingCost)}
                   valueClass={shippingCost === 0 ? "text-emerald-600 font-semibold" : ""}
                 />
-                <SummaryRow label="Impuestos estimados" value={fmt(taxes)} />
+                <SummaryRow label={t("checkout.taxes")} value={fmt(taxes)} />
               </div>
 
               <div className="my-3 h-px bg-gray-200" />
 
               <div className="flex items-baseline justify-between">
-                <span className="text-base font-bold text-red-700">Total del Pedido:</span>
+                <span className="text-base font-bold text-red-700">{t("checkout.orderTotal")}</span>
                 <span className="text-2xl font-extrabold text-red-700">
                   {fmt(grandTotal)}
                 </span>
               </div>
 
               <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-gray-500">
-                <Lock className="h-3 w-3" /> Pago 100% seguro y cifrado
+                <Lock className="h-3 w-3" /> {t("checkout.secureEncrypted")}
               </div>
             </div>
           </aside>
@@ -486,15 +487,19 @@ function CheckoutPage() {
 
 // ============ Minimal header (Amazon-style focus mode) ============
 function MiniHeader() {
+  const { t } = useTranslation();
   return (
     <header className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-6">
         <Link to="/" className="flex items-center gap-3" aria-label="AMYRAX">
           <AmyraXLogo size={28} nameClassName="text-[#1f3a5f]" />
-          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">Checkout</span>
+          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">{t("checkout.miniLabel")}</span>
         </Link>
-        <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
-          <Lock className="h-3.5 w-3.5" /> Pago Seguro
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher variant="light" />
+          <div className="hidden items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:flex">
+            <Lock className="h-3.5 w-3.5" /> {t("checkout.secure")}
+          </div>
         </div>
       </div>
     </header>
