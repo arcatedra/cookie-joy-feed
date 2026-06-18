@@ -21,6 +21,8 @@ import { QRCodeSection } from "@/components/QRCodeSection";
 import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getMyDonationTier } from "@/lib/donations.functions";
 import type { DonationTier } from "@/lib/donation-tier";
 import { SubscribePromoBanner } from "@/lib/subscription-gate";
 import avatar from "@/assets/avatar.jpg";
