@@ -151,8 +151,12 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
               {strings.chargingTo} <span className="font-semibold">{email}</span>
             </p>
           </div>
-          <LanguageSwitcher variant="light" />
-          <button
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-7 items-center justify-center rounded-full bg-primary/10 px-2.5 text-[11px] font-bold uppercase tracking-wider text-primary">
+              {(i18n.language ?? "en").slice(0, 2).toUpperCase()}
+            </span>
+            <LanguageSwitcher variant="light" />
+            <button
             type="button"
             onClick={onClose}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
