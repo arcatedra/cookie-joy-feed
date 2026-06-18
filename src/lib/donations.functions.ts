@@ -105,3 +105,16 @@ export const getMyDonations = createServerFn({ method: "GET" })
     if (error) { console.error("[donations] list failed", error); throw new Error("No se pudieron cargar las donaciones."); }
     return { donations: data ?? [] };
   });
+
+export const getMyDonationTier = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("profiles")
+      .select("donation_tier")
+      .eq("id", context.userId)
+      .maybeSingle();
+    if (error) { console.error("[donations] tier lookup failed", error); throw new Error("No se pudo obtener el nivel de donante."); }
+    return { tier: (data?.donation_tier ?? null) as string | null };
+  });

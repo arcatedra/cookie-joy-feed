@@ -21,6 +21,8 @@ import { QRCodeSection } from "@/components/QRCodeSection";
 import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getMyDonationTier } from "@/lib/donations.functions";
 import type { DonationTier } from "@/lib/donation-tier";
 import { SubscribePromoBanner } from "@/lib/subscription-gate";
 import avatar from "@/assets/avatar.jpg";
@@ -232,12 +234,13 @@ function ProfilePage() {
 }
 
 function DonorBadge({ userId }: { userId: string | null }) {
+  const fetchTier = useServerFn(getMyDonationTier);
   const { data } = useQuery({
     queryKey: ["profile-donation-tier", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase.rpc("get_my_donation_tier");
-      return (data as DonationTier | null) ?? null;
+      const res = await fetchTier();
+      return (res.tier as DonationTier | null) ?? null;
     },
   });
   if (!data) return null;
