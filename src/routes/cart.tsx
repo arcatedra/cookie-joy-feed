@@ -260,14 +260,14 @@ function CheckoutPage() {
             {/* STEP 2 — Payment */}
             <StepCard
               num={2}
-              title="Método de Pago"
+              title={t("checkout.paymentMethod")}
               open={openStep === "payment"}
               onToggle={() => setOpenStep(openStep === "payment" ? "review" : "payment")}
               summary={
                 pay === "card" && card.number
-                  ? `Tarjeta •••• ${card.number.slice(-4)}`
+                  ? t("checkout.cardLast4", { last4: card.number.slice(-4) })
                   : pay === "wallet"
-                    ? "PayPal / Apple Pay"
+                    ? t("checkout.walletOption")
                     : undefined
               }
               icon={<CreditCard className="h-5 w-5" />}
@@ -282,7 +282,7 @@ function CheckoutPage() {
                   }`}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <CreditCard className="h-5 w-5" /> Tarjeta de Crédito / Débito
+                    <CreditCard className="h-5 w-5" /> {t("checkout.cardOption")}
                   </span>
                   <span
                     className={`h-4 w-4 rounded-full border-2 ${
@@ -296,7 +296,7 @@ function CheckoutPage() {
                   <div className="grid grid-cols-1 gap-3 rounded-lg bg-gray-50 p-3 md:grid-cols-3">
                     <div className="md:col-span-3">
                       <Field
-                        label="Número de tarjeta"
+                        label={t("checkout.cardNumber")}
                         value={card.number}
                         onChange={(v) =>
                           setCard({ ...card, number: v.replace(/\D/g, "").slice(0, 19) })
@@ -306,13 +306,13 @@ function CheckoutPage() {
                       />
                     </div>
                     <Field
-                      label="Vencimiento (MM/AA)"
+                      label={t("checkout.expiry")}
                       value={card.exp}
                       onChange={(v) => setCard({ ...card, exp: v.slice(0, 5) })}
                       placeholder="08/28"
                     />
                     <Field
-                      label="CVV"
+                      label={t("checkout.cvv")}
                       value={card.cvv}
                       onChange={(v) =>
                         setCard({ ...card, cvv: v.replace(/\D/g, "").slice(0, 4) })
@@ -331,16 +331,16 @@ function CheckoutPage() {
                   }`}
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <Zap className="h-5 w-5 text-emerald-600" /> PayPal / Apple Pay
+                    <Zap className="h-5 w-5 text-emerald-600" /> {t("checkout.walletOption")}
                   </span>
-                  <span className="text-xs font-bold text-emerald-600">RÁPIDO</span>
+                  <span className="text-xs font-bold text-emerald-600">{t("checkout.fast")}</span>
                 </button>
               </div>
               <button
                 onClick={() => setOpenStep("review")}
                 className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
               >
-                Continuar
+                {t("checkout.continueBtn")}
               </button>
             </StepCard>
 
