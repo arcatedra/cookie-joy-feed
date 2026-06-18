@@ -105,6 +105,8 @@ interface Props {
 
 export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }: Props) {
   const startIntent = useServerFn(createSubscriptionIntent);
+  const { i18n } = useTranslation();
+  const strings = getStrings(i18n.language);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -116,12 +118,14 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
       })
       .catch((e) => {
         console.error(e);
-        if (alive) setError(e instanceof Error ? e.message : "Error iniciando el pago");
+        if (alive) setError(e instanceof Error ? e.message : strings.initError);
       });
     return () => {
       alive = false;
     };
-  }, [priceId, startIntent]);
+  }, [priceId, startIntent, strings.initError]);
+
+  const stripeLocale = STRIPE_LOCALES[i18n.language?.slice(0, 2) ?? "en"] ?? "auto";
 
   const options = useMemo(
     () =>
@@ -129,28 +133,30 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
         ? {
             clientSecret,
             appearance: { theme: "stripe" as const },
+            locale: stripeLocale as never,
           }
         : null,
-    [clientSecret],
+    [clientSecret, stripeLocale],
   );
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 sm:items-center">
       <div className="relative flex max-h-[92vh] w-full max-w-md flex-col rounded-t-3xl bg-card shadow-2xl sm:max-h-[90vh] sm:rounded-3xl">
-        <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
-          <div className="min-w-0">
+        <div className="flex items-center justify-between gap-3 border-b border-border/40 px-5 py-4">
+          <div className="min-w-0 flex-1">
             <h2 className="text-base font-bold uppercase tracking-wider text-foreground">
-              Confirmar pago
+              {strings.title}
             </h2>
             <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-              Cobramos a: <span className="font-semibold">{email}</span>
+              {strings.chargingTo} <span className="font-semibold">{email}</span>
             </p>
           </div>
+          <LanguageSwitcher variant="light" />
           <button
             type="button"
             onClick={onClose}
-            className="ml-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
-            aria-label="Cerrar"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
+            aria-label={strings.close}
           >
             <X className="h-4 w-4" />
           </button>
@@ -169,7 +175,7 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
 
           {options && (
             <Elements stripe={getStripe()} options={options}>
-              <PayForm email={email} onSuccess={onSuccess} />
+              <PayForm email={email} onSuccess={onSuccess} strings={strings} />
             </Elements>
           )}
         </div>
@@ -178,7 +184,15 @@ export function SubscriptionPaymentModal({ priceId, email, onClose, onSuccess }:
   );
 }
 
-function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void }) {
+function PayForm({
+  email,
+  onSuccess,
+  strings,
+}: {
+  email: string;
+  onSuccess: () => void;
+  strings: ReturnType<typeof getStrings>;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const { t } = useTranslation();
@@ -200,7 +214,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
     });
 
     if (error) {
-      toast.error(error.message ?? "Pago rechazado");
+      toast.error(error.message ?? strings.paymentRejected);
       setSubmitting(false);
       return;
     }
@@ -217,7 +231,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
     setSubmitting(true);
     const { error: submitError } = await elements.submit();
     if (submitError) {
-      toast.error(submitError.message ?? "Pago rechazado");
+      toast.error(submitError.message ?? strings.paymentRejected);
       setSubmitting(false);
       return;
     }
@@ -232,7 +246,7 @@ function PayForm({ email, onSuccess }: { email: string; onSuccess: () => void })
       redirect: "if_required",
     });
     if (error) {
-      toast.error(error.message ?? "Pago rechazado");
+      toast.error(error.message ?? strings.paymentRejected);
       setSubmitting(false);
       return;
     }
