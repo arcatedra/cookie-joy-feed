@@ -442,7 +442,7 @@ function CheckoutPage() {
                 {processing
                   ? t("subscribeGate.cartProcessing")
                   : !addressComplete
-                    ? "Agrega tu dirección para comprar"
+                    ? t("checkout.addAddressToBuy")
                     : t("subscribeGate.cartConfirm")}
               </button>
 
