@@ -301,7 +301,7 @@ function PayForm({
             <Loader2 className="h-4 w-4 animate-spin" /> {t("common.loading")}
           </>
         ) : (
-          "Pagar y suscribirme"
+          strings.payButton
         )}
       </button>
     </form>
