@@ -344,6 +344,7 @@ function CheckoutPage() {
             </StepCard>
 
             {/* STEP 3 — Review */}
+            <div id="review-step">
             <StepCard
               num={3}
               title="Revisión y Logística"
@@ -351,6 +352,7 @@ function CheckoutPage() {
               onToggle={() => setOpenStep(openStep === "review" ? "address" : "review")}
               icon={<Truck className="h-5 w-5" />}
             >
+
               <ul className="flex flex-col divide-y divide-gray-100 rounded-lg border border-gray-200">
                 {items.map((it) => (
                   <li key={it.id} className="flex items-center gap-3 p-3">
