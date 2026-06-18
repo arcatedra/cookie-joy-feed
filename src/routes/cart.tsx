@@ -348,7 +348,7 @@ function CheckoutPage() {
             <div id="review-step">
             <StepCard
               num={3}
-              title="Revisión y Logística"
+              title={t("checkout.reviewLogistics")}
               open={openStep === "review"}
               onToggle={() => setOpenStep(openStep === "review" ? "address" : "review")}
               icon={<Truck className="h-5 w-5" />}
@@ -366,12 +366,12 @@ function CheckoutPage() {
                       <p className="truncate text-sm font-semibold text-[#1a0f0a]">
                         {it.name}
                       </p>
-                      <p className="text-xs text-gray-500">{fmt(it.price)} c/u</p>
+                      <p className="text-xs text-gray-500">{fmt(it.price)} {t("checkout.each")}</p>
                       <div className="mt-1.5 flex items-center gap-2">
                         <button
                           onClick={() => setQty(it.id, it.qty - 1)}
                           className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label="Reducir"
+                          aria-label={t("checkout.decrease")}
                         >
                           <Minus className="h-3 w-3" />
                         </button>
@@ -381,14 +381,14 @@ function CheckoutPage() {
                         <button
                           onClick={() => setQty(it.id, it.qty + 1)}
                           className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label="Aumentar"
+                          aria-label={t("checkout.increase")}
                         >
                           <Plus className="h-3 w-3" />
                         </button>
                         <button
                           onClick={() => remove(it.id)}
                           className="ml-2 text-gray-400 hover:text-red-500"
-                          aria-label="Eliminar"
+                          aria-label={t("checkout.remove")}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -402,15 +402,15 @@ function CheckoutPage() {
               </ul>
 
               <div className="mt-4">
-                <p className="mb-2 text-sm font-bold text-[#1a0f0a]">Tipo de envío</p>
+                <p className="mb-2 text-sm font-bold text-[#1a0f0a]">{t("checkout.shippingType")}</p>
                 <div className="flex flex-col gap-2">
                   <ShippingOption
                     active={shipping === "standard"}
                     onClick={() => setShipping("standard")}
                     icon={<Truck className="h-5 w-5" />}
-                    title="Envío Estándar"
-                    sub="Llega en 3 días"
-                    price="GRATIS"
+                    title={t("checkout.standardShipping")}
+                    sub={t("checkout.standardSub")}
+                    price={t("checkout.free")}
                     priceClass="text-emerald-600"
                   />
                   {/* Envío Express Dulce desactivado temporalmente */}
@@ -424,7 +424,7 @@ function CheckoutPage() {
                 }}
                 className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
               >
-                Volver al pago
+                {t("checkout.backToPayment")}
               </button>
             </StepCard>
             </div>
