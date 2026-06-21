@@ -477,5 +477,20 @@
     "bakingMsg": "Deine Kekse werden gebacken und sind unterwegs.",
     "trackingNumber": "Sendungsnummer",
     "backToStore": "Zurück zum Shop"
+  },
+  "domains": {
+    "title": "Domain suchen",
+    "subtitle": "Finde eine verfügbare Domain. Wir prüfen die Verfügbarkeit live und schlagen ähnliche Alternativen vor.",
+    "placeholder": "Namen eingeben (z. B. mahanaix)",
+    "search": "Suchen",
+    "mainResults": "Ergebnisse für \"{{base}}\"",
+    "similarAlternatives": "Ähnliche Alternativen",
+    "checking": "Wird geprüft…",
+    "available": "Verfügbar",
+    "taken": "Registriert",
+    "takenBy": "Registriert ({{registrar}})",
+    "unknown": "Status unbekannt",
+    "buy": "Kaufen",
+    "priceDisclaimer": "Preise sind Schätzungen für das erste Registrierungsjahr in USD bei gängigen Registraren und können variieren. * Aktionspreis für das erste Jahr."
   }
 }

@@ -474,5 +474,20 @@
     "bakingMsg": "Your cookies are baking and on their way.",
     "trackingNumber": "Tracking number",
     "backToStore": "Back to the store"
+  },
+  "domains": {
+    "title": "Domain Search",
+    "subtitle": "Find an available domain. We check live availability and suggest similar alternatives.",
+    "placeholder": "Type a name (e.g. mahanaix)",
+    "search": "Search",
+    "mainResults": "Results for \"{{base}}\"",
+    "similarAlternatives": "Similar alternatives",
+    "checking": "Checking…",
+    "available": "Available",
+    "taken": "Registered",
+    "takenBy": "Registered ({{registrar}})",
+    "unknown": "Status unknown",
+    "buy": "Buy",
+    "priceDisclaimer": "Prices are estimates of first-year registration cost in USD at common registrars and may vary. * promotional price for the first year."
   }
 }
