@@ -15,7 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import { AmyraXSymbol } from "@/components/AmyraXLogo";
+import { HazorexSymbol } from "@/components/HazorexLogo";
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
@@ -89,12 +89,12 @@ export function TopNav() {
           <Link
             to="/"
             className="flex shrink-0 items-center gap-1 py-1 md:gap-1.5 md:py-1.5"
-            aria-label="AMYRAX"
+            aria-label="HAZOREX"
           >
-            <AmyraXSymbol size={40} className="sm:hidden" />
-            <AmyraXSymbol size={52} className="hidden sm:block" />
+            <HazorexSymbol size={40} className="sm:hidden" />
+            <HazorexSymbol size={52} className="hidden sm:block" />
             <span className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-xl font-black tracking-[0.15em] text-transparent sm:text-2xl md:text-3xl">
-              AMYRAX
+              HAZOREX
             </span>
           </Link>
 
