@@ -477,5 +477,20 @@
     "bakingMsg": "Niluluto na ang iyong cookies at paparating na.",
     "trackingNumber": "Tracking number",
     "backToStore": "Bumalik sa tindahan"
+  },
+  "domains": {
+    "title": "Maghanap ng domain",
+    "subtitle": "Maghanap ng available na domain. Live ang pag-check namin at nagmumungkahi ng katulad na alternatibo.",
+    "placeholder": "Maglagay ng pangalan (hal. mahanaix)",
+    "search": "Hanapin",
+    "mainResults": "Mga resulta para sa \"{{base}}\"",
+    "similarAlternatives": "Mga katulad na alternatibo",
+    "checking": "Sinusuri…",
+    "available": "Available",
+    "taken": "Naka-rehistro na",
+    "takenBy": "Naka-rehistro ({{registrar}})",
+    "unknown": "Hindi alam ang status",
+    "buy": "Bilhin",
+    "priceDisclaimer": "Tinatayang halaga ng unang taon ng rehistrasyon sa USD sa karaniwang registrar at maaaring magbago. * promosyonal na presyo para sa unang taon."
   }
 }

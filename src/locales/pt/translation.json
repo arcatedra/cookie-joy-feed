@@ -477,5 +477,20 @@
     "bakingMsg": "Seus biscoitos estão sendo assados e a caminho.",
     "trackingNumber": "Número de rastreamento",
     "backToStore": "Voltar à loja"
+  },
+  "domains": {
+    "title": "Buscar domínio",
+    "subtitle": "Encontre um domínio disponível. Verificamos a disponibilidade ao vivo e sugerimos alternativas semelhantes.",
+    "placeholder": "Digite um nome (ex. mahanaix)",
+    "search": "Buscar",
+    "mainResults": "Resultados para \"{{base}}\"",
+    "similarAlternatives": "Alternativas semelhantes",
+    "checking": "Verificando…",
+    "available": "Disponível",
+    "taken": "Registrado",
+    "takenBy": "Registrado ({{registrar}})",
+    "unknown": "Status desconhecido",
+    "buy": "Comprar",
+    "priceDisclaimer": "Os preços são estimativas do primeiro ano de registro em USD em registradores comuns e podem variar. * preço promocional no primeiro ano."
   }
 }
