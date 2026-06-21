@@ -1,7 +1,6 @@
-import logoUrl from "@/assets/hazorex-logo-transparent.png";
+import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
 import symbolUrl from "@/assets/hazorex-symbol-only.png";
 
-const logoAsset = { url: logoUrl };
 const symbolAsset = { url: symbolUrl };
 
 interface HazorexLogoProps {
@@ -13,7 +12,7 @@ interface HazorexLogoProps {
 }
 
 /**
- * HAZOREX — logo oficial (imagen real generada a partir del logo subido).
+ * HAZOREX — logo oficial (imagen exacta subida por el usuario).
  * Se muestra tal cual, sin contenedor visible, integrado en el header oscuro.
  */
 export function HazorexLogo({ size = 40, className = "" }: HazorexLogoProps) {
@@ -28,7 +27,7 @@ export function HazorexLogo({ size = 40, className = "" }: HazorexLogoProps) {
   );
 }
 
-/** Variante símbolo solo (X entrelazada sin texto) — imagen ya editada limpia */
+/** Variante símbolo solo (X entrelazada sin texto) — imagen generada limpia */
 export function HazorexSymbol({
   size = 36,
   className = "",
@@ -48,8 +47,8 @@ export function HazorexSymbol({
 }
 
 /**
- * Símbolo solo (X entrelazada) — recorta la imagen para mostrar solo la parte superior
- * donde está el símbolo, ocultando el texto "HAZOREX" de la imagen.
+ * Símbolo solo (X entrelazada) — recorta la imagen original para mostrar solo
+ * la parte superior donde está el símbolo, ocultando el texto "HAZOREX".
  */
 export function HazorexSymbolOnly({
   size = 28,
