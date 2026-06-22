@@ -74,6 +74,90 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_draw_entries: {
+        Row: {
+          created_at: string
+          display_name: string
+          draw_date: string
+          id: string
+          subject_email: string | null
+          subject_user_id: string | null
+          tickets: number
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          draw_date: string
+          id?: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tickets?: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          draw_date?: string
+          id?: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tickets?: number
+        }
+        Relationships: []
+      }
+      daily_draws: {
+        Row: {
+          created_at: string
+          draw_date: string
+          drawn_at: string | null
+          entrants_total: number
+          id: string
+          prize_usd: number
+          rolled_over_from: string | null
+          scheduled_at: string
+          seed_hash: string | null
+          status: string
+          tickets_total: number
+          updated_at: string
+          winner_display_name: string | null
+          winner_subject_email: string | null
+          winner_subject_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          draw_date: string
+          drawn_at?: string | null
+          entrants_total?: number
+          id?: string
+          prize_usd?: number
+          rolled_over_from?: string | null
+          scheduled_at: string
+          seed_hash?: string | null
+          status?: string
+          tickets_total?: number
+          updated_at?: string
+          winner_display_name?: string | null
+          winner_subject_email?: string | null
+          winner_subject_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          draw_date?: string
+          drawn_at?: string | null
+          entrants_total?: number
+          id?: string
+          prize_usd?: number
+          rolled_over_from?: string | null
+          scheduled_at?: string
+          seed_hash?: string | null
+          status?: string
+          tickets_total?: number
+          updated_at?: string
+          winner_display_name?: string | null
+          winner_subject_email?: string | null
+          winner_subject_user_id?: string | null
+        }
+        Relationships: []
+      }
       delivery_bookings: {
         Row: {
           address: string | null
@@ -815,9 +899,50 @@ export type Database = {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
       }
+      draw_time_for: { Args: { p_date: string }; Returns: string }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      ensure_today_draw: {
+        Args: never
+        Returns: {
+          created_at: string
+          draw_date: string
+          drawn_at: string | null
+          entrants_total: number
+          id: string
+          prize_usd: number
+          rolled_over_from: string | null
+          scheduled_at: string
+          seed_hash: string | null
+          status: string
+          tickets_total: number
+          updated_at: string
+          winner_display_name: string | null
+          winner_subject_email: string | null
+          winner_subject_user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "daily_draws"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      enter_daily_draw: {
+        Args: {
+          p_cost_per_ticket?: number
+          p_display_name: string
+          p_email: string
+          p_tickets: number
+          p_user_id: string
+        }
+        Returns: {
+          entry_id: string
+          new_balance: number
+          tickets_added: number
+        }[]
       }
       get_prize_pool: {
         Args: never
@@ -825,6 +950,30 @@ export type Database = {
           last_updated: string
           total_contributions: number
           total_pool_usd: number
+        }[]
+      }
+      get_recent_winners: {
+        Args: { p_limit?: number }
+        Returns: {
+          draw_date: string
+          drawn_at: string
+          prize_usd: number
+          seed_hash: string
+          winner_display_name: string
+        }[]
+      }
+      get_today_draw: {
+        Args: never
+        Returns: {
+          draw_date: string
+          entrants_total: number
+          prize_usd_live: number
+          rolled_over_from: string
+          scheduled_at: string
+          seed_hash: string
+          status: string
+          tickets_total: number
+          winner_display_name: string
         }[]
       }
       has_role: {
@@ -865,6 +1014,17 @@ export type Database = {
           reel_id: string
         }[]
       }
+      run_daily_draw: {
+        Args: never
+        Returns: {
+          draw_date: string
+          prize_usd: number
+          seed_hash: string
+          status: string
+          winner_display_name: string
+        }[]
+      }
+      today_et: { Args: never; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"
