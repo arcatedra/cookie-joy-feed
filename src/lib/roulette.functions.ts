@@ -235,19 +235,19 @@ export const submitAmoeEntry = createServerFn({ method: "POST" })
     const userId = subject?.kind === "user" ? subject.userId : null;
 
     const { error } = await sb.rpc("submit_amoe_entry", {
-      p_user_id: userId as unknown as string,
+      p_user_id: (userId as unknown) as string,
       p_email: email,
       p_full_name: data.fullName,
       p_address1: data.address1,
-      p_address2: data.address2 || null,
+      p_address2: (data.address2 || null) as unknown as string,
       p_city: data.city,
       p_state: data.state.toUpperCase(),
       p_zip: data.zip,
       p_dob: data.dob,
       p_phone: data.phone,
       p_essay: data.essay,
-      p_ip: ip,
-      p_user_agent: userAgent,
+      p_ip: ip as unknown as string,
+      p_user_agent: userAgent as unknown as string,
     });
 
     if (error) {
