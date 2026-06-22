@@ -338,6 +338,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         </div>
       </div>
 
+      {/* Admin-only test draw */}
+      <AdminTestDrawPanel onResult={() => qc.invalidateQueries({ queryKey: ["daily-draw"] })} />
+
       {/* Winners leaderboard */}
       <WinnersLeaderboard winners={winners ?? []} />
 
