@@ -23,6 +23,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { redirect } = Route.useSearch();
   const { user } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -30,9 +31,11 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
+
   useEffect(() => {
-    if (user) navigate({ to: "/" });
-  }, [user, navigate]);
+    if (user) navigate({ to: redirectTarget });
+  }, [user, navigate, redirectTarget]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +46,7 @@ function AuthPage() {
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: window.location.origin + redirectTarget,
             data: { name },
           },
         });
@@ -52,7 +55,7 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/" });
+        navigate({ to: redirectTarget });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error");
@@ -64,7 +67,7 @@ function AuthPage() {
   const onGoogle = async () => {
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: window.location.origin + redirectTarget,
       extraParams: {
         prompt: "select_account",
       },
@@ -75,7 +78,7 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/" });
+    navigate({ to: redirectTarget });
   };
 
   return (
