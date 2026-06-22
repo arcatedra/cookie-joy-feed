@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
+import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
 
 const BEIGE = "#f3ead8";
 const BLUE = "#1e3a5f";
