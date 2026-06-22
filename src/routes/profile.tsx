@@ -10,6 +10,7 @@ import {
   Cookie,
   LogOut,
   LogIn,
+  ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -100,6 +101,7 @@ function ProfilePage() {
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
             <DonorBadge userId={user?.id ?? null} />
+            <TermsBadge userId={user?.id ?? null} />
           </div>
 
           <div className="mt-5 flex items-center justify-around">
@@ -247,6 +249,32 @@ function DonorBadge({ userId }: { userId: string | null }) {
   return (
     <div className="mt-3 flex justify-center">
       <TierBadge tier={data} size="md" />
+    </div>
+  );
+}
+
+function TermsBadge({ userId }: { userId: string | null }) {
+  const { data } = useQuery({
+    queryKey: ["profile-terms", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("terms_accepted, terms_accepted_at")
+        .eq("id", userId!)
+        .maybeSingle();
+      if (error) return null;
+      return data;
+    },
+  });
+  if (!data?.terms_accepted) return null;
+  const when = data.terms_accepted_at ? new Date(data.terms_accepted_at).toLocaleDateString() : null;
+  return (
+    <div className="mt-3 flex justify-center">
+      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+        <ShieldCheck className="h-4 w-4" />
+        <span>Cuenta verificada · Términos aceptados{when ? ` el ${when}` : ""}</span>
+      </div>
     </div>
   );
 }

@@ -501,19 +501,34 @@ export type Database = {
           created_at: string
           display_name: string | null
           donation_tier: Database["public"]["Enums"]["donation_tier"] | null
+          email: string | null
+          full_name: string | null
           id: string
+          region: string | null
+          terms_accepted: boolean
+          terms_accepted_at: string | null
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
+          email?: string | null
+          full_name?: string | null
           id: string
+          region?: string | null
+          terms_accepted?: boolean
+          terms_accepted_at?: string | null
         }
         Update: {
           created_at?: string
           display_name?: string | null
           donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
+          email?: string | null
+          full_name?: string | null
           id?: string
+          region?: string | null
+          terms_accepted?: boolean
+          terms_accepted_at?: string | null
         }
         Relationships: []
       }

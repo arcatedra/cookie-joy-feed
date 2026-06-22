@@ -29,6 +29,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [region, setRegion] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -52,7 +53,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin + redirectTarget,
-            data: { name },
+            data: { name, region: region.trim().toUpperCase(), terms_accepted: true },
           },
         });
         if (error) throw error;
@@ -124,14 +125,25 @@ function AuthPage() {
 
         <form onSubmit={onSubmit} className="space-y-3">
           {mode === "signup" && (
-            <input
-              type="text"
-              required
-              placeholder={t("auth.name")}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <>
+              <input
+                type="text"
+                required
+                placeholder={t("auth.name")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <input
+                type="text"
+                required
+                maxLength={2}
+                placeholder="Estado / Región (ej. FL, CA, TX)"
+                value={region}
+                onChange={(e) => setRegion(e.target.value.toUpperCase())}
+                className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </>
           )}
           <input
             type="email"
