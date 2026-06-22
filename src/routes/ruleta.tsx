@@ -514,7 +514,6 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       >
         {TOKEN_PACKAGES.map((pkg) => {
           const featured = pkg.featured ?? false;
-          const poolPart = (pkg.priceUsd / 2).toFixed(2);
           const isLoading = loadingId === pkg.id;
           return (
             <article
