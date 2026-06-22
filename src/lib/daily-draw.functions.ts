@@ -96,11 +96,10 @@ export const enterDailyDraw = createServerFn({ method: "POST" })
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: result, error } = await supabaseAdmin.rpc("enter_daily_draw", {
-      p_user_id: subject.kind === "user" ? subject.userId : null,
-      p_email:
-        subject.kind === "guest"
-          ? subject.email
-          : (subject.kind === "user" ? (subject.email ?? "") : ""),
+      p_user_id: (subject.kind === "user" ? subject.userId : null) as unknown as string,
+      p_email: (subject.kind === "guest"
+        ? subject.email
+        : (subject.email ?? "")) as string,
       p_display_name: data.displayName,
       p_tickets: data.tickets,
       p_cost_per_ticket: 10,
