@@ -387,7 +387,7 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
   );
 }
 
-function BuyTokensPanel() {
+function BuyTokensPanel({ balance }: { balance: number }) {
   const checkout = useServerFn(createStarsCheckout);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -402,8 +402,77 @@ function BuyTokensPanel() {
     }
   };
 
+  const scrollToDraw = () => {
+    document.getElementById("live-draw")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section style={{ display: "grid", gap: 28 }}>
+      {/* Balance hero */}
+      <div
+        style={{
+          background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_SOFT} 100%)`,
+          borderRadius: 20,
+          padding: "22px 26px",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+          color: BEIGE,
+          border: `1px solid ${GOLD}55`,
+          boxShadow: `0 18px 40px -20px ${BLUE}`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${GOLD_BRIGHT}, ${GOLD})`,
+              display: "grid",
+              placeItems: "center",
+              boxShadow: `0 6px 18px -4px ${GOLD}`,
+            }}
+          >
+            <Star size={28} color={WOOD} />
+          </div>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7 }}>
+              TU SALDO ACTUAL
+            </div>
+            <div
+              style={{
+                fontSize: 32,
+                fontWeight: 900,
+                lineHeight: 1.1,
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {balance} <span style={{ fontSize: 14, opacity: 0.7 }}>⭐ estrellas</span>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={scrollToDraw}
+          style={{
+            background: GOLD,
+            color: WOOD,
+            border: "none",
+            padding: "12px 22px",
+            borderRadius: 999,
+            fontWeight: 900,
+            letterSpacing: "0.12em",
+            fontSize: 13,
+            cursor: "pointer",
+            boxShadow: `0 8px 20px -8px ${GOLD}`,
+          }}
+        >
+          CANJEAR POR TICKETS →
+        </button>
+      </div>
+
       <div style={{ display: "grid", gap: 6, textAlign: "center" }}>
         <h2
           style={{
@@ -417,11 +486,13 @@ function BuyTokensPanel() {
           Compra Estrellas
         </h2>
         <p style={{ color: BLUE_SOFT, fontSize: 15, margin: 0 }}>
-          El <strong>50%</strong> de cada compra alimenta el Prize Pool global.
+          Acumula estrellas y canjéalas por tickets en la Ruleta Diaria. El{" "}
+          <strong>50%</strong> de cada compra alimenta el Prize Pool global.
         </p>
       </div>
 
       <PrizePoolCounter />
+
 
       <div
         style={{
