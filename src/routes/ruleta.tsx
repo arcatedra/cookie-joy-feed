@@ -396,8 +396,13 @@ function BuyTokensPanel({ balance }: { balance: number }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
+    if (!acceptedTerms) {
+      toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
+      return;
+    }
     if (!user) {
       toast.info("Inicia sesión para comprar estrellas.");
       navigate({ to: "/auth", search: { redirect: "/ruleta" } });
@@ -504,12 +509,44 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       <PrizePoolCounter />
 
 
+      <label
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 12,
+          padding: "16px 18px",
+          background: BEIGE,
+          border: `2px solid ${acceptedTerms ? GOLD : BLUE_SOFT}55`,
+          borderRadius: 14,
+          cursor: "pointer",
+          transition: "border-color 0.2s",
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+          style={{ marginTop: 3, width: 18, height: 18, accentColor: GOLD, cursor: "pointer", flexShrink: 0 }}
+          aria-required
+        />
+        <span style={{ fontSize: 13, color: BLUE, lineHeight: 1.5 }}>
+          Acepto los{" "}
+          <Link to="/terms" style={{ color: WOOD, fontWeight: 700, textDecoration: "underline" }}>
+            Términos y Condiciones
+          </Link>{" "}
+          y confirmo que la participación en este sorteo es legal en mi lugar de residencia.
+        </span>
+      </label>
+
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: 20,
           alignItems: "stretch",
+          opacity: acceptedTerms ? 1 : 0.55,
+          pointerEvents: acceptedTerms ? "auto" : "none",
+          transition: "opacity 0.2s",
         }}
       >
         {TOKEN_PACKAGES.map((pkg) => {
