@@ -155,13 +155,16 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
-        <LiveDrawSection
-          balance={balance}
-          onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
-        />
+        <div id="live-draw" style={{ scrollMarginTop: 80 }}>
+          <LiveDrawSection
+            balance={balance}
+            onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+          />
+        </div>
+
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
-        <BuyTokensPanel />
+        <BuyTokensPanel balance={balance} />
 
         <AmoeFlow
           state={state}
@@ -387,7 +390,7 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
   );
 }
 
-function BuyTokensPanel() {
+function BuyTokensPanel({ balance }: { balance: number }) {
   const checkout = useServerFn(createStarsCheckout);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -402,8 +405,77 @@ function BuyTokensPanel() {
     }
   };
 
+  const scrollToDraw = () => {
+    document.getElementById("live-draw")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section style={{ display: "grid", gap: 28 }}>
+      {/* Balance hero */}
+      <div
+        style={{
+          background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_SOFT} 100%)`,
+          borderRadius: 20,
+          padding: "22px 26px",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+          color: BEIGE,
+          border: `1px solid ${GOLD}55`,
+          boxShadow: `0 18px 40px -20px ${BLUE}`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${GOLD_BRIGHT}, ${GOLD})`,
+              display: "grid",
+              placeItems: "center",
+              boxShadow: `0 6px 18px -4px ${GOLD}`,
+            }}
+          >
+            <Star size={28} color={WOOD} />
+          </div>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7 }}>
+              TU SALDO ACTUAL
+            </div>
+            <div
+              style={{
+                fontSize: 32,
+                fontWeight: 900,
+                lineHeight: 1.1,
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {balance} <span style={{ fontSize: 14, opacity: 0.7 }}>⭐ estrellas</span>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={scrollToDraw}
+          style={{
+            background: GOLD,
+            color: WOOD,
+            border: "none",
+            padding: "12px 22px",
+            borderRadius: 999,
+            fontWeight: 900,
+            letterSpacing: "0.12em",
+            fontSize: 13,
+            cursor: "pointer",
+            boxShadow: `0 8px 20px -8px ${GOLD}`,
+          }}
+        >
+          CANJEAR POR TICKETS →
+        </button>
+      </div>
+
       <div style={{ display: "grid", gap: 6, textAlign: "center" }}>
         <h2
           style={{
@@ -417,11 +489,13 @@ function BuyTokensPanel() {
           Compra Estrellas
         </h2>
         <p style={{ color: BLUE_SOFT, fontSize: 15, margin: 0 }}>
-          El <strong>50%</strong> de cada compra alimenta el Prize Pool global.
+          Acumula estrellas y canjéalas por tickets en la Ruleta Diaria. El{" "}
+          <strong>50%</strong> de cada compra alimenta el Prize Pool global.
         </p>
       </div>
 
       <PrizePoolCounter />
+
 
       <div
         style={{
@@ -578,15 +652,57 @@ function BuyTokensPanel() {
         })}
       </div>
 
+      {/* Fair-Play certified badge */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 12,
+          background: `linear-gradient(135deg, ${BEIGE} 0%, #fff8ea 100%)`,
+          border: `1px solid ${GOLD}`,
+          borderRadius: 14,
+          padding: "14px 18px",
+          color: BLUE,
+          fontSize: 13,
+          textAlign: "center",
+          boxShadow: `inset 0 0 0 1px ${GOLD}22`,
+        }}
+      >
+        <div
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            background: BLUE,
+            display: "grid",
+            placeItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={GOLD_BRIGHT} aria-hidden>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <div style={{ fontWeight: 900, letterSpacing: "0.1em", fontSize: 12, color: BLUE }}>
+            CERTIFIED FAIR PLAY · NO RIGGED
+          </div>
+          <div style={{ fontSize: 11, color: BLUE_SOFT, marginTop: 2 }}>
+            Selección aleatoria criptográfica · ponderación pública · auditable
+          </div>
+        </div>
+      </div>
+
       {/* Legal footer */}
       <footer
         style={{
           background: BLUE,
           color: BEIGE,
           borderRadius: 18,
-          padding: "18px 22px",
+          padding: "20px 22px",
           display: "grid",
-          gap: 10,
+          gap: 12,
           textAlign: "center",
           fontSize: 12,
         }}
@@ -610,7 +726,7 @@ function BuyTokensPanel() {
           </a>
           <span style={{ opacity: 0.4 }}>·</span>
           <a href="#amoe" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
-            Participación Gratuita (AMOE)
+            Método de Participación Gratuita
           </a>
         </div>
         <p style={{ margin: 0, opacity: 0.75, fontSize: 11, letterSpacing: "0.04em" }}>
@@ -618,6 +734,7 @@ function BuyTokensPanel() {
           probabilidades de ganar. Mayores de 18 años. Nulo donde la ley lo prohíba.
         </p>
       </footer>
+
     </section>
   );
 }

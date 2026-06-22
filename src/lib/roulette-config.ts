@@ -51,24 +51,24 @@ export const TOKEN_PACKAGES: readonly TokenPackage[] = [
   {
     id: "stars_starter",
     tokens: 10,
-    priceUsd: 2,
+    priceUsd: 1.99,
     label: "Inicial",
     tagline: "Prueba tu suerte",
   },
   {
     id: "stars_popular",
     tokens: 30,
-    priceUsd: 5,
-    label: "Popular",
-    tagline: "Mejor valor +20%",
+    priceUsd: 4.99,
+    label: "Más Vendido",
+    tagline: "Mejor opción · +50% valor",
     featured: true,
   },
   {
     id: "stars_premium",
-    tokens: 100,
-    priceUsd: 15,
+    tokens: 150,
+    priceUsd: 9.99,
     label: "Premium",
-    tagline: "Para los más afortunados",
+    tagline: "Máximo valor por estrella",
   },
 ] as const;
 
