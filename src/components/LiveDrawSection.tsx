@@ -488,3 +488,119 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
     </div>
   );
 }
+
+function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
+  const checkAdminFn = useServerFn(checkIsAdmin);
+  const triggerFn = useServerFn(triggerTestDraw);
+
+  const { data: adminCheck } = useQuery({
+    queryKey: ["is-admin"],
+    queryFn: () => checkAdminFn().catch(() => ({ isAdmin: false })),
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+
+  const [lastResult, setLastResult] = useState<{
+    status: string;
+    winnerDisplayName: string | null;
+    prizeUsd: number;
+    seedHash: string | null;
+    drawDate: string;
+  } | null>(null);
+
+  const mut = useMutation({
+    mutationFn: async () => triggerFn(),
+    onSuccess: (res) => {
+      if (!res.ok) {
+        toast.error(res.error);
+        return;
+      }
+      setLastResult({
+        status: res.status,
+        winnerDisplayName: res.winnerDisplayName,
+        prizeUsd: res.prizeUsd,
+        seedHash: res.seedHash,
+        drawDate: res.drawDate,
+      });
+      toast.success(`Sorteo ejecutado: ${res.status}`);
+      onResult();
+    },
+    onError: () => toast.error("Error al ejecutar sorteo de prueba"),
+  });
+
+  if (!adminCheck?.isAdmin) return null;
+
+  const isAlreadyDrawn = lastResult && lastResult.status !== "open";
+
+  return (
+    <div style={{
+      background: `${WOOD}`, color: BEIGE, borderRadius: 20, padding: 20,
+      border: `2px dashed ${GOLD_BRIGHT}`,
+      display: "flex", flexDirection: "column", gap: 12,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between", flexWrap: "wrap" }}>
+        <div>
+          <div style={{ fontSize: 10, letterSpacing: "0.3em", color: GOLD_BRIGHT, fontWeight: 800 }}>
+            🛡️ PANEL ADMIN
+          </div>
+          <div style={{ fontSize: 13, color: `${BEIGE}cc`, marginTop: 4 }}>
+            Ejecutar el sorteo manualmente (idempotente — no repite si ya hay un ganador hoy).
+          </div>
+        </div>
+        <button
+          disabled={mut.isPending}
+          onClick={() => {
+            if (!confirm("¿Ejecutar el sorteo de HOY ahora? Esta acción es real y selecciona un ganador.")) return;
+            mut.mutate();
+          }}
+          style={{
+            padding: "10px 20px", borderRadius: 10, border: "none",
+            background: `linear-gradient(135deg, ${GOLD_BRIGHT}, ${GOLD})`,
+            color: WOOD, fontWeight: 900, fontSize: 13, letterSpacing: "0.15em",
+            cursor: mut.isPending ? "wait" : "pointer", whiteSpace: "nowrap",
+          }}
+        >
+          {mut.isPending ? "EJECUTANDO..." : "🎰 PROBAR SORTEO"}
+        </button>
+      </div>
+
+      {lastResult && (
+        <div style={{
+          padding: 14, borderRadius: 12, background: "rgba(0,0,0,0.35)",
+          display: "grid", gap: 8, fontSize: 13,
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ color: `${BEIGE}99` }}>Estado:</span>
+            <strong style={{ color: GOLD_BRIGHT, textTransform: "uppercase", letterSpacing: "0.15em" }}>
+              {lastResult.status}
+            </strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+            <span style={{ color: `${BEIGE}99` }}>Fecha:</span>
+            <span>{lastResult.drawDate}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+            <span style={{ color: `${BEIGE}99` }}>Ganador:</span>
+            <strong style={{ color: BEIGE }}>{lastResult.winnerDisplayName ?? "— (sin participantes)"}</strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+            <span style={{ color: `${BEIGE}99` }}>Premio:</span>
+            <strong style={{ color: GOLD_BRIGHT, fontVariantNumeric: "tabular-nums" }}>
+              ${lastResult.prizeUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+            </strong>
+          </div>
+          {lastResult.seedHash && (
+            <div style={{ fontSize: 10, fontFamily: "monospace", color: `${BEIGE}77`, wordBreak: "break-all" }}>
+              🔐 {lastResult.seedHash}
+            </div>
+          )}
+          {isAlreadyDrawn && (
+            <div style={{ fontSize: 11, color: `${GOLD_BRIGHT}cc`, fontStyle: "italic" }}>
+              ℹ️ El sorteo ya está marcado como completado. Volver a ejecutar devolverá el mismo resultado.
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
