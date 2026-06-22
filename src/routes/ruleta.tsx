@@ -155,10 +155,13 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
-        <LiveDrawSection
-          balance={balance}
-          onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
-        />
+        <div id="live-draw" style={{ scrollMarginTop: 80 }}>
+          <LiveDrawSection
+            balance={balance}
+            onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+          />
+        </div>
+
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
         <BuyTokensPanel balance={balance} />
