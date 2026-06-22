@@ -36,6 +36,12 @@ export const Route = createFileRoute("/admin/sweepstakes")({
   }),
 });
 
+const US_STATES = [
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+  "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+  "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC",
+];
+
 function AdminSweepstakesPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -73,12 +79,16 @@ function AdminSweepstakesPage() {
   const [sponsorName, setSponsorName] = useState("");
   const [sponsorAddress, setSponsorAddress] = useState("");
   const [sponsorEmail, setSponsorEmail] = useState("");
+  const [maxPrize, setMaxPrize] = useState<number>(4999);
+  const [excluded, setExcluded] = useState<string[]>([]);
 
   useEffect(() => {
     if (data) {
       setSponsorName(data.sponsor_name ?? "");
       setSponsorAddress(data.sponsor_address ?? "");
       setSponsorEmail(data.sponsor_email ?? "");
+      setMaxPrize(Number(data.max_daily_prize_usd ?? 4999));
+      setExcluded((data.excluded_states ?? []) as string[]);
     }
   }, [data]);
 
@@ -89,6 +99,8 @@ function AdminSweepstakesPage() {
           sponsor_name: sponsorName,
           sponsor_address: sponsorAddress,
           sponsor_email: sponsorEmail,
+          max_daily_prize_usd: Number(maxPrize),
+          excluded_states: excluded,
         },
       }),
     onSuccess: () => {
@@ -138,7 +150,14 @@ function AdminSweepstakesPage() {
     !!data &&
     (sponsorName !== data.sponsor_name ||
       sponsorAddress !== data.sponsor_address ||
-      sponsorEmail !== data.sponsor_email);
+      sponsorEmail !== data.sponsor_email ||
+      Number(maxPrize) !== Number(data.max_daily_prize_usd) ||
+      JSON.stringify([...excluded].sort()) !== JSON.stringify([...(data.excluded_states as string[] ?? [])].sort()));
+
+  const toggleState = (s: string) =>
+    setExcluded((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
+
+  const capWarning = Number(maxPrize) >= 5000;
 
   return (
     <div className="container max-w-3xl py-8 space-y-6">
@@ -146,7 +165,7 @@ function AdminSweepstakesPage() {
         <div>
           <h1 className="text-2xl font-bold">Configuración del Sorteo</h1>
           <p className="text-sm text-muted-foreground">
-            Datos legales del Sponsor (obligatorios para operar el sorteo en EE.UU.).
+            Datos legales del Sponsor + cap de premio + estados excluidos (obligatorios para operar en EE.UU.).
           </p>
         </div>
         <Link to="/admin/shipping" className="text-sm underline text-muted-foreground">
@@ -159,8 +178,8 @@ function AdminSweepstakesPage() {
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Dirección del Sponsor no configurada</AlertTitle>
           <AlertDescription>
-            El sorteo diario está <strong>bloqueado</strong> hasta que se complete una dirección
-            física válida. El cron de las 8:00 PM ET fallará y los premios se acumularán.
+            El sorteo diario y la inscripción de boletos están <strong>bloqueados</strong> hasta que se complete una
+            dirección física válida. La venta de Estrellas y la ruleta de cupones siguen activas.
           </AlertDescription>
         </Alert>
       )}
@@ -175,61 +194,94 @@ function AdminSweepstakesPage() {
       <Card>
         <CardHeader>
           <CardTitle>Sponsor</CardTitle>
-          <CardDescription>
-            Aparece en las reglas oficiales y en los emails al ganador.
-          </CardDescription>
+          <CardDescription>Aparece en las Reglas Oficiales y en los emails al ganador.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="sponsor_name">Razón social</Label>
-            <Input
-              id="sponsor_name"
-              value={sponsorName}
-              onChange={(e) => setSponsorName(e.target.value)}
-              maxLength={200}
-              placeholder="HAZOREX ORIGEN LLC"
-            />
+            <Input id="sponsor_name" value={sponsorName} onChange={(e) => setSponsorName(e.target.value)} maxLength={200} placeholder="HAZOREX ORIGEN LLC" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="sponsor_address">Dirección física *</Label>
-            <Textarea
-              id="sponsor_address"
-              value={sponsorAddress}
-              onChange={(e) => setSponsorAddress(e.target.value)}
-              maxLength={500}
-              rows={3}
-              placeholder="123 Main St, Suite 100, Miami, FL 33101, USA"
-            />
-            <p className="text-xs text-muted-foreground">
-              Debe ser una dirección postal real en EE.UU. No se permiten marcadores
-              entre corchetes ni la palabra "COMPLETAR".
-            </p>
+            <Textarea id="sponsor_address" value={sponsorAddress} onChange={(e) => setSponsorAddress(e.target.value)} maxLength={500} rows={3} placeholder="123 Main St, Suite 100, Miami, FL 33101, USA" />
+            <p className="text-xs text-muted-foreground">Debe ser una dirección postal real en EE.UU. (sin corchetes ni "COMPLETAR").</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="sponsor_email">Email de soporte</Label>
-            <Input
-              id="sponsor_email"
-              type="email"
-              value={sponsorEmail}
-              onChange={(e) => setSponsorEmail(e.target.value)}
-              maxLength={200}
-              placeholder="soporte@hazorex.com"
-            />
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={() => save.mutate()} disabled={!dirty || save.isPending}>
-              {save.isPending ? "Guardando…" : "Guardar cambios"}
-            </Button>
+            <Input id="sponsor_email" type="email" value={sponsorEmail} onChange={(e) => setSponsorEmail(e.target.value)} maxLength={200} placeholder="soporte@hazorex.com" />
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Ejecutar sorteo manual</CardTitle>
+          <CardTitle>Cap del Premio Diario (USD)</CardTitle>
           <CardDescription>
-            Útil para pruebas. El cron automático corre todos los días a las 8:00 PM ET.
+            Tope máximo del premio entregado por sorteo. El excedente se acumula al próximo día.
+            Mantener este valor &lt; $5,000 evita el requisito de registro/bond en CA/FL/NY/RI.
           </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Input type="number" min={1} max={1000000} step={1} value={maxPrize} onChange={(e) => setMaxPrize(Number(e.target.value || 0))} />
+          {capWarning && (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Cap ≥ $5,000</AlertTitle>
+              <AlertDescription>
+                Subir el cap a $5,000 USD o más activa requisitos de registro estatal en CA, FL, NY y RI antes de poder
+                operar legalmente con esos premios. Consulta a un abogado de sweepstakes antes de subir el cap.
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Estados excluidos</CardTitle>
+          <CardDescription>
+            Los residentes de estos estados NO pueden inscribir boletos (ni gratis ni pagados).
+            La compra de Estrellas no se restringe geográficamente — es un producto digital.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Por defecto excluye FL, NY, RI</AlertTitle>
+            <AlertDescription>
+              Quitar uno de estos estados requiere registro previo y bond (fianza) en ese estado antes de aceptar
+              participantes. No los quites sin asesoramiento legal.
+            </AlertDescription>
+          </Alert>
+          <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
+            {US_STATES.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => toggleState(s)}
+                className={`rounded border px-2 py-1 text-xs font-semibold transition ${
+                  excluded.includes(s)
+                    ? "bg-destructive text-destructive-foreground border-destructive"
+                    : "bg-background text-foreground border-input hover:bg-accent"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-end">
+        <Button onClick={() => save.mutate()} disabled={!dirty || save.isPending}>
+          {save.isPending ? "Guardando…" : "Guardar cambios"}
+        </Button>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Ejecutar sorteo manual</CardTitle>
+          <CardDescription>Útil para pruebas. El cron automático corre todos los días a las 8:00 PM ET.</CardDescription>
         </CardHeader>
         <CardContent>
           <AlertDialog>
@@ -245,23 +297,19 @@ function AdminSweepstakesPage() {
                   <div className="space-y-2">
                     {!addressValid && (
                       <div className="rounded border border-destructive/50 bg-destructive/10 p-2 text-destructive">
-                        ⚠ La dirección del Sponsor NO está configurada. El sorteo será
-                        rechazado por la base de datos.
+                        ⚠ La dirección del Sponsor NO está configurada. El sorteo será rechazado.
                       </div>
                     )}
                     <div>
-                      Esta acción seleccionará un ganador del día actual de forma
-                      irreversible y enviará el correo de notificación.
+                      Esta acción seleccionará un ganador del día actual de forma irreversible y enviará el correo de
+                      notificación.
                     </div>
                   </div>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => drawMut.mutate()}
-                  disabled={!addressValid}
-                >
+                <AlertDialogAction onClick={() => drawMut.mutate()} disabled={!addressValid}>
                   Sí, ejecutar
                 </AlertDialogAction>
               </AlertDialogFooter>
