@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      amoe_entries: {
+        Row: {
+          created_at: string
+          email: string
+          essay: string
+          full_name: string
+          id: string
+          ip: unknown
+          phone: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          essay: string
+          full_name: string
+          id?: string
+          ip?: unknown
+          phone: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          essay?: string
+          full_name?: string
+          id?: string
+          ip?: unknown
+          phone?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       app_settings: {
         Row: {
           created_at: string
@@ -220,6 +253,57 @@ export type Database = {
         }
         Relationships: []
       }
+      mission_claims: {
+        Row: {
+          created_at: string
+          guest_email: string | null
+          id: string
+          mission_key: string
+          tokens_awarded: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          mission_key: string
+          tokens_awarded: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          mission_key?: string
+          tokens_awarded?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      mission_starts: {
+        Row: {
+          guest_email: string | null
+          id: string
+          mission_key: string
+          started_at: string
+          user_id: string | null
+        }
+        Insert: {
+          guest_email?: string | null
+          id?: string
+          mission_key: string
+          started_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          guest_email?: string | null
+          id?: string
+          mission_key?: string
+          started_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_ratings: {
         Row: {
           created_at: string
@@ -422,6 +506,69 @@ export type Database = {
         }
         Relationships: []
       }
+      spin_coupons: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          prize_key: string
+          redeemed_at: string | null
+          subject_email: string | null
+          subject_user_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          prize_key: string
+          redeemed_at?: string | null
+          subject_email?: string | null
+          subject_user_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          prize_key?: string
+          redeemed_at?: string | null
+          subject_email?: string | null
+          subject_user_id?: string | null
+        }
+        Relationships: []
+      }
+      spin_history: {
+        Row: {
+          coupon_code: string | null
+          created_at: string
+          guest_email: string | null
+          id: string
+          prize_key: string
+          prize_label: string
+          tokens_spent: number
+          user_id: string | null
+        }
+        Insert: {
+          coupon_code?: string | null
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          prize_key: string
+          prize_label: string
+          tokens_spent?: number
+          user_id?: string | null
+        }
+        Update: {
+          coupon_code?: string | null
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          prize_key?: string
+          prize_label?: string
+          tokens_spent?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       subscription_plans: {
         Row: {
           active: boolean
@@ -542,6 +689,33 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_tokens: {
+        Row: {
+          balance: number
+          created_at: string
+          guest_email: string | null
+          id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          guest_email?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
