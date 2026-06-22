@@ -310,11 +310,14 @@ export const claimMission = createServerFn({ method: "POST" })
     }
 
     const reward = MISSIONS[data.mission].reward;
-    const insert =
-      subject.kind === "user"
-        ? { user_id: subject.userId, mission_key: data.mission, tokens_awarded: reward }
-        : { guest_email: subject.email, mission_key: data.mission, tokens_awarded: reward };
+    const insert = {
+      user_id: subject.kind === "user" ? subject.userId : null,
+      guest_email: subject.kind === "guest" ? subject.email : null,
+      mission_key: data.mission,
+      tokens_awarded: reward,
+    };
     const { error } = await sb.from("mission_claims").insert(insert);
+
     if (error) return { ok: false as const, error: error.message };
 
     const newBalance = await addTokens(subject, reward);
