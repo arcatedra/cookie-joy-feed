@@ -100,6 +100,11 @@ function Home() {
         backgroundSize: "18px 18px",
       }}
     >
+      {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
+      <div className="mx-auto max-w-[1500px] pt-3">
+        <DailyWinnerBanner />
+      </div>
+
       {/* Reels stories bar (Instagram-style, above the hero) */}
       <CookiesTV />
 
