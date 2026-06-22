@@ -14,6 +14,7 @@ import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -58,6 +59,11 @@ const ShopRoute = ShopRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuletaRoute = RuletaRouteImport.update({
+  id: '/ruleta',
+  path: '/ruleta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
+  '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
@@ -255,6 +264,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/menu'
     | '/profile'
+    | '/ruleta'
     | '/search'
     | '/shop'
     | '/subscribe'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/menu'
     | '/profile'
+    | '/ruleta'
     | '/search'
     | '/shop'
     | '/subscribe'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/menu'
     | '/profile'
+    | '/ruleta'
     | '/search'
     | '/shop'
     | '/subscribe'
@@ -336,6 +348,7 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   MenuRoute: typeof MenuRoute
   ProfileRoute: typeof ProfileRoute
+  RuletaRoute: typeof RuletaRoute
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
   SubscribeRoute: typeof SubscribeRoute
@@ -388,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ruleta': {
+      id: '/ruleta'
+      path: '/ruleta'
+      fullPath: '/ruleta'
+      preLoaderRoute: typeof RuletaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -554,6 +574,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   MenuRoute: MenuRoute,
   ProfileRoute: ProfileRoute,
+  RuletaRoute: RuletaRoute,
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
   SubscribeRoute: SubscribeRoute,
