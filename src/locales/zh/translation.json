@@ -1,0 +1,29 @@
+{
+  "common": {
+    "back": "返回",
+    "search": "搜索",
+    "addToCart": "加入购物车",
+    "viewCart": "查看购物车",
+    "loading": "加载中…",
+    "tryAgain": "重试",
+    "goHome": "返回首页"
+  },
+  "language": {
+    "switchTo": "选择语言"
+  },
+  "topnav": {
+    "cart": "购物车",
+    "all": "全部",
+    "searchPlaceholder": "搜索 Hazorex",
+    "deliverTo": "配送至",
+    "updateLocation": "更新位置",
+    "accountLists": "账户和列表",
+    "helloSignIn": "您好，请登录",
+    "returns": "退货",
+    "andOrders": "和订单"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出"
+  }
+}

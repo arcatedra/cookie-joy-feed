@@ -1,0 +1,29 @@
+{
+  "common": {
+    "back": "Retour",
+    "search": "Rechercher",
+    "addToCart": "Ajouter au panier",
+    "viewCart": "Voir le panier",
+    "loading": "Chargement…",
+    "tryAgain": "Réessayer",
+    "goHome": "Accueil"
+  },
+  "language": {
+    "switchTo": "Choisir la langue"
+  },
+  "topnav": {
+    "cart": "Panier",
+    "all": "Tout",
+    "searchPlaceholder": "Rechercher Hazorex",
+    "deliverTo": "Livrer à",
+    "updateLocation": "Mettre à jour",
+    "accountLists": "Compte et listes",
+    "helloSignIn": "Bonjour, connectez-vous",
+    "returns": "Retours",
+    "andOrders": "et commandes"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter"
+  }
+}
