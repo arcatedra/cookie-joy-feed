@@ -140,44 +140,28 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
         if (
           metaKind === "stars_purchase" &&
-          (eventType === "checkout.session.completed" ||
-            eventType === "payment_intent.succeeded")
+          eventType === "checkout.session.completed" &&
+          objectId.startsWith("cs_")
         ) {
-          // checkout.session.completed → object.id is cs_xxx (= stripe_session_id).
-          // payment_intent.succeeded → object.id is pi_xxx; fall back to matching by PI.
           const paymentIntentId =
-            eventType === "payment_intent.succeeded"
-              ? objectId
-              : ((dataObject?.payment_intent as string | undefined) ?? null);
+            (dataObject?.payment_intent as string | undefined) ?? null;
+          const sessionId = objectId;
 
-          let query = supabaseAdmin
+          const { data: purchase } = await supabaseAdmin
             .from("star_purchases")
             .select(
-              "id, status, package_id, tokens, amount_usd, subject_user_id, subject_email, stripe_session_id",
-            );
-
-          if (eventType === "checkout.session.completed" && objectId.startsWith("cs_")) {
-            query = query.eq("stripe_session_id", objectId);
-          } else if (paymentIntentId) {
-            query = query.eq("stripe_payment_intent_id", paymentIntentId);
-          } else {
-            return Response.json({ ok: true, ignored: "no session id", eventType });
-          }
-
-          const { data: purchase } = await query.maybeSingle();
+              "id, status, package_id, tokens, amount_usd, subject_user_id, subject_email",
+            )
+            .eq("stripe_session_id", sessionId)
+            .maybeSingle();
 
           if (!purchase) {
-            console.warn("[payments-webhook] stars purchase not found", {
-              eventType,
-              objectId,
-              paymentIntentId,
-            });
-            return Response.json({ ok: true, ignored: "purchase not found", eventType });
+            console.warn("[payments-webhook] stars purchase not found", { sessionId });
+            return Response.json({ ok: true, ignored: "purchase not found", sessionId });
           }
           if (purchase.status === "completed") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
-          const sessionId = purchase.stripe_session_id;
 
           const amount = Number(purchase.amount_usd);
           const platformShare = Math.round((amount / 2) * 100) / 100;
