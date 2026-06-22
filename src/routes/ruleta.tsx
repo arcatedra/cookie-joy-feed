@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useAuth } from "@/lib/auth";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -392,9 +393,16 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
 
 function BuyTokensPanel({ balance }: { balance: number }) {
   const checkout = useServerFn(createStarsCheckout);
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
+    if (!user) {
+      toast.info("Inicia sesión para comprar estrellas.");
+      navigate({ to: "/auth", search: { redirect: "/ruleta" } });
+      return;
+    }
     setLoadingId(packageId);
     try {
       const res = await checkout({ data: { packageId } });
