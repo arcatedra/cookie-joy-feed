@@ -29,6 +29,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -139,6 +140,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSweepstakesRoute = AdminSweepstakesRouteImport.update({
+  id: '/admin/sweepstakes',
+  path: '/admin/sweepstakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminShippingRoute = AdminShippingRouteImport.update({
   id: '/admin/shipping',
   path: '/admin/shipping',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/deliveries'
     | '/admin/shipping'
+    | '/admin/sweepstakes'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/deliveries'
     | '/admin/shipping'
+    | '/admin/sweepstakes'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/_authenticated/deliveries'
     | '/admin/shipping'
+    | '/admin/sweepstakes'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
+  AdminSweepstakesRoute: typeof AdminSweepstakesRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
@@ -561,6 +574,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/sweepstakes': {
+      id: '/admin/sweepstakes'
+      path: '/admin/sweepstakes'
+      fullPath: '/admin/sweepstakes'
+      preLoaderRoute: typeof AdminSweepstakesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/shipping': {
       id: '/admin/shipping'
       path: '/admin/shipping'
@@ -666,6 +686,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
+  AdminSweepstakesRoute: AdminSweepstakesRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
