@@ -112,7 +112,7 @@ export function PrizePoolCounter() {
             marginTop: 4,
           }}
         >
-          {contributions.toLocaleString("en-US")} contribuciones · 50% de cada compra
+          {contributions.toLocaleString("en-US")} contribuciones
         </div>
       </div>
       <style>{`
