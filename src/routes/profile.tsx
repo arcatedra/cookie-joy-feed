@@ -10,6 +10,7 @@ import {
   Cookie,
   LogOut,
   LogIn,
+  ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
