@@ -150,9 +150,27 @@ function AuthPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {mode === "signup" && (
+            <label className="flex items-start gap-2 rounded-xl border border-input bg-card p-3 text-xs text-foreground cursor-pointer">
+              <input
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+                aria-required
+              />
+              <span className="leading-snug">
+                Acepto los{" "}
+                <Link to="/terms" className="font-semibold underline">
+                  Términos y Condiciones
+                </Link>{" "}
+                y confirmo que la participación en este sorteo es legal en mi lugar de residencia.
+              </span>
+            </label>
+          )}
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || (mode === "signup" && !acceptedTerms)}
             className="w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow active:scale-95 transition disabled:opacity-60"
           >
             {mode === "signin" ? t("auth.signIn") : t("auth.signUp")}
