@@ -159,12 +159,12 @@ function RuletaPage() {
           balance={balance}
           onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
         />
-        {/* Keep legacy bonus spin (mini ruleta personal) hidden — focus is the live draw */}
-        {false && (
+        {/* Legacy mini-ruleta retained but hidden — live draw is the focus */}
+        {false && lastPrize && (
           <section>
             <Wheel rotation={rotation} spinning={spinning} />
             <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
-            {lastPrize && <PrizeCard prize={lastPrize} />}
+            <PrizeCard prize={lastPrize} />
           </section>
         )}
 
