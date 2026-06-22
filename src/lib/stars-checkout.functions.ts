@@ -95,7 +95,7 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
                 unit_amount: Math.round(pkg.priceUsd * 100),
                 product_data: {
                   name: `${pkg.tokens} Estrellas — HAZOREX ORIGEN`,
-                  description: `Paquete ${pkg.label}. 50% se acumula en el Prize Pool global.`,
+                  description: `Paquete ${pkg.label} de Estrellas.`,
                 },
               },
             },
