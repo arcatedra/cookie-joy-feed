@@ -252,3 +252,29 @@ function DonorBadge({ userId }: { userId: string | null }) {
     </div>
   );
 }
+
+function TermsBadge({ userId }: { userId: string | null }) {
+  const { data } = useQuery({
+    queryKey: ["profile-terms", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("terms_accepted, terms_accepted_at")
+        .eq("id", userId!)
+        .maybeSingle();
+      if (error) return null;
+      return data;
+    },
+  });
+  if (!data?.terms_accepted) return null;
+  const when = data.terms_accepted_at ? new Date(data.terms_accepted_at).toLocaleDateString() : null;
+  return (
+    <div className="mt-3 flex justify-center">
+      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+        <ShieldCheck className="h-4 w-4" />
+        <span>Cuenta verificada · Términos aceptados{when ? ` el ${when}` : ""}</span>
+      </div>
+    </div>
+  );
+}
