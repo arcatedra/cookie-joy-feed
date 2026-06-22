@@ -396,8 +396,13 @@ function BuyTokensPanel({ balance }: { balance: number }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
+    if (!acceptedTerms) {
+      toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
+      return;
+    }
     if (!user) {
       toast.info("Inicia sesión para comprar estrellas.");
       navigate({ to: "/auth", search: { redirect: "/ruleta" } });
