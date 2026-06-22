@@ -129,37 +129,55 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         }
 
         // --- Stars purchase (HAZOREX prize-pool flow) ---
-        const metaKind = findString(payload, "kind");
+        const dataObject =
+          ((payload as { data?: { object?: Record<string, unknown> } })?.data?.object as
+            | Record<string, unknown>
+            | undefined) ?? undefined;
+        const objectId = (dataObject?.id as string | undefined) ?? "";
+        const metaKind =
+          (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
+          findString(payload, "kind");
+
         if (
           metaKind === "stars_purchase" &&
           (eventType === "checkout.session.completed" ||
             eventType === "payment_intent.succeeded")
         ) {
-          const sessionId =
-            findString(payload, "id") ??
-            findString(payload, "checkout_session_id") ??
-            "";
+          // checkout.session.completed → object.id is cs_xxx (= stripe_session_id).
+          // payment_intent.succeeded → object.id is pi_xxx; fall back to matching by PI.
           const paymentIntentId =
-            findString(payload, "payment_intent_id") ??
-            findString(payload, "payment_intent") ??
-            null;
+            eventType === "payment_intent.succeeded"
+              ? objectId
+              : ((dataObject?.payment_intent as string | undefined) ?? null);
 
-          if (!sessionId) {
-            return Response.json({ ok: true, ignored: "no session id" });
+          let query = supabaseAdmin
+            .from("star_purchases")
+            .select(
+              "id, status, package_id, tokens, amount_usd, subject_user_id, subject_email, stripe_session_id",
+            );
+
+          if (eventType === "checkout.session.completed" && objectId.startsWith("cs_")) {
+            query = query.eq("stripe_session_id", objectId);
+          } else if (paymentIntentId) {
+            query = query.eq("stripe_payment_intent_id", paymentIntentId);
+          } else {
+            return Response.json({ ok: true, ignored: "no session id", eventType });
           }
 
-          const { data: purchase } = await supabaseAdmin
-            .from("star_purchases")
-            .select("id, status, package_id, tokens, amount_usd, subject_user_id, subject_email")
-            .eq("stripe_session_id", sessionId)
-            .maybeSingle();
+          const { data: purchase } = await query.maybeSingle();
 
           if (!purchase) {
-            return Response.json({ ok: true, ignored: "purchase not found" });
+            console.warn("[payments-webhook] stars purchase not found", {
+              eventType,
+              objectId,
+              paymentIntentId,
+            });
+            return Response.json({ ok: true, ignored: "purchase not found", eventType });
           }
           if (purchase.status === "completed") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
+          const sessionId = purchase.stripe_session_id;
 
           const amount = Number(purchase.amount_usd);
           const platformShare = Math.round((amount / 2) * 100) / 100;
