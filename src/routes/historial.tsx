@@ -7,7 +7,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Calendar, DollarSign, Hash, ArrowLeft } from "lucide-react";
 
-const historyQO = (fn: () => Promise<Awaited<ReturnType<typeof getDrawHistory>>>) =>
+type Winner = Awaited<ReturnType<typeof getDrawHistory>>[number];
+
+const historyQO = (fn: () => Promise<Winner[]>) =>
   queryOptions({
     queryKey: ["draw-history", 50],
     queryFn: fn,
