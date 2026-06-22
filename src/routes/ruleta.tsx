@@ -642,7 +642,7 @@ function AmoeFlow({
   const hasAmoe = state?.hasAmoe ?? false;
 
   return (
-    <section>
+    <section id="amoe" style={{ scrollMarginTop: 80 }}>
       <div
         style={{
           background: BEIGE,
