@@ -652,15 +652,57 @@ function BuyTokensPanel({ balance }: { balance: number }) {
         })}
       </div>
 
+      {/* Fair-Play certified badge */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 12,
+          background: `linear-gradient(135deg, ${BEIGE} 0%, #fff8ea 100%)`,
+          border: `1px solid ${GOLD}`,
+          borderRadius: 14,
+          padding: "14px 18px",
+          color: BLUE,
+          fontSize: 13,
+          textAlign: "center",
+          boxShadow: `inset 0 0 0 1px ${GOLD}22`,
+        }}
+      >
+        <div
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            background: BLUE,
+            display: "grid",
+            placeItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill={GOLD_BRIGHT} aria-hidden>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <div style={{ fontWeight: 900, letterSpacing: "0.1em", fontSize: 12, color: BLUE }}>
+            CERTIFIED FAIR PLAY · NO RIGGED
+          </div>
+          <div style={{ fontSize: 11, color: BLUE_SOFT, marginTop: 2 }}>
+            Selección aleatoria criptográfica · ponderación pública · auditable
+          </div>
+        </div>
+      </div>
+
       {/* Legal footer */}
       <footer
         style={{
           background: BLUE,
           color: BEIGE,
           borderRadius: 18,
-          padding: "18px 22px",
+          padding: "20px 22px",
           display: "grid",
-          gap: 10,
+          gap: 12,
           textAlign: "center",
           fontSize: 12,
         }}
@@ -684,7 +726,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           </a>
           <span style={{ opacity: 0.4 }}>·</span>
           <a href="#amoe" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
-            Participación Gratuita (AMOE)
+            Método de Participación Gratuita
           </a>
         </div>
         <p style={{ margin: 0, opacity: 0.75, fontSize: 11, letterSpacing: "0.04em" }}>
@@ -692,6 +734,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           probabilidades de ganar. Mayores de 18 años. Nulo donde la ley lo prohíba.
         </p>
       </footer>
+
     </section>
   );
 }
