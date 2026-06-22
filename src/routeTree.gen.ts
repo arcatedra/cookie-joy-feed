@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TrustRouteImport } from './routes/trust'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
@@ -44,6 +46,16 @@ const UnsubscribeRoute = UnsubscribeRouteImport.update({
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SweepstakesRulesRoute = SweepstakesRulesRouteImport.update({
+  id: '/sweepstakes-rules',
+  path: '/sweepstakes-rules',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubscribeRoute = SubscribeRouteImport.update({
@@ -183,6 +195,8 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -210,6 +224,8 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -239,6 +255,8 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/subscribe': typeof SubscribeRoute
+  '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -268,6 +286,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/sweepstakes-rules'
+    | '/terms'
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
@@ -295,6 +315,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/sweepstakes-rules'
+    | '/terms'
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
@@ -323,6 +345,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/subscribe'
+    | '/sweepstakes-rules'
+    | '/terms'
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
@@ -352,6 +376,8 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
   SubscribeRoute: typeof SubscribeRoute
+  SweepstakesRulesRoute: typeof SweepstakesRulesRoute
+  TermsRoute: typeof TermsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
@@ -380,6 +406,20 @@ declare module '@tanstack/react-router' {
       path: '/trust'
       fullPath: '/trust'
       preLoaderRoute: typeof TrustRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sweepstakes-rules': {
+      id: '/sweepstakes-rules'
+      path: '/sweepstakes-rules'
+      fullPath: '/sweepstakes-rules'
+      preLoaderRoute: typeof SweepstakesRulesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subscribe': {
@@ -578,6 +618,8 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
   SubscribeRoute: SubscribeRoute,
+  SweepstakesRulesRoute: SweepstakesRulesRoute,
+  TermsRoute: TermsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
