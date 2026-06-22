@@ -12,6 +12,7 @@ import {
 } from "@/lib/roulette.functions";
 import { createStarsCheckout } from "@/lib/stars-checkout.functions";
 import { PrizePoolCounter } from "@/components/PrizePoolCounter";
+import { LiveDrawSection } from "@/components/LiveDrawSection";
 import {
   MISSIONS,
   PRIZES,
@@ -154,18 +155,11 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr)",
-            gap: "2rem",
-            placeItems: "center",
-          }}
-        >
-          <Wheel rotation={rotation} spinning={spinning} />
-          <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
-          {lastPrize && <PrizeCard prize={lastPrize} />}
-        </section>
+        <LiveDrawSection
+          balance={balance}
+          onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+        />
+        {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
         <BuyTokensPanel />
 
