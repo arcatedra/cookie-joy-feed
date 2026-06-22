@@ -161,8 +161,8 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
 
   const amoeQ =
     subject.kind === "guest"
-      ? sb.from("amoe_entries").select("id").ilike("email", subject.email).maybeSingle()
-      : sb.from("amoe_entries").select("id").eq("user_id", subject.userId).maybeSingle();
+      ? sb.from("amoe_entries").select("id").ilike("email", subject.email).limit(1)
+      : sb.from("amoe_entries").select("id").eq("user_id", subject.userId).limit(1);
 
   const [claims, starts, spins, amoe] = await Promise.all([claimsQ, startsQ, spinsQ, amoeQ]);
 
