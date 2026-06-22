@@ -43,13 +43,18 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
   const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });
-  const { data, error } = await sb.rpc("get_today_draw");
-  if (error) {
-    console.error("[daily-draw] get_today_draw error", error);
+  const [drawRes, cfgRes] = await Promise.all([
+    sb.rpc("get_today_draw"),
+    sb.rpc("get_sweepstakes_public_config"),
+  ]);
+  if (drawRes.error) {
+    console.error("[daily-draw] get_today_draw error", drawRes.error);
     return null;
   }
-  const row = Array.isArray(data) ? data[0] : data;
+  const row = Array.isArray(drawRes.data) ? drawRes.data[0] : drawRes.data;
   if (!row) return null;
+  const cfgRow = Array.isArray(cfgRes.data) ? cfgRes.data[0] : cfgRes.data;
+  const addressValid = Boolean(cfgRow?.address_valid ?? false);
   return {
     drawDate: row.draw_date as string,
     status: row.status as "open" | "drawing" | "completed" | "rolled_over",
@@ -60,6 +65,8 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
     winnerDisplayName: (row.winner_display_name as string | null) ?? null,
     seedHash: (row.seed_hash as string | null) ?? null,
     rolledOverFrom: (row.rolled_over_from as string | null) ?? null,
+    addressValid,
+    maxDailyPrizeUsd: Number(cfgRow?.max_daily_prize_usd ?? 4999),
   };
 });
 
