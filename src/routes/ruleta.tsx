@@ -867,13 +867,32 @@ function AmoeDialog({
 
 function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
   const submit = useServerFn(submitAmoeEntry);
-  const [form, setForm] = useState({ fullName: "", email: "", phone: "", essay: "" });
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    essay: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+    dob: "",
+    acceptRules: false as boolean,
+  });
   const wc = form.essay.trim().split(/\s+/).filter(Boolean).length;
   const m = useMutation({
-    mutationFn: () => submit({ data: form }),
+    mutationFn: () =>
+      submit({
+        data: {
+          ...form,
+          state: form.state.toUpperCase(),
+          acceptRules: true as const,
+        },
+      }),
     onSuccess: (res) => {
       if (res.ok) {
-        toast.success("¡Recibimos tu entrada! +1 ⭐");
+        toast.success("¡Recibimos tu entrada gratuita! 🎟️ Tienes 1 boleto en el sorteo de hoy.");
         onSuccess();
       } else {
         toast.error(res.error);
@@ -895,71 +914,72 @@ function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (!form.acceptRules) return toast.error("Debes aceptar las Reglas Oficiales.");
         if (wc < 300) return toast.error("El ensayo debe tener al menos 300 palabras.");
         m.mutate();
       }}
       style={{ display: "grid", gap: 12, marginTop: 16 }}
     >
       <p style={{ fontSize: 13, color: BLUE_SOFT, margin: 0 }}>
-        Completa el formulario para recibir <strong>1 estrella gratuita</strong> y desbloquear las
-        misiones.
+        Entrada gratuita oficial (AMOE). <strong>1 boleto real</strong> en el sorteo de hoy con el
+        mismo peso que un boleto pagado. NO ES NECESARIA UNA COMPRA PARA PARTICIPAR.
       </p>
-      <input
-        required
-        placeholder="Nombre completo"
-        value={form.fullName}
-        onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-        style={inputStyle}
-      />
-      <input
-        required
-        type="email"
-        placeholder="Correo electrónico"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        style={inputStyle}
-      />
-      <input
-        required
-        type="tel"
-        placeholder="Teléfono"
-        value={form.phone}
-        onChange={(e) => setForm({ ...form, phone: e.target.value })}
-        style={inputStyle}
-      />
-      <textarea
-        required
-        placeholder="Cuéntanos por qué te gusta la marca ORIGEN (mín. 300 palabras)"
-        value={form.essay}
-        onChange={(e) => setForm({ ...form, essay: e.target.value })}
-        rows={8}
-        style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
-      />
-      <div
-        style={{
-          fontSize: 12,
-          color: wc >= 300 ? "#1f7a3a" : BLUE_SOFT,
-          textAlign: "right",
-        }}
-      >
+      <input required placeholder="Nombre legal completo" value={form.fullName}
+        onChange={(e) => setForm({ ...form, fullName: e.target.value })} style={inputStyle} />
+      <input required type="email" placeholder="Correo electrónico" value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })} style={inputStyle} />
+      <input required type="tel" placeholder="Teléfono" value={form.phone}
+        onChange={(e) => setForm({ ...form, phone: e.target.value })} style={inputStyle} />
+      <div style={{ display: "grid", gap: 6 }}>
+        <label style={{ fontSize: 12, color: BLUE_SOFT }}>Fecha de nacimiento (mín. 18 años)</label>
+        <input required type="date" value={form.dob}
+          onChange={(e) => setForm({ ...form, dob: e.target.value })} style={inputStyle} />
+      </div>
+      <input required placeholder="Dirección (línea 1)" value={form.address1}
+        onChange={(e) => setForm({ ...form, address1: e.target.value })} style={inputStyle} />
+      <input placeholder="Dirección (línea 2, opcional)" value={form.address2}
+        onChange={(e) => setForm({ ...form, address2: e.target.value })} style={inputStyle} />
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8 }}>
+        <input required placeholder="Ciudad" value={form.city}
+          onChange={(e) => setForm({ ...form, city: e.target.value })} style={inputStyle} />
+        <input required placeholder="Estado (CA)" maxLength={2} value={form.state}
+          onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })} style={inputStyle} />
+        <input required placeholder="ZIP" value={form.zip}
+          onChange={(e) => setForm({ ...form, zip: e.target.value })} style={inputStyle} />
+      </div>
+      <textarea required
+        placeholder="Ensayo original: cuéntanos por qué te gusta ORIGEN (mín. 300 palabras)"
+        value={form.essay} onChange={(e) => setForm({ ...form, essay: e.target.value })}
+        rows={8} style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
+      <div style={{ fontSize: 12, color: wc >= 300 ? "#1f7a3a" : BLUE_SOFT, textAlign: "right" }}>
         {wc} / 300 palabras
       </div>
-      <button
-        type="submit"
-        disabled={m.isPending || wc < 300}
+      <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: BLUE_SOFT }}>
+        <input type="checkbox" checked={form.acceptRules}
+          onChange={(e) => setForm({ ...form, acceptRules: e.target.checked })} />
+        <span>
+          Confirmo que tengo 18+ años, soy residente legal de EE.UU. (excepto FL, NY, RI) y acepto las{" "}
+          <a href="/sweepstakes-rules" target="_blank" style={{ color: BLUE, fontWeight: 700 }}>
+            Reglas Oficiales del Sorteo
+          </a>.
+        </span>
+      </label>
+      <button type="submit" disabled={m.isPending || wc < 300 || !form.acceptRules}
         style={{
           padding: "14px",
-          background: wc < 300 ? BEIGE_DEEP : BLUE,
-          color: wc < 300 ? BLUE_SOFT : BEIGE,
-          border: "none",
-          borderRadius: 10,
-          fontWeight: 800,
-          cursor: wc < 300 ? "not-allowed" : "pointer",
+          background: wc < 300 || !form.acceptRules ? BEIGE_DEEP : BLUE,
+          color: wc < 300 || !form.acceptRules ? BLUE_SOFT : BEIGE,
+          border: "none", borderRadius: 10, fontWeight: 800,
+          cursor: wc < 300 || !form.acceptRules ? "not-allowed" : "pointer",
           letterSpacing: "0.1em",
-        }}
-      >
-        {m.isPending ? "ENVIANDO…" : "ENVIAR Y RECIBIR 1 ⭐"}
+        }}>
+        {m.isPending ? "ENVIANDO…" : "ENVIAR ENTRADA GRATUITA 🎟️"}
       </button>
+      <p style={{ fontSize: 11, color: BLUE_SOFT, margin: 0, lineHeight: 1.5 }}>
+        Como alternativa postal, envía una postal escrita a mano con: nombre, dirección, email,
+        teléfono y fecha de nacimiento a la dirección listada en las{" "}
+        <a href="/sweepstakes-rules" style={{ color: BLUE }}>Reglas Oficiales</a>.
+      </p>
     </form>
   );
 }
