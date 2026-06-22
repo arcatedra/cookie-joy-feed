@@ -1,81 +1,122 @@
 
-## Objetivo
-Rediseñar la sección "Compra de Estrellas" dentro de `/ruleta` con un look premium, integrar pagos reales con Stripe (Lovable Payments), y aplicar la regla 50/50: mitad va a la plataforma, mitad alimenta un Prize Pool global mostrado con contador animado.
+# Sorteo Diario Automático "Live Draw" 8:00 PM
+
+Convertir la ruleta personal (cada usuario gira sus propias estrellas) en un **sorteo comunitario diario** automatizado: cada usuario que compre estrellas durante el día queda inscrito; a las 20:00 (hora local del servidor) la ruleta se cierra, gira sola en pantalla y revela al ganador del bote acumulado.
+
+> Nota importante: el modelo actual de la página `/ruleta` permite a cada usuario gastar 10 ⭐ y girar individualmente. Este cambio reorienta la página al **sorteo diario** — la mecánica individual de "gira tú mismo" desaparecería de la pantalla principal (las misiones sociales y compra de estrellas se mantienen, pero ahora las estrellas = **boletos del sorteo del día**).
+
+---
 
 ## 1. Base de datos (migración)
 
-Nueva tabla `prize_pool_ledger` (registro inmutable de cada aporte):
-- `package_id` (text), `amount_usd` (numeric), `tokens_purchased` (int)
-- `platform_share_usd`, `pool_share_usd` (numeric — split 50/50)
-- `subject_user_id` (uuid, nullable), `subject_email` (text, nullable)
-- `stripe_session_id` (text, unique), `created_at`
-- RLS: solo `service_role` lee/escribe. GRANTs explícitos.
+Nueva tabla `daily_draws`:
+- `draw_date` (date, único) — el día del sorteo
+- `status` — `open` | `drawing` | `completed`
+- `winner_subject_id`, `winner_email`, `winner_display_name`
+- `prize_usd` — snapshot del bote acumulado en el momento del cierre
+- `tickets_total`, `entrants_total`
+- `scheduled_at`, `drawn_at`
+- `seed_hash` (transparencia — hash determinístico)
 
-Vista pública `prize_pool_totals` (lectura `anon`):
-- `total_pool_usd`, `total_contributions`, `last_updated`
-- GRANT SELECT a `anon` y `authenticated`.
+Nueva tabla `daily_draw_entries`:
+- `draw_date`, `subject_user_id`/`subject_email`, `display_name`, `tickets` (1 ticket por ⭐ comprada ese día)
+- Único por (draw_date, subject)
 
-Función RPC `get_prize_pool()` (SECURITY DEFINER) que devuelve el total — la única forma en que el front lee el pozo.
+RPC `get_today_draw_status()` (SECURITY DEFINER, público):
+- Devuelve `{ draw_date, status, prize_usd_live, entrants_count, winner?, scheduled_at }`
+- `prize_usd_live` = suma de `pool_share_usd` del día de hoy (ya existe `prize_pool_ledger`)
 
-## 2. Pagos (Stripe Embedded Checkout)
+RPC `get_recent_winners(limit int)`:
+- Últimos N ganadores con `draw_date`, `display_name` (truncado a iniciales+nombre), `prize_usd`
 
-- Habilitar `enable_stripe_payments` + crear 3 productos/precios:
-  - `stars_starter` → 10⭐ / $2
-  - `stars_popular` → 30⭐ / $5
-  - `stars_premium` → 100⭐ / $15
-- Server fn `createStarsCheckout` (en `src/lib/stars-checkout.functions.ts`): crea sesión embedded, resuelve customer con `metadata.userId`, mete `metadata.package_id` y `metadata.subject_email` en la sesión.
-- Webhook `src/routes/api/public/payments/webhook.ts` (extender el existente): en `checkout.session.completed`, verifica firma, calcula split 50/50, inserta fila en `prize_pool_ledger`, acredita estrellas al `user_tokens` del comprador.
-- Modal de checkout embedded reutilizando patrón `useStripeCheckout` + `PaymentTestModeBanner` arriba.
+GRANTs: `SELECT` a `anon` en RPC; tablas sólo `service_role`.
 
-## 3. UI — Nueva sección "Compra de Estrellas"
+## 2. Lógica de inscripción
 
-Reescribir `BuyTokensPanel` en `src/routes/ruleta.tsx` manteniendo paleta beige/azul/oro existente:
+En el webhook de Stripe (`/api/public/payments/webhook.ts`), cuando se confirme una compra de estrellas:
+- Además del split 50/50 ya implementado → insertar/actualizar fila en `daily_draw_entries` para `draw_date = today (America/New_York o zona configurada)`, sumando `tickets += stars`.
 
-**Header del módulo**
-- Título grande "Compra Estrellas" + subtítulo "El 50% de cada compra alimenta el Prize Pool global".
-- Banner Prize Pool: card oscura ancha con
-  - "POZO ACUMULADO GLOBAL" en oro
-  - Cifra `$XX,XXX.XX USD` con contador animado (cuenta atrás/arriba usando `requestAnimationFrame`, easing easeOutExpo)
-  - Polling vía React Query cada 15s al RPC `get_prize_pool`
-  - Ícono estrella + brillo pulsante
+## 3. Trigger automático 20:00 (pg_cron)
 
-**3 tarjetas de paquetes** (grid responsivo)
-- Glassmorphism sutil sobre beige, bordes redondeados 24px, sombra suave
-- Estado hover: lift + brillo dorado en el borde
-- Tarjeta **Popular** (centro):
-  - Escala 1.05, badge "MÁS POPULAR" flotante con gradiente oro
-  - Borde animado (gradient sweep) y resplandor dorado
-  - Etiqueta "Mejor valor +20%"
-- Cada card muestra:
-  - Pictograma estrella grande
-  - Cantidad de estrellas (tipografía display 48px)
-  - Precio USD prominente
-  - Línea micro: "$X.XX → Prize Pool" (transparencia del split)
-  - Botón "COMPRAR" sólido azul → abre embedded checkout
-- Animación de entrada staggered (fade + slide up)
+Crear ruta `/api/public/hooks/run-daily-draw` (POST, autenticada con `apikey` anon):
+1. Idempotente: si ya hay `daily_draws` con `status='completed'` para hoy → return.
+2. Cargar entries del día. Si 0 → marcar `status='completed'` sin ganador, devolver.
+3. Snapshot del bote → `prize_usd`.
+4. Generar `seed = sha256(draw_date || prize_pool_ledger_count || random_bytes)`; convertir a número, mod por suma total de tickets → seleccionar ganador ponderado por tickets.
+5. Insertar `daily_draws` con status `completed`, ganador, hash.
+6. Limpiar/reiniciar `prize_pool_ledger` no — el bote se acumula histórico; usamos `prize_usd` snapshot.
 
-**Footer legal del módulo**
-- Tira oscura discreta con 3 enlaces:
-  - Términos y Condiciones → `/terms`
-  - Reglas Oficiales del Sorteo → `/sweepstakes-rules`
-  - Participación Gratuita (No Purchase Necessary) → ancla `#amoe` a la sección AMOE ya existente
-- Disclaimer corto: "No se requiere compra. Nulo donde la ley lo prohíba. Mayores de 18 años."
+Programar con `pg_cron` diario 20:00:
+```sql
+SELECT cron.schedule('daily-roulette-draw', '0 0 * * *',  -- 20:00 ET = 00:00 UTC
+  $$ SELECT net.http_post(
+    url:='https://project--<id>.lovable.app/api/public/hooks/run-daily-draw',
+    headers:='{"apikey":"<anon>","Content-Type":"application/json"}'::jsonb,
+    body:='{}'::jsonb
+  ); $$
+);
+```
+(Ajustar a la zona horaria que confirme el usuario.)
 
-Crear páginas placeholder `/terms` y `/sweepstakes-rules` con estructura legal básica (texto editable luego).
+## 4. UI — Pantalla `/ruleta` rediseñada
 
-## 4. Detalles técnicos clave
+### Panel superior fijo (Bote)
+- Banner sticky en el top con `PrizePoolCounter` (ya existe) reutilizado para mostrar **bote del día**.
+- Animación: pulso dorado cada vez que cambie el monto (polling 10s); badge "EN VIVO".
+- Cuenta regresiva grande: `HH:MM:SS` hasta las 20:00.
+- Contador de participantes inscritos hoy.
 
-- Split se calcula en el webhook (no en cliente) usando `amount_total` real de Stripe.
-- Idempotencia: `stripe_session_id UNIQUE` en `prize_pool_ledger` evita doble acreditación.
-- El contador anima desde el último valor conocido al nuevo valor (no desde 0) usando `useRef` para memorizar valor previo.
-- No tocar nada fuera de: `src/routes/ruleta.tsx`, nuevos archivos `stars-checkout.functions.ts`, webhook, migración, y nuevas rutas legales.
+### Estado `open` (antes de 20:00)
+- La ruleta se muestra estática con leyenda "El sorteo gira automáticamente a las 8:00 PM".
+- Botón principal cambia de "GIRAR" a "COMPRAR ESTRELLAS PARA PARTICIPAR".
+- Lista de participantes (avatares/iniciales) corriendo en marquee.
 
-## Archivos a crear/editar
-- ➕ `supabase/migrations/<ts>_prize_pool.sql`
-- ➕ `src/lib/stars-checkout.functions.ts`
-- ➕ `src/components/PrizePoolCounter.tsx`
-- ➕ `src/components/StarsCheckoutModal.tsx`
-- ➕ `src/routes/terms.tsx`, `src/routes/sweepstakes-rules.tsx`
-- ✏️ `src/routes/ruleta.tsx` (reemplazar `BuyTokensPanel`)
-- ✏️ `src/routes/api/public/payments/webhook.ts` (rama `stars_*`)
-- ✏️ `src/lib/roulette-config.ts` (priceId por paquete)
+### Estado `drawing` (20:00 – 20:00:08)
+- Polling cada 1s; al detectar `status='drawing'` o `completed` reciente:
+- Animación de giro 6s con desaceleración cubic-bezier, con punteros recorriendo nombres de participantes en el aro exterior.
+- Audio opcional (tick-tick acelerado → lento).
+
+### Estado `completed`
+- Confeti (`canvas-confetti`), flash dorado, modal gigante:
+  - "🎉 ¡GANADOR DEL DÍA!"
+  - Nombre del ganador (text-6xl)
+  - Premio en USD (text-7xl gold)
+  - Hash de transparencia (pequeño, copiable)
+- Auto-cerrable a los 30s, queda en estado "Próximo sorteo: mañana 8:00 PM".
+
+### Leaderboard histórico
+- Sección debajo de la ruleta: tabla con últimos 14 ganadores
+- Columnas: Fecha · Ganador · Premio · Hash
+- Card design glassmorphism, fila destacada para "HOY".
+
+## 5. Archivos a crear / modificar
+
+**Nuevos:**
+- `supabase/migrations/<ts>_daily_draws.sql` (tablas + RPCs + GRANTs)
+- `src/lib/daily-draw.functions.ts` — `getTodayDraw()`, `getRecentWinners()`, `getMyEntry()`
+- `src/routes/api/public/hooks/run-daily-draw.ts` — el ejecutor
+- `src/components/DailyDrawBanner.tsx` — banner sticky + countdown
+- `src/components/LiveRoulette.tsx` — ruleta con animación de live draw
+- `src/components/WinnerCelebration.tsx` — confeti + modal
+- `src/components/WinnersLeaderboard.tsx`
+
+**Modificados:**
+- `src/routes/ruleta.tsx` — reorganizado: Banner → Ruleta Live → Misiones+Compra → Leaderboard
+- `src/routes/api/public/payments/webhook.ts` — agregar inscripción en `daily_draw_entries`
+- `package.json` — añadir `canvas-confetti`
+
+## 6. Detalles técnicos
+
+- Zona horaria por defecto: **America/New_York** (confirmar con usuario). El día del sorteo se calcula con `date_trunc('day', now() AT TIME ZONE 'America/New_York')`.
+- Transparencia: el `seed_hash` se publica antes del sorteo (commit-reveal opcional en v2).
+- Privacidad: mostrar solo `Nombre A.` (inicial del apellido) en el leaderboard.
+- Idempotencia del cron: PK única en `daily_draws(draw_date)` previene doble sorteo.
+- Disclaimer legal mantenido en footer (AMOE sigue activo).
+
+## 7. Preguntas pendientes
+
+1. **Zona horaria del "8:00 PM"**: ¿America/New_York, America/Mexico_City, otra?
+2. **¿Qué pasa si nadie compró estrellas un día?** Plan: marcar sin ganador y el bote rueda al siguiente día (cambiar lógica de `prize_usd` snapshot).
+3. **¿Las estrellas se "consumen" al participar o son acumulativas para múltiples días?** Plan actual: cada compra del día = N tickets sólo para ese día (se "consumen" al cerrar el sorteo).
+
+Confirmar estas 3 decisiones antes de implementar.
