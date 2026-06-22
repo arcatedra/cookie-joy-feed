@@ -16,34 +16,64 @@ export type Database = {
     Tables: {
       amoe_entries: {
         Row: {
+          address1: string | null
+          address2: string | null
+          city: string | null
           created_at: string
+          dob: string | null
+          draw_date: string | null
+          draw_entry_id: string | null
           email: string
           essay: string
           full_name: string
           id: string
           ip: unknown
           phone: string
+          source: string
+          state: string | null
+          user_agent: string | null
           user_id: string | null
+          zip: string | null
         }
         Insert: {
+          address1?: string | null
+          address2?: string | null
+          city?: string | null
           created_at?: string
+          dob?: string | null
+          draw_date?: string | null
+          draw_entry_id?: string | null
           email: string
           essay: string
           full_name: string
           id?: string
           ip?: unknown
           phone: string
+          source?: string
+          state?: string | null
+          user_agent?: string | null
           user_id?: string | null
+          zip?: string | null
         }
         Update: {
+          address1?: string | null
+          address2?: string | null
+          city?: string | null
           created_at?: string
+          dob?: string | null
+          draw_date?: string | null
+          draw_entry_id?: string | null
           email?: string
           essay?: string
           full_name?: string
           id?: string
           ip?: unknown
           phone?: string
+          source?: string
+          state?: string | null
+          user_agent?: string | null
           user_id?: string | null
+          zip?: string | null
         }
         Relationships: []
       }
@@ -80,6 +110,7 @@ export type Database = {
           display_name: string
           draw_date: string
           id: string
+          source: string
           subject_email: string | null
           subject_user_id: string | null
           tickets: number
@@ -89,6 +120,7 @@ export type Database = {
           display_name: string
           draw_date: string
           id?: string
+          source?: string
           subject_email?: string | null
           subject_user_id?: string | null
           tickets?: number
@@ -98,6 +130,7 @@ export type Database = {
           display_name?: string
           draw_date?: string
           id?: string
+          source?: string
           subject_email?: string | null
           subject_user_id?: string | null
           tickets?: number
@@ -845,6 +878,42 @@ export type Database = {
         }
         Relationships: []
       }
+      sweepstakes_config: {
+        Row: {
+          claim_window_days: number
+          entry_cutoff_minutes: number
+          excluded_states: string[]
+          id: boolean
+          min_age: number
+          sponsor_address: string
+          sponsor_email: string
+          sponsor_name: string
+          updated_at: string
+        }
+        Insert: {
+          claim_window_days?: number
+          entry_cutoff_minutes?: number
+          excluded_states?: string[]
+          id?: boolean
+          min_age?: number
+          sponsor_address?: string
+          sponsor_email?: string
+          sponsor_name?: string
+          updated_at?: string
+        }
+        Update: {
+          claim_window_days?: number
+          entry_cutoff_minutes?: number
+          excluded_states?: string[]
+          id?: boolean
+          min_age?: number
+          sponsor_address?: string
+          sponsor_email?: string
+          sponsor_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -920,11 +989,113 @@ export type Database = {
         }
         Relationships: []
       }
+      winner_claims: {
+        Row: {
+          address1: string | null
+          address2: string | null
+          city: string | null
+          claim_deadline: string
+          created_at: string
+          display_name: string
+          dob: string | null
+          draw_date: string
+          email: string
+          full_name: string | null
+          id: string
+          id_document_path: string | null
+          last_reminder_at: string | null
+          notified_at: string | null
+          paid_at: string | null
+          payment_destination: string | null
+          payment_method: string | null
+          payment_reference: string | null
+          phone: string | null
+          prize_usd: number
+          rejection_reason: string | null
+          state: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+          user_id: string | null
+          w9_document_path: string | null
+          zip: string | null
+        }
+        Insert: {
+          address1?: string | null
+          address2?: string | null
+          city?: string | null
+          claim_deadline: string
+          created_at?: string
+          display_name: string
+          dob?: string | null
+          draw_date: string
+          email: string
+          full_name?: string | null
+          id?: string
+          id_document_path?: string | null
+          last_reminder_at?: string | null
+          notified_at?: string | null
+          paid_at?: string | null
+          payment_destination?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          prize_usd: number
+          rejection_reason?: string | null
+          state?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+          w9_document_path?: string | null
+          zip?: string | null
+        }
+        Update: {
+          address1?: string | null
+          address2?: string | null
+          city?: string | null
+          claim_deadline?: string
+          created_at?: string
+          display_name?: string
+          dob?: string | null
+          draw_date?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          id_document_path?: string | null
+          last_reminder_at?: string | null
+          notified_at?: string | null
+          paid_at?: string | null
+          payment_destination?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          prize_usd?: number
+          rejection_reason?: string | null
+          state?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+          w9_document_path?: string | null
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "winner_claims_draw_date_fkey"
+            columns: ["draw_date"]
+            isOneToOne: true
+            referencedRelation: "daily_draws"
+            referencedColumns: ["draw_date"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      close_draws_for_cutoff: { Args: never; Returns: number }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -974,6 +1145,7 @@ export type Database = {
           tickets_added: number
         }[]
       }
+      expire_winner_claims: { Args: never; Returns: number }
       get_prize_pool: {
         Args: never
         Returns: {
@@ -1062,6 +1234,28 @@ export type Database = {
           seed_hash: string
           status: string
           winner_display_name: string
+        }[]
+      }
+      submit_amoe_entry: {
+        Args: {
+          p_address1: string
+          p_address2: string
+          p_city: string
+          p_dob: string
+          p_email: string
+          p_essay: string
+          p_full_name: string
+          p_ip: unknown
+          p_phone: string
+          p_state: string
+          p_user_agent: string
+          p_user_id: string
+          p_zip: string
+        }
+        Returns: {
+          amoe_id: string
+          draw_date: string
+          entry_id: string
         }[]
       }
       today_et: { Args: never; Returns: string }
