@@ -72,10 +72,11 @@ async function ensureTokenRow(
       : sb.from("user_tokens").select("*").ilike("guest_email", subject.email).maybeSingle();
   const { data } = await filter;
   if (data) return data;
-  const insert =
-    subject.kind === "user"
-      ? { user_id: subject.userId, balance: 0 }
-      : { guest_email: subject.email, balance: 0 };
+  const insert = {
+    user_id: subject.kind === "user" ? subject.userId : null,
+    guest_email: subject.kind === "guest" ? subject.email : null,
+    balance: 0,
+  };
   const { data: created, error } = await sb
     .from("user_tokens")
     .insert(insert)
@@ -83,6 +84,7 @@ async function ensureTokenRow(
     .single();
   if (error) throw error;
   return created;
+
 }
 
 async function addTokens(
