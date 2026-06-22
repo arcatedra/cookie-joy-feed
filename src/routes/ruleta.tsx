@@ -159,14 +159,7 @@ function RuletaPage() {
           balance={balance}
           onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
         />
-        {/* Legacy mini-ruleta retained but hidden — live draw is the focus */}
-        {false && lastPrize && (
-          <section>
-            <Wheel rotation={rotation} spinning={spinning} />
-            <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
-            <PrizeCard prize={lastPrize} />
-          </section>
-        )}
+        {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
         <BuyTokensPanel />
 
