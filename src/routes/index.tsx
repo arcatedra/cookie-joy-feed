@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
+import { DailyWinnerBanner } from "@/components/DailyWinnerBanner";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
