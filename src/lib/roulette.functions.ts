@@ -161,8 +161,8 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
 
   const amoeQ =
     subject.kind === "guest"
-      ? sb.from("amoe_entries").select("id").ilike("email", subject.email).maybeSingle()
-      : sb.from("amoe_entries").select("id").eq("user_id", subject.userId).maybeSingle();
+      ? sb.from("amoe_entries").select("id").ilike("email", subject.email).limit(1)
+      : sb.from("amoe_entries").select("id").eq("user_id", subject.userId).limit(1);
 
   const [claims, starts, spins, amoe] = await Promise.all([claimsQ, startsQ, spinsQ, amoeQ]);
 
@@ -178,21 +178,42 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
     balance: row.balance,
     missionsClaimed: (claims.data ?? []).map((c) => c.mission_key as MissionKey),
     missionsStarted: startsMap as Record<MissionKey, number>,
-    hasAmoe: !!amoe.data,
+    hasAmoe: (amoe.data?.length ?? 0) > 0,
     recentSpins: spins.data ?? [],
   };
 });
 
+const US_STATE = z.string().trim().length(2).regex(/^[A-Za-z]{2}$/);
 const amoeSchema = z.object({
   fullName: z.string().trim().min(2).max(120),
   email: z.string().trim().email().max(255),
   phone: z.string().trim().min(6).max(40),
   essay: z.string().trim().min(1).max(20000),
+  address1: z.string().trim().min(2).max(200),
+  address2: z.string().trim().max(200).optional().default(""),
+  city: z.string().trim().min(1).max(100),
+  state: US_STATE,
+  zip: z.string().trim().min(3).max(20),
+  dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+  acceptRules: z.literal(true),
 });
 
 function wordCount(s: string) {
   return s.trim().split(/\s+/).filter(Boolean).length;
 }
+
+const AMOE_ERROR_MESSAGES: Record<string, string> = {
+  EMAIL_REQUIRED: "Falta el correo.",
+  NAME_REQUIRED: "Falta el nombre completo.",
+  ADDRESS_REQUIRED: "Falta la dirección postal completa.",
+  DOB_REQUIRED: "Falta la fecha de nacimiento.",
+  ESSAY_TOO_SHORT: "El ensayo es demasiado corto.",
+  UNDERAGE: "Debes tener al menos 18 años para participar.",
+  STATE_EXCLUDED: "Lo sentimos, el sorteo no está disponible en tu estado.",
+  DRAW_CLOSED: "El sorteo de hoy ya cerró sus entradas (cierra 5 min antes de las 8:00 PM ET).",
+  ALREADY_ENTERED_TODAY: "Ya participaste hoy con este correo. Vuelve mañana.",
+  IP_LIMIT: "Se alcanzó el límite de entradas desde tu red por hoy.",
+};
 
 export const submitAmoeEntry = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => amoeSchema.parse(d))
@@ -203,31 +224,41 @@ export const submitAmoeEntry = createServerFn({ method: "POST" })
     const sb = await getAdmin();
     const email = data.email.trim().toLowerCase();
 
-    const { data: existing } = await sb
-      .from("amoe_entries")
-      .select("id")
-      .ilike("email", email)
-      .maybeSingle();
-    if (existing) {
-      return { ok: false as const, error: "Este correo ya participó en el sorteo gratuito." };
-    }
-
     const req = getRequest();
     const ip =
       req?.headers.get("cf-connecting-ip") ??
       req?.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       null;
+    const userAgent = req?.headers.get("user-agent") ?? null;
 
-    const { error } = await sb.from("amoe_entries").insert({
-      email,
-      full_name: data.fullName,
-      phone: data.phone,
-      essay: data.essay,
-      ip,
+    const subject = await getSubject();
+    const userId = subject?.kind === "user" ? subject.userId : null;
+
+    const { error } = await sb.rpc("submit_amoe_entry", {
+      p_user_id: (userId as unknown) as string,
+      p_email: email,
+      p_full_name: data.fullName,
+      p_address1: data.address1,
+      p_address2: (data.address2 || null) as unknown as string,
+      p_city: data.city,
+      p_state: data.state.toUpperCase(),
+      p_zip: data.zip,
+      p_dob: data.dob,
+      p_phone: data.phone,
+      p_essay: data.essay,
+      p_ip: ip as unknown as string,
+      p_user_agent: userAgent as unknown as string,
     });
-    if (error) return { ok: false as const, error: error.message };
 
-    // Otorgar 1 token base al invitado.
+    if (error) {
+      const msg = error.message || "";
+      for (const code of Object.keys(AMOE_ERROR_MESSAGES)) {
+        if (msg.includes(code)) return { ok: false as const, error: AMOE_ERROR_MESSAGES[code] };
+      }
+      console.error("[amoe] rpc error", error);
+      return { ok: false as const, error: "No se pudo registrar tu entrada gratuita." };
+    }
+
     setCookie(GUEST_COOKIE, signEmail(email), {
       httpOnly: true,
       secure: true,
