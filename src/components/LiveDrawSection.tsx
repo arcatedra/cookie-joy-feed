@@ -646,3 +646,173 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
     </div>
   );
 }
+
+// ===================== Fullscreen Stage =====================
+function DrawStage({
+  phase, spinDeg, segments, countdown, winnerName, prizeUsd, seedHash, onClose,
+}: {
+  phase: "pre-show" | "spinning" | "celebrating";
+  spinDeg: number;
+  segments: string[];
+  countdown: { hh: string; mm: string; ss: string; ms: number };
+  winnerName: string | null;
+  prizeUsd: number;
+  seedHash: string | null;
+  onClose: () => void;
+}) {
+  const wheelSize = "min(78vmin, 620px)";
+  const isCelebrating = phase === "celebrating";
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sorteo en vivo"
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        background: "radial-gradient(ellipse at center, rgba(15,39,71,0.95) 0%, rgba(0,0,0,0.97) 70%)",
+        backdropFilter: "blur(14px)",
+        display: "grid", placeItems: "center", padding: "max(16px, 4vh) 16px",
+        animation: "stageFade 0.5s ease-out",
+        overflow: "auto",
+      }}
+    >
+      {/* Close button only after celebration begins */}
+      {isCelebrating && (
+        <button
+          onClick={onClose}
+          aria-label="Cerrar"
+          style={{
+            position: "absolute", top: 18, right: 18, zIndex: 2,
+            width: 44, height: 44, borderRadius: "50%", border: `1px solid ${GOLD}66`,
+            background: "rgba(0,0,0,0.5)", color: BEIGE, fontSize: 20, cursor: "pointer",
+          }}
+        >×</button>
+      )}
+
+      <div style={{
+        display: "grid", placeItems: "center", gap: "clamp(16px, 3vh, 28px)",
+        textAlign: "center", color: BEIGE, maxWidth: 980, width: "100%",
+      }}>
+        {/* Header / banner */}
+        <div style={{ display: "grid", gap: 8 }}>
+          <div style={{
+            fontSize: "clamp(11px, 1.4vw, 14px)", letterSpacing: "0.45em",
+            color: GOLD_BRIGHT, fontWeight: 800,
+          }}>
+            {phase === "pre-show" && "★ SORTEO EN VIVO · COMIENZA EN ★"}
+            {phase === "spinning" && "🔴 GIRANDO · EN VIVO"}
+            {phase === "celebrating" && "🎉 ¡GANADOR DEL DÍA! 🎉"}
+          </div>
+
+          {phase === "pre-show" && (
+            <div style={{
+              fontSize: "clamp(56px, 12vw, 120px)", fontWeight: 900,
+              fontVariantNumeric: "tabular-nums", color: BEIGE,
+              textShadow: `0 0 40px ${GOLD_BRIGHT}99`, letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}>
+              {countdown.mm}:{countdown.ss}
+            </div>
+          )}
+
+          {isCelebrating && winnerName && (
+            <>
+              <div style={{
+                fontSize: "clamp(40px, 9vw, 110px)", fontWeight: 900,
+                color: BEIGE, lineHeight: 1.05, letterSpacing: "-0.02em",
+                textShadow: `0 0 50px ${GOLD_BRIGHT}`,
+                animation: "winnerIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}>{winnerName}</div>
+              <div style={{ fontSize: 12, letterSpacing: "0.3em", color: `${BEIGE}99`, marginTop: 6 }}>
+                SE LLEVA
+              </div>
+              <div style={{
+                fontSize: "clamp(44px, 10vw, 110px)", fontWeight: 900,
+                color: GOLD_BRIGHT, fontVariantNumeric: "tabular-nums",
+                textShadow: `0 0 60px ${GOLD_BRIGHT}`, lineHeight: 1,
+              }}>
+                ${prizeUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <span style={{ fontSize: "0.4em", marginLeft: 10 }}>USD</span>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Giant wheel — hidden during celebration to leave room for the name */}
+        {!isCelebrating && (
+          <div style={{
+            position: "relative",
+            width: wheelSize, height: wheelSize,
+            display: "grid", placeItems: "center",
+          }}>
+            <div style={{
+              position: "relative", width: "100%", height: "100%",
+              borderRadius: "50%", overflow: "hidden",
+              boxShadow: `inset 0 0 0 14px ${WOOD}, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 80px ${GOLD_BRIGHT}55`,
+              transform: `rotate(${spinDeg}deg)`,
+              transition: phase === "spinning"
+                ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
+                : "transform 0.4s ease-out",
+              background: BEIGE,
+            }}>
+              {segments.map((label, i) => {
+                const angle = 360 / segments.length;
+                const rot = i * angle;
+                const colors = [BLUE, WOOD, GOLD, "#2a4d7d"];
+                return (
+                  <div key={i} style={{
+                    position: "absolute", inset: 0,
+                    clipPath: `polygon(50% 50%, ${50 + 50 * Math.cos((rot - 90) * Math.PI / 180)}% ${50 + 50 * Math.sin((rot - 90) * Math.PI / 180)}%, ${50 + 50 * Math.cos((rot + angle - 90) * Math.PI / 180)}% ${50 + 50 * Math.sin((rot + angle - 90) * Math.PI / 180)}%)`,
+                    background: colors[i % colors.length],
+                    display: "grid", placeItems: "center",
+                  }}>
+                    <span style={{
+                      color: BEIGE, fontSize: "clamp(13px, 1.8vw, 20px)", fontWeight: 800, letterSpacing: "0.08em",
+                      transform: `rotate(${rot + angle / 2}deg) translateY(calc(${wheelSize} * -0.36))`,
+                      transformOrigin: "center",
+                      textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                    }}>{label.slice(0, 14)}</span>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Pointer */}
+            <div style={{
+              position: "absolute", top: -4, left: "50%", transform: "translateX(-50%)",
+              width: 0, height: 0, borderLeft: "22px solid transparent",
+              borderRight: "22px solid transparent", borderTop: `34px solid ${GOLD_BRIGHT}`,
+              filter: `drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 12px ${GOLD_BRIGHT})`,
+              zIndex: 2,
+            }} />
+            {/* Center hub */}
+            <div style={{
+              position: "absolute", width: "12%", height: "12%", borderRadius: "50%",
+              background: `radial-gradient(circle, ${GOLD_BRIGHT}, ${GOLD})`,
+              boxShadow: `0 0 30px ${GOLD_BRIGHT}, inset 0 0 0 4px ${WOOD}`,
+            }} />
+          </div>
+        )}
+
+        {isCelebrating && seedHash && (
+          <div style={{
+            fontSize: 11, color: `${BEIGE}77`, fontFamily: "monospace",
+            wordBreak: "break-all", padding: "10px 16px", background: "rgba(0,0,0,0.4)",
+            borderRadius: 10, maxWidth: 600,
+          }}>
+            🔐 Hash de transparencia: {seedHash.slice(0, 40)}…
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes stageFade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes winnerIn {
+          0% { transform: scale(0.6); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
