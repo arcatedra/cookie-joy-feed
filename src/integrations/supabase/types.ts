@@ -884,6 +884,7 @@ export type Database = {
           entry_cutoff_minutes: number
           excluded_states: string[]
           id: boolean
+          max_daily_prize_usd: number
           min_age: number
           sponsor_address: string
           sponsor_email: string
@@ -895,6 +896,7 @@ export type Database = {
           entry_cutoff_minutes?: number
           excluded_states?: string[]
           id?: boolean
+          max_daily_prize_usd?: number
           min_age?: number
           sponsor_address?: string
           sponsor_email?: string
@@ -906,6 +908,7 @@ export type Database = {
           entry_cutoff_minutes?: number
           excluded_states?: string[]
           id?: boolean
+          max_daily_prize_usd?: number
           min_age?: number
           sponsor_address?: string
           sponsor_email?: string
@@ -1162,6 +1165,19 @@ export type Database = {
           prize_usd: number
           seed_hash: string
           winner_display_name: string
+        }[]
+      }
+      get_sweepstakes_public_config: {
+        Args: never
+        Returns: {
+          address_valid: boolean
+          claim_window_days: number
+          excluded_states: string[]
+          max_daily_prize_usd: number
+          min_age: number
+          sponsor_address: string
+          sponsor_email: string
+          sponsor_name: string
         }[]
       }
       get_today_draw: {
