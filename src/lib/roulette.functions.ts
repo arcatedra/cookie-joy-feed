@@ -203,6 +203,7 @@ function wordCount(s: string) {
 }
 
 const AMOE_ERROR_MESSAGES: Record<string, string> = {
+  SPONSOR_ADDRESS_NOT_CONFIGURED: "El sorteo diario aún no está activo. Pronto anunciaremos la fecha de lanzamiento.",
   EMAIL_REQUIRED: "Falta el correo.",
   NAME_REQUIRED: "Falta el nombre completo.",
   ADDRESS_REQUIRED: "Falta la dirección postal completa.",

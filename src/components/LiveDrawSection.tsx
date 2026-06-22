@@ -199,6 +199,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   }, [stageOpen, forceStageClosed]);
 
 
+  const preLaunch = draw?.addressValid === false;
+
   return (
     <section style={{ position: "relative", display: "grid", gap: 24 }}>
       {/* Top live banner */}
@@ -221,33 +223,51 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             animation: "ldGlow 3s ease-in-out infinite",
           }}
         />
-        <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 6, textAlign: "center" }}>
-          <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-            {isCompleted ? "★ SORTEO DEL DÍA — GANADOR ★" : isDrawing ? "🔴 EN VIVO · GIRANDO" : "★ BOTE DE HOY · LIVE DRAW 8:00 PM ★"}
-          </div>
-          <div style={{
-            fontSize: "clamp(48px, 9vw, 88px)", fontWeight: 900,
-            color: BEIGE, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em",
-            textShadow: `0 0 30px ${GOLD_BRIGHT}66`, lineHeight: 1,
-          }}>
-            ${prize.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            <span style={{ fontSize: "0.4em", marginLeft: 8, color: GOLD_BRIGHT }}>USD</span>
-          </div>
-          {!isCompleted && (
-            <div style={{ display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-              <CountdownDigit label="HORAS" value={cd.hh} />
-              <CountdownDigit label="MIN" value={cd.mm} />
-              <CountdownDigit label="SEG" value={cd.ss} />
+        {preLaunch ? (
+          <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
+              🚧 SORTEO DIARIO EN PREPARACIÓN
             </div>
-          )}
-          <div style={{ fontSize: 12, color: `${BEIGE}cc`, letterSpacing: "0.15em", marginTop: 6 }}>
-            {draw?.entrantsTotal ?? 0} participantes · {draw?.ticketsTotal ?? 0} boletos
-            {draw?.rolledOverFrom ? <> · Acumulado desde {new Date(draw.rolledOverFrom).toLocaleDateString()}</> : null}
+            <div style={{ fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 900, lineHeight: 1.15, maxWidth: 720 }}>
+              Estamos finalizando las Reglas Oficiales del Sorteo
+            </div>
+            <div style={{ fontSize: 14, color: `${BEIGE}cc`, maxWidth: 640, lineHeight: 1.5 }}>
+              Mientras tanto puedes <strong style={{ color: GOLD_BRIGHT }}>comprar Estrellas</strong>, ganar
+              <strong style={{ color: GOLD_BRIGHT }}> cupones con la Ruleta</strong> y participar gratis (AMOE).
+              Pronto anunciaremos la fecha del primer sorteo en USD.
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 6, textAlign: "center" }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
+              {isCompleted ? "★ SORTEO DEL DÍA — GANADOR ★" : isDrawing ? "🔴 EN VIVO · GIRANDO" : "★ BOTE DE HOY · LIVE DRAW 8:00 PM ★"}
+            </div>
+            <div style={{
+              fontSize: "clamp(48px, 9vw, 88px)", fontWeight: 900,
+              color: BEIGE, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em",
+              textShadow: `0 0 30px ${GOLD_BRIGHT}66`, lineHeight: 1,
+            }}>
+              ${prize.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <span style={{ fontSize: "0.4em", marginLeft: 8, color: GOLD_BRIGHT }}>USD</span>
+            </div>
+            {!isCompleted && (
+              <div style={{ display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+                <CountdownDigit label="HORAS" value={cd.hh} />
+                <CountdownDigit label="MIN" value={cd.mm} />
+                <CountdownDigit label="SEG" value={cd.ss} />
+              </div>
+            )}
+            <div style={{ fontSize: 12, color: `${BEIGE}cc`, letterSpacing: "0.15em", marginTop: 6 }}>
+              {draw?.entrantsTotal ?? 0} participantes · {draw?.ticketsTotal ?? 0} boletos
+              {draw?.rolledOverFrom ? <> · Acumulado desde {new Date(draw.rolledOverFrom).toLocaleDateString()}</> : null}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Roulette + Action */}
+
+      {/* Roulette + Action (hidden during pre-launch) */}
+      {!preLaunch && (
       <div style={{
         display: "grid", gridTemplateColumns: "minmax(260px, 1fr) minmax(260px, 1fr)",
         gap: 24, alignItems: "stretch",
@@ -369,6 +389,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           </div>
         </div>
       </div>
+      )}
+
 
       {/* Admin-only test draw */}
       <AdminTestDrawPanel onResult={() => qc.invalidateQueries({ queryKey: ["daily-draw"] })} />
@@ -377,7 +399,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       <WinnersLeaderboard winners={winners ?? []} />
 
       {/* Fullscreen Stage — pre-show + spinning + winner celebration */}
-      {stageOpen && !forceStageClosed && typeof document !== "undefined" &&
+      {stageOpen && !forceStageClosed && !preLaunch && typeof document !== "undefined" &&
         createPortal(
           <DrawStage
             phase={showWinner ? "celebrating" : isDrawing ? "spinning" : "pre-show"}
