@@ -266,7 +266,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       </div>
 
 
-      {/* Roulette + Action */}
+      {/* Roulette + Action (hidden during pre-launch) */}
+      {!preLaunch && (
       <div style={{
         display: "grid", gridTemplateColumns: "minmax(260px, 1fr) minmax(260px, 1fr)",
         gap: 24, alignItems: "stretch",
@@ -388,6 +389,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           </div>
         </div>
       </div>
+      )}
+
 
       {/* Admin-only test draw */}
       <AdminTestDrawPanel onResult={() => qc.invalidateQueries({ queryKey: ["daily-draw"] })} />
