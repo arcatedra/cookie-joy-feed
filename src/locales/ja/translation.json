@@ -1,0 +1,29 @@
+{
+  "common": {
+    "back": "戻る",
+    "search": "検索",
+    "addToCart": "カートに追加",
+    "viewCart": "カートを見る",
+    "loading": "読み込み中…",
+    "tryAgain": "再試行",
+    "goHome": "ホームへ"
+  },
+  "language": {
+    "switchTo": "言語を選択"
+  },
+  "topnav": {
+    "cart": "カート",
+    "all": "すべて",
+    "searchPlaceholder": "Hazorexを検索",
+    "deliverTo": "お届け先",
+    "updateLocation": "場所を更新",
+    "accountLists": "アカウントとリスト",
+    "helloSignIn": "こんにちは、ログイン",
+    "returns": "返品",
+    "andOrders": "と注文"
+  },
+  "auth": {
+    "signIn": "ログイン",
+    "signOut": "ログアウト"
+  }
+}

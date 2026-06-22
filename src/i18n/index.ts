@@ -5,8 +5,12 @@ import es from "@/locales/es/translation.json";
 import pt from "@/locales/pt/translation.json";
 import de from "@/locales/de/translation.json";
 import fil from "@/locales/fil/translation.json";
+import zh from "@/locales/zh/translation.json";
+import fr from "@/locales/fr/translation.json";
+import ja from "@/locales/ja/translation.json";
+import it from "@/locales/it/translation.json";
 
-export const SUPPORTED_LANGS = ["en", "es", "pt", "de", "fil"] as const;
+export const SUPPORTED_LANGS = ["en", "es", "pt", "fr", "de", "it", "zh", "ja", "fil"] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
 const STORAGE_KEY = "origen.lang";
 
@@ -16,13 +20,21 @@ const resources = {
   pt: { translation: pt },
   de: { translation: de },
   fil: { translation: fil },
+  zh: { translation: zh },
+  fr: { translation: fr },
+  ja: { translation: ja },
+  it: { translation: it },
 };
 
 export const LANG_META: Record<Lang, { label: string; nativeName: string; flag: string; locale: string }> = {
   en: { label: "EN", nativeName: "English", flag: "🇺🇸", locale: "en-US" },
   es: { label: "ES", nativeName: "Español", flag: "🇪🇸", locale: "es-ES" },
   pt: { label: "PT", nativeName: "Português (Brasil)", flag: "🇧🇷", locale: "pt-BR" },
+  fr: { label: "FR", nativeName: "Français", flag: "🇫🇷", locale: "fr-FR" },
   de: { label: "DE", nativeName: "Deutsch", flag: "🇩🇪", locale: "de-DE" },
+  it: { label: "IT", nativeName: "Italiano", flag: "🇮🇹", locale: "it-IT" },
+  zh: { label: "ZH", nativeName: "中文", flag: "🇨🇳", locale: "zh-CN" },
+  ja: { label: "JA", nativeName: "日本語", flag: "🇯🇵", locale: "ja-JP" },
   fil: { label: "FIL", nativeName: "Filipino", flag: "🇵🇭", locale: "fil-PH" },
 };
 
