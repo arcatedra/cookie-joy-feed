@@ -53,7 +53,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin + redirectTarget,
-            data: { name },
+            data: { name, region: region.trim().toUpperCase(), terms_accepted: true },
           },
         });
         if (error) throw error;
