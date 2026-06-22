@@ -13,6 +13,7 @@ import {
 } from "@/lib/roulette.functions";
 import { createStarsCheckout } from "@/lib/stars-checkout.functions";
 import { PrizePoolCounter } from "@/components/PrizePoolCounter";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LiveDrawSection } from "@/components/LiveDrawSection";
 import {
   MISSIONS,
@@ -143,7 +144,10 @@ function RuletaPage() {
             </div>
           </div>
         </div>
-        <TokenChip balance={balance} loading={isLoading} />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <LanguageSwitcher variant="light" />
+          <TokenChip balance={balance} loading={isLoading} />
+        </div>
       </header>
 
       <main
