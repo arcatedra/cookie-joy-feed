@@ -168,6 +168,37 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const isDrawing = status === "drawing";
   const isCompleted = status === "completed";
 
+  // ===== Stage (fullscreen) mode =====
+  // Opens at T-15s, while drawing, and during winner celebration.
+  const preShow = isOpen && cd.ms > 0 && cd.ms <= 15_000;
+  const stageOpen = preShow || isDrawing || showWinner;
+
+  // Auto-close stage 14s after winner appears
+  const stageCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [forceStageClosed, setForceStageClosed] = useState(false);
+  useEffect(() => {
+    if (showWinner) {
+      setForceStageClosed(false);
+      if (stageCloseRef.current) clearTimeout(stageCloseRef.current);
+      stageCloseRef.current = setTimeout(() => {
+        setShowWinner(false);
+      }, 14_000);
+    }
+    return () => {
+      if (stageCloseRef.current) clearTimeout(stageCloseRef.current);
+    };
+  }, [showWinner]);
+
+  // Lock body scroll while stage is up
+  useEffect(() => {
+    const shouldLock = stageOpen && !forceStageClosed;
+    if (!shouldLock) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [stageOpen, forceStageClosed]);
+
+
   return (
     <section style={{ position: "relative", display: "grid", gap: 24 }}>
       {/* Top live banner */}
