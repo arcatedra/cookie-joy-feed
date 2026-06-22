@@ -19,6 +19,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as DomainsRouteImport } from './routes/domains'
@@ -89,6 +90,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const MenuRoute = MenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -209,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
+  '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
@@ -241,6 +248,7 @@ export interface FileRoutesByTo {
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
+  '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
@@ -275,6 +283,7 @@ export interface FileRoutesById {
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
+  '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
@@ -309,6 +318,7 @@ export interface FileRouteTypes {
     | '/domains'
     | '/donate'
     | '/explore'
+    | '/historial'
     | '/menu'
     | '/profile'
     | '/ruleta'
@@ -341,6 +351,7 @@ export interface FileRouteTypes {
     | '/domains'
     | '/donate'
     | '/explore'
+    | '/historial'
     | '/menu'
     | '/profile'
     | '/ruleta'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/domains'
     | '/donate'
     | '/explore'
+    | '/historial'
     | '/menu'
     | '/profile'
     | '/ruleta'
@@ -408,6 +420,7 @@ export interface RootRouteChildren {
   DomainsRoute: typeof DomainsRoute
   DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
+  HistorialRoute: typeof HistorialRoute
   MenuRoute: typeof MenuRoute
   ProfileRoute: typeof ProfileRoute
   RuletaRoute: typeof RuletaRoute
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -675,6 +695,7 @@ const rootRouteChildren: RootRouteChildren = {
   DomainsRoute: DomainsRoute,
   DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,
+  HistorialRoute: HistorialRoute,
   MenuRoute: MenuRoute,
   ProfileRoute: ProfileRoute,
   RuletaRoute: RuletaRoute,

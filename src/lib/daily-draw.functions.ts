@@ -89,6 +89,28 @@ export const getRecentWinners = createServerFn({ method: "GET" }).handler(async 
   }));
 });
 
+export const getDrawHistory = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => z.object({ limit: z.number().int().min(1).max(100).default(50) }).parse(data ?? {}))
+  .handler(async ({ data }) => {
+    const { createClient } = await import("@supabase/supabase-js");
+    const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
+      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    });
+    const { data: rows, error } = await sb.rpc("get_recent_winners", { p_limit: data.limit });
+    if (error) {
+      console.error("[daily-draw] getDrawHistory error", error);
+      return [];
+    }
+    return (rows ?? []).map((w: { draw_date: string; winner_display_name: string | null; prize_usd: number | string; seed_hash: string | null; drawn_at: string }) => ({
+      drawDate: w.draw_date,
+      winnerDisplayName: w.winner_display_name,
+      prizeUsd: Number(w.prize_usd),
+      seedHash: w.seed_hash,
+      drawnAt: w.drawn_at,
+    }));
+  });
+
+
 export const getWinnerAnnouncements = createServerFn({ method: "GET" }).handler(async () => {
   const { createClient } = await import("@supabase/supabase-js");
   const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
