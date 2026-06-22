@@ -178,7 +178,7 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
     balance: row.balance,
     missionsClaimed: (claims.data ?? []).map((c) => c.mission_key as MissionKey),
     missionsStarted: startsMap as Record<MissionKey, number>,
-    hasAmoe: !!amoe.data,
+    hasAmoe: (amoe.data?.length ?? 0) > 0,
     recentSpins: spins.data ?? [],
   };
 });
