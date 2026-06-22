@@ -161,7 +161,7 @@ function RuletaPage() {
         />
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
-        <BuyTokensPanel />
+        <BuyTokensPanel balance={balance} />
 
         <AmoeFlow
           state={state}
