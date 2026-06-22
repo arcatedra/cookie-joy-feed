@@ -890,6 +890,36 @@ export type Database = {
         }
         Relationships: []
       }
+      winner_announcements: {
+        Row: {
+          created_at: string
+          draw_date: string
+          id: string
+          prize_usd: number
+          published_at: string
+          seed_hash: string | null
+          winner_display_name: string
+        }
+        Insert: {
+          created_at?: string
+          draw_date: string
+          id?: string
+          prize_usd?: number
+          published_at?: string
+          seed_hash?: string | null
+          winner_display_name: string
+        }
+        Update: {
+          created_at?: string
+          draw_date?: string
+          id?: string
+          prize_usd?: number
+          published_at?: string
+          seed_hash?: string | null
+          winner_display_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -973,6 +1003,16 @@ export type Database = {
           seed_hash: string
           status: string
           tickets_total: number
+          winner_display_name: string
+        }[]
+      }
+      get_winner_announcements: {
+        Args: { p_limit?: number }
+        Returns: {
+          draw_date: string
+          prize_usd: number
+          published_at: string
+          seed_hash: string
           winner_display_name: string
         }[]
       }

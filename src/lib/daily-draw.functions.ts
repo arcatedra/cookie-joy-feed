@@ -82,6 +82,25 @@ export const getRecentWinners = createServerFn({ method: "GET" }).handler(async 
   }));
 });
 
+export const getWinnerAnnouncements = createServerFn({ method: "GET" }).handler(async () => {
+  const { createClient } = await import("@supabase/supabase-js");
+  const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+  const { data, error } = await sb.rpc("get_winner_announcements", { p_limit: 10 });
+  if (error) {
+    console.error("[daily-draw] get_winner_announcements error", error);
+    return [];
+  }
+  return (data ?? []).map((w: { draw_date: string; winner_display_name: string; prize_usd: number | string; seed_hash: string | null; published_at: string }) => ({
+    drawDate: w.draw_date,
+    winnerDisplayName: w.winner_display_name,
+    prizeUsd: Number(w.prize_usd),
+    seedHash: w.seed_hash,
+    publishedAt: w.published_at,
+  }));
+});
+
 const enterSchema = z.object({
   tickets: z.number().int().min(1).max(50),
   displayName: z.string().trim().min(1).max(60),
