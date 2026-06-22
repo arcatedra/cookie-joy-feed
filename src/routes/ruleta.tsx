@@ -497,7 +497,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           Compra Estrellas
         </h2>
         <p style={{ color: BLUE_SOFT, fontSize: 15, margin: 0 }}>
-          Acumula estrellas y canjéalas por tickets en la Ruleta Diaria. Cada compra alimenta el Prize Pool global.
+          Acumula estrellas y canjéalas por tickets en la Ruleta Diaria.
         </p>
       </div>
 
