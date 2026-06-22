@@ -1,0 +1,897 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import {
+  getRouletteState,
+  submitAmoeEntry,
+  startMission,
+  claimMission,
+  spin,
+} from "@/lib/roulette.functions";
+import {
+  MISSIONS,
+  PRIZES,
+  SPIN_COST,
+  TOKEN_PACKAGES,
+  type MissionKey,
+} from "@/lib/roulette-config";
+
+export const Route = createFileRoute("/ruleta")({
+  head: () => ({
+    meta: [
+      { title: "Ruleta ORIGEN — Gira y gana ⭐" },
+      {
+        name: "description",
+        content:
+          "Gira la Ruleta ORIGEN. Compra Estrellas o participa gratis siguiendo nuestras redes y reclama premios premium.",
+      },
+      { property: "og:title", content: "Ruleta ORIGEN — Gira y gana" },
+      {
+        property: "og:description",
+        content: "Premios, descuentos y sabores sorpresa. Participación gratuita disponible.",
+      },
+    ],
+  }),
+  component: RuletaPage,
+});
+
+// ── Design tokens (scoped here) ─────────────────────────────
+const BEIGE = "#f3ead8";
+const BEIGE_DEEP = "#e9dcc0";
+const BLUE = "#1e3a5f";
+const BLUE_SOFT = "#2a4d7d";
+const WOOD = "#3b2417";
+const GOLD = "#c9a36b";
+const GOLD_BRIGHT = "#e6c181";
+
+const woodTexture =
+  "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.05), transparent 50%), repeating-linear-gradient(92deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 4px), repeating-linear-gradient(178deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 7px)";
+
+function Star({ size = 24, color = GOLD_BRIGHT }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
+      <path d="M12 2l2.39 6.96H22l-5.93 4.31L18.46 22 12 17.27 5.54 22l2.39-8.73L2 8.96h7.61z" />
+    </svg>
+  );
+}
+
+function RuletaPage() {
+  const qc = useQueryClient();
+  const fetchState = useServerFn(getRouletteState);
+  const { data: state, isLoading } = useQuery({
+    queryKey: ["roulette-state"],
+    queryFn: () => fetchState(),
+    refetchOnWindowFocus: false,
+  });
+
+  const balance = state?.balance ?? 0;
+  const canSpin = balance >= SPIN_COST;
+
+  const spinFn = useServerFn(spin);
+  const [rotation, setRotation] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  const [lastPrize, setLastPrize] = useState<{
+    label: string;
+    code: string | null;
+  } | null>(null);
+
+  const sectorAngle = 360 / PRIZES.length;
+
+  const handleSpin = async () => {
+    if (!canSpin || spinning) return;
+    setSpinning(true);
+    setLastPrize(null);
+    try {
+      const res = await spinFn();
+      if (!res.ok) {
+        toast.error(res.error);
+        setSpinning(false);
+        return;
+      }
+      const targetCenter = res.prizeIndex * sectorAngle + sectorAngle / 2;
+      // Spin clockwise N turns, final position so pointer (top, 0deg) lands on target center.
+      const turns = 6;
+      const final = 360 * turns + (360 - targetCenter);
+      // Continuous rotation: bump by a delta that ends at `final mod 360`.
+      const currentMod = ((rotation % 360) + 360) % 360;
+      const delta = 360 * turns + (((360 - targetCenter) - currentMod + 360) % 360);
+      setRotation(rotation + delta);
+      setTimeout(() => {
+        setSpinning(false);
+        setLastPrize({ label: res.prizeLabel, code: res.couponCode });
+        qc.invalidateQueries({ queryKey: ["roulette-state"] });
+      }, 4800);
+      void final;
+    } catch (e) {
+      toast.error("Error al girar.");
+      setSpinning(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100dvh",
+        background: `radial-gradient(ellipse at top, ${BEIGE} 0%, ${BEIGE_DEEP} 100%)`,
+        fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+        color: BLUE,
+      }}
+    >
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "1.5rem clamp(1rem, 4vw, 3rem)",
+          maxWidth: 1200,
+          margin: "0 auto",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Star size={32} color={BLUE} />
+          <div>
+            <div style={{ fontWeight: 800, letterSpacing: "0.18em", fontSize: 18 }}>ORIGEN</div>
+            <div style={{ fontSize: 11, color: BLUE_SOFT, letterSpacing: "0.2em" }}>
+              SWEEPSTAKES
+            </div>
+          </div>
+        </div>
+        <TokenChip balance={balance} loading={isLoading} />
+      </header>
+
+      <main
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: "clamp(1.5rem, 4vw, 3rem)",
+          padding: "0 clamp(1rem, 4vw, 3rem) 4rem",
+          maxWidth: 1200,
+          margin: "0 auto",
+        }}
+      >
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: "2rem",
+            placeItems: "center",
+          }}
+        >
+          <Wheel rotation={rotation} spinning={spinning} />
+          <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
+          {lastPrize && <PrizeCard prize={lastPrize} />}
+        </section>
+
+        <BuyTokensPanel />
+
+        <AmoeFlow
+          state={state}
+          onChange={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+        />
+
+        <Legal />
+      </main>
+    </div>
+  );
+}
+
+function TokenChip({ balance, loading }: { balance: number; loading: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        background: BLUE,
+        color: BEIGE,
+        padding: "10px 18px",
+        borderRadius: 999,
+        fontWeight: 700,
+        boxShadow: `0 8px 24px -8px ${BLUE}`,
+      }}
+    >
+      <Star size={18} color={GOLD_BRIGHT} />
+      <span style={{ fontVariantNumeric: "tabular-nums" }}>{loading ? "…" : balance}</span>
+      <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.15em" }}>ESTRELLAS</span>
+    </div>
+  );
+}
+
+function Wheel({ rotation, spinning }: { rotation: number; spinning: boolean }) {
+  const sectorAngle = 360 / PRIZES.length;
+  const radius = 180;
+  const center = 200;
+  const sectors = useMemo(() => {
+    return PRIZES.map((p, i) => {
+      const startAngle = i * sectorAngle - 90;
+      const endAngle = startAngle + sectorAngle;
+      const x1 = center + radius * Math.cos((startAngle * Math.PI) / 180);
+      const y1 = center + radius * Math.sin((startAngle * Math.PI) / 180);
+      const x2 = center + radius * Math.cos((endAngle * Math.PI) / 180);
+      const y2 = center + radius * Math.sin((endAngle * Math.PI) / 180);
+      const path = `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`;
+      const labelAngle = startAngle + sectorAngle / 2;
+      const lx = center + radius * 0.62 * Math.cos((labelAngle * Math.PI) / 180);
+      const ly = center + radius * 0.62 * Math.sin((labelAngle * Math.PI) / 180);
+      return { path, color: p.color, label: p.label, lx, ly, labelAngle, key: p.key };
+    });
+  }, [sectorAngle]);
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "min(92vw, 440px)",
+        aspectRatio: "1",
+        padding: 20,
+        borderRadius: "50%",
+        background: WOOD,
+        backgroundImage: woodTexture,
+        boxShadow: `0 30px 60px -20px rgba(30,58,95,0.4), inset 0 0 0 6px ${GOLD}, inset 0 0 0 12px ${WOOD}`,
+      }}
+    >
+      {/* Pointer (top, elegant gem) */}
+      <div
+        style={{
+          position: "absolute",
+          top: -4,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 26,
+          height: 36,
+          background: `linear-gradient(180deg, ${GOLD_BRIGHT}, ${GOLD})`,
+          clipPath: "polygon(50% 100%, 0 0, 100% 0)",
+          boxShadow: `0 4px 10px rgba(0,0,0,0.3)`,
+          zIndex: 3,
+        }}
+      />
+      <svg
+        viewBox="0 0 400 400"
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "block",
+          borderRadius: "50%",
+          background: BEIGE,
+          transform: `rotate(${rotation}deg)`,
+          transition: spinning
+            ? "transform 4.6s cubic-bezier(0.17, 0.67, 0.16, 1)"
+            : "transform 0s",
+        }}
+      >
+        {sectors.map((s, i) => (
+          <g key={i}>
+            <path d={s.path} fill={s.color} stroke={BEIGE} strokeWidth={2} />
+            <text
+              x={s.lx}
+              y={s.ly}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              transform={`rotate(${s.labelAngle + 90}, ${s.lx}, ${s.ly})`}
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                fill: BEIGE,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {s.label.length > 14 ? s.label.slice(0, 13) + "…" : s.label}
+            </text>
+          </g>
+        ))}
+        {/* Center cap */}
+        <circle cx={200} cy={200} r={28} fill={BLUE} />
+        <circle cx={200} cy={200} r={22} fill="none" stroke={GOLD_BRIGHT} strokeWidth={2} />
+      </svg>
+      {/* Centered star overlay (doesn't rotate) */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          placeItems: "center",
+          pointerEvents: "none",
+        }}
+      >
+        <Star size={28} color={GOLD_BRIGHT} />
+      </div>
+    </div>
+  );
+}
+
+function SpinButton({
+  onClick,
+  disabled,
+  balance,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  balance: number;
+}) {
+  return (
+    <div style={{ display: "grid", placeItems: "center", gap: 8 }}>
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        style={{
+          padding: "16px 48px",
+          fontSize: 18,
+          fontWeight: 800,
+          letterSpacing: "0.1em",
+          background: disabled
+            ? `linear-gradient(180deg, ${BEIGE_DEEP}, ${BEIGE})`
+            : `linear-gradient(180deg, ${BLUE_SOFT}, ${BLUE})`,
+          color: disabled ? BLUE_SOFT : BEIGE,
+          border: `2px solid ${GOLD}`,
+          borderRadius: 999,
+          cursor: disabled ? "not-allowed" : "pointer",
+          boxShadow: disabled ? "none" : `0 14px 30px -10px ${BLUE}`,
+          transition: "transform 0.15s",
+        }}
+        onMouseDown={(e) => !disabled && (e.currentTarget.style.transform = "scale(0.97)")}
+        onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        GIRAR ({SPIN_COST} ⭐)
+      </button>
+      {balance < SPIN_COST && (
+        <p style={{ fontSize: 13, color: BLUE_SOFT }}>
+          Necesitas {SPIN_COST - balance} estrella(s) más para girar.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function PrizeCard({ prize }: { prize: { label: string; code: string | null } }) {
+  return (
+    <div
+      style={{
+        background: BLUE,
+        color: BEIGE,
+        padding: "24px 32px",
+        borderRadius: 20,
+        border: `2px solid ${GOLD}`,
+        textAlign: "center",
+        animation: "scale-in 0.3s ease-out",
+        maxWidth: 420,
+      }}
+    >
+      <div style={{ fontSize: 12, letterSpacing: "0.3em", opacity: 0.7 }}>TU PREMIO</div>
+      <div style={{ fontSize: 24, fontWeight: 800, margin: "8px 0" }}>{prize.label}</div>
+      {prize.code && (
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.2em" }}>CÓDIGO</div>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(prize.code!);
+              toast.success("Código copiado");
+            }}
+            style={{
+              marginTop: 6,
+              background: GOLD,
+              color: WOOD,
+              padding: "10px 20px",
+              borderRadius: 10,
+              fontWeight: 800,
+              letterSpacing: "0.15em",
+              border: "none",
+              cursor: "pointer",
+              fontSize: 16,
+            }}
+          >
+            {prize.code} ⧉
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BuyTokensPanel() {
+  return (
+    <section>
+      <h2
+        style={{
+          fontSize: 22,
+          fontWeight: 800,
+          color: BLUE,
+          marginBottom: 16,
+          letterSpacing: "0.05em",
+        }}
+      >
+        Compra Estrellas
+      </h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: 16,
+        }}
+      >
+        {TOKEN_PACKAGES.map((pkg) => (
+          <div
+            key={pkg.id}
+            style={{
+              background: BEIGE,
+              border: `2px solid ${"featured" in pkg && pkg.featured ? GOLD : BEIGE_DEEP}`,
+              borderRadius: 18,
+              padding: 22,
+              position: "relative",
+              boxShadow: "featured" in pkg && pkg.featured ? `0 18px 40px -16px ${GOLD}` : "none",
+            }}
+          >
+            {"featured" in pkg && pkg.featured && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: -10,
+                  right: 16,
+                  background: GOLD,
+                  color: WOOD,
+                  fontSize: 10,
+                  fontWeight: 800,
+                  letterSpacing: "0.15em",
+                  padding: "3px 10px",
+                  borderRadius: 999,
+                }}
+              >
+                MÁS POPULAR
+              </div>
+            )}
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.25em",
+                color: BLUE_SOFT,
+                fontWeight: 700,
+              }}
+            >
+              {pkg.label.toUpperCase()}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "10px 0" }}>
+              <Star size={22} color={GOLD} />
+              <span style={{ fontSize: 32, fontWeight: 800, color: BLUE }}>{pkg.tokens}</span>
+            </div>
+            <div style={{ fontSize: 18, color: WOOD, fontWeight: 700 }}>${pkg.priceUsd} USD</div>
+            <button
+              onClick={() => toast.info("Checkout próximamente disponible.")}
+              style={{
+                marginTop: 14,
+                width: "100%",
+                padding: "12px",
+                background: BLUE,
+                color: BEIGE,
+                border: "none",
+                borderRadius: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                letterSpacing: "0.08em",
+              }}
+            >
+              COMPRAR
+            </button>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type RouletteState = Awaited<ReturnType<typeof getRouletteState>>;
+
+function AmoeFlow({
+  state,
+  onChange,
+}: {
+  state: RouletteState | undefined;
+  onChange: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const hasAmoe = state?.hasAmoe ?? false;
+
+  return (
+    <section>
+      <div
+        style={{
+          background: BEIGE,
+          border: `1px dashed ${BLUE_SOFT}`,
+          borderRadius: 14,
+          padding: 16,
+          textAlign: "center",
+        }}
+      >
+        <button
+          onClick={() => setOpen(true)}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: BLUE,
+            fontWeight: 700,
+            cursor: "pointer",
+            fontSize: 15,
+            textDecoration: "underline",
+            textUnderlineOffset: 4,
+          }}
+        >
+          ¿No quieres comprar Estrellas? Participa gratis aquí →
+        </button>
+      </div>
+
+      {open && (
+        <AmoeDialog
+          step={hasAmoe ? 2 : 1}
+          state={state}
+          onClose={() => setOpen(false)}
+          onChange={onChange}
+        />
+      )}
+    </section>
+  );
+}
+
+function AmoeDialog({
+  step: initialStep,
+  state,
+  onClose,
+  onChange,
+}: {
+  step: 1 | 2;
+  state: RouletteState | undefined;
+  onClose: () => void;
+  onChange: () => void;
+}) {
+  const [step, setStep] = useState<1 | 2>(initialStep);
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(15, 25, 45, 0.7)",
+        display: "grid",
+        placeItems: "center",
+        zIndex: 50,
+        padding: 16,
+        animation: "fade-in 0.2s",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: BEIGE,
+          borderRadius: 20,
+          padding: "clamp(20px, 4vw, 32px)",
+          maxWidth: 560,
+          width: "100%",
+          maxHeight: "90dvh",
+          overflowY: "auto",
+          border: `2px solid ${GOLD}`,
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3 style={{ color: BLUE, fontWeight: 800, fontSize: 20, margin: 0 }}>
+            {step === 1 ? "Participación gratuita" : "Misiones de redes"}
+          </h3>
+          <button
+            onClick={onClose}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: 24,
+              cursor: "pointer",
+              color: BLUE,
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        {step === 1 ? (
+          <AmoeForm
+            onSuccess={() => {
+              onChange();
+              setStep(2);
+            }}
+          />
+        ) : (
+          <MissionList state={state} onChange={onChange} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
+  const submit = useServerFn(submitAmoeEntry);
+  const [form, setForm] = useState({ fullName: "", email: "", phone: "", essay: "" });
+  const wc = form.essay.trim().split(/\s+/).filter(Boolean).length;
+  const m = useMutation({
+    mutationFn: () => submit({ data: form }),
+    onSuccess: (res) => {
+      if (res.ok) {
+        toast.success("¡Recibimos tu entrada! +1 ⭐");
+        onSuccess();
+      } else {
+        toast.error(res.error);
+      }
+    },
+  });
+
+  const inputStyle = {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: 10,
+    border: `1px solid ${BEIGE_DEEP}`,
+    background: "white",
+    color: BLUE,
+    fontSize: 15,
+  } as const;
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (wc < 300) return toast.error("El ensayo debe tener al menos 300 palabras.");
+        m.mutate();
+      }}
+      style={{ display: "grid", gap: 12, marginTop: 16 }}
+    >
+      <p style={{ fontSize: 13, color: BLUE_SOFT, margin: 0 }}>
+        Completa el formulario para recibir <strong>1 estrella gratuita</strong> y desbloquear las
+        misiones.
+      </p>
+      <input
+        required
+        placeholder="Nombre completo"
+        value={form.fullName}
+        onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+        style={inputStyle}
+      />
+      <input
+        required
+        type="email"
+        placeholder="Correo electrónico"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        style={inputStyle}
+      />
+      <input
+        required
+        type="tel"
+        placeholder="Teléfono"
+        value={form.phone}
+        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+        style={inputStyle}
+      />
+      <textarea
+        required
+        placeholder="Cuéntanos por qué te gusta la marca ORIGEN (mín. 300 palabras)"
+        value={form.essay}
+        onChange={(e) => setForm({ ...form, essay: e.target.value })}
+        rows={8}
+        style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+      />
+      <div
+        style={{
+          fontSize: 12,
+          color: wc >= 300 ? "#1f7a3a" : BLUE_SOFT,
+          textAlign: "right",
+        }}
+      >
+        {wc} / 300 palabras
+      </div>
+      <button
+        type="submit"
+        disabled={m.isPending || wc < 300}
+        style={{
+          padding: "14px",
+          background: wc < 300 ? BEIGE_DEEP : BLUE,
+          color: wc < 300 ? BLUE_SOFT : BEIGE,
+          border: "none",
+          borderRadius: 10,
+          fontWeight: 800,
+          cursor: wc < 300 ? "not-allowed" : "pointer",
+          letterSpacing: "0.1em",
+        }}
+      >
+        {m.isPending ? "ENVIANDO…" : "ENVIAR Y RECIBIR 1 ⭐"}
+      </button>
+    </form>
+  );
+}
+
+function MissionList({
+  state,
+  onChange,
+}: {
+  state: RouletteState | undefined;
+  onChange: () => void;
+}) {
+  const claimed = new Set(state?.missionsClaimed ?? []);
+  const balance = state?.balance ?? 0;
+  return (
+    <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
+      <p style={{ fontSize: 14, color: BLUE_SOFT, margin: 0 }}>
+        ¡Tienes tu token base! Completa estas misiones para sumar hasta <strong>9 ⭐ más</strong> y
+        llegar a {SPIN_COST}.
+      </p>
+      {(Object.keys(MISSIONS) as MissionKey[]).map((k) => (
+        <MissionCard
+          key={k}
+          mission={k}
+          claimed={claimed.has(k)}
+          startedAt={state?.missionsStarted?.[k]}
+          onChange={onChange}
+        />
+      ))}
+      <div
+        style={{
+          marginTop: 8,
+          padding: 12,
+          background: BLUE,
+          color: BEIGE,
+          borderRadius: 12,
+          textAlign: "center",
+          fontWeight: 700,
+        }}
+      >
+        Progreso: {balance} / {SPIN_COST} ⭐
+      </div>
+    </div>
+  );
+}
+
+function MissionCard({
+  mission,
+  claimed,
+  startedAt,
+  onChange,
+}: {
+  mission: MissionKey;
+  claimed: boolean;
+  startedAt: number | undefined;
+  onChange: () => void;
+}) {
+  const cfg = MISSIONS[mission];
+  const start = useServerFn(startMission);
+  const claim = useServerFn(claimMission);
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Resume countdown from server timestamp if exists.
+  useEffect(() => {
+    if (claimed) return;
+    if (!startedAt) return;
+    const elapsed = (Date.now() - startedAt) / 1000;
+    const left = Math.max(0, Math.ceil(cfg.seconds - elapsed));
+    setRemaining(left);
+  }, [startedAt, cfg.seconds, claimed]);
+
+  useEffect(() => {
+    if (remaining === null || remaining <= 0) return;
+    intervalRef.current = setInterval(() => {
+      setRemaining((r) => (r === null ? null : Math.max(0, r - 1)));
+    }, 1000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [remaining !== null]);
+
+  const handleOpen = async () => {
+    window.open(cfg.url, "_blank", "noopener,noreferrer");
+    const res = await start({ data: { mission } });
+    if (res.ok) {
+      setRemaining(cfg.seconds);
+      onChange();
+    } else {
+      toast.error(res.error);
+    }
+  };
+
+  const handleClaim = async () => {
+    const res = await claim({ data: { mission } });
+    if (res.ok) {
+      toast.success(`+${res.reward} ⭐`);
+      onChange();
+    } else {
+      toast.error(res.error);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        background: "white",
+        border: `1px solid ${BEIGE_DEEP}`,
+        borderRadius: 12,
+        padding: 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+      }}
+    >
+      <div>
+        <div style={{ fontWeight: 800, color: BLUE }}>{cfg.label}</div>
+        <div style={{ fontSize: 12, color: BLUE_SOFT }}>
+          +{cfg.reward} ⭐ · {cfg.seconds}s
+        </div>
+      </div>
+      {claimed ? (
+        <span style={{ color: "#1f7a3a", fontWeight: 700, fontSize: 13 }}>✓ Reclamado</span>
+      ) : remaining === null ? (
+        <button
+          onClick={handleOpen}
+          style={{
+            background: BLUE,
+            color: BEIGE,
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: 10,
+            fontWeight: 700,
+            cursor: "pointer",
+            fontSize: 13,
+          }}
+        >
+          Ver video
+        </button>
+      ) : remaining > 0 ? (
+        <span
+          style={{
+            color: WOOD,
+            fontWeight: 800,
+            fontVariantNumeric: "tabular-nums",
+            fontSize: 16,
+          }}
+        >
+          {remaining}s
+        </span>
+      ) : (
+        <button
+          onClick={handleClaim}
+          style={{
+            background: GOLD,
+            color: WOOD,
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: 10,
+            fontWeight: 800,
+            cursor: "pointer",
+            fontSize: 13,
+            letterSpacing: "0.05em",
+          }}
+        >
+          Reclamar +{cfg.reward} ⭐
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Legal() {
+  return (
+    <footer
+      style={{
+        marginTop: 32,
+        padding: 20,
+        background: BEIGE,
+        border: `1px solid ${BEIGE_DEEP}`,
+        borderRadius: 14,
+        fontSize: 12,
+        color: BLUE_SOFT,
+        lineHeight: 1.6,
+      }}
+    >
+      <strong style={{ color: BLUE }}>Reglas del Sorteo (Sweepstakes):</strong> NO COMPRA NECESARIA
+      para participar o ganar. La compra de Estrellas no aumenta tus probabilidades de ganar. Método
+      alterno de entrada gratuita (AMOE) disponible arriba mediante formulario y misiones de redes
+      sociales. Válido donde lo permita la ley. Cada premio se otorga al azar mediante algoritmo de
+      selección ponderada. Los códigos canjeables tienen una sola unidad de uso. Consulta los
+      términos y condiciones completos en nuestra página legal.
+    </footer>
+  );
+}
