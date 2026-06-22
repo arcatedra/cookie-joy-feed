@@ -68,7 +68,7 @@ export const TOKEN_PACKAGES: readonly TokenPackage[] = [
     tokens: 150,
     priceUsd: 9.99,
     label: "Premium",
-    tagline: "Máximo valor · ahorra 87%",
+    tagline: "Máximo valor por estrella",
   },
 ] as const;
 
