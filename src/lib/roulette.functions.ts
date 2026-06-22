@@ -246,11 +246,13 @@ export const startMission = createServerFn({ method: "POST" })
     const subject = await getSubject();
     if (!subject) return { ok: false as const, error: "No autorizado" };
     const sb = await getAdmin();
-    const insert =
-      subject.kind === "user"
-        ? { user_id: subject.userId, mission_key: data.mission }
-        : { guest_email: subject.email, mission_key: data.mission };
+    const insert = {
+      user_id: subject.kind === "user" ? subject.userId : null,
+      guest_email: subject.kind === "guest" ? subject.email : null,
+      mission_key: data.mission,
+    };
     const { error } = await sb.from("mission_starts").insert(insert);
+
     if (error) return { ok: false as const, error: error.message };
     return { ok: true as const, startedAt: Date.now() };
   });
