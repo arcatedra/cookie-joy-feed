@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -1164,21 +1164,66 @@ function Legal() {
     <footer
       style={{
         marginTop: 32,
-        padding: 20,
+        padding: "24px",
         background: BEIGE,
         border: `1px solid ${BEIGE_DEEP}`,
         borderRadius: 14,
-        fontSize: 12,
+        fontSize: 13,
         color: BLUE_SOFT,
         lineHeight: 1.6,
+        display: "grid",
+        gap: 16,
       }}
     >
-      <strong style={{ color: BLUE }}>Reglas del Sorteo (Sweepstakes):</strong> NO COMPRA NECESARIA
-      para participar o ganar. La compra de Estrellas no aumenta tus probabilidades de ganar. Método
-      alterno de entrada gratuita (AMOE) disponible arriba mediante formulario y misiones de redes
-      sociales. Válido donde lo permita la ley. Cada premio se otorga al azar mediante algoritmo de
-      selección ponderada. Los códigos canjeables tienen una sola unidad de uso. Consulta los
-      términos y condiciones completos en nuestra página legal.
+      <p style={{ margin: 0 }}>
+        <strong style={{ color: BLUE }}>Reglas del Sorteo (Sweepstakes):</strong> NO COMPRA NECESARIA
+        para participar o ganar. La compra de Estrellas no aumenta tus probabilidades de ganar. Método
+        alterno de entrada gratuita (AMOE) disponible arriba mediante formulario y misiones de redes
+        sociales. Válido donde lo permita la ley. Cada premio se otorga al azar mediante algoritmo de
+        selección ponderada. Los códigos canjeables tienen una sola unidad de uso.
+      </p>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+        <Link
+          to="/sweepstakes-rules"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "10px 18px",
+            background: BLUE,
+            color: BEIGE,
+            borderRadius: 999,
+            fontWeight: 800,
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            textDecoration: "none",
+            boxShadow: `0 6px 16px -6px ${BLUE}`,
+            transition: "transform 0.15s",
+          }}
+        >
+          📋 Reglas Oficiales del Sorteo
+        </Link>
+        <Link
+          to="/terms"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "10px 18px",
+            background: "transparent",
+            color: BLUE,
+            borderRadius: 999,
+            fontWeight: 800,
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            textDecoration: "none",
+            border: `2px solid ${BLUE}`,
+            transition: "transform 0.15s",
+          }}
+        >
+          ⚖️ Términos y Condiciones
+        </Link>
+      </div>
     </footer>
   );
 }
