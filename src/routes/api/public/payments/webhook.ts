@@ -129,33 +129,35 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         }
 
         // --- Stars purchase (HAZOREX prize-pool flow) ---
-        const metaKind = findString(payload, "kind");
+        const dataObject =
+          ((payload as { data?: { object?: Record<string, unknown> } })?.data?.object as
+            | Record<string, unknown>
+            | undefined) ?? undefined;
+        const objectId = (dataObject?.id as string | undefined) ?? "";
+        const metaKind =
+          (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
+          findString(payload, "kind");
+
         if (
           metaKind === "stars_purchase" &&
-          (eventType === "checkout.session.completed" ||
-            eventType === "payment_intent.succeeded")
+          eventType === "checkout.session.completed" &&
+          objectId.startsWith("cs_")
         ) {
-          const sessionId =
-            findString(payload, "id") ??
-            findString(payload, "checkout_session_id") ??
-            "";
           const paymentIntentId =
-            findString(payload, "payment_intent_id") ??
-            findString(payload, "payment_intent") ??
-            null;
-
-          if (!sessionId) {
-            return Response.json({ ok: true, ignored: "no session id" });
-          }
+            (dataObject?.payment_intent as string | undefined) ?? null;
+          const sessionId = objectId;
 
           const { data: purchase } = await supabaseAdmin
             .from("star_purchases")
-            .select("id, status, package_id, tokens, amount_usd, subject_user_id, subject_email")
+            .select(
+              "id, status, package_id, tokens, amount_usd, subject_user_id, subject_email",
+            )
             .eq("stripe_session_id", sessionId)
             .maybeSingle();
 
           if (!purchase) {
-            return Response.json({ ok: true, ignored: "purchase not found" });
+            console.warn("[payments-webhook] stars purchase not found", { sessionId });
+            return Response.json({ ok: true, ignored: "purchase not found", sessionId });
           }
           if (purchase.status === "completed") {
             return Response.json({ ok: true, alreadyProcessed: true });
