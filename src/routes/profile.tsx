@@ -101,6 +101,7 @@ function ProfilePage() {
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
             <DonorBadge userId={user?.id ?? null} />
+            <TermsBadge userId={user?.id ?? null} />
           </div>
 
           <div className="mt-5 flex items-center justify-around">
