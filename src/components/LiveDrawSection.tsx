@@ -236,7 +236,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
               : "transform 0.4s ease-out",
           }}>
-            {segments.map((label, i) => {
+            {segments.map((label: string, i: number) => {
               const angle = 360 / segments.length;
               const rot = i * angle;
               const colors = [BLUE, WOOD, GOLD, "#2a4d7d"];
