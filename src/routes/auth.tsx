@@ -70,6 +70,10 @@ function AuthPage() {
   };
 
   const onGoogle = async () => {
+    if (mode === "signup" && !acceptedTerms) {
+      toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
+      return;
+    }
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin + redirectTarget,
