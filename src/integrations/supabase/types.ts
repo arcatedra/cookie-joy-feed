@@ -304,6 +304,51 @@ export type Database = {
         }
         Relationships: []
       }
+      prize_pool_ledger: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          environment: string
+          id: string
+          package_id: string
+          platform_share_usd: number
+          pool_share_usd: number
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+          subject_email: string | null
+          subject_user_id: string | null
+          tokens_purchased: number
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string
+          environment?: string
+          id?: string
+          package_id: string
+          platform_share_usd: number
+          pool_share_usd: number
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens_purchased: number
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          environment?: string
+          id?: string
+          package_id?: string
+          platform_share_usd?: number
+          pool_share_usd?: number
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens_purchased?: number
+        }
+        Relationships: []
+      }
       product_ratings: {
         Row: {
           created_at: string
@@ -569,6 +614,48 @@ export type Database = {
         }
         Relationships: []
       }
+      star_purchases: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          environment: string
+          id: string
+          package_id: string
+          status: string
+          stripe_session_id: string
+          subject_email: string | null
+          subject_user_id: string | null
+          tokens: number
+          updated_at: string
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string
+          environment?: string
+          id?: string
+          package_id: string
+          status?: string
+          stripe_session_id: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens: number
+          updated_at?: string
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          environment?: string
+          id?: string
+          package_id?: string
+          status?: string
+          stripe_session_id?: string
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscription_plans: {
         Row: {
           active: boolean
@@ -731,6 +818,14 @@ export type Database = {
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      get_prize_pool: {
+        Args: never
+        Returns: {
+          last_updated: string
+          total_contributions: number
+          total_pool_usd: number
+        }[]
       }
       has_role: {
         Args: {
