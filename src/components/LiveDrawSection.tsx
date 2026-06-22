@@ -154,7 +154,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const canAfford = balance >= ticketCost;
 
   const segments = useMemo(() => {
-    const labels = (winners ?? []).slice(0, 8).map((w) => w.winnerDisplayName ?? "?");
+    const labels: string[] = (winners ?? [])
+      .slice(0, 8)
+      .map((w: { winnerDisplayName: string | null }) => w.winnerDisplayName ?? "?");
     while (labels.length < 8) labels.push("ORIGEN");
     return labels;
   }, [winners]);
