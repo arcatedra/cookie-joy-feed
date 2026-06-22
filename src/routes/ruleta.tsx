@@ -514,7 +514,6 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       >
         {TOKEN_PACKAGES.map((pkg) => {
           const featured = pkg.featured ?? false;
-          const poolPart = (pkg.priceUsd / 2).toFixed(2);
           const isLoading = loadingId === pkg.id;
           return (
             <article
@@ -611,19 +610,6 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                 >
                   ${pkg.priceUsd}
                   <span style={{ fontSize: 14, color: BLUE_SOFT, marginLeft: 4 }}>USD</span>
-                </div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: featured ? WOOD : BLUE_SOFT,
-                    background: featured ? `${GOLD}33` : `${BEIGE_DEEP}99`,
-                    padding: "4px 10px",
-                    borderRadius: 999,
-                    fontWeight: 700,
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  ${poolPart} → Prize Pool
                 </div>
               </div>
 
