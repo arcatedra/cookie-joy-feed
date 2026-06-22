@@ -128,11 +128,106 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           return Response.json({ ok: true, subscription: sub.id });
         }
 
+        // --- Stars purchase (HAZOREX prize-pool flow) ---
+        const metaKind = findString(payload, "kind");
+        if (
+          metaKind === "stars_purchase" &&
+          (eventType === "checkout.session.completed" ||
+            eventType === "payment_intent.succeeded")
+        ) {
+          const sessionId =
+            findString(payload, "id") ??
+            findString(payload, "checkout_session_id") ??
+            "";
+          const paymentIntentId =
+            findString(payload, "payment_intent_id") ??
+            findString(payload, "payment_intent") ??
+            null;
+
+          if (!sessionId) {
+            return Response.json({ ok: true, ignored: "no session id" });
+          }
+
+          const { data: purchase } = await supabaseAdmin
+            .from("star_purchases")
+            .select("id, status, package_id, tokens, amount_usd, subject_user_id, subject_email")
+            .eq("stripe_session_id", sessionId)
+            .maybeSingle();
+
+          if (!purchase) {
+            return Response.json({ ok: true, ignored: "purchase not found" });
+          }
+          if (purchase.status === "completed") {
+            return Response.json({ ok: true, alreadyProcessed: true });
+          }
+
+          const amount = Number(purchase.amount_usd);
+          const platformShare = Math.round((amount / 2) * 100) / 100;
+          const poolShare = Math.round((amount - platformShare) * 100) / 100;
+
+          // Insert ledger row (idempotent via UNIQUE(stripe_session_id))
+          const { error: ledgerErr } = await supabaseAdmin.from("prize_pool_ledger").insert({
+            package_id: purchase.package_id,
+            amount_usd: amount,
+            tokens_purchased: purchase.tokens,
+            platform_share_usd: platformShare,
+            pool_share_usd: poolShare,
+            subject_user_id: purchase.subject_user_id,
+            subject_email: purchase.subject_email,
+            stripe_session_id: sessionId,
+            stripe_payment_intent_id: paymentIntentId,
+            environment,
+          });
+          if (ledgerErr && !String(ledgerErr.message).includes("duplicate")) {
+            console.error("[payments-webhook] ledger insert failed", ledgerErr);
+            return new Response("Ledger insert failed", { status: 500 });
+          }
+
+          // Credit tokens to the buyer's user_tokens row
+          const tokenFilter = purchase.subject_user_id
+            ? supabaseAdmin
+                .from("user_tokens")
+                .select("id,balance")
+                .eq("user_id", purchase.subject_user_id)
+                .maybeSingle()
+            : purchase.subject_email
+              ? supabaseAdmin
+                  .from("user_tokens")
+                  .select("id,balance")
+                  .ilike("guest_email", purchase.subject_email)
+                  .maybeSingle()
+              : null;
+
+          if (tokenFilter) {
+            const { data: row } = await tokenFilter;
+            if (row) {
+              await supabaseAdmin
+                .from("user_tokens")
+                .update({ balance: row.balance + purchase.tokens })
+                .eq("id", row.id);
+            } else {
+              await supabaseAdmin.from("user_tokens").insert({
+                user_id: purchase.subject_user_id,
+                guest_email: purchase.subject_email,
+                balance: purchase.tokens,
+              });
+            }
+          }
+
+          await supabaseAdmin
+            .from("star_purchases")
+            .update({ status: "completed" })
+            .eq("id", purchase.id);
+
+          return Response.json({ ok: true, stars: purchase.tokens });
+        }
+
         // --- Donation flow (one-off payments) ---
         const donationId = findString(payload, "donation_id");
         if (!donationId) {
           return Response.json({ ok: true, ignored: true });
         }
+
 
         if (
           eventType === "transaction.completed" ||
