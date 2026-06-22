@@ -399,7 +399,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       <WinnersLeaderboard winners={winners ?? []} />
 
       {/* Fullscreen Stage — pre-show + spinning + winner celebration */}
-      {stageOpen && !forceStageClosed && typeof document !== "undefined" &&
+      {stageOpen && !forceStageClosed && !preLaunch && typeof document !== "undefined" &&
         createPortal(
           <DrawStage
             phase={showWinner ? "celebrating" : isDrawing ? "spinning" : "pre-show"}
