@@ -38,8 +38,37 @@ export const PRIZES: Prize[] = [
   { key: "try_again_3", label: "Sigue intentando", weight: 1, hasCoupon: false, color: "#3b2417" },
 ];
 
-export const TOKEN_PACKAGES = [
-  { id: "tokens_10", tokens: 10, priceUsd: 2, label: "Inicial" },
-  { id: "tokens_30", tokens: 30, priceUsd: 5, label: "Popular", featured: true },
-  { id: "tokens_100", tokens: 100, priceUsd: 15, label: "Premium" },
+export type TokenPackage = {
+  id: "stars_starter" | "stars_popular" | "stars_premium";
+  tokens: number;
+  priceUsd: number;
+  label: string;
+  tagline: string;
+  featured?: boolean;
+};
+
+export const TOKEN_PACKAGES: readonly TokenPackage[] = [
+  {
+    id: "stars_starter",
+    tokens: 10,
+    priceUsd: 2,
+    label: "Inicial",
+    tagline: "Prueba tu suerte",
+  },
+  {
+    id: "stars_popular",
+    tokens: 30,
+    priceUsd: 5,
+    label: "Popular",
+    tagline: "Mejor valor +20%",
+    featured: true,
+  },
+  {
+    id: "stars_premium",
+    tokens: 100,
+    priceUsd: 15,
+    label: "Premium",
+    tagline: "Para los más afortunados",
+  },
 ] as const;
+

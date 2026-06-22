@@ -10,6 +10,8 @@ import {
   claimMission,
   spin,
 } from "@/lib/roulette.functions";
+import { createStarsCheckout } from "@/lib/stars-checkout.functions";
+import { PrizePoolCounter } from "@/components/PrizePoolCounter";
 import {
   MISSIONS,
   PRIZES,
@@ -17,6 +19,7 @@ import {
   TOKEN_PACKAGES,
   type MissionKey,
 } from "@/lib/roulette-config";
+
 
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
@@ -391,94 +394,240 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
 }
 
 function BuyTokensPanel() {
+  const checkout = useServerFn(createStarsCheckout);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
+    setLoadingId(packageId);
+    try {
+      const res = await checkout({ data: { packageId } });
+      if (res.url) window.location.href = res.url;
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al iniciar el checkout.");
+      setLoadingId(null);
+    }
+  };
+
   return (
-    <section>
-      <h2
-        style={{
-          fontSize: 22,
-          fontWeight: 800,
-          color: BLUE,
-          marginBottom: 16,
-          letterSpacing: "0.05em",
-        }}
-      >
-        Compra Estrellas
-      </h2>
+    <section style={{ display: "grid", gap: 28 }}>
+      <div style={{ display: "grid", gap: 6, textAlign: "center" }}>
+        <h2
+          style={{
+            fontSize: "clamp(28px, 4vw, 38px)",
+            fontWeight: 900,
+            color: BLUE,
+            letterSpacing: "-0.02em",
+            margin: 0,
+          }}
+        >
+          Compra Estrellas
+        </h2>
+        <p style={{ color: BLUE_SOFT, fontSize: 15, margin: 0 }}>
+          El <strong>50%</strong> de cada compra alimenta el Prize Pool global.
+        </p>
+      </div>
+
+      <PrizePoolCounter />
+
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: 16,
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          gap: 20,
+          alignItems: "stretch",
         }}
       >
-        {TOKEN_PACKAGES.map((pkg) => (
-          <div
-            key={pkg.id}
-            style={{
-              background: BEIGE,
-              border: `2px solid ${"featured" in pkg && pkg.featured ? GOLD : BEIGE_DEEP}`,
-              borderRadius: 18,
-              padding: 22,
-              position: "relative",
-              boxShadow: "featured" in pkg && pkg.featured ? `0 18px 40px -16px ${GOLD}` : "none",
-            }}
-          >
-            {"featured" in pkg && pkg.featured && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: -10,
-                  right: 16,
-                  background: GOLD,
-                  color: WOOD,
-                  fontSize: 10,
-                  fontWeight: 800,
-                  letterSpacing: "0.15em",
-                  padding: "3px 10px",
-                  borderRadius: 999,
-                }}
-              >
-                MÁS POPULAR
+        {TOKEN_PACKAGES.map((pkg) => {
+          const featured = pkg.featured ?? false;
+          const poolPart = (pkg.priceUsd / 2).toFixed(2);
+          const isLoading = loadingId === pkg.id;
+          return (
+            <article
+              key={pkg.id}
+              style={{
+                position: "relative",
+                background: featured
+                  ? `linear-gradient(160deg, #fff8ea 0%, ${BEIGE} 100%)`
+                  : BEIGE,
+                border: `2px solid ${featured ? GOLD : BEIGE_DEEP}`,
+                borderRadius: 24,
+                padding: "28px 22px 22px",
+                boxShadow: featured
+                  ? `0 24px 50px -16px ${GOLD}66, 0 0 0 6px ${GOLD}1a`
+                  : `0 12px 28px -16px rgba(30,58,95,0.25)`,
+                transform: featured ? "translateY(-8px)" : "none",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                display: "grid",
+                gridTemplateRows: "auto 1fr auto",
+                gap: 16,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = featured
+                  ? "translateY(-12px)"
+                  : "translateY(-4px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = featured ? "translateY(-8px)" : "none";
+              }}
+            >
+              {featured && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -14,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: `linear-gradient(90deg, ${GOLD}, ${GOLD_BRIGHT}, ${GOLD})`,
+                    color: WOOD,
+                    fontSize: 10,
+                    fontWeight: 900,
+                    letterSpacing: "0.2em",
+                    padding: "6px 14px",
+                    borderRadius: 999,
+                    whiteSpace: "nowrap",
+                    boxShadow: `0 6px 14px -4px ${GOLD}`,
+                  }}
+                >
+                  ★ MÁS POPULAR ★
+                </div>
+              )}
+
+              <header>
+                <div
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.3em",
+                    color: featured ? WOOD : BLUE_SOFT,
+                    fontWeight: 800,
+                  }}
+                >
+                  {pkg.label.toUpperCase()}
+                </div>
+                <div style={{ fontSize: 12, color: BLUE_SOFT, marginTop: 2 }}>{pkg.tagline}</div>
+              </header>
+
+              <div style={{ display: "grid", placeItems: "center", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Star size={36} color={featured ? GOLD : GOLD_BRIGHT} />
+                  <span
+                    style={{
+                      fontSize: 56,
+                      fontWeight: 900,
+                      color: BLUE,
+                      letterSpacing: "-0.04em",
+                      lineHeight: 1,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {pkg.tokens}
+                  </span>
+                </div>
+                <div style={{ fontSize: 11, letterSpacing: "0.15em", color: BLUE_SOFT }}>
+                  ESTRELLAS
+                </div>
+                <div
+                  style={{
+                    marginTop: 8,
+                    fontSize: 28,
+                    fontWeight: 800,
+                    color: WOOD,
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  ${pkg.priceUsd}
+                  <span style={{ fontSize: 14, color: BLUE_SOFT, marginLeft: 4 }}>USD</span>
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: featured ? WOOD : BLUE_SOFT,
+                    background: featured ? `${GOLD}33` : `${BEIGE_DEEP}99`,
+                    padding: "4px 10px",
+                    borderRadius: 999,
+                    fontWeight: 700,
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  ${poolPart} → Prize Pool
+                </div>
               </div>
-            )}
-            <div
-              style={{
-                fontSize: 11,
-                letterSpacing: "0.25em",
-                color: BLUE_SOFT,
-                fontWeight: 700,
-              }}
-            >
-              {pkg.label.toUpperCase()}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "10px 0" }}>
-              <Star size={22} color={GOLD} />
-              <span style={{ fontSize: 32, fontWeight: 800, color: BLUE }}>{pkg.tokens}</span>
-            </div>
-            <div style={{ fontSize: 18, color: WOOD, fontWeight: 700 }}>${pkg.priceUsd} USD</div>
-            <button
-              onClick={() => toast.info("Checkout próximamente disponible.")}
-              style={{
-                marginTop: 14,
-                width: "100%",
-                padding: "12px",
-                background: BLUE,
-                color: BEIGE,
-                border: "none",
-                borderRadius: 10,
-                fontWeight: 700,
-                cursor: "pointer",
-                letterSpacing: "0.08em",
-              }}
-            >
-              COMPRAR
-            </button>
-          </div>
-        ))}
+
+              <button
+                onClick={() => handleBuy(pkg.id)}
+                disabled={isLoading}
+                style={{
+                  width: "100%",
+                  padding: "14px 16px",
+                  background: featured
+                    ? `linear-gradient(180deg, ${GOLD_BRIGHT}, ${GOLD})`
+                    : `linear-gradient(180deg, ${BLUE_SOFT}, ${BLUE})`,
+                  color: featured ? WOOD : BEIGE,
+                  border: "none",
+                  borderRadius: 14,
+                  fontWeight: 900,
+                  cursor: isLoading ? "wait" : "pointer",
+                  letterSpacing: "0.15em",
+                  fontSize: 14,
+                  boxShadow: featured
+                    ? `0 10px 24px -10px ${GOLD}`
+                    : `0 10px 24px -10px ${BLUE}`,
+                  transition: "transform 0.1s",
+                }}
+                onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
+                onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              >
+                {isLoading ? "REDIRIGIENDO…" : "COMPRAR AHORA"}
+              </button>
+            </article>
+          );
+        })}
       </div>
+
+      {/* Legal footer */}
+      <footer
+        style={{
+          background: BLUE,
+          color: BEIGE,
+          borderRadius: 18,
+          padding: "18px 22px",
+          display: "grid",
+          gap: 10,
+          textAlign: "center",
+          fontSize: 12,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "18px",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+          }}
+        >
+          <a href="/terms" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
+            Términos y Condiciones
+          </a>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <a href="/sweepstakes-rules" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
+            Reglas Oficiales del Sorteo
+          </a>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <a href="#amoe" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
+            Participación Gratuita (AMOE)
+          </a>
+        </div>
+        <p style={{ margin: 0, opacity: 0.75, fontSize: 11, letterSpacing: "0.04em" }}>
+          NO ES NECESARIA UNA COMPRA PARA PARTICIPAR O GANAR. La compra no incrementa las
+          probabilidades de ganar. Mayores de 18 años. Nulo donde la ley lo prohíba.
+        </p>
+      </footer>
     </section>
   );
 }
+
 
 type RouletteState = Awaited<ReturnType<typeof getRouletteState>>;
 
@@ -493,7 +642,7 @@ function AmoeFlow({
   const hasAmoe = state?.hasAmoe ?? false;
 
   return (
-    <section>
+    <section id="amoe" style={{ scrollMarginTop: 80 }}>
       <div
         style={{
           background: BEIGE,
