@@ -10,6 +10,8 @@ import {
   claimMission,
   spin,
 } from "@/lib/roulette.functions";
+import { createStarsCheckout } from "@/lib/stars-checkout.functions";
+import { PrizePoolCounter } from "@/components/PrizePoolCounter";
 import {
   MISSIONS,
   PRIZES,
@@ -17,6 +19,7 @@ import {
   TOKEN_PACKAGES,
   type MissionKey,
 } from "@/lib/roulette-config";
+
 
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
