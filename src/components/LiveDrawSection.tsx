@@ -376,15 +376,25 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       {/* Winners leaderboard */}
       <WinnersLeaderboard winners={winners ?? []} />
 
-      {/* Winner celebration modal */}
-      {showWinner && draw?.winnerDisplayName && (
-        <WinnerCelebration
-          name={draw.winnerDisplayName}
-          prizeUsd={draw.prizeUsd}
-          seedHash={draw.seedHash}
-          onClose={() => setShowWinner(false)}
-        />
-      )}
+      {/* Fullscreen Stage — pre-show + spinning + winner celebration */}
+      {stageOpen && !forceStageClosed && typeof document !== "undefined" &&
+        createPortal(
+          <DrawStage
+            phase={showWinner ? "celebrating" : isDrawing ? "spinning" : "pre-show"}
+            spinDeg={spinDeg}
+            segments={segments}
+            countdown={cd}
+            winnerName={draw?.winnerDisplayName ?? null}
+            prizeUsd={draw?.prizeUsd ?? 0}
+            seedHash={draw?.seedHash ?? null}
+            onClose={() => {
+              setShowWinner(false);
+              setForceStageClosed(true);
+            }}
+          />,
+          document.body,
+        )
+      }
 
       <style>{`
         @keyframes ldGlow {
