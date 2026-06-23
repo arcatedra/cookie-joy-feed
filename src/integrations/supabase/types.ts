@@ -1263,6 +1263,7 @@ export type Database = {
         Returns: {
           address_valid: boolean
           claim_window_days: number
+          entry_cutoff_minutes: number
           excluded_states: string[]
           max_daily_prize_usd: number
           min_age: number
