@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { getWinnerAnnouncements } from "@/lib/daily-draw.functions";
+import { getLocale } from "@/i18n";
 
 const BEIGE = "#f3ead8";
 const BLUE = "#1e3a5f";
@@ -10,6 +12,7 @@ const GOLD = "#c9a36b";
 const GOLD_BRIGHT = "#e6c181";
 
 export function DailyWinnerBanner() {
+  const { t, i18n } = useTranslation();
   const fetchFn = useServerFn(getWinnerAnnouncements);
   const { data } = useQuery({
     queryKey: ["winner-announcements"],
@@ -20,14 +23,14 @@ export function DailyWinnerBanner() {
   const latest = data?.[0];
   if (!latest) return null;
 
-  const date = new Date(latest.drawDate).toLocaleDateString("es", {
+  const date = new Date(latest.drawDate).toLocaleDateString(getLocale(i18n.language), {
     day: "2-digit",
     month: "long",
   });
 
   return (
     <section
-      aria-label="Ganador del día"
+      aria-label={t("dailyWinner.aria")}
       style={{
         position: "relative",
         margin: "0 auto 20px",
@@ -89,7 +92,7 @@ export function DailyWinnerBanner() {
                 fontWeight: 800,
               }}
             >
-              GANADOR DEL SORTEO · {date.toUpperCase()}
+              {t("dailyWinner.eyebrow", { date: date.toUpperCase() })}
             </div>
             <div
               style={{
@@ -113,7 +116,7 @@ export function DailyWinnerBanner() {
                 marginTop: 2,
               }}
             >
-              Se llevó{" "}
+              {t("dailyWinner.takesHome")}
               <strong
                 style={{
                   color: GOLD_BRIGHT,
@@ -139,7 +142,7 @@ export function DailyWinnerBanner() {
               whiteSpace: "nowrap",
             }}
           >
-            JUGAR HOY
+            {t("dailyWinner.playToday")}
           </Link>
         </div>
       </div>

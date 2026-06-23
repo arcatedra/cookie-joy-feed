@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useTranslation } from "react-i18next";
 import { getPrizePool } from "@/lib/stars-checkout.functions";
+
 
 const BEIGE = "#f3ead8";
 const GOLD = "#c9a36b";
@@ -14,6 +16,8 @@ function easeOutExpo(t: number) {
 }
 
 export function PrizePoolCounter() {
+  const { t } = useTranslation();
+
   const fetchPool = useServerFn(getPrizePool);
   const { data } = useQuery({
     queryKey: ["prize-pool"],

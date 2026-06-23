@@ -2,10 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Truck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
 import { getMyDeliveryStatus } from "@/lib/deliveries.functions";
 
 export function DeliveryCounter() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const getStatus = useServerFn(getMyDeliveryStatus);
 
@@ -33,11 +35,11 @@ export function DeliveryCounter() {
     <Link
       to="/deliveries"
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ring-1 transition hover:opacity-90 ${colorClass}`}
-      title={`${remaining} de ${total} entregas restantes este mes`}
+      title={t("deliveryCounter.title", { remaining, total })}
     >
       <Truck className="h-3.5 w-3.5" />
       <span>{remaining}</span>
-      <span className="hidden sm:inline font-medium opacity-80">rest.</span>
+      <span className="hidden sm:inline font-medium opacity-80">{t("deliveryCounter.remainingShort")}</span>
     </Link>
   );
 }
