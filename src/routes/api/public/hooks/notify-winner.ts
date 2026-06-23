@@ -63,9 +63,6 @@ export const Route = createFileRoute('/api/public/hooks/notify-winner')({
           return new Response('Invalid body', { status: 400 })
         }
 
-        const supabase = createClient(supabaseUrl, serviceKey, {
-          auth: { persistSession: false, autoRefreshToken: false },
-        })
 
         const claimQuery = supabase
           .from('winner_claims')
