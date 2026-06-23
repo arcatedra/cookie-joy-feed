@@ -167,7 +167,13 @@ function RuletaPage() {
           />
         </div>
 
-        <TestDrawButton onDone={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })} />
+        <TestDrawButton
+          onDone={() => {
+            qc.invalidateQueries({ queryKey: ["roulette-state"] });
+            qc.invalidateQueries({ queryKey: ["recent-winners"] });
+          }}
+        />
+
 
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
