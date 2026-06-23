@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 import i18n, { getLocale } from "@/i18n";
 
