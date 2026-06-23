@@ -1,29 +1,493 @@
 {
   "common": {
     "back": "返回",
+    "errorOccurred": "出错了。请重试。",
     "search": "搜索",
     "addToCart": "加入购物车",
+    "updateCart": "更新购物车",
     "viewCart": "查看购物车",
-    "loading": "加载中…",
+    "add": "添加",
+    "remove": "移除",
+    "selected": "已选择",
+    "signUp": "注册",
+    "goHome": "返回首页",
     "tryAgain": "重试",
-    "goHome": "返回首页"
-  },
-  "language": {
-    "switchTo": "选择语言"
-  },
-  "topnav": {
-    "cart": "购物车",
-    "all": "全部",
-    "searchPlaceholder": "搜索 Hazorex",
-    "deliverTo": "配送至",
-    "updateLocation": "更新位置",
-    "accountLists": "账户和列表",
-    "helloSignIn": "您好，请登录",
-    "returns": "退货",
-    "andOrders": "和订单"
+    "seeAll": "查看全部",
+    "viewMore": "查看更多",
+    "comingSoon": "即将推出",
+    "reviews": "评论",
+    "notifications": "通知",
+    "markRead": "全部标记为已读",
+    "settings": "设置",
+    "loading": "加载中…"
   },
   "auth": {
+    "signInTitle": "登录",
+    "signUpTitle": "创建账户",
+    "subtitle": "点赞、评论和评价曲奇。",
+    "google": "使用 Google 继续",
+    "or": "或",
+    "email": "电子邮件",
+    "password": "密码",
+    "name": "您的姓名",
     "signIn": "登录",
-    "signOut": "退出"
+    "signUp": "创建账户",
+    "signOut": "退出登录",
+    "signedOut": "已退出登录",
+    "noAccount": "还没有账户？创建一个",
+    "haveAccount": "已有账户？登录",
+    "checkEmail": "请检查您的电子邮件以确认您的账户"
+  },
+  "reels": {
+    "writeComment": "写下评论…",
+    "send": "发送",
+    "noComments": "暂无评论。快来抢沙发！",
+    "signInToLike": "登录以点赞",
+    "signInToComment": "登录以评论",
+    "anonymous": "用户",
+    "reel1": "双重巧克力喜悦",
+    "reel2": "新鲜出炉！",
+    "reel3": "面团的美味",
+    "reel4": "燕麦葡萄干魔法",
+    "reel5": "花生酱天堂",
+    "reel6": "薄荷巧克力脆",
+    "items": {
+      "pista": {
+        "title": "开心果与白巧克力的相遇 💚✨",
+        "product": "开心果白巧克力"
+      },
+      "triple": {
+        "title": "三重巧克力软糖融化 🍫",
+        "product": "三重巧克力软糖"
+      },
+      "snicker": {
+        "title": "肉桂糖魔法 🌟",
+        "product": "经典肉桂糖饼"
+      },
+      "oatmeal": {
+        "title": "温暖的燕麦和葡萄干 🍂",
+        "product": "燕麦葡萄干肉桂"
+      },
+      "cchunk": {
+        "title": "双重巧克力块 🤎",
+        "product": "双重巧克力块"
+      },
+      "mint": {
+        "title": "黑薄荷清爽 🌿",
+        "product": "黑薄荷巧克力"
+      },
+      "mm": {
+        "title": "多彩 M&M 嘎嘣脆 🎉",
+        "product": "节日 M&M"
+      }
+    }
+  },
+  "topnav": {
+    "deliverTo": "配送至",
+    "updateLocation": "布鲁克林 — 更新位置",
+    "searchPlaceholder": "搜索曲奇、套餐、礼品…",
+    "suggestions": "建议",
+    "helloSignIn": "您好，请登录",
+    "helloUser": "您好，{{name}}",
+    "accountLists": "账户与列表",
+    "signInPrompt": "登录获取个性化推荐",
+    "returns": "退货",
+    "andOrders": "与订单",
+    "cart": "购物车",
+    "all": "全部",
+    "openMenu": "打开菜单",
+    "groups": {
+      "shop": "选购曲奇",
+      "discover": "发现",
+      "account": "帮助与设置"
+    },
+    "cats": {
+      "all": "所有曲奇",
+      "allCookies": "所有曲奇",
+      "filled": "夹心系列",
+      "healthy": "健康/健身",
+      "giftBoxes": "礼品盒",
+      "vegan": "纯素",
+      "brownies": "布朗尼",
+      "bestSellers": "热销产品",
+      "deals": "今日特价",
+      "buildPack": "自组套餐",
+      "subscriptions": "曲奇订阅",
+      "yourAccount": "您的账户",
+      "ordersReturns": "退货与订单",
+      "cart": "您的购物车",
+      "signIn": "登录"
+    },
+    "links": {
+      "deals": "今日特价",
+      "bestSellers": "热销产品",
+      "buildPack": "自组套餐",
+      "support": "客户服务",
+      "subscriptions": "曲奇订阅"
+    }
+  },
+  "ratings": {
+    "yourRating": "您的评分",
+    "writeReview": "为 {{product}} 撰写可选评论",
+    "save": "保存",
+    "thanks": "感谢您的评分！",
+    "signInToRate": "登录以评分"
+  },
+  "language": {
+    "switchTo": "切换语言",
+    "english": "英语",
+    "spanish": "西班牙语"
+  },
+  "nav": {
+    "home": "首页",
+    "explore": "探索",
+    "subscribe": "订阅",
+    "profile": "个人资料"
+  },
+  "errors": {
+    "pageNotFoundTitle": "页面未找到",
+    "pageNotFoundDesc": "您正在寻找的页面不存在或已被移动。",
+    "didNotLoadTitle": "此页面加载失败",
+    "didNotLoadDesc": "我们这边出了点问题。您可以尝试刷新或返回首页。"
+  },
+  "home": {
+    "metaTitle": "AMYRAX — 美食曲奇，按月配送",
+    "metaDesc": "探索手工美食曲奇，加入 AMYRAX 月度订阅，享受新鲜出炉的美味直送上门。",
+    "welcome": "欢迎回来",
+    "greeting": "早上好，{{name}}！",
+    "freshToday": "今天有新鲜批次出炉",
+    "searchPlaceholder": "搜索曲奇、口味、礼盒…",
+    "reels": "短视频",
+    "trending": "时下流行",
+    "categories": "特色分类",
+    "cookiePacks": "曲奇套餐",
+    "subscriptionEyebrow": "月度礼盒",
+    "subscriptionHeadline": "12 块新鲜曲奇，直送上门。",
+    "subscriptionSubcopy": "随时取消 · 免运费",
+    "startSubscription": "开始订阅",
+    "promoTitle": "准备好尝试点新东西了吗？",
+    "promoSubtitle": "探索我们的限量版和本月最爱。",
+    "promoCta": "查看完整菜单",
+    "cards": {
+      "bestSellersTitle": "热销产品",
+      "bestSellersLink": "查看更多",
+      "buildPackTitle": "自组您的专属套餐",
+      "buildPackLink": "查看选项",
+      "buildPackCta": "开始组合",
+      "buildPackAlt": "自定义曲奇盒",
+      "subscriptionTitle": "月度订阅",
+      "subscriptionLink": "探索俱乐部",
+      "subscriptionClub": "AMYRAX 俱乐部",
+      "subscriptionHeadline": "每周新鲜烘焙配送",
+      "subscriptionSubcopy": "随时取消 · 含运费",
+      "subscriptionPrice": "每月 $24 起",
+      "flashTitle": "限时特惠",
+      "flashLink": "查看所有特惠",
+      "flashProduct": "什锦 9 曲奇套餐",
+      "flashAlt": "9 曲奇套餐",
+      "flashClaimed": "已抢购：{{pct}}%",
+      "flashEndsIn": "结束于 {{time}}",
+      "best": {
+        "classic": "经典",
+        "redVelvet": "红丝绒",
+        "tripleChoc": "三重巧克力",
+        "oatRaisin": "燕麦葡萄干"
+      }
+    }
+  },
+  "categories": {
+    "cookies": "曲奇",
+    "brownies": "布朗尼",
+    "boxes": "什锦礼盒",
+    "vegan": "纯素",
+    "gifts": "礼品套装"
+  },
+  "_reelsLegacy": {},
+  "explore": {
+    "metaTitle": "浏览曲奇 — AMYRAX",
+    "metaDesc": "在 AMYRAX 探索我们全系列的手工美食曲奇。",
+    "title": "浏览曲奇",
+    "sort": "排序",
+    "price": "价格"
+  },
+  "menu": {
+    "metaTitle": "菜单 — AMYRAX",
+    "metaDesc": "浏览我们的经典曲奇。",
+    "title": "曲奇",
+    "tabs": {
+      "classic": "经典曲奇",
+      "packs": "套餐",
+      "deluxe": "豪华曲奇"
+    },
+    "allCategories": "所有类别",
+    "cookies": "曲奇",
+    "serves": "份量",
+    "calPerCookie": "卡路里 / 每块曲奇",
+    "ingredients": "成分",
+    "allergens": "过敏原",
+    "prevPack": "上一个套餐",
+    "nextPack": "下一个套餐",
+    "goToPack": "前往套餐 {{n}}",
+    "viewDetails": "查看 {{name}} 详情",
+    "detailOf": "{{name}} 的详情"
+  },
+  "cookies": {
+    "c1": {
+      "name": "巧克力块",
+      "desc": "浓郁的黄油香草曲奇，加入半甜巧克力块，风味升级。",
+      "caption": "黄油香草与半甜巧克力块"
+    },
+    "c2": {
+      "name": "肉桂糖饼",
+      "desc": "坚持经典，选择我们的肉桂糖饼。温暖柔软的曲奇，裹上一层肉桂糖。",
+      "caption": "柔软温暖的肉桂糖"
+    },
+    "c3": {
+      "name": "糖饼",
+      "desc": "简直是您尝过的最好、入口即化、黄油味十足的糖饼。",
+      "caption": "入口即化的黄油甜味"
+    },
+    "c4": {
+      "name": "双重巧克力块",
+      "desc": "我们的黑巧克力曲奇，富含浓郁的巧克力块。为真正的巧克力爱好者而设。",
+      "caption": "黑可可富含巧克力块"
+    },
+    "c5": {
+      "name": "燕麦葡萄干",
+      "desc": "一种能温暖灵魂的美味。每一口都能尝到温暖的燕麦和饱满的葡萄干。",
+      "caption": "温暖的燕麦和饱满的葡萄干"
+    },
+    "c6": {
+      "name": "白巧克力夏威夷果",
+      "desc": "这款零食充满了海岛风情。椰子黄油味的曲奇，搭配白巧克力和夏威夷果仁。",
+      "caption": "椰子黄油味，热带风情"
+    },
+    "c7": {
+      "name": "经典 M&M'S®",
+      "desc": "这是我们经典巧克力曲奇的多彩糖衣变奏，带来甜蜜惊喜。",
+      "caption": "多彩糖衣巧克力扭转"
+    },
+    "c8": {
+      "name": "花生酱碎",
+      "desc": "花生酱碎融入柔软香甜的香草曲奇中。坚果爱好者的天堂。",
+      "caption": "柔软香草，花生酱碎"
+    },
+    "c9": {
+      "name": "纯素巧克力块",
+      "desc": "一款能温暖您灵魂的纯素曲奇，含有大量无乳制品巧克力块。",
+      "caption": "无乳制品巧克力块"
+    },
+    "c10": {
+      "name": "双重巧克力薄荷",
+      "desc": "我们对经典风味组合的诠释。温暖的巧克力曲奇，搭配清凉的薄荷碎。",
+      "caption": "温暖巧克力与清凉薄荷"
+    }
+  },
+  "packs": {
+    "p6": {
+      "name": "6只装",
+      "desc": "一盒 6 块温暖美味的曲奇犒劳自己。",
+      "serves": "3–6 人份"
+    },
+    "p9": {
+      "name": "9只装",
+      "desc": "恰到好处的满足感。选择 9 块您最爱的曲奇。",
+      "serves": "5–9 人份"
+    },
+    "p12": {
+      "name": "12只装",
+      "desc": "当别人说要带够大家吃的份量时，这才是他们真正想要的。",
+      "serves": "6–12 人份"
+    },
+    "ingredients": "强化小麦粉、黄油、蔗糖、红糖、鸡蛋、半甜巧克力块、香草精、小苏打、海盐。",
+    "allergens": "含有小麦、乳制品、鸡蛋、大豆。可能含有微量坚果和花生。"
+  },
+  "tags": {
+    "treeNuts": "坚果",
+    "peanuts": "花生"
+  },
+  "subscribe": {
+    "metaTitle": "订阅计划 — AMYRAX",
+    "metaDesc": "选择您的 AMYRAX 曲奇订阅计划。仅限周一和周五配送。",
+    "title": "订阅计划",
+    "deliveryBadge": "仅限周一和周五配送",
+    "activePlan": "当前计划",
+    "remaining": "剩余",
+    "scheduledCount": "本月已安排 {{used}} / {{total}} 次配送",
+    "choosePlan": "选择您的计划",
+    "mostPopular": "最受欢迎",
+    "perMonth": "/ 月",
+    "schedule": "安排配送",
+    "scheduleHint": "仅可选择周一和周五。",
+    "prevMonth": "上个月",
+    "nextMonth": "下个月",
+    "yourDeliveries": "您的配送安排",
+    "usedAll": "您已用完此计划的全部 {{count}} 次配送。升级以添加更多。",
+    "footnote": "*仅在周一和周五提供",
+    "removeDate": "移除 {{date}}",
+    "tiers": {
+      "starter": {
+        "title": "入门计划",
+        "cadence": "每月 2 次配送",
+        "desc": "适合基本需求。每月最多可安排 2 次配送，可选择周一或周五。"
+      },
+      "essential": {
+        "title": "基础计划",
+        "cadence": "每月 4 次配送",
+        "desc": "我们最受欢迎的选择。每月享受多达 4 次配送。灵活安排：每周、每两周，或按您的日程安排。"
+      },
+      "intermediate": {
+        "title": "中级计划",
+        "cadence": "每月 6 次配送",
+        "desc": "为活跃家庭提供额外灵活性。每月最多可在周一或周五安排 6 次配送。"
+      },
+      "premium": {
+        "title": "高级计划",
+        "cadence": "每月 8 次配送",
+        "desc": "全月覆盖。每月最多 8 次配送（每周一和周五各一次），提供最大便利。"
+      }
+    }
+  },
+  "profile": {
+    "metaTitle": "我的个人资料 — AMYRAX",
+    "metaDesc": "管理您的 AMYRAX 账户、订单和订阅。",
+    "title": "我的个人资料",
+    "settings": "设置",
+    "city": "纽约",
+    "joined": "加入于：2024年7月",
+    "orders": "订单",
+    "favorites": "收藏夹",
+    "level": "等级",
+    "cookieFan": "曲奇爱好者",
+    "currentPlan": "当前计划",
+    "enthusiast": "热衷者计划",
+    "active": "有效",
+    "recentOrders": "最近订单",
+    "order": "订单 #{{id}}",
+    "orderItems": "经典巧克力片 · 1 件",
+    "account": "账户",
+    "menu": {
+      "favorites": "收藏夹",
+      "payment": "支付方式",
+      "general": "通用设置",
+      "help": "帮助与支持"
+    },
+    "qr": {
+      "title": "您的二维码",
+      "description": "从任何设备扫描即可直接访问 AMYRAX 商店。",
+      "download": "下载二维码",
+      "copyLink": "复制链接",
+      "downloaded": "二维码已下载",
+      "downloadError": "无法下载二维码",
+      "copied": "链接已复制到剪贴板",
+      "copyError": "无法复制链接"
+    }
+  },
+  "cart": {
+    "title": "您的购物车",
+    "checkout": "结算",
+    "empty": "您的购物车是空的",
+    "emptyDesc": "添加一些美味的曲奇开始购物吧。",
+    "browseMenu": "浏览菜单",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "free": "免费",
+    "total": "总计",
+    "proceedCheckout": "前往结算",
+    "payMethod": "支付方式",
+    "orderSummary": "订单摘要",
+    "items": "{{count}} 件商品",
+    "payNow": "立即支付",
+    "processing": "处理中…",
+    "fastSecure": "快速安全",
+    "demoNote": "演示结算——不会产生真实费用。",
+    "orderConfirmed": "订单已确认",
+    "thanks": "谢谢您！",
+    "thanksDesc": "您的曲奇已在路上。一封确认邮件已发送给您。",
+    "backHome": "返回首页"
+  },
+  "subscribeGate": {
+    "dialogTitle": "订阅以激活您的配送和购物权限",
+    "dialogDesc": "购买和配送仅对订阅会员开放。",
+    "freeShipping": "每个计划都包含免费配送（$0）！",
+    "viewPlans": "查看订阅计划",
+    "signInAndSubscribe": "登录并订阅",
+    "keepBrowsing": "继续浏览",
+    "bannerEyebrow": "成为会员",
+    "bannerTitle": "订阅以激活您的配送",
+    "bannerSubcopy": "每个计划都包含免费配送（$0）！",
+    "bannerCta": "查看计划",
+    "cartWarning": "您需要有效订阅才能结算。",
+    "cartCta": "订阅以购买",
+    "cartProcessing": "处理中…",
+    "cartConfirm": "确认并支付订单",
+    "cartTerms": "确认订单即表示您接受商店的服务条款。",
+    "noActive": "您没有有效的订阅。订阅以开始安排配送。",
+    "scheduled": "配送已安排",
+    "canceled": "配送已取消"
+  },
+  "checkout": {
+    "secure": "安全结算",
+    "miniLabel": "结算",
+    "title": "安全结算",
+    "viewCart": "查看我的购物车",
+    "shippingAddress": "配送地址",
+    "fullName": "全名",
+    "street": "街道地址",
+    "apt": "公寓/单元",
+    "city": "城市",
+    "zip": "邮政编码",
+    "phone": "电话",
+    "makeDefault": "设为我的默认地址",
+    "addressRequired": "您必须填写完整的地址（姓名、街道、城市、邮编和电话）才能购买。",
+    "useAddress": "使用此地址",
+    "paymentMethod": "支付方式",
+    "cardOption": "信用卡/借记卡",
+    "cardLast4": "卡 •••• {{last4}}",
+    "cardNumber": "卡号",
+    "expiry": "有效期 (MM/YY)",
+    "cvv": "CVV",
+    "walletOption": "PayPal / Apple Pay",
+    "fast": "快捷",
+    "continueBtn": "继续",
+    "reviewLogistics": "审核与配送",
+    "each": "每个",
+    "decrease": "减少",
+    "increase": "增加",
+    "remove": "移除",
+    "shippingType": "配送类型",
+    "standardShipping": "标准配送",
+    "standardSub": "3天内送达",
+    "free": "免费",
+    "backToPayment": "返回支付",
+    "addAddressToBuy": "添加您的地址以购买",
+    "orderSummary": "订单摘要",
+    "productsCount": "产品",
+    "shippingHandling": "运费与处理费",
+    "taxes": "预计税费",
+    "orderTotal": "订单总计：",
+    "secureEncrypted": "100% 安全加密支付",
+    "emptyTitle": "您的购物车是空的",
+    "emptyDesc": "添加曲奇以开始结算。",
+    "exploreCookies": "浏览曲奇",
+    "orderConfirmed": "订单已确认！",
+    "bakingMsg": "您的曲奇正在烘焙并已在路上。",
+    "trackingNumber": "追踪号码",
+    "backToStore": "返回商店"
+  },
+  "domains": {
+    "title": "域名搜索",
+    "subtitle": "查找可用域名。我们实时检查可用性并建议类似的替代方案。",
+    "placeholder": "输入一个名称（例如 mahanaix）",
+    "search": "搜索",
+    "mainResults": "“{{base}}”的搜索结果",
+    "similarAlternatives": "类似的替代方案",
+    "checking": "检查中…",
+    "available": "可用",
+    "taken": "已注册",
+    "takenBy": "已注册 ({{registrar}})",
+    "unknown": "状态未知",
+    "buy": "购买",
+    "priceDisclaimer": "价格为常见注册商第一年注册费用的估算值（美元），可能会有变化。* 第一年的促销价。"
   }
 }
