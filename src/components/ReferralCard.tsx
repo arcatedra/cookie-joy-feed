@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
-import { Share2, Sparkles, Star, Users, Download, MessageCircle, Music2, Camera, Send } from "lucide-react";
+import { Share2, Sparkles, Star, Users, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ReferralCardProps {
