@@ -50,6 +50,7 @@ function AdminSweepstakesPage() {
   const fetchConfig = useServerFn(getSweepstakesConfig);
   const saveConfig = useServerFn(updateSweepstakesConfig);
   const runDraw = useServerFn(triggerTestDraw);
+  const sendSmokeEmail = useServerFn(sendSmokeTestWinnerEmail);
 
   useEffect(() => {
     let cancelled = false;
