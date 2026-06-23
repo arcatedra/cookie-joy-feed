@@ -932,6 +932,36 @@ export type Database = {
         }
         Relationships: []
       }
+      test_winner_log: {
+        Row: {
+          created_at: string
+          delivered: boolean
+          delivered_at: string
+          id: string
+          prize_usd: number
+          winner_display_name: string
+          winner_email: string | null
+        }
+        Insert: {
+          created_at?: string
+          delivered?: boolean
+          delivered_at?: string
+          id?: string
+          prize_usd?: number
+          winner_display_name: string
+          winner_email?: string | null
+        }
+        Update: {
+          created_at?: string
+          delivered?: boolean
+          delivered_at?: string
+          id?: string
+          prize_usd?: number
+          winner_display_name?: string
+          winner_email?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -1172,6 +1202,16 @@ export type Database = {
           total_pool_usd: number
         }[]
       }
+      get_recent_test_winners: {
+        Args: { p_limit?: number }
+        Returns: {
+          created_at: string
+          delivered: boolean
+          id: string
+          prize_usd: number
+          winner_display_name: string
+        }[]
+      }
       get_recent_winners: {
         Args: { p_limit?: number }
         Returns: {
@@ -1264,6 +1304,16 @@ export type Database = {
           prize_usd: number
           seed_hash: string
           status: string
+          winner_display_name: string
+        }[]
+      }
+      run_test_draw_tick: {
+        Args: never
+        Returns: {
+          created_at: string
+          delivered: boolean
+          id: string
+          prize_usd: number
           winner_display_name: string
         }[]
       }
