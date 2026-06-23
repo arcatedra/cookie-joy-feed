@@ -1,0 +1,19 @@
+# Origen / Hazorex
+
+> Plataforma de sorteos transparentes y verificables: ruleta cero trampa, donaciones, suscripciones y entregas a ganadores.
+
+## Pages
+
+- [Inicio](/): Vista principal de la plataforma.
+- [Ruleta](/ruleta): Sorteo en vivo con selección de participantes verificable.
+- [Explorar](/explore): Descubre reels, productos y categorías destacadas.
+- [Tienda](/shop): Productos disponibles para compra.
+- [Menú](/menu): Catálogo y categorías del catálogo.
+- [Buscar](/search): Buscador del catálogo.
+- [Suscribirse](/subscribe): Planes de suscripción y beneficios.
+- [Donar](/donate): Apoyo y donaciones a la comunidad.
+- [Dominios](/domains): Búsqueda y registro de dominios.
+- [Historial](/historial): Historial público de sorteos y ganadores.
+- [Reglas del sorteo](/sweepstakes-rules): Bases legales del sorteo.
+- [Términos](/terms): Términos y condiciones.
+- [Confianza](/trust): Cómo garantizamos sorteos sin trampa.

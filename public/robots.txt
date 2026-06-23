@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /lovable/
+Disallow: /auth
+Disallow: /profile
+Disallow: /cart
+Disallow: /deliveries
+Disallow: /claim
+Disallow: /email/
+
+Sitemap: https://hazorex.com/sitemap.xml
