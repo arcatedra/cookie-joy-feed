@@ -1305,31 +1305,35 @@ function TestDrawButton({ onDone }: { onDone: () => void }) {
 }
 
 function NextDrawCountdown() {
+  // Next daily draw scheduled at 20:00 America/New_York
   const computeNext = () => {
     const now = new Date();
-    const next = new Date(now);
-    const mins = now.getMinutes();
-    const add = 5 - (mins % 5);
-    next.setMinutes(mins + add, 0, 0);
-    return next.getTime();
+    const etNow = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+    const etTarget = new Date(etNow);
+    etTarget.setHours(20, 0, 0, 0);
+    if (etNow.getTime() >= etTarget.getTime()) {
+      etTarget.setDate(etTarget.getDate() + 1);
+    }
+    const diff = etTarget.getTime() - etNow.getTime();
+    return now.getTime() + diff;
   };
   const [target, setTarget] = useState<number | null>(null);
   const [now, setNow] = useState<number | null>(null);
   const fetchWinners = async () => {
     const { supabase } = await import("@/integrations/supabase/client");
-    const { data } = await supabase.rpc("get_recent_test_winners", { p_limit: 5 });
+    const { data } = await supabase.rpc("get_recent_winners", { p_limit: 5 });
     return (data ?? []) as Array<{
-      id: string;
+      draw_date: string;
       winner_display_name: string;
       prize_usd: number;
-      delivered: boolean;
-      created_at: string;
+      seed_hash: string | null;
+      drawn_at: string | null;
     }>;
   };
   const { data: winners, refetch } = useQuery({
-    queryKey: ["test-winners"],
+    queryKey: ["recent-winners-countdown"],
     queryFn: fetchWinners,
-    refetchInterval: 15_000,
+    refetchInterval: 60_000,
   });
 
   useEffect(() => {
@@ -1345,8 +1349,10 @@ function NextDrawCountdown() {
 
   const remaining = target !== null && now !== null ? Math.max(0, target - now) : 0;
   const ready = target !== null && now !== null;
-  const mm = ready ? Math.floor(remaining / 60000).toString().padStart(2, "0") : "--";
-  const ss = ready ? Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0") : "--";
+  const totalSec = Math.floor(remaining / 1000);
+  const hh = ready ? Math.floor(totalSec / 3600).toString().padStart(2, "0") : "--";
+  const mm = ready ? Math.floor((totalSec % 3600) / 60).toString().padStart(2, "0") : "--";
+  const ss = ready ? (totalSec % 60).toString().padStart(2, "0") : "--";
   const latest = winners?.[0];
 
   return (
@@ -1365,7 +1371,7 @@ function NextDrawCountdown() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7, textTransform: "uppercase" }}>
-            ⏱ Próximo sorteo automático en
+            ⏱ Próximo sorteo oficial en
           </div>
           <div
             style={{
@@ -1377,10 +1383,10 @@ function NextDrawCountdown() {
               lineHeight: 1.1,
             }}
           >
-            {mm}:{ss}
+            {hh}:{mm}:{ss}
           </div>
           <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
-            Sorteo cada 5 minutos · entrega automática
+            Sorteo diario a las 20:00 (hora del Este) · automatizado
           </div>
         </div>
         {latest && (
@@ -1391,7 +1397,7 @@ function NextDrawCountdown() {
               ${Number(latest.prize_usd).toFixed(2)}
             </div>
             <div style={{ fontSize: 11, opacity: 0.75, marginTop: 2 }}>
-              {latest.delivered ? "✅ Premio entregado" : "⏳ Pendiente"}
+              {latest.draw_date}
             </div>
           </div>
         )}
@@ -1401,7 +1407,7 @@ function NextDrawCountdown() {
           <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.6 }}>HISTORIAL RECIENTE</div>
           {winners.slice(1).map((w) => (
             <div
-              key={w.id}
+              key={w.draw_date}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -1409,7 +1415,7 @@ function NextDrawCountdown() {
                 opacity: 0.9,
               }}
             >
-              <span>{w.winner_display_name}</span>
+              <span>{w.winner_display_name} · {w.draw_date}</span>
               <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>${Number(w.prize_usd).toFixed(2)}</span>
             </div>
           ))}
@@ -1418,4 +1424,5 @@ function NextDrawCountdown() {
     </div>
   );
 }
+
 
