@@ -1,52 +1,56 @@
 
-# Checklist para dejar los sorteos listos para producción
+# Panel admin de ganadores (aprobar / pagar)
 
-Te respondo con sinceridad: el sistema **funciona end-to-end** (entrar con stars, AMOE gratis, cierre por cutoff, sorteo determinista, ganador, claim, email automático). Lo que falta para considerarlo "perfecto y listo" son piezas operativas y de cumplimiento legal, no de código base.
+El claim del ganador con subida de W-9/ID **ya está implementado** end-to-end en `/claim/$drawDate` (ver `_authenticated/claim.$drawDate.tsx` + `winner-claim.functions.ts` + bucket `winner-documents`). Lo que falta es el panel admin para revisar y procesar esos reclamos.
 
-## 1. Cron / automatización del sorteo (CRÍTICO)
+## 1. Permisos de BD (migración)
 
-Hoy `run_daily_draw()` existe pero **nadie lo dispara automáticamente** a las 20:00 ET. Falta:
-- Programar `pg_cron` para llamar `/api/public/hooks/run-daily-draw` todos los días a las 20:00 ET (00:00 UTC en invierno / 01:00 UTC en verano — usar cron en UTC fijo y dejar la función decidir si corresponde por `today_et()`).
-- Programar `pg_cron` para `close_draws_for_cutoff()` cada minuto (cerrar entradas en el último cutoff).
-- Programar `pg_cron` para `expire_winner_claims()` una vez al día (marcar reclamos vencidos).
+- Añadir policy en `winner_claims`: admins (`has_role(uid,'admin')`) pueden `SELECT` y `UPDATE` cualquier fila.
+- Añadir policies en `storage.objects` para bucket `winner-documents`: admins pueden `SELECT` cualquier objeto (hoy solo el dueño).
 
-## 2. Flujo de reclamo del ganador (verificación)
+## 2. Server functions admin (`src/lib/admin-claims.functions.ts`)
 
-La ruta `/claim/$drawDate` existe pero falta validar:
-- Que el ganador pueda subir documentos (W-9 / ID) al bucket `winner-documents` ya creado.
-- Notificación al admin cuando el ganador envía sus documentos.
-- Botón en `/admin/sweepstakes` para aprobar/rechazar el reclamo y marcar `paid_at` cuando se hace el pago.
+Todas con `requireSupabaseAuth` + chequeo `has_role(userId,'admin')`:
 
-## 3. Reglas oficiales (legal)
+- `listWinnerClaims({ status?, limit, offset })` → lista paginada con campos clave (draw_date, email, prize, status, submitted_at, notified_at).
+- `getClaimDocumentUrls({ drawDate })` → genera 2 signed URLs (10 min) para `id_document_path` y `w9_document_path` usando `supabaseAdmin.storage.createSignedUrl`.
+- `approveClaim({ drawDate, notes? })` → marca `status='verified'`, `verified_at=now()`, `verified_by=userId`, guarda `admin_notes`.
+- `rejectClaim({ drawDate, reason })` → marca `status='rejected'`, `rejection_reason`, `rejected_by`, `rejected_at`.
+- `markClaimPaid({ drawDate, paymentReference })` → exige `status='verified'`; setea `status='paid'`, `paid_at`, `payment_reference`, `paid_by`.
 
-`sweepstakes-rules.tsx` está publicada pero conviene revisar contra `sweepstakes_config` real:
-- Sponsor: HAZOREX ORIGEN LLC, 365 58th Street, Brooklyn, NY 11220.
-- Estados excluidos, edad mínima, ventana de reclamo, premio máximo diario — todos los valores que muestran las reglas deben coincidir con los de la BD (hoy se leen, pero hay que verificar el render final).
-- Confirmar que el AMOE postal está documentado (dirección postal para enviar entrada gratis por correo).
+Cada acción registra una fila opcional en log (saltable; usamos los timestamps de la tabla).
 
-## 4. Monitoreo de emails de ganador
+## 3. Nueva ruta `/admin/sweepstakes.winners.tsx`
 
-- Verificar end-to-end: insertar un `winner_claims` de prueba y confirmar que llega el email vía `email_send_log` (`template_name = 'winner-notification'`, status `sent`).
-- Agregar a un dashboard admin (si lo quieres) el conteo de winners notificados / pendientes.
+Tab/sección bajo el admin de sorteos, con:
+- Filtro de estado (todos / pending_verification / submitted / verified / paid / rejected / expired).
+- Tabla con: fecha sorteo, ganador, email, premio, estado (badge color), enviado el, deadline.
+- Click en una fila abre **Sheet** con:
+  - Datos KYC (nombre, DOB, dirección, teléfono).
+  - Método de pago + destino.
+  - Botones "Ver ID" y "Ver W-9" → abre signed URL en pestaña nueva.
+  - Si `status='submitted'`: botones **Aprobar** / **Rechazar** (modal con motivo).
+  - Si `status='verified'`: input de `payment_reference` + botón **Marcar como pagado**.
+  - Si `status='paid'`: muestra referencia y fecha.
+- Link visible desde `/admin/sweepstakes` ("Reclamos de ganadores →").
 
-## 5. Pequeños pulidos UX
+## 4. Pequeño ajuste en `winner-claim.functions.ts` submit
 
-- Mostrar countdown al próximo sorteo en `/ruleta` (ya hay componentes, falta verificar que use `scheduled_at` real).
-- Estado "DRAW_CLOSED" amigable cuando alguien intenta entrar después del cutoff.
-- Confirmación visual tras enviar AMOE (hoy puede ser silenciosa).
+Hoy `submitClaim` deja `status` en `pending_verification`. Cambiar a `status='submitted'` cuando el ganador termina el formulario, para distinguir "ganador notificado, aún no envió docs" vs "ganador envió docs, listo para revisar". El admin filtra `submitted` para procesar.
 
-## 6. Pruebas en vivo antes de lanzar
+## 5. Notas
 
-Plan mínimo de smoke test:
-1. Crear entrada con stars → ver ticket en `daily_draw_entries`.
-2. Crear entrada AMOE → ver fila en `amoe_entries` + `daily_draw_entries`.
-3. Forzar `run_daily_draw()` manualmente → ver `daily_draws.status='completed'`, `winner_claims` creado, email enviado.
-4. Abrir `/claim/$drawDate` como ganador → completar flujo de documentos.
+- No tocamos diseño general — reusamos shadcn (`Card`, `Table`, `Sheet`, `Badge`, `Dialog`).
+- Toda escritura va por `requireSupabaseAuth` + verificación `has_role`. No se usa `supabaseAdmin` salvo para signed URLs de los documentos.
+- Email al admin cuando el ganador envía docs: **lo dejo fuera** de este turno (lo confirmamos después si lo quieres; añade complejidad de plantilla).
 
----
+## Archivos a crear/editar
 
-## ¿Qué hago en el siguiente turno?
+- **migración**: policies admin en `winner_claims` y `storage.objects` (bucket `winner-documents`).
+- **nuevo**: `src/lib/admin-claims.functions.ts`.
+- **nuevo**: `src/routes/admin.sweepstakes.winners.tsx`.
+- **editado**: `src/routes/admin.sweepstakes.tsx` → link a la sección de reclamos.
+- **editado**: `src/lib/winner-claim.functions.ts` → `submitted_at` + `status='submitted'`.
+- **editado**: `src/routes/_authenticated/claim.$drawDate.tsx` → render del estado `submitted` ("en revisión por el equipo").
 
-Propongo atacar **#1 (cron automático)** primero porque sin eso el sorteo no corre solo. Después #2 (flujo de claim con documentos) y #4 (verificación de email real).
-
-¿Empiezo por el cron de los 3 jobs (`run_daily_draw`, `close_draws_for_cutoff`, `expire_winner_claims`), o prefieres que primero verifique con un sorteo de prueba real que el email de ganador llega bien?
+¿Procedo así?
