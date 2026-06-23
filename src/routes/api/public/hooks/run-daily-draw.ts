@@ -112,10 +112,14 @@ export const Route = createFileRoute("/api/public/hooks/run-daily-draw")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        // Dedicated server-only secret; do NOT accept SUPABASE_PUBLISHABLE_KEY
+        // (it ships to every browser and would let anyone trigger draws).
+        const expected = process.env.DRAW_CRON_SECRET;
         const apikey = request.headers.get("apikey") ?? request.headers.get("x-api-key");
-        if (!apikey || apikey !== process.env.SUPABASE_PUBLISHABLE_KEY) {
+        if (!expected || !apikey || apikey !== expected) {
           return new Response("Unauthorized", { status: 401 });
         }
+
 
         let testMode = false;
         try {

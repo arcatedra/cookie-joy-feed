@@ -19,8 +19,9 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
     const pkg = TOKEN_PACKAGES.find((p) => p.id === data.packageId);
     if (!pkg) throw new Error("Paquete inválido");
 
-    // Resolve subject — bearer user OR guest email cookie.
-    const { getRequest, getCookie } = await import("@tanstack/react-start/server");
+    // Resolve subject — bearer user OR HMAC-verified guest email cookie.
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { verifyGuestCookie } = await import("./guest-cookie.server");
     let userId: string | null = null;
     let email: string | null = data.email?.trim().toLowerCase() ?? null;
 
@@ -44,12 +45,10 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
     }
 
     if (!userId) {
-      const guest = getCookie("origen_guest");
-      if (guest) {
-        const guestEmail = guest.split("|")[0];
-        if (guestEmail) email = email ?? guestEmail;
-      }
+      const guestEmail = verifyGuestCookie();
+      if (guestEmail) email = email ?? guestEmail;
     }
+
 
     if (!userId && !email) {
       throw new Error("Inicia sesión o completa el formulario de participación gratuita primero.");
