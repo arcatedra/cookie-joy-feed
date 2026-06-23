@@ -176,8 +176,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const isCompleted = status === "completed";
 
   // Entry cutoff: inscriptions close N minutes before the scheduled draw time.
-  // Matches sweepstakes_config.entry_cutoff_minutes default (5).
-  const ENTRY_CUTOFF_MIN = 5;
+  // Pulled from DB (sweepstakes_config.entry_cutoff_minutes) so admin changes apply live.
+  const ENTRY_CUTOFF_MIN = Math.max(0, Number(draw?.entryCutoffMinutes ?? 5));
   const cutoffMs = ENTRY_CUTOFF_MIN * 60_000;
   const entriesClosed = isOpen && cd.ms > 0 && cd.ms <= cutoffMs;
   const canEnter = isOpen && !entriesClosed;

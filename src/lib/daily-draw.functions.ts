@@ -67,6 +67,7 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
     rolledOverFrom: (row.rolled_over_from as string | null) ?? null,
     addressValid,
     maxDailyPrizeUsd: Number(cfgRow?.max_daily_prize_usd ?? 4999),
+    entryCutoffMinutes: Number(cfgRow?.entry_cutoff_minutes ?? 5),
   };
 });
 
