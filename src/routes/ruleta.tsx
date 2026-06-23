@@ -147,7 +147,7 @@ function RuletaPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <Star size={32} color={BLUE} />
           <div>
-            <div style={{ fontWeight: 800, letterSpacing: "0.14em", fontSize: "clamp(14px, 4vw, 18px)", whiteSpace: "nowrap" }}>Porcenje</div>
+            <div style={{ fontWeight: 800, letterSpacing: "0.14em", fontSize: "clamp(14px, 4vw, 18px)", whiteSpace: "nowrap" }}>Porsenge</div>
             <div style={{ fontSize: 11, color: BLUE_SOFT, letterSpacing: "0.2em" }}>
               {t("ruleta.sweepstakes")}
             </div>
