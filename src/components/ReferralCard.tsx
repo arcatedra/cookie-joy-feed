@@ -182,6 +182,16 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               {referralCode}
             </div>
           )}
+          {referralUrl && (
+            <button
+              type="button"
+              onClick={handleCopy}
+              title="Toca para copiar"
+              className="mt-3 max-w-full truncate rounded-lg bg-primary-foreground/10 px-3 py-1.5 text-[11px] font-medium text-primary-foreground/90 underline-offset-2 hover:underline"
+            >
+              {referralUrl}
+            </button>
+          )}
         </div>
 
         {/* Actions */}
