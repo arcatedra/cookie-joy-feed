@@ -1313,8 +1313,8 @@ function NextDrawCountdown() {
     next.setMinutes(mins + add, 0, 0);
     return next.getTime();
   };
-  const [target, setTarget] = useState<number>(() => computeNext());
-  const [now, setNow] = useState<number>(() => Date.now());
+  const [target, setTarget] = useState<number | null>(null);
+  const [now, setNow] = useState<number | null>(null);
   const fetchWinners = async () => {
     const { supabase } = await import("@/integrations/supabase/client");
     const { data } = await supabase.rpc("get_recent_test_winners", { p_limit: 5 });
