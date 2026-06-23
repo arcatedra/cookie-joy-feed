@@ -36,6 +36,7 @@ import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
+import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -179,6 +180,11 @@ const ApiPublicDomainCheckRoute = ApiPublicDomainCheckRouteImport.update({
   path: '/api/public/domain-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSweepstakesWinnersRoute = AdminSweepstakesWinnersRouteImport.update({
+  id: '/winners',
+  path: '/winners',
+  getParentRoute: () => AdminSweepstakesRoute,
+} as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -249,11 +255,12 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
-  '/admin/sweepstakes': typeof AdminSweepstakesRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
@@ -285,11 +292,12 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
-  '/admin/sweepstakes': typeof AdminSweepstakesRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
@@ -323,11 +331,12 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
-  '/admin/sweepstakes': typeof AdminSweepstakesRoute
+  '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
@@ -366,6 +375,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/claim/$drawDate'
+    | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/notify-winner'
@@ -402,6 +412,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/claim/$drawDate'
+    | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/notify-winner'
@@ -439,6 +450,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/claim/$drawDate'
+    | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/notify-winner'
@@ -471,7 +483,7 @@ export interface RootRouteChildren {
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
-  AdminSweepstakesRoute: typeof AdminSweepstakesRoute
+  AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
@@ -677,6 +689,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDomainCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/sweepstakes/winners': {
+      id: '/admin/sweepstakes/winners'
+      path: '/winners'
+      fullPath: '/admin/sweepstakes/winners'
+      preLoaderRoute: typeof AdminSweepstakesWinnersRouteImport
+      parentRoute: typeof AdminSweepstakesRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -749,6 +768,17 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AdminSweepstakesRouteChildren {
+  AdminSweepstakesWinnersRoute: typeof AdminSweepstakesWinnersRoute
+}
+
+const AdminSweepstakesRouteChildren: AdminSweepstakesRouteChildren = {
+  AdminSweepstakesWinnersRoute: AdminSweepstakesWinnersRoute,
+}
+
+const AdminSweepstakesRouteWithChildren =
+  AdminSweepstakesRoute._addFileChildren(AdminSweepstakesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -770,7 +800,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
-  AdminSweepstakesRoute: AdminSweepstakesRoute,
+  AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,

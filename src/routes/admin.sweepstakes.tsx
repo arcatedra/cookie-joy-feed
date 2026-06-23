@@ -168,9 +168,14 @@ function AdminSweepstakesPage() {
             Datos legales del Sponsor + cap de premio + estados excluidos (obligatorios para operar en EE.UU.).
           </p>
         </div>
-        <Link to="/admin/shipping" className="text-sm underline text-muted-foreground">
-          Envíos →
-        </Link>
+        <div className="flex gap-3 text-sm">
+          <Link to="/admin/sweepstakes/winners" className="underline text-muted-foreground">
+            Reclamos de ganadores →
+          </Link>
+          <Link to="/admin/shipping" className="underline text-muted-foreground">
+            Envíos →
+          </Link>
+        </div>
       </div>
 
       {!isLoading && !addressValid && (
