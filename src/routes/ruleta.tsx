@@ -15,6 +15,8 @@ import { createStarsCheckout } from "@/lib/stars-checkout.functions";
 import { PrizePoolCounter } from "@/components/PrizePoolCounter";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LiveDrawSection } from "@/components/LiveDrawSection";
+import { FullscreenDrawExperience } from "@/components/FullscreenDrawExperience";
+
 import {
   MISSIONS,
   PRIZES,
