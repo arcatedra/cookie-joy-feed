@@ -1,54 +1,68 @@
-# Asegurar el endpoint de backup CSV
+# Auditoría anti-borrado masivo + protecciones
 
-## El problema
+Tu preocupación es legítima. Lo que le pasó a tu amigo normalmente ocurre por una de estas tres cosas:
 
-Tienes razón: el endpoint `/api/public/hooks/backup-csv` **no tiene candado real**.
+1. La `SERVICE_ROLE_KEY` (que ignora RLS) se filtró al frontend o a un repo público.
+2. Una tabla quedó sin RLS o con una policy DELETE demasiado abierta.
+3. Un endpoint público permitía borrar/modificar sin autenticación.
 
-Hoy compara el header `apikey` contra `SUPABASE_PUBLISHABLE_KEY`, que es **la clave pública** del frontend — está expuesta en el bundle del navegador y en todas las llamadas del cliente. Cualquiera que abra DevTools puede leerla y disparar el endpoint para:
+Este plan revisa los tres frentes y añade tres capas de defensa para que un borrado masivo sea **imposible incluso si alguien entra con credenciales de un usuario**.
 
-- Forzar volcados completos de todas las tablas críticas (profiles, donations, subscriptions, winner_claims…) al bucket `backups`.
-- Sobrescribir backups legítimos (usa `upsert: true`).
-- Consumir storage y créditos.
+## Fase 1 — Auditoría (solo lectura, sin cambios)
 
-El bucket en sí es privado, pero el endpoint no debería poder dispararse desde fuera del cron.
+Revisar y reportarte:
 
-Comparación con los otros hooks:
+1. **Policies DELETE existentes** en todas las tablas de `public`. Detectar cualquier `USING (true)`, `TO anon`, o sin `WHERE auth.uid()`.
+2. **Tablas sin RLS habilitada** en `public`.
+3. **Uso de `supabaseAdmin` / service_role** en el código: confirmar que NUNCA se importa desde componentes del navegador y que cada handler que lo usa verifica caller (rol admin o secreto compartido).
+4. **Endpoints `/api/public/*`**: confirmar que todos los que escriben/borran tienen candado (Bearer/HMAC/firma). Ya endurecimos `backup-csv`, `notify-winner`, `run-daily-draw`, `webhook` — verificar también `domain-check`, `test-draw-tick` y los de `/lovable/email/*`.
+5. **Permisos de Storage** en los buckets `reels`, `winner-documents`, `backups`: ¿quién puede borrar objetos?
+6. **`SUPABASE_SERVICE_ROLE_KEY` no aparece** en `src/`, `public/`, `.env*` versionados, ni en el bundle del navegador.
 
-| Endpoint | Candado actual |
-|---|---|
-| `notify-winner` | Bearer + `WINNER_NOTIFY_SECRET` (secreto dedicado) ✅ |
-| `run-daily-draw` | Bearer + secreto dedicado ✅ |
-| `backup-csv` | `apikey` = anon key pública ❌ |
+Entregable: un reporte resumido con un "🔴/🟢" por cada punto.
 
-## La solución
+## Fase 2 — Endurecimiento (3 capas de defensa)
 
-Replicar el patrón de `notify-winner`: un secreto dedicado, solo conocido por el cron y por el endpoint.
+### Capa A — Quitar el DELETE público
 
-### Pasos
+- Revocar `DELETE` sobre todo `public.*` a los roles `anon` y `authenticated` por defecto (`REVOKE DELETE ON ALL TABLES IN SCHEMA public FROM anon, authenticated`).
+- Donde un usuario sí debe poder borrar lo suyo (ej. borrar su propio comentario, su propia rating), volver a otorgar `DELETE` y dejar una policy estricta `auth.uid() = user_id`.
+- Resultado: aunque alguien encuentre la clave anon, **no puede borrar nada** vía la Data API.
 
-1. **Generar `BACKUP_HOOK_SECRET`** (64 chars random) y guardarlo como secreto del proyecto.
+### Capa B — Trigger anti borrado masivo
 
-2. **Endurecer `src/routes/api/public/hooks/backup-csv.ts`**:
-   - Aceptar solo `Authorization: Bearer <BACKUP_HOOK_SECRET>`.
-   - Rechazar el header `apikey` (eliminar el fallback inseguro).
-   - Comparación en tiempo constante para evitar timing attacks.
-   - Devolver 401 con cuerpo vacío en cualquier fallo de auth.
+Crear un trigger `BEFORE DELETE` en las tablas críticas (`profiles`, `donations`, `subscriptions`, `winner_claims`, `daily_draws`, `daily_draw_entries`, `winner_announcements`, `prize_pool_ledger`, `sweepstakes_config`, `user_tokens`) que:
 
-3. **Actualizar el cron job** (`cron.schedule` ya existente, job de las 7:30 UTC):
-   - `cron.unschedule` del job actual.
-   - Volver a programarlo con header `Authorization: Bearer <secreto>` en lugar de `apikey`.
-   - El secreto se lee desde Vault / settings de Postgres para no quedar en texto plano en `cron.job`.
+- Cuente cuántas filas se están borrando en la sesión.
+- Si en un mismo statement se intentan borrar más de N filas (ej. 50), **aborta** con `RAISE EXCEPTION 'BULK_DELETE_BLOCKED'`.
+- Loggea el intento en una tabla `security_audit_log`.
 
-4. **Verificar**: disparar el endpoint manualmente sin el header → 401. Con el header → 200 y nuevos archivos en `backups/YYYY-MM-DD/`.
+Esto detiene incluso un ataque con `service_role` por accidente (ej. un admin que se equivoca de WHERE). Solo se puede saltar usando `SET LOCAL` que la app nunca emite.
 
-## Detalles técnicos
+### Capa C — Soft delete + retención
 
-- El secreto se mete en Postgres con `ALTER DATABASE ... SET app.backup_hook_secret = '…'` no es viable en Cloud (prohibido por las reglas de migración). Alternativa: guardarlo en la tabla `internal_hook_config` (mismo patrón que `notify_winner_secret`) y leerlo dentro del `cron.schedule` con un `SELECT value FROM internal_hook_config WHERE key = 'backup_hook_secret'` concatenado al `headers` jsonb.
-- El endpoint sigue bajo `/api/public/*` (bypass de auth del edge) pero la verificación Bearer manual queda como única puerta.
-- Sin cambios en el bucket ni en la lógica de exportación; solo cambia la autenticación del endpoint y el cron que lo invoca.
+Para las 4 tablas más sensibles (`donations`, `subscriptions`, `winner_claims`, `profiles`):
 
-## Archivos a tocar
+- Añadir columna `deleted_at TIMESTAMPTZ` y forzar UPDATE en vez de DELETE desde la app.
+- Trigger que convierte cualquier DELETE en un UPDATE `SET deleted_at = now()` (excepto si la sesión es `service_role` ejecutando explícitamente un job de purga).
+- Las queries normales filtran por `deleted_at IS NULL` automáticamente.
+- Tabla `_archive` para retener los borrados durante 30 días antes de la purga real.
 
-- `src/routes/api/public/hooks/backup-csv.ts` — sustituir validación de `apikey` por Bearer con secreto dedicado.
-- Insert SQL (no migración) para: añadir `backup_hook_secret` a `internal_hook_config`, `cron.unschedule` del job viejo y `cron.schedule` del nuevo.
-- Nuevo secreto del proyecto: `BACKUP_HOOK_SECRET` (autogenerado).
+### Capa D — Backups verificables (ya existe, reforzar)
+
+- Ya tienes backups CSV diarios al bucket `backups` (con candado nuevo).
+- Añadir: retención de **30 días** (purga automática) y un job semanal que sube una copia comprimida a un prefijo `weekly/`.
+- El bucket `backups` queda restringido para que ningún rol que no sea `service_role` lo pueda LISTAR ni BORRAR (solo el admin verifica desde el panel Cloud).
+
+## Cómo te lo entrego
+
+Primero ejecuto la **Fase 1** y te paso el reporte. Sin tocar nada. Tú decides qué partes de la Fase 2 aplicar — algunas pueden romper flujos legítimos (ej. si tu app permite a un usuario eliminar su cuenta, hay que conservar ese flujo).
+
+## Lo que **ya** te protege hoy
+
+- `service_role` no está en el bundle del cliente (solo se lee con `process.env` desde server functions).
+- Todas las tablas tienen RLS habilitada (todas las que vimos en el security scan).
+- Los hooks internos ya tienen candado Bearer dedicado.
+- Tienes backups CSV diarios automáticos.
+
+Lo que falta es la **Capa A + B + auditoría** para que sea matemáticamente imposible borrar la base, no solo "improbable".
