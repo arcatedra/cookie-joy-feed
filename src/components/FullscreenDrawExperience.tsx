@@ -67,7 +67,7 @@ export function FullscreenDrawExperience({
     return { a, b, answer: a + b };
   }, [open]);
   const [challengeInput, setChallengeInput] = useState("");
-  const [challengeTime, setChallengeTime] = useState(5);
+  const [challengeTime, setChallengeTime] = useState(20);
   const [challengeStatus, setChallengeStatus] = useState<"idle" | "ok" | "fail">("idle");
 
   const apiPromiseRef = useRef<Promise<ApiResult> | null>(null);
