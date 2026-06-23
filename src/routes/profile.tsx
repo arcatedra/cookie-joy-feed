@@ -19,6 +19,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { QRCodeSection } from "@/components/QRCodeSection";
+import { ReferralCard } from "@/components/ReferralCard";
 import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
