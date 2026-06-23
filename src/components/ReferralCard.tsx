@@ -41,10 +41,9 @@ export function ReferralCard({ userId }: ReferralCardProps) {
   const invited = data?.invited ?? 0;
 
   const referralUrl = useMemo(() => {
-    if (!referralCode) return "";
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://origen.management";
-    return `${origin}/auth?ref=${referralCode}`;
+    return referralCode ? `${origin}/auth?ref=${referralCode}` : `${origin}/auth`;
   }, [referralCode]);
 
   const handleCopy = useCallback(async () => {
@@ -78,9 +77,10 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     () =>
       referralCode
         ? `🎁 ¡Únete a Hazorex con mi código ${referralCode} y los dos ganamos estrellas! ${referralUrl}`
-        : "",
+        : `🎁 ¡Únete a Hazorex y gana estrellas! ${referralUrl}`,
     [referralCode, referralUrl],
   );
+
 
   const openShare = useCallback((url: string) => {
     if (typeof window === "undefined") return;
