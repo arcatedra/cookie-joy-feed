@@ -187,6 +187,8 @@ function RuletaPage() {
           Modo prueba activo — sorteo manual habilitado
         </div>
 
+        <NextDrawCountdown />
+
         <div id="live-draw" style={{ scrollMarginTop: 80 }}>
           <LiveDrawSection
             balance={balance}
