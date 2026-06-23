@@ -91,7 +91,7 @@ export function FullscreenDrawExperience({
     setWinner(null);
     setErrorMsg(null);
     setChallengeInput("");
-    setChallengeTime(5);
+    setChallengeTime(20);
     setChallengeStatus("idle");
 
     // Fire API in parallel with countdown
