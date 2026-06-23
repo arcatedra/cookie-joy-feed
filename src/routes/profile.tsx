@@ -169,6 +169,8 @@ function ProfilePage() {
         </div>
       </section>
 
+      <ReferralCard userId={user?.id ?? null} />
+
       <QRCodeSection />
 
       {/* Account Navigation */}
