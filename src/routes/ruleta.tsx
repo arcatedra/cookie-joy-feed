@@ -167,6 +167,8 @@ function RuletaPage() {
           />
         </div>
 
+        <TestDrawButton onDone={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })} />
+
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
         <BuyTokensPanel balance={balance} />
@@ -1252,5 +1254,84 @@ function Legal() {
         </Link>
       </div>
     </footer>
+  );
+}
+
+function TestDrawButton({ onDone }: { onDone: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+
+  const fire = async () => {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/public/hooks/run-daily-draw", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: "{}",
+      });
+      const text = await res.text();
+      setResult(`${res.status} → ${text.slice(0, 300)}`);
+      toast.success("Sorteo disparado — refresca para ver el ganador");
+      onDone();
+    } catch (e) {
+      setResult(String(e));
+      toast.error("Error al disparar el sorteo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        background: "#fff3cd",
+        border: "2px dashed #c9a36b",
+        borderRadius: 16,
+        padding: 20,
+        textAlign: "center",
+      }}
+    >
+      <div style={{ fontWeight: 800, color: "#3b2417", marginBottom: 8 }}>
+        🧪 Modo prueba — disparar sorteo manualmente
+      </div>
+      <button
+        type="button"
+        onClick={fire}
+        disabled={loading}
+        style={{
+          padding: "12px 24px",
+          background: "#1e3a5f",
+          color: "#f3ead8",
+          border: "none",
+          borderRadius: 10,
+          fontWeight: 800,
+          fontSize: 14,
+          cursor: loading ? "wait" : "pointer",
+          opacity: loading ? 0.6 : 1,
+        }}
+      >
+        {loading ? "Disparando…" : "🎰 Ejecutar sorteo AHORA"}
+      </button>
+      {result && (
+        <pre
+          style={{
+            marginTop: 12,
+            padding: 10,
+            background: "#fff",
+            borderRadius: 8,
+            fontSize: 11,
+            textAlign: "left",
+            overflow: "auto",
+            maxHeight: 200,
+          }}
+        >
+          {result}
+        </pre>
+      )}
+    </div>
   );
 }
