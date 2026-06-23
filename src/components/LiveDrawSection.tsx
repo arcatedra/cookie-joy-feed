@@ -486,6 +486,10 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           0%, 100% { opacity: 0.55; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
+        @keyframes ldPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.65; transform: scale(1.03); }
+        }
       `}</style>
     </section>
   );
