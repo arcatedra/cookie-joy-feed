@@ -175,6 +175,14 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const isDrawing = status === "drawing";
   const isCompleted = status === "completed";
 
+  // Entry cutoff: inscriptions close N minutes before the scheduled draw time.
+  // Matches sweepstakes_config.entry_cutoff_minutes default (5).
+  const ENTRY_CUTOFF_MIN = 5;
+  const cutoffMs = ENTRY_CUTOFF_MIN * 60_000;
+  const entriesClosed = isOpen && cd.ms > 0 && cd.ms <= cutoffMs;
+  const canEnter = isOpen && !entriesClosed;
+  const lastMinute = cd.ms > 0 && cd.ms <= 60_000;
+
   // ===== Stage (fullscreen) mode =====
   // Opens at T-15s, while drawing, and during winner celebration.
   const preShow = isOpen && cd.ms > 0 && cd.ms <= 15_000;
