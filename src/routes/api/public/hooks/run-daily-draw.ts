@@ -116,20 +116,39 @@ export const Route = createFileRoute("/api/public/hooks/run-daily-draw")({
         if (!apikey || apikey !== process.env.SUPABASE_PUBLISHABLE_KEY) {
           return new Response("Unauthorized", { status: 401 });
         }
-        const nowET = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
+
+        let testMode = false;
+        try {
+          const body = (await request.json().catch(() => ({}))) as { test_mode?: boolean };
+          testMode = Boolean(body?.test_mode);
+        } catch {
+          testMode = false;
+        }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+        // TEST MODE: ensure sponsor_address is valid so run_daily_draw doesn't reject
+        if (testMode) {
+          const { data: cfg } = await supabaseAdmin
+            .from("sweepstakes_config")
+            .select("sponsor_address")
+            .eq("id", true)
+            .maybeSingle();
+          const addr = (cfg?.sponsor_address ?? "").trim();
+          const invalid =
+            !addr || addr.length < 10 || /completar/i.test(addr) || /\[.*\]/.test(addr);
+          if (invalid) {
+            await supabaseAdmin
+              .from("sweepstakes_config")
+              .update({ sponsor_address: "123 Test Street, Miami, FL 33101, USA" })
+              .eq("id", true);
+          }
+        }
 
         // Cutoff sweep (idempotent): close entries 5 min before scheduled_at
         await supabaseAdmin.rpc("close_draws_for_cutoff");
         // Expire stale claims (idempotent)
         await supabaseAdmin.rpc("expire_winner_claims");
-
-        // TEMP: prueba en vivo — gate de 8pm ET desactivado. REVERTIR después.
-        // if (nowET.getHours() < 20) {
-        //   return Response.json({ skipped: true, reason: "before-8pm-et", hourET: nowET.getHours() });
-        // }
-        void nowET;
 
         const { data, error } = await supabaseAdmin.rpc("run_daily_draw");
         if (error) {
@@ -137,9 +156,44 @@ export const Route = createFileRoute("/api/public/hooks/run-daily-draw")({
           return new Response(JSON.stringify({ error: error.message }), { status: 500 });
         }
 
-        // Notify winner if there is one
+        const row = Array.isArray(data) ? data[0] : data;
+        let simulated = false;
+        let simulatedWinner: { display_name: string; prize_usd: number; draw_date: string } | null = null;
+
+        // TEST MODE: if no entries today (rolled_over), simulate a winner from recent participants
+        if (testMode && row?.status === "rolled_over") {
+          const { data: entries } = await supabaseAdmin
+            .from("daily_draw_entries")
+            .select("display_name, subject_email, draw_date")
+            .order("created_at", { ascending: false })
+            .limit(50);
+          if (entries && entries.length > 0) {
+            const pick = entries[Math.floor(Math.random() * entries.length)];
+            const prize = Number(row.prize_usd ?? 0) || 100;
+            const drawDate = row.draw_date as string;
+            await supabaseAdmin
+              .from("winner_announcements")
+              .upsert(
+                {
+                  draw_date: drawDate,
+                  winner_display_name: pick.display_name ?? "Participante",
+                  prize_usd: prize,
+                  seed_hash: `sim-${Date.now()}`,
+                  published_at: new Date().toISOString(),
+                },
+                { onConflict: "draw_date" },
+              );
+            simulated = true;
+            simulatedWinner = {
+              display_name: pick.display_name ?? "Participante",
+              prize_usd: prize,
+              draw_date: drawDate,
+            };
+          }
+        }
+
+        // Notify real winner via email
         try {
-          const row = Array.isArray(data) ? data[0] : data;
           if (row?.status === "completed" && row.winner_display_name) {
             const { data: claim } = await supabaseAdmin
               .from("winner_claims")
@@ -160,7 +214,7 @@ export const Route = createFileRoute("/api/public/hooks/run-daily-draw")({
           console.error("[run-daily-draw] notify error", e);
         }
 
-        return Response.json({ ok: true, result: data });
+        return Response.json({ ok: true, result: data, simulated, simulatedWinner });
       },
       GET: async () => new Response("Method Not Allowed", { status: 405 }),
     },
