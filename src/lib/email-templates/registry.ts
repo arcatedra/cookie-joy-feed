@@ -4,6 +4,7 @@ import { template as subscriptionConfirmation } from './subscription-confirmatio
 import { template as adminNewOrder } from './admin-new-order'
 import { template as adminNewSubscription } from './admin-new-subscription'
 import { template as winnerNotification } from './winner-notification'
+import { template as securityAlert } from './security-alert'
 
 export interface TemplateEntry {
   component: ComponentType<any>
