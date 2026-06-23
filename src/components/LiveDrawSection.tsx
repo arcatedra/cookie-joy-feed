@@ -175,6 +175,14 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const isDrawing = status === "drawing";
   const isCompleted = status === "completed";
 
+  // Entry cutoff: inscriptions close N minutes before the scheduled draw time.
+  // Matches sweepstakes_config.entry_cutoff_minutes default (5).
+  const ENTRY_CUTOFF_MIN = 5;
+  const cutoffMs = ENTRY_CUTOFF_MIN * 60_000;
+  const entriesClosed = isOpen && cd.ms > 0 && cd.ms <= cutoffMs;
+  const canEnter = isOpen && !entriesClosed;
+  const lastMinute = cd.ms > 0 && cd.ms <= 60_000;
+
   // ===== Stage (fullscreen) mode =====
   // Opens at T-15s, while drawing, and during winner celebration.
   const preShow = isOpen && cd.ms > 0 && cd.ms <= 15_000;
@@ -246,8 +254,17 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
 
         ) : (
           <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 6, textAlign: "center" }}>
-            <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-              {isCompleted ? t("liveDraw.winnerEyebrow") : isDrawing ? t("liveDraw.spinningEyebrow") : t("liveDraw.todayPotEyebrow")}
+            <div style={{
+              fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800,
+              animation: lastMinute && !isDrawing && !isCompleted ? "ldPulse 1s ease-in-out infinite" : undefined,
+            }}>
+              {isCompleted
+                ? t("liveDraw.winnerEyebrow")
+                : isDrawing
+                ? t("liveDraw.spinningEyebrow")
+                : entriesClosed
+                ? t("liveDraw.entriesClosedEyebrow")
+                : t("liveDraw.todayPotEyebrow")}
             </div>
 
             <div style={{
@@ -259,7 +276,10 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               <span style={{ fontSize: "0.4em", marginLeft: 8, color: GOLD_BRIGHT }}>USD</span>
             </div>
             {!isCompleted && (
-              <div style={{ display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              <div style={{
+                display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center",
+                animation: lastMinute && !isDrawing ? "ldPulse 1s ease-in-out infinite" : undefined,
+              }}>
                 <CountdownDigit label={t("liveDraw.hours")} value={cd.hh} />
                 <CountdownDigit label={t("liveDraw.minutes")} value={cd.mm} />
                 <CountdownDigit label={t("liveDraw.seconds")} value={cd.ss} />
@@ -269,6 +289,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               {t("liveDraw.participantsAndTickets", { participants: draw?.entrantsTotal ?? 0, tickets: draw?.ticketsTotal ?? 0 })}
               {draw?.rolledOverFrom ? t("liveDraw.rolledOverSince", { date: new Date(draw.rolledOverFrom).toLocaleDateString(getLocale(i18n.language)) }) : null}
             </div>
+
 
           </div>
         )}
@@ -345,6 +366,22 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           <div style={{ fontSize: 11, letterSpacing: "0.3em", color: GOLD_BRIGHT, fontWeight: 800 }}>
             {t("liveDraw.enterDrawTitle")}
           </div>
+
+          {entriesClosed && (
+            <div style={{
+              padding: "12px 14px", borderRadius: 12,
+              background: `${GOLD_BRIGHT}1f`, border: `1px solid ${GOLD_BRIGHT}55`,
+              color: GOLD_BRIGHT, fontSize: 13, lineHeight: 1.5,
+            }}>
+              <div style={{ fontWeight: 800, marginBottom: 2 }}>
+                ⏸ {t("liveDraw.entriesClosedTitle")}
+              </div>
+              <div style={{ color: `${BEIGE}cc`, fontSize: 12 }}>
+                {t("liveDraw.entriesClosedBody", { mins: ENTRY_CUTOFF_MIN })}
+              </div>
+            </div>
+          )}
+
           <div style={{ fontSize: 14, color: `${BEIGE}cc`, lineHeight: 1.5 }}
             dangerouslySetInnerHTML={{ __html: t("liveDraw.ticketIntro") }}
           />
@@ -354,14 +391,17 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={60}
+            disabled={!canEnter}
             style={{
               padding: "12px 14px", borderRadius: 12, border: `1px solid ${GOLD}55`,
               background: `${BEIGE}11`, color: BEIGE, fontSize: 14, outline: "none",
+              opacity: canEnter ? 1 : 0.55,
             }}
           />
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <button
               onClick={() => setTickets((t) => Math.max(1, t - 1))}
+              disabled={!canEnter}
               style={btnSmall()}
               aria-label={t("liveDraw.minusAria")}
             >−</button>
@@ -375,26 +415,35 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             />
             <button
               onClick={() => setTickets((t) => Math.min(50, t + 1))}
+              disabled={!canEnter}
               style={btnSmall()}
               aria-label={t("liveDraw.plusAria")}
             >+</button>
           </div>
           <button
-            disabled={!isOpen || !canAfford || enterMut.isPending}
+            disabled={!canEnter || !canAfford || enterMut.isPending}
             onClick={() => enterMut.mutate()}
             style={{
               padding: "16px", borderRadius: 14, border: "none",
-              background: isOpen && canAfford
+              background: canEnter && canAfford
                 ? `linear-gradient(135deg, ${GOLD_BRIGHT}, ${GOLD})`
                 : `${BEIGE}22`,
-              color: isOpen && canAfford ? WOOD : `${BEIGE}66`,
+              color: canEnter && canAfford ? WOOD : `${BEIGE}66`,
               fontSize: 16, fontWeight: 900, letterSpacing: "0.1em",
-              cursor: isOpen && canAfford ? "pointer" : "not-allowed",
-              boxShadow: isOpen && canAfford ? `0 10px 30px -10px ${GOLD_BRIGHT}` : "none",
+              cursor: canEnter && canAfford ? "pointer" : "not-allowed",
+              boxShadow: canEnter && canAfford ? `0 10px 30px -10px ${GOLD_BRIGHT}` : "none",
               transition: "all 0.2s",
             }}
           >
-            {!isOpen ? t("liveDraw.drawClosed") : !canAfford ? t("liveDraw.missingStars", { n: ticketCost - balance }) : enterMut.isPending ? t("liveDraw.registering") : t("liveDraw.participate", { cost: ticketCost })}
+            {!isOpen
+              ? t("liveDraw.drawClosed")
+              : entriesClosed
+              ? t("liveDraw.entriesClosedShort")
+              : !canAfford
+              ? t("liveDraw.missingStars", { n: ticketCost - balance })
+              : enterMut.isPending
+              ? t("liveDraw.registering")
+              : t("liveDraw.participate", { cost: ticketCost })}
           </button>
           <div style={{ fontSize: 11, color: `${BEIGE}88`, textAlign: "center" }}
             dangerouslySetInnerHTML={{ __html: t("liveDraw.yourBalance", { balance }) }}
@@ -403,6 +452,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         </div>
       </div>
       )}
+
 
 
       {/* Admin-only test draw */}
@@ -435,6 +485,10 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         @keyframes ldGlow {
           0%, 100% { opacity: 0.55; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes ldPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.65; transform: scale(1.03); }
         }
       `}</style>
     </section>

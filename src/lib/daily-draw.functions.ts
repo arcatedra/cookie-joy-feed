@@ -159,7 +159,7 @@ export const enterDailyDraw = createServerFn({ method: "POST" })
       if (msg.includes("INSUFFICIENT_STARS"))
         return { ok: false as const, error: "No tienes suficientes estrellas (10⭐ por boleto)." };
       if (msg.includes("DRAW_CLOSED"))
-        return { ok: false as const, error: "El sorteo de hoy ya está cerrado." };
+        return { ok: false as const, error: "Las inscripciones del sorteo de hoy ya cerraron (5 min antes del giro). Vuelve mañana." };
       if (msg.includes("INVALID_TICKETS"))
         return { ok: false as const, error: "Cantidad de boletos inválida." };
       console.error("[daily-draw] enter error", error);
