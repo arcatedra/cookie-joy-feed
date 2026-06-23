@@ -1059,6 +1059,7 @@ export type Database = {
         Row: {
           address1: string | null
           address2: string | null
+          admin_notes: string | null
           city: string | null
           claim_deadline: string
           created_at: string
@@ -1072,23 +1073,29 @@ export type Database = {
           last_reminder_at: string | null
           notified_at: string | null
           paid_at: string | null
+          paid_by: string | null
           payment_destination: string | null
           payment_method: string | null
           payment_reference: string | null
           phone: string | null
           prize_usd: number
+          rejected_at: string | null
+          rejected_by: string | null
           rejection_reason: string | null
           state: string | null
           status: string
           submitted_at: string | null
           updated_at: string
           user_id: string | null
+          verified_at: string | null
+          verified_by: string | null
           w9_document_path: string | null
           zip: string | null
         }
         Insert: {
           address1?: string | null
           address2?: string | null
+          admin_notes?: string | null
           city?: string | null
           claim_deadline: string
           created_at?: string
@@ -1102,23 +1109,29 @@ export type Database = {
           last_reminder_at?: string | null
           notified_at?: string | null
           paid_at?: string | null
+          paid_by?: string | null
           payment_destination?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           phone?: string | null
           prize_usd: number
+          rejected_at?: string | null
+          rejected_by?: string | null
           rejection_reason?: string | null
           state?: string | null
           status?: string
           submitted_at?: string | null
           updated_at?: string
           user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
           w9_document_path?: string | null
           zip?: string | null
         }
         Update: {
           address1?: string | null
           address2?: string | null
+          admin_notes?: string | null
           city?: string | null
           claim_deadline?: string
           created_at?: string
@@ -1132,17 +1145,22 @@ export type Database = {
           last_reminder_at?: string | null
           notified_at?: string | null
           paid_at?: string | null
+          paid_by?: string | null
           payment_destination?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           phone?: string | null
           prize_usd?: number
+          rejected_at?: string | null
+          rejected_by?: string | null
           rejection_reason?: string | null
           state?: string | null
           status?: string
           submitted_at?: string | null
           updated_at?: string
           user_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
           w9_document_path?: string | null
           zip?: string | null
         }
