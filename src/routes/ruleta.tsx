@@ -1296,48 +1296,8 @@ function Legal() {
   );
 }
 
-function TestDrawButton({ onDone }: { onDone: () => void }) {
-  const [open, setOpen] = useState(false);
 
-  return (
-    <>
-      <div
-        style={{
-          background: "#fff3cd",
-          border: "2px dashed #c9a36b",
-          borderRadius: 16,
-          padding: 20,
-          textAlign: "center",
-        }}
-      >
-        <div style={{ fontWeight: 800, color: "#3b2417", marginBottom: 8 }}>
-          🧪 Modo prueba — disparar sorteo manualmente
-        </div>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          style={{
-            padding: "12px 24px",
-            background: "#1e3a5f",
-            color: "#f3ead8",
-            border: "none",
-            borderRadius: 10,
-            fontWeight: 800,
-            fontSize: 14,
-            cursor: "pointer",
-          }}
-        >
-          🎰 Ejecutar sorteo AHORA
-        </button>
-      </div>
-      <FullscreenDrawExperience
-        open={open}
-        onClose={() => setOpen(false)}
-        onWinnerInvalidate={onDone}
-      />
-    </>
-  );
-}
+
 
 function NextDrawCountdown() {
   const { t, i18n } = useTranslation();
