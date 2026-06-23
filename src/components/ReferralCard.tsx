@@ -74,6 +74,53 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     await handleCopy();
   }, [referralUrl, handleCopy]);
 
+  const shareMessage = useMemo(
+    () =>
+      referralCode
+        ? `🎁 ¡Únete a Hazorex con mi código ${referralCode} y los dos ganamos estrellas! ${referralUrl}`
+        : "",
+    [referralCode, referralUrl],
+  );
+
+  const openShare = useCallback((url: string) => {
+    if (typeof window === "undefined") return;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }, []);
+
+  const handleWhatsApp = useCallback(() => {
+    if (!shareMessage) return;
+    openShare(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`);
+  }, [shareMessage, openShare]);
+
+  const handleFacebook = useCallback(() => {
+    if (!referralUrl) return;
+    openShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralUrl)}`);
+  }, [referralUrl, openShare]);
+
+  const handleYouTube = useCallback(async () => {
+    if (!referralUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareMessage || referralUrl);
+      toast.success("¡Enlace copiado! Pégalo en tu canal o comunidad de YouTube");
+    } catch {
+      toast.error("No se pudo copiar el enlace");
+    }
+  }, [referralUrl, shareMessage]);
+
+  const handleCopyForApp = useCallback(
+    async (appName: string) => {
+      if (!referralUrl) return;
+      try {
+        await navigator.clipboard.writeText(shareMessage || referralUrl);
+        toast.success(`¡Enlace copiado! Pégalo en tu perfil o mensaje de ${appName}`);
+      } catch {
+        toast.error("No se pudo copiar el enlace");
+      }
+    },
+    [referralUrl, shareMessage],
+  );
+
+
   const handleDownload = useCallback(() => {
     const svg = svgRef.current;
     if (!svg) return;
