@@ -2,10 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { getDrawHistory } from "@/lib/daily-draw.functions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Calendar, DollarSign, Hash, ArrowLeft } from "lucide-react";
+import i18n from "@/i18n";
+import { getLocale } from "@/i18n";
 
 type Winner = Awaited<ReturnType<typeof getDrawHistory>>[number];
 
@@ -19,31 +22,37 @@ const historyQO = (fn: () => Promise<Winner[]>) =>
 export const Route = createFileRoute("/historial")({
   head: () => ({
     meta: [
-      { title: "Historial de Sorteos — ORIGEN" },
-      {
-        name: "description",
-        content:
-          "Consulta el historial completo de ganadores diarios de la Ruleta ORIGEN: nombre, fecha, monto del premio y verificación pública.",
-      },
-      { property: "og:title", content: "Historial de Sorteos — ORIGEN" },
-      {
-        property: "og:description",
-        content: "Transparencia total: revisa cada ronda con su ganador, fecha y monto.",
-      },
+      { title: i18n.t("historial.metaTitle") },
+      { name: "description", content: i18n.t("historial.metaDesc") },
+      { property: "og:title", content: i18n.t("historial.ogTitle") },
+      { property: "og:description", content: i18n.t("historial.ogDesc") },
     ],
   }),
   component: HistoryPage,
-  errorComponent: ({ error }) => (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <p className="text-destructive">Error: {error.message}</p>
-    </div>
-  ),
-  notFoundComponent: () => <div className="p-6">No encontrado.</div>,
+  errorComponent: ({ error }) => <ErrorBlock message={error.message} />,
+  notFoundComponent: () => <NotFoundBlock />,
 });
+
+function ErrorBlock({ message }: { message: string }) {
+  const { t } = useTranslation();
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <p className="text-destructive">
+        {t("historial.errorPrefix")}
+        {message}
+      </p>
+    </div>
+  );
+}
+
+function NotFoundBlock() {
+  const { t } = useTranslation();
+  return <div className="p-6">{t("historial.notFound")}</div>;
+}
 
 function formatDate(iso: string): string {
   try {
-    return new Date(iso + "T12:00:00").toLocaleDateString("es-ES", {
+    return new Date(iso + "T12:00:00").toLocaleDateString(getLocale(), {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -54,6 +63,7 @@ function formatDate(iso: string): string {
 }
 
 function HistoryPage() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <header className="border-b bg-background/80 backdrop-blur sticky top-0 z-10">
@@ -63,20 +73,17 @@ function HistoryPage() {
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
-            Ruleta
+            {t("historial.backToRoulette")}
           </Link>
           <h1 className="text-xl font-bold flex items-center gap-2 ml-2">
             <Trophy className="w-5 h-5 text-yellow-500" />
-            Historial de Sorteos
+            {t("historial.title")}
           </h1>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <p className="text-muted-foreground mb-6">
-          Cada sorteo se ejecuta diariamente a las 8:00 PM (hora del Este). Los resultados son
-          públicos y verificables mediante el hash de semilla.
-        </p>
+        <p className="text-muted-foreground mb-6">{t("historial.intro")}</p>
 
         <Suspense fallback={<LoadingList />}>
           <HistoryList />
@@ -97,6 +104,7 @@ function LoadingList() {
 }
 
 function HistoryList() {
+  const { t } = useTranslation();
   const fetchHistory = useServerFn(getDrawHistory);
   const { data: winners } = useSuspenseQuery(
     historyQO(() => fetchHistory({ data: { limit: 50 } })),
@@ -106,9 +114,7 @@ function HistoryList() {
     return (
       <Card className="p-8 text-center">
         <Trophy className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-        <p className="text-muted-foreground">
-          Aún no hay sorteos completados. ¡Vuelve después de las 8:00 PM ET!
-        </p>
+        <p className="text-muted-foreground">{t("historial.empty")}</p>
       </Card>
     );
   }
@@ -126,7 +132,7 @@ function HistoryList() {
               <div className="flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-yellow-500" />
                 <span className="font-semibold text-lg">
-                  {w.winnerDisplayName || "Anónimo"}
+                  {w.winnerDisplayName || t("historial.anonymous")}
                 </span>
               </div>
               {w.seedHash && (

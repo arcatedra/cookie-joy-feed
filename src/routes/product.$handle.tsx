@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Loader2, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShopifyCartDrawer } from "@/components/ShopifyCartDrawer";
 import { PRODUCT_BY_HANDLE_QUERY, storefrontApiRequest } from "@/lib/shopify";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { useShopifyCartSync } from "@/hooks/useShopifyCartSync";
+import i18n from "@/i18n";
 
 interface ProductDetail {
   id: string;
@@ -31,18 +33,24 @@ interface ProductDetail {
 export const Route = createFileRoute("/product/$handle")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.handle} · AMYRAX Shop` },
-      { name: "description", content: `Order ${params.handle} from AMYRAX Cookies.` },
+      { title: i18n.t("product.metaTitle", { handle: params.handle }) },
+      { name: "description", content: i18n.t("product.metaDesc", { handle: params.handle }) },
     ],
   }),
   component: ProductPage,
   errorComponent: ({ error }) => (
     <div className="p-8 text-center text-sm text-red-600">{error.message}</div>
   ),
-  notFoundComponent: () => <div className="p-8 text-center">Product not found</div>,
+  notFoundComponent: () => <NotFoundBlock />,
 });
 
+function NotFoundBlock() {
+  const { t } = useTranslation();
+  return <div className="p-8 text-center">{t("product.notFound")}</div>;
+}
+
 function ProductPage() {
+  const { t } = useTranslation();
   useShopifyCartSync();
   const { handle } = Route.useParams();
   const [variantIndex, setVariantIndex] = useState(0);
@@ -74,9 +82,9 @@ function ProductPage() {
   if (!data) {
     return (
       <div className="mx-auto max-w-2xl p-8 text-center">
-        <h1 className="text-xl font-semibold">Product not found</h1>
+        <h1 className="text-xl font-semibold">{t("product.notFound")}</h1>
         <Link to="/shop" className="mt-4 inline-block text-sm text-amber-700 underline">
-          Back to shop
+          {t("product.backToShop")}
         </Link>
       </div>
     );
@@ -104,7 +112,7 @@ function ProductPage() {
           to="/shop"
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to shop
+          <ArrowLeft className="h-4 w-4" /> {t("product.backToShop")}
         </Link>
         <ShopifyCartDrawer />
       </div>
@@ -137,7 +145,7 @@ function ProductPage() {
 
           {data.variants.edges.length > 1 && (
             <div className="mt-6">
-              <label className="text-sm font-medium">Variant</label>
+              <label className="text-sm font-medium">{t("product.variant")}</label>
               <select
                 value={variantIndex}
                 onChange={(e) => setVariantIndex(Number(e.target.value))}
@@ -162,9 +170,9 @@ function ProductPage() {
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : variant?.availableForSale ? (
-              "Add to Cart"
+              t("product.addToCart")
             ) : (
-              "Sold out"
+              t("product.soldOut")
             )}
           </Button>
         </div>

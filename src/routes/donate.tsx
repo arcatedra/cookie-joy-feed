@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Heart, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -13,6 +14,7 @@ import {
 import { createDonationCheckout } from "@/lib/donations.functions";
 import { TierBadge } from "@/components/TierBadge";
 import { useAuth } from "@/lib/auth";
+import i18n from "@/i18n";
 
 const searchSchema = z.object({
   status: z.enum(["success", "cancel"]).optional(),
@@ -23,18 +25,15 @@ export const Route = createFileRoute("/donate")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Donar — AMYRAX" },
-      {
-        name: "description",
-        content:
-          "Apoya a AMYRAX con una donación y desbloquea insignias exclusivas: Azul, Bronce, Oro, Premium, Corona y Estrella Suprema.",
-      },
+      { title: i18n.t("donate.metaTitle") },
+      { name: "description", content: i18n.t("donate.metaDesc") },
     ],
   }),
   component: DonatePage,
 });
 
 function DonatePage() {
+  const { t } = useTranslation();
   const { status, donation_id } = Route.useSearch();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -46,14 +45,13 @@ function DonatePage() {
 
   useEffect(() => {
     if (status === "success") {
-      toast.success("¡Gracias por tu donación! Tu insignia se activará en segundos.");
-      // Clean the URL.
+      toast.success(t("donate.thanks"));
       navigate({ to: "/donate", search: {}, replace: true });
     } else if (status === "cancel") {
-      toast.info("Donación cancelada. Puedes intentarlo cuando quieras.");
+      toast.info(t("donate.cancelled"));
       navigate({ to: "/donate", search: {}, replace: true });
     }
-  }, [status, donation_id, navigate]);
+  }, [status, donation_id, navigate, t]);
 
   const effectiveAmount = useMemo(() => {
     const custom = parseFloat(customInput);
@@ -65,12 +63,12 @@ function DonatePage() {
 
   const onDonate = async () => {
     if (!user) {
-      toast.error("Inicia sesión para donar.");
+      toast.error(t("donate.signInRequired"));
       navigate({ to: "/auth" });
       return;
     }
     if (!previewTier) {
-      toast.error("El monto mínimo es $1 USD.");
+      toast.error(t("donate.minAmount"));
       return;
     }
     setLoading(true);
@@ -79,11 +77,11 @@ function DonatePage() {
       if (result?.url) {
         window.location.href = result.url;
       } else {
-        throw new Error("No se recibió URL de pago.");
+        throw new Error(t("donate.noPaymentUrl"));
       }
     } catch (e) {
       console.error(e);
-      toast.error("No se pudo iniciar el pago. Inténtalo de nuevo.");
+      toast.error(t("donate.checkoutError"));
       setLoading(false);
     }
   };
@@ -99,27 +97,24 @@ function DonatePage() {
 
   return (
     <main className="min-h-screen bg-background pb-24">
-      {/* Hero */}
       <header className="relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0f172a] px-5 py-12 text-white">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur">
             <Heart className="h-7 w-7 text-amber-300" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Apoya a AMYRAX
+            {t("donate.heroTitle")}
           </h1>
           <p className="mt-3 text-sm text-white/80 md:text-base">
-            Cada donación nos ayuda a seguir creando experiencias artesanales.
-            A cambio, recibes una insignia exclusiva en tu perfil.
+            {t("donate.heroDesc")}
           </p>
         </div>
       </header>
 
-      {/* Donation form */}
       <section className="mx-auto -mt-8 max-w-2xl px-5">
         <div className="rounded-3xl bg-card p-6 shadow-xl ring-1 ring-border md:p-8">
           <h2 className="text-base font-bold uppercase tracking-[0.12em] text-foreground">
-            Elige tu monto (USD)
+            {t("donate.chooseAmount")}
           </h2>
 
           <div className="mt-4 grid grid-cols-3 gap-2 md:grid-cols-6">
@@ -150,7 +145,7 @@ function DonatePage() {
               htmlFor="custom-amount"
               className="text-xs font-semibold text-muted-foreground"
             >
-              O introduce un monto personalizado
+              {t("donate.customAmount")}
             </label>
             <div className="mt-1.5 flex items-center rounded-xl border border-border bg-background focus-within:ring-2 focus-within:ring-primary">
               <span className="pl-4 text-lg font-bold text-muted-foreground">$</span>
@@ -168,12 +163,11 @@ function DonatePage() {
             </div>
           </div>
 
-          {/* Live tier preview */}
           {previewTier && (
             <div className="mt-5 flex items-center justify-between rounded-2xl bg-muted px-4 py-3">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Tu insignia
+                  {t("donate.yourBadge")}
                 </p>
                 <p className="mt-0.5 text-sm font-bold text-foreground">
                   {TIER_LABEL[previewTier]}
@@ -191,45 +185,45 @@ function DonatePage() {
           >
             {loading ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Redirigiendo…
+                <Loader2 className="h-4 w-4 animate-spin" /> {t("donate.redirecting")}
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4" /> Donar ${effectiveAmount.toFixed(2)} USD
+                <Sparkles className="h-4 w-4" />{" "}
+                {t("donate.donateBtn", { amount: effectiveAmount.toFixed(2) })}
               </>
             )}
           </button>
 
           {!user && (
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              ¿Aún no tienes cuenta?{" "}
+              {t("donate.noAccountBefore")}
               <Link to="/auth" className="font-semibold text-primary underline">
-                Inicia sesión
-              </Link>{" "}
-              para donar.
+                {t("donate.signInWord")}
+              </Link>
+              {t("donate.noAccountAfter")}
             </p>
           )}
 
           <p className="mt-3 text-center text-[10px] text-muted-foreground">
-            Pagos procesados de forma segura. Entorno de pruebas activo.
+            {t("donate.secureNotice")}
           </p>
         </div>
       </section>
 
-      {/* Tier showcase */}
       <section className="mx-auto mt-10 max-w-3xl px-5">
         <h2 className="text-center text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">
-          Niveles de reconocimiento
+          {t("donate.tiersTitle")}
         </h2>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {allTiers.map((t) => (
+          {allTiers.map((tier) => (
             <div
-              key={t}
+              key={tier}
               className="flex flex-col items-center gap-3 rounded-2xl bg-card p-4 text-center shadow-sm ring-1 ring-border"
             >
-              <TierBadge tier={t} size="lg" />
+              <TierBadge tier={tier} size="lg" />
               <p className="text-[11px] font-medium text-muted-foreground">
-                {tierRange(t)}
+                {t(`donate.tierRange.${tier}`)}
               </p>
             </div>
           ))}
@@ -237,21 +231,4 @@ function DonatePage() {
       </section>
     </main>
   );
-}
-
-function tierRange(t: DonationTier): string {
-  switch (t) {
-    case "azul":
-      return "$1 – $4";
-    case "bronce":
-      return "$5 – $19";
-    case "oro":
-      return "$20 – $99";
-    case "premium":
-      return "$100 – $499";
-    case "corona":
-      return "$500 exacto";
-    case "estrella_suprema":
-      return "$501 en adelante";
-  }
 }
