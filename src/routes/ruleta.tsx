@@ -1,9 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getLocale } from "@/i18n";
+
 import {
   getRouletteState,
   submitAmoeEntry,
@@ -29,21 +32,22 @@ import {
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
     meta: [
-      { title: "Ruleta ORIGEN — Gira y gana ⭐" },
+      { title: "ORIGEN Roulette — Spin & Win ⭐" },
       {
         name: "description",
         content:
-          "Gira la Ruleta ORIGEN. Compra Estrellas o participa gratis siguiendo nuestras redes y reclama premios premium.",
+          "Spin the ORIGEN Roulette. Buy Stars or enter free by following our social channels and claim premium prizes.",
       },
-      { property: "og:title", content: "Ruleta ORIGEN — Gira y gana" },
+      { property: "og:title", content: "ORIGEN Roulette — Spin & Win" },
       {
         property: "og:description",
-        content: "Premios, descuentos y sabores sorpresa. Participación gratuita disponible.",
+        content: "Prizes, discounts and surprise flavors. Free entry available.",
       },
     ],
   }),
   component: RuletaPage,
 });
+
 
 // ── Design tokens (scoped here) ─────────────────────────────
 const BEIGE = "#f3ead8";
@@ -66,7 +70,9 @@ function Star({ size = 24, color = GOLD_BRIGHT }: { size?: number; color?: strin
 }
 
 function RuletaPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
+
   const fetchState = useServerFn(getRouletteState);
   const { data: state, isLoading } = useQuery({
     queryKey: ["roulette-state"],
@@ -112,10 +118,11 @@ function RuletaPage() {
         qc.invalidateQueries({ queryKey: ["roulette-state"] });
       }, 4800);
       void final;
-    } catch (e) {
-      toast.error("Error al girar.");
+    } catch {
+      toast.error(t("ruleta.spinError"));
       setSpinning(false);
     }
+
   };
 
   return (
@@ -142,8 +149,9 @@ function RuletaPage() {
           <div>
             <div style={{ fontWeight: 800, letterSpacing: "0.18em", fontSize: 18 }}>ORIGEN</div>
             <div style={{ fontSize: 11, color: BLUE_SOFT, letterSpacing: "0.2em" }}>
-              SWEEPSTAKES
+              {t("ruleta.sweepstakes")}
             </div>
+
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -189,6 +197,8 @@ function RuletaPage() {
 }
 
 function TokenChip({ balance, loading }: { balance: number; loading: boolean }) {
+  const { t } = useTranslation();
+
   return (
     <div
       style={{
@@ -205,7 +215,8 @@ function TokenChip({ balance, loading }: { balance: number; loading: boolean }) 
     >
       <Star size={18} color={GOLD_BRIGHT} />
       <span style={{ fontVariantNumeric: "tabular-nums" }}>{loading ? "…" : balance}</span>
-      <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.15em" }}>ESTRELLAS</span>
+      <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.15em" }}>{t("ruleta.starsLabel")}</span>
+
     </div>
   );
 }
@@ -321,7 +332,9 @@ function SpinButton({
   disabled: boolean;
   balance: number;
 }) {
+  const { t } = useTranslation();
   return (
+
     <div style={{ display: "grid", placeItems: "center", gap: 8 }}>
       <button
         onClick={onClick}
@@ -345,18 +358,21 @@ function SpinButton({
         onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        GIRAR ({SPIN_COST} ⭐)
+        {t("ruleta.spinBtn", { cost: SPIN_COST })}
       </button>
       {balance < SPIN_COST && (
         <p style={{ fontSize: 13, color: BLUE_SOFT }}>
-          Necesitas {SPIN_COST - balance} estrella(s) más para girar.
+          {t("ruleta.needStars", { n: SPIN_COST - balance })}
         </p>
       )}
+
     </div>
   );
 }
 
 function PrizeCard({ prize }: { prize: { label: string; code: string | null } }) {
+  const { t } = useTranslation();
+
   return (
     <div
       style={{
@@ -370,16 +386,17 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
         maxWidth: 420,
       }}
     >
-      <div style={{ fontSize: 12, letterSpacing: "0.3em", opacity: 0.7 }}>TU PREMIO</div>
+      <div style={{ fontSize: 12, letterSpacing: "0.3em", opacity: 0.7 }}>{t("ruleta.yourPrize")}</div>
       <div style={{ fontSize: 24, fontWeight: 800, margin: "8px 0" }}>{prize.label}</div>
       {prize.code && (
         <div style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.2em" }}>CÓDIGO</div>
+          <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.2em" }}>{t("ruleta.code")}</div>
           <button
             onClick={() => {
               navigator.clipboard.writeText(prize.code!);
-              toast.success("Código copiado");
+              toast.success(t("ruleta.codeCopied"));
             }}
+
             style={{
               marginTop: 6,
               background: GOLD,
@@ -402,7 +419,9 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
 }
 
 function BuyTokensPanel({ balance }: { balance: number }) {
+  const { t } = useTranslation();
   const checkout = useServerFn(createStarsCheckout);
+
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -410,11 +429,11 @@ function BuyTokensPanel({ balance }: { balance: number }) {
 
   const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
     if (!acceptedTerms) {
-      toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
+      toast.error(t("ruleta.mustAcceptTerms"));
       return;
     }
     if (!user) {
-      toast.info("Inicia sesión para comprar estrellas.");
+      toast.info(t("ruleta.signInToBuy"));
       navigate({ to: "/auth", search: { redirect: "/ruleta" } });
       return;
     }
@@ -423,10 +442,11 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       const res = await checkout({ data: { packageId } });
       if (res.url) window.location.href = res.url;
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Error al iniciar el checkout.");
+      toast.error(e instanceof Error ? e.message : t("ruleta.checkoutError"));
       setLoadingId(null);
     }
   };
+
 
   const scrollToDraw = () => {
     document.getElementById("live-draw")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -466,7 +486,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           </div>
           <div>
             <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7 }}>
-              TU SALDO ACTUAL
+              {t("ruleta.yourBalance")}
             </div>
             <div
               style={{
@@ -476,8 +496,9 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                 fontVariantNumeric: "tabular-nums",
               }}
             >
-              {balance} <span style={{ fontSize: 14, opacity: 0.7 }}>⭐ estrellas</span>
+              {balance} <span style={{ fontSize: 14, opacity: 0.7 }}>{t("ruleta.stars")}</span>
             </div>
+
           </div>
         </div>
         <button
@@ -495,7 +516,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
             boxShadow: `0 8px 20px -8px ${GOLD}`,
           }}
         >
-          CANJEAR POR TICKETS →
+          {t("ruleta.redeemForTickets")}
         </button>
       </div>
 
@@ -509,11 +530,12 @@ function BuyTokensPanel({ balance }: { balance: number }) {
             margin: 0,
           }}
         >
-          Compra Estrellas
+          {t("ruleta.buyStarsTitle")}
         </h2>
         <p style={{ color: BLUE_SOFT, fontSize: 15, margin: 0 }}>
-          Acumula estrellas y canjéalas por tickets en la Ruleta Diaria.
+          {t("ruleta.buyStarsSubtitle")}
         </p>
+
       </div>
 
       <PrizePoolCounter />
@@ -540,12 +562,13 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           aria-required
         />
         <span style={{ fontSize: 13, color: BLUE, lineHeight: 1.5 }}>
-          Acepto los{" "}
+          {t("ruleta.termsBefore")}
           <Link to="/terms" style={{ color: WOOD, fontWeight: 700, textDecoration: "underline" }}>
-            Términos y Condiciones
-          </Link>{" "}
-          y confirmo que la participación en este sorteo es legal en mi lugar de residencia.
+            {t("ruleta.termsLink")}
+          </Link>
+          {t("ruleta.termsAfter")}
         </span>
+
       </label>
 
       <div
@@ -609,7 +632,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                     boxShadow: `0 6px 14px -4px ${GOLD}`,
                   }}
                 >
-                  ★ MÁS POPULAR ★
+                  {t("ruleta.mostPopular")}
                 </div>
               )}
 
@@ -644,8 +667,9 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                   </span>
                 </div>
                 <div style={{ fontSize: 11, letterSpacing: "0.15em", color: BLUE_SOFT }}>
-                  ESTRELLAS
+                  {t("ruleta.starsLabel")}
                 </div>
+
                 <div
                   style={{
                     marginTop: 8,
@@ -685,7 +709,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                 onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
               >
-                {isLoading ? "REDIRIGIENDO…" : "COMPRAR AHORA"}
+                {isLoading ? t("ruleta.redirecting") : t("ruleta.buyNow")}
               </button>
             </article>
           );
@@ -726,12 +750,13 @@ function BuyTokensPanel({ balance }: { balance: number }) {
         </div>
         <div style={{ textAlign: "left" }}>
           <div style={{ fontWeight: 900, letterSpacing: "0.1em", fontSize: 12, color: BLUE }}>
-            CERTIFIED FAIR PLAY · NO RIGGED
+            {t("ruleta.fairPlay")}
           </div>
           <div style={{ fontSize: 11, color: BLUE_SOFT, marginTop: 2 }}>
-            Selección aleatoria criptográfica · ponderación pública · auditable
+            {t("ruleta.fairPlayDesc")}
           </div>
         </div>
+
       </div>
 
       {/* Legal footer */}
@@ -758,22 +783,22 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           }}
         >
           <a href="/terms" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
-            Términos y Condiciones
+            {t("ruleta.footerTerms")}
           </a>
           <span style={{ opacity: 0.4 }}>·</span>
           <a href="/sweepstakes-rules" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
-            Reglas Oficiales del Sorteo
+            {t("ruleta.footerRules")}
           </a>
           <span style={{ opacity: 0.4 }}>·</span>
           <a href="#amoe" style={{ color: GOLD_BRIGHT, textDecoration: "none" }}>
-            Método de Participación Gratuita
+            {t("ruleta.footerAmoe")}
           </a>
         </div>
         <p style={{ margin: 0, opacity: 0.75, fontSize: 11, letterSpacing: "0.04em" }}>
-          NO ES NECESARIA UNA COMPRA PARA PARTICIPAR O GANAR. La compra no incrementa las
-          probabilidades de ganar. Mayores de 18 años. Nulo donde la ley lo prohíba.
+          {t("ruleta.noPurchaseRequired")}
         </p>
       </footer>
+
 
     </section>
   );
@@ -789,7 +814,9 @@ function AmoeFlow({
   state: RouletteState | undefined;
   onChange: () => void;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+
   const hasAmoe = state?.hasAmoe ?? false;
 
   return (
@@ -816,7 +843,7 @@ function AmoeFlow({
             textUnderlineOffset: 4,
           }}
         >
-          ¿No quieres comprar Estrellas? Participa gratis aquí →
+          {t("ruleta.amoeButton")}
         </button>
       </div>
 
@@ -843,7 +870,9 @@ function AmoeDialog({
   onClose: () => void;
   onChange: () => void;
 }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<1 | 2>(initialStep);
+
 
   return (
     <div
@@ -874,8 +903,9 @@ function AmoeDialog({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h3 style={{ color: BLUE, fontWeight: 800, fontSize: 20, margin: 0 }}>
-            {step === 1 ? "Participación gratuita" : "Misiones de redes"}
+            {step === 1 ? t("ruleta.amoeTitle") : t("ruleta.missionsTitle")}
           </h3>
+
           <button
             onClick={onClose}
             style={{
@@ -906,7 +936,9 @@ function AmoeDialog({
 }
 
 function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
+  const { t } = useTranslation();
   const submit = useServerFn(submitAmoeEntry);
+
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -932,13 +964,14 @@ function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
       }),
     onSuccess: (res) => {
       if (res.ok) {
-        toast.success("¡Recibimos tu entrada gratuita! 🎟️ Tienes 1 boleto en el sorteo de hoy.");
+        toast.success(t("ruleta.amoeReceived"));
         onSuccess();
       } else {
         toast.error(res.error);
       }
     },
   });
+
 
   const inputStyle = {
     width: "100%",
@@ -954,53 +987,53 @@ function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (!form.acceptRules) return toast.error("Debes aceptar las Reglas Oficiales.");
-        if (wc < 300) return toast.error("El ensayo debe tener al menos 300 palabras.");
+        if (!form.acceptRules) return toast.error(t("ruleta.mustAcceptRules"));
+        if (wc < 300) return toast.error(t("ruleta.essayTooShort"));
         m.mutate();
       }}
       style={{ display: "grid", gap: 12, marginTop: 16 }}
     >
-      <p style={{ fontSize: 13, color: BLUE_SOFT, margin: 0 }}>
-        Entrada gratuita oficial (AMOE). <strong>1 boleto real</strong> en el sorteo de hoy con el
-        mismo peso que un boleto pagado. NO ES NECESARIA UNA COMPRA PARA PARTICIPAR.
-      </p>
-      <input required placeholder="Nombre legal completo" value={form.fullName}
+      <p style={{ fontSize: 13, color: BLUE_SOFT, margin: 0 }}
+        dangerouslySetInnerHTML={{ __html: t("ruleta.amoeIntro") }}
+      />
+      <input required placeholder={t("ruleta.fields.fullName")} value={form.fullName}
         onChange={(e) => setForm({ ...form, fullName: e.target.value })} style={inputStyle} />
-      <input required type="email" placeholder="Correo electrónico" value={form.email}
+      <input required type="email" placeholder={t("ruleta.fields.email")} value={form.email}
         onChange={(e) => setForm({ ...form, email: e.target.value })} style={inputStyle} />
-      <input required type="tel" placeholder="Teléfono" value={form.phone}
+      <input required type="tel" placeholder={t("ruleta.fields.phone")} value={form.phone}
         onChange={(e) => setForm({ ...form, phone: e.target.value })} style={inputStyle} />
       <div style={{ display: "grid", gap: 6 }}>
-        <label style={{ fontSize: 12, color: BLUE_SOFT }}>Fecha de nacimiento (mín. 18 años)</label>
+        <label style={{ fontSize: 12, color: BLUE_SOFT }}>{t("ruleta.fields.dobLabel")}</label>
         <input required type="date" value={form.dob}
           onChange={(e) => setForm({ ...form, dob: e.target.value })} style={inputStyle} />
       </div>
-      <input required placeholder="Dirección (línea 1)" value={form.address1}
+      <input required placeholder={t("ruleta.fields.address1")} value={form.address1}
         onChange={(e) => setForm({ ...form, address1: e.target.value })} style={inputStyle} />
-      <input placeholder="Dirección (línea 2, opcional)" value={form.address2}
+      <input placeholder={t("ruleta.fields.address2")} value={form.address2}
         onChange={(e) => setForm({ ...form, address2: e.target.value })} style={inputStyle} />
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8 }}>
-        <input required placeholder="Ciudad" value={form.city}
+        <input required placeholder={t("ruleta.fields.city")} value={form.city}
           onChange={(e) => setForm({ ...form, city: e.target.value })} style={inputStyle} />
-        <input required placeholder="Estado (CA)" maxLength={2} value={form.state}
+        <input required placeholder={t("ruleta.fields.state")} maxLength={2} value={form.state}
           onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })} style={inputStyle} />
-        <input required placeholder="ZIP" value={form.zip}
+        <input required placeholder={t("ruleta.fields.zip")} value={form.zip}
           onChange={(e) => setForm({ ...form, zip: e.target.value })} style={inputStyle} />
       </div>
       <textarea required
-        placeholder="Ensayo original: cuéntanos por qué te gusta ORIGEN (mín. 300 palabras)"
+        placeholder={t("ruleta.fields.essay")}
         value={form.essay} onChange={(e) => setForm({ ...form, essay: e.target.value })}
         rows={8} style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
       <div style={{ fontSize: 12, color: wc >= 300 ? "#1f7a3a" : BLUE_SOFT, textAlign: "right" }}>
-        {wc} / 300 palabras
+        {t("ruleta.fields.wordCount", { count: wc })}
       </div>
+
       <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 12, color: BLUE_SOFT }}>
         <input type="checkbox" checked={form.acceptRules}
           onChange={(e) => setForm({ ...form, acceptRules: e.target.checked })} />
         <span>
-          Confirmo que tengo 18+ años, soy residente legal de EE.UU. (excepto FL, NY, RI) y acepto las{" "}
+          {t("ruleta.rulesCheckbox")}
           <a href="/sweepstakes-rules" target="_blank" style={{ color: BLUE, fontWeight: 700 }}>
-            Reglas Oficiales del Sorteo
+            {t("ruleta.officialRulesLink")}
           </a>.
         </span>
       </label>
@@ -1013,16 +1046,16 @@ function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
           cursor: wc < 300 || !form.acceptRules ? "not-allowed" : "pointer",
           letterSpacing: "0.1em",
         }}>
-        {m.isPending ? "ENVIANDO…" : "ENVIAR ENTRADA GRATUITA 🎟️"}
+        {m.isPending ? t("ruleta.sending") : t("ruleta.sendEntry")}
       </button>
       <p style={{ fontSize: 11, color: BLUE_SOFT, margin: 0, lineHeight: 1.5 }}>
-        Como alternativa postal, envía una postal escrita a mano con: nombre, dirección, email,
-        teléfono y fecha de nacimiento a la dirección listada en las{" "}
-        <a href="/sweepstakes-rules" style={{ color: BLUE }}>Reglas Oficiales</a>.
+        {t("ruleta.mailAlternative")}
+        <a href="/sweepstakes-rules" style={{ color: BLUE }}>{t("ruleta.officialRulesShort")}</a>.
       </p>
     </form>
   );
 }
+
 
 function MissionList({
   state,
@@ -1031,14 +1064,15 @@ function MissionList({
   state: RouletteState | undefined;
   onChange: () => void;
 }) {
+  const { t } = useTranslation();
   const claimed = new Set(state?.missionsClaimed ?? []);
   const balance = state?.balance ?? 0;
   return (
     <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
-      <p style={{ fontSize: 14, color: BLUE_SOFT, margin: 0 }}>
-        ¡Tienes tu token base! Completa estas misiones para sumar hasta <strong>9 ⭐ más</strong> y
-        llegar a {SPIN_COST}.
-      </p>
+      <p style={{ fontSize: 14, color: BLUE_SOFT, margin: 0 }}
+        dangerouslySetInnerHTML={{ __html: t("ruleta.missionsIntro", { cost: SPIN_COST }) }}
+      />
+
       {(Object.keys(MISSIONS) as MissionKey[]).map((k) => (
         <MissionCard
           key={k}
@@ -1059,7 +1093,7 @@ function MissionList({
           fontWeight: 700,
         }}
       >
-        Progreso: {balance} / {SPIN_COST} ⭐
+        {t("ruleta.progress", { balance, cost: SPIN_COST })}
       </div>
     </div>
   );
@@ -1076,7 +1110,9 @@ function MissionCard({
   startedAt: number | undefined;
   onChange: () => void;
 }) {
+  const { t } = useTranslation();
   const cfg = MISSIONS[mission];
+
   const start = useServerFn(startMission);
   const claim = useServerFn(claimMission);
   const [remaining, setRemaining] = useState<number | null>(null);
@@ -1142,7 +1178,7 @@ function MissionCard({
         </div>
       </div>
       {claimed ? (
-        <span style={{ color: "#1f7a3a", fontWeight: 700, fontSize: 13 }}>✓ Reclamado</span>
+        <span style={{ color: "#1f7a3a", fontWeight: 700, fontSize: 13 }}>{t("ruleta.claimed")}</span>
       ) : remaining === null ? (
         <button
           onClick={handleOpen}
@@ -1157,7 +1193,7 @@ function MissionCard({
             fontSize: 13,
           }}
         >
-          Ver video
+          {t("ruleta.watchVideo")}
         </button>
       ) : remaining > 0 ? (
         <span
@@ -1185,7 +1221,7 @@ function MissionCard({
             letterSpacing: "0.05em",
           }}
         >
-          Reclamar +{cfg.reward} ⭐
+          {t("ruleta.claimReward", { reward: cfg.reward })}
         </button>
       )}
     </div>
@@ -1193,7 +1229,9 @@ function MissionCard({
 }
 
 function Legal() {
+  const { t } = useTranslation();
   return (
+
     <footer
       style={{
         marginTop: 32,
@@ -1208,13 +1246,10 @@ function Legal() {
         gap: 16,
       }}
     >
-      <p style={{ margin: 0 }}>
-        <strong style={{ color: BLUE }}>Reglas del Sorteo (Sweepstakes):</strong> NO COMPRA NECESARIA
-        para participar o ganar. La compra de Estrellas no aumenta tus probabilidades de ganar. Método
-        alterno de entrada gratuita (AMOE) disponible arriba mediante formulario y misiones de redes
-        sociales. Válido donde lo permita la ley. Cada premio se otorga al azar mediante algoritmo de
-        selección ponderada. Los códigos canjeables tienen una sola unidad de uso.
-      </p>
+      <p style={{ margin: 0 }}
+        dangerouslySetInnerHTML={{ __html: t("ruleta.legalIntro") }}
+      />
+
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
         <Link
           to="/sweepstakes-rules"
@@ -1234,7 +1269,7 @@ function Legal() {
             transition: "transform 0.15s",
           }}
         >
-          📋 Reglas Oficiales del Sorteo
+          {t("ruleta.officialRulesBtn")}
         </Link>
         <Link
           to="/terms"
@@ -1254,7 +1289,7 @@ function Legal() {
             transition: "transform 0.15s",
           }}
         >
-          ⚖️ Términos y Condiciones
+          {t("ruleta.termsBtn")}
         </Link>
       </div>
     </footer>
@@ -1305,7 +1340,9 @@ function TestDrawButton({ onDone }: { onDone: () => void }) {
 }
 
 function NextDrawCountdown() {
+  const { t, i18n } = useTranslation();
   // Next daily draw scheduled at 20:00 America/New_York
+
   const computeNext = () => {
     const now = new Date();
     const etNow = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
@@ -1371,7 +1408,7 @@ function NextDrawCountdown() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7, textTransform: "uppercase" }}>
-            ⏱ Próximo sorteo oficial en
+            {t("ruleta.nextDraw")}
           </div>
           <div
             style={{
@@ -1386,25 +1423,26 @@ function NextDrawCountdown() {
             {hh}:{mm}:{ss}
           </div>
           <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
-            Sorteo diario a las 20:00 (hora del Este) · automatizado
+            {t("ruleta.dailyDrawAt")}
           </div>
         </div>
         {latest && (
           <div style={{ textAlign: "right", minWidth: 200 }}>
-            <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.7 }}>ÚLTIMO GANADOR</div>
+            <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.7 }}>{t("ruleta.lastWinner")}</div>
             <div style={{ fontWeight: 800, fontSize: 16, marginTop: 4 }}>{latest.winner_display_name}</div>
             <div style={{ color: GOLD_BRIGHT, fontWeight: 800, fontSize: 18 }}>
               ${Number(latest.prize_usd).toFixed(2)}
             </div>
             <div style={{ fontSize: 11, opacity: 0.75, marginTop: 2 }}>
-              {latest.draw_date}
+              {new Date(latest.draw_date).toLocaleDateString(getLocale(i18n.language))}
             </div>
           </div>
         )}
+
       </div>
       {winners && winners.length > 1 && (
         <div style={{ borderTop: `1px solid ${GOLD}33`, paddingTop: 10, display: "grid", gap: 4 }}>
-          <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.6 }}>HISTORIAL RECIENTE</div>
+          <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.6 }}>{t("ruleta.recentHistory")}</div>
           {winners.slice(1).map((w) => (
             <div
               key={w.draw_date}
@@ -1415,7 +1453,7 @@ function NextDrawCountdown() {
                 opacity: 0.9,
               }}
             >
-              <span>{w.winner_display_name} · {w.draw_date}</span>
+              <span>{w.winner_display_name} · {new Date(w.draw_date).toLocaleDateString(getLocale(i18n.language))}</span>
               <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>${Number(w.prize_usd).toFixed(2)}</span>
             </div>
           ))}
