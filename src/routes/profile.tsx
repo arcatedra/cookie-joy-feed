@@ -55,7 +55,7 @@ function ProfilePage() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
   const [sheet, setSheet] = useState<string | null>(null);
-  const orderDate = formatDate(new Date(2023, 8, 26), { year: "numeric", month: "short", day: "numeric" }, i18n.language);
+  
   const displayName =
     (user?.user_metadata?.name as string | undefined) ??
     (user?.user_metadata?.full_name as string | undefined) ??
@@ -104,22 +104,7 @@ function ProfilePage() {
             <TermsBadge userId={user?.id ?? null} />
           </div>
 
-          <div className="mt-5 flex items-center justify-around">
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{formatNumber(28, i18n.language)}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{formatNumber(12, i18n.language)}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{t("profile.cookieFan")}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
-            </div>
-          </div>
+          <ProfileStats userId={user?.id ?? null} lang={i18n.language} t={t} />
         </div>
       </section>
 
@@ -148,25 +133,7 @@ function ProfilePage() {
       </section>
 
       {/* Recent Orders */}
-      <section className="mt-6 px-5">
-        <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-          {t("profile.recentOrders")}
-        </h3>
-        <div className="mt-3 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-cream">
-                <Cookie className="h-5 w-5 text-brown" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-foreground">{t("profile.order", { id: 1023 })}</p>
-                <p className="text-xs text-muted-foreground">{t("profile.orderItems")}</p>
-              </div>
-            </div>
-            <span className="text-xs text-muted-foreground">{orderDate}</span>
-          </div>
-        </div>
-      </section>
+      <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
 
       <ReferralCard userId={user?.id ?? null} />
 
@@ -274,6 +241,120 @@ function TermsBadge({ userId }: { userId: string | null }) {
       <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
         <ShieldCheck className="h-4 w-4" />
         <span>Cuenta verificada · Términos aceptados{when ? ` el ${when}` : ""}</span>
+      </div>
+    </div>
+  );
+}
+
+function RecentOrders({ userId, lang, t }: { userId: string | null; lang: string; t: (k: string, opts?: Record<string, unknown>) => string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["profile-recent-orders", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("star_purchases")
+        .select("id, package_id, tokens, amount_usd, created_at, status")
+        .eq("subject_user_id", userId!)
+        .in("status", ["paid", "completed", "succeeded"])
+        .order("created_at", { ascending: false })
+        .limit(3);
+      return data ?? [];
+    },
+  });
+
+  return (
+    <section className="mt-6 px-5">
+      <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+        {t("profile.recentOrders")}
+      </h3>
+      <div className="mt-3 space-y-2">
+        {isLoading ? (
+          <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
+            <p className="text-xs text-muted-foreground">…</p>
+          </div>
+        ) : !data || data.length === 0 ? (
+          <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border text-center">
+            <p className="text-sm text-muted-foreground">Aún no tienes pedidos. ¡Haz tu primera compra para verla aquí!</p>
+          </div>
+        ) : (
+          data.map((order) => {
+            const shortId = order.id.slice(0, 6).toUpperCase();
+            const date = formatDate(new Date(order.created_at), { year: "numeric", month: "short", day: "numeric" }, lang);
+            return (
+              <div key={order.id} className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-cream">
+                      <Cookie className="h-5 w-5 text-brown" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-foreground">{t("profile.order", { id: shortId })}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {order.tokens} ⭐ · ${Number(order.amount_usd).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted-foreground">{date}</span>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string; t: (k: string) => string }) {
+  const { data } = useQuery({
+    queryKey: ["profile-stats", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const [ordersRes, favsRes] = await Promise.all([
+        supabase
+          .from("star_purchases")
+          .select("id", { count: "exact", head: true })
+          .eq("subject_user_id", userId!)
+          .in("status", ["paid", "completed", "succeeded"]),
+        supabase
+          .from("reel_likes")
+          .select("reel_id", { count: "exact", head: true })
+          .eq("user_id", userId!),
+      ]);
+      return {
+        orders: ordersRes.count ?? 0,
+        favorites: favsRes.count ?? 0,
+      };
+    },
+  });
+
+  const orders = data?.orders ?? 0;
+  const favorites = data?.favorites ?? 0;
+
+  // Cookie fan tier derived from real activity
+  const totalActivity = orders * 3 + favorites;
+  let level = t("profile.cookieFan");
+  if (totalActivity >= 100) level = "Cookie Legend";
+  else if (totalActivity >= 50) level = "Cookie Pro";
+  else if (totalActivity >= 20) level = "Cookie Fan";
+  else if (totalActivity >= 5) level = "Cookie Lover";
+  else level = "Cookie Rookie";
+
+  return (
+    <div className="mt-5 flex items-center justify-around">
+      <div className="flex flex-col items-center px-4">
+        <span className="text-lg font-bold text-foreground">{formatNumber(orders, lang)}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
+      </div>
+      <div className="h-8 w-px bg-border" />
+      <div className="flex flex-col items-center px-4">
+        <span className="text-lg font-bold text-foreground">{formatNumber(favorites, lang)}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
+      </div>
+      <div className="h-8 w-px bg-border" />
+      <div className="flex flex-col items-center px-4">
+        <span className="text-sm font-bold text-foreground">{level}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
       </div>
     </div>
   );
