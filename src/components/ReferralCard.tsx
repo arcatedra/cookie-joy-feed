@@ -195,7 +195,16 @@ export function ReferralCard({ userId }: ReferralCardProps) {
         </div>
 
         {/* Actions */}
-        <div className="mt-5 flex flex-col gap-2 px-6 pb-6">
+        <div className="mt-5 flex flex-col gap-3 px-6 pb-6">
+          <div className="rounded-2xl bg-primary-foreground/10 px-4 py-3 text-center ring-1 ring-yellow-300/40 backdrop-blur">
+            <p className="text-sm font-bold text-yellow-300">
+              ¡Invita a tus amigos y gana!
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-primary-foreground/90">
+              Por cada usuario que se suscriba con tu código QR o enlace, recibirás{" "}
+              <span className="font-bold text-yellow-300">3 Estrellas</span> automáticamente en tu cuenta.
+            </p>
+          </div>
           <button
             type="button"
             onClick={handleShare}
