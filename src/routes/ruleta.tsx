@@ -162,31 +162,6 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
-        <div
-          role="status"
-          aria-label="Modo prueba activo"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 10,
-            padding: "10px 16px",
-            background: "linear-gradient(90deg, #fde68a, #fbbf24)",
-            color: "#3b2417",
-            border: "2px solid #b45309",
-            borderRadius: 999,
-            fontWeight: 800,
-            fontSize: 13,
-            letterSpacing: 0.5,
-            textTransform: "uppercase",
-            boxShadow: "0 4px 12px rgba(180,83,9,0.25)",
-            justifySelf: "center",
-          }}
-        >
-          <span style={{ fontSize: 16 }}>🧪</span>
-          Modo prueba activo — sorteo manual habilitado
-        </div>
-
         <NextDrawCountdown />
 
         <div id="live-draw" style={{ scrollMarginTop: 80 }}>
@@ -196,13 +171,6 @@ function RuletaPage() {
           />
         </div>
 
-
-        <TestDrawButton
-          onDone={() => {
-            qc.invalidateQueries({ queryKey: ["roulette-state"] });
-            qc.invalidateQueries({ queryKey: ["recent-winners"] });
-          }}
-        />
 
 
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
@@ -1345,8 +1313,8 @@ function NextDrawCountdown() {
     next.setMinutes(mins + add, 0, 0);
     return next.getTime();
   };
-  const [target, setTarget] = useState<number>(() => computeNext());
-  const [now, setNow] = useState<number>(() => Date.now());
+  const [target, setTarget] = useState<number | null>(null);
+  const [now, setNow] = useState<number | null>(null);
   const fetchWinners = async () => {
     const { supabase } = await import("@/integrations/supabase/client");
     const { data } = await supabase.rpc("get_recent_test_winners", { p_limit: 5 });
@@ -1365,21 +1333,20 @@ function NextDrawCountdown() {
   });
 
   useEffect(() => {
+    setTarget(computeNext());
+    setNow(Date.now());
     const id = setInterval(() => {
       const t = Date.now();
       setNow(t);
-      if (t >= target) {
-        setTarget(computeNext());
-        // Give the cron a moment, then refresh
-        setTimeout(() => refetch(), 4000);
-      }
+      setTarget((prev) => (prev !== null && t >= prev ? (setTimeout(() => refetch(), 4000), computeNext()) : prev));
     }, 1000);
     return () => clearInterval(id);
-  }, [target, refetch]);
+  }, [refetch]);
 
-  const remaining = Math.max(0, target - now);
-  const mm = Math.floor(remaining / 60000).toString().padStart(2, "0");
-  const ss = Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0");
+  const remaining = target !== null && now !== null ? Math.max(0, target - now) : 0;
+  const ready = target !== null && now !== null;
+  const mm = ready ? Math.floor(remaining / 60000).toString().padStart(2, "0") : "--";
+  const ss = ready ? Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0") : "--";
   const latest = winners?.[0];
 
   return (
