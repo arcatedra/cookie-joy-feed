@@ -19,6 +19,10 @@ function signEmail(email: string): string {
   return `${norm}|${sig}`;
 }
 
+function hashEmail(email: string): string {
+  return createHmac("sha256", getSecret()).update(email.trim().toLowerCase()).digest("hex");
+}
+
 function verifyGuestCookie(): string | null {
   const raw = getCookie(GUEST_COOKIE);
   if (!raw) return null;
