@@ -8,8 +8,9 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
     redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+    ref: typeof search.ref === "string" ? search.ref.toUpperCase().slice(0, 16) : undefined,
   }),
   head: () => ({
     meta: [
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { redirect } = Route.useSearch();
+  const { redirect, ref } = Route.useSearch();
   const { user } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -53,7 +54,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin + redirectTarget,
-            data: { name, region: region.trim().toUpperCase(), terms_accepted: true },
+            data: { name, region: region.trim().toUpperCase(), terms_accepted: true, referral_code: ref ?? null },
           },
         });
         if (error) throw error;

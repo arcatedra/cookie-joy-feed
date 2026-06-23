@@ -526,7 +526,9 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          referral_code: string
           region: string | null
+          stars_count: number
           terms_accepted: boolean
           terms_accepted_at: string | null
         }
@@ -538,7 +540,9 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          referral_code?: string
           region?: string | null
+          stars_count?: number
           terms_accepted?: boolean
           terms_accepted_at?: string | null
         }
@@ -550,7 +554,9 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          referral_code?: string
           region?: string | null
+          stars_count?: number
           terms_accepted?: boolean
           terms_accepted_at?: string | null
         }
@@ -656,6 +662,33 @@ export type Database = {
           thumb_url?: string | null
           title?: string | null
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referee_id: string
+          referrer_id: string
+          reward_granted: boolean
+          rewarded_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referee_id: string
+          referrer_id: string
+          reward_granted?: boolean
+          rewarded_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referee_id?: string
+          referrer_id?: string
+          reward_granted?: boolean
+          rewarded_at?: string | null
         }
         Relationships: []
       }
@@ -1285,6 +1318,7 @@ export type Database = {
         }[]
       }
       expire_winner_claims: { Args: never; Returns: number }
+      generate_referral_code: { Args: never; Returns: string }
       get_prize_pool: {
         Args: never
         Returns: {
@@ -1403,6 +1437,13 @@ export type Database = {
         Returns: {
           like_count: number
           reel_id: string
+        }[]
+      }
+      resolve_referral_code: {
+        Args: { p_code: string }
+        Returns: {
+          display_name: string
+          referrer_id: string
         }[]
       }
       restore_row: { Args: { p_id: string; p_table: string }; Returns: boolean }
