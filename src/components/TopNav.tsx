@@ -23,7 +23,7 @@ const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 const quickLinkKeys = [
   { key: "deals", to: "/explore" },
   { key: "shop", to: "/shop", label: "🛍️ Tienda" },
-  { key: "roulette", to: "/ruleta", label: "🎰 ORIGEN" },
+  { key: "roulette", to: "/ruleta", label: "🎰 Porcentaje" },
   { key: "bestSellers", to: "/menu" },
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
