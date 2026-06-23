@@ -41,10 +41,9 @@ export function ReferralCard({ userId }: ReferralCardProps) {
   const invited = data?.invited ?? 0;
 
   const referralUrl = useMemo(() => {
-    if (!referralCode) return "";
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://origen.management";
-    return `${origin}/auth?ref=${referralCode}`;
+    return referralCode ? `${origin}/auth?ref=${referralCode}` : `${origin}/auth`;
   }, [referralCode]);
 
   const handleCopy = useCallback(async () => {
@@ -78,9 +77,10 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     () =>
       referralCode
         ? `🎁 ¡Únete a Hazorex con mi código ${referralCode} y los dos ganamos estrellas! ${referralUrl}`
-        : "",
+        : `🎁 ¡Únete a Hazorex y gana estrellas! ${referralUrl}`,
     [referralCode, referralUrl],
   );
+
 
   const openShare = useCallback((url: string) => {
     if (typeof window === "undefined") return;
@@ -188,7 +188,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
         {/* QR */}
         <div className="mt-5 flex flex-col items-center px-6">
           <div className="rounded-2xl bg-white p-4 shadow-lg">
-            {isLoading || !referralCode ? (
+            {isLoading ? (
               <div className="h-[200px] w-[200px] animate-pulse rounded bg-muted" />
             ) : (
               <QRCodeSVG
@@ -255,7 +255,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
           <button
             type="button"
             onClick={handleShare}
-            disabled={!referralCode}
+
             className="flex w-full items-center justify-center gap-2 rounded-full bg-yellow-300 py-3 text-sm font-bold text-slate-900 shadow-md transition hover:bg-yellow-200 disabled:opacity-50"
           >
             <Share2 className="h-4 w-4" />
@@ -271,7 +271,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                disabled={!referralCode}
+
                 aria-label="Compartir en WhatsApp"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white shadow-md transition hover:scale-105 disabled:opacity-50"
               >
@@ -280,7 +280,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <button
                 type="button"
                 onClick={() => handleCopyForApp("TikTok")}
-                disabled={!referralCode}
+
                 aria-label="Compartir en TikTok"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-white shadow-md transition hover:scale-105 disabled:opacity-50"
               >
@@ -289,7 +289,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <button
                 type="button"
                 onClick={() => handleCopyForApp("Instagram")}
-                disabled={!referralCode}
+
                 aria-label="Compartir en Instagram"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white shadow-md transition hover:scale-105 disabled:opacity-50"
               >
@@ -298,7 +298,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <button
                 type="button"
                 onClick={handleFacebook}
-                disabled={!referralCode}
+
                 aria-label="Compartir en Facebook"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-md transition hover:scale-105 disabled:opacity-50"
               >
@@ -307,7 +307,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <button
                 type="button"
                 onClick={handleYouTube}
-                disabled={!referralCode}
+
                 aria-label="Compartir en YouTube"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FF0000] text-white shadow-md transition hover:scale-105 disabled:opacity-50"
               >
@@ -320,7 +320,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
             <button
               type="button"
               onClick={handleCopy}
-              disabled={!referralCode}
+  
               className="flex-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/5 py-2.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary-foreground/15 disabled:opacity-50"
             >
               Copiar enlace
@@ -328,7 +328,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
             <button
               type="button"
               onClick={handleDownload}
-              disabled={!referralCode}
+  
               className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-primary-foreground/30 bg-primary-foreground/5 py-2.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary-foreground/15 disabled:opacity-50"
             >
               <Download className="h-3.5 w-3.5" />
