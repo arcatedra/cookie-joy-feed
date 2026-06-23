@@ -1336,3 +1336,119 @@ function TestDrawButton({ onDone }: { onDone: () => void }) {
   );
 }
 
+function NextDrawCountdown() {
+  const computeNext = () => {
+    const now = new Date();
+    const next = new Date(now);
+    const mins = now.getMinutes();
+    const add = 5 - (mins % 5);
+    next.setMinutes(mins + add, 0, 0);
+    return next.getTime();
+  };
+  const [target, setTarget] = useState<number>(() => computeNext());
+  const [now, setNow] = useState<number>(() => Date.now());
+  const fetchWinners = async () => {
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data } = await supabase.rpc("get_recent_test_winners", { p_limit: 5 });
+    return (data ?? []) as Array<{
+      id: string;
+      winner_display_name: string;
+      prize_usd: number;
+      delivered: boolean;
+      created_at: string;
+    }>;
+  };
+  const { data: winners, refetch } = useQuery({
+    queryKey: ["test-winners"],
+    queryFn: fetchWinners,
+    refetchInterval: 15_000,
+  });
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const t = Date.now();
+      setNow(t);
+      if (t >= target) {
+        setTarget(computeNext());
+        // Give the cron a moment, then refresh
+        setTimeout(() => refetch(), 4000);
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [target, refetch]);
+
+  const remaining = Math.max(0, target - now);
+  const mm = Math.floor(remaining / 60000).toString().padStart(2, "0");
+  const ss = Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0");
+  const latest = winners?.[0];
+
+  return (
+    <div
+      style={{
+        background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_SOFT} 100%)`,
+        color: BEIGE,
+        border: `2px solid ${GOLD}`,
+        borderRadius: 20,
+        padding: "20px 24px",
+        display: "grid",
+        gap: 14,
+        boxShadow: `0 18px 40px -20px ${BLUE}`,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+        <div>
+          <div style={{ fontSize: 11, letterSpacing: "0.25em", opacity: 0.7, textTransform: "uppercase" }}>
+            ⏱ Próximo sorteo automático en
+          </div>
+          <div
+            style={{
+              fontVariantNumeric: "tabular-nums",
+              fontSize: 44,
+              fontWeight: 900,
+              letterSpacing: "0.05em",
+              color: GOLD_BRIGHT,
+              lineHeight: 1.1,
+            }}
+          >
+            {mm}:{ss}
+          </div>
+          <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
+            Sorteo cada 5 minutos · entrega automática
+          </div>
+        </div>
+        {latest && (
+          <div style={{ textAlign: "right", minWidth: 200 }}>
+            <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.7 }}>ÚLTIMO GANADOR</div>
+            <div style={{ fontWeight: 800, fontSize: 16, marginTop: 4 }}>{latest.winner_display_name}</div>
+            <div style={{ color: GOLD_BRIGHT, fontWeight: 800, fontSize: 18 }}>
+              ${Number(latest.prize_usd).toFixed(2)}
+            </div>
+            <div style={{ fontSize: 11, opacity: 0.75, marginTop: 2 }}>
+              {latest.delivered ? "✅ Premio entregado" : "⏳ Pendiente"}
+            </div>
+          </div>
+        )}
+      </div>
+      {winners && winners.length > 1 && (
+        <div style={{ borderTop: `1px solid ${GOLD}33`, paddingTop: 10, display: "grid", gap: 4 }}>
+          <div style={{ fontSize: 10, letterSpacing: "0.25em", opacity: 0.6 }}>HISTORIAL RECIENTE</div>
+          {winners.slice(1).map((w) => (
+            <div
+              key={w.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: 13,
+                opacity: 0.9,
+              }}
+            >
+              <span>{w.winner_display_name}</span>
+              <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>${Number(w.prize_usd).toFixed(2)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
