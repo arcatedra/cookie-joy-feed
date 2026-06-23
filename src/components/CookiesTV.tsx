@@ -1816,10 +1816,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
       const ids = Array.from(new Set(rows.map((r) => r.user_id)));
       const names: Record<string, string> = {};
       if (ids.length) {
-        const { data: profs } = await supabase
-          .from("profiles")
-          .select("id, display_name")
-          .in("id", ids);
+        const { data: profs } = await supabase.rpc("get_public_profiles", { ids });
         (profs ?? []).forEach((p: { id: string; display_name: string | null }) => {
           names[p.id] = p.display_name ?? "Anónimo";
         });
@@ -1837,12 +1834,9 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
         async (payload) => {
           const row = payload.new as DbComment;
           let name = "Anónimo";
-          const { data } = await supabase
-            .from("profiles")
-            .select("display_name")
-            .eq("id", row.user_id)
-            .maybeSingle();
-          if (data?.display_name) name = data.display_name;
+          const { data } = await supabase.rpc("get_public_profiles", { ids: [row.user_id] });
+          const first = (data ?? [])[0] as { display_name: string | null } | undefined;
+          if (first?.display_name) name = first.display_name;
           setComments((prev) =>
             prev.some((c) => c.id === row.id) ? prev : [...prev, { ...row, author_name: name }],
           );

@@ -220,11 +220,8 @@ function CommentsSheet({ reelId, title, open, onOpenChange }: { reelId: string; 
       const ids = Array.from(new Set(rows.map((r) => r.user_id)));
       const names = new Map<string, string | null>();
       if (ids.length) {
-        const { data: profs } = await supabase
-          .from("profiles")
-          .select("id, display_name")
-          .in("id", ids);
-        profs?.forEach((p) => names.set(p.id, p.display_name));
+        const { data: profs } = await supabase.rpc("get_public_profiles", { ids });
+        profs?.forEach((p: { id: string; display_name: string | null }) => names.set(p.id, p.display_name));
       }
       return rows.map((r) => ({ ...r, display_name: names.get(r.user_id) ?? null }));
     },
