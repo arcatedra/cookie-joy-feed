@@ -4,8 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
 import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
+import { getLocale } from "@/i18n";
+
 
 const BEIGE = "#f3ead8";
 const BLUE = "#1e3a5f";
@@ -54,6 +57,8 @@ function useAnimatedNumber(target: number, durationMs = 1200) {
 }
 
 export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend: (n: number) => void }) {
+  const { t, i18n } = useTranslation();
+
   const qc = useQueryClient();
   const fetchDraw = useServerFn(getTodayDraw);
   const fetchWinners = useServerFn(getRecentWinners);
