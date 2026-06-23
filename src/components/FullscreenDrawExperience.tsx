@@ -130,14 +130,14 @@ export function FullscreenDrawExperience({
       vibrate([20, 30, 20, 30, 20, 30, 20, 30, 20, 30, 20]);
       return;
     }
-    const t = setTimeout(() => setCountdown((c) => c - 1), 800);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setCountdown((c) => c - 1), 800);
+    return () => clearTimeout(tm);
   }, [open, phase, countdown]);
 
   // After spin animation, resolve winner
   useEffect(() => {
     if (!open || phase !== "spinning") return;
-    const t = setTimeout(async () => {
+    const tm = setTimeout(async () => {
       try {
         const data = (await apiPromiseRef.current) ?? {};
         const row = Array.isArray(data.result) ? data.result[0] : data.result;
@@ -155,14 +155,14 @@ export function FullscreenDrawExperience({
         toast.error(t("fullscreenDraw.drawError"));
       }
     }, 4800);
-    return () => clearTimeout(t);
+    return () => clearTimeout(tm);
   }, [open, phase, onWinnerInvalidate]);
 
   // Auto-advance to challenge after celebration
   useEffect(() => {
     if (phase !== "winner") return;
-    const t = setTimeout(() => setPhase("challenge"), 3200);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setPhase("challenge"), 3200);
+    return () => clearTimeout(tm);
   }, [phase]);
 
   // Challenge timer
@@ -172,8 +172,8 @@ export function FullscreenDrawExperience({
       setChallengeStatus("fail");
       return;
     }
-    const t = setTimeout(() => setChallengeTime((s) => s - 1), 1000);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setChallengeTime((s) => s - 1), 1000);
+    return () => clearTimeout(tm);
   }, [phase, challengeTime, challengeStatus]);
 
   if (!open) return null;
