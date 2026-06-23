@@ -9,7 +9,7 @@ import {
   getSweepstakesConfig,
   updateSweepstakesConfig,
 } from "@/lib/sweepstakes-config.functions";
-import { triggerTestDraw } from "@/lib/admin-draw.functions";
+import { triggerTestDraw, sendSmokeTestWinnerEmail } from "@/lib/admin-draw.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +50,7 @@ function AdminSweepstakesPage() {
   const fetchConfig = useServerFn(getSweepstakesConfig);
   const saveConfig = useServerFn(updateSweepstakesConfig);
   const runDraw = useServerFn(triggerTestDraw);
+  const sendSmokeEmail = useServerFn(sendSmokeTestWinnerEmail);
 
   useEffect(() => {
     let cancelled = false;
@@ -126,6 +127,21 @@ function AdminSweepstakesPage() {
           ? `Sorteo completado · Ganador: ${res.winnerDisplayName ?? "—"}`
           : `Sorteo: ${res.status}`,
       );
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const [smokeEmail, setSmokeEmail] = useState("");
+  const [smokeName, setSmokeName] = useState("Smoke Test");
+  const smokeMut = useMutation({
+    mutationFn: () =>
+      sendSmokeEmail({ data: { email: smokeEmail.trim(), displayName: smokeName.trim() || undefined } }),
+    onSuccess: (res) => {
+      if (!res.ok) {
+        toast.error(res.error ?? "Error en smoke test");
+        return;
+      }
+      toast.success(`Email encolado a ${res.recipient}. Revisa la bandeja en ~10s.`);
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -320,6 +336,48 @@ function AdminSweepstakesPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Smoke test del email al ganador</CardTitle>
+          <CardDescription>
+            Inserta un <code>winner_claim</code> sintético con fecha pasada (sin tocar sorteos reales)
+            y dispara el email de notificación a la dirección que indiques. Útil para confirmar entregabilidad.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="smoke_email">Email destinatario *</Label>
+              <Input
+                id="smoke_email"
+                type="email"
+                value={smokeEmail}
+                onChange={(e) => setSmokeEmail(e.target.value)}
+                placeholder="tu@correo.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="smoke_name">Nombre mostrado</Label>
+              <Input
+                id="smoke_name"
+                value={smokeName}
+                onChange={(e) => setSmokeName(e.target.value)}
+                maxLength={120}
+              />
+            </div>
+          </div>
+          <Button
+            onClick={() => smokeMut.mutate()}
+            disabled={smokeMut.isPending || !smokeEmail.includes("@")}
+          >
+            {smokeMut.isPending ? "Enviando…" : "Enviar email de prueba"}
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            El procesador de la cola corre cada ~5s. Si no llega, revisa <code>email_send_log</code>.
+          </p>
         </CardContent>
       </Card>
     </div>
