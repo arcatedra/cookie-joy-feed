@@ -1,29 +1,493 @@
 {
   "common": {
     "back": "Retour",
+    "errorOccurred": "Une erreur est survenue. Veuillez réessayer.",
     "search": "Rechercher",
     "addToCart": "Ajouter au panier",
+    "updateCart": "Mettre à jour le panier",
     "viewCart": "Voir le panier",
-    "loading": "Chargement…",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "selected": "Sélectionné",
+    "signUp": "S'inscrire",
+    "goHome": "Aller à l'accueil",
     "tryAgain": "Réessayer",
-    "goHome": "Accueil"
-  },
-  "language": {
-    "switchTo": "Choisir la langue"
-  },
-  "topnav": {
-    "cart": "Panier",
-    "all": "Tout",
-    "searchPlaceholder": "Rechercher Hazorex",
-    "deliverTo": "Livrer à",
-    "updateLocation": "Mettre à jour",
-    "accountLists": "Compte et listes",
-    "helloSignIn": "Bonjour, connectez-vous",
-    "returns": "Retours",
-    "andOrders": "et commandes"
+    "seeAll": "Tout voir",
+    "viewMore": "Voir plus",
+    "comingSoon": "Bientôt disponible",
+    "reviews": "avis",
+    "notifications": "Notifications",
+    "markRead": "Marquer tout comme lu",
+    "settings": "Paramètres",
+    "loading": "Chargement…"
   },
   "auth": {
+    "signInTitle": "Connexion",
+    "signUpTitle": "Créer un compte",
+    "subtitle": "Aimez les reels, commentez et notez les cookies.",
+    "google": "Continuer avec Google",
+    "or": "ou",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "name": "Votre nom",
     "signIn": "Se connecter",
-    "signOut": "Se déconnecter"
+    "signUp": "Créer un compte",
+    "signOut": "Se déconnecter",
+    "signedOut": "Déconnecté",
+    "noAccount": "Pas de compte ? Créez-en un",
+    "haveAccount": "Vous avez déjà un compte ? Connectez-vous",
+    "checkEmail": "Vérifiez votre e-mail pour confirmer votre compte"
+  },
+  "reels": {
+    "writeComment": "Écrire un commentaire…",
+    "send": "Envoyer",
+    "noComments": "Aucun commentaire pour l'instant. Soyez le premier !",
+    "signInToLike": "Connectez-vous pour aimer",
+    "signInToComment": "Connectez-vous pour commenter",
+    "anonymous": "Utilisateur",
+    "reel1": "Double Choc Délice",
+    "reel2": "Fraîchement cuit !",
+    "reel3": "Douceur pâteuse",
+    "reel4": "Magie avoine et raisins secs",
+    "reel5": "Paradis beurre de cacahuète",
+    "reel6": "M&M's Croustillants à la Menthe",
+    "items": {
+      "pista": {
+        "title": "Pistache rencontre choc blanc 💚✨",
+        "product": "Pistache & Chocolat Blanc"
+      },
+      "triple": {
+        "title": "Fudge triple chocolat fondu 🍫",
+        "product": "Fudge Triple Chocolat"
+      },
+      "snicker": {
+        "title": "Magie sucre cannelle 🌟",
+        "product": "Snickerdoodle Classique"
+      },
+      "oatmeal": {
+        "title": "Avoine et raisins secs réconfortants 🍂",
+        "product": "Avoine & Raisin Sec Cannelle"
+      },
+      "cchunk": {
+        "title": "Pépites double chocolat 🤎",
+        "product": "Pépite Double Chocolat"
+      },
+      "mint": {
+        "title": "Rafraîchissement menthe noire 🌿",
+        "product": "Chocolat Noir Menthe"
+      },
+      "mm": {
+        "title": "M&M's colorés croquants 🎉",
+        "product": "M&M's Festifs"
+      }
+    }
+  },
+  "topnav": {
+    "deliverTo": "Livrer à",
+    "updateLocation": "Brooklyn — Mettre à jour la localisation",
+    "searchPlaceholder": "Rechercher cookies, packs, cadeaux…",
+    "suggestions": "Suggestions",
+    "helloSignIn": "Bonjour, connectez-vous",
+    "helloUser": "Bonjour, {{name}}",
+    "accountLists": "Compte & Listes",
+    "signInPrompt": "Connectez-vous pour des recommandations personnalisées",
+    "returns": "Retours",
+    "andOrders": "& Commandes",
+    "cart": "Panier",
+    "all": "Tout",
+    "openMenu": "Ouvrir le menu",
+    "groups": {
+      "shop": "Acheter des cookies",
+      "discover": "Découvrir",
+      "account": "Aide & paramètres"
+    },
+    "cats": {
+      "all": "Tous les cookies",
+      "allCookies": "Tous les cookies",
+      "filled": "Garnis",
+      "healthy": "Sains / Fitness",
+      "giftBoxes": "Boîtes cadeaux",
+      "vegan": "Vegan",
+      "brownies": "Brownies",
+      "bestSellers": "Meilleures ventes",
+      "deals": "Offres du jour",
+      "buildPack": "Créez votre propre pack",
+      "subscriptions": "Abonnements cookies",
+      "yourAccount": "Votre compte",
+      "ordersReturns": "Retours & commandes",
+      "cart": "Votre panier",
+      "signIn": "Se connecter"
+    },
+    "links": {
+      "deals": "Offres du jour",
+      "bestSellers": "Meilleures ventes",
+      "buildPack": "Créer un pack",
+      "support": "Service client",
+      "subscriptions": "Abonnements cookies"
+    }
+  },
+  "ratings": {
+    "yourRating": "Votre évaluation",
+    "writeReview": "Avis facultatif pour {{product}}",
+    "save": "Enregistrer",
+    "thanks": "Merci pour votre évaluation !",
+    "signInToRate": "Connectez-vous pour évaluer"
+  },
+  "language": {
+    "switchTo": "Changer de langue",
+    "english": "Anglais",
+    "spanish": "Espagnol"
+  },
+  "nav": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "subscribe": "S'abonner",
+    "profile": "Profil"
+  },
+  "errors": {
+    "pageNotFoundTitle": "Page introuvable",
+    "pageNotFoundDesc": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "didNotLoadTitle": "Cette page n'a pas pu être chargée",
+    "didNotLoadDesc": "Une erreur est survenue de notre côté. Vous pouvez essayer d'actualiser ou retourner à l'accueil."
+  },
+  "home": {
+    "metaTitle": "AMYRAX — Cookies Gourmands, Livrés Chaque Mois",
+    "metaDesc": "Découvrez des cookies gourmands artisanaux et rejoignez l'abonnement mensuel AMYRAX pour des douceurs fraîchement préparées livrées à votre porte.",
+    "welcome": "Bienvenue à nouveau",
+    "greeting": "Bonjour, {{name}} !",
+    "freshToday": "Nouveaux lots sortis aujourd'hui",
+    "searchPlaceholder": "Rechercher cookies, saveurs, boîtes…",
+    "reels": "Reels",
+    "trending": "Tendances actuelles",
+    "categories": "Catégories phares",
+    "cookiePacks": "Packs de cookies",
+    "subscriptionEyebrow": "Boîte mensuelle",
+    "subscriptionHeadline": "12 cookies frais, livrés à votre porte.",
+    "subscriptionSubcopy": "Annulez à tout moment · Livraison gratuite",
+    "startSubscription": "Démarrer l'abonnement",
+    "promoTitle": "Prêt à essayer quelque chose de nouveau ?",
+    "promoSubtitle": "Découvrez nos éditions limitées et les favoris du mois.",
+    "promoCta": "Voir le menu complet",
+    "cards": {
+      "bestSellersTitle": "Meilleures Ventes",
+      "bestSellersLink": "Voir plus",
+      "buildPackTitle": "Créez votre pack personnalisé",
+      "buildPackLink": "Voir les options",
+      "buildPackCta": "Commencer à créer",
+      "buildPackAlt": "Boîte de cookies personnalisée",
+      "subscriptionTitle": "Abonnement Mensuel",
+      "subscriptionLink": "Découvrir le club",
+      "subscriptionClub": "CLUB AMYRAX",
+      "subscriptionHeadline": "Livraisons hebdomadaires de cookies fraîchement préparés",
+      "subscriptionSubcopy": "Annulez à tout moment · Livraison incluse",
+      "subscriptionPrice": "À partir de 24 $/mois",
+      "flashTitle": "Offres Éclair",
+      "flashLink": "Voir toutes les offres",
+      "flashProduct": "Pack assorti de 9 cookies",
+      "flashAlt": "Pack de 9 cookies",
+      "flashClaimed": "Réclamé : {{pct}}%",
+      "flashEndsIn": "Se termine dans {{time}}",
+      "best": {
+        "classic": "Classique",
+        "redVelvet": "Red Velvet",
+        "tripleChoc": "Triple Chocolat",
+        "oatRaisin": "Avoine Raisin"
+      }
+    }
+  },
+  "categories": {
+    "cookies": "Cookies",
+    "brownies": "Brownies",
+    "boxes": "Boîtes assorties",
+    "vegan": "Vegan",
+    "gifts": "Coffrets cadeaux"
+  },
+  "_reelsLegacy": {},
+  "explore": {
+    "metaTitle": "Parcourir les Cookies — AMYRAX",
+    "metaDesc": "Découvrez notre gamme complète de cookies gourmands artisanaux chez AMYRAX.",
+    "title": "Parcourir les Cookies",
+    "sort": "Trier",
+    "price": "Prix"
+  },
+  "menu": {
+    "metaTitle": "Menu — AMYRAX",
+    "metaDesc": "Découvrez nos cookies classiques.",
+    "title": "Cookies",
+    "tabs": {
+      "classic": "Cookies Classiques",
+      "packs": "Packs",
+      "deluxe": "Cookies Deluxe"
+    },
+    "allCategories": "Toutes les catégories",
+    "cookies": "Cookies",
+    "serves": "Portions",
+    "calPerCookie": "Cal / cookie",
+    "ingredients": "Ingrédients",
+    "allergens": "Allergènes",
+    "prevPack": "Pack précédent",
+    "nextPack": "Pack suivant",
+    "goToPack": "Aller au pack {{n}}",
+    "viewDetails": "Voir les détails de {{name}}",
+    "detailOf": "Détail de {{name}}"
+  },
+  "cookies": {
+    "c1": {
+      "name": "Pépite de Chocolat",
+      "desc": "Un cookie à la vanille riche et beurré, rehaussé de pépites de chocolat mi-amer.",
+      "caption": "Vanille beurrée avec des pépites mi-amères"
+    },
+    "c2": {
+      "name": "Snickerdoodle",
+      "desc": "Optez pour un classique avec notre Snickerdoodle. Un cookie chaud et moelleux roulé dans du sucre à la cannelle.",
+      "caption": "Doux, chaud sucre cannelle"
+    },
+    "c3": {
+      "name": "Sucre",
+      "desc": "Tout simplement le meilleur cookie au sucre beurré et fondant que vous ayez jamais goûté.",
+      "caption": "Fondant, beurré et sucré"
+    },
+    "c4": {
+      "name": "Double Chocolat",
+      "desc": "Notre cookie au chocolat noir rempli de riches pépites de chocolat. Pour les vrais amateurs de chocolat.",
+      "caption": "Cacao noir rempli de pépites"
+    },
+    "c5": {
+      "name": "Avoine Raisin",
+      "desc": "Une gâterie qui réconforte l'âme. Des flocons d'avoine chauds et des raisins secs dodus à chaque bouchée.",
+      "caption": "Avoine chaude et raisins secs dodus"
+    },
+    "c6": {
+      "name": "Chocolat Blanc Macadamia",
+      "desc": "Ce snack fonctionne à l'heure des îles. Un cookie beurré à la noix de coco avec du chocolat blanc et des noix de macadamia.",
+      "caption": "Beurré-coco, ambiance tropicale"
+    },
+    "c7": {
+      "name": "Classique aux M&M'S®",
+      "desc": "Cette touche colorée enrobée de bonbons sur notre classique aux pépites de chocolat est une douce surprise.",
+      "caption": "Chocolat enrobé de bonbons"
+    },
+    "c8": {
+      "name": "Pépite de Beurre de Cacahuète",
+      "desc": "Pépites de beurre de cacahuète incorporées dans un cookie vanille doux et sucré. Un paradis de noisette.",
+      "caption": "Vanille douce, pépites de beurre de cacahuète"
+    },
+    "c9": {
+      "name": "Pépite de Chocolat Vegan",
+      "desc": "Un cookie vegan qui réchauffe votre âme avec des tonnes de pépites de chocolat sans produits laitiers.",
+      "caption": "Pépites de chocolat sans produits laitiers"
+    },
+    "c10": {
+      "name": "Double Chocolat Menthe",
+      "desc": "Notre version d'une combinaison de saveurs préférée. Un cookie au chocolat chaud avec des pépites de menthe fraîche.",
+      "caption": "Chocolat chaud avec menthe fraîche"
+    }
+  },
+  "packs": {
+    "p6": {
+      "name": "Pack de 6",
+      "desc": "Offrez-vous 6 douceurs chaudes et délicieuses dans une seule boîte.",
+      "serves": "3 à 6 personnes"
+    },
+    "p9": {
+      "name": "Pack de 9",
+      "desc": "Le point idéal de satisfaction. Sélectionnez 9 de vos cookies préférés.",
+      "serves": "5 à 9 personnes"
+    },
+    "p12": {
+      "name": "Pack de 12",
+      "desc": "Ce qu'ils veulent VRAIMENT dire quand ils disent d'en apporter assez pour tout le monde.",
+      "serves": "6 à 12 personnes"
+    },
+    "ingredients": "Farine de blé enrichie, beurre, sucre de canne, sucre roux, œufs, pépites de chocolat mi-amer, extrait de vanille, bicarbonate de soude, sel de mer.",
+    "allergens": "Contient du blé, des produits laitiers, des œufs, du soja. Peut contenir des traces de fruits à coque et d'arachides."
+  },
+  "tags": {
+    "treeNuts": "FRUITS À COQUE",
+    "peanuts": "ARACHIDES"
+  },
+  "subscribe": {
+    "metaTitle": "Plans d'Abonnement — AMYRAX",
+    "metaDesc": "Choisissez votre plan d'abonnement aux cookies AMYRAX. Livré les lundis et vendredis uniquement.",
+    "title": "Plans d'Abonnement",
+    "deliveryBadge": "Livraison les lundis et vendredis uniquement",
+    "activePlan": "Plan Actif",
+    "remaining": "Restant",
+    "scheduledCount": "{{used}} sur {{total}} livraisons prévues ce mois-ci",
+    "choosePlan": "Choisissez Votre Plan",
+    "mostPopular": "Le Plus Populaire",
+    "perMonth": "/ mois",
+    "schedule": "Planifier les Livraisons",
+    "scheduleHint": "Seuls les lundis et vendredis sont sélectionnables.",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "yourDeliveries": "Vos Livraisons",
+    "usedAll": "Vous avez utilisé toutes les {{count}} livraisons de ce plan. Passez à un plan supérieur pour en ajouter davantage.",
+    "footnote": "*Disponible uniquement les LUNDIS & VENDREDIS",
+    "removeDate": "Supprimer le {{date}}",
+    "tiers": {
+      "starter": {
+        "title": "Plan Démarrage",
+        "cadence": "2 LIVRAISONS / MOIS",
+        "desc": "Parfait pour l'essentiel. Planifiez jusqu'à 2 livraisons par mois, les lundis ou les vendredis de votre choix."
+      },
+      "essential": {
+        "title": "Plan Essentiel",
+        "cadence": "4 LIVRAISONS / MOIS",
+        "desc": "Notre choix le plus populaire. Profitez de jusqu'à 4 livraisons par mois. Planification flexible : utilisez-les chaque semaine, toutes les deux semaines, ou comme cela convient à votre routine."
+      },
+      "intermediate": {
+        "cadence": "6 LIVRAISONS / MOIS",
+        "desc": "Flexibilité supplémentaire pour les foyers actifs. Obtenez jusqu'à 6 livraisons par mois, planifiées les lundis ou les vendredis.",
+        "title": "Plan Intermédiaire"
+      },
+      "premium": {
+        "title": "Plan Premium",
+        "cadence": "8 LIVRAISONS / MOIS",
+        "desc": "Couverture mensuelle complète. Commodité maximale avec jusqu'à 8 livraisons par mois (deux fois par semaine les lundis et vendredis)."
+      }
+    }
+  },
+  "profile": {
+    "metaTitle": "Mon Profil — AMYRAX",
+    "metaDesc": "Gérez votre compte AMYRAX, vos commandes et votre abonnement.",
+    "title": "Mon Profil",
+    "settings": "Paramètres",
+    "city": "New York",
+    "joined": "Membre depuis : juillet 2024",
+    "orders": "Commandes",
+    "favorites": "Favoris",
+    "level": "Niveau",
+    "cookieFan": "Fan de cookies",
+    "currentPlan": "Plan Actuel",
+    "enthusiast": "Plan Enthousiaste",
+    "active": "Actif",
+    "recentOrders": "Commandes récentes",
+    "order": "Commande n°{{id}}",
+    "orderItems": "Pépite Choc Classique · 1 article",
+    "account": "Compte",
+    "menu": {
+      "favorites": "Favoris",
+      "payment": "Modes de Paiement",
+      "general": "Paramètres Généraux",
+      "help": "Aide & Support"
+    },
+    "qr": {
+      "title": "Votre Code QR",
+      "description": "Scannez pour visiter la boutique AMYRAX directement depuis n'importe quel appareil.",
+      "download": "Télécharger le QR",
+      "copyLink": "Copier le lien",
+      "downloaded": "QR téléchargé",
+      "downloadError": "Impossible de télécharger le QR",
+      "copied": "Lien copié dans le presse-papiers",
+      "copyError": "Impossible de copier le lien"
+    }
+  },
+  "cart": {
+    "title": "Votre Panier",
+    "checkout": "Commander",
+    "empty": "Votre panier est vide",
+    "emptyDesc": "Ajoutez de délicieux cookies pour commencer.",
+    "browseMenu": "Parcourir le menu",
+    "subtotal": "Total partiel",
+    "shipping": "Livraison",
+    "free": "Gratuit",
+    "total": "Total",
+    "proceedCheckout": "Passer à la caisse",
+    "payMethod": "Méthode de paiement",
+    "orderSummary": "Récapitulatif de la commande",
+    "items": "{{count}} articles",
+    "payNow": "Payer maintenant",
+    "processing": "Traitement…",
+    "fastSecure": "Rapide & sécurisé",
+    "demoNote": "Paiement de démonstration — aucun prélèvement réel ne sera effectué.",
+    "orderConfirmed": "Commande confirmée",
+    "thanks": "Merci !",
+    "thanksDesc": "Vos cookies sont en route. Une confirmation a été envoyée.",
+    "backHome": "Retour à l'accueil"
+  },
+  "subscribeGate": {
+    "dialogTitle": "Abonnez-vous pour activer vos livraisons et vos achats",
+    "dialogDesc": "Les achats et les livraisons sont disponibles uniquement pour les membres abonnés.",
+    "freeShipping": "Livraison GRATUITE (0 $) incluse dans chaque plan !",
+    "viewPlans": "Voir les plans d'abonnement",
+    "signInAndSubscribe": "Connectez-vous et abonnez-vous",
+    "keepBrowsing": "Continuer à naviguer",
+    "bannerEyebrow": "Devenez membre",
+    "bannerTitle": "Abonnez-vous pour activer vos livraisons",
+    "bannerSubcopy": "Livraison GRATUITE (0 $) incluse dans chaque plan !",
+    "bannerCta": "Voir les plans",
+    "cartWarning": "Vous avez besoin d'un abonnement actif pour passer à la caisse.",
+    "cartCta": "S'abonner pour acheter",
+    "cartProcessing": "Traitement…",
+    "cartConfirm": "Confirmer et Payer la Commande",
+    "cartTerms": "En confirmant votre commande, vous acceptez les conditions générales de vente du magasin.",
+    "noActive": "Vous n'avez pas d'abonnement actif. Abonnez-vous pour commencer à planifier les livraisons.",
+    "scheduled": "Livraison planifiée",
+    "canceled": "Livraison annulée"
+  },
+  "checkout": {
+    "secure": "Paiement Sécurisé",
+    "miniLabel": "Paiement",
+    "title": "Paiement Sécurisé",
+    "viewCart": "Voir mon panier",
+    "shippingAddress": "Adresse de Livraison",
+    "fullName": "Nom complet",
+    "street": "Adresse",
+    "apt": "Appartement / Unité",
+    "city": "Ville",
+    "zip": "Code Postal",
+    "phone": "Téléphone",
+    "makeDefault": "Définir comme mon adresse par défaut",
+    "addressRequired": "Vous devez compléter votre adresse (nom, rue, ville, code postal et téléphone) pour pouvoir acheter.",
+    "useAddress": "Utiliser cette adresse",
+    "paymentMethod": "Méthode de Paiement",
+    "cardOption": "Carte de Crédit / Débit",
+    "cardLast4": "Carte •••• {{last4}}",
+    "cardNumber": "Numéro de carte",
+    "expiry": "Expiration (MM/AA)",
+    "cvv": "CVV",
+    "walletOption": "PayPal / Apple Pay",
+    "fast": "RAPIDE",
+    "continueBtn": "Continuer",
+    "reviewLogistics": "Révision & Expédition",
+    "each": "chacun",
+    "decrease": "Diminuer",
+    "increase": "Augmenter",
+    "remove": "Supprimer",
+    "shippingType": "Type d'expédition",
+    "standardShipping": "Livraison Standard",
+    "standardSub": "Arrive en 3 jours",
+    "free": "GRATUIT",
+    "backToPayment": "Retour au paiement",
+    "addAddressToBuy": "Ajoutez votre adresse pour acheter",
+    "orderSummary": "Récapitulatif de la commande",
+    "productsCount": "Produits",
+    "shippingHandling": "Frais de port et de manutention",
+    "taxes": "Taxes estimées",
+    "orderTotal": "Total de la commande :",
+    "secureEncrypted": "Paiement 100% sécurisé et crypté",
+    "emptyTitle": "Votre panier est vide",
+    "emptyDesc": "Ajoutez des cookies pour commencer le processus de commande.",
+    "exploreCookies": "Parcourir les cookies",
+    "orderConfirmed": "Commande Confirmée !",
+    "bakingMsg": "Vos cookies sont en cours de cuisson et en route.",
+    "trackingNumber": "Numéro de suivi",
+    "backToStore": "Retour au magasin"
+  },
+  "domains": {
+    "title": "Recherche de domaine",
+    "subtitle": "Trouvez un domaine disponible. Nous vérifions la disponibilité en temps réel et suggérons des alternatives similaires.",
+    "placeholder": "Tapez un nom (ex. mahanaix)",
+    "search": "Rechercher",
+    "mainResults": "Résultats pour \"{{base}}\"",
+    "similarAlternatives": "Alternatives similaires",
+    "checking": "Vérification…",
+    "available": "Disponible",
+    "taken": "Enregistré",
+    "takenBy": "Enregistré ({{registrar}})",
+    "unknown": "Statut inconnu",
+    "buy": "Acheter",
+    "priceDisclaimer": "Les prix sont des estimations du coût d'enregistrement pour la première année en USD chez les registraires courants et peuvent varier. * prix promotionnel pour la première année."
   }
 }
