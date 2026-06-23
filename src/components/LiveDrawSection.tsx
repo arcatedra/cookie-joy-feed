@@ -254,8 +254,17 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
 
         ) : (
           <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 6, textAlign: "center" }}>
-            <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-              {isCompleted ? t("liveDraw.winnerEyebrow") : isDrawing ? t("liveDraw.spinningEyebrow") : t("liveDraw.todayPotEyebrow")}
+            <div style={{
+              fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800,
+              animation: lastMinute && !isDrawing && !isCompleted ? "ldPulse 1s ease-in-out infinite" : undefined,
+            }}>
+              {isCompleted
+                ? t("liveDraw.winnerEyebrow")
+                : isDrawing
+                ? t("liveDraw.spinningEyebrow")
+                : entriesClosed
+                ? t("liveDraw.entriesClosedEyebrow")
+                : t("liveDraw.todayPotEyebrow")}
             </div>
 
             <div style={{
@@ -267,7 +276,10 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               <span style={{ fontSize: "0.4em", marginLeft: 8, color: GOLD_BRIGHT }}>USD</span>
             </div>
             {!isCompleted && (
-              <div style={{ display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              <div style={{
+                display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center",
+                animation: lastMinute && !isDrawing ? "ldPulse 1s ease-in-out infinite" : undefined,
+              }}>
                 <CountdownDigit label={t("liveDraw.hours")} value={cd.hh} />
                 <CountdownDigit label={t("liveDraw.minutes")} value={cd.mm} />
                 <CountdownDigit label={t("liveDraw.seconds")} value={cd.ss} />
@@ -277,6 +289,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               {t("liveDraw.participantsAndTickets", { participants: draw?.entrantsTotal ?? 0, tickets: draw?.ticketsTotal ?? 0 })}
               {draw?.rolledOverFrom ? t("liveDraw.rolledOverSince", { date: new Date(draw.rolledOverFrom).toLocaleDateString(getLocale(i18n.language)) }) : null}
             </div>
+
 
           </div>
         )}
