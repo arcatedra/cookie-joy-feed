@@ -9,7 +9,7 @@ import {
   getSweepstakesConfig,
   updateSweepstakesConfig,
 } from "@/lib/sweepstakes-config.functions";
-import { triggerTestDraw } from "@/lib/admin-draw.functions";
+import { triggerTestDraw, sendSmokeTestWinnerEmail } from "@/lib/admin-draw.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
