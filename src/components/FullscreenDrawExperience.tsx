@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
+
 
 type Phase = "countdown" | "spinning" | "winner" | "challenge" | "done";
 
@@ -54,7 +56,9 @@ export function FullscreenDrawExperience({
   onClose: () => void;
   onWinnerInvalidate?: () => void;
 }) {
+  const { t } = useTranslation();
   const [phase, setPhase] = useState<Phase>("countdown");
+
   const [countdown, setCountdown] = useState(3);
   const [spinDeg, setSpinDeg] = useState(0);
   const [winner, setWinner] = useState<{ name: string; prize: number } | null>(null);
@@ -137,8 +141,9 @@ export function FullscreenDrawExperience({
       try {
         const data = (await apiPromiseRef.current) ?? {};
         const row = Array.isArray(data.result) ? data.result[0] : data.result;
-        const name = data.simulatedWinner?.display_name ?? row?.winner_display_name ?? "Participante";
+        const name = data.simulatedWinner?.display_name ?? row?.winner_display_name ?? t("ruleta.fields.fullName");
         const prize = Number(data.simulatedWinner?.prize_usd ?? row?.prize_usd ?? 0);
+
         setWinner({ name, prize });
         setPhase("winner");
         fireConfetti();
@@ -147,7 +152,7 @@ export function FullscreenDrawExperience({
       } catch (e) {
         setErrorMsg(String(e instanceof Error ? e.message : e));
         setPhase("done");
-        toast.error("Error al ejecutar el sorteo");
+        toast.error(t("fullscreenDraw.drawError"));
       }
     }, 4800);
     return () => clearTimeout(t);
@@ -191,7 +196,7 @@ export function FullscreenDrawExperience({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Sorteo en vivo"
+      aria-label={t("fullscreenDraw.ariaLabel")}
       style={{
         position: "fixed",
         inset: 0,
@@ -225,7 +230,7 @@ export function FullscreenDrawExperience({
           textTransform: "uppercase",
         }}
       >
-        🧪 Modo prueba
+        {t("fullscreenDraw.testMode")}
       </div>
 
       {/* Close button (always available except mid-spin) */}
@@ -233,7 +238,7 @@ export function FullscreenDrawExperience({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Cerrar"
+          aria-label={t("fullscreenDraw.close")}
           style={{
             position: "absolute",
             top: 16,
@@ -387,7 +392,7 @@ export function FullscreenDrawExperience({
                 zIndex: 4,
               }}
             >
-              {countdown > 0 ? countdown : "¡GIRA!"}
+              {countdown > 0 ? countdown : t("fullscreenDraw.spinGo")}
             </div>
           )}
         </div>
@@ -418,8 +423,9 @@ export function FullscreenDrawExperience({
             }}
           >
             <div style={{ fontSize: 14, letterSpacing: 4, color: "#8a5a2b", fontWeight: 700 }}>
-              GANADOR DEL SORTEO
+              {t("fullscreenDraw.winnerHeader")}
             </div>
+
             <div
               style={{
                 marginTop: 16,
@@ -444,8 +450,9 @@ export function FullscreenDrawExperience({
               ${winner.prize.toFixed(2)}
             </div>
             <div style={{ marginTop: 10, fontSize: 13, color: "#8a5a2b" }}>
-              en estrellas ORIGEN ⭐
+              {t("fullscreenDraw.inStars")}
             </div>
+
           </div>
         </div>
       )}
@@ -476,7 +483,7 @@ export function FullscreenDrawExperience({
             }}
           >
             <div style={{ fontSize: 12, letterSpacing: 3, color: "#c9a36b", fontWeight: 700 }}>
-              VALIDACIÓN LEGAL — RETO DE HABILIDAD
+              {t("fullscreenDraw.challengeHeader")}
             </div>
             <div
               style={{
@@ -486,14 +493,15 @@ export function FullscreenDrawExperience({
                 fontWeight: 800,
               }}
             >
-              ¿Cuánto es {challenge.a} + {challenge.b}?
+              {t("fullscreenDraw.challengeQuestion", { a: challenge.a, b: challenge.b })}
             </div>
             <div style={{ marginTop: 8, fontSize: 14, opacity: 0.8 }}>
-              Tiempo restante:{" "}
+              {t("fullscreenDraw.timeRemaining")}{" "}
               <span style={{ color: challengeTime <= 2 ? "#ef4444" : "#c9a36b", fontWeight: 800 }}>
                 {Math.max(0, challengeTime)}s
               </span>
             </div>
+
 
             {challengeStatus === "idle" && (
               <>
@@ -517,7 +525,7 @@ export function FullscreenDrawExperience({
                     borderRadius: 12,
                     outline: "none",
                   }}
-                  placeholder="Tu respuesta"
+                  placeholder={t("fullscreenDraw.yourAnswer")}
                 />
                 <button
                   type="button"
@@ -535,7 +543,7 @@ export function FullscreenDrawExperience({
                     cursor: "pointer",
                   }}
                 >
-                  Confirmar
+                  {t("fullscreenDraw.confirm")}
                 </button>
               </>
             )}
@@ -543,7 +551,8 @@ export function FullscreenDrawExperience({
             {challengeStatus === "ok" && (
               <div style={{ marginTop: 20 }}>
                 <div style={{ fontSize: 18, color: "#86efac", fontWeight: 800 }}>
-                  ✅ ¡Correcto! Premio validado.
+                  {t("fullscreenDraw.correct")}
+
                 </div>
                 <button
                   type="button"
@@ -561,7 +570,7 @@ export function FullscreenDrawExperience({
                     cursor: "pointer",
                   }}
                 >
-                  Cerrar y volver a la tienda
+                  {t("fullscreenDraw.closeAndReturn")}
                 </button>
               </div>
             )}
@@ -569,12 +578,13 @@ export function FullscreenDrawExperience({
             {challengeStatus === "fail" && (
               <div style={{ marginTop: 20 }}>
                 <div style={{ fontSize: 16, color: "#fca5a5", fontWeight: 700 }}>
-                  ⛔ Respuesta incorrecta o tiempo agotado.
+                  {t("fullscreenDraw.incorrect")}
                   <br />
                   <span style={{ fontSize: 13, opacity: 0.8 }}>
-                    La respuesta era {challenge.answer}.
+                    {t("fullscreenDraw.answerWas", { answer: challenge.answer })}
                   </span>
                 </div>
+
                 <button
                   type="button"
                   onClick={onClose}
@@ -591,7 +601,8 @@ export function FullscreenDrawExperience({
                     cursor: "pointer",
                   }}
                 >
-                  Cerrar
+                  {t("fullscreenDraw.close")}
+
                 </button>
               </div>
             )}
@@ -622,8 +633,9 @@ export function FullscreenDrawExperience({
             }}
           >
             <div style={{ color: "#fca5a5", fontWeight: 800, marginBottom: 10 }}>
-              Error al ejecutar el sorteo
+              {t("fullscreenDraw.drawError")}
             </div>
+
             <pre
               style={{
                 fontSize: 11,
@@ -651,7 +663,7 @@ export function FullscreenDrawExperience({
                 cursor: "pointer",
               }}
             >
-              Cerrar
+              {t("fullscreenDraw.close")}
             </button>
           </div>
         </div>
