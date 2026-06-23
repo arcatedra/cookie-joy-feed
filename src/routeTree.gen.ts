@@ -43,6 +43,7 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
+import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
@@ -220,6 +221,12 @@ const ApiPublicHooksRunDailyDrawRoute =
     path: '/api/public/hooks/run-daily-draw',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksNotifyWinnerRoute =
+  ApiPublicHooksNotifyWinnerRouteImport.update({
+    id: '/api/public/hooks/notify-winner',
+    path: '/api/public/hooks/notify-winner',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -284,6 +292,7 @@ export interface FileRoutesByTo {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -321,6 +330,7 @@ export interface FileRoutesById {
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -358,6 +368,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
@@ -393,6 +404,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
@@ -429,6 +441,7 @@ export interface FileRouteTypes {
     | '/_authenticated/claim/$drawDate'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
@@ -464,6 +477,7 @@ export interface RootRouteChildren {
   ReelReelIdRoute: typeof ReelReelIdRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
   ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -712,6 +726,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksRunDailyDrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/notify-winner': {
+      id: '/api/public/hooks/notify-winner'
+      path: '/api/public/hooks/notify-winner'
+      fullPath: '/api/public/hooks/notify-winner'
+      preLoaderRoute: typeof ApiPublicHooksNotifyWinnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -755,6 +776,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReelReelIdRoute: ReelReelIdRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
   ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
