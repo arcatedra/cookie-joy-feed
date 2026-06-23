@@ -870,9 +870,15 @@ function AmoeDialog({
   onClose: () => void;
   onChange: () => void;
 }) {
-  const { t } = useTranslation();
-  const [step, setStep] = useState<1 | 2>(initialStep);
+  const { t, i18n } = useTranslation();
+  // 'form' → 'confirm' → 'missions'
+  const [view, setView] = useState<"form" | "confirm" | "missions">(
+    initialStep === 2 ? "missions" : "form",
+  );
 
+  const today = new Date().toLocaleDateString(getLocale(i18n.language), {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
 
   return (
     <div
@@ -903,7 +909,11 @@ function AmoeDialog({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h3 style={{ color: BLUE, fontWeight: 800, fontSize: 20, margin: 0 }}>
-            {step === 1 ? t("ruleta.amoeTitle") : t("ruleta.missionsTitle")}
+            {view === "form"
+              ? t("ruleta.amoeTitle")
+              : view === "confirm"
+              ? t("ruleta.amoeConfirmTitle")
+              : t("ruleta.missionsTitle")}
           </h3>
 
           <button
@@ -920,20 +930,102 @@ function AmoeDialog({
           </button>
         </div>
 
-        {step === 1 ? (
+        {view === "form" && (
           <AmoeForm
             onSuccess={() => {
               onChange();
-              setStep(2);
+              setView("confirm");
             }}
           />
-        ) : (
+        )}
+        {view === "confirm" && (
+          <AmoeConfirmation
+            today={today}
+            onContinue={() => setView("missions")}
+            onClose={onClose}
+          />
+        )}
+        {view === "missions" && (
           <MissionList state={state} onChange={onChange} />
         )}
       </div>
     </div>
   );
 }
+
+function AmoeConfirmation({
+  today,
+  onContinue,
+  onClose,
+}: {
+  today: string;
+  onContinue: () => void;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <div style={{ marginTop: 20, display: "grid", gap: 16 }}>
+      <div
+        style={{
+          padding: "20px",
+          borderRadius: 14,
+          background: `linear-gradient(135deg, ${BLUE} 0%, ${BLUE_SOFT} 100%)`,
+          color: BEIGE,
+          textAlign: "center",
+          border: `2px solid ${GOLD}`,
+        }}
+      >
+        <div style={{ fontSize: 44, marginBottom: 6 }}>🎟️</div>
+        <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>
+          {t("ruleta.amoeConfirmHeadline")}
+        </div>
+        <div style={{ fontSize: 13, opacity: 0.85, lineHeight: 1.5 }}>
+          {t("ruleta.amoeConfirmDateLine", { date: today })}
+        </div>
+      </div>
+
+      <ul style={{ margin: 0, paddingLeft: 18, color: BLUE, fontSize: 13, lineHeight: 1.7 }}>
+        <li>{t("ruleta.amoeConfirmBullet1")}</li>
+        <li>{t("ruleta.amoeConfirmBullet2")}</li>
+        <li>{t("ruleta.amoeConfirmBullet3")}</li>
+      </ul>
+
+      <div style={{ display: "grid", gap: 8 }}>
+        <button
+          onClick={onContinue}
+          style={{
+            padding: "14px",
+            background: BLUE,
+            color: BEIGE,
+            border: "none",
+            borderRadius: 10,
+            fontWeight: 800,
+            cursor: "pointer",
+            letterSpacing: "0.08em",
+          }}
+        >
+          {t("ruleta.amoeConfirmContinue")}
+        </button>
+        <button
+          onClick={onClose}
+          style={{
+            padding: "10px",
+            background: "transparent",
+            color: BLUE_SOFT,
+            border: `1px solid ${BEIGE_DEEP}`,
+            borderRadius: 10,
+            fontWeight: 600,
+            cursor: "pointer",
+            fontSize: 13,
+          }}
+        >
+          {t("ruleta.amoeConfirmClose")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
 function AmoeForm({ onSuccess }: { onSuccess: () => void }) {
   const { t } = useTranslation();
