@@ -971,6 +971,7 @@
     "submitClaim": "ENVIAR RECLAMO",
     "statusLabels": {
       "pending_verification": "Pendiente de verificación",
+      "submitted": "Enviado — en revisión",
       "verified": "Verificado — pago en proceso",
       "paid": "Pagado",
       "rejected": "Rechazado",

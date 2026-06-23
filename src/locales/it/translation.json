@@ -971,6 +971,7 @@
     "submitClaim": "INVIA RISCOSSIONE",
     "statusLabels": {
       "pending_verification": "In attesa di verifica",
+      "submitted": "Inviato — in revisione",
       "verified": "Verificato — pagamento in corso",
       "paid": "Pagato",
       "rejected": "Rifiutato",

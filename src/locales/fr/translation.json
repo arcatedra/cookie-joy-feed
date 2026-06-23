@@ -971,6 +971,7 @@
     "submitClaim": "SOUMETTRE LA RÉCLAMATION",
     "statusLabels": {
       "pending_verification": "En attente de vérification",
+      "submitted": "Envoyé — en cours d’examen",
       "verified": "Vérifié — paiement en cours",
       "paid": "Payé",
       "rejected": "Rejeté",

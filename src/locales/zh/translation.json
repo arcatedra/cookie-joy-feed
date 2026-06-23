@@ -971,6 +971,7 @@
     "submitClaim": "提交申领",
     "statusLabels": {
       "pending_verification": "等待验证",
+      "submitted": "已提交 — 审核中",
       "verified": "已验证 — 付款处理中",
       "paid": "已支付",
       "rejected": "已拒绝",

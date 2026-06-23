@@ -974,6 +974,7 @@
     "submitClaim": "ENVIAR REIVINDICAÇÃO",
     "statusLabels": {
       "pending_verification": "Verificação pendente",
+      "submitted": "Enviado — em análise",
       "verified": "Verificado — pagamento em processo",
       "paid": "Pago",
       "rejected": "Rejeitado",
