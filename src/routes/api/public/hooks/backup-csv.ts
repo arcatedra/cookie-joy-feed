@@ -33,14 +33,27 @@ function toCsv(rows: Record<string, unknown>[]): string {
   return `${header}\n${body}\n`;
 }
 
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 export const Route = createFileRoute("/api/public/hooks/backup-csv")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apikey =
-          request.headers.get("apikey") ?? request.headers.get("x-api-key");
-        if (!apikey || apikey !== process.env.SUPABASE_PUBLISHABLE_KEY) {
-          return new Response("Unauthorized", { status: 401 });
+        const expected = process.env.BACKUP_HOOK_SECRET;
+        if (!expected) {
+          console.error("backup-csv: BACKUP_HOOK_SECRET missing");
+          return new Response("Server misconfigured", { status: 500 });
+        }
+
+        const auth = request.headers.get("authorization") ?? "";
+        const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+        if (!token || !timingSafeEqual(token, expected)) {
+          return new Response(null, { status: 401 });
         }
 
         const { supabaseAdmin } = await import(
