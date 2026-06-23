@@ -4,8 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
 import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
+import { getLocale } from "@/i18n";
+
 
 const BEIGE = "#f3ead8";
 const BLUE = "#1e3a5f";
@@ -54,6 +57,8 @@ function useAnimatedNumber(target: number, durationMs = 1200) {
 }
 
 export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend: (n: number) => void }) {
+  const { t, i18n } = useTranslation();
+
   const qc = useQueryClient();
   const fetchDraw = useServerFn(getTodayDraw);
   const fetchWinners = useServerFn(getRecentWinners);
@@ -145,12 +150,13 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         return;
       }
       onSpend(tickets * 10);
-      toast.success(`✓ ${res.ticketsAdded} boleto(s) registrado(s) — saldo: ${res.newBalance}⭐`);
+      toast.success(t("liveDraw.ticketRegistered", { count: res.ticketsAdded, balance: res.newBalance }));
       qc.invalidateQueries({ queryKey: ["daily-draw"] });
       qc.invalidateQueries({ queryKey: ["roulette-state"] });
     },
-    onError: () => toast.error("Error al registrar boleto"),
+    onError: () => toast.error(t("liveDraw.ticketError")),
   });
+
 
   const ticketCost = tickets * 10;
   const canAfford = balance >= ticketCost;
@@ -162,6 +168,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
     while (labels.length < 8) labels.push("ORIGEN");
     return labels;
   }, [winners]);
+
 
   const status = draw?.status ?? "open";
   const isOpen = status === "open";
@@ -226,22 +233,23 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         {preLaunch ? (
           <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-              🚧 SORTEO DIARIO EN PREPARACIÓN
+              {t("liveDraw.preLaunchEyebrow")}
             </div>
             <div style={{ fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 900, lineHeight: 1.15, maxWidth: 720 }}>
-              Estamos finalizando las Reglas Oficiales del Sorteo
+              {t("liveDraw.preLaunchTitle")}
             </div>
             <div style={{ fontSize: 14, color: `${BEIGE}cc`, maxWidth: 640, lineHeight: 1.5 }}>
-              Mientras tanto puedes <strong style={{ color: GOLD_BRIGHT }}>comprar Estrellas</strong>, ganar
-              <strong style={{ color: GOLD_BRIGHT }}> cupones con la Ruleta</strong> y participar gratis (AMOE).
-              Pronto anunciaremos la fecha del primer sorteo en USD.
+              {t("liveDraw.preLaunchDescBefore")}<strong style={{ color: GOLD_BRIGHT }}>{t("liveDraw.preLaunchDescStars")}</strong>{t("liveDraw.preLaunchDescMiddle")}
+              <strong style={{ color: GOLD_BRIGHT }}>{t("liveDraw.preLaunchDescRoulette")}</strong>{t("liveDraw.preLaunchDescAfter")}
             </div>
           </div>
+
         ) : (
           <div style={{ position: "relative", display: "grid", placeItems: "center", gap: 6, textAlign: "center" }}>
             <div style={{ fontSize: 11, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-              {isCompleted ? "★ SORTEO DEL DÍA — GANADOR ★" : isDrawing ? "🔴 EN VIVO · GIRANDO" : "★ BOTE DE HOY · LIVE DRAW 8:00 PM ★"}
+              {isCompleted ? t("liveDraw.winnerEyebrow") : isDrawing ? t("liveDraw.spinningEyebrow") : t("liveDraw.todayPotEyebrow")}
             </div>
+
             <div style={{
               fontSize: "clamp(48px, 9vw, 88px)", fontWeight: 900,
               color: BEIGE, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em",
@@ -252,15 +260,16 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             </div>
             {!isCompleted && (
               <div style={{ display: "flex", gap: 18, marginTop: 10, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-                <CountdownDigit label="HORAS" value={cd.hh} />
-                <CountdownDigit label="MIN" value={cd.mm} />
-                <CountdownDigit label="SEG" value={cd.ss} />
+                <CountdownDigit label={t("liveDraw.hours")} value={cd.hh} />
+                <CountdownDigit label={t("liveDraw.minutes")} value={cd.mm} />
+                <CountdownDigit label={t("liveDraw.seconds")} value={cd.ss} />
               </div>
             )}
             <div style={{ fontSize: 12, color: `${BEIGE}cc`, letterSpacing: "0.15em", marginTop: 6 }}>
-              {draw?.entrantsTotal ?? 0} participantes · {draw?.ticketsTotal ?? 0} boletos
-              {draw?.rolledOverFrom ? <> · Acumulado desde {new Date(draw.rolledOverFrom).toLocaleDateString()}</> : null}
+              {t("liveDraw.participantsAndTickets", { participants: draw?.entrantsTotal ?? 0, tickets: draw?.ticketsTotal ?? 0 })}
+              {draw?.rolledOverFrom ? t("liveDraw.rolledOverSince", { date: new Date(draw.rolledOverFrom).toLocaleDateString(getLocale(i18n.language)) }) : null}
             </div>
+
           </div>
         )}
       </div>
@@ -319,11 +328,12 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             zIndex: 2,
           }} />
           <div style={{ marginTop: 12, fontSize: 11, color: WOOD, letterSpacing: "0.2em", fontWeight: 700 }}>
-            {isOpen && "🤖 GIRA AUTOMÁTICAMENTE 8:00 PM ET"}
-            {isDrawing && "🔴 SORTEANDO..."}
-            {isCompleted && draw?.winnerDisplayName && "🏆 GANADOR ANUNCIADO"}
-            {isCompleted && !draw?.winnerDisplayName && "Sin participantes — Bote acumulado"}
+            {isOpen && t("liveDraw.autoSpin")}
+            {isDrawing && t("liveDraw.spinning")}
+            {isCompleted && draw?.winnerDisplayName && t("liveDraw.winnerAnnounced")}
+            {isCompleted && !draw?.winnerDisplayName && t("liveDraw.noParticipants")}
           </div>
+
         </div>
 
         {/* Action panel */}
@@ -333,14 +343,14 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           display: "flex", flexDirection: "column", gap: 16,
         }}>
           <div style={{ fontSize: 11, letterSpacing: "0.3em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-            INSCRIBIRSE AL SORTEO
+            {t("liveDraw.enterDrawTitle")}
           </div>
-          <div style={{ fontSize: 14, color: `${BEIGE}cc`, lineHeight: 1.5 }}>
-            1 boleto = <strong style={{ color: GOLD_BRIGHT }}>10 ⭐</strong> · Mientras más boletos, más chances.
-          </div>
+          <div style={{ fontSize: 14, color: `${BEIGE}cc`, lineHeight: 1.5 }}
+            dangerouslySetInnerHTML={{ __html: t("liveDraw.ticketIntro") }}
+          />
           <input
             type="text"
-            placeholder="Tu nombre (visible si ganas)"
+            placeholder={t("liveDraw.namePlaceholder")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={60}
@@ -353,18 +363,20 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             <button
               onClick={() => setTickets((t) => Math.max(1, t - 1))}
               style={btnSmall()}
-              aria-label="menos"
+              aria-label={t("liveDraw.minusAria")}
             >−</button>
             <div style={{
               flex: 1, textAlign: "center", padding: "10px 0",
               background: `${BEIGE}11`, borderRadius: 12, fontSize: 18, fontWeight: 800,
-            }}>
-              {tickets} boleto{tickets > 1 ? "s" : ""} · <span style={{ color: GOLD_BRIGHT }}>{ticketCost}⭐</span>
-            </div>
+            }}
+              dangerouslySetInnerHTML={{
+                __html: t(tickets > 1 ? "liveDraw.ticketsLabelPlural" : "liveDraw.ticketsLabel", { n: tickets, cost: ticketCost }),
+              }}
+            />
             <button
               onClick={() => setTickets((t) => Math.min(50, t + 1))}
               style={btnSmall()}
-              aria-label="más"
+              aria-label={t("liveDraw.plusAria")}
             >+</button>
           </div>
           <button
@@ -382,11 +394,12 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               transition: "all 0.2s",
             }}
           >
-            {!isOpen ? "SORTEO CERRADO" : !canAfford ? `FALTAN ${ticketCost - balance}⭐` : enterMut.isPending ? "REGISTRANDO..." : `PARTICIPAR (${ticketCost}⭐)`}
+            {!isOpen ? t("liveDraw.drawClosed") : !canAfford ? t("liveDraw.missingStars", { n: ticketCost - balance }) : enterMut.isPending ? t("liveDraw.registering") : t("liveDraw.participate", { cost: ticketCost })}
           </button>
-          <div style={{ fontSize: 11, color: `${BEIGE}88`, textAlign: "center" }}>
-            Tu saldo: <strong style={{ color: GOLD_BRIGHT }}>{balance}⭐</strong>
-          </div>
+          <div style={{ fontSize: 11, color: `${BEIGE}88`, textAlign: "center" }}
+            dangerouslySetInnerHTML={{ __html: t("liveDraw.yourBalance", { balance }) }}
+          />
+
         </div>
       </div>
       )}
@@ -450,17 +463,18 @@ function CountdownDigit({ value, label }: { value: string; label: string }) {
 }
 
 function WinnersLeaderboard({ winners }: { winners: Array<{ drawDate: string; winnerDisplayName: string | null; prizeUsd: number; seedHash: string | null }> }) {
+  const { t, i18n } = useTranslation();
   return (
     <div style={{
       background: BEIGE, borderRadius: 24, padding: 24,
       boxShadow: `0 20px 50px -20px rgba(59,36,23,0.3), inset 0 0 0 1px ${WOOD}22`,
     }}>
       <div style={{ fontSize: 11, letterSpacing: "0.3em", color: WOOD, fontWeight: 800, marginBottom: 14 }}>
-        🏆 GANADORES ANTERIORES
+        {t("liveDraw.previousWinners")}
       </div>
       {winners.length === 0 ? (
         <div style={{ color: `${WOOD}99`, fontSize: 14, padding: "20px 0" }}>
-          Aún no hay sorteos completados. ¡Tú puedes ser el primero!
+          {t("liveDraw.noWinnersYet")}
         </div>
       ) : (
         <div style={{ display: "grid", gap: 8 }}>
@@ -472,7 +486,7 @@ function WinnersLeaderboard({ winners }: { winners: Array<{ drawDate: string; wi
               border: i === 0 ? `1px solid ${GOLD}` : `1px solid transparent`,
             }}>
               <span style={{ fontSize: 11, color: `${WOOD}99`, fontWeight: 700, minWidth: 60 }}>
-                {new Date(w.drawDate).toLocaleDateString("es", { day: "2-digit", month: "short" })}
+                {new Date(w.drawDate).toLocaleDateString(getLocale(i18n.language), { day: "2-digit", month: "short" })}
               </span>
               <span style={{ color: BLUE, fontWeight: 700, fontSize: 15 }}>
                 {w.winnerDisplayName ?? "—"}
@@ -488,9 +502,12 @@ function WinnersLeaderboard({ winners }: { winners: Array<{ drawDate: string; wi
   );
 }
 
+
 function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
   name: string; prizeUsd: number; seedHash: string | null; onClose: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div
       onClick={onClose}
@@ -511,14 +528,15 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
       }}>
         <div style={{ fontSize: 60, marginBottom: 8 }}>🎉</div>
         <div style={{ fontSize: 12, letterSpacing: "0.4em", color: GOLD_BRIGHT, fontWeight: 800, marginBottom: 10 }}>
-          ¡GANADOR DEL DÍA!
+          {t("liveDraw.winnerOfDay")}
         </div>
+
         <div style={{
           fontSize: "clamp(36px, 7vw, 64px)", fontWeight: 900, color: BEIGE,
           lineHeight: 1.1, marginBottom: 18, letterSpacing: "-0.02em",
           textShadow: `0 0 30px ${GOLD_BRIGHT}99`,
         }}>{name}</div>
-        <div style={{ fontSize: 11, color: `${BEIGE}99`, letterSpacing: "0.2em" }}>SE LLEVA</div>
+        <div style={{ fontSize: 11, color: `${BEIGE}99`, letterSpacing: "0.2em" }}>{t("liveDraw.takesHome")}</div>
         <div style={{
           fontSize: "clamp(48px, 9vw, 88px)", fontWeight: 900,
           color: GOLD_BRIGHT, fontVariantNumeric: "tabular-nums",
@@ -540,7 +558,7 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
           marginTop: 24, padding: "12px 32px", borderRadius: 12, border: "none",
           background: `linear-gradient(135deg, ${GOLD_BRIGHT}, ${GOLD})`,
           color: WOOD, fontWeight: 900, fontSize: 14, letterSpacing: "0.2em", cursor: "pointer",
-        }}>CERRAR</button>
+        }}>{t("liveDraw.closeBtn")}</button>
       </div>
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -554,8 +572,10 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
 }
 
 function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
+  const { t } = useTranslation();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
+
 
   const { data: adminCheck } = useQuery({
     queryKey: ["is-admin"],
@@ -586,11 +606,12 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
         seedHash: res.seedHash,
         drawDate: res.drawDate,
       });
-      toast.success(`Sorteo ejecutado: ${res.status}`);
+      toast.success(t("liveDraw.drawRan", { status: res.status }));
       onResult();
     },
-    onError: () => toast.error("Error al ejecutar sorteo de prueba"),
+    onError: () => toast.error(t("liveDraw.drawTestError")),
   });
+
 
   if (!adminCheck?.isAdmin) return null;
 
@@ -605,16 +626,16 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
       <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between", flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 10, letterSpacing: "0.3em", color: GOLD_BRIGHT, fontWeight: 800 }}>
-            🛡️ PANEL ADMIN
+            {t("liveDraw.adminPanel")}
           </div>
           <div style={{ fontSize: 13, color: `${BEIGE}cc`, marginTop: 4 }}>
-            Ejecutar el sorteo manualmente (idempotente — no repite si ya hay un ganador hoy).
+            {t("liveDraw.adminDesc")}
           </div>
         </div>
         <button
           disabled={mut.isPending}
           onClick={() => {
-            if (!confirm("¿Ejecutar el sorteo de HOY ahora? Esta acción es real y selecciona un ganador.")) return;
+            if (!confirm(t("liveDraw.runDrawConfirm"))) return;
             mut.mutate();
           }}
           style={{
@@ -624,9 +645,10 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
             cursor: mut.isPending ? "wait" : "pointer", whiteSpace: "nowrap",
           }}
         >
-          {mut.isPending ? "EJECUTANDO..." : "🎰 PROBAR SORTEO"}
+          {mut.isPending ? t("liveDraw.running") : t("liveDraw.runDraw")}
         </button>
       </div>
+
 
       {lastResult && (
         <div style={{
@@ -634,21 +656,21 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
           display: "grid", gap: 8, fontSize: 13,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-            <span style={{ color: `${BEIGE}99` }}>Estado:</span>
+            <span style={{ color: `${BEIGE}99` }}>{t("liveDraw.status")}</span>
             <strong style={{ color: GOLD_BRIGHT, textTransform: "uppercase", letterSpacing: "0.15em" }}>
               {lastResult.status}
             </strong>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-            <span style={{ color: `${BEIGE}99` }}>Fecha:</span>
+            <span style={{ color: `${BEIGE}99` }}>{t("liveDraw.date")}</span>
             <span>{lastResult.drawDate}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-            <span style={{ color: `${BEIGE}99` }}>Ganador:</span>
-            <strong style={{ color: BEIGE }}>{lastResult.winnerDisplayName ?? "— (sin participantes)"}</strong>
+            <span style={{ color: `${BEIGE}99` }}>{t("liveDraw.winner")}</span>
+            <strong style={{ color: BEIGE }}>{lastResult.winnerDisplayName ?? t("liveDraw.noParticipantsShort")}</strong>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-            <span style={{ color: `${BEIGE}99` }}>Premio:</span>
+            <span style={{ color: `${BEIGE}99` }}>{t("liveDraw.prize")}</span>
             <strong style={{ color: GOLD_BRIGHT, fontVariantNumeric: "tabular-nums" }}>
               ${lastResult.prizeUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
             </strong>
@@ -660,9 +682,10 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
           )}
           {isAlreadyDrawn && (
             <div style={{ fontSize: 11, color: `${GOLD_BRIGHT}cc`, fontStyle: "italic" }}>
-              ℹ️ El sorteo ya está marcado como completado. Volver a ejecutar devolverá el mismo resultado.
+              {t("liveDraw.alreadyDrawn")}
             </div>
           )}
+
         </div>
       )}
     </div>
@@ -682,14 +705,16 @@ function DrawStage({
   seedHash: string | null;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const wheelSize = "min(78vmin, 620px)";
+
   const isCelebrating = phase === "celebrating";
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Sorteo en vivo"
+      aria-label={t("fullscreenDraw.ariaLabel")}
       style={{
         position: "fixed", inset: 0, zIndex: 9999,
         background: "radial-gradient(ellipse at center, rgba(15,39,71,0.95) 0%, rgba(0,0,0,0.97) 70%)",
@@ -703,7 +728,7 @@ function DrawStage({
       {isCelebrating && (
         <button
           onClick={onClose}
-          aria-label="Cerrar"
+          aria-label={t("fullscreenDraw.close")}
           style={{
             position: "absolute", top: 18, right: 18, zIndex: 2,
             width: 44, height: 44, borderRadius: "50%", border: `1px solid ${GOLD}66`,
@@ -722,9 +747,10 @@ function DrawStage({
             fontSize: "clamp(11px, 1.4vw, 14px)", letterSpacing: "0.45em",
             color: GOLD_BRIGHT, fontWeight: 800,
           }}>
-            {phase === "pre-show" && "★ SORTEO EN VIVO · COMIENZA EN ★"}
-            {phase === "spinning" && "🔴 GIRANDO · EN VIVO"}
-            {phase === "celebrating" && "🎉 ¡GANADOR DEL DÍA! 🎉"}
+            {phase === "pre-show" && t("liveDraw.stageEyebrowPre")}
+            {phase === "spinning" && t("liveDraw.stageEyebrowSpin")}
+            {phase === "celebrating" && t("liveDraw.stageEyebrowWin")}
+
           </div>
 
           {phase === "pre-show" && (
@@ -747,8 +773,9 @@ function DrawStage({
                 animation: "winnerIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}>{winnerName}</div>
               <div style={{ fontSize: 12, letterSpacing: "0.3em", color: `${BEIGE}99`, marginTop: 6 }}>
-                SE LLEVA
+                {t("liveDraw.takesHome")}
               </div>
+
               <div style={{
                 fontSize: "clamp(44px, 10vw, 110px)", fontWeight: 900,
                 color: GOLD_BRIGHT, fontVariantNumeric: "tabular-nums",
@@ -822,7 +849,7 @@ function DrawStage({
             wordBreak: "break-all", padding: "10px 16px", background: "rgba(0,0,0,0.4)",
             borderRadius: 10, maxWidth: 600,
           }}>
-            🔐 Hash de transparencia: {seedHash.slice(0, 40)}…
+            {t("liveDraw.transparencyHash", { hash: seedHash.slice(0, 40) })}
           </div>
         )}
       </div>

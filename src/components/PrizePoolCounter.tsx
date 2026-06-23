@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useTranslation } from "react-i18next";
 import { getPrizePool } from "@/lib/stars-checkout.functions";
+
 
 const BEIGE = "#f3ead8";
 const GOLD = "#c9a36b";
@@ -14,6 +16,8 @@ function easeOutExpo(t: number) {
 }
 
 export function PrizePoolCounter() {
+  const { t } = useTranslation();
+
   const fetchPool = useServerFn(getPrizePool);
   const { data } = useQuery({
     queryKey: ["prize-pool"],
@@ -84,8 +88,9 @@ export function PrizePoolCounter() {
             fontWeight: 700,
           }}
         >
-          ★ POZO ACUMULADO GLOBAL ★
+          {t("prizePool.eyebrow")}
         </div>
+
         <div
           style={{
             fontSize: "clamp(40px, 8vw, 72px)",
@@ -112,8 +117,9 @@ export function PrizePoolCounter() {
             marginTop: 4,
           }}
         >
-          {contributions.toLocaleString("en-US")} contribuciones
+          {t("prizePool.contributions", { count: contributions })}
         </div>
+
       </div>
       <style>{`
         @keyframes ppGlow {
@@ -132,9 +138,10 @@ export function PrizePoolCounter() {
           letterSpacing: "0.2em",
         }}
       >
-        ACTUALIZADO EN VIVO
+        {t("prizePool.updatedLive")}
       </div>
       <div aria-hidden style={{ display: "none", color: WOOD }} />
+
     </div>
   );
 }

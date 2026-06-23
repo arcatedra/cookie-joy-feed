@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ExternalLink, Loader2, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import {
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 
 export function ShopifyCartDrawer() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const items = useShopifyCartStore((s) => s.items);
   const isLoading = useShopifyCartStore((s) => s.isLoading);
@@ -58,11 +60,13 @@ export function ShopifyCartDrawer() {
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
         <SheetHeader className="flex-shrink-0">
-          <SheetTitle>Shopify Cart</SheetTitle>
+          <SheetTitle>{t("cartDrawer.title")}</SheetTitle>
           <SheetDescription>
             {totalItems === 0
-              ? "Your shop cart is empty"
-              : `${totalItems} item${totalItems !== 1 ? "s" : ""} in your cart`}
+              ? t("cartDrawer.empty")
+              : totalItems === 1
+                ? t("cartDrawer.itemCount", { count: totalItems })
+                : t("cartDrawer.itemsCount", { count: totalItems })}
           </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col flex-1 pt-6 min-h-0">
@@ -70,7 +74,7 @@ export function ShopifyCartDrawer() {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">Your shop cart is empty</p>
+                <p className="text-muted-foreground">{t("cartDrawer.empty")}</p>
               </div>
             </div>
           ) : (
@@ -103,6 +107,7 @@ export function ShopifyCartDrawer() {
                           size="icon"
                           className="h-6 w-6"
                           onClick={() => removeItem(item.variantId)}
+                          aria-label={t("common.remove")}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -112,6 +117,7 @@ export function ShopifyCartDrawer() {
                             size="icon"
                             className="h-6 w-6"
                             onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                            aria-label={t("checkout.decrease")}
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
@@ -121,6 +127,7 @@ export function ShopifyCartDrawer() {
                             size="icon"
                             className="h-6 w-6"
                             onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                            aria-label={t("checkout.increase")}
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
@@ -132,7 +139,7 @@ export function ShopifyCartDrawer() {
               </div>
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total</span>
+                  <span className="text-lg font-semibold">{t("cartDrawer.total")}</span>
                   <span className="text-xl font-bold">
                     {items[0]?.price.currencyCode || "$"} {totalPrice.toFixed(2)}
                   </span>
@@ -148,7 +155,7 @@ export function ShopifyCartDrawer() {
                   ) : (
                     <>
                       <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout with Shopify
+                      {t("cartDrawer.checkoutBtn")}
                     </>
                   )}
                 </Button>

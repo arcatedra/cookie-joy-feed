@@ -1,35 +1,79 @@
-## Diagnóstico (estado actual en producción)
+## Objetivo
 
-Hay 3 cron jobs apuntando al mismo endpoint `run-daily-draw`:
+Que al cambiar idioma desde el selector, **todo** el sitio cambie a ese idioma y se mantenga (ya persiste en `localStorage`). Idiomas objetivo: `en`, `es`, `pt`, `fr`, `it`, `zh`, `fil`.
 
-| jobid | nombre | schedule (UTC) | observación |
-|---|---|---|---|
-| 1 | `daily-roulette-draw` | `0 0,1 * * *` | OK — cubre 20:00 ET en EDT (00:00 UTC) y en EST (01:00 UTC) |
-| 3 | `run-daily-draw-every-5min` | `*/5 * * * *` | **Residuo del modo prueba** — está disparando el sorteo cada 5 minutos |
-| 5 | `run-daily-draw-et-2000` | `0 0,1 * * *` | Duplicado de #1 |
+## Estado actual
 
-`run_daily_draw()` es idempotente por `draw_date` (sale temprano si `status IN ('completed','rolled_over')`), así que los disparos extra no abren un nuevo sorteo el mismo día ET, pero igualmente generan ruido en logs y son un riesgo si alguien cambia esa lógica. El job #3 además ejecuta `ensure_today_draw()` cada 5 min, lo cual no es lo deseado en vivo.
+- Infra i18n correcta: `src/i18n/index.ts` con `setLanguage`/`syncClientLanguage`, persistencia en `localStorage`, `LanguageSwitcher` ya enlazado en TopNav.
+- Las 380 claves existentes están al 100% en los 7 idiomas (acabo de completar fr/it/zh).
+- ~26 archivos con texto en duro (mayormente español) que **no** usan `t()`. Esos textos no cambian al alternar idioma.
 
-Sobre la zona horaria: ET = UTC-5 en invierno (EST) y UTC-4 en verano (EDT). pg_cron corre en UTC y no entiende DST. El patrón `0 0,1 * * *` (dispara a 00:00 UTC y 01:00 UTC) garantiza que **el disparo correspondiente a las 20:00 ET ocurre siempre**, en ambas estaciones; el otro disparo cae a las 21:00 ET o 19:00 ET y queda como no-op por idempotencia. Es el patrón estándar y seguro.
+## Archivos a refactorizar
 
-## Cambios propuestos
+Rutas (alto volumen de copy):
+- `src/routes/ruleta.tsx`
+- `src/routes/donate.tsx`
+- `src/routes/shop.tsx`
+- `src/routes/search.tsx`
+- `src/routes/product.$handle.tsx`
+- `src/routes/reel.$reelId.tsx`
+- `src/routes/historial.tsx`
+- `src/routes/trust.tsx`
+- `src/routes/terms.tsx`
+- `src/routes/sweepstakes-rules.tsx`
+- `src/routes/unsubscribe.tsx`
+- `src/routes/_authenticated/claim.$drawDate.tsx`
+- `src/routes/_authenticated/route.tsx` (loader/redirect copy si hay)
+- `src/routes/admin.shipping.tsx`, `src/routes/admin.sweepstakes.tsx` — **se excluyen**: son páginas administrativas internas, no de usuario final.
 
-Una sola migración:
+Componentes:
+- `src/components/FullscreenDrawExperience.tsx`
+- `src/components/ShopifyCartDrawer.tsx`
+- `src/components/DailyWinnerBanner.tsx`
+- `src/components/DeliveryCounter.tsx`
+- `src/components/LiveDrawSection.tsx`
+- `src/components/PrizePoolCounter.tsx`
+- `src/components/TierBadge.tsx`
 
-1. `SELECT cron.unschedule('run-daily-draw-every-5min');` — elimina el residuo del modo prueba.
-2. `SELECT cron.unschedule('run-daily-draw-et-2000');` — elimina el duplicado.
-3. Dejar `daily-roulette-draw` (jobid 1) como única fuente del sorteo diario. Schedule actual `0 0,1 * * *` ya es correcto para 20:00 ET con DST.
+Sin cambios (sin copy traducible o ya cubiertos):
+- `*Logo.tsx`, `BrandIcons.tsx` (solo SVG/imagen)
+- `src/components/ui/*` (primitivas shadcn)
+- Archivos ya refactorizados que aparecen en la lista de "usa i18n".
 
-## Verificación posterior
+También cubrir notificaciones/toasts:
+- Recorrer `toast(...)` / `sonner` / `alert(...)` / mensajes de `try/catch` en todos los archivos modificados, envolverlos en `t()`.
 
-Después de aplicar la migración voy a correr:
+## Cómo lo voy a hacer (técnico)
 
-- `SELECT jobid, jobname, schedule, active FROM cron.job;` — confirmar que solo queda `daily-roulette-draw`.
-- `SELECT jobid, status, start_time, end_time FROM cron.job_run_details WHERE jobid = 1 ORDER BY start_time DESC LIMIT 10;` — confirmar últimas ejecuciones exitosas a 00:00 / 01:00 UTC.
-- Confirmar al usuario que el contador visible en `/ruleta` (que ya apunta a 20:00 America/New_York con ajuste DST en el cliente) coincide con el disparo real del backend.
+1. **Extracción**: por cada archivo de la lista, identifico cada string visible (JSX text, `aria-label`, `placeholder`, `title`, `alt`, toasts, mensajes de error). Asigno claves jerárquicas siguiendo el patrón existente, por archivo/sección:
+   - `ruleta.*`, `donate.*`, `shop.*`, `product.*`, `reel.*`, `historial.*`, `trust.*`, `terms.*`, `sweepstakesRules.*`, `unsubscribe.*`, `claim.*`, `fullscreenDraw.*`, `cartDrawer.*`, `dailyWinner.*`, `deliveryCounter.*`, `liveDraw.*`, `prizePool.*`, `tierBadge.*`.
+   - Strings dinámicos con valores usan placeholders i18next: `{{name}}`, `{{count}}`, `{{prize}}`.
+   - Plurales con `t('key', { count })` + variante `_one`/`_other` cuando aplica.
 
-## Lo que NO se toca
+2. **Inserción de claves**: agrego todas las claves nuevas a `src/locales/en/translation.json` (fuente de verdad) bajo los namespaces nuevos, preservando los 380 existentes.
 
-- `process-email-queue` (cron de emails, no relacionado).
-- `src/components/FullscreenDrawExperience.tsx` y `src/routes/ruleta.tsx` — ya están en modo vivo con countdown a 20:00 ET.
-- `run_daily_draw()` — la lógica SQL ya es correcta e idempotente por día ET.
+3. **Traducción automática**: con un script idéntico al que ya usé para fr/it/zh, llamo a Lovable AI Gateway (`google/gemini-2.5-pro`) para generar los 6 idiomas restantes (es, pt, fr, it, zh, fil) **solo de las claves nuevas**, luego merge con los archivos existentes para no perder calidad. Reglas del prompt: preservar keys, placeholders `{{x}}`, HTML, emojis, y dejar marcas (Hazorex, OriGen, AmyraX, Origen) sin traducir.
+
+4. **Refactor de componentes**: por cada archivo, reemplazo strings por `t('key')`, agrego `const { t } = useTranslation()` donde falte, y mantengo `getLocale`/`formatPrice`/`formatDate`/`formatNumber` para fechas y números (ya existen helpers).
+
+5. **Verificación**:
+   - Conteo de claves: cada locale debe tener el mismo conjunto que `en`.
+   - Build TypeScript ok.
+   - Smoke test con Playwright headless: cargo `/ruleta`, cambio a `fr`, verifico que el botón principal y el countdown cambien; cambio a `zh`, mismo check. Recargo y verifico que persista.
+
+## Estrategia por turnos
+
+El cambio es grande (≈26 archivos + ~150-250 claves nuevas). Para no exceder un turno, lo divido así:
+
+- **Turno 1 (este)**: navegación + ruleta + checkout (`FullscreenDrawExperience`, `ruleta`, `ShopifyCartDrawer`, `DailyWinnerBanner`, `DeliveryCounter`, `LiveDrawSection`, `PrizePoolCounter`, `TierBadge`). Es el flujo que estás viendo ahora mismo.
+- **Turno 2**: shop, product, reel, search, historial, donate.
+- **Turno 3**: trust, terms, sweepstakes-rules, unsubscribe, claim, route gate.
+
+Al final de cada turno: traducciones regeneradas para las claves nuevas y verificación.
+
+## Lo que NO toco
+
+- `src/components/ui/*` (primitivas).
+- `admin.*` (interno, no requerido).
+- Estructura de `src/i18n/index.ts`, `LanguageSwitcher`, persistencia. Ya funciona correctamente.
+- Backend / SQL / cron.
