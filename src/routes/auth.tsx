@@ -54,7 +54,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin + redirectTarget,
-            data: { name, region: region.trim().toUpperCase(), terms_accepted: true },
+            data: { name, region: region.trim().toUpperCase(), terms_accepted: true, referral_code: ref ?? null },
           },
         });
         if (error) throw error;
