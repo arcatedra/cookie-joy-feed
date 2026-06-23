@@ -38,6 +38,7 @@ import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/em
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
+import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -194,6 +195,12 @@ const AuthenticatedClaimDrawDateRoute =
     path: '/claim/$drawDate',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminSecurityRoute =
+  AuthenticatedAdminSecurityRouteImport.update({
+    id: '/admin/security',
+    path: '/admin/security',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -279,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -319,6 +327,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -361,6 +370,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -403,6 +413,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/admin/security'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -443,6 +454,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/admin/security'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -484,6 +496,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/_authenticated/admin/security'
     | '/_authenticated/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -744,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClaimDrawDateRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/security': {
+      id: '/_authenticated/admin/security'
+      path: '/admin/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -819,11 +839,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
 }
 
