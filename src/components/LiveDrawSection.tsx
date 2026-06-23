@@ -299,7 +299,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       {/* Roulette + Action (hidden during pre-launch) */}
       {!preLaunch && (
       <div style={{
-        display: "grid", gridTemplateColumns: "minmax(260px, 1fr) minmax(260px, 1fr)",
+        display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
         gap: 24, alignItems: "stretch",
       }}>
         {/* Roulette */}
