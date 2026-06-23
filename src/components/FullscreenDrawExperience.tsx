@@ -67,7 +67,7 @@ export function FullscreenDrawExperience({
     return { a, b, answer: a + b };
   }, [open]);
   const [challengeInput, setChallengeInput] = useState("");
-  const [challengeTime, setChallengeTime] = useState(5);
+  const [challengeTime, setChallengeTime] = useState(20);
   const [challengeStatus, setChallengeStatus] = useState<"idle" | "ok" | "fail">("idle");
 
   const apiPromiseRef = useRef<Promise<ApiResult> | null>(null);
@@ -91,7 +91,7 @@ export function FullscreenDrawExperience({
     setWinner(null);
     setErrorMsg(null);
     setChallengeInput("");
-    setChallengeTime(5);
+    setChallengeTime(20);
     setChallengeStatus("idle");
 
     // Fire API in parallel with countdown
