@@ -1,29 +1,493 @@
 {
   "common": {
     "back": "Indietro",
+    "errorOccurred": "Qualcosa è andato storto. Riprova.",
     "search": "Cerca",
-    "addToCart": "Aggiungi al carrello",
-    "viewCart": "Vedi carrello",
-    "loading": "Caricamento…",
+    "addToCart": "Aggiungi al Carrello",
+    "updateCart": "Aggiorna Carrello",
+    "viewCart": "Visualizza carrello",
+    "add": "Aggiungi",
+    "remove": "Rimuovi",
+    "selected": "Selezionato",
+    "signUp": "Iscriviti",
+    "goHome": "Torna alla home",
     "tryAgain": "Riprova",
-    "goHome": "Home"
-  },
-  "language": {
-    "switchTo": "Cambia lingua"
-  },
-  "topnav": {
-    "cart": "Carrello",
-    "all": "Tutto",
-    "searchPlaceholder": "Cerca su Hazorex",
-    "deliverTo": "Consegna a",
-    "updateLocation": "Aggiorna posizione",
-    "accountLists": "Account e liste",
-    "helloSignIn": "Ciao, accedi",
-    "returns": "Resi",
-    "andOrders": "e ordini"
+    "seeAll": "Vedi tutti",
+    "viewMore": "Vedi altro",
+    "comingSoon": "Prossimamente",
+    "reviews": "recensioni",
+    "notifications": "Notifiche",
+    "markRead": "Segna tutti come letti",
+    "settings": "Impostazioni",
+    "loading": "Caricamento…"
   },
   "auth": {
+    "signInTitle": "Accedi",
+    "signUpTitle": "Crea account",
+    "subtitle": "Metti mi piace ai reel, commenta e valuta i biscotti.",
+    "google": "Continua con Google",
+    "or": "o",
+    "email": "Email",
+    "password": "Password",
+    "name": "Il tuo nome",
     "signIn": "Accedi",
-    "signOut": "Esci"
+    "signUp": "Crea account",
+    "signOut": "Esci",
+    "signedOut": "Disconnesso",
+    "noAccount": "Non hai un account? Creane uno",
+    "haveAccount": "Hai già un account? Accedi",
+    "checkEmail": "Controlla la tua email per confermare l'account"
+  },
+  "reels": {
+    "writeComment": "Scrivi un commento…",
+    "send": "Invia",
+    "noComments": "Ancora nessun commento. Sii il primo!",
+    "signInToLike": "Accedi per mettere mi piace",
+    "signInToComment": "Accedi per commentare",
+    "anonymous": "Utente",
+    "reel1": "Doppio piacere al cioccolato",
+    "reel2": "Appena sfornato!",
+    "reel3": "Bontà impastata",
+    "reel4": "Magia avena e uvetta",
+    "reel5": "Paradiso al burro d'arachidi",
+    "reel6": "Croccantezza menta e cioccolato",
+    "items": {
+      "pista": {
+        "title": "Pistacchio incontra cioccolato bianco 💚✨",
+        "product": "Pistacchio e Cioccolato Bianco"
+      },
+      "triple": {
+        "title": "Scioglievolezza triplo cioccolato fondente 🍫",
+        "product": "Triplo Cioccolato Fondente"
+      },
+      "snicker": {
+        "title": "Magia di cannella e zucchero 🌟",
+        "product": "Snickerdoodle Classico"
+      },
+      "oatmeal": {
+        "title": "Avena e uvetta accoglienti 🍂",
+        "product": "Avena e Uvetta alla Cannella"
+      },
+      "cchunk": {
+        "title": "Doppi pezzi di cioccolato 🤎",
+        "product": "Doppi Pezzi di Cioccolato"
+      },
+      "mint": {
+        "title": "Rinfrescante menta scura 🌿",
+        "product": "Cioccolato Fondente alla Menta"
+      },
+      "mm": {
+        "title": "M&M croccanti e colorati 🎉",
+        "product": "M&M Festivi"
+      }
+    }
+  },
+  "topnav": {
+    "deliverTo": "Consegna a",
+    "updateLocation": "Brooklyn — Aggiorna località",
+    "searchPlaceholder": "Cerca biscotti, confezioni, regali…",
+    "suggestions": "Suggerimenti",
+    "helloSignIn": "Ciao, accedi",
+    "helloUser": "Ciao, {{name}}",
+    "accountLists": "Account e Liste",
+    "signInPrompt": "Accedi per consigli personalizzati",
+    "returns": "Resi",
+    "andOrders": "e Ordini",
+    "cart": "Carrello",
+    "all": "Tutto",
+    "openMenu": "Apri menu",
+    "groups": {
+      "shop": "Acquista biscotti",
+      "discover": "Scopri",
+      "account": "Aiuto e impostazioni"
+    },
+    "cats": {
+      "all": "Tutti i biscotti",
+      "allCookies": "Tutti i biscotti",
+      "filled": "Linea ripiena",
+      "healthy": "Sano / Fit",
+      "giftBoxes": "Confezioni regalo",
+      "vegan": "Vegani",
+      "brownies": "Brownies",
+      "bestSellers": "Bestseller",
+      "deals": "Offerte del giorno",
+      "buildPack": "Crea la tua confezione",
+      "subscriptions": "Abbonamenti biscotti",
+      "yourAccount": "Il tuo account",
+      "ordersReturns": "Resi e ordini",
+      "cart": "Il tuo carrello",
+      "signIn": "Accedi"
+    },
+    "links": {
+      "deals": "Offerte del Giorno",
+      "bestSellers": "Bestseller",
+      "buildPack": "Crea un Pacchetto",
+      "support": "Servizio Clienti",
+      "subscriptions": "Abbonamenti Biscotti"
+    }
+  },
+  "ratings": {
+    "yourRating": "La tua valutazione",
+    "writeReview": "Recensione opzionale per {{product}}",
+    "save": "Salva",
+    "thanks": "Grazie per la tua valutazione!",
+    "signInToRate": "Accedi per votare"
+  },
+  "language": {
+    "switchTo": "Cambia lingua",
+    "english": "Inglese",
+    "spanish": "Spagnolo"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Esplora",
+    "subscribe": "Abbonati",
+    "profile": "Profilo"
+  },
+  "errors": {
+    "pageNotFoundTitle": "Pagina non trovata",
+    "pageNotFoundDesc": "La pagina che stai cercando non esiste o è stata spostata.",
+    "didNotLoadTitle": "Questa pagina non è stata caricata",
+    "didNotLoadDesc": "Qualcosa è andato storto da parte nostra. Puoi provare ad aggiornare o tornare alla home."
+  },
+  "home": {
+    "metaTitle": "AMYRAX — Biscotti Gourmet, Consegnati Mensilmente",
+    "metaDesc": "Scopri i biscotti gourmet artigianali e unisciti all'abbonamento mensile AMYRAX per delizie appena sfornate a casa tua.",
+    "welcome": "Bentornato",
+    "greeting": "Buongiorno, {{name}}!",
+    "freshToday": "Nuove sfornate oggi",
+    "searchPlaceholder": "Cerca biscotti, gusti, scatole…",
+    "reels": "Reel",
+    "trending": "Di tendenza",
+    "categories": "Categorie in evidenza",
+    "cookiePacks": "Confezioni di biscotti",
+    "subscriptionEyebrow": "Scatola mensile",
+    "subscriptionHeadline": "12 biscotti freschi, consegnati a casa tua.",
+    "subscriptionSubcopy": "Annulla in qualsiasi momento · Spedizione gratuita",
+    "startSubscription": "Inizia l'abbonamento",
+    "promoTitle": "Pronto a provare qualcosa di nuovo?",
+    "promoSubtitle": "Scopri le nostre edizioni limitate e i preferiti del mese.",
+    "promoCta": "Vedi il menu completo",
+    "cards": {
+      "bestSellersTitle": "Bestseller",
+      "bestSellersLink": "Vedi altro",
+      "buildPackTitle": "Componi il tuo pacchetto personalizzato",
+      "buildPackLink": "Visualizza opzioni",
+      "buildPackCta": "Inizia a comporre",
+      "buildPackAlt": "Scatola di biscotti personalizzata",
+      "subscriptionTitle": "Abbonamento Mensile",
+      "subscriptionLink": "Scopri il club",
+      "subscriptionClub": "AMYRAX CLUB",
+      "subscriptionHeadline": "Consegne settimanali di biscotti appena sfornati",
+      "subscriptionSubcopy": "Annulla in qualsiasi momento · Spedizione inclusa",
+      "subscriptionPrice": "Da $24/mese",
+      "flashTitle": "Offerte Lampo",
+      "flashLink": "Vedi tutte le offerte",
+      "flashProduct": "Confezione assortita da 9 biscotti",
+      "flashAlt": "Confezione da 9 biscotti",
+      "flashClaimed": "Reclamati: {{pct}}%",
+      "flashEndsIn": "Termina tra {{time}}",
+      "best": {
+        "classic": "Classico",
+        "redVelvet": "Red Velvet",
+        "tripleChoc": "Triplo Cioccolato",
+        "oatRaisin": "Avena e Uvetta"
+      }
+    }
+  },
+  "categories": {
+    "cookies": "Biscotti",
+    "brownies": "Brownies",
+    "boxes": "Scatole Assortite",
+    "vegan": "Vegano",
+    "gifts": "Cesti Regalo"
+  },
+  "_reelsLegacy": {},
+  "explore": {
+    "metaTitle": "Sfoglia i Biscotti — AMYRAX",
+    "metaDesc": "Esplora la nostra gamma completa di biscotti gourmet artigianali su AMYRAX.",
+    "title": "Sfoglia i Biscotti",
+    "sort": "Ordina",
+    "price": "Prezzo"
+  },
+  "menu": {
+    "metaTitle": "Menu — AMYRAX",
+    "metaDesc": "Sfoglia i nostri biscotti classici.",
+    "title": "Biscotti",
+    "tabs": {
+      "classic": "Biscotti Classici",
+      "packs": "Confezioni",
+      "deluxe": "Biscotti Deluxe"
+    },
+    "allCategories": "Tutte le categorie",
+    "cookies": "Biscotti",
+    "serves": "Porzioni",
+    "calPerCookie": "Cal / biscotto",
+    "ingredients": "Ingredienti",
+    "allergens": "Allergeni",
+    "prevPack": "Pacchetto precedente",
+    "nextPack": "Pacchetto successivo",
+    "goToPack": "Vai al pacchetto {{n}}",
+    "viewDetails": "Visualizza dettagli di {{name}}",
+    "detailOf": "Dettaglio di {{name}}"
+  },
+  "cookies": {
+    "c1": {
+      "name": "Pezzi di Cioccolato",
+      "desc": "Un ricco biscotto al burro e vaniglia arricchito con pezzi di cioccolato semi-dolce.",
+      "caption": "Vaniglia burrosa con pezzi semi-dolci"
+    },
+    "c2": {
+      "name": "Snickerdoodle",
+      "desc": "Rimani sul classico con il nostro Snickerdoodle. Un biscotto caldo e morbido rotolato nello zucchero alla cannella.",
+      "caption": "Morbida, calda cannella zuccherata"
+    },
+    "c3": {
+      "name": "Zucchero",
+      "desc": "Semplicemente il miglior biscotto al burro e zucchero che si scioglie in bocca che tu abbia mai assaggiato.",
+      "caption": "Burroso e dolce che si scioglie in bocca"
+    },
+    "c4": {
+      "name": "Doppio Cioccolato con Pezzi",
+      "desc": "Il nostro biscotto al cioccolato fondente ricco di pezzi di cioccolato. Per veri amanti del cioccolato.",
+      "caption": "Cacao fondente ricco di pezzi"
+    },
+    "c5": {
+      "name": "Avena e Uvetta",
+      "desc": "Una delizia che è come un abbraccio per l'anima. Fiocchi d'avena caldi e uvette succose in ogni morso.",
+      "caption": "Fiocchi d'avena caldi e uvette succose"
+    },
+    "c6": {
+      "name": "Cioccolato Bianco e Macadamia",
+      "desc": "Questo snack funziona a ritmo isolano. Un biscotto al cocco e burro con cioccolato bianco e noci di macadamia.",
+      "caption": "Burroso al cocco, atmosfera tropicale"
+    },
+    "c7": {
+      "name": "Classico con M&M'S®",
+      "desc": "Questa colorata variante ricoperta di caramelle del nostro classico biscotto con gocce di cioccolato è una dolce sorpresa.",
+      "caption": "Variante al cioccolato rivestita di caramelle"
+    },
+    "c8": {
+      "name": "Gocce di Burro d'Arachidi",
+      "desc": "Gocce di burro d'arachidi mescolate in un biscotto morbido e dolce alla vaniglia. Un paradiso di noci.",
+      "caption": "Morbida vaniglia, gocce di burro d'arachidi"
+    },
+    "c9": {
+      "name": "Vegano con Pezzi di Cioccolato",
+      "desc": "Un biscotto vegano che scalda l'anima con tantissimi pezzi di cioccolato senza latticini.",
+      "caption": "Pezzi di cioccolato senza latticini"
+    },
+    "c10": {
+      "name": "Doppio Cioccolato alla Menta",
+      "desc": "La nostra versione di una combinazione di sapori preferita. Un biscotto caldo al cioccolato con gocce di menta fresca.",
+      "caption": "Cioccolato caldo con menta fresca"
+    }
+  },
+  "packs": {
+    "p6": {
+      "name": "Confezione da 6",
+      "desc": "Regalati 6 prelibatezze calde e deliziose in una sola confezione.",
+      "serves": "3-6 persone"
+    },
+    "p9": {
+      "name": "Confezione da 9",
+      "desc": "Il punto giusto di soddisfazione. Seleziona 9 dei tuoi biscotti preferiti.",
+      "serves": "5-9 persone"
+    },
+    "p12": {
+      "name": "Confezione da 12",
+      "desc": "Quello che intendono REALMENTE quando dicono di portare abbastanza per tutti.",
+      "serves": "6-12 persone"
+    },
+    "ingredients": "Farina di frumento arricchita, burro, zucchero di canna, zucchero di canna scuro, uova, pezzi di cioccolato semi-dolce, estratto di vaniglia, bicarbonato di sodio, sale marino.",
+    "allergens": "Contiene grano, latticini, uova, soia. Può contenere tracce di frutta a guscio e arachidi."
+  },
+  "tags": {
+    "treeNuts": "FRUTTA A GUSCIO",
+    "peanuts": "ARACHIDI"
+  },
+  "subscribe": {
+    "metaTitle": "Piani di Abbonamento — AMYRAX",
+    "metaDesc": "Scegli il tuo piano di abbonamento ai biscotti AMYRAX. Consegne solo il lunedì e il venerdì.",
+    "title": "Piani di Abbonamento",
+    "deliveryBadge": "Consegna Solo Lunedì e Venerdì",
+    "activePlan": "Piano Attivo",
+    "remaining": "Rimanenti",
+    "scheduledCount": "{{used}} di {{total}} consegne programmate questo mese",
+    "choosePlan": "Scegli il tuo piano",
+    "mostPopular": "Più Popolare",
+    "perMonth": "/ mese",
+    "schedule": "Programma le Consegne",
+    "scheduleHint": "Solo lunedì e venerdì sono selezionabili.",
+    "prevMonth": "Mese precedente",
+    "nextMonth": "Mese successivo",
+    "yourDeliveries": "Le tue consegne",
+    "usedAll": "Hai utilizzato tutte le {{count}} consegne previste da questo piano. Effettua l'upgrade per aggiungerne altre.",
+    "footnote": "*Disponibile SOLO il LUNEDÌ e il VENERDÌ",
+    "removeDate": "Rimuovi {{date}}",
+    "tiers": {
+      "starter": {
+        "title": "Piano Starter",
+        "cadence": "2 CONSEGNE / MESE",
+        "desc": "Perfetto per l'essenziale. Programma fino a 2 consegne al mese a tua scelta tra lunedì o venerdì."
+      },
+      "essential": {
+        "title": "Piano Essential",
+        "cadence": "4 CONSEGNE / MESE",
+        "desc": "La nostra scelta più popolare. Goditi fino a 4 consegne al mese. Programmazione flessibile: usale settimanalmente, bisettimanalmente o come si adatta alla tua routine."
+      },
+      "intermediate": {
+        "cadence": "6 CONSEGNE / MESE",
+        "desc": "Flessibilità extra per le famiglie attive. Ottieni fino a 6 consegne al mese programmate il lunedì o il venerdì.",
+        "title": "Piano Intermedio"
+      },
+      "premium": {
+        "title": "Piano Premium",
+        "cadence": "8 CONSEGNE / MESE",
+        "desc": "Copertura mensile completa. Massima comodità con fino a 8 consegne al mese (due volte a settimana il lunedì e il venerdì)."
+      }
+    }
+  },
+  "profile": {
+    "metaTitle": "Il mio Profilo — AMYRAX",
+    "metaDesc": "Gestisci il tuo account, ordini e abbonamento AMYRAX.",
+    "title": "Il mio Profilo",
+    "settings": "Impostazioni",
+    "city": "New York",
+    "joined": "Iscritto: Luglio 2024",
+    "orders": "Ordini",
+    "favorites": "Preferiti",
+    "level": "Livello",
+    "cookieFan": "Fan dei Biscotti",
+    "currentPlan": "Piano Attivo",
+    "enthusiast": "Piano Appassionato",
+    "active": "Attivo",
+    "recentOrders": "Ordini Recenti",
+    "order": "Ordine #{{id}}",
+    "orderItems": "Biscotto classico con gocce di cioccolato · 1 articolo",
+    "account": "Account",
+    "menu": {
+      "favorites": "Preferiti",
+      "payment": "Metodi di Pagamento",
+      "general": "Impostazioni Generali",
+      "help": "Aiuto e Supporto"
+    },
+    "qr": {
+      "title": "Il tuo Codice QR",
+      "description": "Scansiona per visitare il negozio AMYRAX direttamente da qualsiasi dispositivo.",
+      "download": "Scarica QR",
+      "copyLink": "Copia link",
+      "downloaded": "QR scaricato",
+      "downloadError": "Impossibile scaricare QR",
+      "copied": "Link copiato negli appunti",
+      "copyError": "Impossibile copiare il link"
+    }
+  },
+  "cart": {
+    "title": "Il tuo Carrello",
+    "checkout": "Vai al Checkout",
+    "empty": "Il tuo carrello è vuoto",
+    "emptyDesc": "Aggiungi deliziosi biscotti per iniziare.",
+    "browseMenu": "Sfoglia il menu",
+    "subtotal": "Subtotale",
+    "shipping": "Spedizione",
+    "free": "Gratuita",
+    "total": "Totale",
+    "proceedCheckout": "Procedi al checkout",
+    "payMethod": "Metodo di pagamento",
+    "orderSummary": "Riepilogo ordine",
+    "items": "{{count}} articoli",
+    "payNow": "Paga ora",
+    "processing": "Elaborazione…",
+    "fastSecure": "Veloce e sicuro",
+    "demoNote": "Checkout demo — nessun addebito effettivo verrà effettuato.",
+    "orderConfirmed": "Ordine confermato",
+    "thanks": "Grazie!",
+    "thanksDesc": "I tuoi biscotti sono in arrivo. Ti è stata inviata una conferma.",
+    "backHome": "Torna alla home"
+  },
+  "subscribeGate": {
+    "dialogTitle": "Abbonati per attivare le tue consegne e fare acquisti",
+    "dialogDesc": "Gli acquisti e le consegne sono disponibili solo per i membri abbonati.",
+    "freeShipping": "Consegna GRATUITA ($0) inclusa in ogni piano!",
+    "viewPlans": "Visualizza piani di abbonamento",
+    "signInAndSubscribe": "Accedi e abbonati",
+    "keepBrowsing": "Continua a navigare",
+    "bannerEyebrow": "Diventa un membro",
+    "bannerTitle": "Abbonati per attivare le tue consegne",
+    "bannerSubcopy": "Consegna GRATUITA ($0) inclusa in ogni piano!",
+    "bannerCta": "Visualizza piani",
+    "cartWarning": "Hai bisogno di un abbonamento attivo per effettuare il checkout.",
+    "cartCta": "Abbonati per acquistare",
+    "cartProcessing": "Elaborazione…",
+    "cartConfirm": "Conferma e paga l'ordine",
+    "cartTerms": "Confermando l'ordine, accetti i termini di servizio del negozio.",
+    "noActive": "Non hai un abbonamento attivo. Abbonati per iniziare a programmare le consegne.",
+    "scheduled": "Consegna programmata",
+    "canceled": "Consegna annullata"
+  },
+  "checkout": {
+    "secure": "Checkout Sicuro",
+    "miniLabel": "Checkout",
+    "title": "Checkout Sicuro",
+    "viewCart": "Visualizza il mio carrello",
+    "shippingAddress": "Indirizzo di Spedizione",
+    "fullName": "Nome completo",
+    "street": "Via",
+    "apt": "Appartamento / Unità",
+    "city": "Città",
+    "zip": "Codice postale",
+    "phone": "Telefono",
+    "makeDefault": "Imposta come indirizzo predefinito",
+    "addressRequired": "Devi completare il tuo indirizzo (nome, via, città, CAP e telefono) per poter acquistare.",
+    "useAddress": "Usa questo indirizzo",
+    "paymentMethod": "Metodo di Pagamento",
+    "cardOption": "Carta di Credito / Debito",
+    "cardLast4": "Carta •••• {{last4}}",
+    "cardNumber": "Numero di carta",
+    "expiry": "Scadenza (MM/AA)",
+    "cvv": "CVV",
+    "walletOption": "PayPal / Apple Pay",
+    "fast": "VELOCE",
+    "continueBtn": "Continua",
+    "reviewLogistics": "Revisione e Spedizione",
+    "each": "ciascuno",
+    "decrease": "Diminuisci",
+    "increase": "Aumenta",
+    "remove": "Rimuovi",
+    "shippingType": "Tipo di spedizione",
+    "standardShipping": "Spedizione Standard",
+    "standardSub": "Arriva in 3 giorni",
+    "free": "GRATUITA",
+    "backToPayment": "Torna al pagamento",
+    "addAddressToBuy": "Aggiungi il tuo indirizzo per acquistare",
+    "orderSummary": "Riepilogo Ordine",
+    "productsCount": "Prodotti",
+    "shippingHandling": "Spedizione e gestione",
+    "taxes": "Tasse stimate",
+    "orderTotal": "Totale Ordine:",
+    "secureEncrypted": "Pagamento 100% sicuro e criptato",
+    "emptyTitle": "Il tuo carrello è vuoto",
+    "emptyDesc": "Aggiungi biscotti per iniziare il checkout.",
+    "exploreCookies": "Sfoglia i biscotti",
+    "orderConfirmed": "Ordine Confermato!",
+    "bakingMsg": "I tuoi biscotti sono in preparazione e in arrivo.",
+    "trackingNumber": "Numero di tracciamento",
+    "backToStore": "Torna al negozio"
+  },
+  "domains": {
+    "title": "Ricerca Dominio",
+    "subtitle": "Trova un dominio disponibile. Verifichiamo la disponibilità in tempo reale e suggeriamo alternative simili.",
+    "placeholder": "Digita un nome (es. mahanaix)",
+    "search": "Cerca",
+    "mainResults": "Risultati per \"{{base}}\"",
+    "similarAlternatives": "Alternative simili",
+    "checking": "Verifica…",
+    "available": "Disponibile",
+    "taken": "Registrato",
+    "takenBy": "Registrato ({{registrar}})",
+    "unknown": "Stato sconosciuto",
+    "buy": "Acquista",
+    "priceDisclaimer": "I prezzi sono stime del costo di registrazione per il primo anno in USD presso registratori comuni e possono variare. * prezzo promozionale per il primo anno."
   }
 }
