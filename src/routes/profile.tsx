@@ -246,6 +246,65 @@ function TermsBadge({ userId }: { userId: string | null }) {
   );
 }
 
+function RecentOrders({ userId, lang, t }: { userId: string | null; lang: string; t: (k: string, opts?: Record<string, unknown>) => string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["profile-recent-orders", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("star_purchases")
+        .select("id, package_id, tokens, amount_usd, created_at, status")
+        .eq("subject_user_id", userId!)
+        .in("status", ["paid", "completed", "succeeded"])
+        .order("created_at", { ascending: false })
+        .limit(3);
+      return data ?? [];
+    },
+  });
+
+  return (
+    <section className="mt-6 px-5">
+      <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+        {t("profile.recentOrders")}
+      </h3>
+      <div className="mt-3 space-y-2">
+        {isLoading ? (
+          <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
+            <p className="text-xs text-muted-foreground">…</p>
+          </div>
+        ) : !data || data.length === 0 ? (
+          <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border text-center">
+            <p className="text-sm text-muted-foreground">Aún no tienes pedidos. ¡Haz tu primera compra para verla aquí!</p>
+          </div>
+        ) : (
+          data.map((order) => {
+            const shortId = order.id.slice(0, 6).toUpperCase();
+            const date = formatDate(new Date(order.created_at), { year: "numeric", month: "short", day: "numeric" }, lang);
+            return (
+              <div key={order.id} className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-cream">
+                      <Cookie className="h-5 w-5 text-brown" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-foreground">{t("profile.order", { id: shortId })}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {order.tokens} ⭐ · ${Number(order.amount_usd).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted-foreground">{date}</span>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </section>
+  );
+}
+
 function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string; t: (k: string) => string }) {
   const { data } = useQuery({
     queryKey: ["profile-stats", userId],
