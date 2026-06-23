@@ -1816,10 +1816,7 @@ function CommentsPanel({ reelId, onClose }: { reelId: string; onClose: () => voi
       const ids = Array.from(new Set(rows.map((r) => r.user_id)));
       const names: Record<string, string> = {};
       if (ids.length) {
-        const { data: profs } = await supabase
-          .from("profiles")
-          .select("id, display_name")
-          .in("id", ids);
+        const { data: profs } = await supabase.rpc("get_public_profiles", { ids });
         (profs ?? []).forEach((p: { id: string; display_name: string | null }) => {
           names[p.id] = p.display_name ?? "Anónimo";
         });
