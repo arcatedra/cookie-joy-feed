@@ -19,6 +19,10 @@ function signEmail(email: string): string {
   return `${norm}|${sig}`;
 }
 
+function hashEmail(email: string): string {
+  return createHmac("sha256", getSecret()).update(email.trim().toLowerCase()).digest("hex");
+}
+
 function verifyGuestCookie(): string | null {
   const raw = getCookie(GUEST_COOKIE);
   if (!raw) return null;
@@ -155,7 +159,7 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
       : sb
           .from("spin_history")
           .select("prize_label, created_at, coupon_code")
-          .ilike("guest_email", subject.email)
+          .eq("guest_email_hash", hashEmail(subject.email))
           .order("created_at", { ascending: false })
           .limit(5);
 
@@ -392,7 +396,7 @@ export const spin = createServerFn({ method: "POST" }).handler(async () => {
   }
   const insert = {
     user_id: subject.kind === "user" ? subject.userId : null,
-    guest_email: subject.kind === "guest" ? subject.email : null,
+    guest_email_hash: subject.kind === "guest" ? hashEmail(subject.email) : null,
     prize_key: prize.key,
     prize_label: prize.label,
     coupon_code: couponCode,

@@ -801,7 +801,7 @@ export type Database = {
         Row: {
           coupon_code: string | null
           created_at: string
-          guest_email: string | null
+          guest_email_hash: string | null
           id: string
           prize_key: string
           prize_label: string
@@ -811,7 +811,7 @@ export type Database = {
         Insert: {
           coupon_code?: string | null
           created_at?: string
-          guest_email?: string | null
+          guest_email_hash?: string | null
           id?: string
           prize_key: string
           prize_label: string
@@ -821,7 +821,7 @@ export type Database = {
         Update: {
           coupon_code?: string | null
           created_at?: string
-          guest_email?: string | null
+          guest_email_hash?: string | null
           id?: string
           prize_key?: string
           prize_label?: string
