@@ -1238,6 +1238,13 @@ export type Database = {
           total_pool_usd: number
         }[]
       }
+      get_public_profiles: {
+        Args: { ids: string[] }
+        Returns: {
+          display_name: string
+          id: string
+        }[]
+      }
       get_recent_test_winners: {
         Args: { p_limit?: number }
         Returns: {
