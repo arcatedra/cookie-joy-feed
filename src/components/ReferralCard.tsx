@@ -188,7 +188,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
         {/* QR */}
         <div className="mt-5 flex flex-col items-center px-6">
           <div className="rounded-2xl bg-white p-4 shadow-lg">
-            {isLoading || !referralCode ? (
+            {isLoading ? (
               <div className="h-[200px] w-[200px] animate-pulse rounded bg-muted" />
             ) : (
               <QRCodeSVG
