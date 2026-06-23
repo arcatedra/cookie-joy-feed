@@ -14,6 +14,7 @@ import { Route as TrustRouteImport } from './routes/trust'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RuletaRouteImport } from './routes/ruleta'
@@ -65,6 +66,11 @@ const SweepstakesRulesRoute = SweepstakesRulesRouteImport.update({
 const SubscribeRoute = SubscribeRouteImport.update({
   id: '/subscribe',
   path: '/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -221,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terms': typeof TermsRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terms': typeof TermsRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terms': typeof TermsRoute
@@ -324,6 +333,7 @@ export interface FileRouteTypes {
     | '/ruleta'
     | '/search'
     | '/shop'
+    | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
     | '/terms'
@@ -357,6 +367,7 @@ export interface FileRouteTypes {
     | '/ruleta'
     | '/search'
     | '/shop'
+    | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
     | '/terms'
@@ -391,6 +402,7 @@ export interface FileRouteTypes {
     | '/ruleta'
     | '/search'
     | '/shop'
+    | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
     | '/terms'
@@ -426,6 +438,7 @@ export interface RootRouteChildren {
   RuletaRoute: typeof RuletaRoute
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
   TermsRoute: typeof TermsRoute
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       path: '/subscribe'
       fullPath: '/subscribe'
       preLoaderRoute: typeof SubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -701,6 +721,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuletaRoute: RuletaRoute,
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   SweepstakesRulesRoute: SweepstakesRulesRoute,
   TermsRoute: TermsRoute,
@@ -722,13 +743,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
