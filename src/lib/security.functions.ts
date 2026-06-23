@@ -29,7 +29,10 @@ export const getCronStatus = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await requireAdmin(context)
-    const { data, error } = await context.supabase.rpc('cron_status')
+    // Use service-role client: RPC is no longer exposed to `authenticated`
+    // (linter 0029). Admin gate above already verified the caller.
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const { data, error } = await supabaseAdmin.rpc('cron_status')
     if (error) throw new Error(error.message)
     return data ?? []
   })
@@ -38,7 +41,8 @@ export const getSoftDeleted = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await requireAdmin(context)
-    const { data, error } = await context.supabase.rpc('list_soft_deleted', { p_limit: 200 })
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const { data, error } = await supabaseAdmin.rpc('list_soft_deleted', { p_limit: 200 })
     if (error) throw new Error(error.message)
     return data ?? []
   })
@@ -55,13 +59,15 @@ export const restoreSoftDeleted = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data, context }) => {
     await requireAdmin(context)
-    const { data: ok, error } = await context.supabase.rpc('restore_row', {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server')
+    const { data: ok, error } = await supabaseAdmin.rpc('restore_row', {
       p_table: data.table,
       p_id: data.id,
     })
     if (error) throw new Error(error.message)
     return { restored: Boolean(ok) }
   })
+
 
 export const getBackupInventory = createServerFn({ method: 'POST' })
   .middleware([requireSupabaseAuth])

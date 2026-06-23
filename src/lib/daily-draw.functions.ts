@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest, getCookie } from "@tanstack/react-start/server";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { verifyGuestCookie } from "./guest-cookie.server";
 
 async function resolveSubject(): Promise<
   | { kind: "user"; userId: string; email: string | null }
@@ -30,13 +31,12 @@ async function resolveSubject(): Promise<
       }
     }
   } catch {/* ignore */}
-  const raw = getCookie("origen_guest");
-  if (raw) {
-    const email = raw.split("|")[0];
-    if (email) return { kind: "guest", email };
-  }
+  // HMAC-verified guest cookie — rejects forged emails. See guest-cookie.server.ts
+  const email = verifyGuestCookie();
+  if (email) return { kind: "guest", email };
   return null;
 }
+
 
 export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () => {
   const { createClient } = await import("@supabase/supabase-js");

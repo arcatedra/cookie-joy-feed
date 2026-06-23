@@ -152,8 +152,6 @@ export type Database = {
           tickets_total: number
           updated_at: string
           winner_display_name: string | null
-          winner_subject_email: string | null
-          winner_subject_user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -169,8 +167,6 @@ export type Database = {
           tickets_total?: number
           updated_at?: string
           winner_display_name?: string | null
-          winner_subject_email?: string | null
-          winner_subject_user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -186,8 +182,6 @@ export type Database = {
           tickets_total?: number
           updated_at?: string
           winner_display_name?: string | null
-          winner_subject_email?: string | null
-          winner_subject_user_id?: string | null
         }
         Relationships: []
       }
@@ -1293,8 +1287,6 @@ export type Database = {
           tickets_total: number
           updated_at: string
           winner_display_name: string | null
-          winner_subject_email: string | null
-          winner_subject_user_id: string | null
         }
         SetofOptions: {
           from: "*"
