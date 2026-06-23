@@ -41,6 +41,7 @@ import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lova
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
@@ -207,6 +208,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksTestDrawTickRoute =
+  ApiPublicHooksTestDrawTickRouteImport.update({
+    id: '/api/public/hooks/test-draw-tick',
+    path: '/api/public/hooks/test-draw-tick',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksRunDailyDrawRoute =
   ApiPublicHooksRunDailyDrawRouteImport.update({
     id: '/api/public/hooks/run-daily-draw',
@@ -243,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -277,6 +285,7 @@ export interface FileRoutesByTo {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -313,6 +322,7 @@ export interface FileRoutesById {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -383,6 +394,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -418,6 +430,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
@@ -452,6 +465,7 @@ export interface RootRouteChildren {
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
+  ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -684,6 +698,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/test-draw-tick': {
+      id: '/api/public/hooks/test-draw-tick'
+      path: '/api/public/hooks/test-draw-tick'
+      fullPath: '/api/public/hooks/test-draw-tick'
+      preLoaderRoute: typeof ApiPublicHooksTestDrawTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/run-daily-draw': {
       id: '/api/public/hooks/run-daily-draw'
       path: '/api/public/hooks/run-daily-draw'
@@ -735,6 +756,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
+  ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
