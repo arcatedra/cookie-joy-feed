@@ -194,8 +194,7 @@ function RulesPage() {
           sponsor: sponsorName,
         })}
       </p>
-      {/* Suppress unused-import warning when Trans isn't used */}
-      {false && <Trans i18nKey="" />}
     </main>
   );
 }
+
