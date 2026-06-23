@@ -22,19 +22,28 @@ export function ProductRating({ productId, productName, size = "md" }: ProductRa
   const [showReview, setShowReview] = useState(false);
 
   const ratingsQ = useQuery({
-    queryKey: ["product-rating", productId],
+    queryKey: ["product-rating", productId, user?.id ?? "anon"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("product_ratings")
-        .select("stars, user_id")
-        .eq("product_id", productId);
-      if (error) throw error;
-      const rows = data ?? [];
-      const avg = rows.length ? rows.reduce((s, r) => s + r.stars, 0) / rows.length : 0;
-      const my = user ? rows.find((r) => r.user_id === user.id)?.stars ?? 0 : 0;
-      return { avg, count: rows.length, my };
+      const summaryP = supabase.rpc("get_product_rating_summary", { p_product_id: productId });
+      const myP = user
+        ? supabase
+            .from("product_ratings")
+            .select("stars")
+            .eq("product_id", productId)
+            .eq("user_id", user.id)
+            .maybeSingle()
+        : Promise.resolve({ data: null, error: null });
+      const [summary, mine] = await Promise.all([summaryP, myP]);
+      if (summary.error) throw summary.error;
+      const row = (summary.data ?? [])[0] ?? { avg: 0, count: 0 };
+      return {
+        avg: Number(row.avg ?? 0),
+        count: Number(row.count ?? 0),
+        my: (mine as { data: { stars: number } | null }).data?.stars ?? 0,
+      };
     },
   });
+
 
   const rate = useMutation({
     mutationFn: async ({ stars, reviewText }: { stars: number; reviewText?: string }) => {
