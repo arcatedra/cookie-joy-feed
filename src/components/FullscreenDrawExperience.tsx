@@ -102,7 +102,7 @@ export function FullscreenDrawExperience({
           "Content-Type": "application/json",
           apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
-        body: JSON.stringify({ test_mode: true }),
+        body: JSON.stringify({}),
       });
       const text = await res.text();
       if (!res.ok) throw new Error(`${res.status} → ${text.slice(0, 200)}`);
