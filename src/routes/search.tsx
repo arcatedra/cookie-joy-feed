@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Filter, Star, ShoppingCart, X } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
@@ -16,12 +17,13 @@ import imgMint from "@/assets/ins-mint.jpg";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
-      { title: "Search results — AMYRAX Cookies" },
-      { name: "description", content: "Find your favorite artisan cookies." },
+      { title: i18n.t("searchPage.metaTitle") },
+      { name: "description", content: i18n.t("searchPage.metaDesc") },
     ],
   }),
   component: SearchPage,
@@ -60,25 +62,13 @@ const PRODUCTS: Product[] = [
   { id: "p13", name: "Pack of 12", image: imgPack12, price: 42, rating: 4.9, reviews: 1620, category: "gift", allergens: ["belgian"], badge: "deal", expressShipping: false, deliveryDate: "Wed, Jun 11" },
 ];
 
-const CATS: { key: "all" | Category; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "traditional", label: "Traditional" },
-  { key: "filled", label: "Filled / Explosive" },
-  { key: "healthy", label: "Healthy (Keto/Vegan)" },
-  { key: "gift", label: "Gift Boxes" },
-];
+const CAT_KEYS: ("all" | Category)[] = ["all", "traditional", "filled", "healthy", "gift"];
+const ALLERGEN_KEYS: Allergen[] = ["glutenFree", "noSugar", "nuts", "belgian"];
 
-const ALLERGENS: { key: Allergen; label: string }[] = [
-  { key: "glutenFree", label: "Gluten-Free" },
-  { key: "noSugar", label: "No Added Sugar" },
-  { key: "nuts", label: "Contains Nuts" },
-  { key: "belgian", label: "100% Belgian Chocolate" },
-];
-
-const PRICE_RANGES: { key: string; label: string; min: number; max: number }[] = [
-  { key: "u10", label: "Under $10", min: 0, max: 10 },
-  { key: "1025", label: "$10 to $25", min: 10, max: 25 },
-  { key: "o25", label: "Over $25", min: 25, max: 9999 },
+const PRICE_RANGES: { key: string; min: number; max: number }[] = [
+  { key: "u10", min: 0, max: 10 },
+  { key: "1025", min: 10, max: 25 },
+  { key: "o25", min: 25, max: 9999 },
 ];
 
 type SortKey = "featured" | "priceAsc" | "priceDesc" | "rating";
@@ -111,19 +101,20 @@ function FiltersPanel({
   express: boolean; setExpress: (b: boolean) => void;
   applyCustom: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-6 text-sm">
       <section>
-        <h3 className="mb-2 font-bold text-[#1a0f0a]">Category</h3>
+        <h3 className="mb-2 font-bold text-[#1a0f0a]">{t("searchPage.category")}</h3>
         <ul className="space-y-1.5">
-          {CATS.map((c) => (
-            <li key={c.key}>
+          {CAT_KEYS.map((c) => (
+            <li key={c}>
               <button
                 type="button"
-                onClick={() => setCat(c.key)}
-                className={`text-left transition hover:text-amber-700 hover:underline ${cat === c.key ? "font-bold text-amber-700" : "text-foreground"}`}
+                onClick={() => setCat(c)}
+                className={`text-left transition hover:text-amber-700 hover:underline ${cat === c ? "font-bold text-amber-700" : "text-foreground"}`}
               >
-                {c.label}
+                {t(`searchPage.cats.${c}`)}
               </button>
             </li>
           ))}
@@ -131,7 +122,7 @@ function FiltersPanel({
       </section>
 
       <section>
-        <h3 className="mb-2 font-bold text-[#1a0f0a]">Customer Reviews</h3>
+        <h3 className="mb-2 font-bold text-[#1a0f0a]">{t("searchPage.customerReviews")}</h3>
         <ul className="space-y-1.5">
           {[4, 3, 2, 1].map((n) => (
             <li key={n}>
@@ -141,7 +132,7 @@ function FiltersPanel({
                 className={`flex items-center gap-1.5 transition hover:underline ${minRating === n ? "font-semibold" : ""}`}
               >
                 <Stars value={n} />
-                <span className="text-xs text-muted-foreground">& Up</span>
+                <span className="text-xs text-muted-foreground">{t("searchPage.andUp")}</span>
               </button>
             </li>
           ))}
@@ -149,18 +140,18 @@ function FiltersPanel({
       </section>
 
       <section>
-        <h3 className="mb-2 font-bold text-[#1a0f0a]">Ingredients & Allergens</h3>
+        <h3 className="mb-2 font-bold text-[#1a0f0a]">{t("searchPage.ingredientsAllergens")}</h3>
         <ul className="space-y-1.5">
-          {ALLERGENS.map((a) => (
-            <li key={a.key}>
+          {ALLERGEN_KEYS.map((a) => (
+            <li key={a}>
               <label className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
-                  checked={allergens.includes(a.key)}
-                  onChange={() => toggleAllergen(a.key)}
+                  checked={allergens.includes(a)}
+                  onChange={() => toggleAllergen(a)}
                   className="h-4 w-4 accent-amber-600"
                 />
-                <span>{a.label}</span>
+                <span>{t(`searchPage.allergens.${a}`)}</span>
               </label>
             </li>
           ))}
@@ -168,7 +159,7 @@ function FiltersPanel({
       </section>
 
       <section>
-        <h3 className="mb-2 font-bold text-[#1a0f0a]">Price</h3>
+        <h3 className="mb-2 font-bold text-[#1a0f0a]">{t("searchPage.price")}</h3>
         <ul className="space-y-1.5">
           {PRICE_RANGES.map((p) => (
             <li key={p.key}>
@@ -177,7 +168,7 @@ function FiltersPanel({
                 onClick={() => setPriceRange(priceRange === p.key ? null : p.key)}
                 className={`text-left transition hover:text-amber-700 hover:underline ${priceRange === p.key ? "font-bold text-amber-700" : ""}`}
               >
-                {p.label}
+                {t(`searchPage.prices.${p.key}`)}
               </button>
             </li>
           ))}
@@ -187,7 +178,7 @@ function FiltersPanel({
           <input
             type="number"
             inputMode="numeric"
-            placeholder="Min"
+            placeholder={t("searchPage.min")}
             value={customMin}
             onChange={(e) => setCustomMin(e.target.value)}
             className="w-16 rounded border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-amber-400"
@@ -196,7 +187,7 @@ function FiltersPanel({
           <input
             type="number"
             inputMode="numeric"
-            placeholder="Max"
+            placeholder={t("searchPage.max")}
             value={customMax}
             onChange={(e) => setCustomMax(e.target.value)}
             className="w-16 rounded border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-amber-400"
@@ -206,13 +197,13 @@ function FiltersPanel({
             onClick={applyCustom}
             className="rounded border border-input bg-muted px-3 py-1 text-xs font-semibold hover:bg-muted/70"
           >
-            Go
+            {t("searchPage.go")}
           </button>
         </div>
       </section>
 
       <section>
-        <h3 className="mb-2 font-bold text-[#1a0f0a]">Shipping</h3>
+        <h3 className="mb-2 font-bold text-[#1a0f0a]">{t("searchPage.shipping")}</h3>
         <label className="flex cursor-pointer items-center gap-2">
           <input
             type="checkbox"
@@ -220,7 +211,7 @@ function FiltersPanel({
             onChange={(e) => setExpress(e.target.checked)}
             className="h-4 w-4 accent-amber-600"
           />
-          <span>Express shipping — today</span>
+          <span>{t("searchPage.expressToday")}</span>
         </label>
       </section>
     </div>
@@ -228,6 +219,7 @@ function FiltersPanel({
 }
 
 function SearchPage() {
+  const { t } = useTranslation();
   const cart = useCart();
   const gate = useSubscriptionGate();
   const [cat, setCat] = useState<"all" | Category>("all");
@@ -280,36 +272,36 @@ function SearchPage() {
   return (
     <div className="mx-auto max-w-[1500px] px-3 py-4 md:px-6">
       <div className="flex gap-6">
-        {/* Sidebar — desktop */}
         <aside className="hidden w-64 shrink-0 rounded-md border border-border bg-white p-4 md:block lg:w-72">
           <FiltersPanel {...filterProps} />
         </aside>
 
-        {/* Results */}
         <section className="min-w-0 flex-1">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm">
             <p className="text-foreground">
-              <span className="font-semibold">1-{filtered.length}</span> of over{" "}
-              <span className="font-semibold">{PRODUCTS.length}</span> results
+              <span className="font-semibold">1-{filtered.length}</span>
+              {t("searchPage.resultsCountPre")}
+              <span className="font-semibold">{PRODUCTS.length}</span>
+              {t("searchPage.resultsCountPost")}
             </p>
             <label className="flex items-center gap-2">
-              <span className="text-xs font-semibold">Sort by:</span>
+              <span className="text-xs font-semibold">{t("searchPage.sortBy")}</span>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 className="rounded border border-input bg-background px-2 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-amber-400"
               >
-                <option value="featured">Featured</option>
-                <option value="priceAsc">Price: Low to High</option>
-                <option value="priceDesc">Price: High to Low</option>
-                <option value="rating">Avg. Customer Review</option>
+                <option value="featured">{t("searchPage.sort.featured")}</option>
+                <option value="priceAsc">{t("searchPage.sort.priceAsc")}</option>
+                <option value="priceDesc">{t("searchPage.sort.priceDesc")}</option>
+                <option value="rating">{t("searchPage.sort.rating")}</option>
               </select>
             </label>
           </div>
 
           {filtered.length === 0 ? (
             <div className="rounded-md border border-border bg-white p-10 text-center text-muted-foreground">
-              No products match your filters.
+              {t("searchPage.noMatches")}
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -318,7 +310,7 @@ function SearchPage() {
                   <div className="relative aspect-square overflow-hidden bg-muted">
                     {p.badge && (
                       <span className={`absolute left-2 top-2 z-10 rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white ${p.badge === "bestSeller" ? "bg-amber-600" : "bg-red-600"}`}>
-                        {p.badge === "bestSeller" ? "Best Seller" : "Deal"}
+                        {p.badge === "bestSeller" ? t("searchPage.bestSeller") : t("searchPage.deal")}
                       </span>
                     )}
                     <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
@@ -339,10 +331,10 @@ function SearchPage() {
                       {p.price.toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground">Get it {p.deliveryDate}</span>
+                      <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: p.deliveryDate })}</span>
                     </p>
                     {p.expressShipping && (
-                      <p className="text-[11px] font-semibold text-emerald-700">Express shipping available</p>
+                      <p className="text-[11px] font-semibold text-emerald-700">{t("searchPage.expressAvailable")}</p>
                     )}
                     <button
                       type="button"
@@ -350,7 +342,7 @@ function SearchPage() {
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
-                      Add to cart
+                      {t("searchPage.addToCart")}
                     </button>
                   </div>
                 </li>
@@ -360,28 +352,26 @@ function SearchPage() {
         </section>
       </div>
 
-      {/* Mobile floating filter button */}
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
         className="fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-[#1a0f0a] px-5 py-3 text-sm font-bold text-white shadow-lg md:hidden"
       >
         <Filter className="h-4 w-4" />
-        Filters
+        {t("searchPage.filters")}
       </button>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">Filters</h2>
+              <h2 className="text-lg font-bold">{t("searchPage.filters")}</h2>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 className="grid h-9 w-9 place-items-center rounded-full hover:bg-muted"
-                aria-label="Close filters"
+                aria-label={t("searchPage.closeFilters")}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -392,7 +382,7 @@ function SearchPage() {
               onClick={() => setMobileOpen(false)}
               className="mt-5 w-full rounded-full bg-amber-400 py-3 text-sm font-bold text-[#1a0f0a]"
             >
-              Show {filtered.length} results
+              {t("searchPage.showResults", { n: filtered.length })}
             </button>
           </div>
         </div>

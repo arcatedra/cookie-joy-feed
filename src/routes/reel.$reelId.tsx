@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import i18n from "@/i18n";
 
 interface ReelMeta {
   id: string;
@@ -55,12 +57,12 @@ export const Route = createFileRoute("/reel/$reelId")({
   },
   head: ({ loaderData }) => {
     const reel = loaderData?.reel;
-    if (!reel) return { meta: [{ title: "Reel · AMYRAX Cookies" }] };
-    const title = reel.title || reel.product_name || "Mira este reel";
-    const fullTitle = `${title} · AMYRAX Cookies`;
+    if (!reel) return { meta: [{ title: i18n.t("reel.metaTitleFallback") }] };
+    const title = reel.title || reel.product_name || i18n.t("reel.defaultTitle");
+    const fullTitle = `${title} ${i18n.t("reel.metaTitleSuffix")}`;
     const description = reel.product_name
-      ? `${reel.product_name} en AMYRAX Cookies. Mira el reel y descubre nuestras galletas artesanales.`
-      : "Mira este reel de AMYRAX Cookies — galletas artesanales premium.";
+      ? i18n.t("reel.metaDescWithProduct", { product: reel.product_name })
+      : i18n.t("reel.metaDescDefault");
     const image = reel.thumb_url || reel.product_image || undefined;
     const meta: Array<Record<string, string>> = [
       { title: fullTitle },
@@ -83,28 +85,32 @@ export const Route = createFileRoute("/reel/$reelId")({
     }
     return { meta };
   },
-  notFoundComponent: () => (
+  notFoundComponent: () => <ReelNotFound />,
+  component: ReelPage,
+});
+
+function ReelNotFound() {
+  const { t } = useTranslation();
+  return (
     <div className="flex min-h-[60vh] items-center justify-center px-4 text-center">
       <div>
-        <h1 className="text-2xl font-semibold">Reel no encontrado</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Es posible que este reel haya sido eliminado.
-        </p>
+        <h1 className="text-2xl font-semibold">{t("reel.notFoundTitle")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t("reel.notFoundDesc")}</p>
         <Link
           to="/"
           className="mt-6 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
         >
-          Volver al inicio
+          {t("reel.backHome")}
         </Link>
       </div>
     </div>
-  ),
-  component: ReelPage,
-});
+  );
+}
 
 function ReelPage() {
+  const { t } = useTranslation();
   const { reel } = Route.useLoaderData();
-  const title = reel.title || reel.product_name || "Reel";
+  const title = reel.title || reel.product_name || t("reel.fallbackTitle");
   const poster = reel.thumb_url || reel.product_image || undefined;
 
   return (
@@ -125,19 +131,22 @@ function ReelPage() {
         ) : poster ? (
           <img src={poster} alt={title} className="absolute inset-0 h-full w-full object-cover" />
         ) : (
-          <div className="grid h-full w-full place-items-center text-white/60">Sin video</div>
+          <div className="grid h-full w-full place-items-center text-white/60">
+            {t("reel.noVideo")}
+          </div>
         )}
       </div>
       {reel.product_name && (
         <p className="mt-4 text-sm text-muted-foreground">
-          Producto: <span className="font-medium text-foreground">{reel.product_name}</span>
+          {t("reel.productLabel")}
+          <span className="font-medium text-foreground">{reel.product_name}</span>
         </p>
       )}
       <Link
         to="/"
         className="mt-6 inline-flex w-full max-w-sm items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
       >
-        Ver más reels
+        {t("reel.moreReels")}
       </Link>
     </main>
   );
