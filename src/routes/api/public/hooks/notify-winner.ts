@@ -25,18 +25,30 @@ export const Route = createFileRoute('/api/public/hooks/notify-winner')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secret = process.env.WINNER_NOTIFY_SECRET
         const supabaseUrl = process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL
         const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-        if (!secret || !supabaseUrl || !serviceKey) {
+        if (!supabaseUrl || !serviceKey) {
           console.error('notify-winner: missing env')
           return new Response('Server misconfigured', { status: 500 })
         }
 
+        const supabase = createClient(supabaseUrl, serviceKey, {
+          auth: { persistSession: false, autoRefreshToken: false },
+        })
+
+        // Shared secret lives in internal_hook_config so the DB trigger and
+        // this route read from the same source of truth.
+        const { data: secretRow } = await supabase
+          .from('internal_hook_config')
+          .select('value')
+          .eq('key', 'notify_winner_secret')
+          .maybeSingle()
+        const secret = secretRow?.value ?? ''
+
         const auth = request.headers.get('authorization') ?? ''
         const provided = auth.startsWith('Bearer ') ? auth.slice(7).trim() : ''
-        if (provided !== secret) {
+        if (!secret || provided !== secret) {
           return new Response('Unauthorized', { status: 401 })
         }
 
