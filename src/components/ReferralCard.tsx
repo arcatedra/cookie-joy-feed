@@ -185,28 +185,6 @@ export function ReferralCard({ userId }: ReferralCardProps) {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="mt-4 grid grid-cols-2 gap-3 px-6">
-          <div className="rounded-2xl bg-primary-foreground/10 px-4 py-3 backdrop-blur">
-            <div className="flex items-center gap-2 text-yellow-300">
-              <Star className="h-4 w-4 fill-current" />
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/70">
-                Tus estrellas
-              </span>
-            </div>
-            <p className="mt-1 text-2xl font-extrabold">{stars}</p>
-          </div>
-          <div className="rounded-2xl bg-primary-foreground/10 px-4 py-3 backdrop-blur">
-            <div className="flex items-center gap-2 text-primary-foreground/90">
-              <Users className="h-4 w-4" />
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/70">
-                Invitados
-              </span>
-            </div>
-            <p className="mt-1 text-2xl font-extrabold">{invited}</p>
-          </div>
-        </div>
-
         {/* QR */}
         <div className="mt-5 flex flex-col items-center px-6">
           <div className="rounded-2xl bg-white p-4 shadow-lg">
@@ -239,6 +217,28 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               {referralUrl}
             </button>
           )}
+        </div>
+
+        {/* Stats */}
+        <div className="mt-5 grid grid-cols-2 gap-3 px-6">
+          <div className="rounded-2xl bg-primary-foreground/10 px-4 py-3 backdrop-blur">
+            <div className="flex items-center gap-2 text-yellow-300">
+              <Star className="h-4 w-4 fill-current" />
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/70">
+                Tus estrellas
+              </span>
+            </div>
+            <p className="mt-1 text-2xl font-extrabold">{stars}</p>
+          </div>
+          <div className="rounded-2xl bg-primary-foreground/10 px-4 py-3 backdrop-blur">
+            <div className="flex items-center gap-2 text-primary-foreground/90">
+              <Users className="h-4 w-4" />
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/70">
+                Invitados
+              </span>
+            </div>
+            <p className="mt-1 text-2xl font-extrabold">{invited}</p>
+          </div>
         </div>
 
         {/* Actions */}
