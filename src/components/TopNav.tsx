@@ -77,15 +77,8 @@ export function TopNav() {
       <header className="sticky top-0 z-40 border-b border-[#C8862E]/30 bg-[#0B0B0F] text-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.6)]">
         {/* Top row */}
         <div className="flex items-center gap-2 px-3 py-2 md:gap-4 md:px-6 md:py-2.5">
-          {/* Mobile hamburger */}
-          <button
-            type="button"
-            onClick={() => setSideOpen(true)}
-            className="grid h-9 w-9 place-items-center rounded hover:bg-white/10 md:hidden"
-            aria-label={t("topnav.openMenu")}
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          {/* Mobile hamburger removed per request */}
+
 
           {/* Logo — símbolo + nombre tipo Amazon */}
           <Link
