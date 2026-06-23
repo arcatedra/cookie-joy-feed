@@ -131,6 +131,21 @@ function AdminSweepstakesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const [smokeEmail, setSmokeEmail] = useState("");
+  const [smokeName, setSmokeName] = useState("Smoke Test");
+  const smokeMut = useMutation({
+    mutationFn: () =>
+      sendSmokeEmail({ data: { email: smokeEmail.trim(), displayName: smokeName.trim() || undefined } }),
+    onSuccess: (res) => {
+      if (!res.ok) {
+        toast.error(res.error ?? "Error en smoke test");
+        return;
+      }
+      toast.success(`Email encolado a ${res.recipient}. Revisa la bandeja en ~10s.`);
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   if (allowed === null) {
     return <div className="p-6 text-sm text-muted-foreground">Cargando…</div>;
   }
