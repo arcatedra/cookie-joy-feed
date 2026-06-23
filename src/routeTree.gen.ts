@@ -38,11 +38,13 @@ import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/em
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
+import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
+import { Route as ApiPublicHooksSecurityAlertRouteImport } from './routes/api/public/hooks/security-alert'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
@@ -193,6 +195,12 @@ const AuthenticatedClaimDrawDateRoute =
     path: '/claim/$drawDate',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminSecurityRoute =
+  AuthenticatedAdminSecurityRouteImport.update({
+    id: '/admin/security',
+    path: '/admin/security',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -221,6 +229,12 @@ const ApiPublicHooksTestDrawTickRoute =
   ApiPublicHooksTestDrawTickRouteImport.update({
     id: '/api/public/hooks/test-draw-tick',
     path: '/api/public/hooks/test-draw-tick',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksSecurityAlertRoute =
+  ApiPublicHooksSecurityAlertRouteImport.update({
+    id: '/api/public/hooks/security-alert',
+    path: '/api/public/hooks/security-alert',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksRunDailyDrawRoute =
@@ -272,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -280,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -311,6 +327,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -319,6 +336,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -352,6 +370,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
@@ -360,6 +379,7 @@ export interface FileRoutesById {
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
+  '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -393,6 +413,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/admin/security'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -401,6 +422,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -432,6 +454,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/admin/security'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -440,6 +463,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -472,6 +496,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/_authenticated/admin/security'
     | '/_authenticated/claim/$drawDate'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
@@ -480,6 +505,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
+    | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/lovable/email/queue/process'
@@ -518,6 +544,7 @@ export interface RootRouteChildren {
   ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
   ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
+  ApiPublicHooksSecurityAlertRoute: typeof ApiPublicHooksSecurityAlertRoute
   ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -730,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClaimDrawDateRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/security': {
+      id: '/_authenticated/admin/security'
+      path: '/admin/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -765,6 +799,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksTestDrawTickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/security-alert': {
+      id: '/api/public/hooks/security-alert'
+      path: '/api/public/hooks/security-alert'
+      fullPath: '/api/public/hooks/security-alert'
+      preLoaderRoute: typeof ApiPublicHooksSecurityAlertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/run-daily-draw': {
       id: '/api/public/hooks/run-daily-draw'
       path: '/api/public/hooks/run-daily-draw'
@@ -798,11 +839,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
 }
 
@@ -851,6 +894,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,
   ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
+  ApiPublicHooksSecurityAlertRoute: ApiPublicHooksSecurityAlertRoute,
   ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,

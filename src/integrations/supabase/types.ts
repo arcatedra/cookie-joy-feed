@@ -249,6 +249,7 @@ export type Database = {
           amount: number
           created_at: string
           currency: string
+          deleted_at: string | null
           id: string
           status: string
           stripe_payment_intent_id: string | null
@@ -261,6 +262,7 @@ export type Database = {
           amount: number
           created_at?: string
           currency?: string
+          deleted_at?: string | null
           id?: string
           status?: string
           stripe_payment_intent_id?: string | null
@@ -273,6 +275,7 @@ export type Database = {
           amount?: number
           created_at?: string
           currency?: string
+          deleted_at?: string | null
           id?: string
           status?: string
           stripe_payment_intent_id?: string | null
@@ -517,6 +520,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          deleted_at: string | null
           display_name: string | null
           donation_tier: Database["public"]["Enums"]["donation_tier"] | null
           email: string | null
@@ -528,6 +532,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           display_name?: string | null
           donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
           email?: string | null
@@ -539,6 +544,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           display_name?: string | null
           donation_tier?: Database["public"]["Enums"]["donation_tier"] | null
           email?: string | null
@@ -878,6 +884,7 @@ export type Database = {
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
+          deleted_at: string | null
           environment: string
           id: string
           price_id: string
@@ -893,6 +900,7 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          deleted_at?: string | null
           environment?: string
           id?: string
           price_id: string
@@ -908,6 +916,7 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          deleted_at?: string | null
           environment?: string
           id?: string
           price_id?: string
@@ -1096,6 +1105,7 @@ export type Database = {
           city: string | null
           claim_deadline: string
           created_at: string
+          deleted_at: string | null
           display_name: string
           dob: string | null
           draw_date: string
@@ -1132,6 +1142,7 @@ export type Database = {
           city?: string | null
           claim_deadline: string
           created_at?: string
+          deleted_at?: string | null
           display_name: string
           dob?: string | null
           draw_date: string
@@ -1168,6 +1179,7 @@ export type Database = {
           city?: string | null
           claim_deadline?: string
           created_at?: string
+          deleted_at?: string | null
           display_name?: string
           dob?: string | null
           draw_date?: string
@@ -1213,6 +1225,16 @@ export type Database = {
     }
     Functions: {
       close_draws_for_cutoff: { Args: never; Returns: number }
+      cron_status: {
+        Args: never
+        Returns: {
+          jobname: string
+          last_msg: string
+          last_start: string
+          last_status: string
+          schedule: string
+        }[]
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -1343,6 +1365,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_soft_deleted: {
+        Args: { p_limit?: number }
+        Returns: {
+          deleted_at: string
+          id: string
+          label: string
+          table_name: string
+        }[]
+      }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -1374,6 +1405,7 @@ export type Database = {
           reel_id: string
         }[]
       }
+      restore_row: { Args: { p_id: string; p_table: string }; Returns: boolean }
       run_daily_draw: {
         Args: never
         Returns: {
