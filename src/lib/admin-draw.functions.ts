@@ -56,3 +56,79 @@ export const triggerTestDraw = createServerFn({ method: "POST" })
       seedHash: (row?.seed_hash as string | null) ?? null,
     };
   });
+
+/**
+ * Smoke test for the winner notification email.
+ *
+ * Inserts a synthetic `winner_claims` row using a unique past sentinel
+ * draw_date in the 1970-01-01..1999-12-31 range (so it never collides
+ * with real draws). The `trg_notify_winner` trigger fires `net.http_post`
+ * to /api/public/hooks/notify-winner which enqueues a real email.
+ *
+ * Admin-only. Returns the synthetic draw_date + claim id so the caller
+ * can inspect email_send_log afterwards.
+ */
+export const sendSmokeTestWinnerEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        email: z.string().email(),
+        displayName: z.string().min(1).max(120).optional(),
+        prizeUsd: z.number().positive().max(4999).optional(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin, error: roleErr } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (roleErr || !isAdmin) {
+      return { ok: false as const, error: "Solo administradores." };
+    }
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Pick next free synthetic past date so we don't collide with real draws.
+    const { data: maxRow } = await supabaseAdmin
+      .from("winner_claims")
+      .select("draw_date")
+      .lt("draw_date", "2000-01-01")
+      .order("draw_date", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const base = maxRow?.draw_date ? new Date(maxRow.draw_date) : new Date("1970-01-01");
+    base.setUTCDate(base.getUTCDate() + 1);
+    const drawDate = base.toISOString().slice(0, 10);
+
+    const deadline = new Date();
+    deadline.setUTCDate(deadline.getUTCDate() + 14);
+
+    const { data: claim, error: insErr } = await supabaseAdmin
+      .from("winner_claims")
+      .insert({
+        draw_date: drawDate,
+        user_id: context.userId,
+        email: data.email.toLowerCase(),
+        display_name: data.displayName ?? "Smoke Test",
+        prize_usd: data.prizeUsd ?? 123.45,
+        claim_deadline: deadline.toISOString(),
+        status: "pending_verification",
+      })
+      .select("id, draw_date, email")
+      .single();
+
+    if (insErr || !claim) {
+      console.error("[sendSmokeTestWinnerEmail] insert failed", insErr);
+      return { ok: false as const, error: insErr?.message ?? "insert failed" };
+    }
+
+    return {
+      ok: true as const,
+      claimId: claim.id as string,
+      drawDate: claim.draw_date as string,
+      recipient: claim.email as string,
+    };
+  });
