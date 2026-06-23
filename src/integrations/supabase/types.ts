@@ -1319,6 +1319,13 @@ export type Database = {
           total_pool_usd: number
         }[]
       }
+      get_product_rating_summary: {
+        Args: { p_product_id: string }
+        Returns: {
+          avg: number
+          count: number
+        }[]
+      }
       get_public_profiles: {
         Args: { ids: string[] }
         Returns: {
