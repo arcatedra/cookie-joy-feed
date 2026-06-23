@@ -61,10 +61,44 @@ async function checkDomain(domain: string): Promise<CheckResult> {
   return result;
 }
 
+// Per-IP rate limiter to prevent the endpoint being abused as a free RDAP proxy.
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX = 30;
+const ipHits = new Map<string, number[]>();
+
+function clientIp(request: Request): string {
+  const h = request.headers;
+  return (
+    h.get("cf-connecting-ip") ||
+    h.get("x-real-ip") ||
+    (h.get("x-forwarded-for") ?? "").split(",")[0].trim() ||
+    "unknown"
+  );
+}
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const arr = (ipHits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) {
+    ipHits.set(ip, arr);
+    return true;
+  }
+  arr.push(now);
+  ipHits.set(ip, arr);
+  return false;
+}
+
 export const Route = createFileRoute("/api/public/domain-check")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const ip = clientIp(request);
+        if (rateLimited(ip)) {
+          return Response.json(
+            { error: "Too many requests" },
+            { status: 429, headers: { "Retry-After": "60" } },
+          );
+        }
         const url = new URL(request.url);
         const domain = (url.searchParams.get("domain") ?? "").trim().toLowerCase();
         if (!domain || !DOMAIN_RE.test(domain)) {
