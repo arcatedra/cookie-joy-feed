@@ -653,6 +653,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_log: {
+        Row: {
+          actor_role: string | null
+          actor_uid: string | null
+          created_at: string
+          details: Json | null
+          event: string
+          id: number
+          row_count: number | null
+          table_name: string | null
+        }
+        Insert: {
+          actor_role?: string | null
+          actor_uid?: string | null
+          created_at?: string
+          details?: Json | null
+          event: string
+          id?: number
+          row_count?: number | null
+          table_name?: string | null
+        }
+        Update: {
+          actor_role?: string | null
+          actor_uid?: string | null
+          created_at?: string
+          details?: Json | null
+          event?: string
+          id?: number
+          row_count?: number | null
+          table_name?: string | null
+        }
+        Relationships: []
+      }
       shipping_quotes: {
         Row: {
           base_price: number

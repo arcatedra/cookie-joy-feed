@@ -45,6 +45,7 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
+import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
@@ -234,6 +235,12 @@ const ApiPublicHooksNotifyWinnerRoute =
     path: '/api/public/hooks/notify-winner',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksBackupPruneRoute =
+  ApiPublicHooksBackupPruneRouteImport.update({
+    id: '/api/public/hooks/backup-prune',
+    path: '/api/public/hooks/backup-prune',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksBackupCsvRoute = ApiPublicHooksBackupCsvRouteImport.update({
   id: '/api/public/hooks/backup-csv',
   path: '/api/public/hooks/backup-csv',
@@ -270,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
+  '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
@@ -308,6 +316,7 @@ export interface FileRoutesByTo {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
+  '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
@@ -348,6 +357,7 @@ export interface FileRoutesById {
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
+  '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
@@ -388,6 +398,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
+    | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
@@ -426,6 +437,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
+    | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
@@ -465,6 +477,7 @@ export interface FileRouteTypes {
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
+    | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/test-draw-tick'
@@ -502,6 +515,7 @@ export interface RootRouteChildren {
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
+  ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
   ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
   ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
@@ -765,6 +779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksNotifyWinnerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/backup-prune': {
+      id: '/api/public/hooks/backup-prune'
+      path: '/api/public/hooks/backup-prune'
+      fullPath: '/api/public/hooks/backup-prune'
+      preLoaderRoute: typeof ApiPublicHooksBackupPruneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/backup-csv': {
       id: '/api/public/hooks/backup-csv'
       path: '/api/public/hooks/backup-csv'
@@ -827,6 +848,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
+  ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,
   ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
   ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
