@@ -68,7 +68,7 @@ export const submitClaim = createServerFn({ method: "POST" })
         id_document_path: data.idDocumentPath,
         w9_document_path: data.w9DocumentPath,
         submitted_at: new Date().toISOString(),
-        status: "submitted",
+
       })
       .eq("draw_date", data.drawDate)
       .eq("user_id", context.userId);
