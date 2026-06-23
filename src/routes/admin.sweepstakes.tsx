@@ -338,6 +338,48 @@ function AdminSweepstakesPage() {
           </AlertDialog>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Smoke test del email al ganador</CardTitle>
+          <CardDescription>
+            Inserta un <code>winner_claim</code> sintético con fecha pasada (sin tocar sorteos reales)
+            y dispara el email de notificación a la dirección que indiques. Útil para confirmar entregabilidad.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="smoke_email">Email destinatario *</Label>
+              <Input
+                id="smoke_email"
+                type="email"
+                value={smokeEmail}
+                onChange={(e) => setSmokeEmail(e.target.value)}
+                placeholder="tu@correo.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="smoke_name">Nombre mostrado</Label>
+              <Input
+                id="smoke_name"
+                value={smokeName}
+                onChange={(e) => setSmokeName(e.target.value)}
+                maxLength={120}
+              />
+            </div>
+          </div>
+          <Button
+            onClick={() => smokeMut.mutate()}
+            disabled={smokeMut.isPending || !smokeEmail.includes("@")}
+          >
+            {smokeMut.isPending ? "Enviando…" : "Enviar email de prueba"}
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            El procesador de la cola corre cada ~5s. Si no llega, revisa <code>email_send_log</code>.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
