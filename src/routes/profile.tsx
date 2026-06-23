@@ -133,25 +133,7 @@ function ProfilePage() {
       </section>
 
       {/* Recent Orders */}
-      <section className="mt-6 px-5">
-        <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-          {t("profile.recentOrders")}
-        </h3>
-        <div className="mt-3 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-cream">
-                <Cookie className="h-5 w-5 text-brown" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-foreground">{t("profile.order", { id: 1023 })}</p>
-                <p className="text-xs text-muted-foreground">{t("profile.orderItems")}</p>
-              </div>
-            </div>
-            <span className="text-xs text-muted-foreground">{orderDate}</span>
-          </div>
-        </div>
-      </section>
+      <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
 
       <ReferralCard userId={user?.id ?? null} />
 
