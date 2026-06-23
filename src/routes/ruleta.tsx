@@ -167,7 +167,13 @@ function RuletaPage() {
           />
         </div>
 
-        <TestDrawButton onDone={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })} />
+        <TestDrawButton
+          onDone={() => {
+            qc.invalidateQueries({ queryKey: ["roulette-state"] });
+            qc.invalidateQueries({ queryKey: ["recent-winners"] });
+          }}
+        />
+
 
         {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
 
@@ -1271,19 +1277,41 @@ function TestDrawButton({ onDone }: { onDone: () => void }) {
           "Content-Type": "application/json",
           apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
-        body: "{}",
+        body: JSON.stringify({ test_mode: true }),
       });
       const text = await res.text();
-      setResult(`${res.status} → ${text.slice(0, 300)}`);
-      toast.success("Sorteo disparado — refresca para ver el ganador");
+      if (!res.ok) {
+        setResult(`❌ ${res.status} → ${text.slice(0, 300)}`);
+        toast.error("Error al disparar el sorteo");
+        return;
+      }
+      let parsed: {
+        ok?: boolean;
+        simulated?: boolean;
+        simulatedWinner?: { display_name: string; prize_usd: number } | null;
+        result?: { status?: string; winner_display_name?: string | null; prize_usd?: number } | Array<{ status?: string; winner_display_name?: string | null; prize_usd?: number }>;
+      } = {};
+      try { parsed = JSON.parse(text); } catch { /* ignore */ }
+      const row = Array.isArray(parsed.result) ? parsed.result[0] : parsed.result;
+      const winnerName = parsed.simulatedWinner?.display_name ?? row?.winner_display_name ?? null;
+      const prize = parsed.simulatedWinner?.prize_usd ?? row?.prize_usd ?? 0;
+      if (winnerName) {
+        const tag = parsed.simulated ? " (simulado)" : "";
+        setResult(`✅ Sorteo ejecutado${tag} — Ganador: ${winnerName} — $${Number(prize).toFixed(2)}`);
+        toast.success(`🏆 Ganador: ${winnerName}`);
+      } else {
+        setResult(`✅ Sorteo ejecutado — estado: ${row?.status ?? "desconocido"}`);
+        toast.success("Sorteo ejecutado");
+      }
       onDone();
     } catch (e) {
-      setResult(String(e));
+      setResult(`❌ ${String(e)}`);
       toast.error("Error al disparar el sorteo");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div
