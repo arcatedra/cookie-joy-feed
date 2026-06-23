@@ -57,14 +57,14 @@ export const Route = createFileRoute('/api/public/hooks/notify-winner')({
 
         const claimQuery = supabase
           .from('winner_claims')
-          .select('id, draw_date, email, display_name, prize_usd, claim_deadline, notification_sent_at')
+          .select('id, draw_date, email, display_name, prize_usd, claim_deadline, notified_at')
           .eq('draw_date', drawDate)
           .maybeSingle()
 
         const { data: claim, error: claimErr } = claimId
           ? await supabase
               .from('winner_claims')
-              .select('id, draw_date, email, display_name, prize_usd, claim_deadline, notification_sent_at')
+              .select('id, draw_date, email, display_name, prize_usd, claim_deadline, notified_at')
               .eq('id', claimId)
               .maybeSingle()
           : await claimQuery
@@ -74,7 +74,7 @@ export const Route = createFileRoute('/api/public/hooks/notify-winner')({
           return new Response('Claim not found', { status: 404 })
         }
 
-        if (claim.notification_sent_at) {
+        if (claim.notified_at) {
           return Response.json({ success: true, skipped: 'already_notified' })
         }
 
@@ -198,7 +198,7 @@ export const Route = createFileRoute('/api/public/hooks/notify-winner')({
 
         await supabase
           .from('winner_claims')
-          .update({ notification_sent_at: new Date().toISOString() })
+          .update({ notified_at: new Date().toISOString() })
           .eq('id', claim.id)
 
         console.log('Winner notification queued', {
