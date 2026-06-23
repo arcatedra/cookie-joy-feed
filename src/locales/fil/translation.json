@@ -974,6 +974,7 @@
     "submitClaim": "ISUMITE ANG CLAIM",
     "statusLabels": {
       "pending_verification": "Nakabinbin ang beripikasyon",
+      "submitted": "Naipasa na — sinusuri",
       "verified": "Na-verify — pinoproseso ang pagbabayad",
       "paid": "Bayad na",
       "rejected": "Tinanggihan",

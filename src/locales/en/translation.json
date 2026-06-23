@@ -971,6 +971,7 @@
     "submitClaim": "SUBMIT CLAIM",
     "statusLabels": {
       "pending_verification": "Pending verification",
+      "submitted": "Submitted — under review",
       "verified": "Verified — payment in process",
       "paid": "Paid",
       "rejected": "Rejected",
