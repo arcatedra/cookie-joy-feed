@@ -159,7 +159,7 @@ export const getRouletteState = createServerFn({ method: "GET" }).handler(async 
       : sb
           .from("spin_history")
           .select("prize_label, created_at, coupon_code")
-          .ilike("guest_email", subject.email)
+          .eq("guest_email_hash", hashEmail(subject.email))
           .order("created_at", { ascending: false })
           .limit(5);
 
