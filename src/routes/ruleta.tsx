@@ -160,12 +160,38 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
+        <div
+          role="status"
+          aria-label="Modo prueba activo"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            padding: "10px 16px",
+            background: "linear-gradient(90deg, #fde68a, #fbbf24)",
+            color: "#3b2417",
+            border: "2px solid #b45309",
+            borderRadius: 999,
+            fontWeight: 800,
+            fontSize: 13,
+            letterSpacing: 0.5,
+            textTransform: "uppercase",
+            boxShadow: "0 4px 12px rgba(180,83,9,0.25)",
+            justifySelf: "center",
+          }}
+        >
+          <span style={{ fontSize: 16 }}>🧪</span>
+          Modo prueba activo — sorteo manual habilitado
+        </div>
+
         <div id="live-draw" style={{ scrollMarginTop: 80 }}>
           <LiveDrawSection
             balance={balance}
             onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
           />
         </div>
+
 
         <TestDrawButton
           onDone={() => {
