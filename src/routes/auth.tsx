@@ -8,8 +8,9 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
     redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+    ref: typeof search.ref === "string" ? search.ref.toUpperCase().slice(0, 16) : undefined,
   }),
   head: () => ({
     meta: [
