@@ -263,3 +263,58 @@ function TermsBadge({ userId }: { userId: string | null }) {
     </div>
   );
 }
+
+function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string; t: (k: string) => string }) {
+  const { data } = useQuery({
+    queryKey: ["profile-stats", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const [ordersRes, favsRes] = await Promise.all([
+        supabase
+          .from("star_purchases")
+          .select("id", { count: "exact", head: true })
+          .eq("subject_user_id", userId!)
+          .in("status", ["paid", "completed", "succeeded"]),
+        supabase
+          .from("reel_likes")
+          .select("reel_id", { count: "exact", head: true })
+          .eq("user_id", userId!),
+      ]);
+      return {
+        orders: ordersRes.count ?? 0,
+        favorites: favsRes.count ?? 0,
+      };
+    },
+  });
+
+  const orders = data?.orders ?? 0;
+  const favorites = data?.favorites ?? 0;
+
+  // Cookie fan tier derived from real activity
+  const totalActivity = orders * 3 + favorites;
+  let level = t("profile.cookieFan");
+  if (totalActivity >= 100) level = "Cookie Legend";
+  else if (totalActivity >= 50) level = "Cookie Pro";
+  else if (totalActivity >= 20) level = "Cookie Fan";
+  else if (totalActivity >= 5) level = "Cookie Lover";
+  else level = "Cookie Rookie";
+
+  return (
+    <div className="mt-5 flex items-center justify-around">
+      <div className="flex flex-col items-center px-4">
+        <span className="text-lg font-bold text-foreground">{formatNumber(orders, lang)}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
+      </div>
+      <div className="h-8 w-px bg-border" />
+      <div className="flex flex-col items-center px-4">
+        <span className="text-lg font-bold text-foreground">{formatNumber(favorites, lang)}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
+      </div>
+      <div className="h-8 w-px bg-border" />
+      <div className="flex flex-col items-center px-4">
+        <span className="text-sm font-bold text-foreground">{level}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
+      </div>
+    </div>
+  );
+}
