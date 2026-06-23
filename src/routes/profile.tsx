@@ -104,22 +104,7 @@ function ProfilePage() {
             <TermsBadge userId={user?.id ?? null} />
           </div>
 
-          <div className="mt-5 flex items-center justify-around">
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{formatNumber(28, i18n.language)}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{formatNumber(12, i18n.language)}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div className="flex flex-col items-center px-4">
-              <span className="text-lg font-bold text-foreground">{t("profile.cookieFan")}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
-            </div>
-          </div>
+          <ProfileStats userId={user?.id ?? null} lang={i18n.language} t={t} />
         </div>
       </section>
 
