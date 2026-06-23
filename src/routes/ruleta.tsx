@@ -1333,21 +1333,20 @@ function NextDrawCountdown() {
   });
 
   useEffect(() => {
+    setTarget(computeNext());
+    setNow(Date.now());
     const id = setInterval(() => {
       const t = Date.now();
       setNow(t);
-      if (t >= target) {
-        setTarget(computeNext());
-        // Give the cron a moment, then refresh
-        setTimeout(() => refetch(), 4000);
-      }
+      setTarget((prev) => (prev !== null && t >= prev ? (setTimeout(() => refetch(), 4000), computeNext()) : prev));
     }, 1000);
     return () => clearInterval(id);
-  }, [target, refetch]);
+  }, [refetch]);
 
-  const remaining = Math.max(0, target - now);
-  const mm = Math.floor(remaining / 60000).toString().padStart(2, "0");
-  const ss = Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0");
+  const remaining = target !== null && now !== null ? Math.max(0, target - now) : 0;
+  const ready = target !== null && now !== null;
+  const mm = ready ? Math.floor(remaining / 60000).toString().padStart(2, "0") : "--";
+  const ss = ready ? Math.floor((remaining % 60000) / 1000).toString().padStart(2, "0") : "--";
   const latest = winners?.[0];
 
   return (
