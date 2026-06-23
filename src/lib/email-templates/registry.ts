@@ -21,4 +21,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'admin-new-order': adminNewOrder,
   'admin-new-subscription': adminNewSubscription,
   'winner-notification': winnerNotification,
+  'security-alert': securityAlert,
 }
