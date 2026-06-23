@@ -15,6 +15,8 @@ import { createStarsCheckout } from "@/lib/stars-checkout.functions";
 import { PrizePoolCounter } from "@/components/PrizePoolCounter";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LiveDrawSection } from "@/components/LiveDrawSection";
+import { FullscreenDrawExperience } from "@/components/FullscreenDrawExperience";
+
 import {
   MISSIONS,
   PRIZES,
@@ -1290,102 +1292,45 @@ function Legal() {
 }
 
 function TestDrawButton({ onDone }: { onDone: () => void }) {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-
-  const fire = async () => {
-    setLoading(true);
-    setResult(null);
-    try {
-      const res = await fetch("/api/public/hooks/run-daily-draw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        },
-        body: JSON.stringify({ test_mode: true }),
-      });
-      const text = await res.text();
-      if (!res.ok) {
-        setResult(`❌ ${res.status} → ${text.slice(0, 300)}`);
-        toast.error("Error al disparar el sorteo");
-        return;
-      }
-      let parsed: {
-        ok?: boolean;
-        simulated?: boolean;
-        simulatedWinner?: { display_name: string; prize_usd: number } | null;
-        result?: { status?: string; winner_display_name?: string | null; prize_usd?: number } | Array<{ status?: string; winner_display_name?: string | null; prize_usd?: number }>;
-      } = {};
-      try { parsed = JSON.parse(text); } catch { /* ignore */ }
-      const row = Array.isArray(parsed.result) ? parsed.result[0] : parsed.result;
-      const winnerName = parsed.simulatedWinner?.display_name ?? row?.winner_display_name ?? null;
-      const prize = parsed.simulatedWinner?.prize_usd ?? row?.prize_usd ?? 0;
-      if (winnerName) {
-        const tag = parsed.simulated ? " (simulado)" : "";
-        setResult(`✅ Sorteo ejecutado${tag} — Ganador: ${winnerName} — $${Number(prize).toFixed(2)}`);
-        toast.success(`🏆 Ganador: ${winnerName}`);
-      } else {
-        setResult(`✅ Sorteo ejecutado — estado: ${row?.status ?? "desconocido"}`);
-        toast.success("Sorteo ejecutado");
-      }
-      onDone();
-    } catch (e) {
-      setResult(`❌ ${String(e)}`);
-      toast.error("Error al disparar el sorteo");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const [open, setOpen] = useState(false);
 
   return (
-    <div
-      style={{
-        background: "#fff3cd",
-        border: "2px dashed #c9a36b",
-        borderRadius: 16,
-        padding: 20,
-        textAlign: "center",
-      }}
-    >
-      <div style={{ fontWeight: 800, color: "#3b2417", marginBottom: 8 }}>
-        🧪 Modo prueba — disparar sorteo manualmente
-      </div>
-      <button
-        type="button"
-        onClick={fire}
-        disabled={loading}
+    <>
+      <div
         style={{
-          padding: "12px 24px",
-          background: "#1e3a5f",
-          color: "#f3ead8",
-          border: "none",
-          borderRadius: 10,
-          fontWeight: 800,
-          fontSize: 14,
-          cursor: loading ? "wait" : "pointer",
-          opacity: loading ? 0.6 : 1,
+          background: "#fff3cd",
+          border: "2px dashed #c9a36b",
+          borderRadius: 16,
+          padding: 20,
+          textAlign: "center",
         }}
       >
-        {loading ? "Disparando…" : "🎰 Ejecutar sorteo AHORA"}
-      </button>
-      {result && (
-        <pre
+        <div style={{ fontWeight: 800, color: "#3b2417", marginBottom: 8 }}>
+          🧪 Modo prueba — disparar sorteo manualmente
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
           style={{
-            marginTop: 12,
-            padding: 10,
-            background: "#fff",
-            borderRadius: 8,
-            fontSize: 11,
-            textAlign: "left",
-            overflow: "auto",
-            maxHeight: 200,
+            padding: "12px 24px",
+            background: "#1e3a5f",
+            color: "#f3ead8",
+            border: "none",
+            borderRadius: 10,
+            fontWeight: 800,
+            fontSize: 14,
+            cursor: "pointer",
           }}
         >
-          {result}
-        </pre>
-      )}
-    </div>
+          🎰 Ejecutar sorteo AHORA
+        </button>
+      </div>
+      <FullscreenDrawExperience
+        open={open}
+        onClose={() => setOpen(false)}
+        onWinnerInvalidate={onDone}
+      />
+    </>
   );
 }
+
