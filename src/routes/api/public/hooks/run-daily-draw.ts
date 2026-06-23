@@ -125,9 +125,11 @@ export const Route = createFileRoute("/api/public/hooks/run-daily-draw")({
         // Expire stale claims (idempotent)
         await supabaseAdmin.rpc("expire_winner_claims");
 
-        if (nowET.getHours() < 20) {
-          return Response.json({ skipped: true, reason: "before-8pm-et", hourET: nowET.getHours() });
-        }
+        // TEMP: prueba en vivo — gate de 8pm ET desactivado. REVERTIR después.
+        // if (nowET.getHours() < 20) {
+        //   return Response.json({ skipped: true, reason: "before-8pm-et", hourET: nowET.getHours() });
+        // }
+        void nowET;
 
         const { data, error } = await supabaseAdmin.rpc("run_daily_draw");
         if (error) {
