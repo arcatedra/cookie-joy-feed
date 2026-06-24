@@ -1,0 +1,2 @@
+ALTER TABLE public.daily_draw_entries DROP CONSTRAINT IF EXISTS daily_draw_entries_source_check;
+ALTER TABLE public.daily_draw_entries ADD CONSTRAINT daily_draw_entries_source_check CHECK (source = ANY (ARRAY['paid'::text, 'amoe'::text, 'purchase_auto'::text]));
