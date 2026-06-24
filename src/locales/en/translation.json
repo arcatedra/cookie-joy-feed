@@ -650,9 +650,9 @@
     "transparencyHash": "🔐 Transparency hash: {{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ GLOBAL ACCUMULATED POT ★",
-    "contributions": "{{count}} contributions",
-    "updatedLive": "UPDATED LIVE"
+    "eyebrow": "★ TOTAL HISTORICALLY RAISED ★",
+    "contributions": "{{count}} contributions in total",
+    "updatedLive": "LIVE HISTORICAL COUNTER"
   },
   "dailyWinner": {
     "aria": "Winner of the day",

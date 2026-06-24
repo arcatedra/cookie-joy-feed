@@ -653,9 +653,9 @@
     "transparencyHash": "🔐 Hash de transparência: {{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ PRÊMIO GLOBAL ACUMULADO ★",
-    "contributions": "{{count}} contribuições",
-    "updatedLive": "ATUALIZADO AO VIVO"
+    "eyebrow": "★ TOTAL HISTÓRICO ARRECADADO ★",
+    "contributions": "{{count}} contribuições no total",
+    "updatedLive": "CONTADOR HISTÓRICO AO VIVO"
   },
   "dailyWinner": {
     "aria": "Vencedor do dia",

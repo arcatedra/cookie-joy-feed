@@ -650,9 +650,9 @@
     "transparencyHash": "🔐 Hash di trasparenza: {{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ MONTEPREMI GLOBALE ACCUMULATO ★",
-    "contributions": "{{count}} contributi",
-    "updatedLive": "AGGIORNATO IN DIRETTA"
+    "eyebrow": "★ TOTALE STORICO RACCOLTO ★",
+    "contributions": "{{count}} contributi in totale",
+    "updatedLive": "CONTATORE STORICO IN DIRETTA"
   },
   "dailyWinner": {
     "aria": "Vincitore del giorno",
