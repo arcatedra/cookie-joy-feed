@@ -180,7 +180,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             stripe_payment_intent_id: paymentIntentId,
             environment,
           });
-          if (ledgerErr && !String(ledgerErr.message).includes("duplicate")) {
+          const ledgerDuplicate = Boolean(
+            ledgerErr && String(ledgerErr.message).includes("duplicate"),
+          );
+          if (ledgerErr && !ledgerDuplicate) {
             console.error("[payments-webhook] ledger insert failed", ledgerErr);
             return new Response("Ledger insert failed", { status: 500 });
           }
@@ -213,6 +216,62 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
                 guest_email: purchase.subject_email,
                 balance: purchase.tokens,
               });
+            }
+          }
+
+          // Auto-enter the buyer into the current open draw so every paid
+          // contribution to the pool always has at least one participant who
+          // can receive the prize. Skipped on duplicate webhook deliveries.
+          if (!ledgerDuplicate) {
+            try {
+              // Ensure a draw row exists for today (NY); RPC is idempotent.
+              await supabaseAdmin.rpc("ensure_today_draw");
+
+              const { data: drawRow } = await supabaseAdmin
+                .from("daily_draws")
+                .select("draw_date, status")
+                .order("draw_date", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+              if (drawRow?.draw_date && drawRow.status === "open") {
+                // Idempotency: skip if an auto-entry already exists today for
+                // this buyer (handles webhook retries that bypass the ledger
+                // duplicate check on transient errors).
+                const existingQuery = supabaseAdmin
+                  .from("daily_draw_entries")
+                  .select("id")
+                  .eq("draw_date", drawRow.draw_date)
+                  .eq("source", "purchase_auto")
+                  .limit(1);
+                if (purchase.subject_user_id) {
+                  existingQuery.eq("subject_user_id", purchase.subject_user_id);
+                } else if (purchase.subject_email) {
+                  existingQuery.eq("subject_email", purchase.subject_email);
+                }
+                const { data: existing } = await existingQuery.maybeSingle();
+
+                if (!existing) {
+                  const displayName =
+                    (purchase.subject_email?.split("@")[0] ?? "Participante")
+                      .slice(0, 40) || "Participante";
+                  const { error: entryErr } = await supabaseAdmin
+                    .from("daily_draw_entries")
+                    .insert({
+                      draw_date: drawRow.draw_date,
+                      subject_user_id: purchase.subject_user_id,
+                      subject_email: purchase.subject_email,
+                      display_name: displayName,
+                      tickets: 1,
+                      source: "purchase_auto",
+                    });
+                  if (entryErr) {
+                    console.error("[payments-webhook] auto entry insert failed", entryErr);
+                  }
+                }
+              }
+            } catch (e) {
+              console.error("[payments-webhook] auto entry flow error", e);
             }
           }
 
