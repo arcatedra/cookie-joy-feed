@@ -653,9 +653,9 @@
     "transparencyHash": "🔐 Transparency hash: {{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ GLOBAL ACCUMULATED POT ★",
-    "contributions": "{{count}} na kontribusyon",
-    "updatedLive": "UPDATED LIVE"
+    "eyebrow": "★ KABUUANG NAIPONG HISTORYA ★",
+    "contributions": "{{count}} kabuuang kontribusyon",
+    "updatedLive": "LIVE NA HISTORICAL COUNTER"
   },
   "dailyWinner": {
     "aria": "Nanalo ng araw",

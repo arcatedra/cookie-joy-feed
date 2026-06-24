@@ -650,9 +650,9 @@
     "transparencyHash": "🔐 透明度哈希：{{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ 全球累积奖池 ★",
-    "contributions": "{{count}} 次贡献",
-    "updatedLive": "实时更新"
+    "eyebrow": "★ 历史累计募集总额 ★",
+    "contributions": "共 {{count}} 次贡献",
+    "updatedLive": "历史实时计数"
   },
   "dailyWinner": {
     "aria": "今日中奖者",

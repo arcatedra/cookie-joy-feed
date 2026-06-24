@@ -650,9 +650,9 @@
     "transparencyHash": "🔐 Hachage de transparence : {{hash}}…"
   },
   "prizePool": {
-    "eyebrow": "★ CAGNOTTE GLOBALE ACCUMULÉE ★",
-    "contributions": "{{count}} contributions",
-    "updatedLive": "MISE À JOUR EN DIRECT"
+    "eyebrow": "★ TOTAL HISTORIQUE COLLECTÉ ★",
+    "contributions": "{{count}} contributions au total",
+    "updatedLive": "COMPTEUR HISTORIQUE EN DIRECT"
   },
   "dailyWinner": {
     "aria": "Gagnant du jour",
