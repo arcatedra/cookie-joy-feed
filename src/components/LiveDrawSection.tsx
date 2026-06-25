@@ -310,10 +310,6 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           background: BEIGE, borderRadius: 28, padding: 24,
           boxShadow: `0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px ${WOOD}22`,
           display: "grid", placeItems: "center", minHeight: 360, position: "relative",
-        <div style={{
-          background: BEIGE, borderRadius: 28, padding: 24,
-          boxShadow: `0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px ${WOOD}22`,
-          display: "grid", placeItems: "center", minHeight: 360, position: "relative",
           animation: !isDrawing && !isCompleted
             ? (preWarn1 ? "ldRing1 0.6s ease-in-out infinite" : preWarn5 ? "ldRing5 1.6s ease-in-out infinite" : undefined)
             : undefined,
