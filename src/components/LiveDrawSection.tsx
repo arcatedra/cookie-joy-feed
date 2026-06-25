@@ -182,6 +182,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const entriesClosed = isOpen && cd.ms > 0 && cd.ms <= cutoffMs;
   const canEnter = isOpen && !entriesClosed;
   const lastMinute = cd.ms > 0 && cd.ms <= 60_000;
+  // Pre-draw visual warnings on the wheel
+  const preWarn5 = isOpen && cd.ms > 60_000 && cd.ms <= 5 * 60_000;
+  const preWarn1 = isOpen && cd.ms > 15_000 && cd.ms <= 60_000;
 
   // ===== Stage (fullscreen) mode =====
   // Opens at T-15s, while drawing, and during winner celebration.
