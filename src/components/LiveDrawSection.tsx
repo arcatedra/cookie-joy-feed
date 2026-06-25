@@ -522,7 +522,8 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           @keyframes ldRing5 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 16px 2px rgba(212,175,55,0.4); } }
           @keyframes ldRing1 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 24px 6px rgba(255,196,60,0.7); } }
         }
-  );
+      `}</style>
+    </section>
 }
 
 function btnSmall(): React.CSSProperties {
