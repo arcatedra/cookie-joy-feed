@@ -509,8 +509,19 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.65; transform: scale(1.03); }
         }
-      `}</style>
-    </section>
+        @keyframes ldRing5 {
+          0%, 100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 0 0 rgba(212,175,55,0.55); }
+          50% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 28px 6px rgba(212,175,55,0.45); }
+        }
+        @keyframes ldRing1 {
+          0%, 100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 0 0 rgba(255,196,60,0.9); }
+          50% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 44px 12px rgba(255,196,60,0.85); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes ldPulse { 0%,100% { opacity: 1; transform: none; } }
+          @keyframes ldRing5 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 16px 2px rgba(212,175,55,0.4); } }
+          @keyframes ldRing1 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 24px 6px rgba(255,196,60,0.7); } }
+        }
   );
 }
 
