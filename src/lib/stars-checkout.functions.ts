@@ -123,19 +123,31 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
   });
 
 export const getPrizePool = createServerFn({ method: "GET" }).handler(async () => {
-  const { createClient } = await import("@supabase/supabase-js");
-  const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
-  const { data, error } = await sb.rpc("get_prize_pool");
-  if (error) {
-    console.error("[prize-pool] rpc error", error);
-    return { total_pool_usd: 0, total_contributions: 0, last_updated: new Date().toISOString() };
+  const fallback = { total_pool_usd: 0, total_contributions: 0, last_updated: new Date().toISOString() };
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+    if (!url || !key) {
+      console.error("[prize-pool] missing SUPABASE_URL/SUPABASE_PUBLISHABLE_KEY");
+      return fallback;
+    }
+    const sb = createClient(url, key, {
+      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await sb.rpc("get_prize_pool");
+    if (error) {
+      console.error("[prize-pool] rpc error", error);
+      return fallback;
+    }
+    const row = Array.isArray(data) ? data[0] : data;
+    return {
+      total_pool_usd: Number(row?.total_pool_usd ?? 0),
+      total_contributions: Number(row?.total_contributions ?? 0),
+      last_updated: row?.last_updated ?? new Date().toISOString(),
+    };
+  } catch (e) {
+    console.error("[prize-pool] unexpected error", e);
+    return fallback;
   }
-  const row = Array.isArray(data) ? data[0] : data;
-  return {
-    total_pool_usd: Number(row?.total_pool_usd ?? 0),
-    total_contributions: Number(row?.total_contributions ?? 0),
-    last_updated: row?.last_updated ?? new Date().toISOString(),
-  };
 });
