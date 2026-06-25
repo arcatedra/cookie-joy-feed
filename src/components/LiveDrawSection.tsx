@@ -524,6 +524,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         }
       `}</style>
     </section>
+  );
 }
 
 function btnSmall(): React.CSSProperties {
