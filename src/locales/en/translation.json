@@ -647,7 +647,9 @@
     "stageEyebrowPre": "★ LIVE DRAW · STARTS IN ★",
     "stageEyebrowSpin": "🔴 SPINNING · LIVE",
     "stageEyebrowWin": "🎉 WINNER OF THE DAY! 🎉",
-    "transparencyHash": "🔐 Transparency hash: {{hash}}…"
+    "transparencyHash": "🔐 Transparency hash: {{hash}}…",
+    "preWarn5": "Draw in 5 minutes",
+    "preWarn1": "About to spin!"
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTORICALLY RAISED ★",
