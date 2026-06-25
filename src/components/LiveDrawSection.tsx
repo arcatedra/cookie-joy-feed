@@ -310,7 +310,27 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           background: BEIGE, borderRadius: 28, padding: 24,
           boxShadow: `0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px ${WOOD}22`,
           display: "grid", placeItems: "center", minHeight: 360, position: "relative",
+        <div style={{
+          background: BEIGE, borderRadius: 28, padding: 24,
+          boxShadow: `0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px ${WOOD}22`,
+          display: "grid", placeItems: "center", minHeight: 360, position: "relative",
+          animation: !isDrawing && !isCompleted
+            ? (preWarn1 ? "ldRing1 0.6s ease-in-out infinite" : preWarn5 ? "ldRing5 1.6s ease-in-out infinite" : undefined)
+            : undefined,
         }}>
+          {(preWarn5 || preWarn1) && !isDrawing && !isCompleted && (
+            <div style={{
+              position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)",
+              padding: "6px 14px", borderRadius: 999,
+              background: preWarn1 ? "#c0392b" : GOLD_BRIGHT,
+              color: preWarn1 ? BEIGE : WOOD,
+              fontSize: 11, fontWeight: 800, letterSpacing: "0.15em",
+              boxShadow: "0 6px 16px rgba(0,0,0,0.25)", whiteSpace: "nowrap", zIndex: 3,
+              animation: preWarn1 ? "ldPulse 0.6s ease-in-out infinite" : "ldPulse 1.6s ease-in-out infinite",
+            }}>
+              {preWarn1 ? t("liveDraw.preWarn1") : t("liveDraw.preWarn5")}
+            </div>
+          )}
           <div style={{
             position: "relative", width: 280, height: 280,
             borderRadius: "50%", overflow: "hidden",
