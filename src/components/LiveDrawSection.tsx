@@ -182,6 +182,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const entriesClosed = isOpen && cd.ms > 0 && cd.ms <= cutoffMs;
   const canEnter = isOpen && !entriesClosed;
   const lastMinute = cd.ms > 0 && cd.ms <= 60_000;
+  // Pre-draw visual warnings on the wheel
+  const preWarn5 = isOpen && cd.ms > 60_000 && cd.ms <= 5 * 60_000;
+  const preWarn1 = isOpen && cd.ms > 15_000 && cd.ms <= 60_000;
 
   // ===== Stage (fullscreen) mode =====
   // Opens at T-15s, while drawing, and during winner celebration.
@@ -307,7 +310,23 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           background: BEIGE, borderRadius: 28, padding: 24,
           boxShadow: `0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px ${WOOD}22`,
           display: "grid", placeItems: "center", minHeight: 360, position: "relative",
+          animation: !isDrawing && !isCompleted
+            ? (preWarn1 ? "ldRing1 0.6s ease-in-out infinite" : preWarn5 ? "ldRing5 1.6s ease-in-out infinite" : undefined)
+            : undefined,
         }}>
+          {(preWarn5 || preWarn1) && !isDrawing && !isCompleted && (
+            <div style={{
+              position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)",
+              padding: "6px 14px", borderRadius: 999,
+              background: preWarn1 ? "#c0392b" : GOLD_BRIGHT,
+              color: preWarn1 ? BEIGE : WOOD,
+              fontSize: 11, fontWeight: 800, letterSpacing: "0.15em",
+              boxShadow: "0 6px 16px rgba(0,0,0,0.25)", whiteSpace: "nowrap", zIndex: 3,
+              animation: preWarn1 ? "ldPulse 0.6s ease-in-out infinite" : "ldPulse 1.6s ease-in-out infinite",
+            }}>
+              {preWarn1 ? t("liveDraw.preWarn1") : t("liveDraw.preWarn5")}
+            </div>
+          )}
           <div style={{
             position: "relative", width: 280, height: 280,
             borderRadius: "50%", overflow: "hidden",
@@ -489,6 +508,19 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         @keyframes ldPulse {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.65; transform: scale(1.03); }
+        }
+        @keyframes ldRing5 {
+          0%, 100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 0 0 rgba(212,175,55,0.55); }
+          50% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 28px 6px rgba(212,175,55,0.45); }
+        }
+        @keyframes ldRing1 {
+          0%, 100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 0 0 rgba(255,196,60,0.9); }
+          50% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 44px 12px rgba(255,196,60,0.85); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes ldPulse { 0%,100% { opacity: 1; transform: none; } }
+          @keyframes ldRing5 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 16px 2px rgba(212,175,55,0.4); } }
+          @keyframes ldRing1 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 24px 6px rgba(255,196,60,0.7); } }
         }
       `}</style>
     </section>

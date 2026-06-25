@@ -647,7 +647,9 @@
     "stageEyebrowPre": "★ 实时抽奖 · 剩余时间 ★",
     "stageEyebrowSpin": "🔴 正在旋转 · 实时",
     "stageEyebrowWin": "🎉 今日中奖者！🎉",
-    "transparencyHash": "🔐 透明度哈希：{{hash}}…"
+    "transparencyHash": "🔐 透明度哈希：{{hash}}…",
+    "preWarn5": "5分钟后开奖",
+    "preWarn1": "即将转动！"
   },
   "prizePool": {
     "eyebrow": "★ 历史累计募集总额 ★",

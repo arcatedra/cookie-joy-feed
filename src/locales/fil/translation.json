@@ -650,7 +650,9 @@
     "stageEyebrowPre": "★ LIVE DRAW · MAGSISIMULA SA ★",
     "stageEyebrowSpin": "🔴 UMIKOT · LIVE",
     "stageEyebrowWin": "🎉 NANALO NG ARAW! 🎉",
-    "transparencyHash": "🔐 Transparency hash: {{hash}}…"
+    "transparencyHash": "🔐 Transparency hash: {{hash}}…",
+    "preWarn5": "Bunot sa 5 minuto",
+    "preWarn1": "Malapit nang umikot!"
   },
   "prizePool": {
     "eyebrow": "★ KABUUANG NAIPONG HISTORYA ★",

@@ -647,7 +647,9 @@
     "stageEyebrowPre": "★ ESTRAZIONE DAL VIVO · INIZIA TRA ★",
     "stageEyebrowSpin": "🔴 IN ESECUZIONE · DAL VIVO",
     "stageEyebrowWin": "🎉 VINCITORE DEL GIORNO! 🎉",
-    "transparencyHash": "🔐 Hash di trasparenza: {{hash}}…"
+    "transparencyHash": "🔐 Hash di trasparenza: {{hash}}…",
+    "preWarn5": "Estrazione tra 5 minuti",
+    "preWarn1": "Sta per girare!"
   },
   "prizePool": {
     "eyebrow": "★ TOTALE STORICO RACCOLTO ★",

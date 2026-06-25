@@ -647,7 +647,9 @@
     "stageEyebrowPre": "★ TIRAGE EN DIRECT · DÉBUTE DANS ★",
     "stageEyebrowSpin": "🔴 EN COURS · EN DIRECT",
     "stageEyebrowWin": "🎉 GAGNANT DU JOUR ! 🎉",
-    "transparencyHash": "🔐 Hachage de transparence : {{hash}}…"
+    "transparencyHash": "🔐 Hachage de transparence : {{hash}}…",
+    "preWarn5": "Tirage dans 5 minutes",
+    "preWarn1": "Sur le point de tourner !"
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTORIQUE COLLECTÉ ★",

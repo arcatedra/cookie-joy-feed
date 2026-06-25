@@ -492,5 +492,9 @@
     "unknown": "Status unbekannt",
     "buy": "Kaufen",
     "priceDisclaimer": "Preise sind Schätzungen für das erste Registrierungsjahr in USD bei gängigen Registraren und können variieren. * Aktionspreis für das erste Jahr."
+  },
+  "liveDraw": {
+    "preWarn5": "Ziehung in 5 Minuten",
+    "preWarn1": "Gleich dreht es sich!"
   }
 }

@@ -25,5 +25,9 @@
   "auth": {
     "signIn": "ログイン",
     "signOut": "ログアウト"
+  },
+  "liveDraw": {
+    "preWarn5": "5分後に抽選",
+    "preWarn1": "まもなく回転！"
   }
 }

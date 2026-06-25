@@ -647,7 +647,9 @@
     "stageEyebrowPre": "★ SORTEO EN VIVO · COMIENZA EN ★",
     "stageEyebrowSpin": "🔴 GIRANDO · EN VIVO",
     "stageEyebrowWin": "🎉 ¡GANADOR DEL DÍA! 🎉",
-    "transparencyHash": "🔐 Hash de transparencia: {{hash}}…"
+    "transparencyHash": "🔐 Hash de transparencia: {{hash}}…",
+    "preWarn5": "Sorteo en 5 minutos",
+    "preWarn1": "¡A punto de girar!"
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTÓRICO RECAUDADO ★",
