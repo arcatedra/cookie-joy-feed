@@ -618,13 +618,17 @@ export type Database = {
         Row: {
           author_id: string | null
           created_at: string
+          cta_label: string | null
+          cta_url: string | null
           expires_at: string | null
           id: string
+          is_ad: boolean
           product_image: string | null
           product_name: string | null
           product_price: number | null
           product_slug: string | null
           slug: string
+          sponsor_name: string | null
           thumb_url: string | null
           title: string | null
           video_url: string | null
@@ -632,13 +636,17 @@ export type Database = {
         Insert: {
           author_id?: string | null
           created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
           expires_at?: string | null
           id?: string
+          is_ad?: boolean
           product_image?: string | null
           product_name?: string | null
           product_price?: number | null
           product_slug?: string | null
           slug: string
+          sponsor_name?: string | null
           thumb_url?: string | null
           title?: string | null
           video_url?: string | null
@@ -646,13 +654,17 @@ export type Database = {
         Update: {
           author_id?: string | null
           created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
           expires_at?: string | null
           id?: string
+          is_ad?: boolean
           product_image?: string | null
           product_name?: string | null
           product_price?: number | null
           product_slug?: string | null
           slug?: string
+          sponsor_name?: string | null
           thumb_url?: string | null
           title?: string | null
           video_url?: string | null
