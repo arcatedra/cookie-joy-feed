@@ -1273,12 +1273,35 @@ function ReelCard({
         </DropdownMenu>
       </div>}
 
+      {/* Ad badge — visible whenever the reel is marked as a sponsored ad */}
+      {reel.is_ad && (
+        <div className="pointer-events-none absolute right-2 top-12 z-30 inline-flex items-center gap-1 rounded-md bg-amber-400 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#1a0f0a] shadow ring-1 ring-black/10">
+          Ad
+          {reel.sponsor_name && (
+            <span className="ml-1 max-w-[90px] truncate text-[9px] font-bold normal-case tracking-normal opacity-80">
+              · {reel.sponsor_name}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Bottom fixed info */}
       {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
           {translateReelText(reel.title) || "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
-        {reel.product_name && (
+        {reel.is_ad && reel.cta_url ? (
+          <a
+            href={reel.cta_url}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-3 py-2.5 text-center text-[12px] font-extrabold text-[#1a0f0a] shadow-md ring-1 ring-amber-300 transition hover:bg-amber-300"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            {reel.cta_label?.trim() || "Más información"}
+          </a>
+        ) : reel.product_name && (
           <button
             type="button"
             onClick={buy}
