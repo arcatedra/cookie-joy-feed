@@ -2001,6 +2001,10 @@ function AdminModal({
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadPct, setUploadPct] = useState(0);
+  const [isAd, setIsAd] = useState<boolean>(Boolean(editing?.is_ad));
+  const [sponsorName, setSponsorName] = useState(editing?.sponsor_name ?? "");
+  const [ctaLabel, setCtaLabel] = useState(editing?.cta_label ?? "");
+  const [ctaUrl, setCtaUrl] = useState(editing?.cta_url ?? "");
 
   const preview = useMemo(() => parseEmbed(link), [link]);
   const directVideo = useMemo(() => isDirectVideoUrl(link), [link]);
