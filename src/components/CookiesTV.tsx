@@ -606,9 +606,9 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
-                canDelete={canManageAllReels || user?.id === r.author_id}
+                canDelete={canManageAllReels}
                 onDelete={() => handleDelete(r.id)}
-                canEdit={canManageAllReels || user?.id === r.author_id}
+                canEdit={canManageAllReels}
                 onEdit={() => setEditingReel(r)}
                 onExpand={() => setExpandedIndex(index)}
               />
