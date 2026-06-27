@@ -82,6 +82,10 @@ interface DbReel {
   author_id: string | null;
   created_at: string;
   expires_at?: string | null;
+  is_ad?: boolean | null;
+  cta_label?: string | null;
+  cta_url?: string | null;
+  sponsor_name?: string | null;
 }
 
 const REEL_LIFETIME_MS = 60 * 60 * 1000; // 1 hora
