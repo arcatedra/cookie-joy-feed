@@ -23,7 +23,8 @@ export function DailyWinnerBanner() {
   const latest = data?.[0];
   if (!latest) return null;
 
-  const date = new Date(latest.drawDate).toLocaleDateString(getLocale(i18n.language), {
+  // Parse "YYYY-MM-DD" as local noon to avoid UTC→local shifting the day back by one.
+  const date = new Date(latest.drawDate + "T12:00:00").toLocaleDateString(getLocale(i18n.language), {
     day: "2-digit",
     month: "long",
   });
