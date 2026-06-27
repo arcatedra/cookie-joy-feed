@@ -224,20 +224,49 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           // can receive the prize. Skipped on duplicate webhook deliveries.
           if (!ledgerDuplicate) {
             try {
-              // Ensure a draw row exists for today (NY); RPC is idempotent.
+              // Ensure today's draw row exists (NY); RPC is idempotent.
               await supabaseAdmin.rpc("ensure_today_draw");
 
-              const { data: drawRow } = await supabaseAdmin
+              // Find the next OPEN draw (today if still open, otherwise the
+              // next future one). If today is already closed/drawing/completed
+              // we create tomorrow's open draw so the buyer is never left out.
+              let { data: drawRow } = await supabaseAdmin
                 .from("daily_draws")
                 .select("draw_date, status")
-                .order("draw_date", { ascending: false })
+                .eq("status", "open")
+                .order("draw_date", { ascending: true })
                 .limit(1)
                 .maybeSingle();
 
-              if (drawRow?.draw_date && drawRow.status === "open") {
-                // Idempotency: skip if an auto-entry already exists today for
-                // this buyer (handles webhook retries that bypass the ledger
-                // duplicate check on transient errors).
+              if (!drawRow) {
+                // No open draw exists — bootstrap tomorrow's row.
+                const { data: latest } = await supabaseAdmin
+                  .from("daily_draws")
+                  .select("draw_date")
+                  .order("draw_date", { ascending: false })
+                  .limit(1)
+                  .maybeSingle();
+                const base = latest?.draw_date
+                  ? new Date(latest.draw_date + "T12:00:00Z")
+                  : new Date();
+                const next = new Date(base);
+                next.setUTCDate(next.getUTCDate() + 1);
+                const nextDate = next.toISOString().slice(0, 10);
+                const scheduledAt = new Date(`${nextDate}T20:00:00-04:00`).toISOString();
+                const { data: inserted } = await supabaseAdmin
+                  .from("daily_draws")
+                  .upsert(
+                    { draw_date: nextDate, status: "open", scheduled_at: scheduledAt, prize_usd: 0 },
+                    { onConflict: "draw_date" },
+                  )
+                  .select("draw_date, status")
+                  .maybeSingle();
+                drawRow = inserted ?? { draw_date: nextDate, status: "open" };
+              }
+
+              if (drawRow?.draw_date) {
+                // Idempotency: skip if an auto-entry already exists in that draw
+                // for this buyer (handles webhook retries).
                 const existingQuery = supabaseAdmin
                   .from("daily_draw_entries")
                   .select("id")
@@ -274,6 +303,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
               console.error("[payments-webhook] auto entry flow error", e);
             }
           }
+
 
           await supabaseAdmin
             .from("star_purchases")
