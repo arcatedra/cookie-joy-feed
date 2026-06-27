@@ -183,13 +183,14 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const canEnter = isOpen && !entriesClosed;
   const lastMinute = cd.ms > 0 && cd.ms <= 60_000;
   // Pre-draw visual warnings on the wheel
-  const preWarn5 = isOpen && cd.ms > 60_000 && cd.ms <= 5 * 60_000;
-  const preWarn1 = isOpen && cd.ms > 15_000 && cd.ms <= 60_000;
+  //  • preWarn5: soft pulse from cutoff (T-5m) down to T-30s
+  //  • preWarn1: intense "suspense" pulse during the final 30 seconds
+  const preWarn5 = isOpen && cd.ms > 30_000 && cd.ms <= cutoffMs;
+  const preWarn1 = isOpen && cd.ms > 0 && cd.ms <= 30_000;
 
   // ===== Stage (fullscreen) mode =====
-  // Opens at T-15s, while drawing, and during winner celebration.
-  const preShow = isOpen && cd.ms > 0 && cd.ms <= 15_000;
-  const stageOpen = preShow || isDrawing || showWinner;
+  // Opens exactly at draw time (T=0), while drawing, and during winner celebration.
+  const stageOpen = (isOpen && cd.ms === 0) || isDrawing || showWinner;
 
   // Auto-close stage 14s after winner appears
   const stageCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
