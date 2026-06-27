@@ -572,7 +572,7 @@ function WinnersLeaderboard({ winners }: { winners: Array<{ drawDate: string; wi
               border: i === 0 ? `1px solid ${GOLD}` : `1px solid transparent`,
             }}>
               <span style={{ fontSize: 11, color: `${WOOD}99`, fontWeight: 700, minWidth: 60 }}>
-                {new Date(w.drawDate).toLocaleDateString(getLocale(i18n.language), { day: "2-digit", month: "short" })}
+                {new Date(w.drawDate + "T12:00:00").toLocaleDateString(getLocale(i18n.language), { day: "2-digit", month: "short" })}
               </span>
               <span style={{ color: BLUE, fontWeight: 700, fontSize: 15 }}>
                 {w.winnerDisplayName ?? "—"}
