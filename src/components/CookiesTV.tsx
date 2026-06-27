@@ -470,6 +470,23 @@ export function CookiesTV() {
           return { ...prev, [row.reel_id]: Math.max(0, (prev[row.reel_id] ?? 0) + delta) };
         });
       })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "reels" }, async (payload) => {
+        const newRow = payload.new as DbReel;
+        if (reelsRef.current.some((r) => r.id === newRow.id)) return;
+        const [signed] = await signStoredReelVideos([newRow]);
+        if (!hasPlayableSource(signed)) return;
+        setReels((prev) => (prev.some((r) => r.id === signed.id) ? prev : [signed, ...prev]));
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "reels" }, (payload) => {
+        const oldRow = payload.old as { id: string } | null;
+        if (!oldRow?.id) return;
+        setReels((prev) => prev.filter((r) => r.id !== oldRow.id));
+      })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "reels" }, async (payload) => {
+        const newRow = payload.new as DbReel;
+        const [signed] = await signStoredReelVideos([newRow]);
+        setReels((prev) => prev.map((r) => (r.id === signed.id ? { ...r, ...signed } : r)));
+      })
       .subscribe();
     return () => {
       void supabase.removeChannel(ch);
@@ -606,9 +623,9 @@ export function CookiesTV() {
                 onOpenComments={() => setCommentsFor(r.id)}
                 globalMuted={globalMuted}
                 onToggleMuted={() => setGlobalMuted((m) => !m)}
-                canDelete={canManageAllReels || user?.id === r.author_id}
+                canDelete={canManageAllReels}
                 onDelete={() => handleDelete(r.id)}
-                canEdit={canManageAllReels || user?.id === r.author_id}
+                canEdit={canManageAllReels}
                 onEdit={() => setEditingReel(r)}
                 onExpand={() => setExpandedIndex(index)}
               />
