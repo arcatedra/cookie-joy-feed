@@ -82,6 +82,10 @@ interface DbReel {
   author_id: string | null;
   created_at: string;
   expires_at?: string | null;
+  is_ad?: boolean | null;
+  cta_label?: string | null;
+  cta_url?: string | null;
+  sponsor_name?: string | null;
 }
 
 const REEL_LIFETIME_MS = 60 * 60 * 1000; // 1 hora
@@ -1269,12 +1273,35 @@ function ReelCard({
         </DropdownMenu>
       </div>}
 
+      {/* Ad badge — visible whenever the reel is marked as a sponsored ad */}
+      {reel.is_ad && (
+        <div className="pointer-events-none absolute right-2 top-12 z-30 inline-flex items-center gap-1 rounded-md bg-amber-400 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#1a0f0a] shadow ring-1 ring-black/10">
+          Ad
+          {reel.sponsor_name && (
+            <span className="ml-1 max-w-[90px] truncate text-[9px] font-bold normal-case tracking-normal opacity-80">
+              · {reel.sponsor_name}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Bottom fixed info */}
       {!firstExternalOnly && <div className="absolute inset-x-3 bottom-3 z-10 space-y-2">
         <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-white drop-shadow">
           {translateReelText(reel.title) || "¡Saliendo del horno! 🍪 Temp. 1"}
         </p>
-        {reel.product_name && (
+        {reel.is_ad && reel.cta_url ? (
+          <a
+            href={reel.cta_url}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-3 py-2.5 text-center text-[12px] font-extrabold text-[#1a0f0a] shadow-md ring-1 ring-amber-300 transition hover:bg-amber-300"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            {reel.cta_label?.trim() || "Más información"}
+          </a>
+        ) : reel.product_name && (
           <button
             type="button"
             onClick={buy}
@@ -1974,6 +2001,10 @@ function AdminModal({
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadPct, setUploadPct] = useState(0);
+  const [isAd, setIsAd] = useState<boolean>(Boolean(editing?.is_ad));
+  const [sponsorName, setSponsorName] = useState(editing?.sponsor_name ?? "");
+  const [ctaLabel, setCtaLabel] = useState(editing?.cta_label ?? "");
+  const [ctaUrl, setCtaUrl] = useState(editing?.cta_url ?? "");
 
   const preview = useMemo(() => parseEmbed(link), [link]);
   const directVideo = useMemo(() => isDirectVideoUrl(link), [link]);
@@ -2050,6 +2081,13 @@ function AdminModal({
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
     const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
+    const adFields = {
+      is_ad: isAd,
+      sponsor_name: isAd ? (sponsorName.trim() || null) : null,
+      cta_label: isAd ? (ctaLabel.trim() || null) : null,
+      cta_url: isAd ? (ctaUrl.trim() || null) : null,
+    };
+
     if (isEdit && editing) {
       // EDITAR: reemplazar reel existente y reiniciar la hora
       // Si no se cambió el video, conservar el actual
@@ -2066,6 +2104,7 @@ function AdminModal({
         product_image: product.image,
         product_slug: product.slug,
         expires_at: newExpiresAt,
+        ...adFields,
       };
       onPublish(updatedReel);
       setSubmitting(false);
@@ -2081,6 +2120,7 @@ function AdminModal({
             product_image: product.image,
             product_slug: product.slug,
             expires_at: newExpiresAt,
+            ...adFields,
           })
           .eq("id", editing.id);
       }
@@ -2100,6 +2140,7 @@ function AdminModal({
       author_id: user?.id ?? null,
       created_at: new Date().toISOString(),
       expires_at: newExpiresAt,
+      ...adFields,
     };
     onPublish(localReel);
     setSubmitting(false);
@@ -2116,6 +2157,7 @@ function AdminModal({
         product_slug: product.slug,
         author_id: user.id,
         expires_at: newExpiresAt,
+        ...adFields,
       });
     }
   };
@@ -2276,8 +2318,67 @@ function AdminModal({
             </p>
           </label>
 
+          {/* Anuncio nativo (opcional) */}
+          <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={isAd}
+                onChange={(e) => setIsAd(e.target.checked)}
+                className="h-4 w-4 accent-amber-500"
+              />
+              <span className="text-xs font-bold text-[#1a0f0a]">
+                📣 Marcar como anuncio (mostrará el badge "Ad")
+              </span>
+            </label>
 
-
+            {isAd && (
+              <div className="mt-3 space-y-2">
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Patrocinador (opcional)
+                  </span>
+                  <input
+                    type="text"
+                    value={sponsorName}
+                    onChange={(e) => setSponsorName(e.target.value)}
+                    placeholder="Ej. Marca Acme"
+                    maxLength={60}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Texto del botón (CTA)
+                  </span>
+                  <input
+                    type="text"
+                    value={ctaLabel}
+                    onChange={(e) => setCtaLabel(e.target.value)}
+                    placeholder="Más información"
+                    maxLength={40}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Enlace del botón (URL)
+                  </span>
+                  <input
+                    type="url"
+                    value={ctaUrl}
+                    onChange={(e) => setCtaUrl(e.target.value)}
+                    placeholder="https://..."
+                    maxLength={500}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <p className="text-[10px] text-[#666]">
+                  Cuando el reel es un anuncio, el botón "Comprar" se reemplaza por tu CTA con enlace externo.
+                </p>
+              </div>
+            )}
+          </div>
 
 
           <div className="flex justify-end gap-2 pt-2">
