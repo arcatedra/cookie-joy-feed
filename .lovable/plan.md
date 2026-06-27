@@ -1,26 +1,22 @@
-## Aviso visual antes del sorteo (parpadeo de la ruleta)
+## Decisión: sorteo 100% transparente, sin override de admin
 
-Sí — todo el sistema del sorteo ya quedó funcionando. Ahora agrego la señal visual previa.
+No se va a construir ninguna función para que el admin (ni nadie) pueda elegir, forzar o reemplazar al ganador del sorteo diario. El sorteo seguirá corriendo solo por `run_daily_draw()` con su semilla aleatoria verificable (`seed_hash` público).
 
-### Qué se va a ver
-- **T-5 minutos**: la ruleta empieza un parpadeo suave (glow dorado pulsante lento ~1.5s) + badge sutil "Sorteo en 5 min".
-- **T-1 minuto**: parpadeo intenso (pulso rápido ~0.6s) con halo dorado más fuerte + badge en rojo "¡A punto de girar!".
-- A T-15s ya existe el modo "stage" fullscreen — no se toca.
-- Al volver a >5 min (caso edge), el efecto desaparece.
+### Único cambio en este plan
 
-### Cambios técnicos
-1. **`src/components/LiveDrawSection.tsx`**
-   - Derivar dos flags nuevos junto al `lastMinute` existente:
-     - `preWarn5 = isOpen && cd.ms > 60_000 && cd.ms <= 5*60_000`
-     - `preWarn1 = isOpen && cd.ms > 15_000 && cd.ms <= 60_000`
-   - Aplicar clases condicionales al contenedor del wheel: `pre-draw-pulse-soft` o `pre-draw-pulse-strong`.
-   - Mostrar un badge pequeño encima de la ruleta con el texto correspondiente (i18n).
-2. **`src/styles.css`**
-   - Añadir 2 keyframes (`pre-draw-glow-soft`, `pre-draw-glow-strong`) usando tokens existentes (oro). Respeta `prefers-reduced-motion` (sin animación, sólo cambio de color estático).
-3. **i18n** — añadir claves en los 9 locales:
-   - `liveDraw.preWarn5` → "Sorteo en 5 minutos"
-   - `liveDraw.preWarn1` → "¡A punto de girar!"
+Guardar esta decisión como **regla permanente del proyecto** para que en el futuro, aunque tú o yo lo olvidemos, ningún agente (ni yo en otra sesión) construya por accidente algo que rompa la transparencia.
 
-### Notas
-- Sólo cambios de presentación. No toca lógica del sorteo ni del cron (ya arreglados).
-- Sin nuevas dependencias.
+Se crean dos archivos de memoria:
+
+1. **`mem://constraints/no-admin-winner-override.md`** — la regla detallada: qué está prohibido construir (endpoints de override, UI de "elegir ganador", flags en entries, modificaciones a `run_daily_draw`) y qué sí está permitido (el random actual + futura transmisión en vivo por cámara).
+2. **`mem://index.md`** — índice del proyecto con la regla en la sección "Core" para que siempre esté activa.
+
+### Lo que NO cambia
+
+- Cero cambios de código.
+- Cero cambios en la base de datos.
+- El sorteo sigue funcionando exactamente igual que ahora.
+
+### Si en el futuro cambias de opinión
+
+Solo tienes que decírmelo explícitamente y confirmaré antes de construir nada — la regla queda como un "freno" intencional, no como una prohibición eterna.
