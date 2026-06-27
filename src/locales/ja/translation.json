@@ -28,6 +28,9 @@
   },
   "liveDraw": {
     "preWarn5": "5分後に抽選",
-    "preWarn1": "まもなく回転！"
+    "preWarn1": "まもなく回転！",
+    "entriesClosedEyebrow": "⏸ 登録終了 · ライブ抽選を準備中",
+    "entriesClosedTitle": "本日の抽選の登録は終了しました",
+    "entriesClosedBody": "ライブ抽選を準備中… ホイールは ET 午後8時に回転します。"
   }
 }
