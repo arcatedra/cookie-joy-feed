@@ -1,22 +1,21 @@
-## Decisión: sorteo 100% transparente, sin override de admin
+## Publicar la nueva versión del sorteo
 
-No se va a construir ninguna función para que el admin (ni nadie) pueda elegir, forzar o reemplazar al ganador del sorteo diario. El sorteo seguirá corriendo solo por `run_daily_draw()` con su semilla aleatoria verificable (`seed_hash` público).
+Todo el flujo nuevo está funcionando bien en preview. El siguiente paso natural es publicar para que tus usuarios reales vean:
 
-### Único cambio en este plan
+- **7:55 PM ET** — Registro cerrado con mensaje elegante.
+- **7:59:30 PM ET** — Modo suspenso (pulso intenso + badge "¡A punto de girar!").
+- **8:00 PM ET exactas** — Ruleta a pantalla completa, gira, confeti dorado, ganador en tarjeta premium.
+- Sorteo 100% transparente vía `run_daily_draw()` con `seed_hash` público (regla guardada en memoria: nunca override de admin).
 
-Guardar esta decisión como **regla permanente del proyecto** para que en el futuro, aunque tú o yo lo olvidemos, ningún agente (ni yo en otra sesión) construya por accidente algo que rompa la transparencia.
+### Qué hago
 
-Se crean dos archivos de memoria:
+1. Abrir el panel de publicación para que confirmes y subas la versión.
+2. Verificar después de publicar que la URL pública (`origen-com.lovable.app` y tus dominios `origen.management` / `hazorex.com`) refleje los cambios.
 
-1. **`mem://constraints/no-admin-winner-override.md`** — la regla detallada: qué está prohibido construir (endpoints de override, UI de "elegir ganador", flags en entries, modificaciones a `run_daily_draw`) y qué sí está permitido (el random actual + futura transmisión en vivo por cámara).
-2. **`mem://index.md`** — índice del proyecto con la regla en la sección "Core" para que siempre esté activa.
+### Qué NO toco
 
-### Lo que NO cambia
-
-- Cero cambios de código.
+- Cero cambios de código nuevos.
 - Cero cambios en la base de datos.
-- El sorteo sigue funcionando exactamente igual que ahora.
+- El cron del sorteo y los pagos siguen igual.
 
-### Si en el futuro cambias de opinión
-
-Solo tienes que decírmelo explícitamente y confirmaré antes de construir nada — la regla queda como un "freno" intencional, no como una prohibición eterna.
+Cuando apruebes, abro el publicador.
