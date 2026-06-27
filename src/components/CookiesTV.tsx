@@ -2318,8 +2318,67 @@ function AdminModal({
             </p>
           </label>
 
+          {/* Anuncio nativo (opcional) */}
+          <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={isAd}
+                onChange={(e) => setIsAd(e.target.checked)}
+                className="h-4 w-4 accent-amber-500"
+              />
+              <span className="text-xs font-bold text-[#1a0f0a]">
+                📣 Marcar como anuncio (mostrará el badge "Ad")
+              </span>
+            </label>
 
-
+            {isAd && (
+              <div className="mt-3 space-y-2">
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Patrocinador (opcional)
+                  </span>
+                  <input
+                    type="text"
+                    value={sponsorName}
+                    onChange={(e) => setSponsorName(e.target.value)}
+                    placeholder="Ej. Marca Acme"
+                    maxLength={60}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Texto del botón (CTA)
+                  </span>
+                  <input
+                    type="text"
+                    value={ctaLabel}
+                    onChange={(e) => setCtaLabel(e.target.value)}
+                    placeholder="Más información"
+                    maxLength={40}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[10px] font-semibold text-[#1a0f0a]">
+                    Enlace del botón (URL)
+                  </span>
+                  <input
+                    type="url"
+                    value={ctaUrl}
+                    onChange={(e) => setCtaUrl(e.target.value)}
+                    placeholder="https://..."
+                    maxLength={500}
+                    className="w-full rounded-md border border-[#ddd] px-3 py-2 text-sm focus:border-[#c8956d] focus:outline-none focus:ring-1 focus:ring-[#c8956d]"
+                  />
+                </label>
+                <p className="text-[10px] text-[#666]">
+                  Cuando el reel es un anuncio, el botón "Comprar" se reemplaza por tu CTA con enlace externo.
+                </p>
+              </div>
+            )}
+          </div>
 
 
           <div className="flex justify-end gap-2 pt-2">
