@@ -2081,6 +2081,13 @@ function AdminModal({
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
     const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
+    const adFields = {
+      is_ad: isAd,
+      sponsor_name: isAd ? (sponsorName.trim() || null) : null,
+      cta_label: isAd ? (ctaLabel.trim() || null) : null,
+      cta_url: isAd ? (ctaUrl.trim() || null) : null,
+    };
+
     if (isEdit && editing) {
       // EDITAR: reemplazar reel existente y reiniciar la hora
       // Si no se cambió el video, conservar el actual
@@ -2097,6 +2104,7 @@ function AdminModal({
         product_image: product.image,
         product_slug: product.slug,
         expires_at: newExpiresAt,
+        ...adFields,
       };
       onPublish(updatedReel);
       setSubmitting(false);
@@ -2112,6 +2120,7 @@ function AdminModal({
             product_image: product.image,
             product_slug: product.slug,
             expires_at: newExpiresAt,
+            ...adFields,
           })
           .eq("id", editing.id);
       }
@@ -2131,6 +2140,7 @@ function AdminModal({
       author_id: user?.id ?? null,
       created_at: new Date().toISOString(),
       expires_at: newExpiresAt,
+      ...adFields,
     };
     onPublish(localReel);
     setSubmitting(false);
@@ -2147,6 +2157,7 @@ function AdminModal({
         product_slug: product.slug,
         author_id: user.id,
         expires_at: newExpiresAt,
+        ...adFields,
       });
     }
   };
