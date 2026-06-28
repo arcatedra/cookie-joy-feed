@@ -376,6 +376,62 @@ function openInNativeApp(link: PlatformAppLink) {
   window.open(link.webUrl, "_blank", "noopener,noreferrer");
 }
 
+// ============ Embed thumbnail resolver (TikTok / YouTube oEmbed) ============
+const EMBED_THUMB_CACHE = new Map<string, string | null>();
+
+function getYouTubeId(url: string): string | null {
+  const m =
+    url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+  return m?.[1] ?? null;
+}
+
+function useEmbedThumbnail(embed: EmbedInfo | null): string | null {
+  const url = embed?.originalUrl ?? "";
+  const [thumb, setThumb] = useState<string | null>(() => {
+    if (!embed) return null;
+    if (embed.platform === "youtube") {
+      const id = getYouTubeId(url);
+      return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+    }
+    return EMBED_THUMB_CACHE.get(url) ?? null;
+  });
+
+  useEffect(() => {
+    if (!embed) return;
+    if (embed.platform === "youtube") return;
+    if (EMBED_THUMB_CACHE.has(url)) {
+      setThumb(EMBED_THUMB_CACHE.get(url) ?? null);
+      return;
+    }
+    const oembed =
+      embed.platform === "tiktok"
+        ? `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`
+        : null;
+    if (!oembed) {
+      EMBED_THUMB_CACHE.set(url, null);
+      return;
+    }
+    let cancelled = false;
+    fetch(oembed)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { thumbnail_url?: string } | null) => {
+        const t = data?.thumbnail_url ?? null;
+        EMBED_THUMB_CACHE.set(url, t);
+        if (!cancelled) setThumb(t);
+      })
+      .catch(() => {
+        EMBED_THUMB_CACHE.set(url, null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [embed, url]);
+
+  return thumb;
+}
+
 // ============ Main: Facebook-style Reels row ============
 export function CookiesTV() {
   const { user } = useAuth();
@@ -761,6 +817,7 @@ function ReelCard({
   const effectiveVideoUrl = expired ? null : reel.video_url;
   const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
+  const embedThumb = useEmbedThumbnail(embed);
   const firstExternalOnly = false;
 
   // Autoplay native <video> when visible
@@ -1060,15 +1117,41 @@ function ReelCard({
 
         </>
       ) : isEmbed ? (
-        <iframe
-          src={embed!.embedUrl}
-          title={translateReelText(reel.title) || `${embed!.label} reel`}
-          loading="lazy"
-          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
-          allowFullScreen
-          referrerPolicy="strict-origin-when-cross-origin"
-          className="absolute inset-0 h-full w-full border-0"
-        />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onExpand();
+          }}
+          aria-label={`Reproducir ${embed!.label}`}
+          className="absolute inset-0 h-full w-full"
+        >
+          {embedThumb ? (
+            <img
+              src={embedThumb}
+              alt={translateReelText(reel.title) || `${embed!.label} preview`}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : productImg ? (
+            <img
+              src={productImg}
+              alt={translateReelText(reel.product_name) || ""}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
+          )}
+          {/* Big centered play with platform mark */}
+          <span className="absolute inset-0 grid place-items-center">
+            <span className="relative grid h-16 w-16 place-items-center rounded-full bg-white/95 shadow-xl ring-2 ring-white/60">
+              <Play className="h-7 w-7 fill-[#1a0f0a] text-[#1a0f0a]" />
+              <span className="absolute -bottom-1 -right-1">
+                <PlatformMark embed={embed!} className="h-7 w-7" />
+              </span>
+            </span>
+          </span>
+        </button>
       ) : videoSrc ? (
         <video
           ref={videoRef}
