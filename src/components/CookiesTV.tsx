@@ -289,57 +289,76 @@ function isDirectVideoUrl(raw: string | null | undefined): boolean {
 interface PlatformAppLink {
   Icon: ComponentType<{ className?: string }>;
   label: string;
-  colorClass: string; // brand color for the icon button
-  // Try app scheme first, then fall back to https URL.
-  appUrl: string | null;
+  colorClass: string;
+  /** iOS custom scheme (opens app via URL scheme). */
+  iosAppUrl: string | null;
+  /** Android Intent URI with package + https fallback baked in. */
+  androidIntentUrl: string | null;
+  /** Universal/web URL (also works on desktop). */
   webUrl: string;
+}
+
+function stripScheme(url: string): string {
+  return url.replace(/^https?:\/\//i, "");
+}
+
+function buildAndroidIntent(url: string, pkg: string): string {
+  // https scheme + S.browser_fallback_url so Chrome opens the web URL if the app isn't installed.
+  const noScheme = stripScheme(url);
+  const fallback = encodeURIComponent(url);
+  return `intent://${noScheme}#Intent;scheme=https;package=${pkg};S.browser_fallback_url=${fallback};end`;
 }
 
 function getPlatformAppLink(embed: EmbedInfo): PlatformAppLink {
   const url = embed.originalUrl;
   switch (embed.platform) {
     case "instagram": {
-      // /reel/{shortcode}/ or /p/{shortcode}/
       const m = url.match(/instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/i);
-      const appUrl = m ? `instagram://media?shortcode=${m[2]}` : null;
+      const shortcode = m?.[2] ?? null;
       return {
         Icon: InstagramIcon,
         label: "Abrir en Instagram",
         colorClass: "text-pink-500",
-        appUrl,
+        iosAppUrl: shortcode ? `instagram://media?shortcode=${shortcode}` : null,
+        androidIntentUrl: buildAndroidIntent(url, "com.instagram.android"),
         webUrl: url,
       };
     }
     case "tiktok": {
       const m = url.match(/tiktok\.com\/@([\w.-]+)\/video\/(\d+)/i);
-      const appUrl = m ? `snssdk1233://aweme/detail/${m[2]}` : null;
+      const videoId = m?.[2] ?? null;
       return {
         Icon: Music2,
         label: "Abrir en TikTok",
         colorClass: "text-black",
-        appUrl,
+        // snssdk1233 is TikTok's internal scheme; falls back to web automatically.
+        iosAppUrl: videoId ? `snssdk1233://aweme/detail/${videoId}` : null,
+        androidIntentUrl: buildAndroidIntent(url, "com.zhiliaoapp.musically"),
         webUrl: url,
       };
     }
-    case "facebook":
+    case "facebook": {
       return {
         Icon: FacebookIcon,
         label: "Abrir en Facebook",
         colorClass: "text-blue-500",
-        appUrl: `fb://facewebmodal/f?href=${encodeURIComponent(url)}`,
+        iosAppUrl: `fb://facewebmodal/f?href=${encodeURIComponent(url)}`,
+        androidIntentUrl: buildAndroidIntent(url, "com.facebook.katana"),
         webUrl: url,
       };
+    }
     case "youtube": {
       const m =
         url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
         url.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/i) ||
         url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
-      const appUrl = m ? `vnd.youtube://${m[1]}` : null;
+      const videoId = m?.[1] ?? null;
       return {
         Icon: YoutubeIcon,
         label: "Abrir en YouTube",
         colorClass: "text-red-500",
-        appUrl,
+        iosAppUrl: videoId ? `youtube://watch?v=${videoId}` : null,
+        androidIntentUrl: buildAndroidIntent(url, "com.google.android.youtube"),
         webUrl: url,
       };
     }
@@ -355,26 +374,46 @@ function PlatformMark({ embed, className = "h-14 w-14" }: { embed: EmbedInfo; cl
   );
 }
 
+function detectPlatform(): "ios" | "android" | "desktop" {
+  if (typeof navigator === "undefined") return "desktop";
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
+  if (/Android/i.test(ua)) return "android";
+  return "desktop";
+}
+
 function openInNativeApp(link: PlatformAppLink) {
   if (typeof window === "undefined") return;
-  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-  // On mobile, App Links / Universal Links handle https URLs and route to the
-  // installed app automatically. We also attempt the custom scheme as a hint.
-  if (isMobile && link.appUrl) {
+  const platform = detectPlatform();
+
+  // Android: intent:// handles app open + web fallback natively in Chrome.
+  if (platform === "android" && link.androidIntentUrl) {
+    window.location.href = link.androidIntentUrl;
+    return;
+  }
+
+  // iOS: try custom scheme, fall back to web URL if app isn't installed.
+  if (platform === "ios" && link.iosAppUrl) {
+    const start = Date.now();
     const fallback = window.setTimeout(() => {
-      window.location.href = link.webUrl;
-    }, 800);
-    // If app opens, the page is backgrounded and the timeout effectively cancels.
+      // If we're still here after ~1.2s, the app didn't open.
+      if (Date.now() - start < 2000 && document.visibilityState === "visible") {
+        window.location.href = link.webUrl;
+      }
+    }, 1200);
     window.addEventListener(
       "pagehide",
       () => window.clearTimeout(fallback),
       { once: true },
     );
-    window.location.href = link.appUrl;
+    window.location.href = link.iosAppUrl;
     return;
   }
+
+  // Desktop / unknown: open the web URL in a new tab.
   window.open(link.webUrl, "_blank", "noopener,noreferrer");
 }
+
 
 // ============ Embed thumbnail resolver (TikTok / YouTube oEmbed) ============
 const EMBED_THUMB_CACHE = new Map<string, string | null>();
