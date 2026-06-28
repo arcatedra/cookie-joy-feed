@@ -2091,6 +2091,12 @@ function AdminModal({
       cta_url: isAd ? (ctaUrl.trim() || null) : null,
     };
 
+    if (!user) {
+      toast.error("Debes iniciar sesión para publicar un reel.");
+      setSubmitting(false);
+      return;
+    }
+
     if (isEdit && editing) {
       // EDITAR: reemplazar reel existente y reiniciar la hora
       // Si no se cambió el video, conservar el actual
@@ -2109,11 +2115,8 @@ function AdminModal({
         expires_at: newExpiresAt,
         ...adFields,
       };
-      onPublish(updatedReel);
-      setSubmitting(false);
-
-      if (user && !editing.id.startsWith("local-")) {
-        void supabase
+      if (!editing.id.startsWith("local-")) {
+        const { error } = await supabase
           .from("reels")
           .update({
             title: updatedReel.title,
@@ -2126,33 +2129,25 @@ function AdminModal({
             ...adFields,
           })
           .eq("id", editing.id);
+        if (error) {
+          console.error("reel-update error", error);
+          toast.error("No se pudo guardar el reel para todos. Intenta de nuevo.");
+          setSubmitting(false);
+          return;
+        }
       }
+
+      onPublish(updatedReel);
+      setSubmitting(false);
       return;
     }
 
-    // CREAR: reel optimista — aparece al instante en el feed
-    const localReel: DbReel = {
-      id: `local-${Date.now()}`,
-      slug: `r-${Date.now()}`,
-      title: title.trim(),
-      video_url: videoUrl,
-      product_name: product.name,
-      product_price: product.price,
-      product_image: product.image,
-      product_slug: product.slug,
-      author_id: user?.id ?? null,
-      created_at: new Date().toISOString(),
-      expires_at: newExpiresAt,
-      ...adFields,
-    };
-    onPublish(localReel);
-    setSubmitting(false);
-
-    // Persistencia en segundo plano (silencioso si falla, e.g. sin sesión)
-    if (user) {
-      void supabase.from("reels").insert({
-        slug: localReel.slug,
-        title: localReel.title,
+    const slug = `r-${Date.now()}`;
+    const { data: savedReel, error } = await supabase
+      .from("reels")
+      .insert({
+        slug,
+        title: title.trim(),
         video_url: videoUrl,
         product_name: product.name,
         product_price: product.price,
@@ -2161,8 +2156,19 @@ function AdminModal({
         author_id: user.id,
         expires_at: newExpiresAt,
         ...adFields,
-      });
+      })
+      .select("*")
+      .single();
+
+    if (error || !savedReel) {
+      console.error("reel-insert error", error);
+      toast.error("No se pudo guardar el reel para todos. Intenta de nuevo.");
+      setSubmitting(false);
+      return;
     }
+
+    onPublish(savedReel as DbReel);
+    setSubmitting(false);
   };
 
 
