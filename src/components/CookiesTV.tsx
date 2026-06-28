@@ -817,6 +817,7 @@ function ReelCard({
   const effectiveVideoUrl = expired ? null : reel.video_url;
   const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
+  const embedThumb = useEmbedThumbnail(embed);
   const firstExternalOnly = false;
 
   // Autoplay native <video> when visible
