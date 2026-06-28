@@ -492,20 +492,25 @@ export function CookiesTV() {
       setLoading(false);
       const ids = playable.map((r) => r.id);
       if (ids.length) {
-        const [{ data: likeRows }, { data: commentRows }] = await Promise.all([
-          supabase.from("reel_likes").select("reel_id, user_id").in("reel_id", ids),
-          supabase.from("reel_comments").select("reel_id").in("reel_id", ids),
+        const [{ data: likeRows }, { data: commentRows }, { data: myLikeRows }] = await Promise.all([
+          supabase.rpc("reel_like_counts", { reel_ids: ids }),
+          supabase.rpc("reel_comment_counts", { reel_ids: ids }),
+          user
+            ? supabase.from("reel_likes").select("reel_id").in("reel_id", ids).eq("user_id", user.id)
+            : Promise.resolve({ data: [] }),
         ]);
         if (cancelled) return;
         const lc: Record<string, number> = {};
         const mine = new Set<string>();
-        (likeRows ?? []).forEach((l: { reel_id: string; user_id: string }) => {
-          lc[l.reel_id] = (lc[l.reel_id] ?? 0) + 1;
-          if (user && l.user_id === user.id) mine.add(l.reel_id);
+        (likeRows ?? []).forEach((l: { reel_id: string; like_count: number }) => {
+          lc[l.reel_id] = Number(l.like_count) || 0;
+        });
+        (myLikeRows ?? []).forEach((l: { reel_id: string }) => {
+          mine.add(l.reel_id);
         });
         const cc: Record<string, number> = {};
-        (commentRows ?? []).forEach((c: { reel_id: string }) => {
-          cc[c.reel_id] = (cc[c.reel_id] ?? 0) + 1;
+        (commentRows ?? []).forEach((c: { reel_id: string; comment_count: number }) => {
+          cc[c.reel_id] = Number(c.comment_count) || 0;
         });
         setLikeCounts(lc);
         setCommentCounts(cc);
