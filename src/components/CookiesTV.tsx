@@ -1122,41 +1122,54 @@ function ReelCard({
 
         </>
       ) : isEmbed ? (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onExpand();
-          }}
-          aria-label={`Reproducir ${embed!.label}`}
-          className="absolute inset-0 h-full w-full"
-        >
-          {embedThumb ? (
-            <img
-              src={embedThumb}
-              alt={translateReelText(reel.title) || `${embed!.label} preview`}
-              loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          ) : productImg ? (
-            <img
-              src={productImg}
-              alt={translateReelText(reel.product_name) || ""}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
-          )}
-          {/* Big centered play with platform mark */}
-          <span className="absolute inset-0 grid place-items-center">
-            <span className="relative grid h-16 w-16 place-items-center rounded-full bg-white/95 shadow-xl ring-2 ring-white/60">
-              <Play className="h-7 w-7 fill-[#1a0f0a] text-[#1a0f0a]" />
-              <span className="absolute -bottom-1 -right-1">
-                <PlatformMark embed={embed!} className="h-7 w-7" />
+        (() => {
+          const appLink = getPlatformAppLink(embed!);
+          return (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                openInNativeApp(appLink);
+              }}
+              aria-label={`${appLink.label} — ${embed!.label}`}
+              title={appLink.label}
+              className="absolute inset-0 h-full w-full"
+            >
+              {embedThumb ? (
+                <img
+                  src={embedThumb}
+                  alt={translateReelText(reel.title) || `${embed!.label} preview`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : productImg ? (
+                <img
+                  src={productImg}
+                  alt={translateReelText(reel.product_name) || ""}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
+              )}
+              {/* Big centered play with platform mark */}
+              <span className="absolute inset-0 grid place-items-center">
+                <span className="relative grid h-16 w-16 place-items-center rounded-full bg-white/95 shadow-xl ring-2 ring-white/60">
+                  <Play className="h-7 w-7 fill-[#1a0f0a] text-[#1a0f0a]" />
+                  <span className="absolute -bottom-1 -right-1">
+                    <PlatformMark embed={embed!} className="h-7 w-7" />
+                  </span>
+                </span>
               </span>
-            </span>
-          </span>
-        </button>
+              {/* "Open in {platform}" CTA pill */}
+              <span className="pointer-events-none absolute bottom-3 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/85 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-lg ring-1 ring-white/20 backdrop-blur">
+                <span className="inline-flex items-center gap-1.5">
+                  <ExternalLink className="h-3 w-3" />
+                  {appLink.label}
+                </span>
+              </span>
+            </button>
+          );
+        })()
       ) : videoSrc ? (
         <video
           ref={videoRef}
