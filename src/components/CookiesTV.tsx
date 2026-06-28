@@ -1117,15 +1117,41 @@ function ReelCard({
 
         </>
       ) : isEmbed ? (
-        <iframe
-          src={embed!.embedUrl}
-          title={translateReelText(reel.title) || `${embed!.label} reel`}
-          loading="lazy"
-          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
-          allowFullScreen
-          referrerPolicy="strict-origin-when-cross-origin"
-          className="absolute inset-0 h-full w-full border-0"
-        />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onExpand();
+          }}
+          aria-label={`Reproducir ${embed!.label}`}
+          className="absolute inset-0 h-full w-full"
+        >
+          {embedThumb ? (
+            <img
+              src={embedThumb}
+              alt={translateReelText(reel.title) || `${embed!.label} preview`}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : productImg ? (
+            <img
+              src={productImg}
+              alt={translateReelText(reel.product_name) || ""}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
+          )}
+          {/* Big centered play with platform mark */}
+          <span className="absolute inset-0 grid place-items-center">
+            <span className="relative grid h-16 w-16 place-items-center rounded-full bg-white/95 shadow-xl ring-2 ring-white/60">
+              <Play className="h-7 w-7 fill-[#1a0f0a] text-[#1a0f0a]" />
+              <span className="absolute -bottom-1 -right-1">
+                <PlatformMark embed={embed!} className="h-7 w-7" />
+              </span>
+            </span>
+          </span>
+        </button>
       ) : videoSrc ? (
         <video
           ref={videoRef}
