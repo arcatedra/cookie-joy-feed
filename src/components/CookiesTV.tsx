@@ -2059,24 +2059,27 @@ function AdminModal({
       // Object URL = instantánea, se muestra en el feed inmediatamente
       videoUrl = URL.createObjectURL(file);
 
-      // Intento de subida a Storage en segundo plano (best-effort, requiere auth)
+      // Subida a Storage — ESPERAMOS a que termine para que la BD guarde
+      // la URL pública real (no el blob local que solo existe en este navegador).
       if (user) {
         const path = `${user.id}/${Date.now()}.${ext}`;
         setUploadPct(20);
-        // Force a safe video content-type regardless of the browser-supplied value.
         const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
-        void supabase.storage
+        const { error: upErr } = await supabase.storage
           .from("reels")
-          .upload(path, file, { contentType: safeContentType, upsert: false })
-          .then(({ error: upErr }) => {
-            setUploadPct(100);
-            if (upErr) return;
-            const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
-            if (pub?.publicUrl) videoUrl = pub.publicUrl;
-          });
+          .upload(path, file, { contentType: safeContentType, upsert: false });
+        setUploadPct(100);
+        if (upErr) {
+          toast.error("No se pudo subir el video. Intenta de nuevo.");
+          setSubmitting(false);
+          return;
+        }
+        const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
+        if (pub?.publicUrl) videoUrl = pub.publicUrl;
       }
       }
     }
+
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
     const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
