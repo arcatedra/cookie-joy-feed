@@ -138,6 +138,109 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
           findString(payload, "kind");
 
+        // --- Cookie order (cart checkout) ---
+        if (
+          metaKind === "cookie_order" &&
+          eventType === "checkout.session.completed" &&
+          objectId.startsWith("cs_")
+        ) {
+          const sessionId = objectId;
+          const paymentIntentId =
+            (dataObject?.payment_intent as string | undefined) ?? null;
+          const amountTotalCents = Number(dataObject?.amount_total ?? 0);
+          const amountSubtotalCents = Number(dataObject?.amount_subtotal ?? 0);
+          const totalDetails = (dataObject?.total_details as Record<string, unknown> | undefined) ?? {};
+          const shippingCents = Number(totalDetails?.amount_shipping ?? 0);
+          const taxCents = Number(totalDetails?.amount_tax ?? 0);
+          const customerDetails =
+            (dataObject?.customer_details as Record<string, unknown> | undefined) ?? {};
+          const shippingFromStripe =
+            (dataObject?.shipping_details as Record<string, unknown> | undefined) ??
+            (dataObject?.shipping as Record<string, unknown> | undefined) ??
+            null;
+
+          const { data: existing } = await supabaseAdmin
+            .from("orders")
+            .select("id, status, email, items, total_usd, user_id")
+            .eq("stripe_session_id", sessionId)
+            .maybeSingle();
+
+          if (!existing) {
+            console.warn("[payments-webhook] order not found", { sessionId });
+            return Response.json({ ok: true, ignored: "order not found" });
+          }
+          if (existing.status === "paid") {
+            return Response.json({ ok: true, alreadyProcessed: true });
+          }
+
+          const update: Record<string, unknown> = {
+            status: "paid",
+            stripe_payment_intent_id: paymentIntentId,
+            paid_at: new Date().toISOString(),
+          };
+          if (amountTotalCents > 0) update.total_usd = amountTotalCents / 100;
+          if (amountSubtotalCents > 0) update.subtotal_usd = amountSubtotalCents / 100;
+          if (shippingCents >= 0) update.shipping_usd = shippingCents / 100;
+          if (taxCents >= 0) update.tax_usd = taxCents / 100;
+          if (shippingFromStripe) update.shipping_address = shippingFromStripe;
+          const stripeEmail = (customerDetails?.email as string | undefined) ?? null;
+          if (stripeEmail) update.email = stripeEmail.toLowerCase();
+
+          const { error: updateErr } = await supabaseAdmin
+            .from("orders")
+            .update(update)
+            .eq("id", existing.id);
+          if (updateErr) {
+            console.error("[payments-webhook] order update failed", updateErr);
+            return new Response("Order update failed", { status: 500 });
+          }
+
+          // Send confirmation emails (idempotent via idempotency_key)
+          try {
+            const recipient = (stripeEmail ?? existing.email) as string;
+            const items = Array.isArray(existing.items) ? existing.items : [];
+            const orderNumber = String(existing.id).slice(0, 8).toUpperCase();
+            const totalFinal = amountTotalCents > 0
+              ? amountTotalCents / 100
+              : Number(existing.total_usd ?? 0);
+
+            await supabaseAdmin.rpc("enqueue_email", {
+              p_queue: "transactional_emails",
+              p_template_name: "order-confirmation",
+              p_recipient_email: recipient,
+              p_template_data: {
+                customerName: recipient.split("@")[0],
+                orderNumber,
+                orderTotal: `$${totalFinal.toFixed(2)}`,
+                items: items.map((it: Record<string, unknown>) => ({
+                  name: String(it.name ?? "Galleta"),
+                  quantity: Number(it.qty ?? 1),
+                  price: `$${(Number(it.price ?? 0) * Number(it.qty ?? 1)).toFixed(2)}`,
+                })),
+              },
+              p_idempotency_key: `order:${sessionId}:customer`,
+            });
+
+            // Admin notification — best-effort; ignore if template/recipient missing
+            await supabaseAdmin.rpc("enqueue_email", {
+              p_queue: "transactional_emails",
+              p_template_name: "admin-new-order",
+              p_recipient_email: process.env.ADMIN_EMAIL ?? recipient,
+              p_template_data: {
+                orderNumber,
+                customerEmail: recipient,
+                orderTotal: `$${totalFinal.toFixed(2)}`,
+                items,
+              },
+              p_idempotency_key: `order:${sessionId}:admin`,
+            });
+          } catch (e) {
+            console.error("[payments-webhook] email enqueue failed (non-fatal)", e);
+          }
+
+          return Response.json({ ok: true, order: existing.id });
+        }
+
         if (
           metaKind === "stars_purchase" &&
           eventType === "checkout.session.completed" &&
