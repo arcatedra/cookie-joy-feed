@@ -1,53 +1,35 @@
-# Quitar "Lovable" de la pantalla de inicio de sesión con Google
+# Aplicar el logo de Hazorex en toda la app
 
-## El problema
+## 1. Subir el logo como asset del CDN
+- Subir `user-uploads://Diseño_sin_título.png` con `lovable-assets create` → `src/assets/hazorex-logo.png.asset.json`.
+- Generar también una versión favicon (32×32 / 180×180 para Apple touch) desde la misma imagen y subirlas como assets:
+  - `src/assets/hazorex-favicon.png.asset.json`
+  - `src/assets/hazorex-apple-touch.png.asset.json`
 
-La pantalla "Acceder con Google" muestra el nombre **Lovable** y el corazón porque la app está usando las credenciales OAuth compartidas y gestionadas por Lovable. Google muestra el nombre y logo del proyecto OAuth **dueño del Client ID** — no se puede cambiar desde el código de la app. La única solución es usar credenciales OAuth propias en tu cuenta de Google Cloud.
+## 2. Favicon + metadatos sitewide
+- Editar `src/routes/__root.tsx`:
+  - Reemplazar `links` del favicon actual por el nuevo `hazorex-favicon` (32×32) y añadir `apple-touch-icon` (180×180).
+  - Mantener `og:site_name = "Hazorex"`.
+  - Añadir `og:image` por defecto solo si no rompe rutas hijas (preferiblemente dejarlo en rutas leaf clave: home, login, privacidad, términos).
 
-Una vez hecho, la pantalla mostrará:
-- **Hazorex** en lugar de Lovable
-- **Tu logo** en lugar del corazón
-- **hazorex.com** como sitio oficial
-- Enlaces a tu Política de Privacidad y Términos
+## 3. Logo en header / navbar
+- Localizar el componente de header principal (probablemente `src/components/Header.tsx` o similar) y reemplazar el logo/marca textual actual por:
+  ```tsx
+  import logo from "@/assets/hazorex-logo.png.asset.json";
+  <img src={logo.url} alt="Hazorex" className="h-8 w-auto" />
+  ```
+- Mantener el texto "Hazorex" al lado del icono para legibilidad y SEO.
 
-Resultado: indistinguible de cualquier app profesional. Nadie sabrá con qué herramienta se construyó.
+## 4. Logo en pantallas de login / registro
+- Localizar las rutas/componentes de auth (login, registro, recuperar contraseña) y añadir el logo centrado arriba del formulario, tamaño ~64–80px.
+- Aplicar también en `src/routes/privacidad.tsx` y `src/routes/terminos.tsx` en la cabecera para consistencia con la consent screen de Google.
 
-## Lo que tú haces (en Google Cloud — guiado paso a paso)
+## 5. Open Graph image
+- Añadir `og:image` y `twitter:image` en rutas leaf principales (`/`, `/privacidad`, `/terminos`, `/auth` si existe) apuntando al URL absoluto del logo (`https://hazorex.com` + asset URL).
+- Recordatorio: los crawlers cachean OG; los previews ya compartidos no se actualizan al instante (debugger de cada red para forzar refresh).
 
-1. Crear proyecto en Google Cloud Console llamado **Hazorex**.
-2. Configurar la **OAuth consent screen**:
-   - App name: `Hazorex`
-   - User support email: tu email
-   - App logo: subir tu logo cuadrado (mín. 120×120, PNG)
-   - Application home page: `https://hazorex.com`
-   - Privacy policy: `https://hazorex.com/privacidad` (o la que indiques)
-   - Terms of service: `https://hazorex.com/terminos`
-   - Authorized domains: `hazorex.com`
-   - Scopes: `email`, `profile`, `openid`
-3. Crear **OAuth Client ID** (tipo Web application):
-   - Authorized redirect URI: la URL de callback que te daré desde la configuración de auth del backend (formato `https://<proyecto>.supabase.co/auth/v1/callback`).
-4. Copiar **Client ID** y **Client Secret** y pegármelos cuando te los pida.
-5. Publicar la app OAuth (estado "In production") para que cualquier usuario pueda iniciar sesión sin la advertencia de "app no verificada".
-
-> Nota sobre verificación: Google puede pedir verificación oficial (proceso de días/semanas, gratis) si superas ~100 usuarios o pides scopes sensibles. Con `email/profile/openid` el proceso es ligero o no requerido.
-
-## Lo que yo hago (en la app)
-
-1. Crear las rutas legales mínimas si no existen, para que los enlaces de la pantalla de Google funcionen:
-   - `/privacidad` — Política de Privacidad básica de Hazorex.
-   - `/terminos` — Términos del Servicio básicos de Hazorex.
-2. Una vez me pases Client ID + Client Secret, guardarlos de forma segura y configurarlos como las credenciales del proveedor Google en el backend de auth (sustituyendo las credenciales gestionadas por Lovable).
-3. Verificar el flujo: hacer logout y volver a iniciar sesión con Google; confirmar que la pantalla muestra **Hazorex + tu logo + hazorex.com** y ya no aparece Lovable.
-
-## Fuera de alcance
-
-- No tocaré la lógica de la app, el sorteo, ni nada visual fuera de las dos páginas legales nuevas.
-- No puedo eliminar la marca Lovable de la URL de callback de Google (es la del backend, no visible para el usuario final).
-- No registro tu app en Google ni acepto los Términos por ti — eso solo lo puedes hacer tú con tu cuenta Google.
-
-## Orden de ejecución sugerido
-
-1. Apruebas este plan.
-2. Yo creo las páginas `/privacidad` y `/terminos` y te paso la URL de callback exacta para Google.
-3. Tú haces los pasos en Google Cloud y me devuelves Client ID + Secret.
-4. Yo los configuro en el backend y verificamos juntos el resultado.
+## Detalles técnicos
+- Usar `lovable-assets create --file /mnt/user-uploads/Diseño_sin_título.png --filename hazorex-logo.png`.
+- Para favicon redimensionar con Python/PIL antes de subir.
+- No tocar `src/integrations/supabase/*` ni `routeTree.gen.ts`.
+- Verificar build al final.
