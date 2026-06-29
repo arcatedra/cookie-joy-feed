@@ -92,15 +92,8 @@ const sliderProducts: SliderProduct[] = [
 function Home() {
   const { t } = useTranslation();
   return (
-    <main
-      className="min-h-screen"
-      style={{
-        backgroundColor: "#eaeded",
-        backgroundImage:
-          "radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0)",
-        backgroundSize: "18px 18px",
-      }}
-    >
+    <main className="min-h-screen bg-[#0B0B0F]">
+
       {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
       <div className="mx-auto max-w-[1500px] pt-3">
         <DailyWinnerBanner />
@@ -161,7 +154,7 @@ function HeroCarousel() {
 
   return (
     <div
-      className="relative w-full overflow-hidden bg-[#1a0f0a]"
+      className="relative w-full overflow-hidden bg-[#0B0B0F]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -243,7 +236,7 @@ function HeroCarousel() {
       </div>
 
       {/* Bottom fade into page bg */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-[#eaeded] md:h-24" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-[#0B0B0F] md:h-24" />
     </div>
   );
 }
