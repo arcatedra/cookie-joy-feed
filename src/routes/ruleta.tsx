@@ -188,8 +188,27 @@ function RuletaPage() {
         </div>
 
 
-
-        {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
+        {/* Personal star spin — fullscreen suspense overlay */}
+        <section
+          style={{
+            background: BEIGE_DEEP,
+            borderRadius: 24,
+            padding: "clamp(1.5rem, 4vw, 2.5rem)",
+            border: `1px solid ${GOLD}`,
+            display: "grid",
+            placeItems: "center",
+            gap: 16,
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: 11, letterSpacing: "0.3em", color: BLUE_SOFT }}>
+            {t("ruleta.sweepstakes")}
+          </div>
+          <h2 style={{ margin: 0, fontSize: "clamp(22px, 4vw, 32px)", color: BLUE }}>
+            {t("ruleta.spinBtn", { cost: SPIN_COST })}
+          </h2>
+          <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
+        </section>
 
         <BuyTokensPanel balance={balance} />
 
