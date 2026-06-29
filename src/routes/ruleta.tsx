@@ -219,6 +219,19 @@ function RuletaPage() {
 
         <Legal />
       </main>
+
+      {stageOpen && (
+        <SpinStageOverlay
+          phase={stagePhase}
+          rotation={rotation}
+          spinning={spinning}
+          prize={lastPrize}
+          onClose={() => {
+            setStageOpen(false);
+            setStagePhase("building");
+          }}
+        />
+      )}
     </div>
   );
 }
