@@ -94,6 +94,14 @@ function Home() {
   return (
     <main className="min-h-screen bg-[#7A8BA3]">
 
+      {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
+      <div className="mx-auto max-w-[1500px] pt-3">
+        <DailyWinnerBanner />
+      </div>
+
+      {/* Reels stories bar (Instagram-style) */}
+      <CookiesTV />
+
       {/* Hero — propuesta clara */}
       <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-4 text-white md:py-6">
         <div className="mx-auto max-w-[1100px] text-center">
@@ -126,15 +134,6 @@ function Home() {
           </p>
         </div>
       </section>
-
-
-      {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
-      <div className="mx-auto max-w-[1500px] pt-3">
-        <DailyWinnerBanner />
-      </div>
-
-      {/* Reels stories bar (Instagram-style, above the hero) */}
-      <CookiesTV />
 
       {/* Subscription promo banner (hidden when already subscribed) */}
       <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
