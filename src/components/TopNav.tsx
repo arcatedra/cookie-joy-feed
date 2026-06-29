@@ -302,12 +302,17 @@ export function TopNav() {
         </div>
 
         {/* Mobile-only address & language row */}
-        <div className="flex items-center justify-between gap-2 bg-[#16294a] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
-          <button type="button" className="flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 text-amber-300" />
-            <span>{t("topnav.deliverTo")} — {t("topnav.updateLocation")}</span>
+        <div className="flex min-w-0 items-center justify-between gap-2 bg-[#16294a] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
+          <button type="button" className="flex min-w-0 items-center gap-1">
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-amber-300" />
+            <span className="truncate">
+              <span className="hidden xs:inline">{t("topnav.deliverTo")} — </span>
+              {t("topnav.updateLocation")}
+            </span>
           </button>
-          <LanguageSwitcher />
+          <div className="shrink-0">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* Sub-navbar */}

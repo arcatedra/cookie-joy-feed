@@ -21,6 +21,7 @@ import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
+import { SiteFooter } from "@/components/SiteFooter";
 import { PreDrawCountdownBanner } from "@/components/PreDrawCountdownBanner";
 import { PushNotificationOptIn } from "@/components/PushNotificationOptIn";
 import { Toaster } from "sonner";
@@ -149,6 +150,7 @@ function RootComponent() {
               <TopNav />
               {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
               <Outlet />
+              <SiteFooter />
             </div>
             <PushNotificationOptIn />
             <Toaster position="top-center" richColors />
