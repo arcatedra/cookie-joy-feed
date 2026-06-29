@@ -44,10 +44,11 @@ type Shipping = "standard" | "express";
 type PayMethod = "card" | "wallet";
 
 function CheckoutPage() {
-  const { items, total, setQty, remove, clear, count } = useCart();
+  const { items, total, setQty, remove, count } = useCart();
   const gate = useSubscriptionGate();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user } = useAuth();
 
 
   const [openStep, setOpenStep] = useState<StepKey>("address");
@@ -55,6 +56,8 @@ function CheckoutPage() {
   const [pay, setPay] = useState<PayMethod>("card");
   const [confirmed, setConfirmed] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [trackingId] = useState(
     () => `AMZ-GAL-${Math.floor(1000 + Math.random() * 9000)}`,
   );
@@ -67,10 +70,11 @@ function CheckoutPage() {
     city: "",
     zip: "",
     phone: "",
+    email: "",
     makeDefault: true,
   });
 
-  // Card form
+  // Card form (placeholder — real payment runs in the embedded Stripe modal below)
   const [card, setCard] = useState({ number: "", exp: "", cvv: "" });
 
   const shippingCost = items.length === 0 ? 0 : shipping === "express" ? 4.99 : 0;
@@ -82,12 +86,16 @@ function CheckoutPage() {
 
   const fmt = (n: number) => `$${n.toFixed(2)}`;
 
+  const buyerEmail = (user?.email ?? addr.email ?? "").trim().toLowerCase();
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail);
+
   const addressComplete = Boolean(
     addr.name.trim() &&
       addr.street.trim() &&
       addr.city.trim() &&
       addr.zip.trim() &&
-      addr.phone.trim(),
+      addr.phone.trim() &&
+      emailValid,
   );
 
   const handleConfirm = async () => {
@@ -96,11 +104,42 @@ function CheckoutPage() {
       setOpenStep("address");
       return;
     }
+    if (!stripePromise) {
+      setCheckoutError("El pago no está configurado en este entorno.");
+      return;
+    }
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 1400));
-    clear();
-    setProcessing(false);
-    setConfirmed(true);
+    setCheckoutError(null);
+    try {
+      const res = await createCartCheckout({
+        data: {
+          items: items.map((it) => ({
+            id: it.id,
+            name: it.name,
+            price: it.price,
+            qty: it.qty,
+            image: it.image,
+          })),
+          email: buyerEmail,
+          shipping,
+          address: {
+            name: addr.name,
+            street: addr.street,
+            apt: addr.apt,
+            city: addr.city,
+            zip: addr.zip,
+            phone: addr.phone,
+            country: "US",
+          },
+        },
+      });
+      setClientSecret(res.clientSecret);
+    } catch (e) {
+      console.error(e);
+      setCheckoutError(e instanceof Error ? e.message : "No se pudo iniciar el pago.");
+    } finally {
+      setProcessing(false);
+    }
   };
 
   // ============ Success screen ============
