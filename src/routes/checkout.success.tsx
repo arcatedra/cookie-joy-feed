@@ -60,7 +60,7 @@ function SuccessPage() {
         const res = await getOrderBySession({ data: { sessionId: session_id } });
         if (cancelled) return;
         if (res.found) {
-          setOrder(res.order as OrderView);
+          setOrder(res.order as unknown as OrderView);
           setLoading(false);
           if (res.order.status === "paid") clear();
           else if (attempts < maxAttempts) {
