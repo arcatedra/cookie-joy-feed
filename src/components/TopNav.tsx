@@ -75,7 +75,7 @@ export function TopNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[#C8862E]/30 bg-[#0B0B0F] text-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.6)]">
+      <header className="sticky top-0 z-40 border-b border-[#C8862E]/30 bg-[#1e3a5f] text-white shadow-[0_2px_20px_-4px_rgba(0,0,0,0.6)]">
         {/* Top row */}
         <div className="flex items-center gap-2 px-3 py-2 md:gap-4 md:px-6 md:py-2.5">
           {/* Mobile hamburger removed per request */}
@@ -298,7 +298,7 @@ export function TopNav() {
         </div>
 
         {/* Mobile-only address & language row */}
-        <div className="flex items-center justify-between gap-2 bg-[#0F172A] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
+        <div className="flex items-center justify-between gap-2 bg-[#16294a] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
           <button type="button" className="flex items-center gap-1">
             <MapPin className="h-3.5 w-3.5 text-amber-300" />
             <span>{t("topnav.deliverTo")} — {t("topnav.updateLocation")}</span>
@@ -307,7 +307,7 @@ export function TopNav() {
         </div>
 
         {/* Sub-navbar */}
-        <nav className="flex items-center gap-1 bg-[#0F172A] px-2 py-1.5 text-sm md:px-4">
+        <nav className="flex items-center gap-1 bg-[#16294a] px-2 py-1.5 text-sm md:px-4">
           <button
             type="button"
             onClick={() => setSideOpen(true)}
