@@ -439,6 +439,69 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          email: string
+          environment: string
+          id: string
+          items: Json
+          paid_at: string | null
+          shipping_address: Json | null
+          shipping_usd: number
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+          subtotal_usd: number
+          tax_usd: number
+          total_usd: number
+          tracking_number: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          email: string
+          environment?: string
+          id?: string
+          items?: Json
+          paid_at?: string | null
+          shipping_address?: Json | null
+          shipping_usd?: number
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+          subtotal_usd?: number
+          tax_usd?: number
+          total_usd?: number
+          tracking_number?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          email?: string
+          environment?: string
+          id?: string
+          items?: Json
+          paid_at?: string | null
+          shipping_address?: Json | null
+          shipping_usd?: number
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+          subtotal_usd?: number
+          tax_usd?: number
+          total_usd?: number
+          tracking_number?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       prize_pool_ledger: {
         Row: {
           amount_usd: number
