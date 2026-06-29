@@ -1,53 +1,53 @@
-# Aviso "El sorteo gira en 5 minutos"
+# Quitar "Lovable" de la pantalla de inicio de sesión con Google
 
-Objetivo: 5 minutos antes de que gire la ruleta del sorteo diario, todos los usuarios registrados reciben un aviso simultáneo por tres canales para que entren en vivo y vivan la tensión del giro.
+## El problema
 
-## Qué se construye
+La pantalla "Acceder con Google" muestra el nombre **Lovable** y el corazón porque la app está usando las credenciales OAuth compartidas y gestionadas por Lovable. Google muestra el nombre y logo del proyecto OAuth **dueño del Client ID** — no se puede cambiar desde el código de la app. La única solución es usar credenciales OAuth propias en tu cuenta de Google Cloud.
 
-### 1. Push notifications del navegador (canal principal)
-- Banner discreto en la home y en `/ruleta` pidiendo permiso: "Activa avisos para no perderte el giro en vivo".
-- Al aceptar, se guarda la suscripción Web Push (endpoint + keys p256dh/auth) en una nueva tabla `push_subscriptions` ligada al `user_id`.
-- Funciona en Chrome/Edge/Firefox desktop y Android. En iOS solo funciona si el usuario añadió la web a la pantalla de inicio (se lo explicamos en el banner).
-- Click en la notificación → abre directamente la pantalla del sorteo en vivo.
+Una vez hecho, la pantalla mostrará:
+- **Hazorex** en lugar de Lovable
+- **Tu logo** en lugar del corazón
+- **hazorex.com** como sitio oficial
+- Enlaces a tu Política de Privacidad y Términos
 
-### 2. Email de respaldo
-- A todos los usuarios registrados con email verificado y que no estén en la lista de suppressed.
-- Asunto: "🎰 El sorteo gira en 5 minutos — entra ahora".
-- Botón grande "Ver el giro en vivo" que lleva al sorteo.
-- Usa la infraestructura de Lovable Emails que ya tienes montada (cola `transactional_emails`).
+Resultado: indistinguible de cualquier app profesional. Nadie sabrá con qué herramienta se construyó.
 
-### 3. Banner in-app para los que ya están dentro
-- Toast/banner llamativo en la parte superior con cuenta regresiva (5:00 → 0:00) y botón "Ir al sorteo en vivo".
-- Aparece en cualquier ruta donde esté el usuario.
+## Lo que tú haces (en Google Cloud — guiado paso a paso)
 
-### 4. Disparador automático
-- Un cron job (pg_cron) que se ejecuta cada minuto, mira la hora del próximo sorteo en `sweepstakes_config`, y cuando faltan exactamente 5 minutos dispara los tres canales en paralelo.
-- Idempotente: marca el sorteo del día como "avisado" para no enviar dos veces si el cron corre dos veces.
+1. Crear proyecto en Google Cloud Console llamado **Hazorex**.
+2. Configurar la **OAuth consent screen**:
+   - App name: `Hazorex`
+   - User support email: tu email
+   - App logo: subir tu logo cuadrado (mín. 120×120, PNG)
+   - Application home page: `https://hazorex.com`
+   - Privacy policy: `https://hazorex.com/privacidad` (o la que indiques)
+   - Terms of service: `https://hazorex.com/terminos`
+   - Authorized domains: `hazorex.com`
+   - Scopes: `email`, `profile`, `openid`
+3. Crear **OAuth Client ID** (tipo Web application):
+   - Authorized redirect URI: la URL de callback que te daré desde la configuración de auth del backend (formato `https://<proyecto>.supabase.co/auth/v1/callback`).
+4. Copiar **Client ID** y **Client Secret** y pegármelos cuando te los pida.
+5. Publicar la app OAuth (estado "In production") para que cualquier usuario pueda iniciar sesión sin la advertencia de "app no verificada".
 
-### 5. Preferencias del usuario
-- Toggle en el perfil: "Avísame 5 min antes del sorteo" (activado por defecto al aceptar push, desactivable).
-- Link de unsubscribe en el email (usa la tabla `email_unsubscribe_tokens` existente).
+> Nota sobre verificación: Google puede pedir verificación oficial (proceso de días/semanas, gratis) si superas ~100 usuarios o pides scopes sensibles. Con `email/profile/openid` el proceso es ligero o no requerido.
 
-## Detalles técnicos
+## Lo que yo hago (en la app)
 
-- **Nueva tabla** `push_subscriptions` (user_id, endpoint, p256dh, auth, created_at) con RLS y GRANTs.
-- **Nueva columna** en `profiles`: `notify_before_draw boolean default true`.
-- **Nueva columna** en `daily_draws`: `notified_5min_at timestamptz` para idempotencia.
-- **Server route público** `/api/public/hooks/notify-pre-draw` que el cron invoca; valida con `apikey` header.
-- **Server function** `sendPushNotification` que firma con VAPID y hace POST al endpoint de cada suscripción (librería `web-push` compatible con Worker, o llamada fetch directa firmando JWT VAPID).
-- **Claves VAPID**: se generan una vez con `generate_secret` y se guardan como `VAPID_PUBLIC_KEY` (también expuesta como `VITE_VAPID_PUBLIC_KEY` para el cliente) y `VAPID_PRIVATE_KEY` (server-only).
-- **Service Worker** nuevo en `public/sw.js` que escucha el evento `push` y muestra la notificación.
-- **Cron** cada minuto vía `pg_cron` + `pg_net`.
-- **Banner in-app** consulta cada 30s la hora del próximo sorteo (o vía Realtime sobre `daily_draws`) y aparece solo en la ventana de los últimos 5 min.
-
-## Limitaciones honestas
-
-- **iOS Safari**: las push solo llegan si el usuario instaló la web como PWA. No hay forma de evitarlo, es restricción de Apple.
-- **Tasa de aceptación de push**: típicamente 20-40% acepta el permiso. Por eso van los 3 canales.
-- **Email a "todos los registrados"**: si tienes muchos usuarios inactivos, puede afectar tu reputación de envío. Recomendación a futuro (no en este plan): pasar a opt-in explícito una vez tengas base.
+1. Crear las rutas legales mínimas si no existen, para que los enlaces de la pantalla de Google funcionen:
+   - `/privacidad` — Política de Privacidad básica de Hazorex.
+   - `/terminos` — Términos del Servicio básicos de Hazorex.
+2. Una vez me pases Client ID + Client Secret, guardarlos de forma segura y configurarlos como las credenciales del proveedor Google en el backend de auth (sustituyendo las credenciales gestionadas por Lovable).
+3. Verificar el flujo: hacer logout y volver a iniciar sesión con Google; confirmar que la pantalla muestra **Hazorex + tu logo + hazorex.com** y ya no aparece Lovable.
 
 ## Fuera de alcance
 
-- Notificaciones SMS (requeriría Twilio o similar, coste por mensaje).
-- Notificaciones push nativas iOS sin PWA (imposible técnicamente).
-- Cambiar la lógica del sorteo o de la ruleta personal.
+- No tocaré la lógica de la app, el sorteo, ni nada visual fuera de las dos páginas legales nuevas.
+- No puedo eliminar la marca Lovable de la URL de callback de Google (es la del backend, no visible para el usuario final).
+- No registro tu app en Google ni acepto los Términos por ti — eso solo lo puedes hacer tú con tu cuenta Google.
+
+## Orden de ejecución sugerido
+
+1. Apruebas este plan.
+2. Yo creo las páginas `/privacidad` y `/terminos` y te paso la URL de callback exacta para Google.
+3. Tú haces los pasos en Google Cloud y me devuelves Client ID + Secret.
+4. Yo los configuro en el backend y verificamos juntos el resultado.
