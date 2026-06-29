@@ -4,7 +4,7 @@ import { render } from "@react-email/components";
 import { TEMPLATES } from "@/lib/email-templates/registry";
 
 const SITE_NAME = "origen-com";
-const SENDER_DOMAIN = "notify.origen.management";
+const SENDER_DOMAIN = "notify.hazorex.com";
 const FROM_DOMAIN = "origen.management";
 
 function generateToken(): string {

@@ -245,8 +245,8 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
                 payload: {
                   message_id: messageId,
                   to: recipient,
-                  from: "HAZOREX <noreply@notify.origen.management>",
-                  sender_domain: "notify.origen.management",
+                  from: "HAZOREX <noreply@notify.hazorex.com>",
+                  sender_domain: "notify.hazorex.com",
                   subject,
                   html,
                   text,
