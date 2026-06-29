@@ -1,19 +1,29 @@
+# Plan: Logo sin fondo para integrarse al encabezado
+
+## Problema
+El asset actual `hazorex-symbol-gold.png` incluye un fondo azul texturizado detrás del símbolo dorado. Al colocarlo sobre el encabezado azul marino o el fondo azul grisáceo, se nota un "cuadro" de fondo alrededor del logo, lo que rompe la integración visual.
+
 ## Objetivo
+Quitar el fondo del símbolo dorado manteniendo el color, la forma 3D y el estilo actuales, para que el logo se vea "flotando" sobre el encabezado y se adapte perfectamente a su color.
 
-Colocar el logo dorado (X entrelazada) que subiste a la izquierda del nombre **HAZOREX** en el header, sin tocar el texto ni su estilo.
+## Pasos
 
-## Cambios
+1. **Limpiar el logo**
+   - Usar `imagegen--edit_image` sobre la imagen actual (`/tmp/logo-inspect.png` o el CDN original).
+   - Prompt: eliminar el fondo azul texturizado, mantener el símbolo dorado 3D intacto, resultado en PNG transparente.
+   - Guardar como `src/assets/hazorex-symbol-gold.png` temporal.
 
-1. **Subir el nuevo logo como asset CDN**
-   - Tomar el archivo subido (`user-uploads://cbcfe146-...png`).
-   - Crear `src/assets/hazorex-symbol-gold.png.asset.json` con `lovable-assets create`.
+2. **Subir a Lovable Assets**
+   - `lovable-assets create --file src/assets/hazorex-symbol-gold.png > src/assets/hazorex-symbol-gold.png.asset.json`
+   - Eliminar el binario temporal después de subir (quedará solo el `.asset.json` en el repo).
 
-2. **Actualizar `src/components/TopNav.tsx`**
-   - Cambiar el import `hazorexSymbolUrl` para apuntar al nuevo asset JSON (usando `.url`).
-   - Mantener exactamente el mismo tamaño (`h-10` móvil / `h-[52px]` desktop), la misma posición (símbolo primero, luego nombre) y el mismo estilo dorado del texto **HAZOREX**.
+3. **Actualizar la referencia en el componente**
+   - Verificar que `src/components/TopNav.tsx` siga importando `hazorexSymbolAsset` y usando `hazorexSymbolAsset.url`.
+   - No cambiar tamaño ni posición salvo que sea necesario para que el símbolo transparente luzca equilibrado.
 
-3. **No tocar nada más**: ni el texto, ni la página principal, ni el login de Google, ni otros logos del sitio.
+4. **Verificar visualmente**
+   - Ejecutar `bun run build`.
+   - Capturar screenshot del header en `http://localhost:8080/` para confirmar que el símbolo dorado no tiene fondo visible y se integra con el azul marino del encabezado.
 
-## Resultado
-
-El header mostrará: `[logo dorado nuevo]  HAZOREX` — idéntico al layout actual, solo cambia la imagen del símbolo.
+## Resultado esperado
+El símbolo dorado aparece al lado de "HAZOREX" sin ningún fondo o cuadro alrededor, luciendo como parte nativa del encabezado.
