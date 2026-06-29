@@ -279,7 +279,7 @@ function Wheel({ rotation, spinning }: { rotation: number; spinning: boolean }) 
           background: BEIGE,
           transform: `rotate(${rotation}deg)`,
           transition: spinning
-            ? "transform 4.6s cubic-bezier(0.17, 0.67, 0.16, 1)"
+            ? "transform 14s cubic-bezier(0.15, 0.7, 0.1, 1)"
             : "transform 0s",
         }}
       >
