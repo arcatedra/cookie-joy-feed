@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -19,6 +20,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -66,6 +68,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerminosRoute = TerminosRouteImport.update({
+  id: '/terminos',
+  path: '/terminos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SweepstakesRulesRoute = SweepstakesRulesRouteImport.update({
   id: '/sweepstakes-rules',
   path: '/sweepstakes-rules',
@@ -99,6 +106,11 @@ const RuletaRoute = RuletaRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MenuRoute = MenuRouteImport.update({
@@ -277,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -284,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -319,6 +333,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -326,6 +341,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -363,6 +379,7 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
   '/menu': typeof MenuRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -370,6 +387,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
+  '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -407,6 +425,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/historial'
     | '/menu'
+    | '/privacidad'
     | '/profile'
     | '/ruleta'
     | '/search'
@@ -414,6 +433,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
+    | '/terminos'
     | '/terms'
     | '/trust'
     | '/unsubscribe'
@@ -449,6 +469,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/historial'
     | '/menu'
+    | '/privacidad'
     | '/profile'
     | '/ruleta'
     | '/search'
@@ -456,6 +477,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
+    | '/terminos'
     | '/terms'
     | '/trust'
     | '/unsubscribe'
@@ -492,6 +514,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/historial'
     | '/menu'
+    | '/privacidad'
     | '/profile'
     | '/ruleta'
     | '/search'
@@ -499,6 +522,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/sweepstakes-rules'
+    | '/terminos'
     | '/terms'
     | '/trust'
     | '/unsubscribe'
@@ -536,6 +560,7 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   HistorialRoute: typeof HistorialRoute
   MenuRoute: typeof MenuRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   ProfileRoute: typeof ProfileRoute
   RuletaRoute: typeof RuletaRoute
   SearchRoute: typeof SearchRoute
@@ -543,6 +568,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
+  TerminosRoute: typeof TerminosRoute
   TermsRoute: typeof TermsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
@@ -587,6 +613,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terminos': {
+      id: '/terminos'
+      path: '/terminos'
+      fullPath: '/terminos'
+      preLoaderRoute: typeof TerminosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sweepstakes-rules': {
@@ -636,6 +669,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/menu': {
@@ -894,6 +934,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   HistorialRoute: HistorialRoute,
   MenuRoute: MenuRoute,
+  PrivacidadRoute: PrivacidadRoute,
   ProfileRoute: ProfileRoute,
   RuletaRoute: RuletaRoute,
   SearchRoute: SearchRoute,
@@ -901,6 +942,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   SweepstakesRulesRoute: SweepstakesRulesRoute,
+  TerminosRoute: TerminosRoute,
   TermsRoute: TermsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
