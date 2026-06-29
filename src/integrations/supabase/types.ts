@@ -144,6 +144,7 @@ export type Database = {
           drawn_at: string | null
           entrants_total: number
           id: string
+          notified_5min_at: string | null
           prize_usd: number
           rolled_over_from: string | null
           scheduled_at: string
@@ -159,6 +160,7 @@ export type Database = {
           drawn_at?: string | null
           entrants_total?: number
           id?: string
+          notified_5min_at?: string | null
           prize_usd?: number
           rolled_over_from?: string | null
           scheduled_at: string
@@ -174,6 +176,7 @@ export type Database = {
           drawn_at?: string | null
           entrants_total?: number
           id?: string
+          notified_5min_at?: string | null
           prize_usd?: number
           rolled_over_from?: string | null
           scheduled_at?: string
@@ -520,6 +523,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          notify_before_draw: boolean
           referral_code: string
           region: string | null
           stars_count: number
@@ -534,6 +538,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          notify_before_draw?: boolean
           referral_code?: string
           region?: string | null
           stars_count?: number
@@ -548,11 +553,45 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          notify_before_draw?: boolean
           referral_code?: string
           region?: string | null
           stars_count?: number
           terms_accepted?: boolean
           terms_accepted_at?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          last_used_at: string | null
+          p256dh: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          last_used_at?: string | null
+          p256dh: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          last_used_at?: string | null
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -1291,6 +1330,7 @@ export type Database = {
           drawn_at: string | null
           entrants_total: number
           id: string
+          notified_5min_at: string | null
           prize_usd: number
           rolled_over_from: string | null
           scheduled_at: string
