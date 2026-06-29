@@ -15,7 +15,7 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold.png.asset.json";
+import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
 const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 
