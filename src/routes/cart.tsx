@@ -278,6 +278,15 @@ function CheckoutPage() {
                   value={addr.phone}
                   onChange={(v) => setAddr({ ...addr, phone: v })}
                 />
+                {!user?.email && (
+                  <Field
+                    label="Email"
+                    value={addr.email}
+                    onChange={(v) => setAddr({ ...addr, email: v })}
+                    placeholder="tu@email.com"
+                    full
+                  />
+                )}
               </div>
               <label className="mt-4 flex items-center gap-2 text-sm text-gray-700">
                 <input
