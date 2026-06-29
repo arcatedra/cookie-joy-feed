@@ -36,10 +36,9 @@
 
 :root {
   --radius: 1rem;
-  /* Warm light beige bg */
-  /* Elegant soft beige */
-  --background: #f4f1ea;
-  --foreground: #1a1a1a;
+  /* Background matches the header for a seamless dark feel */
+  --background: #0B0B0F;
+  --foreground: #F4F1EA;
 
   /* Obsidiana profunda */
   --primary: #0B0B0F;
