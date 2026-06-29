@@ -1,31 +1,31 @@
-# Conectar tu OAuth Client de Hazorex a Lovable Cloud
+## 1. Revertir el logo del header (página principal)
 
-Ya tienes el OAuth Client creado en Google Cloud con el nombre, logo y dominios de Hazorex. Falta enchufar esas credenciales en el backend para que sustituyan a las de Lovable.
+En el último cambio sustituí el símbolo del header de la home (`TopNav.tsx`) por una imagen nueva (`hazorex-symbol-new.png`). Eso no me lo pediste — perdón.
 
-## Lo que voy a hacer
+Lo que voy a hacer:
+- En `src/components/TopNav.tsx`, dejar de usar `HazorexSymbol` y volver al símbolo anterior (`hazorex-symbol-only.png`, el que usabas antes de tocar nada).
+- No tocar el favicon ni la metadata OG (esos sí los pediste y siguen con el logo dorado oficial).
+- No tocar `auth.tsx` ni los demás sitios donde el logo está bien.
 
-1. **Guardar de forma segura** tus dos credenciales como secretos del proyecto:
-   - `GOOGLE_OAUTH_CLIENT_ID` — el Client ID que te dio Google Cloud
-   - `GOOGLE_OAUTH_CLIENT_SECRET` — el Client Secret que te dio Google Cloud
-   
-   Te abriré un formulario seguro para pegarlos. **Nunca los pegues en el chat.**
+Resultado: la home vuelve a verse exactamente como antes de mi cambio.
 
-2. **Activar el proveedor Google en Lovable Cloud** usando esas credenciales (en lugar de las gestionadas por defecto), para que la pantalla de "Acceder con Google" muestre **Hazorex + tu logo dorado** en vez de "Lovable".
+## 2. Pantalla "Acceder con Google" (Lovable / logo de corazón)
 
-## Lo que necesito de ti
+Eso **no es código**. Esa pantalla la dibuja Google, y muestra el nombre y logo del **OAuth Client** que se está usando. Ahora mismo se está usando el de Lovable (gestionado por defecto), por eso ves "Lovable" y su corazón.
 
-- El **Client ID** (termina en `.apps.googleusercontent.com`)
-- El **Client Secret** (cadena tipo `GOCSPX-...`)
+Tú ya creaste tu propio OAuth Client en Google Cloud con el nombre **Hazorex** y tu logo dorado — perfecto. Falta el último paso, que **solo tú puedes hacer** (yo no tengo acceso a ese panel):
 
-Los encuentras en Google Cloud Console → **APIs & Services → Credentials → tu OAuth 2.0 Client ID** (botón de descarga / "Show client secret").
+1. Abre el backend con el botón de abajo.
+2. Ve a **Users → Auth Settings (engranaje) → Sign In Methods → Google**.
+3. Cambia el modo de "Use Lovable-managed credentials" a **"Use my own credentials"**.
+4. Pega ahí:
+   - **Client ID** (termina en `.apps.googleusercontent.com`)
+   - **Client Secret** (empieza por `GOCSPX-...`)
+5. Copia el **Authorized redirect URI** que te muestra esa misma pantalla y verifica que está EXACTAMENTE igual en Google Cloud → Credentials → tu OAuth Client → Authorized redirect URIs. Si falta o sobra una barra, Google rechaza con `redirect_uri_mismatch`.
+6. Guarda.
 
-## Verificación final
+A partir de ese momento, la pantalla de Google dirá **"Acceder con Hazorex"** con tu logo dorado en vez de "Lovable". Si sigues viendo Lovable: cierra la pestaña, espera 30 s y reintenta (caché del navegador).
 
-Después de guardarlos:
-- La próxima vez que abras la pantalla de login con Google aparecerá **"Acceder con Hazorex"** con tu logo.
-- Si sigue saliendo "Lovable", suele ser cache del navegador → cerrar pestaña, esperar 30 s y reintentar.
+## Detalles técnicos
 
-## Importante
-
-- El **redirect URI** que pusiste en Google Cloud debe coincidir EXACTAMENTE con el que muestra Lovable Cloud en Users → Auth Settings → Google. Si no coincide, Google rechaza con `redirect_uri_mismatch`.
-- No tocaremos código de la app: el cambio es puramente de configuración del backend de auth.
+Archivos modificados en esta tarea: solo `src/components/TopNav.tsx` (1 import + 2 líneas JSX, volver al componente de símbolo anterior). Cero cambios de backend, cero cambios de auth, cero cambios de assets.
