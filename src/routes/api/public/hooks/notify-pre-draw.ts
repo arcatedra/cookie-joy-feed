@@ -100,6 +100,82 @@ export const Route = createFileRoute("/api/public/hooks/notify-pre-draw")({
         const drawTime = formatDrawTime(draw.scheduled_at);
         const prizeUsd = `$${Number(draw.prize_usd ?? 0).toFixed(2)}`;
 
+        // ===== Browser push notifications (fire in parallel) =====
+        let pushSent = 0;
+        let pushFailed = 0;
+        let pushExpired = 0;
+        try {
+          const optedInIds = (profiles ?? []).map((p) => p.id as string);
+          if (optedInIds.length > 0) {
+            const { data: subs } = await supabaseAdmin
+              .from("push_subscriptions")
+              .select("id, endpoint, p256dh, auth, user_id")
+              .in("user_id", optedInIds);
+
+            if (subs && subs.length > 0) {
+              const { buildPushPayload } = await import("@block65/webcrypto-web-push");
+              const vapid = {
+                subject: process.env.VAPID_SUBJECT ?? "mailto:noreply@origen.management",
+                publicKey: process.env.VAPID_PUBLIC_KEY,
+                privateKey: process.env.VAPID_PRIVATE_KEY,
+              };
+
+              if (!vapid.publicKey || !vapid.privateKey) {
+                console.warn("notify-pre-draw: VAPID keys not configured; skipping push");
+              } else {
+                const message = {
+                  data: {
+                    title: "🎰 El sorteo gira en 5 minutos",
+                    body: `Premio actual ${prizeUsd}. Entra para ver el giro en vivo.`,
+                    url: PUBLIC_DRAW_URL,
+                    tag: `pre-draw-${draw.draw_date}`,
+                  },
+                  options: { ttl: 300, urgency: "high" as const, topic: "pre-draw" },
+                };
+
+                await Promise.all(
+                  subs.map(async (s) => {
+                    try {
+                      const payload = await buildPushPayload(
+                        message,
+                        {
+                          endpoint: s.endpoint as string,
+                          expirationTime: null,
+                          keys: { p256dh: s.p256dh as string, auth: s.auth as string },
+                        },
+                        vapid,
+                      );
+                      const resp = await fetch(s.endpoint as string, {
+                        method: payload.method,
+                        headers: payload.headers,
+                        body: payload.body.buffer.slice(payload.body.byteOffset, payload.body.byteOffset + payload.body.byteLength) as ArrayBuffer,
+                      });
+                      if (resp.status === 404 || resp.status === 410) {
+                        pushExpired++;
+                        await supabaseAdmin.from("push_subscriptions").delete().eq("id", s.id);
+                      } else if (!resp.ok) {
+                        pushFailed++;
+                        console.warn("push failed", resp.status, await resp.text().catch(() => ""));
+                      } else {
+                        pushSent++;
+                        await supabaseAdmin
+                          .from("push_subscriptions")
+                          .update({ last_used_at: new Date().toISOString() })
+                          .eq("id", s.id);
+                      }
+                    } catch (err) {
+                      pushFailed++;
+                      console.warn("push error", err);
+                    }
+                  }),
+                );
+              }
+            }
+          }
+        } catch (err) {
+          console.error("notify-pre-draw: push block error", err);
+        }
+
         const { template } = await import("@/lib/email-templates/pre-draw-notification");
         const subject = typeof template.subject === "string" ? template.subject : (template.subject as (d: Record<string, unknown>) => string)({});
 
@@ -199,6 +275,7 @@ export const Route = createFileRoute("/api/public/hooks/notify-pre-draw")({
           enqueued,
           suppressed: suppressedCount,
           errors: errors.length,
+          push: { sent: pushSent, failed: pushFailed, expired: pushExpired },
         });
       },
     },
