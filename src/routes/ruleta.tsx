@@ -86,6 +86,8 @@ function RuletaPage() {
   const spinFn = useServerFn(spin);
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
+  const [stageOpen, setStageOpen] = useState(false);
+  const [stagePhase, setStagePhase] = useState<"building" | "spinning" | "revealing">("building");
   const [lastPrize, setLastPrize] = useState<{
     label: string;
     code: string | null;
@@ -97,30 +99,36 @@ function RuletaPage() {
     if (!canSpin || spinning) return;
     setSpinning(true);
     setLastPrize(null);
+    setStageOpen(true);
+    setStagePhase("building");
     try {
       const res = await spinFn();
       if (!res.ok) {
         toast.error(res.error);
         setSpinning(false);
+        setStageOpen(false);
         return;
       }
       const targetCenter = res.prizeIndex * sectorAngle + sectorAngle / 2;
-      // Spin clockwise N turns, final position so pointer (top, 0deg) lands on target center.
-      const turns = 6;
-      const final = 360 * turns + (360 - targetCenter);
-      // Continuous rotation: bump by a delta that ends at `final mod 360`.
+      const turns = 18;
       const currentMod = ((rotation % 360) + 360) % 360;
       const delta = 360 * turns + (((360 - targetCenter) - currentMod + 360) % 360);
-      setRotation(rotation + delta);
+      // Build-up 1s, then start spin transition
+      setTimeout(() => {
+        setStagePhase("spinning");
+        setRotation(rotation + delta);
+      }, 1000);
+      // Spin animation lasts 14s; reveal after 15s total
       setTimeout(() => {
         setSpinning(false);
+        setStagePhase("revealing");
         setLastPrize({ label: res.prizeLabel, code: res.couponCode });
         qc.invalidateQueries({ queryKey: ["roulette-state"] });
-      }, 4800);
-      void final;
+      }, 15000);
     } catch {
       toast.error(t("ruleta.spinError"));
       setSpinning(false);
+      setStageOpen(false);
     }
 
   };
