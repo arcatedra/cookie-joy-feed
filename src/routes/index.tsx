@@ -98,33 +98,35 @@ function Home() {
       <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-10 text-white md:py-14">
         <div className="mx-auto max-w-[1100px] text-center">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#E6C35C]">
-            HAZOREX ORIGEN
+            {t("hero.eyebrow", "HAZOREX ORIGEN")}
           </p>
           <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">
-            Galletas premium con <span className="text-[#E6C35C]">sorteos diarios reales</span>
+            {t("hero.titlePart1", "Premium cookies with")}{" "}
+            <span className="text-[#E6C35C]">{t("hero.titlePart2", "real daily sweepstakes")}</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl font-serif text-base text-white/85 md:text-lg">
-            Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.
+            {t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")}
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/shop"
               className="rounded-full bg-[#E6C35C] px-7 py-3 text-sm font-bold text-[#1a0f0a] shadow-lg transition hover:bg-[#f0d175]"
             >
-              Ver galletas
+              {t("hero.ctaShop", "Shop cookies")}
             </Link>
             <Link
               to="/ruleta"
               className="rounded-full border-2 border-[#E6C35C]/60 bg-white/5 px-7 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
             >
-              Cómo funciona el sorteo
+              {t("hero.ctaHow", "How the draw works")}
             </Link>
           </div>
           <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#E6C35C]/80">
-            ✓ Sorteo verificable · ✓ Envío en 24h · ✓ Galletas artesanales
+            {t("hero.trust", "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies")}
           </p>
         </div>
       </section>
+
 
       {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
       <div className="mx-auto max-w-[1500px] pt-3">
