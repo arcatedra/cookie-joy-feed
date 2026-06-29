@@ -543,6 +543,29 @@ function CheckoutPage() {
           </aside>
         </div>
       </div>
+
+      {clientSecret && stripePromise && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 md:p-8">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setClientSecret(null)}
+              className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-gray-500 shadow ring-1 ring-black/10 hover:text-gray-900"
+              aria-label="Cerrar"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="p-2 md:p-4">
+              <EmbeddedCheckoutProvider
+                stripe={stripePromise}
+                options={{ clientSecret }}
+              >
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
