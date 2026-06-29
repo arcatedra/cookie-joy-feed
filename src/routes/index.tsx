@@ -95,33 +95,33 @@ function Home() {
     <main className="min-h-screen bg-[#7A8BA3]">
 
       {/* Hero — propuesta clara */}
-      <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-10 text-white md:py-14">
+      <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-4 text-white md:py-6">
         <div className="mx-auto max-w-[1100px] text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#E6C35C]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6C35C]">
             {t("hero.eyebrow", "HAZOREX ORIGEN")}
           </p>
-          <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">
+          <h1 className="mt-1 text-xl font-black leading-tight md:text-3xl">
             {t("hero.titlePart1", "Premium cookies with")}{" "}
             <span className="text-[#E6C35C]">{t("hero.titlePart2", "real daily sweepstakes")}</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl font-serif text-base text-white/85 md:text-lg">
+          <p className="mx-auto mt-2 max-w-xl font-serif text-xs text-white/85 md:text-sm">
             {t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")}
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
               to="/shop"
-              className="rounded-full bg-[#E6C35C] px-7 py-3 text-sm font-bold text-[#1a0f0a] shadow-lg transition hover:bg-[#f0d175]"
+              className="rounded-full bg-[#E6C35C] px-5 py-2 text-xs font-bold text-[#1a0f0a] shadow transition hover:bg-[#f0d175]"
             >
               {t("hero.ctaShop", "Shop cookies")}
             </Link>
             <Link
               to="/ruleta"
-              className="rounded-full border-2 border-[#E6C35C]/60 bg-white/5 px-7 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
+              className="rounded-full border border-[#E6C35C]/60 bg-white/5 px-5 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/10"
             >
               {t("hero.ctaHow", "How the draw works")}
             </Link>
           </div>
-          <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#E6C35C]/80">
+          <p className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-[#E6C35C]/80">
             {t("hero.trust", "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies")}
           </p>
         </div>
