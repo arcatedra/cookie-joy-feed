@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
+import { HazorexSymbol } from "@/components/HazorexLogo";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
@@ -14,8 +15,8 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in — AMYRAX" },
-      { name: "description", content: "Sign in to like reels, comment and rate products." },
+      { title: "Iniciar sesión — Hazorex" },
+      { name: "description", content: "Inicia sesión en Hazorex para participar, comentar y guardar tus favoritos." },
     ],
   }),
   component: AuthPage,
@@ -98,10 +99,16 @@ function AuthPage() {
         <ChevronLeft className="h-5 w-5" />
       </Link>
       <div className="mx-auto mt-6 max-w-sm">
-        <h1 className="text-2xl font-bold text-foreground">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <HazorexSymbol size={72} />
+          <span className="mt-3 bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-2xl font-black tracking-[0.2em] text-transparent">
+            HAZOREX
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold text-foreground text-center">
           {mode === "signin" ? t("auth.signInTitle") : t("auth.signUpTitle")}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t("auth.subtitle")}</p>
+        <p className="mt-1 text-sm text-muted-foreground text-center">{t("auth.subtitle")}</p>
 
         <button
           type="button"
