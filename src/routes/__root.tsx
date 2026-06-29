@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
+import faviconAsset from "@/assets/hazorex-favicon.png.asset.json";
+import appleTouchAsset from "@/assets/hazorex-apple-touch.png.asset.json";
+import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
 import { CartProvider } from "@/lib/cart";
@@ -85,21 +88,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AMYRAX" },
-      { name: "description", content: "AMYRAX is a mobile-first web app for discovering gourmet cookies and subscribing to monthly deliveries." },
-      { name: "author", content: "AMYRAX" },
-      { property: "og:title", content: "AMYRAX" },
-      { property: "og:description", content: "AMYRAX is a mobile-first web app for discovering gourmet cookies and subscribing to monthly deliveries." },
+      { title: "Hazorex" },
+      { name: "description", content: "Hazorex — la plataforma para descubrir, comprar y participar en experiencias premium." },
+      { name: "author", content: "Hazorex" },
+      { property: "og:site_name", content: "Hazorex" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: `https://hazorex.com${logoAsset.url}` },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@AMYRAX" },
-      { name: "twitter:title", content: "AMYRAX" },
-      { name: "twitter:description", content: "AMYRAX is a mobile-first web app for discovering gourmet cookies and subscribing to monthly deliveries." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/28c1c646-c215-4281-81d7-564895597844/id-preview-914e7d7b--d99974e1-204d-46a0-816a-e2595eaf444a.lovable.app-1780805982542.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/28c1c646-c215-4281-81d7-564895597844/id-preview-914e7d7b--d99974e1-204d-46a0-816a-e2595eaf444a.lovable.app-1780805982542.png" },
+      { name: "twitter:image", content: `https://hazorex.com${logoAsset.url}` },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: faviconAsset.url },
+      { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchAsset.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
