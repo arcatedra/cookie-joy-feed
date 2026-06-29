@@ -1,35 +1,31 @@
-# Aplicar el logo de Hazorex en toda la app
+# Conectar tu OAuth Client de Hazorex a Lovable Cloud
 
-## 1. Subir el logo como asset del CDN
-- Subir `user-uploads://Diseño_sin_título.png` con `lovable-assets create` → `src/assets/hazorex-logo.png.asset.json`.
-- Generar también una versión favicon (32×32 / 180×180 para Apple touch) desde la misma imagen y subirlas como assets:
-  - `src/assets/hazorex-favicon.png.asset.json`
-  - `src/assets/hazorex-apple-touch.png.asset.json`
+Ya tienes el OAuth Client creado en Google Cloud con el nombre, logo y dominios de Hazorex. Falta enchufar esas credenciales en el backend para que sustituyan a las de Lovable.
 
-## 2. Favicon + metadatos sitewide
-- Editar `src/routes/__root.tsx`:
-  - Reemplazar `links` del favicon actual por el nuevo `hazorex-favicon` (32×32) y añadir `apple-touch-icon` (180×180).
-  - Mantener `og:site_name = "Hazorex"`.
-  - Añadir `og:image` por defecto solo si no rompe rutas hijas (preferiblemente dejarlo en rutas leaf clave: home, login, privacidad, términos).
+## Lo que voy a hacer
 
-## 3. Logo en header / navbar
-- Localizar el componente de header principal (probablemente `src/components/Header.tsx` o similar) y reemplazar el logo/marca textual actual por:
-  ```tsx
-  import logo from "@/assets/hazorex-logo.png.asset.json";
-  <img src={logo.url} alt="Hazorex" className="h-8 w-auto" />
-  ```
-- Mantener el texto "Hazorex" al lado del icono para legibilidad y SEO.
+1. **Guardar de forma segura** tus dos credenciales como secretos del proyecto:
+   - `GOOGLE_OAUTH_CLIENT_ID` — el Client ID que te dio Google Cloud
+   - `GOOGLE_OAUTH_CLIENT_SECRET` — el Client Secret que te dio Google Cloud
+   
+   Te abriré un formulario seguro para pegarlos. **Nunca los pegues en el chat.**
 
-## 4. Logo en pantallas de login / registro
-- Localizar las rutas/componentes de auth (login, registro, recuperar contraseña) y añadir el logo centrado arriba del formulario, tamaño ~64–80px.
-- Aplicar también en `src/routes/privacidad.tsx` y `src/routes/terminos.tsx` en la cabecera para consistencia con la consent screen de Google.
+2. **Activar el proveedor Google en Lovable Cloud** usando esas credenciales (en lugar de las gestionadas por defecto), para que la pantalla de "Acceder con Google" muestre **Hazorex + tu logo dorado** en vez de "Lovable".
 
-## 5. Open Graph image
-- Añadir `og:image` y `twitter:image` en rutas leaf principales (`/`, `/privacidad`, `/terminos`, `/auth` si existe) apuntando al URL absoluto del logo (`https://hazorex.com` + asset URL).
-- Recordatorio: los crawlers cachean OG; los previews ya compartidos no se actualizan al instante (debugger de cada red para forzar refresh).
+## Lo que necesito de ti
 
-## Detalles técnicos
-- Usar `lovable-assets create --file /mnt/user-uploads/Diseño_sin_título.png --filename hazorex-logo.png`.
-- Para favicon redimensionar con Python/PIL antes de subir.
-- No tocar `src/integrations/supabase/*` ni `routeTree.gen.ts`.
-- Verificar build al final.
+- El **Client ID** (termina en `.apps.googleusercontent.com`)
+- El **Client Secret** (cadena tipo `GOCSPX-...`)
+
+Los encuentras en Google Cloud Console → **APIs & Services → Credentials → tu OAuth 2.0 Client ID** (botón de descarga / "Show client secret").
+
+## Verificación final
+
+Después de guardarlos:
+- La próxima vez que abras la pantalla de login con Google aparecerá **"Acceder con Hazorex"** con tu logo.
+- Si sigue saliendo "Lovable", suele ser cache del navegador → cerrar pestaña, esperar 30 s y reintentar.
+
+## Importante
+
+- El **redirect URI** que pusiste en Google Cloud debe coincidir EXACTAMENTE con el que muestra Lovable Cloud en Users → Auth Settings → Google. Si no coincide, Google rechaza con `redirect_uri_mismatch`.
+- No tocaremos código de la app: el cambio es puramente de configuración del backend de auth.
