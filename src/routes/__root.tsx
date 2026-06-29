@@ -18,6 +18,7 @@ import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
+import { PreDrawCountdownBanner } from "@/components/PreDrawCountdownBanner";
 import { Toaster } from "sonner";
 
 function NotFoundComponent() {
@@ -142,6 +143,7 @@ function RootComponent() {
         <SubscriptionGateProvider>
           <CartProvider>
             <div className="min-h-screen bg-background">
+              <PreDrawCountdownBanner />
               <TopNav />
               {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
               <Outlet />

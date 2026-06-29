@@ -47,6 +47,7 @@ import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksSecurityAlertRouteImport } from './routes/api/public/hooks/security-alert'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
+import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
 
@@ -249,6 +250,12 @@ const ApiPublicHooksNotifyWinnerRoute =
     path: '/api/public/hooks/notify-winner',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksNotifyPreDrawRoute =
+  ApiPublicHooksNotifyPreDrawRouteImport.update({
+    id: '/api/public/hooks/notify-pre-draw',
+    path: '/api/public/hooks/notify-pre-draw',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksBackupPruneRoute =
   ApiPublicHooksBackupPruneRouteImport.update({
     id: '/api/public/hooks/backup-prune',
@@ -293,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
@@ -334,6 +342,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
@@ -377,6 +386,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
@@ -420,6 +430,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
@@ -503,6 +515,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
@@ -542,6 +555,7 @@ export interface RootRouteChildren {
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
   ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
+  ApiPublicHooksNotifyPreDrawRoute: typeof ApiPublicHooksNotifyPreDrawRoute
   ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
   ApiPublicHooksSecurityAlertRoute: typeof ApiPublicHooksSecurityAlertRoute
@@ -820,6 +834,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksNotifyWinnerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/notify-pre-draw': {
+      id: '/api/public/hooks/notify-pre-draw'
+      path: '/api/public/hooks/notify-pre-draw'
+      fullPath: '/api/public/hooks/notify-pre-draw'
+      preLoaderRoute: typeof ApiPublicHooksNotifyPreDrawRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/backup-prune': {
       id: '/api/public/hooks/backup-prune'
       path: '/api/public/hooks/backup-prune'
@@ -892,6 +913,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
   ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,
+  ApiPublicHooksNotifyPreDrawRoute: ApiPublicHooksNotifyPreDrawRoute,
   ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
   ApiPublicHooksSecurityAlertRoute: ApiPublicHooksSecurityAlertRoute,
