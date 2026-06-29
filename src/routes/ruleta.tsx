@@ -86,6 +86,8 @@ function RuletaPage() {
   const spinFn = useServerFn(spin);
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
+  const [stageOpen, setStageOpen] = useState(false);
+  const [stagePhase, setStagePhase] = useState<"building" | "spinning" | "revealing">("building");
   const [lastPrize, setLastPrize] = useState<{
     label: string;
     code: string | null;
@@ -97,30 +99,36 @@ function RuletaPage() {
     if (!canSpin || spinning) return;
     setSpinning(true);
     setLastPrize(null);
+    setStageOpen(true);
+    setStagePhase("building");
     try {
       const res = await spinFn();
       if (!res.ok) {
         toast.error(res.error);
         setSpinning(false);
+        setStageOpen(false);
         return;
       }
       const targetCenter = res.prizeIndex * sectorAngle + sectorAngle / 2;
-      // Spin clockwise N turns, final position so pointer (top, 0deg) lands on target center.
-      const turns = 6;
-      const final = 360 * turns + (360 - targetCenter);
-      // Continuous rotation: bump by a delta that ends at `final mod 360`.
+      const turns = 18;
       const currentMod = ((rotation % 360) + 360) % 360;
       const delta = 360 * turns + (((360 - targetCenter) - currentMod + 360) % 360);
-      setRotation(rotation + delta);
+      // Build-up 1s, then start spin transition
+      setTimeout(() => {
+        setStagePhase("spinning");
+        setRotation(rotation + delta);
+      }, 1000);
+      // Spin animation lasts 14s; reveal after 15s total
       setTimeout(() => {
         setSpinning(false);
+        setStagePhase("revealing");
         setLastPrize({ label: res.prizeLabel, code: res.couponCode });
         qc.invalidateQueries({ queryKey: ["roulette-state"] });
-      }, 4800);
-      void final;
+      }, 15000);
     } catch {
       toast.error(t("ruleta.spinError"));
       setSpinning(false);
+      setStageOpen(false);
     }
 
   };
@@ -180,8 +188,27 @@ function RuletaPage() {
         </div>
 
 
-
-        {/* Legacy mini-ruleta removed — live draw is now the main mechanic */}
+        {/* Personal star spin — fullscreen suspense overlay */}
+        <section
+          style={{
+            background: BEIGE_DEEP,
+            borderRadius: 24,
+            padding: "clamp(1.5rem, 4vw, 2.5rem)",
+            border: `1px solid ${GOLD}`,
+            display: "grid",
+            placeItems: "center",
+            gap: 16,
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: 11, letterSpacing: "0.3em", color: BLUE_SOFT }}>
+            {t("ruleta.sweepstakes")}
+          </div>
+          <h2 style={{ margin: 0, fontSize: "clamp(22px, 4vw, 32px)", color: BLUE }}>
+            {t("ruleta.spinBtn", { cost: SPIN_COST })}
+          </h2>
+          <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
+        </section>
 
         <BuyTokensPanel balance={balance} />
 
@@ -192,6 +219,19 @@ function RuletaPage() {
 
         <Legal />
       </main>
+
+      {stageOpen && (
+        <SpinStageOverlay
+          phase={stagePhase}
+          rotation={rotation}
+          spinning={spinning}
+          prize={lastPrize}
+          onClose={() => {
+            setStageOpen(false);
+            setStagePhase("building");
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -217,6 +257,174 @@ function TokenChip({ balance, loading }: { balance: number; loading: boolean }) 
       <span style={{ fontVariantNumeric: "tabular-nums" }}>{loading ? "…" : balance}</span>
       <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: "0.15em" }}>{t("ruleta.starsLabel")}</span>
 
+    </div>
+  );
+}
+
+function SpinStageOverlay({
+  phase,
+  rotation,
+  spinning,
+  prize,
+  onClose,
+}: {
+  phase: "building" | "spinning" | "revealing";
+  rotation: number;
+  spinning: boolean;
+  prize: { label: string; code: string | null } | null;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const [countdown, setCountdown] = useState(15);
+
+  useEffect(() => {
+    if (phase === "revealing") return;
+    const start = Date.now();
+    const totalMs = phase === "building" ? 15000 : 14000;
+    const id = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((totalMs - (Date.now() - start)) / 1000));
+      setCountdown(remaining);
+    }, 200);
+    return () => clearInterval(id);
+  }, [phase]);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (phase !== "revealing") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase, onClose]);
+
+  const eyebrow =
+    phase === "building"
+      ? t("ruleta.stageBuilding", { defaultValue: "Preparando el giro…" })
+      : phase === "spinning"
+        ? t("ruleta.stageSpinning", { defaultValue: "El destino se mueve…" })
+        : t("ruleta.yourPrize");
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 100,
+        background: "rgba(15,30,55,0.92)",
+        backdropFilter: "blur(8px)",
+        display: "grid",
+        placeItems: "center",
+        padding: "1rem",
+        animation: "fade-in 0.3s ease-out",
+      }}
+    >
+      <div style={{ display: "grid", placeItems: "center", gap: 20, maxWidth: 520, width: "100%" }}>
+        <div
+          aria-live="polite"
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.3em",
+            color: GOLD_BRIGHT,
+            textTransform: "uppercase",
+            fontWeight: 700,
+          }}
+        >
+          {eyebrow}
+        </div>
+
+        <div style={{ animation: "scale-in 0.4s ease-out" }}>
+          <Wheel rotation={rotation} spinning={spinning} />
+        </div>
+
+        {phase !== "revealing" && (
+          <div
+            style={{
+              fontSize: 48,
+              fontWeight: 800,
+              color: BEIGE,
+              fontVariantNumeric: "tabular-nums",
+              textShadow: `0 4px 20px ${BLUE}`,
+            }}
+          >
+            {countdown}
+          </div>
+        )}
+
+        {phase === "revealing" && prize && (
+          <>
+            <Confetti />
+            <PrizeCard prize={prize} />
+            <button
+              onClick={onClose}
+              style={{
+                marginTop: 8,
+                padding: "12px 32px",
+                background: "transparent",
+                color: BEIGE,
+                border: `1px solid ${GOLD}`,
+                borderRadius: 999,
+                cursor: "pointer",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+              }}
+            >
+              {t("common.close", { defaultValue: "Cerrar" })}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Confetti() {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: 30 }, (_, i) => ({
+        left: Math.random() * 100,
+        delay: Math.random() * 0.8,
+        duration: 2 + Math.random() * 1.5,
+        color: i % 2 === 0 ? GOLD_BRIGHT : BEIGE,
+        size: 6 + Math.random() * 6,
+      })),
+    [],
+  );
+  return (
+    <div
+      aria-hidden
+      style={{ position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden" }}
+    >
+      <style>{`
+        @keyframes confetti-fall {
+          0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+      `}</style>
+      {pieces.map((p, i) => (
+        <span
+          key={i}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.size * 1.6,
+            background: p.color,
+            borderRadius: 2,
+            animation: `confetti-fall ${p.duration}s ${p.delay}s linear forwards`,
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -279,7 +487,7 @@ function Wheel({ rotation, spinning }: { rotation: number; spinning: boolean }) 
           background: BEIGE,
           transform: `rotate(${rotation}deg)`,
           transition: spinning
-            ? "transform 4.6s cubic-bezier(0.17, 0.67, 0.16, 1)"
+            ? "transform 14s cubic-bezier(0.15, 0.7, 0.1, 1)"
             : "transform 0s",
         }}
       >
