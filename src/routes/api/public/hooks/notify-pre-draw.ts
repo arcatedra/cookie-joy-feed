@@ -148,7 +148,7 @@ export const Route = createFileRoute("/api/public/hooks/notify-pre-draw")({
                       const resp = await fetch(s.endpoint as string, {
                         method: payload.method,
                         headers: payload.headers,
-                        body: payload.body,
+                        body: payload.body.buffer.slice(payload.body.byteOffset, payload.body.byteOffset + payload.body.byteLength) as ArrayBuffer,
                       });
                       if (resp.status === 404 || resp.status === 410) {
                         pushExpired++;
