@@ -84,12 +84,16 @@ export function TopNav() {
           {/* Logo — símbolo + nombre tipo Amazon */}
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-1 py-1 md:gap-1.5 md:py-1.5"
+            className="flex shrink-0 items-center gap-0.5 sm:gap-1 md:gap-1.5"
             aria-label="HAZOREX"
           >
-            <img src={hazorexSymbolUrl} alt="HAZOREX" draggable={false} className="block h-10 w-auto select-none object-contain sm:hidden" />
-            <img src={hazorexSymbolUrl} alt="HAZOREX" draggable={false} className="hidden h-[52px] w-auto select-none object-contain sm:block" />
-            <span className="text-xl font-black tracking-[0.15em] text-[#E6C35C] sm:text-2xl md:text-3xl">
+            <img
+              src={hazorexSymbolUrl}
+              alt="HAZOREX"
+              draggable={false}
+              className="h-9 w-auto select-none self-center object-contain sm:h-11 md:h-12"
+            />
+            <span className="self-center text-xl font-black leading-none tracking-[0.15em] text-[#E6C35C] sm:text-2xl md:text-3xl">
               HAZOREX
             </span>
           </Link>
