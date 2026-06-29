@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { loadStripe } from "@stripe/stripe-js";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import {
   Lock,
   Cookie,
@@ -15,11 +17,14 @@ import {
   Minus,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
+import { useAuth } from "@/lib/auth";
 import { HazorexLogo } from "@/components/HazorexLogo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { createCartCheckout } from "@/lib/cart-checkout.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -30,6 +35,9 @@ export const Route = createFileRoute("/cart")({
   }),
   component: CheckoutPage,
 });
+
+const stripeToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
+const stripePromise = stripeToken ? loadStripe(stripeToken) : null;
 
 type StepKey = "address" | "payment" | "review";
 type Shipping = "standard" | "express";
