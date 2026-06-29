@@ -1,44 +1,53 @@
-## Objetivo
+# Aviso "El sorteo gira en 5 minutos"
 
-Cuando el usuario gaste 10⭐ y dispare el giro en `/ruleta`, en vez de girar discretamente in-place, abrir un **overlay fullscreen** con la ruleta centrada que gira durante **15 segundos** con build-up dramático y luego revela el premio.
+Objetivo: 5 minutos antes de que gire la ruleta del sorteo diario, todos los usuarios registrados reciben un aviso simultáneo por tres canales para que entren en vivo y vivan la tensión del giro.
 
-## Cambios (solo UI, sin tocar backend)
+## Qué se construye
 
-Archivo: `src/routes/ruleta.tsx`
+### 1. Push notifications del navegador (canal principal)
+- Banner discreto en la home y en `/ruleta` pidiendo permiso: "Activa avisos para no perderte el giro en vivo".
+- Al aceptar, se guarda la suscripción Web Push (endpoint + keys p256dh/auth) en una nueva tabla `push_subscriptions` ligada al `user_id`.
+- Funciona en Chrome/Edge/Firefox desktop y Android. En iOS solo funciona si el usuario añadió la web a la pantalla de inicio (se lo explicamos en el banner).
+- Click en la notificación → abre directamente la pantalla del sorteo en vivo.
 
-1. **Nuevo componente `SpinStageOverlay`**
-   - `position: fixed; inset: 0; z-index: 100` con fondo `rgba(15,30,55,0.92)` + blur.
-   - Centra el componente `Wheel` existente (reutilizado tal cual) y el puntero/gema.
-   - Fases internas controladas por estado:
-     - `building` (0–1 s): wheel entra con `scale-in`, eyebrow "Preparando el giro…".
-     - `spinning` (1–15 s): wheel rota con la transición CSS extendida a 14 s, easing `cubic-bezier(0.15, 0.7, 0.1, 1)` para empezar rápido y desacelerar fuerte al final. Texto rotativo cada 3 s: "El destino se mueve…", "Casi…", "Suerte…", contador regresivo discreto (15…1).
-     - `revealing` (≥15 s): wheel se detiene en el sector ganador, confetti dorado (CSS keyframes), `PrizeCard` aparece debajo con `scale-in`.
-   - Botón "Cerrar" sólo visible en `revealing`.
+### 2. Email de respaldo
+- A todos los usuarios registrados con email verificado y que no estén en la lista de suppressed.
+- Asunto: "🎰 El sorteo gira en 5 minutos — entra ahora".
+- Botón grande "Ver el giro en vivo" que lleva al sorteo.
+- Usa la infraestructura de Lovable Emails que ya tienes montada (cola `transactional_emails`).
 
-2. **Ajustar `handleSpin`**
-   - Activar overlay (`setStageOpen(true)`) antes del request.
-   - Llamar `spinFn()`, calcular `delta` igual que hoy pero con `turns = 18` (más vueltas para llenar 14 s visibles).
-   - Cambiar el `transition` del SVG cuando `spinning` esté activo: `transform 14s cubic-bezier(0.15, 0.7, 0.1, 1)`.
-   - Reemplazar `setTimeout(..., 4800)` por `setTimeout(..., 15000)` antes de pasar a fase `revealing` y mostrar `PrizeCard`.
-   - En error de servidor: cerrar el overlay y mostrar `toast.error`.
+### 3. Banner in-app para los que ya están dentro
+- Toast/banner llamativo en la parte superior con cuenta regresiva (5:00 → 0:00) y botón "Ir al sorteo en vivo".
+- Aparece en cualquier ruta donde esté el usuario.
 
-3. **Re-montar `Wheel` + `SpinButton` en el JSX principal**
-   - Hoy (línea 184) la mini-ruleta está removida. Añadir una sección "Tu giro de la suerte" sobre `BuyTokensPanel` que renderice `SpinButton`. El `Wheel` ya no se muestra inline: vive sólo dentro del overlay durante el giro.
+### 4. Disparador automático
+- Un cron job (pg_cron) que se ejecuta cada minuto, mira la hora del próximo sorteo en `sweepstakes_config`, y cuando faltan exactamente 5 minutos dispara los tres canales en paralelo.
+- Idempotente: marca el sorteo del día como "avisado" para no enviar dos veces si el cron corre dos veces.
 
-4. **Accesibilidad / UX**
-   - `aria-modal="true"`, `role="dialog"`, `aria-live="polite"` para los textos de fase.
-   - Cerrar con `Escape` sólo cuando fase = `revealing`.
-   - Bloquear scroll del body mientras el overlay esté abierto.
+### 5. Preferencias del usuario
+- Toggle en el perfil: "Avísame 5 min antes del sorteo" (activado por defecto al aceptar push, desactivable).
+- Link de unsubscribe en el email (usa la tabla `email_unsubscribe_tokens` existente).
 
 ## Detalles técnicos
 
-- Duración de giro: 14 s de animación CSS + 1 s de build-up = **15 s totales** antes de revelar.
-- Easing: `cubic-bezier(0.15, 0.7, 0.1, 1)` para arranque enérgico y frenado lento (más suspenso al final).
-- Vueltas: `turns = 18` para que la rueda esté visiblemente girando durante toda la animación sin verse "lenta".
-- Confetti: 30 partículas absolutas con keyframes `fall` + `spin`, sin dependencias nuevas.
-- Sin cambios en `roulette.functions.ts`, `roulette-config.ts`, ni en el endpoint `spin`.
+- **Nueva tabla** `push_subscriptions` (user_id, endpoint, p256dh, auth, created_at) con RLS y GRANTs.
+- **Nueva columna** en `profiles`: `notify_before_draw boolean default true`.
+- **Nueva columna** en `daily_draws`: `notified_5min_at timestamptz` para idempotencia.
+- **Server route público** `/api/public/hooks/notify-pre-draw` que el cron invoca; valida con `apikey` header.
+- **Server function** `sendPushNotification` que firma con VAPID y hace POST al endpoint de cada suscripción (librería `web-push` compatible con Worker, o llamada fetch directa firmando JWT VAPID).
+- **Claves VAPID**: se generan una vez con `generate_secret` y se guardan como `VAPID_PUBLIC_KEY` (también expuesta como `VITE_VAPID_PUBLIC_KEY` para el cliente) y `VAPID_PRIVATE_KEY` (server-only).
+- **Service Worker** nuevo en `public/sw.js` que escucha el evento `push` y muestra la notificación.
+- **Cron** cada minuto vía `pg_cron` + `pg_net`.
+- **Banner in-app** consulta cada 30s la hora del próximo sorteo (o vía Realtime sobre `daily_draws`) y aparece solo en la ventana de los últimos 5 min.
+
+## Limitaciones honestas
+
+- **iOS Safari**: las push solo llegan si el usuario instaló la web como PWA. No hay forma de evitarlo, es restricción de Apple.
+- **Tasa de aceptación de push**: típicamente 20-40% acepta el permiso. Por eso van los 3 canales.
+- **Email a "todos los registrados"**: si tienes muchos usuarios inactivos, puede afectar tu reputación de envío. Recomendación a futuro (no en este plan): pasar a opt-in explícito una vez tengas base.
 
 ## Fuera de alcance
 
-- No se toca `LiveDrawSection` (sorteo USD).
-- No se cambia el costo (10⭐), los premios, ni la lógica de cupones.
+- Notificaciones SMS (requeriría Twilio o similar, coste por mensaje).
+- Notificaciones push nativas iOS sin PWA (imposible técnicamente).
+- Cambiar la lógica del sorteo o de la ruleta personal.
