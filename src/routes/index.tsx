@@ -94,6 +94,38 @@ function Home() {
   return (
     <main className="min-h-screen bg-[#7A8BA3]">
 
+      {/* Hero — propuesta clara */}
+      <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-10 text-white md:py-14">
+        <div className="mx-auto max-w-[1100px] text-center">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#E6C35C]">
+            HAZOREX ORIGEN
+          </p>
+          <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">
+            Galletas premium con <span className="text-[#E6C35C]">sorteos diarios reales</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl font-serif text-base text-white/85 md:text-lg">
+            Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/shop"
+              className="rounded-full bg-[#E6C35C] px-7 py-3 text-sm font-bold text-[#1a0f0a] shadow-lg transition hover:bg-[#f0d175]"
+            >
+              Ver galletas
+            </Link>
+            <Link
+              to="/ruleta"
+              className="rounded-full border-2 border-[#E6C35C]/60 bg-white/5 px-7 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/10"
+            >
+              Cómo funciona el sorteo
+            </Link>
+          </div>
+          <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#E6C35C]/80">
+            ✓ Sorteo verificable · ✓ Envío en 24h · ✓ Galletas artesanales
+          </p>
+        </div>
+      </section>
+
       {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
       <div className="mx-auto max-w-[1500px] pt-3">
         <DailyWinnerBanner />
@@ -106,6 +138,8 @@ function Home() {
       <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
         <SubscribePromoBanner />
       </section>
+
+
 
 
       {/* Category grid */}
