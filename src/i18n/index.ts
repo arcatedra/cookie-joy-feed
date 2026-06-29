@@ -94,6 +94,9 @@ export function setLanguage(lang: Lang) {
     } catch {
       /* ignore */
     }
+    // Full reload so SSR-rendered content and any non-reactive caches
+    // (router loaders, suspense boundaries) re-render in the new language.
+    window.location.reload();
   }
 }
 
