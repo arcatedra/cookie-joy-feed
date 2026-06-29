@@ -388,46 +388,123 @@ function SpinStageOverlay({
 }
 
 function Confetti() {
+  // Adaptive count: fewer pieces on small/low-power screens for consistent 60fps,
+  // but still impactful via burst origin + multiple shapes + glow flash.
+  const count = useMemo(() => {
+    if (typeof window === "undefined") return 80;
+    const w = window.innerWidth;
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return 24;
+    if (w < 480) return 70;
+    if (w < 900) return 100;
+    return 140;
+  }, []);
+
+  const palette = [GOLD_BRIGHT, GOLD, BEIGE, "#FFE6A8", "#FFFFFF"];
+
   const pieces = useMemo(
     () =>
-      Array.from({ length: 30 }, (_, i) => ({
-        left: Math.random() * 100,
-        delay: Math.random() * 0.8,
-        duration: 2 + Math.random() * 1.5,
-        color: i % 2 === 0 ? GOLD_BRIGHT : BEIGE,
-        size: 6 + Math.random() * 6,
-      })),
-    [],
+      Array.from({ length: count }, (_, i) => {
+        // Burst from center: angle + distance → translate target.
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 35 + Math.random() * 55; // vmax
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance * 0.85 + 25; // bias downward for gravity feel
+        const shape = i % 5; // 0 strip, 1 square, 2 circle, 3 thin strip, 4 small square
+        const size = 6 + Math.random() * 8;
+        return {
+          tx,
+          ty,
+          rot: (Math.random() - 0.5) * 1440,
+          delay: Math.random() * 0.25,
+          duration: 1.6 + Math.random() * 1.4,
+          color: palette[i % palette.length],
+          size,
+          shape,
+        };
+      }),
+    [count],
   );
+
   return (
     <div
       aria-hidden
-      style={{ position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden" }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        pointerEvents: "none",
+        overflow: "hidden",
+        zIndex: 1,
+        contain: "strict",
+      }}
     >
       <style>{`
-        @keyframes confetti-fall {
-          0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        @keyframes confetti-burst {
+          0% {
+            transform: translate3d(-50%, -50%, 0) rotate(0deg) scale(0.4);
+            opacity: 0;
+          }
+          8% { opacity: 1; }
+          100% {
+            transform: translate3d(calc(-50% + var(--tx)), calc(-50% + var(--ty)), 0) rotate(var(--rot)) scale(1);
+            opacity: 0;
+          }
+        }
+        @keyframes reveal-flash {
+          0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+          25% { opacity: 0.9; }
+          100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
         }
       `}</style>
-      {pieces.map((p, i) => (
-        <span
-          key={i}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: `${p.left}%`,
-            width: p.size,
-            height: p.size * 1.6,
-            background: p.color,
-            borderRadius: 2,
-            animation: `confetti-fall ${p.duration}s ${p.delay}s linear forwards`,
-          }}
-        />
-      ))}
+
+      {/* Golden flash ring behind the prize */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: "min(60vw, 420px)",
+          height: "min(60vw, 420px)",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${GOLD_BRIGHT}55 0%, ${GOLD}22 40%, transparent 70%)`,
+          animation: "reveal-flash 900ms ease-out forwards",
+          willChange: "transform, opacity",
+        }}
+      />
+
+      {pieces.map((p, i) => {
+        const isCircle = p.shape === 2;
+        const isStrip = p.shape === 0 || p.shape === 3;
+        const w = isStrip ? p.size * 0.4 : p.size;
+        const h = isStrip ? p.size * 1.8 : p.size;
+        return (
+          <span
+            key={i}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: w,
+              height: h,
+              background: p.color,
+              borderRadius: isCircle ? "50%" : 1,
+              boxShadow: `0 0 6px ${p.color}66`,
+              willChange: "transform, opacity",
+              animation: `confetti-burst ${p.duration}s ${p.delay}s cubic-bezier(0.15, 0.7, 0.3, 1) forwards`,
+              // CSS custom props consumed by keyframes
+              ["--tx" as never]: `${p.tx}vmax`,
+              ["--ty" as never]: `${p.ty}vmax`,
+              ["--rot" as never]: `${p.rot}deg`,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
+
 
 function Wheel({ rotation, spinning }: { rotation: number; spinning: boolean }) {
   const sectorAngle = 360 / PRIZES.length;
