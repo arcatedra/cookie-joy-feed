@@ -994,5 +994,33 @@
       "rejected": "Tinanggihan",
       "expired": "Nag-expire na"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX PINAGMULAN",
+    "titlePart1": "Premium na cookies na may",
+    "titlePart2": "tunay na pang-araw-araw na palabunutan",
+    "subtitle": "Bawat bili ay awtomatikong sumasali sa araw na palabunutan. 100% verifiable na resulta gamit ang cryptographic seed — walang tagapamagitan.",
+    "ctaShop": "Tingnan ang cookies",
+    "ctaHow": "Paano gumagana ang palabunutan",
+    "trust": "✓ Verifiable na bunutan · ✓ 24h shipping · ✓ Handcrafted cookies"
+  },
+  "footer": {
+    "tagline": "Premium na cookies na may 100% verifiable na pang-araw-araw na palabunutan. Bawat bili ay sumasali sa araw na bunutan.",
+    "shop": "Tindahan",
+    "allCookies": "Cookies",
+    "roulette": "Araw-araw na ruleta",
+    "subscribe": "Subscription",
+    "explore": "Tuklasin",
+    "account": "Account",
+    "profile": "Aking profile",
+    "history": "Kasaysayan",
+    "deliveries": "Mga delivery",
+    "signIn": "Mag-sign in",
+    "legal": "Legal",
+    "terms": "Mga tuntunin",
+    "privacy": "Pagkapribado",
+    "rules": "Mga panuntunan",
+    "trust": "Tiwala",
+    "rights": "Lahat ng karapatan ay nakalaan."
   }
 }

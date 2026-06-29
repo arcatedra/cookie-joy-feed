@@ -499,5 +499,33 @@
     "entriesClosedEyebrow": "⏸ ANMELDUNG GESCHLOSSEN · LIVE-AUSWAHL WIRD VORBEREITET",
     "entriesClosedTitle": "Die Anmeldung für die heutige Ziehung ist beendet",
     "entriesClosedBody": "Die Live-Auswahl wird vorbereitet… Das Rad dreht sich um 20:00 ET."
+  },
+  "hero": {
+    "eyebrow": "HAZOREX URSPRUNG",
+    "titlePart1": "Premium-Kekse mit",
+    "titlePart2": "echten täglichen Verlosungen",
+    "subtitle": "Jeder Kauf nimmt automatisch an der täglichen Verlosung teil. 100% verifizierbares Ergebnis mit kryptografischem Seed — keine Mittelsmänner.",
+    "ctaShop": "Kekse ansehen",
+    "ctaHow": "So funktioniert die Verlosung",
+    "trust": "✓ Verifizierbare Verlosung · ✓ 24h Versand · ✓ Handgemachte Kekse"
+  },
+  "footer": {
+    "tagline": "Premium-Kekse mit 100% verifizierbaren täglichen Verlosungen. Jeder Kauf gewährt Zugang zur Tagesverlosung.",
+    "shop": "Shop",
+    "allCookies": "Kekse",
+    "roulette": "Tagesroulette",
+    "subscribe": "Abo",
+    "explore": "Entdecken",
+    "account": "Konto",
+    "profile": "Mein Profil",
+    "history": "Verlauf",
+    "deliveries": "Lieferungen",
+    "signIn": "Anmelden",
+    "legal": "Rechtliches",
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "rules": "Verlosungsregeln",
+    "trust": "Vertrauen",
+    "rights": "Alle Rechte vorbehalten."
   }
 }

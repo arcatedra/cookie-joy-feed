@@ -756,8 +756,8 @@
       "belgian": "100% Belgian Chocolate"
     },
     "prices": {
-      "u10": "Under $10",
       "1025": "$10 to $25",
+      "u10": "Under $10",
       "o25": "Over $25"
     },
     "category": "Category",
@@ -991,5 +991,33 @@
       "rejected": "Rejected",
       "expired": "Expired"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX ORIGIN",
+    "titlePart1": "Premium cookies with",
+    "titlePart2": "real daily sweepstakes",
+    "subtitle": "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.",
+    "ctaShop": "Shop cookies",
+    "ctaHow": "How the draw works",
+    "trust": "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies"
+  },
+  "footer": {
+    "tagline": "Premium cookies with 100% verifiable daily sweepstakes. Every purchase grants entry to that day's draw.",
+    "shop": "Shop",
+    "allCookies": "Cookies",
+    "roulette": "Daily roulette",
+    "subscribe": "Subscription",
+    "explore": "Explore",
+    "account": "Account",
+    "profile": "My profile",
+    "history": "History",
+    "deliveries": "Deliveries",
+    "signIn": "Sign in",
+    "legal": "Legal",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "rules": "Sweepstakes rules",
+    "trust": "Trust",
+    "rights": "All rights reserved."
   }
 }

@@ -991,5 +991,33 @@
       "rejected": "Rechazado",
       "expired": "Expirado"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX ORIGEN",
+    "titlePart1": "Galletas premium con",
+    "titlePart2": "sorteos diarios reales",
+    "subtitle": "Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.",
+    "ctaShop": "Ver galletas",
+    "ctaHow": "Cómo funciona el sorteo",
+    "trust": "✓ Sorteo verificable · ✓ Envío en 24h · ✓ Galletas artesanales"
+  },
+  "footer": {
+    "tagline": "Galletas premium con sorteos diarios 100% verificables. Cada compra te da acceso al sorteo del día.",
+    "shop": "Tienda",
+    "allCookies": "Galletas",
+    "roulette": "Ruleta del día",
+    "subscribe": "Suscripción",
+    "explore": "Explorar",
+    "account": "Cuenta",
+    "profile": "Mi perfil",
+    "history": "Historial",
+    "deliveries": "Entregas",
+    "signIn": "Iniciar sesión",
+    "legal": "Legal",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "rules": "Reglas del sorteo",
+    "trust": "Confianza",
+    "rights": "Todos los derechos reservados."
   }
 }

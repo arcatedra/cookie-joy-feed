@@ -991,5 +991,33 @@
       "rejected": "已拒绝",
       "expired": "已过期"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX 源",
+    "titlePart1": "高级饼干配",
+    "titlePart2": "真实每日抽奖",
+    "subtitle": "每次购买自动进入当日抽奖。使用加密种子，结果100%可验证——无中间方。",
+    "ctaShop": "查看饼干",
+    "ctaHow": "抽奖如何运作",
+    "trust": "✓ 可验证抽奖 · ✓ 24小时发货 · ✓ 手工饼干"
+  },
+  "footer": {
+    "tagline": "高级饼干配100%可验证每日抽奖。每次购买都可进入当日抽奖。",
+    "shop": "商店",
+    "allCookies": "饼干",
+    "roulette": "每日轮盘",
+    "subscribe": "订阅",
+    "explore": "探索",
+    "account": "账户",
+    "profile": "我的资料",
+    "history": "历史",
+    "deliveries": "配送",
+    "signIn": "登录",
+    "legal": "法律",
+    "terms": "条款",
+    "privacy": "隐私",
+    "rules": "抽奖规则",
+    "trust": "信任",
+    "rights": "版权所有。"
   }
 }

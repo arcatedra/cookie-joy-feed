@@ -991,5 +991,33 @@
       "rejected": "Rifiutato",
       "expired": "Scaduto"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX ORIGINE",
+    "titlePart1": "Biscotti premium con",
+    "titlePart2": "veri concorsi quotidiani",
+    "subtitle": "Ogni acquisto partecipa automaticamente all'estrazione del giorno. Risultato 100% verificabile con seed crittografico — senza intermediari.",
+    "ctaShop": "Vedi biscotti",
+    "ctaHow": "Come funziona l'estrazione",
+    "trust": "✓ Estrazione verificabile · ✓ Spedizione 24h · ✓ Biscotti artigianali"
+  },
+  "footer": {
+    "tagline": "Biscotti premium con estrazioni quotidiane 100% verificabili. Ogni acquisto dà accesso all'estrazione del giorno.",
+    "shop": "Shop",
+    "allCookies": "Biscotti",
+    "roulette": "Roulette del giorno",
+    "subscribe": "Abbonamento",
+    "explore": "Esplora",
+    "account": "Account",
+    "profile": "Il mio profilo",
+    "history": "Cronologia",
+    "deliveries": "Consegne",
+    "signIn": "Accedi",
+    "legal": "Legale",
+    "terms": "Termini",
+    "privacy": "Privacy",
+    "rules": "Regole del concorso",
+    "trust": "Fiducia",
+    "rights": "Tutti i diritti riservati."
   }
 }

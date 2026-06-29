@@ -994,5 +994,33 @@
       "rejected": "Rejeitado",
       "expired": "Expirado"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX ORIGEM",
+    "titlePart1": "Biscoitos premium com",
+    "titlePart2": "sorteios diários reais",
+    "subtitle": "Cada compra entra automaticamente no sorteio do dia. Resultado 100% verificável com seed criptográfica — sem intermediários.",
+    "ctaShop": "Ver biscoitos",
+    "ctaHow": "Como funciona o sorteio",
+    "trust": "✓ Sorteio verificável · ✓ Entrega 24h · ✓ Biscoitos artesanais"
+  },
+  "footer": {
+    "tagline": "Biscoitos premium com sorteios diários 100% verificáveis. Cada compra dá acesso ao sorteio do dia.",
+    "shop": "Loja",
+    "allCookies": "Biscoitos",
+    "roulette": "Roleta diária",
+    "subscribe": "Assinatura",
+    "explore": "Explorar",
+    "account": "Conta",
+    "profile": "Meu perfil",
+    "history": "Histórico",
+    "deliveries": "Entregas",
+    "signIn": "Entrar",
+    "legal": "Legal",
+    "terms": "Termos",
+    "privacy": "Privacidade",
+    "rules": "Regras do sorteio",
+    "trust": "Confiança",
+    "rights": "Todos os direitos reservados."
   }
 }

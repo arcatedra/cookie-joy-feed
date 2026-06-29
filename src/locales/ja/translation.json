@@ -32,5 +32,33 @@
     "entriesClosedEyebrow": "⏸ 登録終了 · ライブ抽選を準備中",
     "entriesClosedTitle": "本日の抽選の登録は終了しました",
     "entriesClosedBody": "ライブ抽選を準備中… ホイールは ET 午後8時に回転します。"
+  },
+  "hero": {
+    "eyebrow": "HAZOREX オリジン",
+    "titlePart1": "プレミアムクッキーと",
+    "titlePart2": "本物の毎日抽選",
+    "subtitle": "ご購入ごとに本日の抽選に自動エントリー。暗号シードで100％検証可能 — 仲介者なし。",
+    "ctaShop": "クッキーを見る",
+    "ctaHow": "抽選の仕組み",
+    "trust": "✓ 検証可能な抽選 · ✓ 24時間以内発送 · ✓ 手作りクッキー"
+  },
+  "footer": {
+    "tagline": "プレミアムクッキーと100％検証可能な毎日抽選。ご購入で当日の抽選に参加できます。",
+    "shop": "ショップ",
+    "allCookies": "クッキー",
+    "roulette": "デイリールーレット",
+    "subscribe": "サブスク",
+    "explore": "探索",
+    "account": "アカウント",
+    "profile": "プロフィール",
+    "history": "履歴",
+    "deliveries": "配送",
+    "signIn": "ログイン",
+    "legal": "法的事項",
+    "terms": "規約",
+    "privacy": "プライバシー",
+    "rules": "抽選ルール",
+    "trust": "信頼",
+    "rights": "無断複写・転載を禁じます。"
   }
 }
