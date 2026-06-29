@@ -101,7 +101,7 @@ export const Route = createFileRoute("/api/public/hooks/notify-pre-draw")({
         const prizeUsd = `$${Number(draw.prize_usd ?? 0).toFixed(2)}`;
 
         const { template } = await import("@/lib/email-templates/pre-draw-notification");
-        const subject = typeof template.subject === "string" ? template.subject : template.subject({});
+        const subject = typeof template.subject === "string" ? template.subject : (template.subject as (d: Record<string, unknown>) => string)({});
 
         // Pre-render once (same content for everyone)
         const Component = template.component;
