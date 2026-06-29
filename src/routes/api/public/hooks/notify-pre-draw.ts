@@ -3,7 +3,7 @@ import * as React from "react";
 import { render } from "@react-email/components";
 
 const SITE_NAME = "origen-com";
-const SENDER_DOMAIN = "notify.origen.management";
+const SENDER_DOMAIN = "notify.hazorex.com";
 const FROM_DOMAIN = "origen.management";
 const PUBLIC_DRAW_URL = "https://www.hazorex.com/";
 
