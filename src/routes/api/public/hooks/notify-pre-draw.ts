@@ -275,6 +275,7 @@ export const Route = createFileRoute("/api/public/hooks/notify-pre-draw")({
           enqueued,
           suppressed: suppressedCount,
           errors: errors.length,
+          push: { sent: pushSent, failed: pushFailed, expired: pushExpired },
         });
       },
     },
