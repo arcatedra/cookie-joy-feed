@@ -15,7 +15,8 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
-import hazorexSymbolUrl from "@/assets/hazorex-symbol-only.png";
+import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold.png.asset.json";
+const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
