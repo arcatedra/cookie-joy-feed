@@ -502,6 +502,12 @@ function CheckoutPage() {
                     : t("subscribeGate.cartConfirm")}
               </button>
 
+              {checkoutError && (
+                <p className="mt-2 rounded-md bg-red-50 px-3 py-2 text-center text-xs font-semibold text-red-700">
+                  {checkoutError}
+                </p>
+              )}
+
               <p className="mt-3 text-center text-[11px] text-gray-500">
                 {t("subscribeGate.cartTerms")}
               </p>
