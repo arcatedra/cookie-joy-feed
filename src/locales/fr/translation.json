@@ -991,5 +991,33 @@
       "rejected": "Rejeté",
       "expired": "Expiré"
     }
+  },
+  "hero": {
+    "eyebrow": "HAZOREX ORIGINE",
+    "titlePart1": "Cookies premium avec",
+    "titlePart2": "vrais tirages quotidiens",
+    "subtitle": "Chaque achat participe automatiquement au tirage du jour. Résultat 100% vérifiable avec graine cryptographique — sans intermédiaires.",
+    "ctaShop": "Voir les cookies",
+    "ctaHow": "Comment fonctionne le tirage",
+    "trust": "✓ Tirage vérifiable · ✓ Livraison 24h · ✓ Cookies artisanaux"
+  },
+  "footer": {
+    "tagline": "Cookies premium avec tirages quotidiens 100% vérifiables. Chaque achat donne accès au tirage du jour.",
+    "shop": "Boutique",
+    "allCookies": "Cookies",
+    "roulette": "Roulette du jour",
+    "subscribe": "Abonnement",
+    "explore": "Explorer",
+    "account": "Compte",
+    "profile": "Mon profil",
+    "history": "Historique",
+    "deliveries": "Livraisons",
+    "signIn": "Se connecter",
+    "legal": "Légal",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "rules": "Règles du tirage",
+    "trust": "Confiance",
+    "rights": "Tous droits réservés."
   }
 }
