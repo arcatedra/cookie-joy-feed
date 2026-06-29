@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { loadStripe } from "@stripe/stripe-js";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import {
   Lock,
   Cookie,
@@ -15,11 +17,14 @@ import {
   Minus,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
+import { useAuth } from "@/lib/auth";
 import { HazorexLogo } from "@/components/HazorexLogo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { createCartCheckout } from "@/lib/cart-checkout.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -31,15 +36,19 @@ export const Route = createFileRoute("/cart")({
   component: CheckoutPage,
 });
 
+const stripeToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
+const stripePromise = stripeToken ? loadStripe(stripeToken) : null;
+
 type StepKey = "address" | "payment" | "review";
 type Shipping = "standard" | "express";
 type PayMethod = "card" | "wallet";
 
 function CheckoutPage() {
-  const { items, total, setQty, remove, clear, count } = useCart();
+  const { items, total, setQty, remove, count } = useCart();
   const gate = useSubscriptionGate();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user } = useAuth();
 
 
   const [openStep, setOpenStep] = useState<StepKey>("address");
@@ -47,6 +56,8 @@ function CheckoutPage() {
   const [pay, setPay] = useState<PayMethod>("card");
   const [confirmed, setConfirmed] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [trackingId] = useState(
     () => `AMZ-GAL-${Math.floor(1000 + Math.random() * 9000)}`,
   );
@@ -59,10 +70,11 @@ function CheckoutPage() {
     city: "",
     zip: "",
     phone: "",
+    email: "",
     makeDefault: true,
   });
 
-  // Card form
+  // Card form (placeholder — real payment runs in the embedded Stripe modal below)
   const [card, setCard] = useState({ number: "", exp: "", cvv: "" });
 
   const shippingCost = items.length === 0 ? 0 : shipping === "express" ? 4.99 : 0;
@@ -74,12 +86,16 @@ function CheckoutPage() {
 
   const fmt = (n: number) => `$${n.toFixed(2)}`;
 
+  const buyerEmail = (user?.email ?? addr.email ?? "").trim().toLowerCase();
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail);
+
   const addressComplete = Boolean(
     addr.name.trim() &&
       addr.street.trim() &&
       addr.city.trim() &&
       addr.zip.trim() &&
-      addr.phone.trim(),
+      addr.phone.trim() &&
+      emailValid,
   );
 
   const handleConfirm = async () => {
@@ -88,11 +104,42 @@ function CheckoutPage() {
       setOpenStep("address");
       return;
     }
+    if (!stripePromise) {
+      setCheckoutError("El pago no está configurado en este entorno.");
+      return;
+    }
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 1400));
-    clear();
-    setProcessing(false);
-    setConfirmed(true);
+    setCheckoutError(null);
+    try {
+      const res = await createCartCheckout({
+        data: {
+          items: items.map((it) => ({
+            id: it.id,
+            name: it.name,
+            price: it.price,
+            qty: it.qty,
+            image: it.image,
+          })),
+          email: buyerEmail,
+          shipping,
+          address: {
+            name: addr.name,
+            street: addr.street,
+            apt: addr.apt,
+            city: addr.city,
+            zip: addr.zip,
+            phone: addr.phone,
+            country: "US",
+          },
+        },
+      });
+      setClientSecret(res.clientSecret);
+    } catch (e) {
+      console.error(e);
+      setCheckoutError(e instanceof Error ? e.message : "No se pudo iniciar el pago.");
+    } finally {
+      setProcessing(false);
+    }
   };
 
   // ============ Success screen ============
@@ -230,6 +277,13 @@ function CheckoutPage() {
                   label={t("checkout.phone")}
                   value={addr.phone}
                   onChange={(v) => setAddr({ ...addr, phone: v })}
+                />
+                <Field
+                  label="Email"
+                  value={addr.email || user?.email || ""}
+                  onChange={(v) => setAddr({ ...addr, email: v })}
+                  placeholder="tu@email.com"
+                  full
                 />
               </div>
               <label className="mt-4 flex items-center gap-2 text-sm text-gray-700">
@@ -446,6 +500,12 @@ function CheckoutPage() {
                     : t("subscribeGate.cartConfirm")}
               </button>
 
+              {checkoutError && (
+                <p className="mt-2 rounded-md bg-red-50 px-3 py-2 text-center text-xs font-semibold text-red-700">
+                  {checkoutError}
+                </p>
+              )}
+
               <p className="mt-3 text-center text-[11px] text-gray-500">
                 {t("subscribeGate.cartTerms")}
               </p>
@@ -481,6 +541,29 @@ function CheckoutPage() {
           </aside>
         </div>
       </div>
+
+      {clientSecret && stripePromise && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 md:p-8">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setClientSecret(null)}
+              className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-gray-500 shadow ring-1 ring-black/10 hover:text-gray-900"
+              aria-label="Cerrar"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="p-2 md:p-4">
+              <EmbeddedCheckoutProvider
+                stripe={stripePromise}
+                options={{ clientSecret }}
+              >
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

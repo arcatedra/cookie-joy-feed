@@ -33,6 +33,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
@@ -172,6 +173,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/checkout/success',
+  path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSweepstakesRoute = AdminSweepstakesRouteImport.update({
   id: '/admin/sweepstakes',
   path: '/admin/sweepstakes',
@@ -304,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -348,6 +355,7 @@ export interface FileRoutesByTo {
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -394,6 +402,7 @@ export interface FileRoutesById {
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -440,6 +449,7 @@ export interface FileRouteTypes {
     | '/deliveries'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/checkout/success'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -484,6 +494,7 @@ export interface FileRouteTypes {
     | '/deliveries'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/checkout/success'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -529,6 +540,7 @@ export interface FileRouteTypes {
     | '/_authenticated/deliveries'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/checkout/success'
     | '/email/unsubscribe'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -574,6 +586,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
   AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
@@ -762,6 +775,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/sweepstakes': {
       id: '/admin/sweepstakes'
       path: '/admin/sweepstakes'
@@ -948,6 +968,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
   AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
@@ -968,13 +989,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

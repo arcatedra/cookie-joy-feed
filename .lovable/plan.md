@@ -1,56 +1,111 @@
-# Plan: 4 arreglos en una sola tanda
+# Checkout propio con Stripe — sin comisión de Shopify
 
-Hago las 4 cosas en una sola ejecución para no fragmentar créditos.
+Entendido: vamos por el camino **B** y lo hacemos por fases para no gastar créditos de golpe. Esta es la **Fase 1**: dejar el checkout cobrando de verdad con Stripe, guardando el pedido en tu BD y mandando email de confirmación. Catálogo y demás siguen como están — solo cambia cómo se cobra.
 
-## 1. Footer global con enlaces legales
+## Lo que ya tienes y vamos a reutilizar
 
-Crear `src/components/SiteFooter.tsx` y montarlo en `src/routes/__root.tsx` debajo del `<Outlet />`.
+- Stripe ya está conectado (lo usas para las Estrellas de la ruleta vía `createStarsCheckout`).
+- Helper `createStripeClient` en `src/lib/stripe.server.ts` con la firma del gateway de Lovable.
+- Carrito local en `src/lib/cart.tsx` (`useCart`) — items con `id`, `name`, `price`, `image`, `qty`.
+- Webhook ya existe en `src/routes/api/public/payments/webhook.ts` con verificación de firma — solo añadimos un handler nuevo para pedidos.
+- Emails: ya hay `src/lib/email-templates/order-confirmation.tsx` y el sistema de cola.
 
-Contenido:
-- Logo + tagline corto en español
-- Columnas: **Tienda** (Shop, Ruleta, Suscripción), **Cuenta** (Perfil, Historial, Entregas), **Legal** (Términos, Privacidad, Reglas del sorteo, Confianza), **Contacto** (email + redes si existen)
-- Línea inferior: © Hazorex 2026 + selector de idioma compacto
-- Estilo: navy del header con borde dorado fino, tipografía Cinzel para títulos y Cormorant para enlaces, coherente con el sitio
+## Lo que voy a construir en Fase 1
 
-## 2. Hero claro en `/` (home)
+### 1. Tabla `orders` en la BD
 
-Editar `src/routes/index.tsx`:
-- Bloque superior nuevo (encima de lo existente) con:
-  - **H1** corto: "Galletas premium con sorteos diarios reales"
-  - Subtítulo de 1 línea explicando la propuesta (compra galletas → cada compra entra al sorteo verificable)
-  - 2 CTAs: **"Ver galletas"** (→ /shop) y **"Cómo funciona el sorteo"** (→ /ruleta)
-  - Indicador de confianza: contador de premio actual (ya existe `PrizePoolCounter`) + "Sorteo 100% verificable"
-- Mantener todo el contenido existente debajo sin tocar lógica
+```text
+orders
+├── id (uuid)
+├── stripe_session_id (text, unique)
+├── stripe_payment_intent_id (text, nullable)
+├── user_id (uuid, nullable → auth.users)
+├── email (text)
+├── items (jsonb)            -- snapshot del carrito
+├── subtotal_usd (numeric)
+├── shipping_usd (numeric)
+├── tax_usd (numeric)
+├── total_usd (numeric)
+├── currency (text, default 'usd')
+├── shipping_address (jsonb) -- nombre, calle, ciudad, zip, país, teléfono
+├── status (text)            -- 'pending' | 'paid' | 'failed' | 'refunded'
+├── environment (text)       -- 'sandbox' | 'live'
+├── tracking_number (text, nullable)
+├── created_at, updated_at, paid_at
+```
 
-## 3. Checkout end-to-end — verificación, no rebuild
+Con RLS: el usuario ve solo sus pedidos (por `user_id` o por email si fue invitado); `service_role` puede todo. GRANT a `authenticated` y `service_role`.
 
-Revisar y arreglar SOLO lo que rompa el flujo actual:
-- `src/routes/cart.tsx` → confirmar que el botón pagar llama a Stripe correctamente
-- `src/lib/stars-checkout.functions.ts` y resto de funciones de pago → confirmar `return_url` y manejo de éxito
-- Crear/verificar página de confirmación `/checkout/success` que muestre resumen y CTA "Ver mis pedidos"
-- Verificar que el email de confirmación se dispara (ya existe `order-confirmation.tsx`)
-- Empty state del carrito con CTA a /shop
+### 2. Server function `createCartCheckout`
 
-Si el flujo ya funciona, solo añadir la página de confirmación y el empty state. No reescribo Stripe.
+Nuevo archivo `src/lib/cart-checkout.functions.ts`. Hace:
 
-## 4. Header móvil <380px
+- Valida con Zod los items, email y dirección.
+- Resuelve el usuario por bearer token (igual que `stars-checkout`) o lo trata como invitado.
+- Crea una sesión Stripe (`mode: 'payment'`, `ui_mode: 'embedded_page'`) con:
+  - `line_items` construidos con `price_data` desde el carrito (cada galleta = un line).
+  - `shipping_address_collection` con países permitidos (te pregunto cuáles abajo).
+  - `shipping_options` con un par de tarifas planas (estándar y exprés — usamos los valores que ya muestras en `/cart`).
+  - `automatic_tax: { enabled: true }` (fallback por defecto; full compliance lo dejamos para Fase 2 cuando sepas seller country).
+  - `metadata.kind = 'cookie_order'`, `subject_user_id`, `subject_email`.
+  - `payment_intent_data.description = "HAZOREX — Pedido de galletas"`.
+- Inserta el pedido en `orders` con `status: 'pending'`.
+- Devuelve `clientSecret` para Embedded Checkout.
 
-Editar `src/components/TopNav.tsx`:
-- Ocultar elementos secundarios bajo `<380px`: dirección, contador de entregas, "Devoluciones" — visibles desde `sm:` (640px) en adelante
-- Mantener visibles siempre: logo, carrito, menú hamburguesa
-- Verificar con Playwright a 360px y 1280px que nada se desborda
+### 3. Reemplazar el botón fake en `/cart`
 
-## Verificación final (una sola pasada)
+Borrar el `setTimeout(1400)` + `setConfirmed(true)`. En su lugar:
 
-- `bun run build` — confirmar que compila
-- Playwright: screenshot de home (desktop + 360px) confirmando footer, hero y header limpios
-- Reportar al usuario qué cambió y qué quedó verificado
+- Validar dirección.
+- Llamar `createCartCheckout`.
+- Montar `<EmbeddedCheckoutProvider>` + `<EmbeddedCheckout>` en un panel/modal sobre la página.
+- `return_url` → `/checkout/success?session_id={CHECKOUT_SESSION_ID}`.
 
-## Lo que NO hago en esta tanda (para no gastar de más)
+### 4. Página `/checkout/success`
 
-- Rediseño visual completo / sistema de tokens reducido
-- SEO por ruta (`head()` individual en cada página)
-- Optimización del logo PNG a WebP
-- Skeletons, push notifications timing, auditoría i18n, E2E tests
+Nueva ruta `src/routes/checkout.success.tsx`:
 
-Si después de esta tanda quieres seguir con alguno, lo pides explícitamente.
+- Lee `session_id` del query.
+- Server function `getOrderBySessionId` que verifica que pertenece al usuario (o al email del invitado) y devuelve resumen.
+- Muestra: número de pedido, items, total, dirección de envío, "Te enviamos un email a X".
+- CTA: "Ver mis pedidos" → `/historial`, "Seguir comprando" → `/shop`.
+
+### 5. Webhook: handler para `checkout.session.completed`
+
+En `src/routes/api/public/payments/webhook.ts` añado una rama nueva (sin tocar la de suscripciones ni estrellas):
+
+- Si `event.type === 'checkout.session.completed'` y `metadata.kind === 'cookie_order'`:
+  - Marca el pedido como `paid` (idempotente con `stripe_session_id`).
+  - Guarda `payment_intent_id`, totales finales, dirección recogida por Stripe.
+  - Encola `order-confirmation` con `idempotencyKey = order:${session.id}`.
+  - Encola también un email interno para ti (`admin-new-order`, ya existe la plantilla).
+
+### 6. Empty state del carrito
+
+Cuando `items.length === 0` y el usuario llega a `/cart`: tarjeta con icono + "Tu carrito está vacío" + CTA "Ver galletas" → `/shop`. Tres líneas, sin más.
+
+## Lo que NO hago en Fase 1 (para no quemar créditos)
+
+- Tax codes por producto en Stripe — usamos `automatic_tax` global. Lo afinamos cuando vayas a live.
+- Cálculo de envío real por peso/destino — tarifas planas por ahora.
+- Migrar el catálogo fuera de Shopify — los productos siguen viniendo del Storefront API, solo cambia el cobro.
+- Reembolsos / cancelaciones desde la app — desde el dashboard de Stripe por ahora.
+- Inventario / stock — Shopify lo sigue mostrando; en Fase 2 movemos a una tabla `products` propia si quieres salir de Shopify del todo.
+- Página `/historial` reconstruida — solo añado lectura básica de `orders` si hace falta para el CTA.
+
+## Antes de empezar necesito 3 datos tuyos
+
+(Pregunto abajo con el botón.)
+
+## Verificación al final
+
+- Tarjeta test `4242 4242 4242 4242` → pago real con sandbox.
+- Confirmar: pedido en BD con `status='paid'`, email recibido, redirección a `/checkout/success` con resumen correcto.
+- Tarjeta de rechazo `4000 0000 0000 0002` → confirmar que NO se marca como pagado.
+- Recargar la página de éxito directamente con un `session_id` de otro usuario → debe denegar.
+
+## Fases siguientes (cuando lo pidas)
+
+- **Fase 2**: tax codes por producto + decidir managed_payments según tu país.
+- **Fase 3**: tabla `products` propia + admin para subir galletas sin Shopify.
+- **Fase 4**: panel de pedidos / tracking / reembolsos desde la app.
