@@ -97,7 +97,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
     const prev = lastStatusRef.current;
     if (draw.status === "drawing" && prev !== "drawing") {
       // start dramatic spin
-      setSpinDeg((d) => d + 360 * 6 + Math.floor(Math.random() * 360));
+      setSpinDeg((d) => d + 360 * 14 + Math.floor(Math.random() * 360));
     }
     if (draw.status === "completed" && prev !== "completed") {
       // finalize spin + celebrate
