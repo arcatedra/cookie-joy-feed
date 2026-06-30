@@ -97,11 +97,11 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
     const prev = lastStatusRef.current;
     if (draw.status === "drawing" && prev !== "drawing") {
       // start dramatic spin
-      setSpinDeg((d) => d + 360 * 6 + Math.floor(Math.random() * 360));
+      setSpinDeg((d) => d + 360 * 14 + Math.floor(Math.random() * 360));
     }
     if (draw.status === "completed" && prev !== "completed") {
       // finalize spin + celebrate
-      setSpinDeg((d) => d + 360 * 8 + Math.floor(Math.random() * 360));
+      setSpinDeg((d) => d + 360 * 18 + Math.floor(Math.random() * 360));
       setTimeout(() => {
         if (draw.winnerDisplayName) {
           setShowWinner(true);
@@ -189,8 +189,13 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const preWarn1 = isOpen && cd.ms > 0 && cd.ms <= 30_000;
 
   // ===== Stage (fullscreen) mode =====
-  // Opens exactly at draw time (T=0), while drawing, and during winner celebration.
-  const stageOpen = (isOpen && cd.ms === 0) || isDrawing || showWinner;
+  // Opens 5 minutes before the draw, stays open through spin + winner celebration.
+  const PRE_SHOW_MS = 5 * 60_000;
+  const stageOpen = (isOpen && cd.ms <= PRE_SHOW_MS) || isDrawing || showWinner;
+
+  // Avoid SSR/CSR hydration mismatch — countdowns depend on Date.now()
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   // Auto-close stage 14s after winner appears
   const stageCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -334,9 +339,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             boxShadow: `inset 0 0 0 8px ${WOOD}, 0 20px 40px -10px rgba(0,0,0,0.3)`,
             transform: `rotate(${spinDeg}deg)`,
             transition: isDrawing
-              ? "transform 6s cubic-bezier(0.15,0.8,0.25,1)"
+              ? "transform 12s cubic-bezier(0.15,0.85,0.2,1)"
               : isCompleted
-              ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
+              ? "transform 13s cubic-bezier(0.05,0.85,0.15,1)"
               : "transform 0.4s ease-out",
           }}>
             {segments.map((label: string, i: number) => {
@@ -482,7 +487,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
       <WinnersLeaderboard winners={winners ?? []} />
 
       {/* Fullscreen Stage — pre-show + spinning + winner celebration */}
-      {stageOpen && !forceStageClosed && !preLaunch && typeof document !== "undefined" &&
+      {mounted && stageOpen && !forceStageClosed && !preLaunch && typeof document !== "undefined" &&
         createPortal(
           <DrawStage
             phase={showWinner ? "celebrating" : isDrawing ? "spinning" : "pre-show"}
@@ -842,10 +847,12 @@ function DrawStage({
 
           {phase === "pre-show" && (
             <div style={{
-              fontSize: "clamp(56px, 12vw, 120px)", fontWeight: 900,
+              fontSize: "clamp(72px, 16vw, 180px)", fontWeight: 900,
               fontVariantNumeric: "tabular-nums", color: BEIGE,
-              textShadow: `0 0 40px ${GOLD_BRIGHT}99`, letterSpacing: "-0.04em",
+              textShadow: `0 0 60px ${GOLD_BRIGHT}, 0 0 120px ${GOLD_BRIGHT}88`,
+              letterSpacing: "-0.04em",
               lineHeight: 1,
+              animation: "stageBlink 1s ease-in-out infinite",
             }}>
               {countdown.mm}:{countdown.ss}
             </div>
@@ -888,7 +895,7 @@ function DrawStage({
               boxShadow: `inset 0 0 0 14px ${WOOD}, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 80px ${GOLD_BRIGHT}55`,
               transform: `rotate(${spinDeg}deg)`,
               transition: phase === "spinning"
-                ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
+                ? "transform 12s cubic-bezier(0.05,0.85,0.15,1)"
                 : "transform 0.4s ease-out",
               background: BEIGE,
             }}>
@@ -946,6 +953,13 @@ function DrawStage({
         @keyframes winnerIn {
           0% { transform: scale(0.6); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes stageBlink {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.35; transform: scale(0.97); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes stageBlink { 0%, 100% { opacity: 1; transform: none; } }
         }
       `}</style>
     </div>
