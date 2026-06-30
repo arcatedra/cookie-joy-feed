@@ -2,6 +2,16 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+const SERVICE_BOROUGHS = ["manhattan", "brooklyn", "queens", "bronx"] as const;
+
+/** Quick client-safe check: the address text must mention one of the allowed boroughs. */
+export function isDeliveryServiceArea(address: string): boolean {
+  const lower = address.trim().toLowerCase();
+  if (lower.length === 0) return false;
+  return SERVICE_BOROUGHS.some((borough) => lower.includes(borough));
+}
+
+
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
 
 export interface DeliveryStatus {
