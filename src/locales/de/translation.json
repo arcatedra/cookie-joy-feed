@@ -206,19 +206,6 @@
     "gifts": "Geschenksets"
   },
   "_reelsLegacy": {},
-  "shop": {
-    "metaTitle": "Shop · AMYRAX Cookies",
-    "metaDesc": "Bestelle handgemachte AMYRAX Gourmet-Cookies. Kuratierte Boxen und Geschenksets.",
-    "ogDesc": "Kuratierte Boxen und Geschenksets, direkt an deine Tür.",
-    "notFound": "Nicht gefunden",
-    "title": "Unsere Cookies",
-    "subtitle": "Frisch gebacken, an deine Tür in NYC geliefert.",
-    "deliveryAreaNotice": "Wir liefern zurzeit nur nach Manhattan, Brooklyn, Queens und Bronx. Mehr Städte folgen bald.",
-    "loadError": "Produkte konnten nicht geladen werden: {{message}}",
-    "noProducts": "Keine Produkte gefunden",
-    "noProductsDesc": "Schreibe im Chat, welche Kekse hinzugefügt werden sollen — z.B.: \"Füge ein 6er-Pack Double Chocolate Chunk für $18 hinzu\".",
-    "addToCart": "In den Warenkorb"
-  },
   "explore": {
     "metaTitle": "Cookies durchsuchen — AMYRAX",
     "metaDesc": "Entdecke das gesamte Sortiment handgemachter Gourmet-Cookies bei AMYRAX.",
