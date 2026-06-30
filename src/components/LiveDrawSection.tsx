@@ -893,7 +893,7 @@ function DrawStage({
               boxShadow: `inset 0 0 0 14px ${WOOD}, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 80px ${GOLD_BRIGHT}55`,
               transform: `rotate(${spinDeg}deg)`,
               transition: phase === "spinning"
-                ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
+                ? "transform 12s cubic-bezier(0.05,0.85,0.15,1)"
                 : "transform 0.4s ease-out",
               background: BEIGE,
             }}>
