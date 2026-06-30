@@ -159,10 +159,11 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
 
     if (!isDeliveryServiceArea(data.address)) {
       throw new Error(
-        "Por ahora solo realizamos entregas en Manhattan, Brooklyn, Queens y Bronx del Bronx. " +
+        "Por ahora solo realizamos entregas en Manhattan, Brooklyn, Queens y Bronx. " +
         "Incluye el nombre del borough en tu dirección.",
       );
     }
+
 
 
     const { count } = await context.supabase
