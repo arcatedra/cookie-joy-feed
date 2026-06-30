@@ -554,8 +554,11 @@ function CountdownDigit({ value, label }: { value: string; label: string }) {
   );
 }
 
+const SHOW_PREVIOUS_WINNERS = false;
+
 function WinnersLeaderboard({ winners }: { winners: Array<{ drawDate: string; winnerDisplayName: string | null; prizeUsd: number; seedHash: string | null }> }) {
   const { t, i18n } = useTranslation();
+  if (!SHOW_PREVIOUS_WINNERS) return null;
   return (
     <div style={{
       background: BEIGE, borderRadius: 24, padding: 24,
