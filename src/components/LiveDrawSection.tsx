@@ -189,8 +189,13 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const preWarn1 = isOpen && cd.ms > 0 && cd.ms <= 30_000;
 
   // ===== Stage (fullscreen) mode =====
-  // Opens exactly at draw time (T=0), while drawing, and during winner celebration.
-  const stageOpen = (isOpen && cd.ms === 0) || isDrawing || showWinner;
+  // Opens 5 minutes before the draw, stays open through spin + winner celebration.
+  const PRE_SHOW_MS = 5 * 60_000;
+  const stageOpen = (isOpen && cd.ms <= PRE_SHOW_MS) || isDrawing || showWinner;
+
+  // Avoid SSR/CSR hydration mismatch — countdowns depend on Date.now()
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   // Auto-close stage 14s after winner appears
   const stageCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
