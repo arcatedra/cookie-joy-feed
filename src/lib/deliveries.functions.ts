@@ -134,7 +134,7 @@ export const listMyDeliveries = createServerFn({ method: "GET" })
 
 const scheduleSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
-  address: z.string().min(1).max(500).optional(),
+  address: z.string().min(5, "La dirección es obligatoria").max(500),
   notes: z.string().max(1000).optional(),
 });
 
