@@ -97,7 +97,7 @@ function DeliveriesPage() {
       return scheduleFn({
         data: {
           date: selectedDate,
-          address: address.trim() || undefined,
+          address: address.trim(),
           notes: notes.trim() || undefined,
         },
       });
