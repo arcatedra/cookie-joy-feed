@@ -1,5 +1,5 @@
 import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
-import symbolAsset from "@/assets/hazorex-symbol-new.png.asset.json";
+import symbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
 
 interface HazorexLogoProps {
   size?: number;
