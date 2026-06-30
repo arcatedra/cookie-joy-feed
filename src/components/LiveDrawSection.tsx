@@ -339,9 +339,9 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
             boxShadow: `inset 0 0 0 8px ${WOOD}, 0 20px 40px -10px rgba(0,0,0,0.3)`,
             transform: `rotate(${spinDeg}deg)`,
             transition: isDrawing
-              ? "transform 6s cubic-bezier(0.15,0.8,0.25,1)"
+              ? "transform 12s cubic-bezier(0.15,0.85,0.2,1)"
               : isCompleted
-              ? "transform 7s cubic-bezier(0.05,0.85,0.15,1)"
+              ? "transform 13s cubic-bezier(0.05,0.85,0.15,1)"
               : "transform 0.4s ease-out",
           }}>
             {segments.map((label: string, i: number) => {
