@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Loader2, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DeliveryAreaNotice } from "@/components/DeliveryAreaNotice";
 import { ShopifyCartDrawer } from "@/components/ShopifyCartDrawer";
 import {
   PRODUCTS_QUERY,
@@ -57,6 +58,8 @@ function ShopPage() {
         </div>
         <ShopifyCartDrawer />
       </div>
+
+      <DeliveryAreaNotice />
 
       {isLoading && (
         <div className="flex items-center justify-center py-20">
