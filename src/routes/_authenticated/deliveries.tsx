@@ -19,6 +19,7 @@ import {
   scheduleDelivery,
   cancelDelivery,
   rescheduleDelivery,
+  isDeliveryServiceArea,
 } from "@/lib/deliveries.functions";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
