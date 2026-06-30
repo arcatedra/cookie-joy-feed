@@ -289,14 +289,21 @@ function DeliveriesPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="addr">Dirección (opcional)</Label>
+                <Label htmlFor="addr">
+                  Dirección de entrega <span className="text-amber-600">*</span>
+                </Label>
                 <Input
                   id="addr"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Dirección de entrega"
+                  placeholder="Ej: 123 Main St, Manhattan, NY 10001"
                   maxLength={500}
+                  required
                 />
+                <p className="text-[11px] text-muted-foreground">
+                  Por ahora solo entregamos en <strong>Manhattan, Brooklyn, Queens y Bronx</strong>.
+                  Escribe el nombre del borough en la dirección.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="notes">Notas (opcional)</Label>
@@ -311,7 +318,12 @@ function DeliveriesPage() {
 
               <Button
                 className="w-full"
-                disabled={!selectedDate || limitReached || scheduleMut.isPending}
+                disabled={
+                  !selectedDate ||
+                  limitReached ||
+                  scheduleMut.isPending ||
+                  !isDeliveryServiceArea(address)
+                }
                 onClick={() => scheduleMut.mutate()}
               >
                 {scheduleMut.isPending ? (
@@ -324,6 +336,7 @@ function DeliveriesPage() {
                   "Selecciona una fecha"
                 )}
               </Button>
+
             </CardContent>
           </Card>
         )}
