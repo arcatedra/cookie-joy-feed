@@ -954,6 +954,13 @@ function DrawStage({
           0% { transform: scale(0.6); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
         }
+        @keyframes stageBlink {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.35; transform: scale(0.97); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes stageBlink { 0%, 100% { opacity: 1; transform: none; } }
+        }
       `}</style>
     </div>
   );
