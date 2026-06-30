@@ -157,6 +157,14 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
       throw new Error("La fecha está fuera de tu período de suscripción actual.");
     }
 
+    if (!isDeliveryServiceArea(data.address)) {
+      throw new Error(
+        "Por ahora solo realizamos entregas en Manhattan, Brooklyn, Queens y Bronx del Bronx. " +
+        "Incluye el nombre del borough en tu dirección.",
+      );
+    }
+
+
     const { count } = await context.supabase
       .from("delivery_bookings")
       .select("id", { count: "exact", head: true })
