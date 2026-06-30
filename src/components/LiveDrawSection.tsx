@@ -101,7 +101,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
     }
     if (draw.status === "completed" && prev !== "completed") {
       // finalize spin + celebrate
-      setSpinDeg((d) => d + 360 * 8 + Math.floor(Math.random() * 360));
+      setSpinDeg((d) => d + 360 * 18 + Math.floor(Math.random() * 360));
       setTimeout(() => {
         if (draw.winnerDisplayName) {
           setShowWinner(true);
