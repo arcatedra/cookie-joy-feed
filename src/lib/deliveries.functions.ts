@@ -2,6 +2,16 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+const SERVICE_BOROUGHS = ["manhattan", "brooklyn", "queens", "bronx"] as const;
+
+/** Quick client-safe check: the address text must mention one of the allowed boroughs. */
+export function isDeliveryServiceArea(address: string): boolean {
+  const lower = address.trim().toLowerCase();
+  if (lower.length === 0) return false;
+  return SERVICE_BOROUGHS.some((borough) => lower.includes(borough));
+}
+
+
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
 
 export interface DeliveryStatus {
@@ -124,7 +134,7 @@ export const listMyDeliveries = createServerFn({ method: "GET" })
 
 const scheduleSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
-  address: z.string().min(1).max(500).optional(),
+  address: z.string().min(5, "La dirección es obligatoria").max(500),
   notes: z.string().max(1000).optional(),
 });
 
@@ -146,6 +156,15 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
     if (date < ctx.periodStart || date > ctx.periodEnd) {
       throw new Error("La fecha está fuera de tu período de suscripción actual.");
     }
+
+    if (!isDeliveryServiceArea(data.address)) {
+      throw new Error(
+        "Por ahora solo realizamos entregas en Manhattan, Brooklyn, Queens y Bronx. " +
+        "Incluye el nombre del borough en tu dirección.",
+      );
+    }
+
+
 
     const { count } = await context.supabase
       .from("delivery_bookings")
