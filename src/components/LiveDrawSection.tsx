@@ -847,10 +847,12 @@ function DrawStage({
 
           {phase === "pre-show" && (
             <div style={{
-              fontSize: "clamp(56px, 12vw, 120px)", fontWeight: 900,
+              fontSize: "clamp(72px, 16vw, 180px)", fontWeight: 900,
               fontVariantNumeric: "tabular-nums", color: BEIGE,
-              textShadow: `0 0 40px ${GOLD_BRIGHT}99`, letterSpacing: "-0.04em",
+              textShadow: `0 0 60px ${GOLD_BRIGHT}, 0 0 120px ${GOLD_BRIGHT}88`,
+              letterSpacing: "-0.04em",
               lineHeight: 1,
+              animation: "stageBlink 1s ease-in-out infinite",
             }}>
               {countdown.mm}:{countdown.ss}
             </div>
