@@ -88,7 +88,7 @@ interface DbReel {
   sponsor_name?: string | null;
 }
 
-const REEL_LIFETIME_MS = 60 * 60 * 1000; // 1 hora
+const REEL_LIFETIME_MS = 60 * 60 * 24 * 1000; // 24 horas
 
 interface DbComment {
   id: string;

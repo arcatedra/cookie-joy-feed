@@ -1381,6 +1381,7 @@ export type Database = {
         Returns: boolean
       }
       draw_time_for: { Args: { p_date: string }; Returns: string }
+      email_queue_dispatch: { Args: never; Returns: undefined }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
