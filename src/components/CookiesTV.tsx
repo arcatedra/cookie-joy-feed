@@ -2227,6 +2227,7 @@ function AdminModal({
 
     setSubmitting(true);
     let videoUrl = "";
+    let thumbUrl = editing?.thumb_url ?? null;
 
     if (mode === "embed") {
       const trimmed = link.trim();
@@ -2238,7 +2239,8 @@ function AdminModal({
         setSubmitting(false);
         return;
       } else {
-        videoUrl = trimmed;
+        videoUrl = normalizePotentialVideoUrl(trimmed) ?? trimmed;
+        thumbUrl = await resolveEmbedThumbnail(parseEmbed(videoUrl));
       }
     } else {
       if (!file) {
@@ -2270,7 +2272,8 @@ function AdminModal({
       // Subida a Storage — ESPERAMOS a que termine para que la BD guarde
       // la URL pública real (no el blob local que solo existe en este navegador).
       if (user) {
-        const path = `${user.id}/${Date.now()}.${ext}`;
+        const uploadId = Date.now();
+        const path = `${user.id}/${uploadId}.${ext}`;
         setUploadPct(20);
         const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
         const { error: upErr } = await supabase.storage
@@ -2284,13 +2287,23 @@ function AdminModal({
         }
         const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
         if (pub?.publicUrl) videoUrl = pub.publicUrl;
+        const thumbBlob = await createVideoThumbnailBlob(file);
+        if (thumbBlob) {
+          const thumbPath = `${user.id}/${uploadId}.jpg`;
+          const { error: thumbErr } = await supabase.storage
+            .from("reels")
+            .upload(thumbPath, thumbBlob, { contentType: "image/jpeg", upsert: false });
+          if (!thumbErr) {
+            const { data: thumbPub } = supabase.storage.from("reels").getPublicUrl(thumbPath);
+            thumbUrl = thumbPub?.publicUrl ?? null;
+          }
+        }
       }
       }
     }
 
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
-    const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
     const adFields = {
       is_ad: isAd,
@@ -2306,7 +2319,7 @@ function AdminModal({
     }
 
     if (isEdit && editing) {
-      // EDITAR: reemplazar reel existente y reiniciar la hora
+      // EDITAR: reemplazar reel existente sin poner tiempo de expiración
       // Si no se cambió el video, conservar el actual
       const finalVideoUrl = mode === "embed"
         ? videoUrl
@@ -2316,11 +2329,12 @@ function AdminModal({
         ...editing,
         title: title.trim(),
         video_url: finalVideoUrl,
+        thumb_url: thumbUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
-        expires_at: newExpiresAt,
+        expires_at: null,
         ...adFields,
       };
       if (!editing.id.startsWith("local-")) {
@@ -2329,11 +2343,12 @@ function AdminModal({
           .update({
             title: updatedReel.title,
             video_url: finalVideoUrl,
+            thumb_url: thumbUrl,
             product_name: product.name,
             product_price: product.price,
             product_image: product.image,
             product_slug: product.slug,
-            expires_at: newExpiresAt,
+            expires_at: null,
             ...adFields,
           })
           .eq("id", editing.id);
@@ -2357,12 +2372,13 @@ function AdminModal({
         slug,
         title: title.trim(),
         video_url: videoUrl,
+        thumb_url: thumbUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
         author_id: user.id,
-        expires_at: newExpiresAt,
+        expires_at: null,
         ...adFields,
       })
       .select("*")
