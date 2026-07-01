@@ -30,7 +30,7 @@ function getReelStoragePath(videoUrl: string | null | undefined) {
 async function signIfNeeded(videoUrl: string | null) {
   const path = getReelStoragePath(videoUrl);
   if (!path) return videoUrl;
-  const { data } = await supabase.storage.from("reels").createSignedUrl(path, 60 * 60);
+  const { data } = await supabase.storage.from("reels").createSignedUrl(path, 60 * 60 * 24);
   return data?.signedUrl ?? videoUrl;
 }
 
