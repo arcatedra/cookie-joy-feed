@@ -146,7 +146,7 @@ async function signStoredReelVideos(rows: DbReel[]) {
   );
   if (!paths.length) return rows;
 
-  const { data, error } = await supabase.storage.from("reels").createSignedUrls(paths, 60 * 60);
+  const { data, error } = await supabase.storage.from("reels").createSignedUrls(paths, 60 * 60 * 24);
   if (error || !data) return rows;
 
   const signedByPath = new Map<string, string>();
