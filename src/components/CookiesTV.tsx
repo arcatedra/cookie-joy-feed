@@ -16,7 +16,6 @@ import {
   ExternalLink,
   Trash2,
   Pencil,
-  Clock,
   MessageCircle as WhatsAppIcon,
   Music2,
   Mail,
@@ -825,7 +824,7 @@ function ReelCard({
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
 
-  // === Expiración de 1 hora por reel ===
+  // === Expiración por reel ===
   // expires_at === null  =>  no expira nunca (reels semilla / permanentes)
   const expiresAtMs = useMemo(() => {
     if (reel.expires_at) return Date.parse(reel.expires_at);
@@ -838,17 +837,6 @@ function ReelCard({
     return () => window.clearInterval(id);
   }, [expiresAtMs]);
   const expired = expiresAtMs !== null && now >= expiresAtMs;
-  const msLeft = expiresAtMs ? Math.max(0, expiresAtMs - now) : 0;
-  const countdownLabel = useMemo(() => {
-    const s = Math.floor(msLeft / 1000);
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-  }, [msLeft]);
-
-
-
-
   // Al expirar volvemos al video original de galletas (seed) en lugar de bloquear
   const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
   const videoSrc = expired
@@ -1021,14 +1009,6 @@ function ReelCard({
       data-reel-id={reel.id}
       className="group relative aspect-[9/16] w-[260px] shrink-0 snap-start overflow-hidden rounded-2xl bg-black shadow-md ring-1 ring-black/10 transition-transform duration-300 hover:scale-[1.02] hover:shadow-2xl sm:w-[290px] md:w-[320px]"
     >
-      {/* Contador de 1 hora visible para todos */}
-      {expiresAtMs !== null && !expired && (
-        <div className="pointer-events-none absolute left-2 top-2 z-30 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold text-white shadow ring-1 ring-white/20 backdrop-blur">
-          <Clock className="h-3 w-3" />
-          {countdownLabel}
-        </div>
-      )}
-
       {/* Al expirar volvemos al video original de galletas — sin bloqueo */}
 
 
