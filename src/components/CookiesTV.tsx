@@ -2240,7 +2240,7 @@ function AdminModal({
         return;
       } else {
         videoUrl = normalizePotentialVideoUrl(trimmed) ?? trimmed;
-        thumbUrl = await resolveEmbedThumbnail(parseEmbed(videoUrl));
+        thumbUrl = (await resolveEmbedThumbnail(parseEmbed(videoUrl))) ?? thumbUrl;
       }
     } else {
       if (!file) {
@@ -2489,7 +2489,7 @@ function AdminModal({
               <div className="relative">
                 <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
                 <input
-                  type="url"
+                  type="text"
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
                   placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
