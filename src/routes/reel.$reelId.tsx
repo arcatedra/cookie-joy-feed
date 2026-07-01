@@ -15,6 +15,89 @@ interface ReelMeta {
 
 const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
 
+type EmbedPlatform = "instagram" | "tiktok" | "facebook" | "youtube";
+interface EmbedInfo {
+  platform: EmbedPlatform;
+  embedUrl: string;
+  originalUrl: string;
+  label: string;
+}
+
+function normalizePotentialVideoUrl(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  let text = raw.trim();
+  if (!text) return null;
+  if (!/^https?:\/\//i.test(text)) {
+    if (/^(www\.)?(instagram|tiktok|facebook|fb|youtube|youtu|vm\.tiktok|vt\.tiktok|m\.tiktok|m\.facebook|m\.youtube)\./i.test(text)) {
+      text = `https://${text}`;
+    }
+  }
+
+  const instagram = text.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:[\w.-]+\/)?(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i);
+  if (instagram) {
+    const kind = instagram[1].toLowerCase() === "reels" ? "reel" : instagram[1].toLowerCase();
+    return `https://www.instagram.com/${kind}/${instagram[2]}/`;
+  }
+  const tiktok = text.match(/(?:https?:\/\/)?(?:www\.)?tiktok\.com\/@([\w.-]+)\/(video|photo)\/(\d+)/i);
+  if (tiktok) return `https://www.tiktok.com/@${tiktok[1]}/${tiktok[2].toLowerCase()}/${tiktok[3]}`;
+  const tiktokShort = text.match(/(?:https?:\/\/)?((?:vm|vt)\.tiktok\.com\/[A-Za-z0-9_-]+\/?)/i);
+  if (tiktokShort) return `https://${tiktokShort[1]}`;
+  const youtubeId =
+    text.match(/(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i)?.[1] ||
+    text.match(/(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i)?.[1] ||
+    text.match(/(?:https?:\/\/)?youtu\.be\/([A-Za-z0-9_-]+)/i)?.[1];
+  if (youtubeId) return `https://www.youtube.com/shorts/${youtubeId}`;
+  const facebook = text.match(/https?:\/\/(?:www\.|m\.)?facebook\.com\/[^\s"'<>]+/i)?.[0] || text.match(/https?:\/\/fb\.watch\/[^\s"'<>]+/i)?.[0];
+  if (facebook) return facebook.replace(/^https?:\/\/m\.facebook\.com/i, "https://www.facebook.com");
+  const direct = text.match(/https?:\/\/[^\s"'<>]+?\.(?:mp4|webm|mov|m4v)(?:\?[^\s"'<>]*)?/i)?.[0];
+  if (direct) return direct;
+  return /^https?:\/\//i.test(text) ? text : null;
+}
+
+function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
+  const url = normalizePotentialVideoUrl(raw);
+  if (!url) return null;
+  const normalized = url
+    .replace(/^https?:\/\/m\.facebook\.com/i, "https://www.facebook.com")
+    .replace(/^https?:\/\/m\.youtube\.com/i, "https://www.youtube.com")
+    .replace(/^https?:\/\/m\.tiktok\.com/i, "https://www.tiktok.com");
+
+  const ig = normalized.match(/instagram\.com\/(?:[\w.-]+\/)?(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i);
+  if (ig) {
+    const kind = ig[1].toLowerCase() === "reels" ? "reel" : ig[1].toLowerCase();
+    return { platform: "instagram", embedUrl: `https://www.instagram.com/${kind}/${ig[2]}/embed/captioned/`, originalUrl: url, label: "Instagram" };
+  }
+  const tt = normalized.match(/tiktok\.com\/(?:@[\w.-]+\/(?:video|photo)\/|v\/|embed\/v2\/)(\d+)/i);
+  if (tt) return { platform: "tiktok", embedUrl: `https://www.tiktok.com/embed/v2/${tt[1]}`, originalUrl: url, label: "TikTok" };
+  if (/(?:vm|vt)\.tiktok\.com\//i.test(url)) {
+    return { platform: "tiktok", embedUrl: `https://www.tiktok.com/embed?lang=en&url=${encodeURIComponent(url)}`, originalUrl: url, label: "TikTok" };
+  }
+  if (/facebook\.com\/(?:reel|watch|share\/(?:v|r|video)|[\w.-]+\/videos|video\.php)/i.test(normalized) || /fb\.watch\//i.test(url)) {
+    return { platform: "facebook", embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=560&t=0`, originalUrl: url, label: "Facebook" };
+  }
+  const yt =
+    normalized.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    normalized.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+  if (yt) return { platform: "youtube", embedUrl: `https://www.youtube.com/embed/${yt[1]}?rel=0&playsinline=1`, originalUrl: url, label: "YouTube" };
+  return null;
+}
+
+function getYouTubeId(url: string): string | null {
+  const m =
+    url.match(/youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i) ||
+    url.match(/youtu\.be\/([A-Za-z0-9_-]+)/i);
+  return m?.[1] ?? null;
+}
+
+function getPreviewImage(reel: ReelMeta): string | undefined {
+  const embed = parseEmbed(reel.video_url);
+  const youtubeId = embed?.platform === "youtube" ? getYouTubeId(embed.originalUrl) : null;
+  const image = reel.thumb_url || (youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : null) || reel.product_image;
+  return image && /^https:\/\//i.test(image) ? image : undefined;
+}
+
 function getReelStoragePath(videoUrl: string | null | undefined) {
   if (!videoUrl) return null;
   const i = videoUrl.indexOf(REELS_STORAGE_MARKER);
@@ -63,7 +146,7 @@ export const Route = createFileRoute("/reel/$reelId")({
     const description = reel.product_name
       ? i18n.t("reel.metaDescWithProduct", { product: reel.product_name })
       : i18n.t("reel.metaDescDefault");
-    const image = reel.thumb_url || reel.product_image || undefined;
+    const image = getPreviewImage(reel);
     const meta: Array<Record<string, string>> = [
       { title: fullTitle },
       { name: "description", content: description },
@@ -111,15 +194,26 @@ function ReelPage() {
   const { t } = useTranslation();
   const { reel } = Route.useLoaderData();
   const title = reel.title || reel.product_name || t("reel.fallbackTitle");
+  const embed = parseEmbed(reel.video_url);
   const poster = reel.thumb_url || reel.product_image || undefined;
+  const videoUrl = normalizePotentialVideoUrl(reel.video_url) || reel.video_url;
 
   return (
     <main className="mx-auto flex max-w-md flex-col items-center px-4 py-6">
       <h1 className="mb-4 w-full text-center text-xl font-semibold text-foreground">{title}</h1>
       <div className="relative aspect-[9/16] w-full max-w-sm overflow-hidden rounded-2xl bg-black shadow-xl ring-1 ring-black/10">
-        {reel.video_url ? (
+        {embed ? (
+          <iframe
+            src={embed.embedUrl}
+            title={title}
+            allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="absolute inset-0 h-full w-full border-0"
+          />
+        ) : videoUrl ? (
           <video
-            src={reel.video_url}
+            src={videoUrl}
             poster={poster}
             controls
             autoPlay

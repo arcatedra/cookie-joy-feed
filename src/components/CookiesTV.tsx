@@ -74,6 +74,7 @@ interface DbReel {
   slug: string;
   title: string | null;
   video_url: string | null;
+  thumb_url: string | null;
   product_name: string | null;
   product_price: number | null;
   product_image: string | null;
@@ -86,8 +87,6 @@ interface DbReel {
   cta_url?: string | null;
   sponsor_name?: string | null;
 }
-
-const REEL_LIFETIME_MS = 60 * 60 * 24 * 1000; // 24 horas
 
 interface DbComment {
   id: string;
@@ -126,6 +125,46 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
 };
 
 const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
+
+function normalizePotentialVideoUrl(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  let text = raw.trim().replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+  if (!text) return null;
+  if (!/^https?:\/\//i.test(text)) {
+    if (/^(www\.)?(instagram|tiktok|facebook|fb|youtube|youtu|vm\.tiktok|vt\.tiktok|m\.tiktok|m\.facebook|m\.youtube)\./i.test(text)) {
+      text = `https://${text}`;
+    }
+  }
+
+  const instagram = text.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:[\w.-]+\/)?(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i);
+  if (instagram) {
+    const kind = instagram[1].toLowerCase() === "reels" ? "reel" : instagram[1].toLowerCase();
+    return `https://www.instagram.com/${kind}/${instagram[2]}/`;
+  }
+  const instagramShare = text.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/share\/(?:reel\/)?([A-Za-z0-9_-]+)/i);
+  if (instagramShare) return `https://www.instagram.com/share/reel/${instagramShare[1]}/`;
+
+  const tiktok = text.match(/(?:https?:\/\/)?(?:www\.)?tiktok\.com\/@([\w.-]+)\/(video|photo)\/(\d+)/i);
+  if (tiktok) return `https://www.tiktok.com/@${tiktok[1]}/${tiktok[2].toLowerCase()}/${tiktok[3]}`;
+  const tiktokShort = text.match(/(?:https?:\/\/)?((?:vm|vt)\.tiktok\.com\/[A-Za-z0-9_-]+\/?)/i);
+  if (tiktokShort) return `https://${tiktokShort[1]}`;
+  const tiktokEmbed = text.match(/(?:https?:\/\/)?(?:www\.)?tiktok\.com\/(?:v\/|embed\/v2\/)(\d+)/i);
+  if (tiktokEmbed) return `https://www.tiktok.com/embed/v2/${tiktokEmbed[1]}`;
+
+  const youtubeId =
+    text.match(/(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i)?.[1] ||
+    text.match(/(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/(?:watch\?(?:.*&)?v=|live\/|embed\/)([A-Za-z0-9_-]+)/i)?.[1] ||
+    text.match(/(?:https?:\/\/)?youtu\.be\/([A-Za-z0-9_-]+)/i)?.[1];
+  if (youtubeId) return `https://www.youtube.com/shorts/${youtubeId}`;
+
+  const facebook = text.match(/https?:\/\/(?:www\.|m\.)?facebook\.com\/[^\s"'<>]+/i)?.[0] || text.match(/https?:\/\/fb\.watch\/[^\s"'<>]+/i)?.[0];
+  if (facebook) return facebook.replace(/^https?:\/\/m\.facebook\.com/i, "https://www.facebook.com");
+
+  const direct = text.match(/https?:\/\/[^\s"'<>]+?\.(?:mp4|webm|mov|m4v)(?:\?[^\s"'<>]*)?/i)?.[0];
+  if (direct) return direct;
+
+  return /^https?:\/\//i.test(text) ? text : null;
+}
 
 function getReelStoragePath(videoUrl: string | null | undefined) {
   if (!videoUrl) return null;
@@ -188,7 +227,7 @@ interface EmbedInfo {
 
 function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
   if (!raw) return null;
-  let url = raw.trim();
+  let url = normalizePotentialVideoUrl(raw) ?? raw.trim();
   if (!url) return null;
   // Tolerate URLs pegadas sin protocolo
   if (!/^https?:\/\//i.test(url)) {
@@ -278,7 +317,7 @@ function parseEmbed(raw: string | null | undefined): EmbedInfo | null {
 // incluyendo Lovable Cloud Storage signed URLs.
 function isDirectVideoUrl(raw: string | null | undefined): boolean {
   if (!raw) return false;
-  const url = raw.trim();
+  const url = normalizePotentialVideoUrl(raw) ?? raw.trim();
   if (!/^https?:\/\//i.test(url)) return false;
   const path = url.split("?")[0].toLowerCase();
   return /\.(mp4|webm|mov|m4v)$/i.test(path);
@@ -425,14 +464,83 @@ function getYouTubeId(url: string): string | null {
   return m?.[1] ?? null;
 }
 
+function getStaticEmbedThumbnail(embed: EmbedInfo | null): string | null {
+  if (!embed) return null;
+  if (embed.platform === "youtube") {
+    const id = getYouTubeId(embed.originalUrl);
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+  }
+  return null;
+}
+
+async function resolveEmbedThumbnail(embed: EmbedInfo | null): Promise<string | null> {
+  const staticThumb = getStaticEmbedThumbnail(embed);
+  if (staticThumb) return staticThumb;
+  if (!embed || embed.platform !== "tiktok") return null;
+  try {
+    const response = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(embed.originalUrl)}`);
+    if (!response.ok) return null;
+    const data = (await response.json()) as { thumbnail_url?: string };
+    return data.thumbnail_url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function createVideoThumbnailBlob(file: File): Promise<Blob | null> {
+  if (typeof document === "undefined") return Promise.resolve(null);
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    const url = URL.createObjectURL(file);
+    let done = false;
+    const finish = (blob: Blob | null) => {
+      if (done) return;
+      done = true;
+      window.clearTimeout(timer);
+      URL.revokeObjectURL(url);
+      video.removeAttribute("src");
+      video.load();
+      resolve(blob);
+    };
+    const capture = () => {
+      const w = video.videoWidth || 720;
+      const h = video.videoHeight || 1280;
+      if (!w || !h) return finish(null);
+      const maxWidth = 720;
+      const scale = Math.min(1, maxWidth / w);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(w * scale));
+      canvas.height = Math.max(1, Math.round(h * scale));
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return finish(null);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => finish(blob), "image/jpeg", 0.82);
+    };
+    const timer = window.setTimeout(() => finish(null), 5000);
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    video.addEventListener("loadedmetadata", () => {
+      try {
+        const target = Number.isFinite(video.duration) && video.duration > 0.35 ? 0.25 : 0;
+        if (target > 0) video.currentTime = target;
+        else capture();
+      } catch {
+        capture();
+      }
+    });
+    video.addEventListener("seeked", capture, { once: true });
+    video.addEventListener("error", () => finish(null), { once: true });
+    video.src = url;
+  });
+}
+
 function useEmbedThumbnail(embed: EmbedInfo | null): string | null {
   const url = embed?.originalUrl ?? "";
   const [thumb, setThumb] = useState<string | null>(() => {
     if (!embed) return null;
-    if (embed.platform === "youtube") {
-      const id = getYouTubeId(url);
-      return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
-    }
+    const staticThumb = getStaticEmbedThumbnail(embed);
+    if (staticThumb) return staticThumb;
     return EMBED_THUMB_CACHE.get(url) ?? null;
   });
 
@@ -762,7 +870,7 @@ export function CookiesTV() {
           onPublish={(updated) => {
             setReels((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
             setEditingReel(null);
-            toast.success("¡Reel actualizado! Contador reiniciado a 1 hora.");
+            toast.success("¡Reel actualizado!");
           }}
         />
       )}
@@ -824,32 +932,17 @@ function ReelCard({
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
 
-  // === Expiración por reel ===
-  // expires_at === null  =>  no expira nunca (reels semilla / permanentes)
-  const expiresAtMs = useMemo(() => {
-    if (reel.expires_at) return Date.parse(reel.expires_at);
-    return null;
-  }, [reel.expires_at]);
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    if (!expiresAtMs) return;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, [expiresAtMs]);
-  const expired = expiresAtMs !== null && now >= expiresAtMs;
-  // Al expirar volvemos al video original de galletas (seed) en lugar de bloquear
   const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
-  const videoSrc = expired
-    ? fallbackCookieVideo
-    : reel.video_url || fallbackCookieVideo || "";
+  const videoSrc = reel.video_url || fallbackCookieVideo || "";
   const productImg =
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
-  const effectiveVideoUrl = expired ? null : reel.video_url;
+  const effectiveVideoUrl = reel.video_url;
   const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
   const embedThumb = useEmbedThumbnail(embed);
+  const posterUrl = reel.thumb_url || embedThumb || productImg || undefined;
   const firstExternalOnly = false;
 
   // Autoplay native <video> when visible
@@ -929,7 +1022,7 @@ function ReelCard({
     // thumbnail and video — instead of the full website homepage.
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
-    return `${origin}/reel/${encodeURIComponent(reel.id)}`;
+    return `${origin}/reel/${encodeURIComponent(reel.slug || reel.id)}`;
   };
   const shareTitle = () => {
     const t = translateReelText(reel.title);
@@ -1154,17 +1247,11 @@ function ReelCard({
               title={appLink.label}
               className="absolute inset-0 h-full w-full"
             >
-              {embedThumb ? (
+              {posterUrl ? (
                 <img
-                  src={embedThumb}
+                  src={posterUrl}
                   alt={translateReelText(reel.title) || `${embed!.label} preview`}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              ) : productImg ? (
-                <img
-                  src={productImg}
-                  alt={translateReelText(reel.product_name) || ""}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : (
@@ -1193,6 +1280,7 @@ function ReelCard({
         <video
           ref={videoRef}
           src={videoSrc}
+          poster={posterUrl}
           playsInline
           loop
           muted
@@ -1611,7 +1699,7 @@ function ExpandedReelModal({
   const shareUrl = () => {
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
-    return `${origin}/reel/${encodeURIComponent(current.id)}`;
+    return `${origin}/reel/${encodeURIComponent(current.slug || current.id)}`;
   };
   const shareTitle = () => {
     const tt = translateReelText(current.title);
@@ -2139,6 +2227,7 @@ function AdminModal({
 
     setSubmitting(true);
     let videoUrl = "";
+    let thumbUrl = editing?.thumb_url ?? null;
 
     if (mode === "embed") {
       const trimmed = link.trim();
@@ -2150,7 +2239,8 @@ function AdminModal({
         setSubmitting(false);
         return;
       } else {
-        videoUrl = trimmed;
+        videoUrl = normalizePotentialVideoUrl(trimmed) ?? trimmed;
+        thumbUrl = (await resolveEmbedThumbnail(parseEmbed(videoUrl))) ?? thumbUrl;
       }
     } else {
       if (!file) {
@@ -2182,7 +2272,8 @@ function AdminModal({
       // Subida a Storage — ESPERAMOS a que termine para que la BD guarde
       // la URL pública real (no el blob local que solo existe en este navegador).
       if (user) {
-        const path = `${user.id}/${Date.now()}.${ext}`;
+        const uploadId = Date.now();
+        const path = `${user.id}/${uploadId}.${ext}`;
         setUploadPct(20);
         const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
         const { error: upErr } = await supabase.storage
@@ -2196,13 +2287,23 @@ function AdminModal({
         }
         const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
         if (pub?.publicUrl) videoUrl = pub.publicUrl;
+        const thumbBlob = await createVideoThumbnailBlob(file);
+        if (thumbBlob) {
+          const thumbPath = `${user.id}/${uploadId}.jpg`;
+          const { error: thumbErr } = await supabase.storage
+            .from("reels")
+            .upload(thumbPath, thumbBlob, { contentType: "image/jpeg", upsert: false });
+          if (!thumbErr) {
+            const { data: thumbPub } = supabase.storage.from("reels").getPublicUrl(thumbPath);
+            thumbUrl = thumbPub?.publicUrl ?? null;
+          }
+        }
       }
       }
     }
 
 
     const product = PRODUCT_OPTIONS.find((p) => p.slug === productSlug) ?? PRODUCT_OPTIONS[0];
-    const newExpiresAt = new Date(Date.now() + REEL_LIFETIME_MS).toISOString();
 
     const adFields = {
       is_ad: isAd,
@@ -2218,7 +2319,7 @@ function AdminModal({
     }
 
     if (isEdit && editing) {
-      // EDITAR: reemplazar reel existente y reiniciar la hora
+      // EDITAR: reemplazar reel existente sin poner tiempo de expiración
       // Si no se cambió el video, conservar el actual
       const finalVideoUrl = mode === "embed"
         ? videoUrl
@@ -2228,11 +2329,12 @@ function AdminModal({
         ...editing,
         title: title.trim(),
         video_url: finalVideoUrl,
+        thumb_url: thumbUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
-        expires_at: newExpiresAt,
+        expires_at: null,
         ...adFields,
       };
       if (!editing.id.startsWith("local-")) {
@@ -2241,11 +2343,12 @@ function AdminModal({
           .update({
             title: updatedReel.title,
             video_url: finalVideoUrl,
+            thumb_url: thumbUrl,
             product_name: product.name,
             product_price: product.price,
             product_image: product.image,
             product_slug: product.slug,
-            expires_at: newExpiresAt,
+            expires_at: null,
             ...adFields,
           })
           .eq("id", editing.id);
@@ -2269,12 +2372,13 @@ function AdminModal({
         slug,
         title: title.trim(),
         video_url: videoUrl,
+        thumb_url: thumbUrl,
         product_name: product.name,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
         author_id: user.id,
-        expires_at: newExpiresAt,
+        expires_at: null,
         ...adFields,
       })
       .select("*")
@@ -2385,7 +2489,7 @@ function AdminModal({
               <div className="relative">
                 <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#999]" />
                 <input
-                  type="url"
+                  type="text"
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
                   placeholder="Pega aquí el enlace (Link) de tu Reel de Instagram, TikTok o Facebook"
