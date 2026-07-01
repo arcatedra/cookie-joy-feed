@@ -870,7 +870,7 @@ export function CookiesTV() {
           onPublish={(updated) => {
             setReels((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
             setEditingReel(null);
-            toast.success("¡Reel actualizado! Contador reiniciado a 1 hora.");
+            toast.success("¡Reel actualizado!");
           }}
         />
       )}
@@ -932,32 +932,17 @@ function ReelCard({
   const [inView, setInView] = useState(false);
   const [burst, setBurst] = useState(false);
 
-  // === Expiración por reel ===
-  // expires_at === null  =>  no expira nunca (reels semilla / permanentes)
-  const expiresAtMs = useMemo(() => {
-    if (reel.expires_at) return Date.parse(reel.expires_at);
-    return null;
-  }, [reel.expires_at]);
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    if (!expiresAtMs) return;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, [expiresAtMs]);
-  const expired = expiresAtMs !== null && now >= expiresAtMs;
-  // Al expirar volvemos al video original de galletas (seed) en lugar de bloquear
   const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
-  const videoSrc = expired
-    ? fallbackCookieVideo
-    : reel.video_url || fallbackCookieVideo || "";
+  const videoSrc = reel.video_url || fallbackCookieVideo || "";
   const productImg =
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
-  const effectiveVideoUrl = expired ? null : reel.video_url;
+  const effectiveVideoUrl = reel.video_url;
   const embed = useMemo(() => parseEmbed(effectiveVideoUrl), [effectiveVideoUrl]);
   const isEmbed = !!embed;
   const embedThumb = useEmbedThumbnail(embed);
+  const posterUrl = reel.thumb_url || embedThumb || productImg || undefined;
   const firstExternalOnly = false;
 
   // Autoplay native <video> when visible
@@ -1037,7 +1022,7 @@ function ReelCard({
     // thumbnail and video — instead of the full website homepage.
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
-    return `${origin}/reel/${encodeURIComponent(reel.id)}`;
+    return `${origin}/reel/${encodeURIComponent(reel.slug || reel.id)}`;
   };
   const shareTitle = () => {
     const t = translateReelText(reel.title);
@@ -1262,17 +1247,11 @@ function ReelCard({
               title={appLink.label}
               className="absolute inset-0 h-full w-full"
             >
-              {embedThumb ? (
+              {posterUrl ? (
                 <img
-                  src={embedThumb}
+                  src={posterUrl}
                   alt={translateReelText(reel.title) || `${embed!.label} preview`}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              ) : productImg ? (
-                <img
-                  src={productImg}
-                  alt={translateReelText(reel.product_name) || ""}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : (
@@ -1301,6 +1280,7 @@ function ReelCard({
         <video
           ref={videoRef}
           src={videoSrc}
+          poster={posterUrl}
           playsInline
           loop
           muted
