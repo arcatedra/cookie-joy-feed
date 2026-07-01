@@ -179,9 +179,10 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               <h3 className="text-lg font-extrabold tracking-tight">Invita y Gana Estrellas</h3>
             </div>
             <p className="mt-1 text-xs text-primary-foreground/80">
-              Por cada amigo que se registre con tu código o QR, recibirás{" "}
-              <span className="font-bold text-yellow-300">3 Estrellas</span> automáticamente.
+              Por cada amigo que se una al sorteo con tu código o QR, recibirás{" "}
+              <span className="font-bold text-yellow-300">5 Estrellas</span> automáticamente.
             </p>
+
           </div>
         </div>
 
