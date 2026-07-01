@@ -1,30 +1,31 @@
-# Ruleta: apertura 5 min antes + giro más largo
 
-## Qué cambia (solo UI)
+# Recompensa por referidos actualizada
 
-### 1. Auto-apertura 5 min antes con efecto titilante
-- En el componente que decide cuándo abrir `FullscreenDrawExperience` (probablemente `LiveDrawSection` o `PreDrawCountdownBanner`), detectar cuándo faltan ≤ 5 min para el sorteo y forzar `open=true` automáticamente.
-- Añadir una nueva fase `"pre"` en `FullscreenDrawExperience` que se muestra durante esos 5 min antes del countdown 3-2-1:
-  - Tarjeta central grande con el mensaje "El sorteo comienza en mm:ss"
-  - Animación titilante (pulse de opacidad + glow dorado) usando `@keyframes` ya en el archivo o una nueva `origen-blink`
-  - Cuando el contador llega a 0, transición automática a la fase `countdown` actual (3-2-1 → spin)
-- Mantener el botón de cerrar disponible en la fase `pre` (el usuario puede minimizar si quiere).
+## Regla nueva
+- Por cada invitado que se una al sorteo **por primera vez** usando tu código de referido, el referidor recibe **5 estrellas**.
+- Ejemplos: 1 invitado que participa = 5 ⭐, 2 invitados = 10 ⭐, 3 = 15 ⭐, y así sucesivamente.
+- Las estrellas siguen valiendo lo mismo (10 ⭐ = 1 ticket del sorteo). No se cambia el costo del ticket.
+- Se **elimina** la recompensa anterior de 3 ⭐ por suscripción del referido.
 
-### 2. Giro más largo (12 segundos)
-- Hoy el spin dura 4.6s (`transition: transform 4.6s ...` + `setTimeout 4800ms`).
-- Subirlo a **12s** (within el rango pedido 10-15s):
-  - `transition: transform 12s cubic-bezier(0.17, 0.67, 0.16, 0.99)`
-  - `setTimeout` de resolución de ganador → `12000ms`
-  - Aumentar las vueltas totales (de `360*8` a `360*15`) para que la velocidad se sienta natural durante 12s en vez de lenta.
-- La llamada al API ya se dispara en paralelo desde el inicio, así que alargar el spin no añade latencia real.
+## Cambios en la base de datos (migración)
 
-## Archivos a tocar
-- `src/components/FullscreenDrawExperience.tsx` — nueva fase `pre`, animación titilante, spin a 12s.
-- El componente que monta `<FullscreenDrawExperience open={...} />` (a confirmar al explorar: `LiveDrawSection.tsx` o `PreDrawCountdownBanner.tsx`) — lógica de auto-abrir cuando faltan ≤ 5 min.
+1. **Reemplazar el trigger `grant_referral_reward`** para que ya no dispare al activarse una suscripción.
+2. **Nueva función `grant_referral_reward_on_entry()`** (SECURITY DEFINER, search_path=public):
+   - Se ejecuta como trigger `AFTER INSERT` en `public.daily_draw_entries`.
+   - Busca en `public.referrals` una fila donde `referee_id = NEW.subject_user_id` y `reward_granted = false`.
+   - Si existe: suma **5** a `profiles.stars_count` del referidor, marca `reward_granted = true` y `rewarded_at = now()`.
+   - Si `subject_user_id` es null (entrada AMOE de invitado no logueado) o no hay referral pendiente, no hace nada.
+   - El flag `reward_granted` garantiza que solo se paga **la primera vez** que el referido entra al sorteo (no en cada entrada).
+
+## Cambios en el frontend
+
+- **`src/components/ReferralCard.tsx`**: actualizar el texto de la recompensa a "Gana 5 ⭐ cada vez que un invitado entra al sorteo por primera vez con tu código" (revisar textos en `src/locales/*/translation.json` que mencionen las 3 estrellas de suscripción y ajustarlos).
 
 ## Lo que NO cambia
-- Backend, API del sorteo, lógica de ganador, emails, base de datos: nada se toca.
-- El challenge post-ganador y el resto del flujo siguen igual.
+- Costo del ticket (sigue 10 ⭐ = 1 ticket).
+- Generación del código de referido, tabla `referrals`, RLS, ni la lógica de `handle_new_user` que crea la relación referrer→referee al registrarse.
+- Sorteo, seed, ganador, entregas: nada del flujo del sorteo se toca.
 
-## Pregunta antes de implementar
-¿Quieres que durante esos 5 min previos la ruleta ya se vea en pantalla (estática, esperando) con el contador titilante encima, o prefieres solo la tarjeta titilante centrada y la ruleta aparece recién cuando arranca el 3-2-1?
+## Notas técnicas
+- El trigger reemplaza al que hoy escucha en `subscriptions`; hay que hacer `DROP TRIGGER` del viejo y `CREATE TRIGGER` del nuevo sobre `daily_draw_entries`.
+- La suma de estrellas se hace con `SECURITY DEFINER` porque el trigger `profiles_protect_referral_fields` bloquea cambios a `stars_count` fuera de `service_role`; la función debe correr como owner (postgres) para pasar ese guard igual que `grant_referral_reward` hoy.
