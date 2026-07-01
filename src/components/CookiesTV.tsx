@@ -1699,7 +1699,7 @@ function ExpandedReelModal({
   const shareUrl = () => {
     const origin =
       typeof window !== "undefined" ? window.location.origin : "https://oys1.lovable.app";
-    return `${origin}/reel/${encodeURIComponent(current.id)}`;
+    return `${origin}/reel/${encodeURIComponent(current.slug || current.id)}`;
   };
   const shareTitle = () => {
     const tt = translateReelText(current.title);
