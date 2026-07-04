@@ -282,6 +282,9 @@ export function TopNav() {
           {/* Delivery counter */}
           <DeliveryCounter />
 
+          {/* Notifications bell */}
+          <NotificationBell />
+
           {/* Cart */}
           <Link
             to="/cart"
