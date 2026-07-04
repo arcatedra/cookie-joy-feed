@@ -36,6 +36,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
+import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
@@ -189,6 +190,12 @@ const AdminShippingRoute = AdminShippingRouteImport.update({
   path: '/admin/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSuggestionsRoute =
+  AuthenticatedSuggestionsRouteImport.update({
+    id: '/suggestions',
+    path: '/suggestions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
   id: '/deliveries',
   path: '/deliveries',
@@ -315,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -361,6 +369,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -409,6 +418,7 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -550,6 +562,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
+    | '/_authenticated/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -809,6 +822,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/suggestions': {
+      id: '/_authenticated/suggestions'
+      path: '/suggestions'
+      fullPath: '/suggestions'
+      preLoaderRoute: typeof AuthenticatedSuggestionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/deliveries': {
       id: '/_authenticated/deliveries'
       path: '/deliveries'
@@ -940,6 +960,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
@@ -947,6 +968,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
