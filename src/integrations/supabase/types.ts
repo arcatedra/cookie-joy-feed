@@ -1176,6 +1176,48 @@ export type Database = {
         }
         Relationships: []
       }
+      suggestions: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          read_at: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       support_conversations: {
         Row: {
           created_at: string
