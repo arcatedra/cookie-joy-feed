@@ -88,11 +88,12 @@ export const sendCustomerMessage = createServerFn({ method: "POST" })
   });
 
 async function resolveIssue(
-  supabase: ReturnType<typeof import("@supabase/supabase-js").createClient>,
+  supabaseAny: any,
   userId: string,
   issueId: string,
   action: "accept_replacement" | "cancel_item",
 ) {
+  const supabase = supabaseAny;
   const { data: issue, error } = await supabase
     .from("order_item_issues")
     .select("*")
