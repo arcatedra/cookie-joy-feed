@@ -104,6 +104,47 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          issue_id: string | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          issue_id?: string | null
+          read_at?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          issue_id?: string | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_notifications_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "order_item_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       daily_draw_entries: {
         Row: {
           created_at: string
@@ -438,6 +479,71 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      order_item_issues: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          item_index: number
+          order_id: string
+          original_price: number
+          original_qty: number
+          product_name: string
+          replacement_image: string | null
+          replacement_name: string | null
+          replacement_price: number | null
+          replacement_product_id: string | null
+          resolved_at: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_index: number
+          order_id: string
+          original_price?: number
+          original_qty?: number
+          product_name: string
+          replacement_image?: string | null
+          replacement_name?: string | null
+          replacement_price?: number | null
+          replacement_product_id?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_index?: number
+          order_id?: string
+          original_price?: number
+          original_qty?: number
+          product_name?: string
+          replacement_image?: string | null
+          replacement_name?: string | null
+          replacement_price?: number | null
+          replacement_product_id?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_item_issues_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       orders: {
         Row: {
@@ -1069,6 +1175,79 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      support_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          issue_id: string
+          last_message_at: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          issue_id: string
+          last_message_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          issue_id?: string
+          last_message_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_conversations_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: true
+            referencedRelation: "order_item_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_messages: {
+        Row: {
+          action: string | null
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender: string
+        }
+        Insert: {
+          action?: string | null
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender: string
+        }
+        Update: {
+          action?: string | null
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "support_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       suppressed_emails: {
         Row: {
