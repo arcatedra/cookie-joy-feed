@@ -18,6 +18,7 @@ import { CategorySidebar } from "@/components/CategorySidebar";
 import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
 const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
