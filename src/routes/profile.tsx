@@ -11,7 +11,10 @@ import {
   LogOut,
   LogIn,
   ShieldCheck,
+  MessageSquare,
+  Inbox,
 } from "lucide-react";
+import { adminUnreadCount } from "@/lib/suggestions.functions";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
