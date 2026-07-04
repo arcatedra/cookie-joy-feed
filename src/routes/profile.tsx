@@ -11,7 +11,10 @@ import {
   LogOut,
   LogIn,
   ShieldCheck,
+  MessageSquare,
+  Inbox,
 } from "lucide-react";
+import { adminUnreadCount } from "@/lib/suggestions.functions";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -184,6 +187,28 @@ function ProfilePage() {
         </div>
       </section>
 
+      {/* Suggestions box (user) */}
+      <section className="mt-6 px-5">
+        <Link
+          to="/suggestions"
+          className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border hover:bg-accent"
+        >
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+              <MessageSquare className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-foreground">Buzón de sugerencias</p>
+              <p className="text-xs text-muted-foreground">Danos tu opinión — la lee nuestro equipo</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        </Link>
+      </section>
+
+      {user?.id ? <AdminSuggestionsLink userId={user.id} /> : null}
+
+
       <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
         <SheetContent side="right" className="w-full sm:max-w-sm p-0">
           <SheetHeader className="px-5 pt-6 pb-3">
@@ -199,6 +224,48 @@ function ProfilePage() {
 
 
     </main>
+  );
+}
+
+function AdminSuggestionsLink({ userId }: { userId: string }) {
+  const fetchUnread = useServerFn(adminUnreadCount);
+  const { data } = useQuery({
+    queryKey: ["admin-suggestions-unread", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      try {
+        return (await fetchUnread()) as { unreadCount: number };
+      } catch {
+        return null;
+      }
+    },
+    refetchInterval: 30_000,
+  });
+  if (!data) return null; // not admin or error → hide silently
+  return (
+    <section className="mt-3 px-5">
+      <Link
+        to="/admin/suggestions"
+        className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border hover:bg-accent"
+      >
+        <div className="flex items-center gap-3">
+          <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+            <Inbox className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-foreground">Admin · Buzón de sugerencias</p>
+            <p className="text-xs text-muted-foreground">
+              {data.unreadCount > 0 ? `${data.unreadCount} sin leer` : "Todo al día"}
+            </p>
+          </div>
+        </div>
+        {data.unreadCount > 0 && (
+          <span className="rounded-full bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white">
+            {data.unreadCount}
+          </span>
+        )}
+      </Link>
+    </section>
   );
 }
 

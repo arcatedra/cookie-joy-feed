@@ -36,12 +36,14 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
+import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
+import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -189,6 +191,12 @@ const AdminShippingRoute = AdminShippingRouteImport.update({
   path: '/admin/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSuggestionsRoute =
+  AuthenticatedSuggestionsRouteImport.update({
+    id: '/suggestions',
+    path: '/suggestions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
   id: '/deliveries',
   path: '/deliveries',
@@ -219,6 +227,12 @@ const AuthenticatedAdminSupportRoute =
   AuthenticatedAdminSupportRouteImport.update({
     id: '/admin/support',
     path: '/admin/support',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminSuggestionsRoute =
+  AuthenticatedAdminSuggestionsRouteImport.update({
+    id: '/admin/suggestions',
+    path: '/admin/suggestions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminSecurityRoute =
@@ -315,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -322,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
+  '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -361,6 +377,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -368,6 +385,7 @@ export interface FileRoutesByTo {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
+  '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -409,6 +427,7 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -416,6 +435,7 @@ export interface FileRoutesById {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
+  '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -457,6 +477,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -464,6 +485,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/security'
+    | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
@@ -503,6 +525,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -510,6 +533,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/security'
+    | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
     | '/admin/sweepstakes/winners'
@@ -550,6 +574,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
+    | '/_authenticated/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/checkout/success'
@@ -557,6 +582,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/admin/security'
+    | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
     | '/admin/sweepstakes/winners'
@@ -809,6 +835,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/suggestions': {
+      id: '/_authenticated/suggestions'
+      path: '/suggestions'
+      fullPath: '/suggestions'
+      preLoaderRoute: typeof AuthenticatedSuggestionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/deliveries': {
       id: '/_authenticated/deliveries'
       path: '/deliveries'
@@ -849,6 +882,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/support'
       fullPath: '/admin/support'
       preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/suggestions': {
+      id: '/_authenticated/admin/suggestions'
+      path: '/admin/suggestions'
+      fullPath: '/admin/suggestions'
+      preLoaderRoute: typeof AuthenticatedAdminSuggestionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/security': {
@@ -940,14 +980,18 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
+  AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
+  AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
 }
