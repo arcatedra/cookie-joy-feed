@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bike, Car, Truck, Footprints, DollarSign, Clock, ShieldCheck, FileCheck2, ChevronRight, Loader2 } from "lucide-react";
+import { Bike, Car, DollarSign, Clock, ShieldCheck, FileCheck2, ChevronRight, Loader2, Zap, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
