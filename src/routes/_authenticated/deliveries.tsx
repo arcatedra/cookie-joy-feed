@@ -73,6 +73,7 @@ function DeliveriesPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
 
   const grid = useMemo(() => buildMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
   const monthLabel = new Intl.DateTimeFormat("es-ES", {
