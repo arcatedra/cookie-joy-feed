@@ -2366,6 +2366,19 @@ export type Database = {
         }
         Returns: number
       }
+      nearby_batchable_orders: {
+        Args: { _order_id: string; _radius_km?: number }
+        Returns: {
+          distance_km: number
+          estimated_duration_minutes: number
+          estimated_earnings: number
+          id: string
+          pickup_address: string
+          pickup_lat: number
+          pickup_lng: number
+          stops_count: number
+        }[]
+      }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
