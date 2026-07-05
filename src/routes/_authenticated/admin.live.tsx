@@ -28,7 +28,7 @@ function AdminLive() {
         <Link to="/" className="text-[#1e3a5f]">
           <ArrowLeft className="size-5" />
         </Link>
-        <h1 flex-1 className="flex-1 font-serif text-xl font-bold text-[#1e3a5f]">Operaciones en vivo</h1>
+        <h1 className="flex-1 font-serif text-xl font-bold text-[#1e3a5f]">Operaciones en vivo</h1>
         <Radio className="size-5 animate-pulse text-emerald-500" />
       </header>
 
