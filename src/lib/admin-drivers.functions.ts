@@ -102,22 +102,21 @@ export const reviewDocument = createServerFn({ method: "POST" })
   }))
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
-    const patch: Record<string, unknown> = {
-      status: data.action === "aprobar" ? "aprobado" : "rechazado",
-      reviewed_by: context.userId,
-      reviewed_at: new Date().toISOString(),
-    };
-    if (data.action === "rechazar") {
-      if (!data.reason) throw new Error("Debes indicar el motivo del rechazo");
-      patch.rejection_reason = data.reason;
+    const now = new Date().toISOString();
+    if (data.action === "aprobar") {
+      const { error } = await context.supabase
+        .from("driver_documents")
+        .update({ status: "aprobado", reviewed_by: context.userId, reviewed_at: now, rejection_reason: null })
+        .eq("id", data.documentId);
+      if (error) throw new Error(error.message);
     } else {
-      patch.rejection_reason = null;
+      if (!data.reason) throw new Error("Debes indicar el motivo del rechazo");
+      const { error } = await context.supabase
+        .from("driver_documents")
+        .update({ status: "rechazado", reviewed_by: context.userId, reviewed_at: now, rejection_reason: data.reason })
+        .eq("id", data.documentId);
+      if (error) throw new Error(error.message);
     }
-    const { error } = await context.supabase
-      .from("driver_documents")
-      .update(patch)
-      .eq("id", data.documentId);
-    if (error) throw new Error(error.message);
     return { ok: true };
   });
 
