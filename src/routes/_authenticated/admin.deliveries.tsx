@@ -143,7 +143,7 @@ function AdminDeliveriesPage() {
             ) : (
               <ul className="divide-y">
                 {delivered.slice(0, 20).map((b) => (
-                  <DeliveredRow key={b.id} booking={b} signFn={signFn} />
+                  <DeliveredRow key={b.id} booking={b} />
                 ))}
               </ul>
             )}
@@ -154,13 +154,8 @@ function AdminDeliveriesPage() {
   );
 }
 
-function DeliveredRow({
-  booking,
-  signFn,
-}: {
-  booking: Booking;
-  signFn: ReturnType<typeof useServerFn<typeof getDeliveryProofSignedUrl>>;
-}) {
+function DeliveredRow({ booking }: { booking: Booking }) {
+  const signFn = useServerFn(getDeliveryProofSignedUrl);
   const [url, setUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
