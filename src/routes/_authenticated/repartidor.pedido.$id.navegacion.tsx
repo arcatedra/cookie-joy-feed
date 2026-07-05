@@ -196,6 +196,11 @@ function NavegacionPedido() {
               {distKm < 1 ? `${Math.round(distKm * 1000)} m` : `${distKm.toFixed(1)} km`}
             </Badge>
           )}
+          {detail.data.order.batch_id && detail.data.order.batch_position != null && (
+            <Badge className="bg-[#c8862e] text-white shadow-lg">
+              🎯 Batch · Parada {detail.data.order.batch_position}
+            </Badge>
+          )}
         </div>
       </div>
 
