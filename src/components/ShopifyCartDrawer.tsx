@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { CartWeightTracker } from "@/components/CartWeightTracker";
+import { TipSelector, type TipValue } from "@/components/TipSelector";
 
 export function ShopifyCartDrawer() {
   const { t } = useTranslation();
