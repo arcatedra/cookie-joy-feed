@@ -298,7 +298,7 @@ function NavegacionPedido() {
   );
 }
 
-/** Static OpenStreetMap preview (no key required). */
+/** Google Maps preview showing driver + target. */
 function MapPreview({
   driver,
   target,
@@ -306,20 +306,13 @@ function MapPreview({
   driver: { lat: number; lng: number } | null;
   target: { lat: number; lng: number };
 }) {
-  const center = driver ?? target;
-  // Small bbox around center
-  const d = 0.01;
-  const bbox = `${center.lng - d},${center.lat - d},${center.lng + d},${center.lat + d}`;
-  const marker = `${target.lat},${target.lng}`;
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${marker}`;
+  const markers = [
+    ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
+    { position: target, color: "target" as const, title: "Destino" },
+  ];
   return (
     <div className="relative h-full w-full bg-[#0f2338]">
-      <iframe
-        title="Mapa"
-        src={src}
-        className="h-full w-full border-0"
-        loading="lazy"
-      />
+      <GoogleMapView markers={markers} className="h-full w-full" />
     </div>
   );
 }
