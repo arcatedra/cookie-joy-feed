@@ -336,6 +336,210 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_documents: {
+        Row: {
+          document_type: Database["public"]["Enums"]["driver_document_type"]
+          driver_id: string
+          expiration_date: string | null
+          file_url: string
+          id: string
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["driver_document_status"]
+          updated_at: string
+          uploaded_at: string
+        }
+        Insert: {
+          document_type: Database["public"]["Enums"]["driver_document_type"]
+          driver_id: string
+          expiration_date?: string | null
+          file_url: string
+          id?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["driver_document_status"]
+          updated_at?: string
+          uploaded_at?: string
+        }
+        Update: {
+          document_type?: Database["public"]["Enums"]["driver_document_type"]
+          driver_id?: string
+          expiration_date?: string | null
+          file_url?: string
+          id?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["driver_document_status"]
+          updated_at?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_documents_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_earnings: {
+        Row: {
+          created_at: string
+          driver_id: string
+          id: string
+          paid_at: string | null
+          period_end: string
+          period_start: string
+          status: Database["public"]["Enums"]["driver_earnings_status"]
+          total_amount: number
+          total_deliveries: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          id?: string
+          paid_at?: string | null
+          period_end: string
+          period_start: string
+          status?: Database["public"]["Enums"]["driver_earnings_status"]
+          total_amount?: number
+          total_deliveries?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          id?: string
+          paid_at?: string | null
+          period_end?: string
+          period_start?: string
+          status?: Database["public"]["Enums"]["driver_earnings_status"]
+          total_amount?: number
+          total_deliveries?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_earnings_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_vehicles: {
+        Row: {
+          brand: string | null
+          created_at: string
+          driver_id: string
+          id: string
+          model: string | null
+          plate_number: string | null
+          updated_at: string
+          vehicle_photo_url: string | null
+          vehicle_type: Database["public"]["Enums"]["driver_vehicle_type"]
+          year: number | null
+        }
+        Insert: {
+          brand?: string | null
+          created_at?: string
+          driver_id: string
+          id?: string
+          model?: string | null
+          plate_number?: string | null
+          updated_at?: string
+          vehicle_photo_url?: string | null
+          vehicle_type: Database["public"]["Enums"]["driver_vehicle_type"]
+          year?: number | null
+        }
+        Update: {
+          brand?: string | null
+          created_at?: string
+          driver_id?: string
+          id?: string
+          model?: string | null
+          plate_number?: string | null
+          updated_at?: string
+          vehicle_photo_url?: string | null
+          vehicle_type?: Database["public"]["Enums"]["driver_vehicle_type"]
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_vehicles_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drivers: {
+        Row: {
+          address: string
+          application_status: Database["public"]["Enums"]["driver_application_status"]
+          approved_at: string | null
+          approved_by: string | null
+          city: string
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          id: string
+          is_active: boolean
+          phone: string
+          profile_photo_url: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          application_status?: Database["public"]["Enums"]["driver_application_status"]
+          approved_at?: string | null
+          approved_by?: string | null
+          city: string
+          created_at?: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          id: string
+          is_active?: boolean
+          phone: string
+          profile_photo_url?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          application_status?: Database["public"]["Enums"]["driver_application_status"]
+          approved_at?: string | null
+          approved_by?: string | null
+          city?: string
+          created_at?: string
+          date_of_birth?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          phone?: string
+          profile_photo_url?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
@@ -1747,6 +1951,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_driver_approved: { Args: { _user_id: string }; Returns: boolean }
       list_soft_deleted: {
         Args: { p_limit?: number }
         Returns: {
@@ -1840,7 +2045,7 @@ export type Database = {
       today_et: { Args: never; Returns: string }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "repartidor"
       donation_tier:
         | "azul"
         | "bronce"
@@ -1848,6 +2053,21 @@ export type Database = {
         | "premium"
         | "corona"
         | "estrella_suprema"
+      driver_application_status:
+        | "pendiente"
+        | "en_revision"
+        | "aprobado"
+        | "rechazado"
+        | "suspendido"
+      driver_document_status: "pendiente" | "aprobado" | "rechazado"
+      driver_document_type:
+        | "licencia_conducir"
+        | "seguro_vehiculo"
+        | "identificacion"
+        | "antecedentes_penales"
+        | "foto_perfil"
+      driver_earnings_status: "pendiente" | "pagado" | "en_proceso"
+      driver_vehicle_type: "bicicleta" | "moto" | "auto" | "a_pie"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1975,7 +2195,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "repartidor"],
       donation_tier: [
         "azul",
         "bronce",
@@ -1984,6 +2204,23 @@ export const Constants = {
         "corona",
         "estrella_suprema",
       ],
+      driver_application_status: [
+        "pendiente",
+        "en_revision",
+        "aprobado",
+        "rechazado",
+        "suspendido",
+      ],
+      driver_document_status: ["pendiente", "aprobado", "rechazado"],
+      driver_document_type: [
+        "licencia_conducir",
+        "seguro_vehiculo",
+        "identificacion",
+        "antecedentes_penales",
+        "foto_perfil",
+      ],
+      driver_earnings_status: ["pendiente", "pagado", "en_proceso"],
+      driver_vehicle_type: ["bicicleta", "moto", "auto", "a_pie"],
     },
   },
 } as const
