@@ -150,10 +150,23 @@ export function ShopifyCartDrawer() {
                     if (heaviest) removeItem(heaviest.variantId);
                   }}
                 />
+                <TipSelector onChange={setTip} />
+                {tip.monto > 0 && (
+                  <div className="flex justify-between items-center text-sm text-muted-foreground">
+                    <span>
+                      Propina{" "}
+                      {tip.metodoPago === "efectivo" ? "(en efectivo)" : "(en la app)"}
+                    </span>
+                    <span>
+                      {items[0]?.price.currencyCode || "$"} {tip.monto.toFixed(2)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">{t("cartDrawer.total")}</span>
                   <span className="text-xl font-bold">
-                    {items[0]?.price.currencyCode || "$"} {totalPrice.toFixed(2)}
+                    {items[0]?.price.currencyCode || "$"}{" "}
+                    {(totalPrice + (tip.metodoPago === "app" ? tip.monto : 0)).toFixed(2)}
                   </span>
                 </div>
                 <Button
