@@ -45,6 +45,7 @@ import {
   setStoredGpsPref,
   type GpsApp,
 } from "@/lib/gps-deeplinks";
+import { ChatDrawer } from "@/components/courier/ChatDrawer";
 
 export const Route = createFileRoute("/_authenticated/repartidor/pedido/$id/navegacion")({
   component: NavegacionPedido,
