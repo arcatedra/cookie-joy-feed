@@ -46,6 +46,7 @@ import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/do
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
+import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
@@ -254,6 +255,12 @@ const AuthenticatedRepartidorOnboardingRoute =
     path: '/repartidor/onboarding',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRepartidorCalificacionesRoute =
+  AuthenticatedRepartidorCalificacionesRouteImport.update({
+    id: '/repartidor/calificaciones',
+    path: '/repartidor/calificaciones',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -404,6 +411,7 @@ export interface FileRoutesByFullPath {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -461,6 +469,7 @@ export interface FileRoutesByTo {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -520,6 +529,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -579,6 +589,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/repartidor/calificaciones'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -636,6 +647,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/repartidor/calificaciones'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -694,6 +706,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
+    | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -1022,6 +1035,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor/calificaciones': {
+      id: '/_authenticated/repartidor/calificaciones'
+      path: '/repartidor/calificaciones'
+      fullPath: '/repartidor/calificaciones'
+      preLoaderRoute: typeof AuthenticatedRepartidorCalificacionesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -1166,6 +1186,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
@@ -1182,6 +1203,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedRepartidorCalificacionesRoute:
+    AuthenticatedRepartidorCalificacionesRoute,
   AuthenticatedRepartidorOnboardingRoute:
     AuthenticatedRepartidorOnboardingRoute,
   AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
