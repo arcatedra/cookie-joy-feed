@@ -36,7 +36,7 @@ function toCartItems(items: DemoItem[]): CartItem[] {
     weightKg: it.weightKg,
     selectedOptions: [],
     // product is required by the type but not read by CartWeightTracker
-    product: { id: it.id, title: it.name, handle: it.id } as CartItem["product"],
+    product: { id: it.id, title: it.name, handle: it.id } as unknown as CartItem["product"],
   }));
 }
 
