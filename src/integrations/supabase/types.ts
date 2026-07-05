@@ -233,11 +233,15 @@ export type Database = {
         Row: {
           address: string | null
           created_at: string
+          delivered_at: string | null
+          delivered_by: string | null
           id: string
           notes: string | null
           period_end: string
           period_start: string
           price_id: string
+          proof_description: string | null
+          proof_photo_path: string | null
           scheduled_date: string
           status: string
           subscription_id: string | null
@@ -247,11 +251,15 @@ export type Database = {
         Insert: {
           address?: string | null
           created_at?: string
+          delivered_at?: string | null
+          delivered_by?: string | null
           id?: string
           notes?: string | null
           period_end: string
           period_start: string
           price_id: string
+          proof_description?: string | null
+          proof_photo_path?: string | null
           scheduled_date: string
           status?: string
           subscription_id?: string | null
@@ -261,11 +269,15 @@ export type Database = {
         Update: {
           address?: string | null
           created_at?: string
+          delivered_at?: string | null
+          delivered_by?: string | null
           id?: string
           notes?: string | null
           period_end?: string
           period_start?: string
           price_id?: string
+          proof_description?: string | null
+          proof_photo_path?: string | null
           scheduled_date?: string
           status?: string
           subscription_id?: string | null
