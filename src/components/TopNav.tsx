@@ -30,6 +30,8 @@ const quickLinkKeys = [
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
+  { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
+  
   
 ] as const;
 
