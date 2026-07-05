@@ -32,6 +32,7 @@ function RepartidorHome() {
   );
   const watchIdRef = useRef<number | null>(null);
   const dingRef = useRef<HTMLAudioElement | null>(null);
+  const [batchOrderId, setBatchOrderId] = useState<string | null>(null);
 
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
