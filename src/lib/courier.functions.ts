@@ -274,3 +274,111 @@ export const uploadDeliveryProof = createServerFn({ method: "POST" })
     const { data: signed } = await supabase.storage.from("delivery-proofs").createSignedUrl(path, 60 * 60 * 24 * 30);
     return { path, url: signed?.signedUrl ?? null };
   });
+
+// ============================================================
+// Fase 4: Onboarding + Online/Offline + Push subscriptions
+// ============================================================
+
+export const getDriverStatus = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("drivers")
+      .select(
+        "id, application_status, profile_photo_url, agreement_accepted_at, tutorial_completed_at, onboarding_completed_at, preferred_gps_app, is_online, went_online_at, last_seen_at"
+      )
+      .eq("id", userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data;
+  });
+
+export const acceptAgreement = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("drivers")
+      .update({ agreement_accepted_at: new Date().toISOString() })
+      .eq("id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const completeTutorial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const now = new Date().toISOString();
+    const { error } = await supabase
+      .from("drivers")
+      .update({ tutorial_completed_at: now, onboarding_completed_at: now })
+      .eq("id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const setOnlineStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { online: boolean; lat?: number | null; lng?: number | null }) => ({
+    online: z.boolean().parse(d.online),
+    lat: d.lat == null ? null : z.number().min(-90).max(90).parse(d.lat),
+    lng: d.lng == null ? null : z.number().min(-180).max(180).parse(d.lng),
+  }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const now = new Date().toISOString();
+    const patch: Record<string, unknown> = {
+      is_online: data.online,
+      last_seen_at: now,
+    };
+    if (data.online) patch.went_online_at = now;
+    if (data.lat != null) patch.last_lat = data.lat;
+    if (data.lng != null) patch.last_lng = data.lng;
+    const { error } = await supabase.from("drivers").update(patch).eq("id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const pingLocation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { lat: number; lng: number }) => ({
+    lat: z.number().min(-90).max(90).parse(d.lat),
+    lng: z.number().min(-180).max(180).parse(d.lng),
+  }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("drivers")
+      .update({ last_lat: data.lat, last_lng: data.lng, last_seen_at: new Date().toISOString() })
+      .eq("id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const savePushSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { endpoint: string; p256dh: string; auth: string; userAgent?: string }) => ({
+    endpoint: z.string().url().parse(d.endpoint),
+    p256dh: z.string().min(1).parse(d.p256dh),
+    auth: z.string().min(1).parse(d.auth),
+    userAgent: d.userAgent ? z.string().max(500).parse(d.userAgent) : null,
+  }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("push_subscriptions")
+      .upsert(
+        {
+          user_id: userId,
+          endpoint: data.endpoint,
+          p256dh: data.p256dh,
+          auth: data.auth,
+          user_agent: data.userAgent,
+        },
+        { onConflict: "endpoint" }
+      );
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
