@@ -104,6 +104,136 @@ export type Database = {
         }
         Relationships: []
       }
+      courier_order_stops: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          delivery_address: string
+          delivery_lat: number
+          delivery_lng: number
+          failure_reason: string | null
+          id: string
+          order_id: string
+          proof_code: string | null
+          proof_type: Database["public"]["Enums"]["courier_proof_type"]
+          proof_url: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          sequence_number: number
+          status: Database["public"]["Enums"]["courier_stop_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_address: string
+          delivery_lat: number
+          delivery_lng: number
+          failure_reason?: string | null
+          id?: string
+          order_id: string
+          proof_code?: string | null
+          proof_type?: Database["public"]["Enums"]["courier_proof_type"]
+          proof_url?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sequence_number: number
+          status?: Database["public"]["Enums"]["courier_stop_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_address?: string
+          delivery_lat?: number
+          delivery_lng?: number
+          failure_reason?: string | null
+          id?: string
+          order_id?: string
+          proof_code?: string | null
+          proof_type?: Database["public"]["Enums"]["courier_proof_type"]
+          proof_url?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sequence_number?: number
+          status?: Database["public"]["Enums"]["courier_stop_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courier_order_stops_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "courier_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courier_orders: {
+        Row: {
+          accepted_at: string | null
+          cancellation_reason: string | null
+          completed_at: string | null
+          created_at: string
+          driver_id: string | null
+          estimated_duration_minutes: number
+          estimated_earnings: number
+          id: string
+          picked_up_at: string | null
+          pickup_address: string
+          pickup_contact_name: string | null
+          pickup_lat: number
+          pickup_lng: number
+          pickup_notes: string | null
+          status: Database["public"]["Enums"]["courier_order_status"]
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          cancellation_reason?: string | null
+          completed_at?: string | null
+          created_at?: string
+          driver_id?: string | null
+          estimated_duration_minutes?: number
+          estimated_earnings?: number
+          id?: string
+          picked_up_at?: string | null
+          pickup_address: string
+          pickup_contact_name?: string | null
+          pickup_lat: number
+          pickup_lng: number
+          pickup_notes?: string | null
+          status?: Database["public"]["Enums"]["courier_order_status"]
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          cancellation_reason?: string | null
+          completed_at?: string | null
+          created_at?: string
+          driver_id?: string | null
+          estimated_duration_minutes?: number
+          estimated_earnings?: number
+          id?: string
+          picked_up_at?: string | null
+          pickup_address?: string
+          pickup_contact_name?: string | null
+          pickup_lat?: number
+          pickup_lng?: number
+          pickup_notes?: string | null
+          status?: Database["public"]["Enums"]["courier_order_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courier_orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_notifications: {
         Row: {
           body: string
@@ -494,6 +624,7 @@ export type Database = {
           id: string
           is_active: boolean
           phone: string
+          preferred_gps_app: string | null
           profile_photo_url: string | null
           rejected_at: string | null
           rejected_by: string | null
@@ -513,6 +644,7 @@ export type Database = {
           id: string
           is_active?: boolean
           phone: string
+          preferred_gps_app?: string | null
           profile_photo_url?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
@@ -532,6 +664,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           phone?: string
+          preferred_gps_app?: string | null
           profile_photo_url?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
@@ -2046,6 +2179,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user" | "repartidor"
+      courier_order_status:
+        | "disponible"
+        | "aceptado"
+        | "en_recoleccion"
+        | "en_camino_entrega"
+        | "completado"
+        | "cancelado"
+      courier_proof_type: "foto" | "firma" | "codigo" | "ninguno"
+      courier_stop_status: "pendiente" | "en_camino" | "entregado" | "fallido"
       donation_tier:
         | "azul"
         | "bronce"
@@ -2196,6 +2338,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user", "repartidor"],
+      courier_order_status: [
+        "disponible",
+        "aceptado",
+        "en_recoleccion",
+        "en_camino_entrega",
+        "completado",
+        "cancelado",
+      ],
+      courier_proof_type: ["foto", "firma", "codigo", "ninguno"],
+      courier_stop_status: ["pendiente", "en_camino", "entregado", "fallido"],
       donation_tier: [
         "azul",
         "bronce",
