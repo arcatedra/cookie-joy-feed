@@ -144,7 +144,7 @@ export const confirmDelivery = createServerFn({ method: "POST" })
     if (sErr) throw new Error(sErr.message);
     if (!stop) throw new Error("Parada no encontrada");
     // RLS also enforces; belt-and-suspenders
-    // @ts-expect-error nested type
+    // @ts-ignore nested type
     if (stop.courier_orders.driver_id !== userId) throw new Error("No autorizado");
 
     const { error } = await supabase
@@ -190,7 +190,7 @@ export const failStop = createServerFn({ method: "POST" })
       .eq("id", data.stopId)
       .maybeSingle();
     if (!stop) throw new Error("Parada no encontrada");
-    // @ts-expect-error nested
+    // @ts-ignore nested
     if (stop.courier_orders.driver_id !== userId) throw new Error("No autorizado");
 
     const { error } = await supabase
@@ -261,7 +261,7 @@ export const uploadDeliveryProof = createServerFn({ method: "POST" })
       .eq("id", data.stopId)
       .maybeSingle();
     if (!stop) throw new Error("Parada no encontrada");
-    // @ts-expect-error nested
+    // @ts-ignore nested
     if (stop.courier_orders.driver_id !== userId) throw new Error("No autorizado");
 
     const bytes = Uint8Array.from(atob(data.contentBase64), (c) => c.charCodeAt(0));
