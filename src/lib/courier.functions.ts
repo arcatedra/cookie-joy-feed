@@ -329,7 +329,13 @@ export const setOnlineStatus = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const now = new Date().toISOString();
-    const patch: Record<string, unknown> = {
+    const patch: {
+      is_online: boolean;
+      last_seen_at: string;
+      went_online_at?: string;
+      last_lat?: number;
+      last_lng?: number;
+    } = {
       is_online: data.online,
       last_seen_at: now,
     };
