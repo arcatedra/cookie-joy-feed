@@ -1,127 +1,88 @@
-# Etapa 3 — Flujo de navegación del repartidor tras aceptar un pedido
+# Comparativa: Hazorex Repartidores vs DoorDash Dasher
 
-## Contexto y dependencias
+Tu módulo ya cubre lo esencial (landing, aplicación, panel, navegación, pruebas de entrega). Pero para igualar a DoorDash Dasher en **experiencia y confianza**, todavía faltan varias piezas clave. Te las agrupo por prioridad.
 
-Antes de construir este flujo hace falta la **base de pedidos** que hoy no existe:
+---
 
-- No hay tabla `orders` de repartidores (la actual `orders` es de la tienda / galletas, no compatible).
-- No hay `order_stops` ni asignación `driver_id`.
-- No hay lista de "pedidos disponibles" ni pantalla de aceptación.
-- No hay integración de mapas embebida (Mapbox/Google Maps JS) todavía en el proyecto.
+## 🔴 Bloqueadores para paridad real con DoorDash
 
-Este prompt asume que un pedido llega asignado a un `driver_id`. Voy a construir esa base mínima como parte de la etapa, porque sin eso la pantalla de navegación no tiene de dónde leer.
+1. **Onboarding guiado post-aprobación**
+   - Checklist "Primeros pasos" (subir foto de perfil, aceptar acuerdo de repartidor, configurar método de cobro, tutorial interactivo).
+   - Video/tour de 60s explicando cómo funciona el panel.
+   - Estado "Aprobado pero no activado" hasta completar checklist.
 
-## Alcance de esta etapa
+2. **Programación de turnos ("Dash Now" vs "Schedule")**
+   - Toggle **"En línea / Fuera de línea"** con geolocalización activa.
+   - Calendario semanal para reservar bloques de horario en zonas.
+   - Mapa de calor de demanda por zona/hora (Peak Pay).
 
-Todo bajo la ruta protegida `/_authenticated/repartidor/*`, visible solo para usuarios con rol `repartidor` aprobado (`drivers.application_status = 'aprobado'`).
+3. **Sistema de pagos al repartidor**
+   - Wallet interna con balance, historial, próximo pago semanal.
+   - "Fast Pay" / cobro instantáneo (integración Stripe Connect o similar).
+   - Desglose por pedido: base + propina + bonos + km.
+   - Comprobantes descargables (PDF) para impuestos.
 
-### 1. Backend — modelo de datos (migración única)
+4. **Sistema de calificaciones y rendimiento**
+   - Rating promedio (últimos 100 pedidos).
+   - Tasa de aceptación, tasa de finalización, puntualidad.
+   - Umbrales para acceso a beneficios (Top Dasher = Repartidor Élite).
+   - Feedback de clientes visible al repartidor.
 
-- `courier_orders` (renombro para no chocar con la `orders` de la tienda):
-  - `id`, `driver_id` (fk `drivers`, nullable), `status` enum (`disponible`, `aceptado`, `en_recoleccion`, `en_camino_entrega`, `completado`, `cancelado`)
-  - `pickup_address`, `pickup_lat`, `pickup_lng`, `pickup_contact_name`, `pickup_notes`
-  - `estimated_earnings numeric`, `estimated_duration_minutes int`
-  - `accepted_at`, `picked_up_at`, `completed_at`
-  - `created_at`, `updated_at` + trigger
-- `courier_order_stops`:
-  - `id`, `order_id` fk, `sequence_number int`
-  - `delivery_address`, `delivery_lat`, `delivery_lng`, `recipient_name`, `recipient_phone`
-  - `status` enum (`pendiente`, `en_camino`, `entregado`, `fallido`)
-  - `proof_type` enum (`foto`, `firma`, `codigo`, `ninguno`), `proof_url`, `failure_reason`, `delivered_at`
-- Bucket privado `delivery-proofs` con RLS: el repartidor solo escribe/lee objetos de sus propios stops.
-- RLS en ambas tablas: repartidor aprobado ve/actualiza solo filas con su `driver_id`; admin ve todo.
-- Columna `preferred_gps_app text` en `drivers` (`google` | `waze` | `apple` | null).
-- GRANTs `authenticated` + `service_role` en ambas tablas.
+5. **Notificaciones push en tiempo real**
+   - Nuevo pedido disponible (con sonido + vibración).
+   - Cambios de estado del pedido, mensajes del cliente/soporte.
+   - Actualmente el panel es solo pull; DoorDash es push.
 
-### 2. Server functions (`createServerFn` con `requireSupabaseAuth`)
+---
 
-- `listAvailableOrders` — pedidos `disponible` sin driver.
-- `acceptOrder(orderId)` — asigna `driver_id`, `status='aceptado'`, `accepted_at=now()`. Bloquea si el repartidor ya tiene un pedido en curso.
-- `startOrder(orderId)` → `status='en_recoleccion'`.
-- `confirmPickup(orderId, { code? })` → `picked_up_at`, `status='en_camino_entrega'`.
-- `confirmDelivery(stopId, { proofUrl?, code? })` → marca stop `entregado`; si es el último, cierra pedido.
-- `failStop(stopId, reason)` → stop `fallido`, avanza.
-- `cancelOrder(orderId, reason)`.
-- `getActiveOrder()` — devuelve el pedido en curso del repartidor (para redirect al reabrir).
-- `setPreferredGpsApp(app)`.
+## 🟡 Funcionalidad importante que falta
 
-### 3. UI — rutas nuevas
+6. **Chat en vivo cliente ↔ repartidor** (enmascarado, sin exponer teléfonos reales).
+7. **Soporte 24/7 dentro de la app** (chat con agente + FAQ contextual por estado del pedido).
+8. **Detalles de recolección más ricos**: foto del comercio, instrucciones del negocio, nombre del encargado, código de recogida.
+9. **Batching / stacked orders**: aceptar 2 pedidos cercanos a la vez (DoorDash lo hace automáticamente).
+10. **Cancelación con motivo tipificado** y política clara (afecta métricas).
+11. **Historial de pedidos** con filtros por fecha, ganancia, distancia.
+12. **Modo "cerca de mi zona"**: radio configurable de pedidos aceptables.
+13. **Estimación de ganancia + distancia + tiempo ANTES de aceptar** (ya está parcial; falta distancia real via Routes API en vez de estimado).
 
-Todas bajo `src/routes/_authenticated/repartidor.*.tsx`:
+---
 
-- `repartidor.index.tsx` — lista de pedidos disponibles + card destacada si hay un pedido en curso (redirige auto).
-- `repartidor.pedido.$id.resumen.tsx` — resumen post-aceptación, botón único **Comenzar**.
-- `repartidor.pedido.$id.navegacion.tsx` — **pantalla central**:
-  - Mapa (Google Maps JS API vía connector `google_maps` ya disponible, con `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY`) a pantalla completa con pin del repartidor (geolocation) y pin de la parada activa.
-  - Bottom sheet fijo con: indicador ("Recolección" / "Entrega X de N"), dirección, distancia/tiempo estimado (Routes API vía gateway), contacto + notas.
-  - Botón **Abrir ruta** → selector de app GPS (Google/Waze/Apple según SO), memoriza preferencia.
-  - Botones **Llamar** / **Mensaje** con `tel:` y `sms:`/WhatsApp.
-  - Botón de estado ("Llegué al punto de recolección" / "Llegué a la dirección"), abre panel de confirmación.
-  - **Reportar un problema** discreto.
-  - Máquina de estados basada en `courier_orders.status` + primera stop `pendiente`. Transición entre stops con fade.
-- `repartidor.pedido.$id.completado.tsx` — resumen final, botón **Buscar nuevo pedido**.
+## 🟢 Detalles de pulido (UX)
 
-### 4. Confirmación de parada
+14. Icono/badge de repartidor verificado, antigüedad y nivel.
+15. Referidos: "Invita a un amigo, gana $X" (DoorDash lo usa fuerte para crecer).
+16. Centro de recompensas / logros (gamificación).
+17. Ajustes: vehículo activo del día, idioma, notificaciones granulares.
+18. Modo oscuro nativo en el panel (repartidores trabajan de noche).
+19. Widget "próximo pago" siempre visible en el header del panel.
+20. Landing: agregar sección de testimonios reales, calculadora de ingresos por zona, FAQ, requisitos legales por país.
 
-Modal / expansión del bottom sheet:
+---
 
-- **Recolección**: checklist + input opcional para código.
-- **Entrega**:
-  - `foto` → `<input type="file" accept="image/*" capture="environment">`, sube a `delivery-proofs`.
-  - `firma` → canvas táctil (react-signature-canvas o implementación mínima con pointer events), exporta PNG y sube.
-  - `codigo` → input numérico.
-  - `ninguno` → botón confirmar.
+## 🔵 Infraestructura que aún no existe
 
-### 5. Excepciones
+- **Google Maps real** (hoy usas OpenStreetMap embed). Para paridad necesitas Maps JS API + Routes API + Places autocomplete.
+- **Tracking GPS en background** enviado al cliente (mapa en vivo del pedido).
+- **Firma digital de contrato de repartidor** (acuerdo independiente + T&C).
+- **Verificación de identidad** (KYC: foto de cédula + selfie con liveness).
+- **Verificación de vehículo** (foto de placa, SOAT vigente, revisión técnica).
+- **Panel admin** para aprobar solicitudes, ver flota en vivo, resolver disputas.
 
-Sheet "Reportar un problema" con: no encuentro dirección, cliente no responde (doble confirmación → `fallido`), cancelado en sitio (→ `cancelado`).
+---
 
-### 6. Persistencia
+## Recomendación de próximo paso
 
-- Al montar `_authenticated` de `/repartidor`, un loader llama `getActiveOrder`; si hay pedido en curso, redirige a `.../navegacion`.
-- Toda pantalla lee estado desde el servidor vía TanStack Query; nada crítico en local state.
-- `localStorage` solo para preferencia de GPS.
+Si quieres avanzar hacia paridad con DoorDash, sugiero atacarlo en **4 fases**:
 
-### 7. Estilo
+- **Fase 4 — Onboarding + toggle online/offline + notificaciones push** (bloquea todo lo demás).
+- **Fase 5 — Pagos: wallet, historial, Stripe Connect, propinas.**
+- **Fase 6 — Rendimiento: ratings, métricas, batching, chat cliente-repartidor.**
+- **Fase 7 — Admin panel + KYC + tracking en vivo para el cliente.**
 
-- Botones ≥ 48px, texto ≥ 16px, alto contraste.
-- Colores de estado: verde (confirmado), ámbar (en curso), rojo (fallido).
-- Mapa ~65% de la altura, bottom sheet ~35% (expande al confirmar).
+Dime cuál fase quieres que planifique en detalle y armo el prompt de implementación.
 
-## Datos de prueba
+---
 
-Como no existe todavía flujo de creación de pedidos por parte de comercios/admin, incluyo un pequeño **seed manual** (via `supabase--insert` cuando esté aprobado): 2 pedidos `disponible` con 1 y 2 stops respectivamente, con coordenadas de tu ciudad, para poder probar el flujo end-to-end.
-
-## Fuera de alcance (para prompts posteriores)
-
-- Optimización automática del `sequence_number` (Routes API `computeRouteMatrix`).
-- Panel de admin / comercio para crear pedidos.
-- Pagos a repartidores (Stripe Connect).
-- Push notifications de nuevos pedidos.
-- Chat en vivo repartidor ↔ cliente.
-
-## Detalles técnicos
-
-- **Mapas**: uso el connector `google_maps` ya conectado. Script cargado con `loading=async` + callback global, `google.maps.Marker` (no `AdvancedMarkerElement`), sin `mapId`. Routes API (`routes/directions/v2:computeRoutes`) vía gateway desde una server function para distancia/tiempo — nunca desde el browser con la key server.
-- **Geolocalización**: `navigator.geolocation.watchPosition` con fallback si el usuario deniega (usa dirección de pickup como centro).
-- **Deep links GPS**: helpers puros en `src/lib/gps-deeplinks.ts`, detección `iOS`/`Android` por `navigator.userAgent`.
-- **Storage**: bucket `delivery-proofs` privado, path `{driver_id}/{stop_id}/{timestamp}.jpg`.
-- **RLS**: policies con `has_role(auth.uid(), 'repartidor')` + `driver_id = auth.uid()`.
-
-```text
-/_authenticated/repartidor
-  ├─ /                          lista disponibles + redirect si activo
-  ├─ /pedido/$id/resumen        Comenzar
-  ├─ /pedido/$id/navegacion     mapa + bottom sheet (loop de stops)
-  └─ /pedido/$id/completado     resumen + volver
-```
-
-## ¿Confirmas?
-
-Este es un módulo grande. Si querés, lo puedo trocear aún más y hacer solo:
-
-- **3a**: modelo de datos + server functions + seed + lista de pedidos disponibles + aceptar + resumen.
-- **3b**: pantalla de navegación con mapa + deep links GPS.
-- **3c**: confirmación con pruebas (foto/firma/código) + excepciones + pantalla de cierre + persistencia.
-
-Decime si prefieres 3a / 3b / 3c por separado o todo de una.
+### Respuesta corta
+**No, no está completo.** Lo que tienes es un MVP muy sólido del flujo *"acepto → navego → entrego"*, pero DoorDash Dasher tiene 4 capas más encima: onboarding guiado, programación/online-offline con push, pagos-wallet, y ratings/soporte. ¿Por cuál seguimos?
