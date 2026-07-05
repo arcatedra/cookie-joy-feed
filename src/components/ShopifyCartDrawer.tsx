@@ -18,6 +18,7 @@ import { TipSelector, type TipValue } from "@/components/TipSelector";
 export function ShopifyCartDrawer() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [tip, setTip] = useState<TipValue>({ monto: 0, metodoPago: "app" });
   const items = useShopifyCartStore((s) => s.items);
   const isLoading = useShopifyCartStore((s) => s.isLoading);
   const isSyncing = useShopifyCartStore((s) => s.isSyncing);
