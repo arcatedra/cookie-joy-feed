@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, MapPin, DollarSign, Clock, Package, Bike, Radio, Bell, BellOff } from "lucide-react";
+import { Loader2, MapPin, DollarSign, Clock, Package, Bike, Radio, Bell, BellOff, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ import {
   pingLocation,
   savePushSubscription,
 } from "@/lib/courier.functions";
+import { BatchSuggestionDialog } from "@/components/courier/BatchSuggestionDialog";
 
 export const Route = createFileRoute("/_authenticated/repartidor/")({
   component: RepartidorHome,
