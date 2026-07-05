@@ -57,68 +57,119 @@ function RepartidoresLanding() {
     <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-[#c8862e]/30 bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f] to-[#0f2338] text-white">
-        <div className="mx-auto max-w-5xl px-4 py-16 md:px-6 md:py-24">
+        {/* Decorative glow */}
+        <div className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-[#E6C35C]/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-24 size-96 rounded-full bg-[#E6C35C]/5 blur-3xl" />
+
+        <div className="relative mx-auto max-w-5xl px-4 py-14 md:px-6 md:py-20">
           <Badge className="mb-4 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#E6C35C]">
-            Programa de repartidores
+            <Zap className="mr-1 size-3.5" /> Postúlate en 3 minutos
           </Badge>
-          <h1 className="font-serif text-4xl font-black leading-tight md:text-6xl">
-            Gana dinero repartiendo con{" "}
-            <span className="text-[#E6C35C]">Hazorex</span>
+
+          <h1 className="font-serif text-4xl font-black leading-[1.05] md:text-6xl">
+            Gana hasta{" "}
+            <span className="text-[#E6C35C]">$25/hora</span>
+            <br className="hidden md:block" />
+            repartiendo con Hazorex
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/85 md:text-xl">
-            Horarios flexibles, pagos semanales y un proceso de aprobación transparente.
-            Elige tu vehículo, sube tus documentos y empieza a repartir.
+
+          <p className="mt-5 max-w-2xl text-lg text-white/85 md:text-xl">
+            Tú manejas tu tiempo, nosotros los pedidos. Solo necesitas{" "}
+            <span className="font-semibold text-[#E6C35C]">moto o auto</span>,
+            licencia vigente y ganas de rodar.
           </p>
 
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <ApplyCta
               authLoading={authLoading}
               isLoggedIn={!!user}
               driver={driver ?? null}
               driverLoading={driverLoading}
             />
+            <a href="#requisitos" className="text-sm text-white/70 underline-offset-4 hover:text-[#E6C35C] hover:underline">
+              Ver requisitos →
+            </a>
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-white/70">
-            <div className="flex items-center gap-2">
-              <Clock className="size-4 text-[#E6C35C]" /> Horarios flexibles
+          {/* Trust bar */}
+          <div className="mt-10 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 sm:grid-cols-4">
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <Clock className="size-4 shrink-0 text-[#E6C35C]" /> Horarios flexibles
             </div>
-            <div className="flex items-center gap-2">
-              <DollarSign className="size-4 text-[#E6C35C]" /> Pagos semanales
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <DollarSign className="size-4 shrink-0 text-[#E6C35C]" /> Pagos semanales
             </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="size-4 text-[#E6C35C]" /> Proceso verificado
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <ShieldCheck className="size-4 shrink-0 text-[#E6C35C]" /> Sin cuota inicial
+            </div>
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <CheckCircle2 className="size-4 shrink-0 text-[#E6C35C]" /> Aprobación en 48 h
             </div>
           </div>
         </div>
       </section>
 
-      {/* VEHÍCULOS */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-6">
-        <h2 className="mb-2 text-center font-serif text-3xl font-bold">
-          Reparte con lo que tengas
-        </h2>
-        <p className="mx-auto mb-10 max-w-2xl text-center text-[#4a3525]">
-          Aceptamos varios tipos de vehículo. Solo pedimos documentos según lo que uses.
-        </p>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      {/* VEHÍCULOS — solo motorizados */}
+      <section id="requisitos" className="mx-auto max-w-5xl px-4 py-14 md:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <Badge variant="outline" className="mb-3 border-[#1e3a5f]/20 bg-white text-[#1e3a5f]">
+            Vehículos aceptados
+          </Badge>
+          <h2 className="mb-3 font-serif text-3xl font-bold md:text-4xl">
+            Reparte en moto o auto
+          </h2>
+          <p className="mb-10 text-[#4a3525]">
+            Para garantizar entregas rápidas y seguras, solo aceptamos vehículos motorizados.
+            Elige el tuyo y te pedimos solo los documentos correspondientes.
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
           {[
-            { icon: Bike, label: "Bicicleta" },
-            { icon: Bike, label: "Moto" },
-            { icon: Car, label: "Auto" },
-            { icon: Footprints, label: "A pie" },
-          ].map(({ icon: Icon, label }) => (
-            <Card key={label} className="border-[#c8862e]/30 bg-white">
-              <CardContent className="flex flex-col items-center gap-3 p-6">
-                <div className="grid size-14 place-items-center rounded-full bg-[#1e3a5f] text-[#E6C35C]">
-                  <Icon className="size-7" />
+            {
+              icon: Bike,
+              label: "Moto",
+              desc: "Ideal para tráfico denso. Entregas más rápidas.",
+              perks: ["Licencia A", "SOAT vigente", "Casco"],
+            },
+            {
+              icon: Car,
+              label: "Auto",
+              desc: "Perfecto para pedidos grandes y clima variable.",
+              perks: ["Licencia B", "Seguro vigente", "Revisión al día"],
+            },
+          ].map(({ icon: Icon, label, desc, perks }) => (
+            <Card
+              key={label}
+              className="group relative overflow-hidden border-[#c8862e]/30 bg-white transition hover:border-[#E6C35C] hover:shadow-lg"
+            >
+              <CardContent className="flex flex-col gap-4 p-6">
+                <div className="flex items-center gap-4">
+                  <div className="grid size-14 place-items-center rounded-full bg-[#1e3a5f] text-[#E6C35C] transition group-hover:scale-105">
+                    <Icon className="size-7" />
+                  </div>
+                  <div>
+                    <p className="font-serif text-xl font-bold text-[#1e3a5f]">{label}</p>
+                    <p className="text-sm text-[#4a3525]">{desc}</p>
+                  </div>
                 </div>
-                <p className="font-serif text-sm font-semibold text-[#1e3a5f]">{label}</p>
+                <ul className="grid gap-1.5 border-t border-[#c8862e]/20 pt-3 text-sm text-[#4a3525]">
+                  {perks.map((p) => (
+                    <li key={p} className="flex items-center gap-2">
+                      <CheckCircle2 className="size-4 text-[#1e3a5f]" /> {p}
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-[#4a3525]/70">
+          No aceptamos entregas a pie ni en bicicleta por motivos de tiempo de entrega y cobertura de zona.
+        </p>
       </section>
+
 
       {/* CÓMO FUNCIONA */}
       <section className="border-t border-[#c8862e]/20 bg-white">
