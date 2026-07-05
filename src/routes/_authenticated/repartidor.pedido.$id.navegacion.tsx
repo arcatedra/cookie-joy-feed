@@ -561,7 +561,7 @@ function ConfirmSheet({
   );
 }
 
-function SignaturePad({ canvasRef }: { canvasRef: React.RefObject<HTMLCanvasElement> }) {
+function SignaturePad({ canvasRef }: { canvasRef: React.RefObject<HTMLCanvasElement | null> }) {
   const drawingRef = useRef(false);
   useEffect(() => {
     const c = canvasRef.current;

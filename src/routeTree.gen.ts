@@ -61,6 +61,7 @@ import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/pu
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
 import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
+import { Route as AuthenticatedRepartidorPedidoIdNavegacionRouteImport } from './routes/_authenticated/repartidor.pedido.$id.navegacion'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
@@ -339,6 +340,12 @@ const AuthenticatedRepartidorPedidoIdResumenRoute =
     path: '/repartidor/pedido/$id/resumen',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRepartidorPedidoIdNavegacionRoute =
+  AuthenticatedRepartidorPedidoIdNavegacionRouteImport.update({
+    id: '/repartidor/pedido/$id/navegacion',
+    path: '/repartidor/pedido/$id/navegacion',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -391,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/repartidor/pedido/$id/navegacion': typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   '/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRoutesByTo {
@@ -444,6 +452,7 @@ export interface FileRoutesByTo {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/repartidor/pedido/$id/navegacion': typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   '/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRoutesById {
@@ -499,6 +508,7 @@ export interface FileRoutesById {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/_authenticated/repartidor/pedido/$id/navegacion': typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   '/_authenticated/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRouteTypes {
@@ -554,6 +564,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/repartidor/pedido/$id/navegacion'
     | '/repartidor/pedido/$id/resumen'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -607,6 +618,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/repartidor/pedido/$id/navegacion'
     | '/repartidor/pedido/$id/resumen'
   id:
     | '__root__'
@@ -661,6 +673,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/_authenticated/repartidor/pedido/$id/navegacion'
     | '/_authenticated/repartidor/pedido/$id/resumen'
   fileRoutesById: FileRoutesById
 }
@@ -1075,6 +1088,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdResumenRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor/pedido/$id/navegacion': {
+      id: '/_authenticated/repartidor/pedido/$id/navegacion'
+      path: '/repartidor/pedido/$id/navegacion'
+      fullPath: '/repartidor/pedido/$id/navegacion'
+      preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -1087,6 +1107,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
+  AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 
@@ -1099,6 +1120,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
+  AuthenticatedRepartidorPedidoIdNavegacionRoute:
+    AuthenticatedRepartidorPedidoIdNavegacionRoute,
   AuthenticatedRepartidorPedidoIdResumenRoute:
     AuthenticatedRepartidorPedidoIdResumenRoute,
 }
