@@ -51,6 +51,7 @@ import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
+import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -286,6 +287,12 @@ const AuthenticatedAdminSecurityRoute =
     path: '/admin/security',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminRepartidoresRoute =
+  AuthenticatedAdminRepartidoresRouteImport.update({
+    id: '/admin/repartidores',
+    path: '/admin/repartidores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminDeliveriesRoute =
   AuthenticatedAdminDeliveriesRouteImport.update({
     id: '/admin/deliveries',
@@ -414,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -473,6 +481,7 @@ export interface FileRoutesByTo {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -534,6 +543,7 @@ export interface FileRoutesById {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -595,6 +605,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
+    | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
@@ -654,6 +665,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
+    | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
@@ -714,6 +726,7 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/admin/deliveries'
+    | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
@@ -1083,6 +1096,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/repartidores': {
+      id: '/_authenticated/admin/repartidores'
+      path: '/admin/repartidores'
+      fullPath: '/admin/repartidores'
+      preLoaderRoute: typeof AuthenticatedAdminRepartidoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/deliveries': {
       id: '/_authenticated/admin/deliveries'
       path: '/admin/deliveries'
@@ -1202,6 +1222,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
+  AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -1220,6 +1241,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
+  AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
