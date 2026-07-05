@@ -1,88 +1,81 @@
-# Comparativa: Hazorex Repartidores vs DoorDash Dasher
 
-Tu módulo ya cubre lo esencial (landing, aplicación, panel, navegación, pruebas de entrega). Pero para igualar a DoorDash Dasher en **experiencia y confianza**, todavía faltan varias piezas clave. Te las agrupo por prioridad.
+# Batching + Optimización de rutas con Google Maps
 
----
+Usar el conector **Google Maps Platform** para agrupar pedidos cercanos automáticamente y calcular la ruta óptima (multi-stop) usando la Routes API. Esto reemplaza el batching manual (Haversine puro) con optimización real de Google.
 
-## 🔴 Bloqueadores para paridad real con DoorDash
+## 1. Conectar Google Maps Platform
 
-1. **Onboarding guiado post-aprobación**
-   - Checklist "Primeros pasos" (subir foto de perfil, aceptar acuerdo de repartidor, configurar método de cobro, tutorial interactivo).
-   - Video/tour de 60s explicando cómo funciona el panel.
-   - Estado "Aprobado pero no activado" hasta completar checklist.
+Vincular el connector `google_maps` al proyecto vía `standard_connectors--connect`. Esto inyecta:
+- `GOOGLE_MAPS_API_KEY` (server, para el gateway)
+- `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY` (browser, para mapas)
+- `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID`
 
-2. **Programación de turnos ("Dash Now" vs "Schedule")**
-   - Toggle **"En línea / Fuera de línea"** con geolocalización activa.
-   - Calendario semanal para reservar bloques de horario en zonas.
-   - Mapa de calor de demanda por zona/hora (Peak Pay).
+## 2. Server functions — `src/lib/batching.functions.ts`
 
-3. **Sistema de pagos al repartidor**
-   - Wallet interna con balance, historial, próximo pago semanal.
-   - "Fast Pay" / cobro instantáneo (integración Stripe Connect o similar).
-   - Desglose por pedido: base + propina + bonos + km.
-   - Comprobantes descargables (PDF) para impuestos.
+Tres funciones protegidas con `requireSupabaseAuth`:
 
-4. **Sistema de calificaciones y rendimiento**
-   - Rating promedio (últimos 100 pedidos).
-   - Tasa de aceptación, tasa de finalización, puntualidad.
-   - Umbrales para acceso a beneficios (Top Dasher = Repartidor Élite).
-   - Feedback de clientes visible al repartidor.
+- **`suggestBatch({ orderId })`** — Devuelve pedidos candidatos para agrupar con el pedido dado:
+  - Filtra `courier_orders` con estado `pendiente` o `asignado`, sin `batch_id`, dentro de un radio de ~1.5 km del pickup (Haversine inicial para reducir candidatos).
+  - Llama a **Routes API** (`/routes/directions/v2:computeRoutes`) con waypoints intermedios y `optimizeWaypointOrder: true` para obtener orden óptimo, distancia total y duración.
+  - Devuelve orden sugerido + tiempo estimado + ahorro vs entregas separadas.
 
-5. **Notificaciones push en tiempo real**
-   - Nuevo pedido disponible (con sonido + vibración).
-   - Cambios de estado del pedido, mensajes del cliente/soporte.
-   - Actualmente el panel es solo pull; DoorDash es push.
+- **`createBatch({ orderIds })`** — Confirma el agrupamiento:
+  - Genera `batch_id` (uuid), asigna a los pedidos con `batch_position` según el orden optimizado.
+  - Solo permitido si el driver ya está asignado a todos los pedidos (o ninguno).
 
----
+- **`getOptimizedRoute({ batchId | orderId })`** — Para el repartidor en ruta:
+  - Recolecta todos los stops (`courier_order_stops`) del batch.
+  - Llama a Routes API con `travelMode: DRIVE`, `origin` = ubicación actual del driver, `intermediates` = pickups + dropoffs restantes, `optimizeWaypointOrder: true`.
+  - Devuelve polyline codificada, orden de stops, ETA por parada.
 
-## 🟡 Funcionalidad importante que falta
+Todas las llamadas a Google pasan por el gateway (`https://connector-gateway.lovable.dev/google_maps/routes/...`) con `Authorization: Bearer $LOVABLE_API_KEY` + `X-Connection-Api-Key: $GOOGLE_MAPS_API_KEY`.
 
-6. **Chat en vivo cliente ↔ repartidor** (enmascarado, sin exponer teléfonos reales).
-7. **Soporte 24/7 dentro de la app** (chat con agente + FAQ contextual por estado del pedido).
-8. **Detalles de recolección más ricos**: foto del comercio, instrucciones del negocio, nombre del encargado, código de recogida.
-9. **Batching / stacked orders**: aceptar 2 pedidos cercanos a la vez (DoorDash lo hace automáticamente).
-10. **Cancelación con motivo tipificado** y política clara (afecta métricas).
-11. **Historial de pedidos** con filtros por fecha, ganancia, distancia.
-12. **Modo "cerca de mi zona"**: radio configurable de pedidos aceptables.
-13. **Estimación de ganancia + distancia + tiempo ANTES de aceptar** (ya está parcial; falta distancia real via Routes API en vez de estimado).
+## 3. UI Repartidor — nueva sección "Batching"
 
----
+En `/repartidor/index.tsx`, cuando hay >1 pedido pendiente cercano:
+- Card "🎯 Agrupa entregas cercanas" con botón "Ver sugerencia".
+- Dialog con lista de pedidos sugeridos, distancia total, tiempo estimado, ahorro (%). Botón "Aceptar batch" llama a `createBatch`.
 
-## 🟢 Detalles de pulido (UX)
+En `/repartidor/pedido/$id/navegacion.tsx`:
+- Si el pedido tiene `batch_id`, mostrar barra superior "Batch de N entregas — Parada X de Y".
+- Botón "Ver ruta completa" abre un mapa con la ruta optimizada.
 
-14. Icono/badge de repartidor verificado, antigüedad y nivel.
-15. Referidos: "Invita a un amigo, gana $X" (DoorDash lo usa fuerte para crecer).
-16. Centro de recompensas / logros (gamificación).
-17. Ajustes: vehículo activo del día, idioma, notificaciones granulares.
-18. Modo oscuro nativo en el panel (repartidores trabajan de noche).
-19. Widget "próximo pago" siempre visible en el header del panel.
-20. Landing: agregar sección de testimonios reales, calculadora de ingresos por zona, FAQ, requisitos legales por país.
+## 4. Mapa real en navegación y tracking
 
----
+Reemplazar el placeholder OpenStreetMap actual por **Google Maps JS API** (browser key):
+- Componente `<GoogleMapView>` en `src/components/courier/GoogleMapView.tsx`.
+- Carga async con `callback=initMap`, `channel=VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID`.
+- Renderiza polyline decodificada de la Routes API + markers para cada stop (pickup/dropoff) + marker del driver.
+- Usado en:
+  - `/repartidor/pedido/$id/navegacion.tsx` (vista del repartidor)
+  - `/pedido/$id/seguimiento.tsx` (vista del cliente — solo driver + destino)
 
-## 🔵 Infraestructura que aún no existe
+## 5. Migración de DB
 
-- **Google Maps real** (hoy usas OpenStreetMap embed). Para paridad necesitas Maps JS API + Routes API + Places autocomplete.
-- **Tracking GPS en background** enviado al cliente (mapa en vivo del pedido).
-- **Firma digital de contrato de repartidor** (acuerdo independiente + T&C).
-- **Verificación de identidad** (KYC: foto de cédula + selfie con liveness).
-- **Verificación de vehículo** (foto de placa, SOAT vigente, revisión técnica).
-- **Panel admin** para aprobar solicitudes, ver flota en vivo, resolver disputas.
+Solo un ajuste menor:
+- Índice en `courier_orders(status, batch_id, pickup_lat, pickup_lng)` para acelerar búsqueda de candidatos.
+- Función RPC `nearby_batchable_orders(_order_id uuid, _radius_km numeric)` que devuelve candidatos usando earthdistance (o cálculo Haversine en SQL) para evitar traer todos los pedidos al server.
 
----
+## Detalles técnicos
 
-## Recomendación de próximo paso
+- **Costos**: Routes API con optimización de waypoints cuesta más ($10/1000 llamadas vs $5). Cachear resultado de `suggestBatch` por 60s en memoria del handler.
+- **Límite de waypoints**: Routes API acepta hasta 25 intermediates — batch máximo de 5 pedidos (2 stops c/u = 10 intermediates + origen).
+- **Fallback**: si el gateway falla, `getOptimizedRoute` devuelve el orden secuencial actual sin polyline, y la UI muestra ruta línea recta.
+- **Prohibited territories**: Google Maps no funciona en ciertos países (Cuba, Irán, etc.). Detectar error y mostrar mensaje al admin.
 
-Si quieres avanzar hacia paridad con DoorDash, sugiero atacarlo en **4 fases**:
+## Archivos a crear/editar
 
-- **Fase 4 — Onboarding + toggle online/offline + notificaciones push** (bloquea todo lo demás).
-- **Fase 5 — Pagos: wallet, historial, Stripe Connect, propinas.**
-- **Fase 6 — Rendimiento: ratings, métricas, batching, chat cliente-repartidor.**
-- **Fase 7 — Admin panel + KYC + tracking en vivo para el cliente.**
+**Nuevos:**
+- `src/lib/batching.functions.ts`
+- `src/components/courier/GoogleMapView.tsx`
+- `src/components/courier/BatchSuggestionDialog.tsx`
+- `supabase/migrations/…_batching_indexes.sql`
 
-Dime cuál fase quieres que planifique en detalle y armo el prompt de implementación.
+**Editados:**
+- `src/routes/_authenticated/repartidor.index.tsx` (card de sugerencia)
+- `src/routes/_authenticated/repartidor.pedido.$id.navegacion.tsx` (mapa Google + barra batch)
+- `src/routes/_authenticated/pedido.$id.seguimiento.tsx` (mapa Google)
 
----
+## Antes de implementar
 
-### Respuesta corta
-**No, no está completo.** Lo que tienes es un MVP muy sólido del flujo *"acepto → navego → entrego"*, pero DoorDash Dasher tiene 4 capas más encima: onboarding guiado, programación/online-offline con push, pagos-wallet, y ratings/soporte. ¿Por cuál seguimos?
+Necesito que confirmes conectar **Google Maps Platform** al proyecto (te lo pediré con el diálogo del connector al arrancar la implementación). Sin el connector vinculado, la Routes API no responde.
