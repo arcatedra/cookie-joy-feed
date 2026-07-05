@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
+import { CartWeightTracker } from "@/components/CartWeightTracker";
 
 export function ShopifyCartDrawer() {
   const { t } = useTranslation();
