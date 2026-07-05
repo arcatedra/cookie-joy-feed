@@ -172,6 +172,8 @@ export type Database = {
       courier_orders: {
         Row: {
           accepted_at: string | null
+          batch_id: string | null
+          batch_position: number | null
           cancellation_reason: string | null
           completed_at: string | null
           created_at: string
@@ -190,6 +192,8 @@ export type Database = {
         }
         Insert: {
           accepted_at?: string | null
+          batch_id?: string | null
+          batch_position?: number | null
           cancellation_reason?: string | null
           completed_at?: string | null
           created_at?: string
@@ -208,6 +212,8 @@ export type Database = {
         }
         Update: {
           accepted_at?: string | null
+          batch_id?: string | null
+          batch_position?: number | null
           cancellation_reason?: string | null
           completed_at?: string | null
           created_at?: string
@@ -708,6 +714,47 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string
+          customer_id: string
+          driver_id: string
+          id: string
+          order_id: string
+          stars: number
+          tags: string[] | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          customer_id: string
+          driver_id: string
+          id?: string
+          order_id: string
+          stars: number
+          tags?: string[] | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          customer_id?: string
+          driver_id?: string
+          id?: string
+          order_id?: string
+          stars?: number
+          tags?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_ratings_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "courier_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       driver_vehicles: {
         Row: {
           brand: string | null
@@ -1059,6 +1106,47 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_quick_reply: boolean
+          order_id: string
+          read_at: string | null
+          sender_id: string
+          sender_role: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          is_quick_reply?: boolean
+          order_id: string
+          read_at?: string | null
+          sender_id: string
+          sender_role: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_quick_reply?: boolean
+          order_id?: string
+          read_at?: string | null
+          sender_id?: string
+          sender_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_messages_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "courier_orders"
             referencedColumns: ["id"]
           },
         ]

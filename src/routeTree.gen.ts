@@ -46,6 +46,7 @@ import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/do
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
+import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
@@ -62,6 +63,7 @@ import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
+import { Route as AuthenticatedPedidoIdCalificarRouteImport } from './routes/_authenticated/pedido.$id.calificar'
 import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
 import { Route as AuthenticatedRepartidorPedidoIdNavegacionRouteImport } from './routes/_authenticated/repartidor.pedido.$id.navegacion'
 import { Route as AuthenticatedRepartidorPedidoIdCompletadoRouteImport } from './routes/_authenticated/repartidor.pedido.$id.completado'
@@ -254,6 +256,12 @@ const AuthenticatedRepartidorOnboardingRoute =
     path: '/repartidor/onboarding',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRepartidorCalificacionesRoute =
+  AuthenticatedRepartidorCalificacionesRouteImport.update({
+    id: '/repartidor/calificaciones',
+    path: '/repartidor/calificaciones',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -349,6 +357,12 @@ const ApiPublicHooksBackupCsvRoute = ApiPublicHooksBackupCsvRouteImport.update({
   path: '/api/public/hooks/backup-csv',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPedidoIdCalificarRoute =
+  AuthenticatedPedidoIdCalificarRouteImport.update({
+    id: '/pedido/$id/calificar',
+    path: '/pedido/$id/calificar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorPedidoIdResumenRoute =
   AuthenticatedRepartidorPedidoIdResumenRouteImport.update({
     id: '/repartidor/pedido/$id/resumen',
@@ -404,12 +418,14 @@ export interface FileRoutesByFullPath {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
+  '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -461,12 +477,14 @@ export interface FileRoutesByTo {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
+  '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -520,12 +538,14 @@ export interface FileRoutesById {
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
+  '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -579,12 +599,14 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/repartidor/calificaciones'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/repartidor/'
+    | '/pedido/$id/calificar'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -636,12 +658,14 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/repartidor/calificaciones'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/repartidor'
+    | '/pedido/$id/calificar'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -694,12 +718,14 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
+    | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/_authenticated/repartidor/'
+    | '/_authenticated/pedido/$id/calificar'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -1022,6 +1048,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor/calificaciones': {
+      id: '/_authenticated/repartidor/calificaciones'
+      path: '/repartidor/calificaciones'
+      fullPath: '/repartidor/calificaciones'
+      preLoaderRoute: typeof AuthenticatedRepartidorCalificacionesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -1134,6 +1167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBackupCsvRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/pedido/$id/calificar': {
+      id: '/_authenticated/pedido/$id/calificar'
+      path: '/pedido/$id/calificar'
+      fullPath: '/pedido/$id/calificar'
+      preLoaderRoute: typeof AuthenticatedPedidoIdCalificarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/pedido/$id/resumen': {
       id: '/_authenticated/repartidor/pedido/$id/resumen'
       path: '/repartidor/pedido/$id/resumen'
@@ -1166,9 +1206,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
+  AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
   AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
   AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
@@ -1182,10 +1224,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedRepartidorCalificacionesRoute:
+    AuthenticatedRepartidorCalificacionesRoute,
   AuthenticatedRepartidorOnboardingRoute:
     AuthenticatedRepartidorOnboardingRoute,
   AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
+  AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
   AuthenticatedRepartidorPedidoIdCompletadoRoute:
     AuthenticatedRepartidorPedidoIdCompletadoRoute,
   AuthenticatedRepartidorPedidoIdNavegacionRoute:

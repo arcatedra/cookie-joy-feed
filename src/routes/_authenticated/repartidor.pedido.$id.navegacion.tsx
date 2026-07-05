@@ -45,6 +45,7 @@ import {
   setStoredGpsPref,
   type GpsApp,
 } from "@/lib/gps-deeplinks";
+import { ChatDrawer } from "@/components/courier/ChatDrawer";
 
 export const Route = createFileRoute("/_authenticated/repartidor/pedido/$id/navegacion")({
   component: NavegacionPedido,
@@ -157,6 +158,7 @@ function NavegacionPedido() {
   // Confirm sheet
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [problemOpen, setProblemOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   if (detail.isLoading) {
     return (
@@ -221,19 +223,19 @@ function NavegacionPedido() {
 
           <div className="flex gap-2">
             {target.contactPhone && (
-              <>
-                <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
-                  <a href={`tel:${target.contactPhone}`}>
-                    <Phone className="mr-2 size-4" /> Llamar
-                  </a>
-                </Button>
-                <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
-                  <a href={`sms:${target.contactPhone}`}>
-                    <MessageSquare className="mr-2 size-4" /> Mensaje
-                  </a>
-                </Button>
-              </>
+              <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
+                <a href={`tel:${target.contactPhone}`}>
+                  <Phone className="mr-2 size-4" /> Llamar
+                </a>
+              </Button>
             )}
+            <Button
+              variant="outline"
+              className="h-11 flex-1 border-[#c8862e]/40"
+              onClick={() => setChatOpen(true)}
+            >
+              <MessageSquare className="mr-2 size-4" /> Chat
+            </Button>
           </div>
 
           <Button
@@ -291,6 +293,7 @@ function NavegacionPedido() {
           qc.invalidateQueries({ queryKey: ["courier", "order", id] });
         }}
       />
+      <ChatDrawer orderId={id} role="driver" open={chatOpen} onOpenChange={setChatOpen} />
     </div>
   );
 }
