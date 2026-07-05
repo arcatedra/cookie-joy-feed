@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { getOrderTracking } from "@/lib/tracking.functions";
 import { haversineKm } from "@/lib/gps-deeplinks";
+import { GoogleMapView } from "@/components/courier/GoogleMapView";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id/seguimiento")({
   component: OrderTracking,
@@ -193,16 +194,9 @@ function OrderTracking() {
 }
 
 function MapView({ driver, target }: { driver: { lat: number; lng: number } | null; target: { lat: number; lng: number } }) {
-  const center = driver ?? target;
-  const d = 0.015;
-  const bbox = `${center.lng - d},${center.lat - d},${center.lng + d},${center.lat + d}`;
-  const marker = `${target.lat},${target.lng}`;
-  return (
-    <iframe
-      title="Mapa"
-      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${marker}`}
-      className="h-full w-full border-0"
-      loading="lazy"
-    />
-  );
+  const markers = [
+    ...(driver ? [{ position: driver, color: "driver" as const, title: "Repartidor" }] : []),
+    { position: target, color: "target" as const, title: "Destino" },
+  ];
+  return <GoogleMapView markers={markers} className="h-full w-full" />;
 }

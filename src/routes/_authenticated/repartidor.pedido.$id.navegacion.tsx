@@ -46,6 +46,7 @@ import {
   type GpsApp,
 } from "@/lib/gps-deeplinks";
 import { ChatDrawer } from "@/components/courier/ChatDrawer";
+import { GoogleMapView } from "@/components/courier/GoogleMapView";
 
 export const Route = createFileRoute("/_authenticated/repartidor/pedido/$id/navegacion")({
   component: NavegacionPedido,
@@ -195,6 +196,11 @@ function NavegacionPedido() {
               {distKm < 1 ? `${Math.round(distKm * 1000)} m` : `${distKm.toFixed(1)} km`}
             </Badge>
           )}
+          {detail.data.order.batch_id && detail.data.order.batch_position != null && (
+            <Badge className="bg-[#c8862e] text-white shadow-lg">
+              🎯 Batch · Parada {detail.data.order.batch_position}
+            </Badge>
+          )}
         </div>
       </div>
 
@@ -298,7 +304,7 @@ function NavegacionPedido() {
   );
 }
 
-/** Static OpenStreetMap preview (no key required). */
+/** Google Maps preview showing driver + target. */
 function MapPreview({
   driver,
   target,
@@ -306,20 +312,13 @@ function MapPreview({
   driver: { lat: number; lng: number } | null;
   target: { lat: number; lng: number };
 }) {
-  const center = driver ?? target;
-  // Small bbox around center
-  const d = 0.01;
-  const bbox = `${center.lng - d},${center.lat - d},${center.lng + d},${center.lat + d}`;
-  const marker = `${target.lat},${target.lng}`;
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${marker}`;
+  const markers = [
+    ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
+    { position: target, color: "target" as const, title: "Destino" },
+  ];
   return (
     <div className="relative h-full w-full bg-[#0f2338]">
-      <iframe
-        title="Mapa"
-        src={src}
-        className="h-full w-full border-0"
-        loading="lazy"
-      />
+      <GoogleMapView markers={markers} className="h-full w-full" />
     </div>
   );
 }

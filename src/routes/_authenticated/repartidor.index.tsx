@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, MapPin, DollarSign, Clock, Package, Bike, Radio, Bell, BellOff } from "lucide-react";
+import { Loader2, MapPin, DollarSign, Clock, Package, Bike, Radio, Bell, BellOff, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ import {
   pingLocation,
   savePushSubscription,
 } from "@/lib/courier.functions";
+import { BatchSuggestionDialog } from "@/components/courier/BatchSuggestionDialog";
 
 export const Route = createFileRoute("/_authenticated/repartidor/")({
   component: RepartidorHome,
@@ -31,6 +32,7 @@ function RepartidorHome() {
   );
   const watchIdRef = useRef<number | null>(null);
   const dingRef = useRef<HTMLAudioElement | null>(null);
+  const [batchOrderId, setBatchOrderId] = useState<string | null>(null);
 
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
@@ -346,17 +348,27 @@ function RepartidorHome() {
                         <span className="flex items-center gap-1"><Clock className="size-3.5" /> ~{o.estimated_duration_minutes} min</span>
                         <span className="flex items-center gap-1"><DollarSign className="size-3.5" /> pago semanal</span>
                       </div>
-                      <Button
-                        className="h-12 w-full bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
-                        disabled={accept.isPending}
-                        onClick={() => accept.mutate(o.id)}
-                      >
-                        {accept.isPending && accept.variables === o.id ? (
-                          <><Loader2 className="mr-2 size-4 animate-spin" /> Aceptando…</>
-                        ) : (
-                          "Aceptar pedido"
-                        )}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          className="h-12 flex-1 bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
+                          disabled={accept.isPending}
+                          onClick={() => accept.mutate(o.id)}
+                        >
+                          {accept.isPending && accept.variables === o.id ? (
+                            <><Loader2 className="mr-2 size-4 animate-spin" /> Aceptando…</>
+                          ) : (
+                            "Aceptar"
+                          )}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="h-12 border-[#c8862e]/40 text-[#1e3a5f]"
+                          onClick={() => setBatchOrderId(o.id)}
+                          title="Ver pedidos cercanos para agrupar"
+                        >
+                          <Sparkles className="mr-1 size-4 text-[#c8862e]" /> Agrupar
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -371,6 +383,18 @@ function RepartidorHome() {
           </Link>
         </div>
       </main>
+      {batchOrderId && (
+        <BatchSuggestionDialog
+          open={!!batchOrderId}
+          onOpenChange={(v) => !v && setBatchOrderId(null)}
+          orderId={batchOrderId}
+          onAccepted={(_batchId) => {
+            qc.invalidateQueries({ queryKey: ["courier"] });
+            setBatchOrderId(null);
+            navigate({ to: "/repartidor/pedido/$id/navegacion", params: { id: batchOrderId } });
+          }}
+        />
+      )}
     </div>
   );
 }
