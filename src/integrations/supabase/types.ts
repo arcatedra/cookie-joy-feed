@@ -613,6 +613,7 @@ export type Database = {
       drivers: {
         Row: {
           address: string
+          agreement_accepted_at: string | null
           application_status: Database["public"]["Enums"]["driver_application_status"]
           approved_at: string | null
           approved_by: string | null
@@ -623,16 +624,24 @@ export type Database = {
           full_name: string
           id: string
           is_active: boolean
+          is_online: boolean
+          last_lat: number | null
+          last_lng: number | null
+          last_seen_at: string | null
+          onboarding_completed_at: string | null
           phone: string
           preferred_gps_app: string | null
           profile_photo_url: string | null
           rejected_at: string | null
           rejected_by: string | null
           rejection_reason: string | null
+          tutorial_completed_at: string | null
           updated_at: string
+          went_online_at: string | null
         }
         Insert: {
           address: string
+          agreement_accepted_at?: string | null
           application_status?: Database["public"]["Enums"]["driver_application_status"]
           approved_at?: string | null
           approved_by?: string | null
@@ -643,16 +652,24 @@ export type Database = {
           full_name: string
           id: string
           is_active?: boolean
+          is_online?: boolean
+          last_lat?: number | null
+          last_lng?: number | null
+          last_seen_at?: string | null
+          onboarding_completed_at?: string | null
           phone: string
           preferred_gps_app?: string | null
           profile_photo_url?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          tutorial_completed_at?: string | null
           updated_at?: string
+          went_online_at?: string | null
         }
         Update: {
           address?: string
+          agreement_accepted_at?: string | null
           application_status?: Database["public"]["Enums"]["driver_application_status"]
           approved_at?: string | null
           approved_by?: string | null
@@ -663,13 +680,20 @@ export type Database = {
           full_name?: string
           id?: string
           is_active?: boolean
+          is_online?: boolean
+          last_lat?: number | null
+          last_lng?: number | null
+          last_seen_at?: string | null
+          onboarding_completed_at?: string | null
           phone?: string
           preferred_gps_app?: string | null
           profile_photo_url?: string | null
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          tutorial_completed_at?: string | null
           updated_at?: string
+          went_online_at?: string | null
         }
         Relationships: []
       }
