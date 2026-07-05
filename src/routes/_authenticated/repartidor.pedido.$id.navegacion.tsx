@@ -46,6 +46,7 @@ import {
   type GpsApp,
 } from "@/lib/gps-deeplinks";
 import { ChatDrawer } from "@/components/courier/ChatDrawer";
+import { GoogleMapView } from "@/components/courier/GoogleMapView";
 
 export const Route = createFileRoute("/_authenticated/repartidor/pedido/$id/navegacion")({
   component: NavegacionPedido,
