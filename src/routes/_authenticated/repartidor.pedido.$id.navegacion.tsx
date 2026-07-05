@@ -223,19 +223,19 @@ function NavegacionPedido() {
 
           <div className="flex gap-2">
             {target.contactPhone && (
-              <>
-                <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
-                  <a href={`tel:${target.contactPhone}`}>
-                    <Phone className="mr-2 size-4" /> Llamar
-                  </a>
-                </Button>
-                <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
-                  <a href={`sms:${target.contactPhone}`}>
-                    <MessageSquare className="mr-2 size-4" /> Mensaje
-                  </a>
-                </Button>
-              </>
+              <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
+                <a href={`tel:${target.contactPhone}`}>
+                  <Phone className="mr-2 size-4" /> Llamar
+                </a>
+              </Button>
             )}
+            <Button
+              variant="outline"
+              className="h-11 flex-1 border-[#c8862e]/40"
+              onClick={() => setChatOpen(true)}
+            >
+              <MessageSquare className="mr-2 size-4" /> Chat
+            </Button>
           </div>
 
           <Button
