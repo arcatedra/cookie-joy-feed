@@ -193,16 +193,9 @@ function OrderTracking() {
 }
 
 function MapView({ driver, target }: { driver: { lat: number; lng: number } | null; target: { lat: number; lng: number } }) {
-  const center = driver ?? target;
-  const d = 0.015;
-  const bbox = `${center.lng - d},${center.lat - d},${center.lng + d},${center.lat + d}`;
-  const marker = `${target.lat},${target.lng}`;
-  return (
-    <iframe
-      title="Mapa"
-      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${marker}`}
-      className="h-full w-full border-0"
-      loading="lazy"
-    />
-  );
+  const markers = [
+    ...(driver ? [{ position: driver, color: "driver" as const, title: "Repartidor" }] : []),
+    { position: target, color: "target" as const, title: "Destino" },
+  ];
+  return <GoogleMapView markers={markers} className="h-full w-full" />;
 }
