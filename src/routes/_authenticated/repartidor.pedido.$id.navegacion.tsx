@@ -158,6 +158,7 @@ function NavegacionPedido() {
   // Confirm sheet
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [problemOpen, setProblemOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   if (detail.isLoading) {
     return (
