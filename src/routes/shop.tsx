@@ -99,12 +99,14 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
 
   const handleAdd = async () => {
     if (!variant) return;
+    const { toKilograms } = await import("@/lib/shopify");
     await addItem({
       product,
       variantId: variant.id,
       variantTitle: variant.title,
       price: variant.price,
       quantity: 1,
+      weightKg: toKilograms(variant.weight, variant.weightUnit),
       selectedOptions: variant.selectedOptions ?? [],
     });
   };

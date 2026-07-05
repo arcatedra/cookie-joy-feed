@@ -25,12 +25,26 @@ export interface ShopifyProduct {
           title: string;
           price: { amount: string; currencyCode: string };
           availableForSale: boolean;
+          weight?: number | null;
+          weightUnit?: string | null;
           selectedOptions: Array<{ name: string; value: string }>;
         };
       }>;
     };
     options: Array<{ name: string; values: string[] }>;
   };
+}
+
+/** Convert a Shopify variant weight to kilograms. */
+export function toKilograms(weight?: number | null, unit?: string | null): number {
+  if (!weight || weight <= 0) return 0;
+  switch ((unit ?? "KILOGRAMS").toUpperCase()) {
+    case "GRAMS": return weight / 1000;
+    case "POUNDS": return weight * 0.45359237;
+    case "OUNCES": return weight * 0.0283495231;
+    case "KILOGRAMS":
+    default: return weight;
+  }
 }
 
 export const PRODUCTS_QUERY = `
@@ -51,6 +65,8 @@ export const PRODUCTS_QUERY = `
                 title
                 price { amount currencyCode }
                 availableForSale
+                weight
+                weightUnit
                 selectedOptions { name value }
               }
             }
@@ -78,6 +94,8 @@ export const PRODUCT_BY_HANDLE_QUERY = `
             title
             price { amount currencyCode }
             availableForSale
+                weight
+                weightUnit
             selectedOptions { name value }
           }
         }
