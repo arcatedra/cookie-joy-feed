@@ -563,6 +563,151 @@ export type Database = {
           },
         ]
       }
+      driver_instant_payouts: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          driver_id: string
+          fee_amount: number
+          id: string
+          net_amount: number
+          payout_method_id: string | null
+          processed_at: string | null
+          reject_reason: string | null
+          requested_at: string
+          status: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          driver_id: string
+          fee_amount?: number
+          id?: string
+          net_amount: number
+          payout_method_id?: string | null
+          processed_at?: string | null
+          reject_reason?: string | null
+          requested_at?: string
+          status?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          driver_id?: string
+          fee_amount?: number
+          id?: string
+          net_amount?: number
+          payout_method_id?: string | null
+          processed_at?: string | null
+          reject_reason?: string | null
+          requested_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_instant_payouts_payout_method_id_fkey"
+            columns: ["payout_method_id"]
+            isOneToOne: false
+            referencedRelation: "driver_payout_methods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_order_earnings: {
+        Row: {
+          base_amount: number
+          bonus_amount: number
+          created_at: string
+          distance_amount: number
+          distance_km: number | null
+          driver_id: string
+          earned_at: string
+          id: string
+          notes: string | null
+          order_id: string
+          paid_out_at: string | null
+          tip_amount: number
+          total_amount: number
+        }
+        Insert: {
+          base_amount?: number
+          bonus_amount?: number
+          created_at?: string
+          distance_amount?: number
+          distance_km?: number | null
+          driver_id: string
+          earned_at?: string
+          id?: string
+          notes?: string | null
+          order_id: string
+          paid_out_at?: string | null
+          tip_amount?: number
+          total_amount?: number
+        }
+        Update: {
+          base_amount?: number
+          bonus_amount?: number
+          created_at?: string
+          distance_amount?: number
+          distance_km?: number | null
+          driver_id?: string
+          earned_at?: string
+          id?: string
+          notes?: string | null
+          order_id?: string
+          paid_out_at?: string | null
+          tip_amount?: number
+          total_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_order_earnings_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "courier_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_payout_methods: {
+        Row: {
+          account_details: Json
+          account_holder: string
+          created_at: string
+          display_label: string
+          driver_id: string
+          id: string
+          is_default: boolean
+          method_type: string
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          account_details?: Json
+          account_holder: string
+          created_at?: string
+          display_label: string
+          driver_id: string
+          id?: string
+          is_default?: boolean
+          method_type: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          account_details?: Json
+          account_holder?: string
+          created_at?: string
+          display_label?: string
+          driver_id?: string
+          id?: string
+          is_default?: boolean
+          method_type?: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       driver_vehicles: {
         Row: {
           brand: string | null

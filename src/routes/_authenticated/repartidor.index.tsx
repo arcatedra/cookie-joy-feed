@@ -238,6 +238,14 @@ function RepartidorHome() {
           <div className="flex items-center gap-3">
             <Bike className="size-6 text-[#1e3a5f]" />
             <h1 className="flex-1 font-serif text-xl font-bold text-[#1e3a5f]">Panel del repartidor</h1>
+            <Link
+              to="/repartidor/wallet"
+              className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-[#1e3a5f] hover:bg-[#f4f1ea]"
+              title="Ir a mi wallet"
+            >
+              <span className="hidden sm:inline">Wallet</span>
+              <span className="text-[#c8862e]">💰</span>
+            </Link>
             <Button
               size="sm"
               variant="ghost"
