@@ -383,6 +383,18 @@ function RepartidorHome() {
           </Link>
         </div>
       </main>
+      {batchOrderId && (
+        <BatchSuggestionDialog
+          open={!!batchOrderId}
+          onOpenChange={(v) => !v && setBatchOrderId(null)}
+          orderId={batchOrderId}
+          onAccepted={(_batchId) => {
+            qc.invalidateQueries({ queryKey: ["courier"] });
+            setBatchOrderId(null);
+            navigate({ to: "/repartidor/pedido/$id/navegacion", params: { id: batchOrderId } });
+          }}
+        />
+      )}
     </div>
   );
 }
