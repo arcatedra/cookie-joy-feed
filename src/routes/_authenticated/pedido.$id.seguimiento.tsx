@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { getOrderTracking } from "@/lib/tracking.functions";
 import { haversineKm } from "@/lib/gps-deeplinks";
+import { GoogleMapView } from "@/components/courier/GoogleMapView";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id/seguimiento")({
   component: OrderTracking,
