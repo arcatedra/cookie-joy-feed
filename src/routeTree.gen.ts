@@ -64,6 +64,7 @@ import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
+import { Route as AuthenticatedPedidoIdSeguimientoRouteImport } from './routes/_authenticated/pedido.$id.seguimiento'
 import { Route as AuthenticatedPedidoIdCalificarRouteImport } from './routes/_authenticated/pedido.$id.calificar'
 import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
 import { Route as AuthenticatedRepartidorPedidoIdNavegacionRouteImport } from './routes/_authenticated/repartidor.pedido.$id.navegacion'
@@ -364,6 +365,12 @@ const ApiPublicHooksBackupCsvRoute = ApiPublicHooksBackupCsvRouteImport.update({
   path: '/api/public/hooks/backup-csv',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPedidoIdSeguimientoRoute =
+  AuthenticatedPedidoIdSeguimientoRouteImport.update({
+    id: '/pedido/$id/seguimiento',
+    path: '/pedido/$id/seguimiento',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPedidoIdCalificarRoute =
   AuthenticatedPedidoIdCalificarRouteImport.update({
     id: '/pedido/$id/calificar',
@@ -434,6 +441,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -494,6 +502,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -556,6 +565,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -618,6 +628,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/repartidor/'
     | '/pedido/$id/calificar'
+    | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -678,6 +689,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/repartidor'
     | '/pedido/$id/calificar'
+    | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -739,6 +751,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/_authenticated/repartidor/'
     | '/_authenticated/pedido/$id/calificar'
+    | '/_authenticated/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -1187,6 +1200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBackupCsvRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/pedido/$id/seguimiento': {
+      id: '/_authenticated/pedido/$id/seguimiento'
+      path: '/pedido/$id/seguimiento'
+      fullPath: '/pedido/$id/seguimiento'
+      preLoaderRoute: typeof AuthenticatedPedidoIdSeguimientoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pedido/$id/calificar': {
       id: '/_authenticated/pedido/$id/calificar'
       path: '/pedido/$id/calificar'
@@ -1232,6 +1252,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
+  AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
   AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
   AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
@@ -1253,6 +1274,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
+  AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
   AuthenticatedRepartidorPedidoIdCompletadoRoute:
     AuthenticatedRepartidorPedidoIdCompletadoRoute,
   AuthenticatedRepartidorPedidoIdNavegacionRoute:
