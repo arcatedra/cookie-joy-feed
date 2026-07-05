@@ -60,6 +60,7 @@ import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
+import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
@@ -332,6 +333,12 @@ const ApiPublicHooksBackupCsvRoute = ApiPublicHooksBackupCsvRouteImport.update({
   path: '/api/public/hooks/backup-csv',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRepartidorPedidoIdResumenRoute =
+  AuthenticatedRepartidorPedidoIdResumenRouteImport.update({
+    id: '/repartidor/pedido/$id/resumen',
+    path: '/repartidor/pedido/$id/resumen',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -384,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -436,6 +444,7 @@ export interface FileRoutesByTo {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -490,6 +499,7 @@ export interface FileRoutesById {
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
+  '/_authenticated/repartidor/pedido/$id/resumen': typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -544,6 +554,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/repartidor/pedido/$id/resumen'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -596,6 +607,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/repartidor/pedido/$id/resumen'
   id:
     | '__root__'
     | '/'
@@ -649,6 +661,7 @@ export interface FileRouteTypes {
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
+    | '/_authenticated/repartidor/pedido/$id/resumen'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1055,6 +1068,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBackupCsvRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/repartidor/pedido/$id/resumen': {
+      id: '/_authenticated/repartidor/pedido/$id/resumen'
+      path: '/repartidor/pedido/$id/resumen'
+      fullPath: '/repartidor/pedido/$id/resumen'
+      preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdResumenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -1067,6 +1087,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
+  AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -1078,6 +1099,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
+  AuthenticatedRepartidorPedidoIdResumenRoute:
+    AuthenticatedRepartidorPedidoIdResumenRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
