@@ -139,8 +139,16 @@ export function ShopifyCartDrawer() {
                 </div>
               </div>
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+                <CartWeightTracker
+                  items={items}
+                  onRemoveHeaviest={() => {
+                    const heaviest = [...items].sort(
+                      (a, b) => (b.weightKg ?? 0) * b.quantity - (a.weightKg ?? 0) * a.quantity,
+                    )[0];
+                    if (heaviest) removeItem(heaviest.variantId);
+                  }}
+                />
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">{t("cartDrawer.total")}</span>
                   <span className="text-xl font-bold">
                     {items[0]?.price.currencyCode || "$"} {totalPrice.toFixed(2)}
                   </span>
