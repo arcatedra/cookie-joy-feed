@@ -279,7 +279,7 @@ function ApplyCta({
       >
         <Link
           to="/auth"
-          search={{ redirect: "/repartidores" } as never}
+          search={{ redirect: "/repartidores" }}
         >
           Postularme
         </Link>
