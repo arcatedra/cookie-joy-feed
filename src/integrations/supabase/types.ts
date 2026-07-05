@@ -824,9 +824,11 @@ export type Database = {
           phone: string
           preferred_gps_app: string | null
           profile_photo_url: string | null
+          rating: number
           rejected_at: string | null
           rejected_by: string | null
           rejection_reason: string | null
+          total_deliveries: number
           tutorial_completed_at: string | null
           updated_at: string
           went_online_at: string | null
@@ -852,9 +854,11 @@ export type Database = {
           phone: string
           preferred_gps_app?: string | null
           profile_photo_url?: string | null
+          rating?: number
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
           went_online_at?: string | null
@@ -880,9 +884,11 @@ export type Database = {
           phone?: string
           preferred_gps_app?: string | null
           profile_photo_url?: string | null
+          rating?: number
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
           went_online_at?: string | null

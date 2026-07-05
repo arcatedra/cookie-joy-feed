@@ -51,6 +51,8 @@ import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
+import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
+import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -63,6 +65,7 @@ import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/pub
 import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
+import { Route as AuthenticatedPedidoIdSeguimientoRouteImport } from './routes/_authenticated/pedido.$id.seguimiento'
 import { Route as AuthenticatedPedidoIdCalificarRouteImport } from './routes/_authenticated/pedido.$id.calificar'
 import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
 import { Route as AuthenticatedRepartidorPedidoIdNavegacionRouteImport } from './routes/_authenticated/repartidor.pedido.$id.navegacion'
@@ -286,6 +289,17 @@ const AuthenticatedAdminSecurityRoute =
     path: '/admin/security',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminRepartidoresRoute =
+  AuthenticatedAdminRepartidoresRouteImport.update({
+    id: '/admin/repartidores',
+    path: '/admin/repartidores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminLiveRoute = AuthenticatedAdminLiveRouteImport.update({
+  id: '/admin/live',
+  path: '/admin/live',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminDeliveriesRoute =
   AuthenticatedAdminDeliveriesRouteImport.update({
     id: '/admin/deliveries',
@@ -357,6 +371,12 @@ const ApiPublicHooksBackupCsvRoute = ApiPublicHooksBackupCsvRouteImport.update({
   path: '/api/public/hooks/backup-csv',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPedidoIdSeguimientoRoute =
+  AuthenticatedPedidoIdSeguimientoRouteImport.update({
+    id: '/pedido/$id/seguimiento',
+    path: '/pedido/$id/seguimiento',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPedidoIdCalificarRoute =
   AuthenticatedPedidoIdCalificarRouteImport.update({
     id: '/pedido/$id/calificar',
@@ -414,6 +434,8 @@ export interface FileRoutesByFullPath {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -426,6 +448,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -473,6 +496,8 @@ export interface FileRoutesByTo {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -485,6 +510,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -534,6 +560,8 @@ export interface FileRoutesById {
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -546,6 +574,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
+  '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -595,6 +624,8 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
+    | '/admin/live'
+    | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
@@ -607,6 +638,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/repartidor/'
     | '/pedido/$id/calificar'
+    | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -654,6 +686,8 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
+    | '/admin/live'
+    | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
@@ -666,6 +700,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/repartidor'
     | '/pedido/$id/calificar'
+    | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -714,6 +749,8 @@ export interface FileRouteTypes {
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/admin/deliveries'
+    | '/_authenticated/admin/live'
+    | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
@@ -726,6 +763,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/_authenticated/repartidor/'
     | '/_authenticated/pedido/$id/calificar'
+    | '/_authenticated/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -1083,6 +1121,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/repartidores': {
+      id: '/_authenticated/admin/repartidores'
+      path: '/admin/repartidores'
+      fullPath: '/admin/repartidores'
+      preLoaderRoute: typeof AuthenticatedAdminRepartidoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/live': {
+      id: '/_authenticated/admin/live'
+      path: '/admin/live'
+      fullPath: '/admin/live'
+      preLoaderRoute: typeof AuthenticatedAdminLiveRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/deliveries': {
       id: '/_authenticated/admin/deliveries'
       path: '/admin/deliveries'
@@ -1167,6 +1219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBackupCsvRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/pedido/$id/seguimiento': {
+      id: '/_authenticated/pedido/$id/seguimiento'
+      path: '/pedido/$id/seguimiento'
+      fullPath: '/pedido/$id/seguimiento'
+      preLoaderRoute: typeof AuthenticatedPedidoIdSeguimientoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pedido/$id/calificar': {
       id: '/_authenticated/pedido/$id/calificar'
       path: '/pedido/$id/calificar'
@@ -1202,6 +1261,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
+  AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
+  AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -1211,6 +1272,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
+  AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
   AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
   AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
   AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
@@ -1220,6 +1282,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
+  AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
+  AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
@@ -1231,6 +1295,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
+  AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
   AuthenticatedRepartidorPedidoIdCompletadoRoute:
     AuthenticatedRepartidorPedidoIdCompletadoRoute,
   AuthenticatedRepartidorPedidoIdNavegacionRoute:
