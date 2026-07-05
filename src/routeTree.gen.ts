@@ -19,6 +19,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RuletaRouteImport } from './routes/ruleta'
+import { Route as RepartidoresRouteImport } from './routes/repartidores'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as MenuRouteImport } from './routes/menu'
@@ -107,6 +108,11 @@ const SearchRoute = SearchRouteImport.update({
 const RuletaRoute = RuletaRouteImport.update({
   id: '/ruleta',
   path: '/ruleta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepartidoresRoute = RepartidoresRouteImport.update({
+  id: '/repartidores',
+  path: '/repartidores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -332,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
+  '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
@@ -382,6 +389,7 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
+  '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
@@ -434,6 +442,7 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
+  '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
@@ -486,6 +495,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacidad'
     | '/profile'
+    | '/repartidores'
     | '/ruleta'
     | '/search'
     | '/shop'
@@ -536,6 +546,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacidad'
     | '/profile'
+    | '/repartidores'
     | '/ruleta'
     | '/search'
     | '/shop'
@@ -587,6 +598,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/privacidad'
     | '/profile'
+    | '/repartidores'
     | '/ruleta'
     | '/search'
     | '/shop'
@@ -639,6 +651,7 @@ export interface RootRouteChildren {
   MenuRoute: typeof MenuRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ProfileRoute: typeof ProfileRoute
+  RepartidoresRoute: typeof RepartidoresRoute
   RuletaRoute: typeof RuletaRoute
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
@@ -740,6 +753,13 @@ declare module '@tanstack/react-router' {
       path: '/ruleta'
       fullPath: '/ruleta'
       preLoaderRoute: typeof RuletaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repartidores': {
+      id: '/repartidores'
+      path: '/repartidores'
+      fullPath: '/repartidores'
+      preLoaderRoute: typeof RepartidoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -1065,6 +1085,7 @@ const rootRouteChildren: RootRouteChildren = {
   MenuRoute: MenuRoute,
   PrivacidadRoute: PrivacidadRoute,
   ProfileRoute: ProfileRoute,
+  RepartidoresRoute: RepartidoresRoute,
   RuletaRoute: RuletaRoute,
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,

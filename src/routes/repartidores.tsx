@@ -334,7 +334,7 @@ function ApplyCta({
   const cur = label[status] ?? label.pendiente;
 
   return (
-    <div className="flex max-w-md flex-col items-center gap-2 rounded-xl border px-5 py-4 text-center backdrop-blur ${cur.tone}">
+    <div className="flex max-w-md flex-col items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-4 text-center backdrop-blur">
       <div className={`rounded-full border px-3 py-1 text-xs font-semibold ${cur.tone}`}>
         {cur.text}
       </div>
