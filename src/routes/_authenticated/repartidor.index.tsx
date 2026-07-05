@@ -348,17 +348,27 @@ function RepartidorHome() {
                         <span className="flex items-center gap-1"><Clock className="size-3.5" /> ~{o.estimated_duration_minutes} min</span>
                         <span className="flex items-center gap-1"><DollarSign className="size-3.5" /> pago semanal</span>
                       </div>
-                      <Button
-                        className="h-12 w-full bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
-                        disabled={accept.isPending}
-                        onClick={() => accept.mutate(o.id)}
-                      >
-                        {accept.isPending && accept.variables === o.id ? (
-                          <><Loader2 className="mr-2 size-4 animate-spin" /> Aceptando…</>
-                        ) : (
-                          "Aceptar pedido"
-                        )}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          className="h-12 flex-1 bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
+                          disabled={accept.isPending}
+                          onClick={() => accept.mutate(o.id)}
+                        >
+                          {accept.isPending && accept.variables === o.id ? (
+                            <><Loader2 className="mr-2 size-4 animate-spin" /> Aceptando…</>
+                          ) : (
+                            "Aceptar"
+                          )}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="h-12 border-[#c8862e]/40 text-[#1e3a5f]"
+                          onClick={() => setBatchOrderId(o.id)}
+                          title="Ver pedidos cercanos para agrupar"
+                        >
+                          <Sparkles className="mr-1 size-4 text-[#c8862e]" /> Agrupar
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
