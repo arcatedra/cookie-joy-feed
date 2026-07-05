@@ -40,7 +40,6 @@ function AdminDeliveriesPage() {
   const qc = useQueryClient();
   const listFn = useServerFn(adminListDeliveryBookings);
   const submitFn = useServerFn(submitDeliveryProof);
-  const signFn = useServerFn(getDeliveryProofSignedUrl);
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-delivery-bookings"],
