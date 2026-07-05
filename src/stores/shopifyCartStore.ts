@@ -19,6 +19,7 @@ export interface CartItem {
   variantTitle: string;
   price: { amount: string; currencyCode: string };
   quantity: number;
+  weightKg?: number;
   selectedOptions: Array<{ name: string; value: string }>;
 }
 
