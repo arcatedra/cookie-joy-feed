@@ -6,6 +6,8 @@ import { template as adminNewSubscription } from './admin-new-subscription'
 import { template as winnerNotification } from './winner-notification'
 import { template as securityAlert } from './security-alert'
 import { template as preDrawNotification } from './pre-draw-notification'
+import { template as driverApproved } from './driver-approved'
+import { template as driverRejected } from './driver-rejected'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -24,4 +26,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'winner-notification': winnerNotification,
   'security-alert': securityAlert,
   'pre-draw-notification': preDrawNotification,
+  'driver-approved': driverApproved,
+  'driver-rejected': driverRejected,
 }
