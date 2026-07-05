@@ -448,6 +448,27 @@ function DeliveriesPage() {
           </CardContent>
         </Card>
       </main>
+
+      {upcoming.length > 0 && (
+        <>
+          {chatOpen && (
+            <div className="fixed bottom-24 right-4 z-40 w-[92vw] max-w-sm">
+              <DeliveryChat
+                nombreDelivery="Tu delivery"
+                onClose={() => setChatOpen(false)}
+              />
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setChatOpen((v) => !v)}
+            className="fixed bottom-6 right-4 z-40 grid h-14 w-14 place-items-center rounded-full bg-emerald-600 text-white shadow-lg transition hover:bg-emerald-700"
+            aria-label="Chatear con el delivery"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </button>
+        </>
+      )}
     </div>
   );
 }
