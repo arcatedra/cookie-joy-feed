@@ -44,6 +44,7 @@ import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_auth
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
+import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
@@ -241,6 +242,12 @@ const AdminSweepstakesWinnersRoute = AdminSweepstakesWinnersRouteImport.update({
   path: '/winners',
   getParentRoute: () => AdminSweepstakesRoute,
 } as any)
+const AuthenticatedRepartidorWalletRoute =
+  AuthenticatedRepartidorWalletRouteImport.update({
+    id: '/repartidor/wallet',
+    path: '/repartidor/wallet',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorOnboardingRoute =
   AuthenticatedRepartidorOnboardingRouteImport.update({
     id: '/repartidor/onboarding',
@@ -398,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
+  '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -454,6 +462,7 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
+  '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -512,6 +521,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
+  '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -570,6 +580,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/claim/$drawDate'
     | '/repartidor/onboarding'
+    | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/claim/$drawDate'
     | '/repartidor/onboarding'
+    | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
@@ -683,6 +695,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/repartidor/onboarding'
+    | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
@@ -995,6 +1008,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSweepstakesWinnersRouteImport
       parentRoute: typeof AdminSweepstakesRoute
     }
+    '/_authenticated/repartidor/wallet': {
+      id: '/_authenticated/repartidor/wallet'
+      path: '/repartidor/wallet'
+      fullPath: '/repartidor/wallet'
+      preLoaderRoute: typeof AuthenticatedRepartidorWalletRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/onboarding': {
       id: '/_authenticated/repartidor/onboarding'
       path: '/repartidor/onboarding'
@@ -1147,6 +1167,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
+  AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
   AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
   AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
@@ -1163,6 +1184,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedRepartidorOnboardingRoute:
     AuthenticatedRepartidorOnboardingRoute,
+  AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
   AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
   AuthenticatedRepartidorPedidoIdCompletadoRoute:
     AuthenticatedRepartidorPedidoIdCompletadoRoute,
