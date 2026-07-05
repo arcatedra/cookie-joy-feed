@@ -65,6 +65,8 @@ export const PRODUCTS_QUERY = `
                 title
                 price { amount currencyCode }
                 availableForSale
+                weight
+                weightUnit
                 selectedOptions { name value }
               }
             }
@@ -92,6 +94,8 @@ export const PRODUCT_BY_HANDLE_QUERY = `
             title
             price { amount currencyCode }
             availableForSale
+                weight
+                weightUnit
             selectedOptions { name value }
           }
         }
