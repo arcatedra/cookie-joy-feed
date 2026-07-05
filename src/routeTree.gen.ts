@@ -40,6 +40,7 @@ import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
+import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
@@ -215,6 +216,12 @@ const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
   path: '/deliveries',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRepartidorIndexRoute =
+  AuthenticatedRepartidorIndexRouteImport.update({
+    id: '/repartidor/',
+    path: '/repartidor/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -365,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -416,6 +424,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -469,6 +478,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/repartidor/'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -573,6 +584,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/repartidor'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -625,6 +637,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/_authenticated/repartidor/'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
     | '/api/public/hooks/notify-pre-draw'
@@ -902,6 +915,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDeliveriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor/': {
+      id: '/_authenticated/repartidor/'
+      path: '/repartidor'
+      fullPath: '/repartidor/'
+      preLoaderRoute: typeof AuthenticatedRepartidorIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1046,6 +1066,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -1056,6 +1077,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
