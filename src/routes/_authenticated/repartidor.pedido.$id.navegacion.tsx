@@ -293,6 +293,7 @@ function NavegacionPedido() {
           qc.invalidateQueries({ queryKey: ["courier", "order", id] });
         }}
       />
+      <ChatDrawer orderId={id} role="driver" open={chatOpen} onOpenChange={setChatOpen} />
     </div>
   );
 }
