@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CalendarDays, ChevronLeft, Loader2, Pencil, Sparkles, Trash2 } from "lucide-react";
+import { CalendarDays, ChevronLeft, Loader2, MessageCircle, Pencil, Sparkles, Trash2 } from "lucide-react";
+import { DeliveryChat } from "@/components/DeliveryChat";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,7 @@ function DeliveriesPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
 
   const grid = useMemo(() => buildMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
   const monthLabel = new Intl.DateTimeFormat("es-ES", {
@@ -446,6 +448,27 @@ function DeliveriesPage() {
           </CardContent>
         </Card>
       </main>
+
+      {upcoming.length > 0 && (
+        <>
+          {chatOpen && (
+            <div className="fixed bottom-24 right-4 z-40 w-[92vw] max-w-sm">
+              <DeliveryChat
+                nombreDelivery="Tu delivery"
+                onClose={() => setChatOpen(false)}
+              />
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setChatOpen((v) => !v)}
+            className="fixed bottom-6 right-4 z-40 grid h-14 w-14 place-items-center rounded-full bg-emerald-600 text-white shadow-lg transition hover:bg-emerald-700"
+            aria-label="Chatear con el delivery"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </button>
+        </>
+      )}
     </div>
   );
 }

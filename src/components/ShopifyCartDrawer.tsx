@@ -13,10 +13,12 @@ import {
 } from "@/components/ui/sheet";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { CartWeightTracker } from "@/components/CartWeightTracker";
+import { TipSelector, type TipValue } from "@/components/TipSelector";
 
 export function ShopifyCartDrawer() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [tip, setTip] = useState<TipValue>({ monto: 0, metodoPago: "app" });
   const items = useShopifyCartStore((s) => s.items);
   const isLoading = useShopifyCartStore((s) => s.isLoading);
   const isSyncing = useShopifyCartStore((s) => s.isSyncing);
@@ -148,10 +150,23 @@ export function ShopifyCartDrawer() {
                     if (heaviest) removeItem(heaviest.variantId);
                   }}
                 />
+                <TipSelector onChange={setTip} />
+                {tip.monto > 0 && (
+                  <div className="flex justify-between items-center text-sm text-muted-foreground">
+                    <span>
+                      Propina{" "}
+                      {tip.metodoPago === "efectivo" ? "(en efectivo)" : "(en la app)"}
+                    </span>
+                    <span>
+                      {items[0]?.price.currencyCode || "$"} {tip.monto.toFixed(2)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">{t("cartDrawer.total")}</span>
                   <span className="text-xl font-bold">
-                    {items[0]?.price.currencyCode || "$"} {totalPrice.toFixed(2)}
+                    {items[0]?.price.currencyCode || "$"}{" "}
+                    {(totalPrice + (tip.metodoPago === "app" ? tip.monto : 0)).toFixed(2)}
                   </span>
                 </div>
                 <Button
