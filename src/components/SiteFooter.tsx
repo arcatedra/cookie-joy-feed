@@ -56,6 +56,7 @@ export function SiteFooter() {
               <li><Link to="/profile" className="text-white/80 hover:text-[#E6C35C]">{t("footer.profile", "Mi perfil")}</Link></li>
               <li><Link to="/historial" className="text-white/80 hover:text-[#E6C35C]">{t("footer.history", "Historial")}</Link></li>
               <li><Link to="/deliveries" className="text-white/80 hover:text-[#E6C35C]">{t("footer.deliveries", "Entregas")}</Link></li>
+              <li><Link to="/repartidores" className="text-white/80 hover:text-[#E6C35C]">{t("footer.becomeDriver", "Sé repartidor")}</Link></li>
               <li><Link to="/auth" className="text-white/80 hover:text-[#E6C35C]">{t("footer.signIn", "Iniciar sesión")}</Link></li>
             </ul>
           </div>

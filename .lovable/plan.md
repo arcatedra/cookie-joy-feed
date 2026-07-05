@@ -1,37 +1,45 @@
-## Objetivo
+## Contexto
 
-Crear una ruta pública `/demo` donde puedas probar los 4 componentes nuevos aislados, sin necesidad de tener carrito real, entregas agendadas ni rol admin.
+Tenés razón: en la etapa 1 solo agregamos las tablas, el rol y el bucket en la base de datos. **Nada de eso se ve en la app.** Por eso no hay ninguna pantalla ni botón que le diga a una persona "sé repartidor".
 
-## Qué vas a ver en `/demo`
+Vamos a agregar la **etapa 2**: la puerta de entrada visible del programa de repartidores.
 
-Una sola página con 4 tarjetas apiladas, cada una con su propio estado local (nada toca la base de datos):
+## Qué vas a ver después de este paso
 
-1. **Peso del carrito (`CartWeightTracker`)**
-   - Carrito simulado editable: 3 items con botones +/− para cambiar cantidades en vivo.
-   - Ves la barra cambiar de verde → ámbar → rojo, el aviso "por poco" y el cálculo de entregas extra.
+### 1. Landing pública `/repartidores`
+Una página pública (no requiere login) con:
+- Hero: "Gana dinero repartiendo con Hazorex" + botón grande **"Postularme"**.
+- 3 bloques cortos: cómo funciona, requisitos (mayor de 18, documentos), qué ganás.
+- FAQ básico (¿necesito vehículo?, ¿cuándo cobro?, etc.).
+- Si la persona no está logueada → el botón la manda a `/auth` y vuelve a `/repartidores` después.
+- Si ya está logueada y todavía no se postuló → botón "Empezar postulación" (deshabilitado por ahora, va a activarse en etapa 3 con el wizard).
+- Si ya se postuló → muestra el estado actual (Pendiente / En revisión / Aprobado / Rechazado con motivo) en vez del botón.
+- Si ya está aprobada → botón "Ir a mi panel" (el panel se construye en etapa 4).
 
-2. **Propina (`TipSelector`)**
-   - Toggle "hay escaleras" para ver cómo cambia la sugerencia.
-   - Muestra debajo el valor elegido y el método de pago seleccionado en JSON, así ves qué llega al `onChange`.
+### 2. Enlace visible en el sitio
+Agrego un link **"Sé repartidor"** en el footer (`SiteFooter.tsx`) para que cualquiera lo encuentre navegando. No toco la navegación principal para no ensuciarla.
 
-3. **Chat de delivery (`DeliveryChat`)**
-   - Montado inline (no como botón flotante) para verlo siempre.
-   - Mensajes locales, sin backend.
+### 3. SEO
+- `title`: "Sé repartidor · Hazorex"
+- `description`, `og:title`, `og:description` propios de la página.
+- Sin `og:image` por ahora (lo agregamos cuando tengamos una imagen del programa).
 
-4. **Prueba de entrega (`ProofOfDelivery`) — modo demo**
-   - Wrapper que intercepta el `onSubmit`: muestra la foto elegida y la descripción en pantalla en lugar de subir a Storage o llamar al server function.
-   - Así podés probar el flujo de cámara/preview sin necesitar rol admin ni una reserva real.
-   - Nota visible: "Modo demo — no se guarda nada". El flujo real sigue viviendo en `/admin/deliveries`.
+## Qué NO hace esta etapa
+
+- **No** construye el wizard de postulación de 4 pasos (eso es etapa 3).
+- **No** construye el panel de admin para revisar postulaciones (etapa 4).
+- **No** construye el dashboard del repartidor aprobado (etapa 5).
+- **No** toca el backend — todas las tablas y el bucket ya están.
+
+El botón "Empezar postulación" va a estar visible pero deshabilitado con un texto tipo *"Próximamente"* para que se vea el flujo completo aunque el wizard todavía no exista.
 
 ## Detalles técnicos
 
-- **Archivo nuevo:** `src/routes/demo.tsx` (ruta pública, no bajo `_authenticated`).
-- **`head()`:** título "Demo de componentes" + `robots: noindex` para que no se indexe.
-- **Sin cambios** en los componentes existentes ni en el backend.
-- **Sin cambios** en `ShopifyCartDrawer`, `/deliveries` ni `/admin/deliveries` — siguen funcionando igual.
-- Layout: contenedor centrado `max-w-2xl`, cada sección en un `Card` con título y descripción corta de qué probar.
+- **Archivo nuevo:** `src/routes/repartidores.tsx` (ruta pública, SSR normal, con `head()`).
+- **Lectura de estado:** un `useQuery` que llama a `supabase.from('drivers').select('application_status, rejection_reason').eq('id', user.id).maybeSingle()` — usa RLS existente, no hace falta server function nueva.
+- **Edición:** `src/components/SiteFooter.tsx` para agregar el link.
+- **Sin migraciones nuevas**, sin cambios en el resto de rutas.
 
-## Fuera de alcance
+## Después de esta etapa
 
-- No se agrega seed data ni se te asigna rol admin (podemos hacerlo después si querés).
-- No se toca lógica de negocio ni RLS.
+Cuando la apruebes y la veas funcionando, seguimos con **etapa 3: el wizard de postulación de 4 pasos** que activa ese botón "Empezar postulación".
