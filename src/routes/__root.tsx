@@ -103,6 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: faviconAsset.url },
       { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchAsset.url },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -133,6 +134,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // /repartidor and /repartidor/* use their own DriverLayout. /repartidores (marketing) keeps store chrome.
+  const isDriverZone =
+    pathname === "/repartidor" || pathname.startsWith("/repartidor/");
 
   useEffect(() => {
     // Defer past hydration commit to avoid SSR/CSR text mismatch.
@@ -147,13 +152,13 @@ function RootComponent() {
         <SubscriptionGateProvider>
           <CartProvider>
             <div className="min-h-screen bg-background">
-              <PreDrawCountdownBanner />
-              <TopNav />
+              {!isDriverZone && <PreDrawCountdownBanner />}
+              {!isDriverZone && <TopNav />}
               {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
               <Outlet />
-              <SiteFooter />
+              {!isDriverZone && <SiteFooter />}
             </div>
-            <PushNotificationOptIn />
+            {!isDriverZone && <PushNotificationOptIn />}
             <Toaster position="top-center" richColors />
           </CartProvider>
         </SubscriptionGateProvider>
