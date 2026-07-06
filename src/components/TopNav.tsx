@@ -31,7 +31,6 @@ const quickLinkKeys = [
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
   { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
-  { key: "courierPanel", to: "/repartidor", label: "🧭 Panel repartidor" },
   
   
 ] as const;
