@@ -37,9 +37,44 @@ function AuthPage() {
 
   const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
 
+  const resolveRoleTarget = async (fallback: string): Promise<string> => {
+    // Respect explicit redirect param when provided.
+    if (redirect && redirect.startsWith("/")) return redirect;
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+      const u = userData.user;
+      if (!u) return fallback;
+      const [{ data: isAdmin }, { data: isDriver }] = await Promise.all([
+        supabase.rpc("has_role", { _user_id: u.id, _role: "admin" }),
+        supabase.rpc("has_role", { _user_id: u.id, _role: "repartidor" }),
+      ]);
+      if (isAdmin) return "/admin/live";
+      if (isDriver) {
+        const { data: d } = await supabase
+          .from("drivers")
+          .select("application_status")
+          .eq("id", u.id)
+          .maybeSingle();
+        if (d?.application_status === "aprobado") return "/repartidor";
+        return "/repartidores";
+      }
+      return fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
   useEffect(() => {
-    if (user) navigate({ to: redirectTarget });
-  }, [user, navigate, redirectTarget]);
+    if (!user) return;
+    let cancelled = false;
+    resolveRoleTarget(redirectTarget).then((to) => {
+      if (!cancelled) navigate({ to });
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +98,8 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: redirectTarget });
+        const to = await resolveRoleTarget(redirectTarget);
+        navigate({ to });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error");
