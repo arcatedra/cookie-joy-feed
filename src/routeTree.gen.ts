@@ -52,6 +52,7 @@ import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
+import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
@@ -298,6 +299,12 @@ const AuthenticatedNegocioProductosRoute =
     path: '/negocio/productos',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedNegocioOfertasRoute =
+  AuthenticatedNegocioOfertasRouteImport.update({
+    id: '/negocio/ofertas',
+    path: '/negocio/ofertas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -475,6 +482,7 @@ export interface FileRoutesByFullPath {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -541,6 +549,7 @@ export interface FileRoutesByTo {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -610,6 +619,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -679,6 +689,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/negocio/ofertas'
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/negocio/ofertas'
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
@@ -813,6 +825,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
+    | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
@@ -1190,6 +1203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNegocioProductosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/negocio/ofertas': {
+      id: '/_authenticated/negocio/ofertas'
+      path: '/negocio/ofertas'
+      fullPath: '/negocio/ofertas'
+      preLoaderRoute: typeof AuthenticatedNegocioOfertasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -1398,6 +1418,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
@@ -1415,6 +1436,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
