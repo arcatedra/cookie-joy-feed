@@ -1,53 +1,68 @@
-## Estado del módulo Repartidor
+## Paso 4: Registro de negocios (multi-vendor)
 
-Ya está construido y funcional:
-- Onboarding, acuerdo, tutorial, online/offline (`repartidor.onboarding.tsx`, `courier.functions.ts`)
-- Aceptar pedidos, recolección, entrega con prueba, cancelación, batching
-- Navegación con Google Maps + deep-links Waze/Apple/Google
-- Chat con cliente, calificaciones, historial
-- Wallet: ganancias por pedido, métodos de pago, payout instantáneo, payout semanal
-- Push notifications y tracking en vivo del pedido
-- Panel admin (`admin.repartidores`, `admin.deliveries`, `admin.live`)
+Añade el módulo de negocios registrados (supermercados, tiendas, panaderías, farmacias) con catálogo y ofertas propias, integrado al sistema de roles y `has_role()` existente.
 
-## Lo único que falta: Facturas / Recibos del repartidor
+### 1. Migración SQL
 
-El repartidor puede ver sus ganancias en `/repartidor/wallet`, pero no puede descargar un **comprobante fiscal / recibo mensual** de sus ingresos para llevar su contabilidad personal. Eso es lo que agregaremos.
+Crear en `supabase/migrations/<timestamp>_businesses.sql`:
 
-### Alcance
+- **`businesses`**: `owner_user_id → auth.users`, `business_name`, `business_type` (enum check: supermercado/tienda/panaderia/farmacia/otro), email, phone, address, city, `status` (pendiente/aprobado/rechazado/suspendido), `rejection_reason`, `logo_url`, `approved_at`, `approved_by`, timestamps.
+- **`business_products`**: `business_id` (FK cascade), name, description, category, price, stock_quantity, image_url, is_active, timestamps + trigger `update_updated_at_column`.
+- **`business_offers`**: `business_id`, `product_id`, `discount_type` (porcentaje/monto_fijo), `discount_value`, `starts_at`, `ends_at`, `is_active`.
 
-1. **Página `/repartidor/facturas`** listando períodos mensuales con:
-   - Mes, total bruto, propinas, comisiones descontadas, neto pagado
-   - Número de entregas completadas
-   - Botón "Descargar PDF" y "Descargar CSV"
+**Ajustes al SQL que pegaste** (obligatorios para este proyecto):
 
-2. **Server function `getDriverInvoices`** que agrupa `driver_order_earnings` por mes del repartidor autenticado (últimos 24 meses).
+- `GRANT SELECT, INSERT, UPDATE, DELETE ON <table> TO authenticated; GRANT ALL TO service_role; GRANT SELECT ON business_products, business_offers TO anon` (catálogo público) — tras cada `CREATE TABLE`, antes del `ENABLE RLS`.
+- Reemplazar cualquier chequeo tipo `profiles.role = 'admin'` por `public.has_role(auth.uid(), 'admin'::app_role)` (el proyecto usa `user_roles` + `has_role`, no `profiles.role`).
+- Añadir políticas admin: admins pueden ver/aprobar/rechazar cualquier `businesses` y auditar productos/ofertas.
+- Añadir política pública anónima para `businesses` (SELECT donde `status = 'aprobado'`, solo columnas seguras vía vista o directamente — sin `email`/`phone` expuestos; se crea vista `public_businesses` con columnas seguras).
+- Trigger `set_business_approved_at` que setea `approved_at`/`approved_by` cuando `status` pasa a `aprobado` (admin-only vía guard trigger, similar a `drivers_protect_admin_fields`).
+- Guard trigger `businesses_protect_admin_fields` que impide al dueño cambiar `status`, `rejection_reason`, `approved_at`, `approved_by`.
 
-3. **Server function `generateDriverInvoicePDF`** (`method: "POST"`) que genera un recibo mensual con:
-   - Datos del repartidor (nombre, teléfono, ID) del `drivers` table
-   - Emisor: Hazorex / OriGen (datos de `config.server.ts` o constantes)
-   - Detalle línea por línea de pedidos del mes
-   - Totales: bruto, propinas, comisión plataforma, neto
-   - Número de factura estable: `HZX-{driverId8}-{YYYYMM}`
-   - PDF generado con `pdf-lib` (compatible con Worker runtime)
+### 2. Tipos + módulo cliente
 
-4. **CSV export** del mismo período para contadores.
+- Regenerar `src/integrations/supabase/types.ts` (automático tras la migración).
+- Crear `src/lib/businesses.ts` con helpers cliente:
+  - `registerBusiness(payload)` — INSERT con `owner_user_id = auth.uid()`.
+  - `fetchMyBusiness()` — el negocio del usuario logueado.
+  - `fetchApprovedBusinesses({ type?, city? })` — lista pública para clientes.
+  - `fetchBusinessProducts(businessId)`, `upsertProduct`, `deleteProduct`.
+  - `fetchBusinessOffers(businessId)`, `upsertOffer`.
 
-5. **Entrada en `BottomNav` / wallet** con link a "Mis facturas".
+### 3. Server functions (admin)
 
-6. **i18n**: claves `driverInvoices.*` en `es/en` (los otros idiomas se completan con el script existente).
+Crear `src/lib/admin-businesses.functions.ts` con `requireSupabaseAuth` + check `has_role('admin')`:
+- `listPendingBusinesses`, `approveBusiness(id)`, `rejectBusiness(id, reason)`, `suspendBusiness(id)`.
+
+### 4. Rutas UI (sin lógica de checkout)
+
+Nuevas rutas (solo scaffolding + formularios; sin tocar carrito/checkout de Hazorex):
+
+- `src/routes/negocios.registro.tsx` — formulario público de postulación (requiere login).
+- `src/routes/_authenticated/negocio.index.tsx` — panel del dueño (ver estado: pendiente/aprobado/rechazado; si aprobado, links a productos/ofertas).
+- `src/routes/_authenticated/negocio.productos.tsx` — CRUD de productos del negocio propio.
+- `src/routes/_authenticated/negocio.ofertas.tsx` — CRUD de ofertas.
+- `src/routes/_authenticated/admin.negocios.tsx` — panel admin: aprobar/rechazar/suspender.
+- `src/routes/negocios.tsx` — listado público de negocios aprobados por ciudad/tipo (opcional, se puede posponer).
+
+Cada ruta con `head()` propio (title/description únicos), `errorComponent` y `notFoundComponent`.
+
+### 5. Navegación
+
+- Añadir link "Mi negocio" en `TopNav`/`BottomNav` cuando el usuario tenga un `businesses` propio.
+- Link "Postula tu negocio" en el menú público.
 
 ### Detalles técnicos
 
-- Archivo nuevo: `src/lib/driver-invoices.functions.ts`
-- Ruta nueva: `src/routes/_authenticated/repartidor.facturas.tsx`
-- Dependencia: `pdf-lib` (ya edge-compatible, no requiere Node nativo)
-- Los "invoices" son documentos derivados de `driver_order_earnings`; no se necesita nueva tabla salvo si el usuario quiere numeración persistente y sellos de tiempo — en ese caso agregar `driver_invoices` (mes, driver_id, totales, generated_at, pdf_path) opcional en fase 2.
-- El PDF se genera on-demand y se devuelve como base64 al cliente para descarga (patrón simple, sin storage). Alternativa: subir a bucket `driver-invoices` y devolver signed URL.
+- **RLS estilo Hazorex**: siempre `public.has_role(auth.uid(), 'admin'::app_role)` para admin; nunca `profiles.role`.
+- **Storage**: bucket `business-logos` (público) para `logo_url` y `business-products` (público) para `image_url`. Se crea en la misma migración vía `insert into storage.buckets` si no existe.
+- **Sin cambios** en catálogo Shopify, carrito, checkout, sorteo, ni módulo repartidor.
 
-### Fuera de alcance
+### Fuera de alcance (para pasos siguientes)
 
-- Facturación fiscal oficial (DGI Panamá / SRI / SAT). Esto es un **recibo interno de ingresos**, no una factura electrónica timbrada. Si quieres factura fiscal oficial (con RUC/timbrado), es un proyecto distinto que requiere integración con proveedor fiscal.
+- Checkout multi-vendor / split cart por negocio.
+- Rutas de repartidor recogiendo en negocios (integración con `delivery_routes`).
+- Comisiones / payouts a negocios.
+- Reviews de negocios.
 
-### Pregunta previa a implementar
-
-¿Quieres que el PDF sea solo **recibo de ingresos mensual** (rápido, ~30 min) o quieres además la tabla `driver_invoices` con numeración persistente y almacenamiento en bucket para auditoría (~1h extra)?
+¿Procedo con esta estructura, o quieres ajustar algo (ej. omitir ofertas por ahora, o incluir ya el listado público `/negocios`)?

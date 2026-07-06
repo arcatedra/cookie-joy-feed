@@ -34,6 +34,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
@@ -42,6 +43,7 @@ import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authenticated/repartidor'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
+import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
@@ -49,11 +51,14 @@ import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_aut
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
+import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
+import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
+import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authenticated/admin.negocios'
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
@@ -197,6 +202,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NegociosRegistroRoute = NegociosRegistroRouteImport.update({
+  id: '/negocios/registro',
+  path: '/negocios/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -239,6 +249,12 @@ const AuthenticatedRepartidorIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
+const AuthenticatedNegocioIndexRoute =
+  AuthenticatedNegocioIndexRouteImport.update({
+    id: '/negocio/',
+    path: '/negocio/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -278,6 +294,18 @@ const AuthenticatedRepartidorCalificacionesRoute =
     path: '/calificaciones',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
+const AuthenticatedNegocioProductosRoute =
+  AuthenticatedNegocioProductosRouteImport.update({
+    id: '/negocio/productos',
+    path: '/negocio/productos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedNegocioOfertasRoute =
+  AuthenticatedNegocioOfertasRouteImport.update({
+    id: '/negocio/ofertas',
+    path: '/negocio/ofertas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -306,6 +334,12 @@ const AuthenticatedAdminRepartidoresRoute =
   AuthenticatedAdminRepartidoresRouteImport.update({
     id: '/admin/repartidores',
     path: '/admin/repartidores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminNegociosRoute =
+  AuthenticatedAdminNegociosRouteImport.update({
+    id: '/admin/negocios',
+    path: '/admin/negocios',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminLiveRoute = AuthenticatedAdminLiveRouteImport.update({
@@ -445,15 +479,19 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
+  '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -461,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -508,15 +547,19 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
+  '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -524,6 +567,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -574,15 +618,19 @@ export interface FileRoutesById {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
+  '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
+  '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -590,6 +638,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -640,15 +689,19 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
     | '/admin/live'
+    | '/admin/negocios'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/negocio/ofertas'
+    | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/onboarding'
@@ -656,6 +709,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/negocio/'
     | '/repartidor/'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
@@ -703,15 +757,19 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
     | '/admin/live'
+    | '/admin/negocios'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
     | '/claim/$drawDate'
+    | '/negocio/ofertas'
+    | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/onboarding'
@@ -719,6 +777,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/negocio'
     | '/repartidor'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
@@ -768,15 +827,19 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/live'
+    | '/_authenticated/admin/negocios'
     | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
+    | '/_authenticated/negocio/ofertas'
+    | '/_authenticated/negocio/productos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/onboarding'
@@ -784,6 +847,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
     | '/_authenticated/pedido/$id/calificar'
     | '/_authenticated/pedido/$id/seguimiento'
@@ -831,6 +895,7 @@ export interface RootRouteChildren {
   AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  NegociosRegistroRoute: typeof NegociosRegistroRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
@@ -1025,6 +1090,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/negocios/registro': {
+      id: '/negocios/registro'
+      path: '/negocios/registro'
+      fullPath: '/negocios/registro'
+      preLoaderRoute: typeof NegociosRegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -1081,6 +1153,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorIndexRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/negocio/': {
+      id: '/_authenticated/negocio/'
+      path: '/negocio'
+      fullPath: '/negocio/'
+      preLoaderRoute: typeof AuthenticatedNegocioIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1130,6 +1209,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorCalificacionesRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/negocio/productos': {
+      id: '/_authenticated/negocio/productos'
+      path: '/negocio/productos'
+      fullPath: '/negocio/productos'
+      preLoaderRoute: typeof AuthenticatedNegocioProductosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/negocio/ofertas': {
+      id: '/_authenticated/negocio/ofertas'
+      path: '/negocio/ofertas'
+      fullPath: '/negocio/ofertas'
+      preLoaderRoute: typeof AuthenticatedNegocioOfertasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -1163,6 +1256,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/repartidores'
       fullPath: '/admin/repartidores'
       preLoaderRoute: typeof AuthenticatedAdminRepartidoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/negocios': {
+      id: '/_authenticated/admin/negocios'
+      path: '/admin/negocios'
+      fullPath: '/admin/negocios'
+      preLoaderRoute: typeof AuthenticatedAdminNegociosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/live': {
@@ -1333,11 +1433,15 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
+  AuthenticatedAdminNegociosRoute: typeof AuthenticatedAdminNegociosRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
+  AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
+  AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
   AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
 }
@@ -1348,11 +1452,15 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
+  AuthenticatedAdminNegociosRoute: AuthenticatedAdminNegociosRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
+  AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
+  AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
   AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
 }
@@ -1399,6 +1507,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  NegociosRegistroRoute: NegociosRegistroRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
