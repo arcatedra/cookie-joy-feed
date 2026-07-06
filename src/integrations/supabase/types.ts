@@ -430,6 +430,39 @@ export type Database = {
           },
         ]
       }
+      delivery_pricing_config: {
+        Row: {
+          base_distance_miles: number
+          base_fee: number
+          created_at: string
+          extra_fee_per_mile: number
+          heavy_handling_fee: number
+          id: string
+          max_standard_weight_kg: number
+          updated_at: string
+        }
+        Insert: {
+          base_distance_miles?: number
+          base_fee?: number
+          created_at?: string
+          extra_fee_per_mile?: number
+          heavy_handling_fee?: number
+          id?: string
+          max_standard_weight_kg?: number
+          updated_at?: string
+        }
+        Update: {
+          base_distance_miles?: number
+          base_fee?: number
+          created_at?: string
+          extra_fee_per_mile?: number
+          heavy_handling_fee?: number
+          id?: string
+          max_standard_weight_kg?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
