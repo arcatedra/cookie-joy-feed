@@ -34,6 +34,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
@@ -195,6 +196,11 @@ const ReelReelIdRoute = ReelReelIdRouteImport.update({
 const ProductHandleRoute = ProductHandleRouteImport.update({
   id: '/product/$handle',
   path: '/product/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NegociosRegistroRoute = NegociosRegistroRouteImport.update({
+  id: '/negocios/registro',
+  path: '/negocios/registro',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -508,6 +515,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -574,6 +582,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -640,6 +649,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
@@ -703,6 +713,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/admin/deliveries'
@@ -768,6 +779,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
     | '/_authenticated/admin/deliveries'
@@ -831,6 +843,7 @@ export interface RootRouteChildren {
   AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  NegociosRegistroRoute: typeof NegociosRegistroRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
@@ -1023,6 +1036,13 @@ declare module '@tanstack/react-router' {
       path: '/product/$handle'
       fullPath: '/product/$handle'
       preLoaderRoute: typeof ProductHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/negocios/registro': {
+      id: '/negocios/registro'
+      path: '/negocios/registro'
+      fullPath: '/negocios/registro'
+      preLoaderRoute: typeof NegociosRegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email/unsubscribe': {
@@ -1399,6 +1419,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  NegociosRegistroRoute: NegociosRegistroRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
