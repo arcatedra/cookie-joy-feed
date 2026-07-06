@@ -39,6 +39,7 @@ import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
+import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authenticated/repartidor'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -222,6 +223,11 @@ const AuthenticatedSuggestionsRoute =
     path: '/suggestions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRepartidorRoute = AuthenticatedRepartidorRouteImport.update({
+  id: '/repartidor',
+  path: '/repartidor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
   id: '/deliveries',
   path: '/deliveries',
@@ -229,9 +235,9 @@ const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
 } as any)
 const AuthenticatedRepartidorIndexRoute =
   AuthenticatedRepartidorIndexRouteImport.update({
-    id: '/repartidor/',
-    path: '/repartidor/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -250,27 +256,27 @@ const AdminSweepstakesWinnersRoute = AdminSweepstakesWinnersRouteImport.update({
 } as any)
 const AuthenticatedRepartidorWalletRoute =
   AuthenticatedRepartidorWalletRouteImport.update({
-    id: '/repartidor/wallet',
-    path: '/repartidor/wallet',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/wallet',
+    path: '/wallet',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorOnboardingRoute =
   AuthenticatedRepartidorOnboardingRouteImport.update({
-    id: '/repartidor/onboarding',
-    path: '/repartidor/onboarding',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/onboarding',
+    path: '/onboarding',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorFacturasRoute =
   AuthenticatedRepartidorFacturasRouteImport.update({
-    id: '/repartidor/facturas',
-    path: '/repartidor/facturas',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/facturas',
+    path: '/facturas',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorCalificacionesRoute =
   AuthenticatedRepartidorCalificacionesRouteImport.update({
-    id: '/repartidor/calificaciones',
-    path: '/repartidor/calificaciones',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/calificaciones',
+    path: '/calificaciones',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
@@ -392,21 +398,21 @@ const AuthenticatedPedidoIdCalificarRoute =
   } as any)
 const AuthenticatedRepartidorPedidoIdResumenRoute =
   AuthenticatedRepartidorPedidoIdResumenRouteImport.update({
-    id: '/repartidor/pedido/$id/resumen',
-    path: '/repartidor/pedido/$id/resumen',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/pedido/$id/resumen',
+    path: '/pedido/$id/resumen',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorPedidoIdNavegacionRoute =
   AuthenticatedRepartidorPedidoIdNavegacionRouteImport.update({
-    id: '/repartidor/pedido/$id/navegacion',
-    path: '/repartidor/pedido/$id/navegacion',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/pedido/$id/navegacion',
+    path: '/pedido/$id/navegacion',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorPedidoIdCompletadoRoute =
   AuthenticatedRepartidorPedidoIdCompletadoRouteImport.update({
-    id: '/repartidor/pedido/$id/completado',
-    path: '/repartidor/pedido/$id/completado',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/pedido/$id/completado',
+    path: '/pedido/$id/completado',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -433,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
@@ -561,6 +568,7 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/_authenticated/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
@@ -626,6 +634,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/repartidor'
     | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
@@ -753,6 +762,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
+    | '/_authenticated/repartidor'
     | '/_authenticated/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
@@ -1050,6 +1060,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSuggestionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor': {
+      id: '/_authenticated/repartidor'
+      path: '/repartidor'
+      fullPath: '/repartidor'
+      preLoaderRoute: typeof AuthenticatedRepartidorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/deliveries': {
       id: '/_authenticated/deliveries'
       path: '/deliveries'
@@ -1059,10 +1076,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/repartidor/': {
       id: '/_authenticated/repartidor/'
-      path: '/repartidor'
+      path: '/'
       fullPath: '/repartidor/'
       preLoaderRoute: typeof AuthenticatedRepartidorIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -1087,31 +1104,31 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/repartidor/wallet': {
       id: '/_authenticated/repartidor/wallet'
-      path: '/repartidor/wallet'
+      path: '/wallet'
       fullPath: '/repartidor/wallet'
       preLoaderRoute: typeof AuthenticatedRepartidorWalletRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/onboarding': {
       id: '/_authenticated/repartidor/onboarding'
-      path: '/repartidor/onboarding'
+      path: '/onboarding'
       fullPath: '/repartidor/onboarding'
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/facturas': {
       id: '/_authenticated/repartidor/facturas'
-      path: '/repartidor/facturas'
+      path: '/facturas'
       fullPath: '/repartidor/facturas'
       preLoaderRoute: typeof AuthenticatedRepartidorFacturasRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/calificaciones': {
       id: '/_authenticated/repartidor/calificaciones'
-      path: '/repartidor/calificaciones'
+      path: '/calificaciones'
       fullPath: '/repartidor/calificaciones'
       preLoaderRoute: typeof AuthenticatedRepartidorCalificacionesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
@@ -1255,30 +1272,64 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/repartidor/pedido/$id/resumen': {
       id: '/_authenticated/repartidor/pedido/$id/resumen'
-      path: '/repartidor/pedido/$id/resumen'
+      path: '/pedido/$id/resumen'
       fullPath: '/repartidor/pedido/$id/resumen'
       preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdResumenRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/pedido/$id/navegacion': {
       id: '/_authenticated/repartidor/pedido/$id/navegacion'
-      path: '/repartidor/pedido/$id/navegacion'
+      path: '/pedido/$id/navegacion'
       fullPath: '/repartidor/pedido/$id/navegacion'
       preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/pedido/$id/completado': {
       id: '/_authenticated/repartidor/pedido/$id/completado'
-      path: '/repartidor/pedido/$id/completado'
+      path: '/pedido/$id/completado'
       fullPath: '/repartidor/pedido/$id/completado'
       preLoaderRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRepartidorRoute
     }
   }
 }
 
+interface AuthenticatedRepartidorRouteChildren {
+  AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
+  AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
+  AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
+  AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
+  AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
+  AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
+  AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
+  AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
+}
+
+const AuthenticatedRepartidorRouteChildren: AuthenticatedRepartidorRouteChildren =
+  {
+    AuthenticatedRepartidorCalificacionesRoute:
+      AuthenticatedRepartidorCalificacionesRoute,
+    AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
+    AuthenticatedRepartidorOnboardingRoute:
+      AuthenticatedRepartidorOnboardingRoute,
+    AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
+    AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
+    AuthenticatedRepartidorPedidoIdCompletadoRoute:
+      AuthenticatedRepartidorPedidoIdCompletadoRoute,
+    AuthenticatedRepartidorPedidoIdNavegacionRoute:
+      AuthenticatedRepartidorPedidoIdNavegacionRoute,
+    AuthenticatedRepartidorPedidoIdResumenRoute:
+      AuthenticatedRepartidorPedidoIdResumenRoute,
+  }
+
+const AuthenticatedRepartidorRouteWithChildren =
+  AuthenticatedRepartidorRoute._addFileChildren(
+    AuthenticatedRepartidorRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
@@ -1287,20 +1338,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
-  AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
-  AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
-  AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
-  AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
-  AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
   AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
-  AuthenticatedRepartidorPedidoIdCompletadoRoute: typeof AuthenticatedRepartidorPedidoIdCompletadoRoute
-  AuthenticatedRepartidorPedidoIdNavegacionRoute: typeof AuthenticatedRepartidorPedidoIdNavegacionRoute
-  AuthenticatedRepartidorPedidoIdResumenRoute: typeof AuthenticatedRepartidorPedidoIdResumenRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
@@ -1309,21 +1353,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
-  AuthenticatedRepartidorCalificacionesRoute:
-    AuthenticatedRepartidorCalificacionesRoute,
-  AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
-  AuthenticatedRepartidorOnboardingRoute:
-    AuthenticatedRepartidorOnboardingRoute,
-  AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
-  AuthenticatedRepartidorIndexRoute: AuthenticatedRepartidorIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
   AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
-  AuthenticatedRepartidorPedidoIdCompletadoRoute:
-    AuthenticatedRepartidorPedidoIdCompletadoRoute,
-  AuthenticatedRepartidorPedidoIdNavegacionRoute:
-    AuthenticatedRepartidorPedidoIdNavegacionRoute,
-  AuthenticatedRepartidorPedidoIdResumenRoute:
-    AuthenticatedRepartidorPedidoIdResumenRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -1,0 +1,14 @@
+{
+  "name": "Hazorex Repartidor",
+  "short_name": "Repartidor",
+  "description": "Panel de repartidor Hazorex — pedidos, ganancias y navegación.",
+  "start_url": "/repartidor",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f766e",
+  "theme_color": "#0f766e",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "64x64", "type": "image/x-icon" }
+  ]
+}
