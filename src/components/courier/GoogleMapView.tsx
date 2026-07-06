@@ -1,5 +1,6 @@
 /// <reference types="google.maps" />
 import { useEffect, useRef } from "react";
+import { getMapsBrowserKey } from "@/lib/maps-config.functions";
 
 type LatLng = { lat: number; lng: number };
 
@@ -14,6 +15,8 @@ declare global {
 
 /**
  * Loads the Google Maps JS API asynchronously (once) and resolves when ready.
+ * Fetches the browser key from the server so we can use a user-provided
+ * (custom-domain-restricted) key without exposing it via VITE_ at build time.
  */
 function loadGoogleMaps(): Promise<typeof google> {
   return new Promise((resolve, reject) => {
@@ -31,18 +34,20 @@ function loadGoogleMaps(): Promise<typeof google> {
       window.__googleMapsInitCallbacks = [];
     };
 
-    const key = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY as string | undefined;
-    const channel = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID as string | undefined;
-    if (!key) {
-      reject(new Error("Google Maps browser key missing"));
-      return;
-    }
-    const s = document.createElement("script");
-    s.async = true;
-    s.defer = true;
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&loading=async&callback=initLovableGoogleMap${channel ? `&channel=${encodeURIComponent(channel)}` : ""}`;
-    s.onerror = () => reject(new Error("Failed to load Google Maps"));
-    document.head.appendChild(s);
+    getMapsBrowserKey()
+      .then(({ key, channel }) => {
+        if (!key) {
+          reject(new Error("Google Maps browser key missing"));
+          return;
+        }
+        const s = document.createElement("script");
+        s.async = true;
+        s.defer = true;
+        s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&loading=async&callback=initLovableGoogleMap${channel ? `&channel=${encodeURIComponent(channel)}` : ""}`;
+        s.onerror = () => reject(new Error("Failed to load Google Maps"));
+        document.head.appendChild(s);
+      })
+      .catch((err) => reject(err));
   });
 }
 
