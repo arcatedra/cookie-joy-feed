@@ -59,12 +59,14 @@ export async function stripePost<T = unknown>(
   path: string,
   body: Record<string, unknown>,
   env: StripeEnv = "sandbox",
+  extraHeaders: Record<string, string> = {},
 ): Promise<T> {
   const res = await fetch(`${GATEWAY_BASE}${path}`, {
     method: "POST",
     headers: {
       ...gatewayHeaders(env),
       "Content-Type": "application/x-www-form-urlencoded",
+      ...extraHeaders,
     },
     body: encodeForm(body).toString(),
   });
