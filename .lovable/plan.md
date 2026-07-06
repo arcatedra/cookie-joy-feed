@@ -1,103 +1,46 @@
-## Retiros instantáneos para repartidores
+## Sincronización completa de pagos con Stripe
 
-Sistema tipo "Instant Pay": cada ruta completada acredita el saldo del repartidor; puede retirar cuando quiera (mín $10, parcial permitido) a su tarjeta de débito vía Stripe Connect Express Instant Payouts. La comisión de Stripe (~1.5% + $0.50) la paga el repartidor.
+Actualmente los retiros funcionan de forma síncrona: cuando el repartidor pide un retiro, llamamos a Stripe y guardamos el estado inicial (`procesando`). Pero Stripe puede tardar minutos u horas en confirmar que el pago llegó al banco, o puede fallar después. Hoy no nos enteramos automáticamente — el estado en la tabla `driver_payouts` se queda "colgado" en `procesando`.
 
-### 1. Base de datos (una sola migración)
+Para sincronizar bien necesitamos escuchar los eventos que Stripe envía cuando el estado cambia.
 
-**Nuevas tablas**
-- `driver_wallets` — caché de saldo por repartidor: `available_balance`, `pending_balance`, `lifetime_earnings`, `updated_at`. PK = `driver_id`.
-- `wallet_transactions` — libro mayor append-only: `type` (`ganancia_ruta`|`retiro`|`ajuste_admin`|`reversion`), `amount` (signed), `route_id`, `payout_id`, `description`. Índice por `(driver_id, created_at desc)`.
-- `driver_payouts` — solicitudes de retiro: `amount_requested`, `fee`, `amount_net`, `status` (`procesando`|`completado`|`fallido`), `stripe_payout_id`, `stripe_error`, `requested_at`, `completed_at`. (No usamos `driver_instant_payouts` existente — su esquema no cuadra con este flujo.)
+### 1. Webhook público para Stripe Connect
 
-**Columnas nuevas en `drivers`**
-- `stripe_account_id` (text, nullable) — cuenta Express conectada
-- `stripe_payouts_enabled` (bool) — capability confirmada
+Crear la ruta `src/routes/api/public/stripe/connect-webhook.ts` (path público bypasea auth, requerido por Stripe). Verifica la firma `stripe-signature` con un secret dedicado y procesa estos eventos:
 
-**Trigger de acreditación automática**
-En `delivery_routes` AFTER UPDATE cuando pasa a `completada` con `driver_id` no nulo:
-1. Inserta fila en `wallet_transactions` (`type='ganancia_ruta'`, monto = `fixed_pay`).
-2. Upsert `driver_wallets` sumando `available_balance` y `lifetime_earnings`.
+- **`payout.paid`** → marcar `driver_payouts.status = 'completado'`, sellar `paid_at`.
+- **`payout.failed`** → marcar `status = 'fallido'`, guardar `failure_message`, y llamar a la RPC `reverse_failed_payout` para devolver el dinero al `available_balance` del repartidor + registrar transacción de reverso.
+- **`payout.canceled`** → mismo flujo que `failed`.
+- **`transfer.failed`** → si el transfer inicial platform → cuenta conectada falla, revertir también.
+- **`account.updated`** (de la cuenta conectada) → actualizar `drivers.stripe_payouts_enabled` según `capabilities.transfers` y `payouts_enabled`. Esto arregla el caso de que el repartidor complete onboarding después y no tengamos que pedirle refresh manual.
 
-**RPC `request_driver_payout(p_amount numeric)`** (SECURITY DEFINER, corre como el repartidor):
-- Bloquea la fila `driver_wallets` (`FOR UPDATE`).
-- Valida: monto ≥ $10, ≤ `available_balance`, sin `driver_payouts` en estado `procesando` para ese repartidor.
-- Descuenta `available_balance` en el acto.
-- Crea `driver_payouts` (`status='procesando'`) y `wallet_transactions` (`type='retiro'`, monto negativo).
-- Devuelve la fila `driver_payouts`. La transferencia real la dispara el server function.
+Todos los updates son idempotentes (buscar por `stripe_payout_id` / `stripe_account_id`, no reprocesar si el estado ya coincide).
 
-**RPC `reverse_failed_payout(p_payout_id uuid)`** para revertir cuando Stripe falla: regresa fondos, marca `fallido`, inserta `wallet_transactions` (`type='reversion'`).
+### 2. Secret para verificar el webhook
 
-**RLS**
-- `driver_wallets`, `wallet_transactions`, `driver_payouts`: repartidor ve solo lo suyo; admins ven todo (`has_role admin`).
-- Ninguna escritura directa desde cliente — todo pasa por RPC/server functions.
+Stripe Connect usa un **endpoint secret distinto** al de webhooks normales. Después de crear el endpoint en el dashboard de Stripe (tipo "Connect"), guardarlo como secret `STRIPE_CONNECT_WEBHOOK_SECRET`. Pediré el valor con el flujo estándar de secretos cuando llegue el momento.
 
-**GRANTs** a `authenticated` y `service_role` en cada tabla nueva.
+### 3. URL a configurar en Stripe
 
-### 2. Server functions (TanStack, `createServerFn` + `requireSupabaseAuth`)
+Una vez desplegado, la URL del webhook será:
+`https://project--d99974e1-204d-46a0-816a-e2595eaf444a.lovable.app/api/public/stripe/connect-webhook`
 
-Archivo nuevo `src/lib/wallet.functions.ts`:
-- `getMyWallet` — saldo + últimas 50 transacciones + últimos 20 payouts.
-- `createStripeConnectOnboarding` — crea/recupera cuenta Express y devuelve URL de onboarding (`stripe.accountLinks.create`). Persiste `stripe_account_id`.
-- `refreshStripeConnectStatus` — sincroniza `stripe_payouts_enabled` desde Stripe.
-- `requestInstantPayout({ amount })`:
-  1. Verifica `stripe_payouts_enabled`.
-  2. Calcula `fee = ceil(amount * 0.015 * 100)/100 + 0.50`, `net = amount - fee` (rechaza si `net ≤ 0`).
-  3. Llama `request_driver_payout` RPC (reserva fondos).
-  4. Crea `stripe.transfers.create` (plataforma → cuenta conectada) por `net`, luego `stripe.payouts.create` con `method: 'instant'` en la cuenta conectada.
-  5. Éxito: actualiza `driver_payouts` a `completado` + `stripe_payout_id`. Fallo: llama `reverse_failed_payout` RPC.
-- `adminListPayouts` — lista todos los payouts + agregado de saldo pendiente global.
+Te la doy ya lista para pegar en Stripe Dashboard → Developers → Webhooks → **Add endpoint** (marcando "Connect" y suscribiéndote a los 5 eventos de arriba).
 
-**Stripe SDK**: BYOK vía `enable_stripe`. Cliente directo con `STRIPE_SECRET_KEY` (no el gateway de payments seamless — Connect no se puede rutear por ahí). SDK ya instalado si el proyecto tuvo Stripe antes; si no, `bun add stripe`.
+### 4. RPC de reverso (menor)
 
-### 3. UI repartidor — `/repartidor/wallet` (existe, se rediseña)
+Ya existe `reverse_failed_payout` de la fase anterior; solo verifico que sea idempotente (no revertir dos veces el mismo payout si Stripe reenvía el evento).
 
-Layout:
-```text
-┌─────────────────────────────────────┐
-│  Saldo disponible                   │
-│  $124.50            [Retirar ahora] │
-│  Total histórico: $2,340.00         │
-└─────────────────────────────────────┘
+### 5. Botón manual de "sincronizar" como respaldo
 
-[Aviso si Stripe Connect no está conectado → botón "Conectar cuenta bancaria"]
+En `/admin/payouts`, un botón por fila que llame a un server function `syncPayoutStatus(payoutId)` que consulta `stripe.payouts.retrieve` y actualiza igual que el webhook. Sirve para casos donde el webhook falló o no llegó.
 
-Retiros recientes
- · 06 nov · $50.00 · Completado
- · 04 nov · $30.00 · Procesando
+### Fuera de alcance
 
-Movimientos
- · +$8.50   Ruta #A3F2 completada  · hace 2h
- · −$50.00  Retiro instantáneo      · ayer
- · +$12.00  Ruta #B771 completada  · ayer
-```
+- Reconciliación periódica programada (cron) — se puede añadir después si hace falta.
+- Webhooks para eventos de balance de la plataforma.
 
-Modal "Retirar ahora":
-- Input de monto (default = saldo disponible, min 10, max saldo).
-- Muestra desglose: `Solicitas $X · Comisión $Y · Recibirás $Z`.
-- Botón deshabilitado si hay payout en `procesando` o saldo < $10 o sin Stripe conectado.
-- Al confirmar, llama `requestInstantPayout`, muestra toast y refresca.
+### Qué necesito de ti para empezar
 
-### 4. UI admin — `/admin/repartidores` o nueva `/admin/payouts`
-
-Tabla de todos los `driver_payouts` (últimos 100) con filtros por estado. Card superior con "Saldo pendiente total" (suma de `available_balance` en `driver_wallets`).
-
-### 5. Secretos necesarios
-
-Después de aprobar la migración pediré:
-- `STRIPE_SECRET_KEY` (BYOK con Connect habilitado en el dashboard de Stripe).
-
-El usuario debe activar Stripe Connect en su dashboard y elegir "Express" antes de que el onboarding funcione.
-
-### Orden de implementación
-
-1. Migración (tablas + trigger + RPCs + RLS + GRANTs).
-2. Solicito `STRIPE_SECRET_KEY`.
-3. `wallet.functions.ts` con onboarding + payout.
-4. Rediseño `/repartidor/wallet`.
-5. Vista admin.
-
-### Fuera de alcance (para después)
-
-- Webhooks de Stripe (`payout.paid`, `payout.failed`) para reconciliar el estado — v1 confía en la respuesta síncrona; v2 agrega webhooks.
-- Métodos alternos (transferencia ACH multi-día). Solo Instant a débito por ahora.
-- Reconciliación periódica saldo vs. ledger (script admin manual disponible con la RPC de reverse).
+1. Confirmación para implementar tal cual.
+2. Después de aplicar el código, tú creas el endpoint en Stripe Dashboard (tipo Connect) y me pasas el signing secret cuando te lo pida.
