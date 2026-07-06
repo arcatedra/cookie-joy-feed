@@ -463,6 +463,76 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_routes: {
+        Row: {
+          accepted_at: string | null
+          completed_at: string | null
+          created_at: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string
+          driver_id: string | null
+          fixed_pay: number
+          id: string
+          route_name: string
+          status: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          warehouse_checkin_at: string | null
+          zone_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string
+          driver_id?: string | null
+          fixed_pay: number
+          id?: string
+          route_name: string
+          status?: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          warehouse_checkin_at?: string | null
+          zone_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          delivery_day?: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date?: string
+          driver_id?: string | null
+          fixed_pay?: number
+          id?: string
+          route_name?: string
+          status?: Database["public"]["Enums"]["route_status"]
+          total_stops?: number
+          warehouse_checkin_at?: string | null
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_routes_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_routes_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_routes_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "v_zone_dispatch_summary"
+            referencedColumns: ["zone_id"]
+          },
+        ]
+      }
       delivery_zones: {
         Row: {
           active: boolean
@@ -1102,6 +1172,41 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_queue: {
+        Row: {
+          created_at: string
+          id: string
+          payload: Json
+          processed: boolean
+          route_stop_id: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payload?: Json
+          processed?: boolean
+          route_stop_id?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payload?: Json
+          processed?: boolean
+          route_stop_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_queue_route_stop_id_fkey"
+            columns: ["route_stop_id"]
+            isOneToOne: false
+            referencedRelation: "route_stops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_item_issues: {
         Row: {
           created_at: string
@@ -1568,6 +1673,78 @@ export type Database = {
           rewarded_at?: string | null
         }
         Relationships: []
+      }
+      route_stops: {
+        Row: {
+          delivered_at: string | null
+          delivery_address: string
+          delivery_instruction: string
+          delivery_lat: number | null
+          delivery_lng: number | null
+          delivery_photo_url: string | null
+          failure_reason: string | null
+          id: string
+          order_id: string
+          package_code: string
+          recipient_name: string
+          recipient_phone: string | null
+          route_id: string
+          scanned_at: string | null
+          sequence_number: number
+          status: Database["public"]["Enums"]["stop_status"]
+        }
+        Insert: {
+          delivered_at?: string | null
+          delivery_address: string
+          delivery_instruction?: string
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          delivery_photo_url?: string | null
+          failure_reason?: string | null
+          id?: string
+          order_id: string
+          package_code: string
+          recipient_name: string
+          recipient_phone?: string | null
+          route_id: string
+          scanned_at?: string | null
+          sequence_number: number
+          status?: Database["public"]["Enums"]["stop_status"]
+        }
+        Update: {
+          delivered_at?: string | null
+          delivery_address?: string
+          delivery_instruction?: string
+          delivery_lat?: number | null
+          delivery_lng?: number | null
+          delivery_photo_url?: string | null
+          failure_reason?: string | null
+          id?: string
+          order_id?: string
+          package_code?: string
+          recipient_name?: string
+          recipient_phone?: string | null
+          route_id?: string
+          scanned_at?: string | null
+          sequence_number?: number
+          status?: Database["public"]["Enums"]["stop_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_stops_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_routes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       security_audit_log: {
         Row: {
@@ -2307,7 +2484,58 @@ export type Database = {
       }
     }
     Functions: {
+      accept_route: {
+        Args: { p_route_id: string }
+        Returns: {
+          accepted_at: string | null
+          completed_at: string | null
+          created_at: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string
+          driver_id: string | null
+          fixed_pay: number
+          id: string
+          route_name: string
+          status: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          warehouse_checkin_at: string | null
+          zone_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "delivery_routes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       close_draws_for_cutoff: { Args: never; Returns: number }
+      complete_route_stop: {
+        Args: { p_photo_url: string; p_stop_id: string }
+        Returns: {
+          delivered_at: string | null
+          delivery_address: string
+          delivery_instruction: string
+          delivery_lat: number | null
+          delivery_lng: number | null
+          delivery_photo_url: string | null
+          failure_reason: string | null
+          id: string
+          order_id: string
+          package_code: string
+          recipient_name: string
+          recipient_phone: string | null
+          route_id: string
+          scanned_at: string | null
+          sequence_number: number
+          status: Database["public"]["Enums"]["stop_status"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "route_stops"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       cron_status: {
         Args: never
         Returns: {
@@ -2545,6 +2773,57 @@ export type Database = {
           winner_display_name: string
         }[]
       }
+      scan_route_package: {
+        Args: { p_package_code: string; p_route_id: string }
+        Returns: {
+          delivered_at: string | null
+          delivery_address: string
+          delivery_instruction: string
+          delivery_lat: number | null
+          delivery_lng: number | null
+          delivery_photo_url: string | null
+          failure_reason: string | null
+          id: string
+          order_id: string
+          package_code: string
+          recipient_name: string
+          recipient_phone: string | null
+          route_id: string
+          scanned_at: string | null
+          sequence_number: number
+          status: Database["public"]["Enums"]["stop_status"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "route_stops"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      start_route_transit: {
+        Args: { p_route_id: string }
+        Returns: {
+          accepted_at: string | null
+          completed_at: string | null
+          created_at: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string
+          driver_id: string | null
+          fixed_pay: number
+          id: string
+          route_name: string
+          status: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          warehouse_checkin_at: string | null
+          zone_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "delivery_routes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       submit_amoe_entry: {
         Args: {
           p_address1: string
@@ -2603,6 +2882,13 @@ export type Database = {
         | "foto_perfil"
       driver_earnings_status: "pendiente" | "pagado" | "en_proceso"
       driver_vehicle_type: "bicicleta" | "moto" | "auto" | "a_pie"
+      route_status:
+        | "disponible"
+        | "asignada"
+        | "en_transito"
+        | "completada"
+        | "cancelada"
+      stop_status: "pendiente" | "en_camino" | "entregado" | "fallido"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2767,6 +3053,14 @@ export const Constants = {
       ],
       driver_earnings_status: ["pendiente", "pagado", "en_proceso"],
       driver_vehicle_type: ["bicicleta", "moto", "auto", "a_pie"],
+      route_status: [
+        "disponible",
+        "asignada",
+        "en_transito",
+        "completada",
+        "cancelada",
+      ],
+      stop_status: ["pendiente", "en_camino", "entregado", "fallido"],
     },
   },
 } as const
