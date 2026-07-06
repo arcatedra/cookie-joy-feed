@@ -49,6 +49,7 @@ import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/do
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
+import { Route as AuthenticatedRepartidorGananciasRouteImport } from './routes/_authenticated/repartidor.ganancias'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
@@ -282,6 +283,12 @@ const AuthenticatedRepartidorOnboardingRoute =
     path: '/onboarding',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
+const AuthenticatedRepartidorGananciasRoute =
+  AuthenticatedRepartidorGananciasRouteImport.update({
+    id: '/ganancias',
+    path: '/ganancias',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
+  } as any)
 const AuthenticatedRepartidorFacturasRoute =
   AuthenticatedRepartidorFacturasRouteImport.update({
     id: '/facturas',
@@ -494,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -562,6 +570,7 @@ export interface FileRoutesByTo {
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -633,6 +642,7 @@ export interface FileRoutesById {
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
+    | '/repartidor/ganancias'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -772,6 +783,7 @@ export interface FileRouteTypes {
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
+    | '/repartidor/ganancias'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -842,6 +854,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocio/productos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
+    | '/_authenticated/repartidor/ganancias'
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -1195,6 +1208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/repartidor/ganancias': {
+      id: '/_authenticated/repartidor/ganancias'
+      path: '/ganancias'
+      fullPath: '/repartidor/ganancias'
+      preLoaderRoute: typeof AuthenticatedRepartidorGananciasRouteImport
+      parentRoute: typeof AuthenticatedRepartidorRoute
+    }
     '/_authenticated/repartidor/facturas': {
       id: '/_authenticated/repartidor/facturas'
       path: '/facturas'
@@ -1397,6 +1417,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRepartidorRouteChildren {
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
+  AuthenticatedRepartidorGananciasRoute: typeof AuthenticatedRepartidorGananciasRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
@@ -1410,6 +1431,8 @@ const AuthenticatedRepartidorRouteChildren: AuthenticatedRepartidorRouteChildren
     AuthenticatedRepartidorCalificacionesRoute:
       AuthenticatedRepartidorCalificacionesRoute,
     AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
+    AuthenticatedRepartidorGananciasRoute:
+      AuthenticatedRepartidorGananciasRoute,
     AuthenticatedRepartidorOnboardingRoute:
       AuthenticatedRepartidorOnboardingRoute,
     AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
