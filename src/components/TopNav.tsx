@@ -31,8 +31,7 @@ const quickLinkKeys = [
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
   { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
-  
-  
+  { key: "businesses", to: "/negocios/registro", label: "🏪 Postula tu negocio" },
 ] as const;
 
 

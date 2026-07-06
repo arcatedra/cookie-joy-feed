@@ -58,6 +58,7 @@ import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
+import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authenticated/admin.negocios'
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
@@ -335,6 +336,12 @@ const AuthenticatedAdminRepartidoresRoute =
     path: '/admin/repartidores',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminNegociosRoute =
+  AuthenticatedAdminNegociosRouteImport.update({
+    id: '/admin/negocios',
+    path: '/admin/negocios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminLiveRoute = AuthenticatedAdminLiveRouteImport.update({
   id: '/admin/live',
   path: '/admin/live',
@@ -477,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -544,6 +552,7 @@ export interface FileRoutesByTo {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -614,6 +623,7 @@ export interface FileRoutesById {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
+  '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -684,6 +694,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/admin/deliveries'
     | '/admin/live'
+    | '/admin/negocios'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -751,6 +762,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/admin/deliveries'
     | '/admin/live'
+    | '/admin/negocios'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -820,6 +832,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/live'
+    | '/_authenticated/admin/negocios'
     | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
@@ -1245,6 +1258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRepartidoresRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/negocios': {
+      id: '/_authenticated/admin/negocios'
+      path: '/admin/negocios'
+      fullPath: '/admin/negocios'
+      preLoaderRoute: typeof AuthenticatedAdminNegociosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/live': {
       id: '/_authenticated/admin/live'
       path: '/admin/live'
@@ -1413,6 +1433,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
+  AuthenticatedAdminNegociosRoute: typeof AuthenticatedAdminNegociosRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
@@ -1431,6 +1452,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
+  AuthenticatedAdminNegociosRoute: AuthenticatedAdminNegociosRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
