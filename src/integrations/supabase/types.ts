@@ -993,6 +993,53 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_payouts: {
+        Row: {
+          amount_net: number
+          amount_requested: number
+          completed_at: string | null
+          driver_id: string
+          fee: number
+          id: string
+          requested_at: string
+          status: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error: string | null
+          stripe_payout_id: string | null
+        }
+        Insert: {
+          amount_net: number
+          amount_requested: number
+          completed_at?: string | null
+          driver_id: string
+          fee?: number
+          id?: string
+          requested_at?: string
+          status?: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error?: string | null
+          stripe_payout_id?: string | null
+        }
+        Update: {
+          amount_net?: number
+          amount_requested?: number
+          completed_at?: string | null
+          driver_id?: string
+          fee?: number
+          id?: string
+          requested_at?: string
+          status?: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error?: string | null
+          stripe_payout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_payouts_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       driver_ratings: {
         Row: {
           comment: string | null
@@ -1081,6 +1128,38 @@ export type Database = {
           },
         ]
       }
+      driver_wallets: {
+        Row: {
+          available_balance: number
+          driver_id: string
+          lifetime_earnings: number
+          pending_balance: number
+          updated_at: string
+        }
+        Insert: {
+          available_balance?: number
+          driver_id: string
+          lifetime_earnings?: number
+          pending_balance?: number
+          updated_at?: string
+        }
+        Update: {
+          available_balance?: number
+          driver_id?: string
+          lifetime_earnings?: number
+          pending_balance?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_wallets_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: true
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drivers: {
         Row: {
           address: string
@@ -1107,6 +1186,8 @@ export type Database = {
           rejected_at: string | null
           rejected_by: string | null
           rejection_reason: string | null
+          stripe_account_id: string | null
+          stripe_payouts_enabled: boolean
           total_deliveries: number
           tutorial_completed_at: string | null
           updated_at: string
@@ -1137,6 +1218,8 @@ export type Database = {
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          stripe_account_id?: string | null
+          stripe_payouts_enabled?: boolean
           total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
@@ -1167,6 +1250,8 @@ export type Database = {
           rejected_at?: string | null
           rejected_by?: string | null
           rejection_reason?: string | null
+          stripe_account_id?: string | null
+          stripe_payouts_enabled?: boolean
           total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
@@ -2475,6 +2560,54 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          driver_id: string
+          id: string
+          payout_id: string | null
+          route_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          driver_id: string
+          id?: string
+          payout_id?: string | null
+          route_id?: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          driver_id?: string
+          id?: string
+          payout_id?: string | null
+          route_id?: string | null
+          type?: Database["public"]["Enums"]["wallet_txn_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_transactions_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wallet_transactions_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       winner_announcements: {
         Row: {
           created_at: string
@@ -2667,6 +2800,27 @@ export type Database = {
         }
       }
       close_draws_for_cutoff: { Args: never; Returns: number }
+      complete_driver_payout: {
+        Args: { p_payout_id: string; p_stripe_payout_id: string }
+        Returns: {
+          amount_net: number
+          amount_requested: number
+          completed_at: string | null
+          driver_id: string
+          fee: number
+          id: string
+          requested_at: string
+          status: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error: string | null
+          stripe_payout_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "driver_payouts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       complete_route_stop: {
         Args: { p_photo_url: string; p_stop_id: string }
         Returns: {
@@ -2903,6 +3057,27 @@ export type Database = {
           reel_id: string
         }[]
       }
+      request_driver_payout: {
+        Args: { p_amount: number; p_fee: number }
+        Returns: {
+          amount_net: number
+          amount_requested: number
+          completed_at: string | null
+          driver_id: string
+          fee: number
+          id: string
+          requested_at: string
+          status: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error: string | null
+          stripe_payout_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "driver_payouts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       resolve_referral_code: {
         Args: { p_code: string }
         Returns: {
@@ -2911,6 +3086,27 @@ export type Database = {
         }[]
       }
       restore_row: { Args: { p_id: string; p_table: string }; Returns: boolean }
+      reverse_failed_payout: {
+        Args: { p_payout_id: string; p_reason: string }
+        Returns: {
+          amount_net: number
+          amount_requested: number
+          completed_at: string | null
+          driver_id: string
+          fee: number
+          id: string
+          requested_at: string
+          status: Database["public"]["Enums"]["driver_payout_status"]
+          stripe_error: string | null
+          stripe_payout_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "driver_payouts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       run_daily_draw: {
         Args: never
         Returns: {
@@ -3039,6 +3235,7 @@ export type Database = {
         | "antecedentes_penales"
         | "foto_perfil"
       driver_earnings_status: "pendiente" | "pagado" | "en_proceso"
+      driver_payout_status: "procesando" | "completado" | "fallido"
       driver_vehicle_type: "bicicleta" | "moto" | "auto" | "a_pie"
       route_status:
         | "disponible"
@@ -3047,6 +3244,7 @@ export type Database = {
         | "completada"
         | "cancelada"
       stop_status: "pendiente" | "en_camino" | "entregado" | "fallido"
+      wallet_txn_type: "ganancia_ruta" | "retiro" | "ajuste_admin" | "reversion"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3210,6 +3408,7 @@ export const Constants = {
         "foto_perfil",
       ],
       driver_earnings_status: ["pendiente", "pagado", "en_proceso"],
+      driver_payout_status: ["procesando", "completado", "fallido"],
       driver_vehicle_type: ["bicicleta", "moto", "auto", "a_pie"],
       route_status: [
         "disponible",
@@ -3219,6 +3418,7 @@ export const Constants = {
         "cancelada",
       ],
       stop_status: ["pendiente", "en_camino", "entregado", "fallido"],
+      wallet_txn_type: ["ganancia_ruta", "retiro", "ajuste_admin", "reversion"],
     },
   },
 } as const
