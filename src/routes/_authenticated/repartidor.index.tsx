@@ -256,6 +256,14 @@ function RepartidorHome() {
               <span className="hidden sm:inline">Wallet</span>
               <span className="text-[#c8862e]">💰</span>
             </Link>
+            <Link
+              to="/repartidor/ganancias"
+              className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-[#1e3a5f] hover:bg-[#f4f1ea]"
+              title="Mis ganancias y retiros"
+            >
+              <span className="hidden sm:inline">Ganancias</span>
+              <span className="text-[#E6C35C]">⚡</span>
+            </Link>
             <Button
               size="sm"
               variant="ghost"
