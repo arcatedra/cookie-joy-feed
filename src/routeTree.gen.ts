@@ -49,6 +49,7 @@ import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/do
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
+import { Route as AuthenticatedRepartidorGananciasRouteImport } from './routes/_authenticated/repartidor.ganancias'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
@@ -58,6 +59,7 @@ import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
+import { Route as AuthenticatedAdminPayoutsRouteImport } from './routes/_authenticated/admin.payouts'
 import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authenticated/admin.negocios'
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
@@ -282,6 +284,12 @@ const AuthenticatedRepartidorOnboardingRoute =
     path: '/onboarding',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
+const AuthenticatedRepartidorGananciasRoute =
+  AuthenticatedRepartidorGananciasRouteImport.update({
+    id: '/ganancias',
+    path: '/ganancias',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
+  } as any)
 const AuthenticatedRepartidorFacturasRoute =
   AuthenticatedRepartidorFacturasRouteImport.update({
     id: '/facturas',
@@ -334,6 +342,12 @@ const AuthenticatedAdminRepartidoresRoute =
   AuthenticatedAdminRepartidoresRouteImport.update({
     id: '/admin/repartidores',
     path: '/admin/repartidores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminPayoutsRoute =
+  AuthenticatedAdminPayoutsRouteImport.update({
+    id: '/admin/payouts',
+    path: '/admin/payouts',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminNegociosRoute =
@@ -485,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
+  '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -494,6 +509,7 @@ export interface FileRoutesByFullPath {
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -553,6 +569,7 @@ export interface FileRoutesByTo {
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
+  '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -562,6 +579,7 @@ export interface FileRoutesByTo {
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -624,6 +642,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
   '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
+  '/_authenticated/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -633,6 +652,7 @@ export interface FileRoutesById {
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
+  '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -695,6 +715,7 @@ export interface FileRouteTypes {
     | '/admin/deliveries'
     | '/admin/live'
     | '/admin/negocios'
+    | '/admin/payouts'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -704,6 +725,7 @@ export interface FileRouteTypes {
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
+    | '/repartidor/ganancias'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -763,6 +785,7 @@ export interface FileRouteTypes {
     | '/admin/deliveries'
     | '/admin/live'
     | '/admin/negocios'
+    | '/admin/payouts'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -772,6 +795,7 @@ export interface FileRouteTypes {
     | '/negocio/productos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
+    | '/repartidor/ganancias'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -833,6 +857,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/live'
     | '/_authenticated/admin/negocios'
+    | '/_authenticated/admin/payouts'
     | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
@@ -842,6 +867,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocio/productos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
+    | '/_authenticated/repartidor/ganancias'
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -1195,6 +1221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/repartidor/ganancias': {
+      id: '/_authenticated/repartidor/ganancias'
+      path: '/ganancias'
+      fullPath: '/repartidor/ganancias'
+      preLoaderRoute: typeof AuthenticatedRepartidorGananciasRouteImport
+      parentRoute: typeof AuthenticatedRepartidorRoute
+    }
     '/_authenticated/repartidor/facturas': {
       id: '/_authenticated/repartidor/facturas'
       path: '/facturas'
@@ -1256,6 +1289,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/repartidores'
       fullPath: '/admin/repartidores'
       preLoaderRoute: typeof AuthenticatedAdminRepartidoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/payouts': {
+      id: '/_authenticated/admin/payouts'
+      path: '/admin/payouts'
+      fullPath: '/admin/payouts'
+      preLoaderRoute: typeof AuthenticatedAdminPayoutsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/negocios': {
@@ -1397,6 +1437,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRepartidorRouteChildren {
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
+  AuthenticatedRepartidorGananciasRoute: typeof AuthenticatedRepartidorGananciasRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
@@ -1410,6 +1451,8 @@ const AuthenticatedRepartidorRouteChildren: AuthenticatedRepartidorRouteChildren
     AuthenticatedRepartidorCalificacionesRoute:
       AuthenticatedRepartidorCalificacionesRoute,
     AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
+    AuthenticatedRepartidorGananciasRoute:
+      AuthenticatedRepartidorGananciasRoute,
     AuthenticatedRepartidorOnboardingRoute:
       AuthenticatedRepartidorOnboardingRoute,
     AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
@@ -1434,6 +1477,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
   AuthenticatedAdminNegociosRoute: typeof AuthenticatedAdminNegociosRoute
+  AuthenticatedAdminPayoutsRoute: typeof AuthenticatedAdminPayoutsRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
@@ -1453,6 +1497,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
   AuthenticatedAdminNegociosRoute: AuthenticatedAdminNegociosRoute,
+  AuthenticatedAdminPayoutsRoute: AuthenticatedAdminPayoutsRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
