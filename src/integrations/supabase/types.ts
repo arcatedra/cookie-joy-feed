@@ -463,6 +463,24 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_zones: {
+        Row: {
+          active: boolean
+          display_name: string
+          id: string
+        }
+        Insert: {
+          active?: boolean
+          display_name: string
+          id: string
+        }
+        Update: {
+          active?: boolean
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
@@ -1737,6 +1755,54 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_orders: {
+        Row: {
+          created_at: string
+          customer_id: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string | null
+          id: string
+          status: string
+          weight_kg: number
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date?: string | null
+          id?: string
+          status?: string
+          weight_kg: number
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          delivery_day?: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date?: string | null
+          id?: string
+          status?: string
+          weight_kg?: number
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_orders_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscription_orders_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "v_zone_dispatch_summary"
+            referencedColumns: ["zone_id"]
+          },
+        ]
+      }
       subscription_plans: {
         Row: {
           active: boolean
@@ -2228,7 +2294,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_zone_dispatch_summary: {
+        Row: {
+          delivery_day: Database["public"]["Enums"]["dispatch_day"] | null
+          dispatch_date: string | null
+          total_orders: number | null
+          total_weight_kg: number | null
+          zone_id: string | null
+          zone_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       close_draws_for_cutoff: { Args: never; Returns: number }
@@ -2412,6 +2488,13 @@ export type Database = {
           stops_count: number
         }[]
       }
+      next_dispatch_date: {
+        Args: {
+          p_day: Database["public"]["Enums"]["dispatch_day"]
+          p_from: string
+        }
+        Returns: string
+      }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
@@ -2497,6 +2580,7 @@ export type Database = {
         | "cancelado"
       courier_proof_type: "foto" | "firma" | "codigo" | "ninguno"
       courier_stop_status: "pendiente" | "en_camino" | "entregado" | "fallido"
+      dispatch_day: "lunes" | "viernes"
       donation_tier:
         | "azul"
         | "bronce"
@@ -2657,6 +2741,7 @@ export const Constants = {
       ],
       courier_proof_type: ["foto", "firma", "codigo", "ninguno"],
       courier_stop_status: ["pendiente", "en_camino", "entregado", "fallido"],
+      dispatch_day: ["lunes", "viernes"],
       donation_tier: [
         "azul",
         "bronce",
