@@ -1,33 +1,53 @@
-# Estado actual de Google Maps Platform
+## Estado del módulo Repartidor
 
-Sí, técnicamente ya está listo para funcionar. El código ya:
+Ya está construido y funcional:
+- Onboarding, acuerdo, tutorial, online/offline (`repartidor.onboarding.tsx`, `courier.functions.ts`)
+- Aceptar pedidos, recolección, entrega con prueba, cancelación, batching
+- Navegación con Google Maps + deep-links Waze/Apple/Google
+- Chat con cliente, calificaciones, historial
+- Wallet: ganancias por pedido, métodos de pago, payout instantáneo, payout semanal
+- Push notifications y tracking en vivo del pedido
+- Panel admin (`admin.repartidores`, `admin.deliveries`, `admin.live`)
 
-- Lee tu `GOOGLE_API_KEY` desde el servidor y la entrega al navegador solo cuando carga el mapa (no se expone en el bundle).
-- Cae a la key gestionada de Lovable como respaldo si por alguna razón la tuya no está.
-- Usa el gateway de Lovable para las llamadas del servidor (Routes API para batching y optimización), así que eso funciona en cualquier dominio sin tocar nada.
+## Lo único que falta: Facturas / Recibos del repartidor
 
-## Lo único que depende de ti (fuera del código)
+El repartidor puede ver sus ganancias en `/repartidor/wallet`, pero no puede descargar un **comprobante fiscal / recibo mensual** de sus ingresos para llevar su contabilidad personal. Eso es lo que agregaremos.
 
-En Google Cloud Console, sobre la API key que guardaste como `GOOGLE_API_KEY`:
+### Alcance
 
-1. **HTTP referrers permitidos** — deben incluir:
-   - `https://origen.management/*` y `https://*.origen.management/*`
-   - `https://hazorex.com/*` y `https://*.hazorex.com/*`
-   - `https://*.lovable.app/*` y `https://*.lovableproject.com/*` (para preview)
-2. **APIs habilitadas en el proyecto de Google Cloud**:
-   - Maps JavaScript API
-   - Places API (New) — si usaremos autocomplete de direcciones
-   - Geocoding API, Routes API — ya se llaman por el gateway, pero conviene tenerlas activas por si luego movemos algo al cliente
-3. **Billing activo** en ese proyecto de Google Cloud (Maps exige billing habilitado incluso dentro del free tier).
+1. **Página `/repartidor/facturas`** listando períodos mensuales con:
+   - Mes, total bruto, propinas, comisiones descontadas, neto pagado
+   - Número de entregas completadas
+   - Botón "Descargar PDF" y "Descargar CSV"
 
-## Cómo verificar que ya anda
+2. **Server function `getDriverInvoices`** que agrupa `driver_order_earnings` por mes del repartidor autenticado (últimos 24 meses).
 
-Después de publicar:
+3. **Server function `generateDriverInvoicePDF`** (`method: "POST"`) que genera un recibo mensual con:
+   - Datos del repartidor (nombre, teléfono, ID) del `drivers` table
+   - Emisor: Hazorex / OriGen (datos de `config.server.ts` o constantes)
+   - Detalle línea por línea de pedidos del mes
+   - Totales: bruto, propinas, comisión plataforma, neto
+   - Número de factura estable: `HZX-{driverId8}-{YYYYMM}`
+   - PDF generado con `pdf-lib` (compatible con Worker runtime)
 
-- Abrir `https://www.origen.management` (o `hazorex.com`) en una ruta que use el mapa: `/pedido/{id}/seguimiento` o `/repartidor/pedido/{id}/navegacion`.
-- El mapa debe cargar sin el error `RefererNotAllowedMapError` en la consola.
-- Si aparece `REQUEST_DENIED` o el mapa queda gris: falta un referrer o una API en Cloud Console; no es un cambio de código.
+4. **CSV export** del mismo período para contadores.
 
-## Plan propuesto
+5. **Entrada en `BottomNav` / wallet** con link a "Mis facturas".
 
-No hace falta tocar código ahora. Confirmar los 3 puntos de Google Cloud arriba, publicar y probar en el dominio real. Si algo falla, capturamos el error de consola y decidimos si es referrer, API deshabilitada o billing.
+6. **i18n**: claves `driverInvoices.*` en `es/en` (los otros idiomas se completan con el script existente).
+
+### Detalles técnicos
+
+- Archivo nuevo: `src/lib/driver-invoices.functions.ts`
+- Ruta nueva: `src/routes/_authenticated/repartidor.facturas.tsx`
+- Dependencia: `pdf-lib` (ya edge-compatible, no requiere Node nativo)
+- Los "invoices" son documentos derivados de `driver_order_earnings`; no se necesita nueva tabla salvo si el usuario quiere numeración persistente y sellos de tiempo — en ese caso agregar `driver_invoices` (mes, driver_id, totales, generated_at, pdf_path) opcional en fase 2.
+- El PDF se genera on-demand y se devuelve como base64 al cliente para descarga (patrón simple, sin storage). Alternativa: subir a bucket `driver-invoices` y devolver signed URL.
+
+### Fuera de alcance
+
+- Facturación fiscal oficial (DGI Panamá / SRI / SAT). Esto es un **recibo interno de ingresos**, no una factura electrónica timbrada. Si quieres factura fiscal oficial (con RUC/timbrado), es un proyecto distinto que requiere integración con proveedor fiscal.
+
+### Pregunta previa a implementar
+
+¿Quieres que el PDF sea solo **recibo de ingresos mensual** (rápido, ~30 min) o quieres además la tabla `driver_invoices` con numeración persistente y almacenamiento en bucket para auditoría (~1h extra)?

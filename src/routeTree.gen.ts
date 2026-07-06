@@ -46,6 +46,7 @@ import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/do
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
+import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
@@ -259,6 +260,12 @@ const AuthenticatedRepartidorOnboardingRoute =
     path: '/repartidor/onboarding',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRepartidorFacturasRoute =
+  AuthenticatedRepartidorFacturasRouteImport.update({
+    id: '/repartidor/facturas',
+    path: '/repartidor/facturas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorCalificacionesRoute =
   AuthenticatedRepartidorCalificacionesRouteImport.update({
     id: '/repartidor/calificaciones',
@@ -441,6 +448,7 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -503,6 +511,7 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -567,6 +576,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
@@ -631,6 +641,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/claim/$drawDate'
     | '/repartidor/calificaciones'
+    | '/repartidor/facturas'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -693,6 +704,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/claim/$drawDate'
     | '/repartidor/calificaciones'
+    | '/repartidor/facturas'
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -756,6 +768,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/support'
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/repartidor/calificaciones'
+    | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
@@ -1086,6 +1099,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repartidor/facturas': {
+      id: '/_authenticated/repartidor/facturas'
+      path: '/repartidor/facturas'
+      fullPath: '/repartidor/facturas'
+      preLoaderRoute: typeof AuthenticatedRepartidorFacturasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/calificaciones': {
       id: '/_authenticated/repartidor/calificaciones'
       path: '/repartidor/calificaciones'
@@ -1268,6 +1288,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
+  AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
   AuthenticatedRepartidorWalletRoute: typeof AuthenticatedRepartidorWalletRoute
   AuthenticatedRepartidorIndexRoute: typeof AuthenticatedRepartidorIndexRoute
@@ -1290,6 +1311,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedRepartidorCalificacionesRoute:
     AuthenticatedRepartidorCalificacionesRoute,
+  AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
   AuthenticatedRepartidorOnboardingRoute:
     AuthenticatedRepartidorOnboardingRoute,
   AuthenticatedRepartidorWalletRoute: AuthenticatedRepartidorWalletRoute,
@@ -1365,13 +1387,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

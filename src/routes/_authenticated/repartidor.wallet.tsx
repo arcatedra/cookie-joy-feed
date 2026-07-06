@@ -16,6 +16,7 @@ import {
   Trash2,
   Star,
   StarOff,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -100,6 +101,13 @@ function WalletPage() {
           </Link>
           <Wallet className="size-6 text-[#1e3a5f]" />
           <h1 className="font-serif text-xl font-bold text-[#1e3a5f]">Mi wallet</h1>
+          <Link
+            to="/repartidor/facturas"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-[#c8862e]/40 bg-white px-3 py-1.5 text-xs font-bold text-[#1e3a5f] hover:bg-[#f4f1ea]"
+          >
+            <FileText className="size-3.5" />
+            Mis recibos
+          </Link>
         </div>
       </header>
 
