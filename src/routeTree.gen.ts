@@ -43,6 +43,7 @@ import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authenticated/repartidor'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
+import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
@@ -244,6 +245,12 @@ const AuthenticatedRepartidorIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedRepartidorRoute,
+  } as any)
+const AuthenticatedNegocioIndexRoute =
+  AuthenticatedNegocioIndexRouteImport.update({
+    id: '/negocio/',
+    path: '/negocio/',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
@@ -468,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -532,6 +540,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -599,6 +608,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
@@ -666,6 +676,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/negocio/'
     | '/repartidor/'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/negocio'
     | '/repartidor'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
@@ -796,6 +808,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
+    | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
     | '/_authenticated/pedido/$id/calificar'
     | '/_authenticated/pedido/$id/seguimiento'
@@ -1101,6 +1114,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorIndexRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/negocio/': {
+      id: '/_authenticated/negocio/'
+      path: '/negocio'
+      fullPath: '/negocio/'
+      preLoaderRoute: typeof AuthenticatedNegocioIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1358,6 +1378,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
+  AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
   AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
 }
@@ -1373,6 +1394,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
+  AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
   AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
 }
