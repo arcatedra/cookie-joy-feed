@@ -66,7 +66,7 @@ function ProfilePage() {
     "Alex R.";
 
   return (
-    <main className="min-h-screen bg-background pb-24">
+    <main className="profile-page min-h-screen bg-background pb-24">
       {/* Top blue banner */}
       <header className="relative bg-primary px-5 pt-12 pb-20">
         <div className="flex items-center justify-between">
@@ -100,7 +100,7 @@ function ProfilePage() {
           </div>
 
           <div className="mt-4 text-center">
-            <h2 className="text-xl font-bold text-foreground">{displayName}</h2>
+            <h2 className="text-xl font-bold text-card-foreground">{displayName}</h2>
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
             <DonorBadge userId={user?.id ?? null} />
@@ -145,7 +145,7 @@ function ProfilePage() {
         <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
           {t("profile.account")}
         </h3>
-        <div className="mt-3 rounded-2xl bg-card shadow-sm ring-1 ring-border overflow-hidden">
+          <div className="mt-3 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
           {menuItems.map((item, i) => (
             <button
               key={item.key}
@@ -157,7 +157,7 @@ function ProfilePage() {
             >
               <div className="flex items-center gap-3">
                 <item.Icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{t(`profile.menu.${item.key}`)}</span>
+                <span className="text-sm font-semibold text-card-foreground">{t(`profile.menu.${item.key}`)}</span>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </button>
@@ -198,7 +198,7 @@ function ProfilePage() {
               <MessageSquare className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground">Buzón de sugerencias</p>
+              <p className="text-sm font-bold text-card-foreground">Buzón de sugerencias</p>
               <p className="text-xs text-muted-foreground">Danos tu opinión — la lee nuestro equipo</p>
             </div>
           </div>
@@ -210,7 +210,7 @@ function ProfilePage() {
 
 
       <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
-        <SheetContent side="right" className="w-full sm:max-w-sm p-0">
+          <SheetContent side="right" className="w-full bg-card text-card-foreground sm:max-w-sm p-0">
           <SheetHeader className="px-5 pt-6 pb-3">
             <SheetTitle className="text-lg font-bold capitalize">
               {sheet ? t(`profile.menu.${sheet}`) : ""}
@@ -253,7 +253,7 @@ function AdminSuggestionsLink({ userId }: { userId: string }) {
             <Inbox className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">Admin · Buzón de sugerencias</p>
+            <p className="text-sm font-bold text-card-foreground">Admin · Buzón de sugerencias</p>
             <p className="text-xs text-muted-foreground">
               {data.unreadCount > 0 ? `${data.unreadCount} sin leer` : "Todo al día"}
             </p>
@@ -355,7 +355,7 @@ function RecentOrders({ userId, lang, t }: { userId: string | null; lang: string
                       <Cookie className="h-5 w-5 text-brown" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-foreground">{t("profile.order", { id: shortId })}</p>
+                      <p className="text-sm font-bold text-card-foreground">{t("profile.order", { id: shortId })}</p>
                       <p className="text-xs text-muted-foreground">
                         {order.tokens} ⭐ · ${Number(order.amount_usd).toFixed(2)}
                       </p>
@@ -410,17 +410,17 @@ function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string
   return (
     <div className="mt-5 flex items-center justify-around">
       <div className="flex flex-col items-center px-4">
-        <span className="text-lg font-bold text-foreground">{formatNumber(orders, lang)}</span>
+        <span className="text-lg font-bold text-card-foreground">{formatNumber(orders, lang)}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
       </div>
       <div className="h-8 w-px bg-border" />
       <div className="flex flex-col items-center px-4">
-        <span className="text-lg font-bold text-foreground">{formatNumber(favorites, lang)}</span>
+        <span className="text-lg font-bold text-card-foreground">{formatNumber(favorites, lang)}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
       </div>
       <div className="h-8 w-px bg-border" />
       <div className="flex flex-col items-center px-4">
-        <span className="text-sm font-bold text-foreground">{level}</span>
+        <span className="text-sm font-bold text-card-foreground">{level}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
       </div>
     </div>
