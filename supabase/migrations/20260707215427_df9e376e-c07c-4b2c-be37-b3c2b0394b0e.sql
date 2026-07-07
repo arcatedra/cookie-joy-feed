@@ -1,0 +1,1 @@
+ALTER TYPE public.driver_document_type ADD VALUE IF NOT EXISTS 'casco';

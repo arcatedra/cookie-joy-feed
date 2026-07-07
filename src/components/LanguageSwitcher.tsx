@@ -37,7 +37,6 @@ export function LanguageSwitcher({ className = "", variant = "dark" }: Props) {
         } ${className}`}
       >
         <Globe className="h-3.5 w-3.5" aria-hidden />
-        <span aria-hidden>{meta.flag}</span>
         <span>{meta.label}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[12rem]">
@@ -58,9 +57,6 @@ export function LanguageSwitcher({ className = "", variant = "dark" }: Props) {
               className="flex items-center justify-between gap-3 text-sm"
             >
               <span className="flex items-center gap-2">
-                <span aria-hidden className="text-base leading-none">
-                  {m.flag}
-                </span>
                 <span className="font-medium">{m.nativeName}</span>
                 <span className="text-xs text-muted-foreground">{m.label}</span>
               </span>

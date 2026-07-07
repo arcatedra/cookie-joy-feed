@@ -3361,6 +3361,7 @@ export type Database = {
         | "identificacion"
         | "antecedentes_penales"
         | "foto_perfil"
+        | "casco"
       driver_earnings_status: "pendiente" | "pagado" | "en_proceso"
       driver_payout_status: "procesando" | "completado" | "fallido"
       driver_vehicle_type: "bicicleta" | "moto" | "auto" | "a_pie"
@@ -3533,6 +3534,7 @@ export const Constants = {
         "identificacion",
         "antecedentes_penales",
         "foto_perfil",
+        "casco",
       ],
       driver_earnings_status: ["pendiente", "pagado", "en_proceso"],
       driver_payout_status: ["procesando", "completado", "fallido"],

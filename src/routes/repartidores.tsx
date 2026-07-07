@@ -60,17 +60,10 @@ type DriverRow = {
 };
 
 const ZONES = [
-  "San Salvador",
-  "Santa Tecla",
-  "Antiguo Cuscatlán",
-  "Nuevo Cuscatlán",
-  "Soyapango",
-  "Mejicanos",
-  "Ilopango",
-  "San Marcos",
-  "Apopa",
-  "Ciudad Merliot",
-  "Otra zona",
+  "Manhattan",
+  "Brooklyn",
+  "Queens",
+  "Bronx",
 ];
 
 function RepartidoresLanding() {
@@ -592,23 +585,33 @@ const step2Schema = z.object({
 type Step1 = z.infer<typeof step1Schema>;
 type Step2 = z.infer<typeof step2Schema>;
 
-type DocKey = "identificacion" | "licencia_conducir" | "seguro_vehiculo" | "foto_perfil";
-const DOC_LABELS: Record<DocKey, { label: string; hint: string }> = {
+type DocKey =
+  | "identificacion"
+  | "licencia_conducir"
+  | "seguro_vehiculo"
+  | "foto_perfil"
+  | "casco";
+const DOC_LABELS: Record<DocKey, { label: string; hint: string; onlyMoto?: boolean }> = {
   identificacion: {
-    label: "Identificación oficial (DUI, pasaporte, cédula)",
+    label: "Identificación oficial (licencia estatal, pasaporte o ID gubernamental)",
     hint: "Imagen o PDF, máx 5MB",
   },
   licencia_conducir: {
-    label: "Licencia de conducir vigente",
+    label: "Licencia de conducir vigente (NY State)",
     hint: "Imagen o PDF, máx 5MB",
   },
   seguro_vehiculo: {
-    label: "Seguro/SOAT del vehículo vigente",
+    label: "Seguro del vehículo vigente",
     hint: "Imagen o PDF, máx 5MB",
   },
   foto_perfil: {
     label: "Selfie clara (foto de perfil)",
     hint: "Imagen jpg/png, máx 5MB",
+  },
+  casco: {
+    label: "Foto de tu casco DOT-aprobado (solo moto)",
+    hint: "Imagen jpg/png del casco puesto o al frente, máx 5MB",
+    onlyMoto: true,
   },
 };
 
@@ -706,7 +709,7 @@ function ApplicationForm({
         }),
       );
       if (docRows.length > 0) {
-        const { error: docErr } = await supabase.from("driver_documents").insert(docRows);
+        const { error: docErr } = await supabase.from("driver_documents").insert(docRows as any);
         if (docErr) throw new Error(`No se pudieron guardar tus documentos: ${docErr.message}`);
       }
 
@@ -740,10 +743,16 @@ function ApplicationForm({
     },
   });
 
-  const requiredDocs: DocKey[] = useMemo(
-    () => ["identificacion", "licencia_conducir", "seguro_vehiculo", "foto_perfil"],
-    [],
-  );
+  const requiredDocs: DocKey[] = useMemo(() => {
+    const base: DocKey[] = [
+      "identificacion",
+      "licencia_conducir",
+      "seguro_vehiculo",
+      "foto_perfil",
+    ];
+    if (s2.vehicleType === "moto") base.push("casco");
+    return base;
+  }, [s2.vehicleType]);
 
   // ---------- SUCCESS SCREEN ----------
   if (submittedRef) {
@@ -870,7 +879,7 @@ function ApplicationForm({
                   id="phone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+503 7000 0000"
+                  placeholder="+1 (212) 555-0100"
                   value={s1.phone}
                   onChange={(e) => setS1({ ...s1, phone: e.target.value })}
                   className="min-h-11"
@@ -1033,7 +1042,7 @@ function ApplicationForm({
             <SectionHeader
               icon={<FileText className="size-5" />}
               title="Documentos"
-              subtitle="Todos los archivos son opcionales de reordenar; pero todos son obligatorios."
+              subtitle="Todos los documentos siguientes son obligatorios para completar tu postulación."
             />
 
             <div className="rounded-lg border border-[#1e3a5f]/20 bg-[#f4f1ea] p-4 text-xs leading-relaxed text-[#4a3525]">
@@ -1098,26 +1107,60 @@ function ApplicationForm({
               title="Confirmación"
             />
 
-            <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4 text-sm text-[#4a3525]">
-              <p>
-                <strong>{s1.fullName}</strong>
-              </p>
-              <p>
-                {s1.email} · {s1.phone}
-              </p>
-              <p>
-                {s1.city} — {s1.address}
-              </p>
-              <p className="mt-2">
-                Vehículo: <strong>{s2.vehicleType === "moto" ? "Moto" : "Auto"}</strong> ·
-                Licencia {s2.licenseNumber} · {s2.insurer}
-              </p>
-              <p className="mt-2">
-                Documentos subidos:{" "}
-                <strong>
-                  {Object.values(files).filter(Boolean).length} / {requiredDocs.length}
-                </strong>
-              </p>
+            <p className="text-xs text-[#4a3525]/70">
+              Revisa que todo esté correcto. Puedes editar cualquier sección antes de
+              enviar tu postulación.
+            </p>
+
+            <SummarySection
+              title="Datos personales"
+              onEdit={() => setStep(1)}
+              rows={[
+                { label: "Nombre", value: s1.fullName },
+                { label: "Correo", value: s1.email },
+                { label: "Teléfono", value: s1.phone },
+                { label: "Fecha de nacimiento", value: s1.dateOfBirth },
+                { label: "Zona", value: s1.city },
+                { label: "Dirección", value: s1.address },
+              ]}
+            />
+
+            <SummarySection
+              title="Vehículo"
+              onEdit={() => setStep(2)}
+              rows={[
+                { label: "Tipo", value: s2.vehicleType === "moto" ? "Moto" : "Auto" },
+                { label: "Licencia", value: s2.licenseNumber },
+                { label: "Aseguradora", value: s2.insurer },
+                { label: "Placa", value: s2.plateNumber || "—" },
+              ]}
+            />
+
+            <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="font-serif text-sm font-bold text-[#1e3a5f]">Documentos</p>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
+                >
+                  Editar
+                </button>
+              </div>
+              <ul className="space-y-1.5">
+                {requiredDocs.map((k) => {
+                  const f = files[k];
+                  return (
+                    <li
+                      key={k}
+                      className="flex items-center justify-between gap-3 text-xs text-[#4a3525]"
+                    >
+                      <span className="truncate">{DOC_LABELS[k].label}</span>
+                      <DocStatusBadge state={f ? "subido" : "pendiente"} />
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#c8862e]/30 bg-white p-4 text-sm text-[#4a3525] min-h-11">
@@ -1284,7 +1327,7 @@ function FileUpload({
   const ref = useRef<HTMLInputElement>(null);
   const info = DOC_LABELS[docKey];
   const inputId = `file-${docKey}`;
-  const isImageOnly = docKey === "foto_perfil";
+  const isImageOnly = docKey === "foto_perfil" || docKey === "casco";
   return (
     <div className="space-y-1.5">
       <Label htmlFor={inputId} className="text-sm font-medium text-[#1e3a5f]">
@@ -1308,6 +1351,7 @@ function FileUpload({
             <p className="text-xs text-[#4a3525]/70">{info.hint}</p>
           )}
         </div>
+        <DocStatusBadge state={file ? "subido" : "pendiente"} />
         <Button
           type="button"
           variant={file ? "outline" : "default"}
@@ -1333,5 +1377,59 @@ function FileUpload({
         </p>
       )}
     </div>
+  );
+}
+
+function SummarySection({
+  title,
+  onEdit,
+  rows,
+}: {
+  title: string;
+  onEdit: () => void;
+  rows: { label: string; value: string }[];
+}) {
+  return (
+    <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="font-serif text-sm font-bold text-[#1e3a5f]">{title}</p>
+        <button
+          type="button"
+          onClick={onEdit}
+          className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
+        >
+          Editar
+        </button>
+      </div>
+      <dl className="grid grid-cols-1 gap-1 text-xs text-[#4a3525] sm:grid-cols-2">
+        {rows.map((r) => (
+          <div key={r.label} className="flex gap-1">
+            <dt className="text-[#4a3525]/70">{r.label}:</dt>
+            <dd className="truncate font-medium text-[#1e3a5f]">{r.value || "—"}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+function DocStatusBadge({
+  state,
+}: {
+  state: "pendiente" | "subido" | "verificado" | "rechazado";
+}) {
+  const map = {
+    pendiente: { label: "Pendiente", cls: "bg-amber-100 text-amber-800 border-amber-300" },
+    subido: { label: "Subido", cls: "bg-blue-100 text-blue-800 border-blue-300" },
+    verificado: { label: "Verificado", cls: "bg-emerald-100 text-emerald-800 border-emerald-300" },
+    rechazado: { label: "Rechazado", cls: "bg-red-100 text-red-800 border-red-300" },
+  } as const;
+  const m = map[state];
+  return (
+    <span
+      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${m.cls}`}
+    >
+      {m.label}
+    </span>
   );
 }
