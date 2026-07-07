@@ -222,7 +222,7 @@ function ProductsPage() {
                 className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
                   p.is_active
                     ? "bg-emerald-100 text-emerald-800"
-                    : "bg-slate-200 text-slate-700"
+                    : "bg-muted text-muted-foreground"
                 }`}
               >
                 {p.is_active ? "Activo" : "Oculto"}
