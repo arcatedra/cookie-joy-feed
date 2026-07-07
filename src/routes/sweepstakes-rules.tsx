@@ -24,6 +24,8 @@ function RulesPage() {
   const { data: cfg, isLoading } = useQuery({
     queryKey: ["sweepstakes-public-config"],
     queryFn: () => fetchCfg(),
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
   });
 
   const sponsorName = cfg?.sponsor_name ?? "HAZOREX ORIGEN LLC";
