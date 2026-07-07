@@ -333,7 +333,7 @@ export function TopNav() {
           </button>
           <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
             {quickLinkKeys.map((l) => {
-              const isHighlighted = l.key === "shop" || l.key === "roulette";
+              const isHighlighted = l.key === "shop" || l.key === "roulette" || l.key === "drivers";
               return (
                 <Link
                   key={l.key}
