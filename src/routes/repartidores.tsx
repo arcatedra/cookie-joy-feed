@@ -59,12 +59,8 @@ type DriverRow = {
   rejection_reason: string | null;
 };
 
-const ZONES = [
-  "Manhattan",
-  "Brooklyn",
-  "Queens",
-  "Bronx",
-];
+import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+const ZONES = NYC_DELIVERY_ZONES;
 
 function RepartidoresLanding() {
   const { user, loading: authLoading } = useAuth();
