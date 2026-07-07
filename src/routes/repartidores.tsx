@@ -60,17 +60,10 @@ type DriverRow = {
 };
 
 const ZONES = [
-  "San Salvador",
-  "Santa Tecla",
-  "Antiguo Cuscatlán",
-  "Nuevo Cuscatlán",
-  "Soyapango",
-  "Mejicanos",
-  "Ilopango",
-  "San Marcos",
-  "Apopa",
-  "Ciudad Merliot",
-  "Otra zona",
+  "Manhattan",
+  "Brooklyn",
+  "Queens",
+  "Bronx",
 ];
 
 function RepartidoresLanding() {
