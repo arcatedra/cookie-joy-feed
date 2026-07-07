@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { render } from '@react-email/components'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { TEMPLATES } from '@/lib/email-templates/registry'
+import type { Database } from '@/integrations/supabase/types'
+
 
 const SITE_NAME = 'HAZOREX'
 const SENDER_DOMAIN = 'notify.hazorex.com'
@@ -31,9 +33,10 @@ export const Route = createFileRoute('/api/public/hooks/notify-order')({
           return new Response('Server misconfigured', { status: 500 })
         }
 
-        const supabase = createClient(supabaseUrl, serviceKey, {
+        const supabase = createClient<Database>(supabaseUrl, serviceKey, {
           auth: { persistSession: false, autoRefreshToken: false },
         })
+
 
         const { data: secretRow } = await supabase
           .from('internal_hook_config')
@@ -115,10 +118,11 @@ export const Route = createFileRoute('/api/public/hooks/notify-order')({
 })
 
 async function handleDeliveryCompleted(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient<Database>,
   notificationId: string,
   payload: Record<string, unknown>,
 ) {
+
   const orderId = String(payload.order_id ?? '')
   const photoUrl = typeof payload.photo_url === 'string' ? payload.photo_url : ''
   if (!orderId) throw new Error('payload.order_id requerido')
