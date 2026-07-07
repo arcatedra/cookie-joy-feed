@@ -117,17 +117,17 @@ function MyBusinessPage() {
       </div>
 
       {data.status === "pendiente" && (
-        <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm">
+        <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           Tu postulación está en revisión. Te notificaremos cuando sea aprobada.
         </div>
       )}
       {data.status === "rechazado" && data.rejection_reason && (
-        <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm">
+        <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-900">
           <strong>Rechazado:</strong> {data.rejection_reason}
         </div>
       )}
       {data.status === "suspendido" && (
-        <div className="mb-6 rounded-md border border-slate-300 bg-slate-100 p-4 text-sm">
+        <div className="mb-6 rounded-md border border-slate-300 bg-slate-100 p-4 text-sm text-slate-900">
           Tu negocio está suspendido.{" "}
           {data.rejection_reason ?? "Contáctanos para más información."}
         </div>
