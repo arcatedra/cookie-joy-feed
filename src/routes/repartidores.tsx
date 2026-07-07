@@ -879,7 +879,7 @@ function ApplicationForm({
                   id="phone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+503 7000 0000"
+                  placeholder="+1 (212) 555-0100"
                   value={s1.phone}
                   onChange={(e) => setS1({ ...s1, phone: e.target.value })}
                   className="min-h-11"
