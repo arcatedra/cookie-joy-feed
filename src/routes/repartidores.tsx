@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import {
   Bike,
@@ -59,12 +59,8 @@ type DriverRow = {
   rejection_reason: string | null;
 };
 
-const ZONES = [
-  "Manhattan",
-  "Brooklyn",
-  "Queens",
-  "Bronx",
-];
+import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+const ZONES = NYC_DELIVERY_ZONES;
 
 function RepartidoresLanding() {
   const { user, loading: authLoading } = useAuth();
@@ -552,9 +548,15 @@ const step1Schema = z.object({
   phone: z
     .string()
     .trim()
-    .min(7, "Teléfono inválido")
+    .min(10, "Teléfono inválido")
     .max(20)
-    .regex(/^[+\d\s()-]+$/, "Solo números y símbolos de teléfono"),
+    .refine((v) => {
+      // Accept US 10-digit numbers, with optional +1/1 country code and common separators.
+      const digits = v.replace(/[^\d]/g, "");
+      if (digits.length === 10) return true;
+      if (digits.length === 11 && digits.startsWith("1")) return true;
+      return false;
+    }, "Ingresa un número de EE. UU. de 10 dígitos, ej. +1 (718) 555 0000"),
   dateOfBirth: z
     .string()
     .min(1, "Selecciona tu fecha de nacimiento")
@@ -879,7 +881,7 @@ function ApplicationForm({
                   id="phone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+1 (212) 555-0100"
+                  placeholder="+1 (718) 555 0000"
                   value={s1.phone}
                   onChange={(e) => setS1({ ...s1, phone: e.target.value })}
                   className="min-h-11"
@@ -914,9 +916,9 @@ function ApplicationForm({
                   className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">Selecciona…</option>
-                  {ZONES.map((z) => (
-                    <option key={z} value={z}>
-                      {z}
+                  {ZONES.map((zone) => (
+                    <option key={zone} value={zone}>
+                      {zone}
                     </option>
                   ))}
                 </select>
@@ -1042,7 +1044,7 @@ function ApplicationForm({
             <SectionHeader
               icon={<FileText className="size-5" />}
               title="Documentos"
-              subtitle="Todos los documentos siguientes son obligatorios para completar tu postulación."
+              subtitle="Todos los documentos siguientes son obligatorios para completar tu postulación (imagen o PDF, máx. 5MB)."
             />
 
             <div className="rounded-lg border border-[#1e3a5f]/20 bg-[#f4f1ea] p-4 text-xs leading-relaxed text-[#4a3525]">
@@ -1328,6 +1330,18 @@ function FileUpload({
   const info = DOC_LABELS[docKey];
   const inputId = `file-${docKey}`;
   const isImageOnly = docKey === "foto_perfil" || docKey === "casco";
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!file || !file.type.startsWith("image/")) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
   return (
     <div className="space-y-1.5">
       <Label htmlFor={inputId} className="text-sm font-medium text-[#1e3a5f]">
@@ -1338,6 +1352,19 @@ function FileUpload({
           error ? "border-red-400 bg-red-50" : "border-[#c8862e]/40 bg-[#f4f1ea]/40"
         }`}
       >
+        {file && (
+          <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-md border border-[#c8862e]/30 bg-white">
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt={`Vista previa de ${info.label}`}
+                className="size-full object-cover"
+              />
+            ) : (
+              <FileText className="size-5 text-[#1e3a5f]" aria-hidden />
+            )}
+          </div>
+        )}
         <div className="min-w-0 flex-1">
           {file ? (
             <div className="flex items-center gap-2 text-sm text-[#1e3a5f]">
