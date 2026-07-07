@@ -585,23 +585,33 @@ const step2Schema = z.object({
 type Step1 = z.infer<typeof step1Schema>;
 type Step2 = z.infer<typeof step2Schema>;
 
-type DocKey = "identificacion" | "licencia_conducir" | "seguro_vehiculo" | "foto_perfil";
-const DOC_LABELS: Record<DocKey, { label: string; hint: string }> = {
+type DocKey =
+  | "identificacion"
+  | "licencia_conducir"
+  | "seguro_vehiculo"
+  | "foto_perfil"
+  | "casco";
+const DOC_LABELS: Record<DocKey, { label: string; hint: string; onlyMoto?: boolean }> = {
   identificacion: {
-    label: "Identificación oficial (DUI, pasaporte, cédula)",
+    label: "Identificación oficial (licencia estatal, pasaporte o ID gubernamental)",
     hint: "Imagen o PDF, máx 5MB",
   },
   licencia_conducir: {
-    label: "Licencia de conducir vigente",
+    label: "Licencia de conducir vigente (NY State)",
     hint: "Imagen o PDF, máx 5MB",
   },
   seguro_vehiculo: {
-    label: "Seguro/SOAT del vehículo vigente",
+    label: "Seguro del vehículo vigente",
     hint: "Imagen o PDF, máx 5MB",
   },
   foto_perfil: {
     label: "Selfie clara (foto de perfil)",
     hint: "Imagen jpg/png, máx 5MB",
+  },
+  casco: {
+    label: "Foto de tu casco DOT-aprobado (solo moto)",
+    hint: "Imagen jpg/png del casco puesto o al frente, máx 5MB",
+    onlyMoto: true,
   },
 };
 
