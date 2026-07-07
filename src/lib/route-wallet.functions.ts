@@ -301,7 +301,7 @@ export const adminListRoutePayouts = createServerFn({ method: "GET" })
 
     const { data: payouts } = await dbAny
       .from("driver_payouts")
-      .select("*, drivers(full_name)")
+      .select("*, drivers(full_name, stripe_account_id)")
       .order("requested_at", { ascending: false })
       .limit(100);
 
@@ -319,3 +319,83 @@ export const adminListRoutePayouts = createServerFn({ method: "GET" })
       totalPending,
     };
   });
+
+/**
+ * Sincronización manual de un payout: consulta Stripe y actualiza el estado
+ * local. Sirve de respaldo si el webhook falla o llega tarde.
+ */
+export const adminSyncRoutePayout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { payout_id: string }) => ({
+    payout_id: z.string().uuid().parse(d.payout_id),
+  }))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const dbAny = supabase as any;
+
+    const { data: isAdmin } = await dbAny.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Solo admins");
+
+    const { data: payout } = await dbAny
+      .from("driver_payouts")
+      .select("id, status, stripe_payout_id, driver_id")
+      .eq("id", data.payout_id)
+      .maybeSingle();
+
+    if (!payout) throw new Error("Retiro no encontrado");
+    if (!payout.stripe_payout_id) {
+      throw new Error("Este retiro nunca llegó a Stripe (sin stripe_payout_id)");
+    }
+
+    const { data: driver } = await dbAny
+      .from("drivers")
+      .select("stripe_account_id")
+      .eq("id", payout.driver_id)
+      .maybeSingle();
+
+    if (!driver?.stripe_account_id) {
+      throw new Error("Repartidor sin cuenta de Stripe conectada");
+    }
+
+    const { stripeGet, paymentsEnvironmentForHost } = await import(
+      "@/lib/stripe.server"
+    );
+    const env = paymentsEnvironmentForHost();
+
+    const remote = await stripeGet<{
+      id: string;
+      status: string;
+      failure_message?: string | null;
+      failure_code?: string | null;
+    }>(`/v1/payouts/${payout.stripe_payout_id}`, env, {
+      "Stripe-Account": driver.stripe_account_id,
+    });
+
+    // Estados de Stripe: paid | pending | in_transit | canceled | failed
+    if (remote.status === "paid") {
+      if (payout.status !== "completado") {
+        await dbAny.rpc("complete_driver_payout", {
+          p_payout_id: payout.id,
+          p_stripe_payout_id: remote.id,
+        });
+      }
+      return { updated: payout.status !== "completado", status: "completado" };
+    }
+
+    if (remote.status === "failed" || remote.status === "canceled") {
+      if (payout.status !== "fallido") {
+        await dbAny.rpc("reverse_failed_payout", {
+          p_payout_id: payout.id,
+          p_reason: (remote.failure_message ?? remote.failure_code ?? remote.status).slice(0, 300),
+        });
+      }
+      return { updated: payout.status !== "fallido", status: "fallido" };
+    }
+
+    // pending / in_transit → sigue procesando
+    return { updated: false, status: "procesando", remote_status: remote.status };
+  });
+
