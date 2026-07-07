@@ -1194,7 +1194,9 @@ export type Database = {
           rejected_by: string | null
           rejection_reason: string | null
           stripe_account_id: string | null
+          stripe_onboarding_status: string
           stripe_payouts_enabled: boolean
+          stripe_updated_at: string | null
           total_deliveries: number
           tutorial_completed_at: string | null
           updated_at: string
@@ -1226,7 +1228,9 @@ export type Database = {
           rejected_by?: string | null
           rejection_reason?: string | null
           stripe_account_id?: string | null
+          stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
+          stripe_updated_at?: string | null
           total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
@@ -1258,7 +1262,9 @@ export type Database = {
           rejected_by?: string | null
           rejection_reason?: string | null
           stripe_account_id?: string | null
+          stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
+          stripe_updated_at?: string | null
           total_deliveries?: number
           tutorial_completed_at?: string | null
           updated_at?: string
@@ -2181,6 +2187,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      stripe_onboarding_events: {
+        Row: {
+          driver_id: string | null
+          event_type: string
+          id: string
+          payload: Json
+          received_at: string
+          stripe_event_id: string
+        }
+        Insert: {
+          driver_id?: string | null
+          event_type: string
+          id?: string
+          payload: Json
+          received_at?: string
+          stripe_event_id: string
+        }
+        Update: {
+          driver_id?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          received_at?: string
+          stripe_event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stripe_onboarding_events_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_orders: {
         Row: {
