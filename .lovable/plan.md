@@ -1,46 +1,41 @@
-## Sincronización completa de pagos con Stripe
+# Sincronizar `stripe_onboarding_status`
 
-Actualmente los retiros funcionan de forma síncrona: cuando el repartidor pide un retiro, llamamos a Stripe y guardamos el estado inicial (`procesando`). Pero Stripe puede tardar minutos u horas en confirmar que el pago llegó al banco, o puede fallar después. Hoy no nos enteramos automáticamente — el estado en la tabla `driver_payouts` se queda "colgado" en `procesando`.
+Objetivo: mantener la columna `drivers.stripe_onboarding_status` alineada con la realidad de la cuenta Stripe Connect, sin cambiar nada más.
 
-Para sincronizar bien necesitamos escuchar los eventos que Stripe envía cuando el estado cambia.
+## Cambios
 
-### 1. Webhook público para Stripe Connect
+**Archivo único:** `src/lib/route-wallet.functions.ts`
 
-Crear la ruta `src/routes/api/public/stripe/connect-webhook.ts` (path público bypasea auth, requerido por Stripe). Verifica la firma `stripe-signature` con un secret dedicado y procesa estos eventos:
+### 1. `createStripeConnectOnboarding` (líneas ~117-138)
 
-- **`payout.paid`** → marcar `driver_payouts.status = 'completado'`, sellar `paid_at`.
-- **`payout.failed`** → marcar `status = 'fallido'`, guardar `failure_message`, y llamar a la RPC `reverse_failed_payout` para devolver el dinero al `available_balance` del repartidor + registrar transacción de reverso.
-- **`payout.canceled`** → mismo flujo que `failed`.
-- **`transfer.failed`** → si el transfer inicial platform → cuenta conectada falla, revertir también.
-- **`account.updated`** (de la cuenta conectada) → actualizar `drivers.stripe_payouts_enabled` según `capabilities.transfers` y `payouts_enabled`. Esto arregla el caso de que el repartidor complete onboarding después y no tengamos que pedirle refresh manual.
+Al crear una cuenta Express nueva, en el mismo `update` que guarda `stripe_account_id`, agregar:
 
-Todos los updates son idempotentes (buscar por `stripe_payout_id` / `stripe_account_id`, no reprocesar si el estado ya coincide).
+- `stripe_onboarding_status: 'pendiente'`
+- `stripe_updated_at: new Date().toISOString()`
 
-### 2. Secret para verificar el webhook
+No se toca cuando la cuenta ya existía (se actualizará en el refresh).
 
-Stripe Connect usa un **endpoint secret distinto** al de webhooks normales. Después de crear el endpoint en el dashboard de Stripe (tipo "Connect"), guardarlo como secret `STRIPE_CONNECT_WEBHOOK_SECRET`. Pediré el valor con el flujo estándar de secretos cuando llegue el momento.
+### 2. `refreshStripeConnectStatus` (líneas ~154-187)
 
-### 3. URL a configurar en Stripe
+Tras leer la cuenta con `stripeGet /v1/accounts/{id}`:
 
-Una vez desplegado, la URL del webhook será:
-`https://project--d99974e1-204d-46a0-816a-e2595eaf444a.lovable.app/api/public/stripe/connect-webhook`
+- Calcular:
+  ```ts
+  const payoutsEnabled = !!acct.payouts_enabled;
+  const chargesEnabled = !!acct.charges_enabled;
+  const detailsSubmitted = !!acct.details_submitted;
+  const status = (payoutsEnabled && chargesEnabled && detailsSubmitted)
+    ? 'completo'
+    : 'pendiente';
+  ```
+- En el `update` de `drivers`, además de `stripe_payouts_enabled`, escribir:
+  - `stripe_onboarding_status: status`
+  - `stripe_updated_at: new Date().toISOString()`
+- Ampliar el objeto retornado a `{ connected, payouts_enabled, charges_enabled, details_submitted, onboarding_status }` para que la UI pueda mostrar el estado.
 
-Te la doy ya lista para pegar en Stripe Dashboard → Developers → Webhooks → **Add endpoint** (marcando "Connect" y suscribiéndote a los 5 eventos de arriba).
+Nota: no se marca `'rechazado'` desde aquí — ese estado queda reservado para el webhook `account.updated` cuando Stripe reporte `requirements.disabled_reason`, que ya está fuera del alcance de este cambio.
 
-### 4. RPC de reverso (menor)
+## Fuera de alcance
 
-Ya existe `reverse_failed_payout` de la fase anterior; solo verifico que sea idempotente (no revertir dos veces el mismo payout si Stripe reenvía el evento).
-
-### 5. Botón manual de "sincronizar" como respaldo
-
-En `/admin/payouts`, un botón por fila que llame a un server function `syncPayoutStatus(payoutId)` que consulta `stripe.payouts.retrieve` y actualiza igual que el webhook. Sirve para casos donde el webhook falló o no llegó.
-
-### Fuera de alcance
-
-- Reconciliación periódica programada (cron) — se puede añadir después si hace falta.
-- Webhooks para eventos de balance de la plataforma.
-
-### Qué necesito de ti para empezar
-
-1. Confirmación para implementar tal cual.
-2. Después de aplicar el código, tú creas el endpoint en Stripe Dashboard (tipo Connect) y me pasas el signing secret cuando te lo pida.
+- Cambios en la UI del repartidor (se puede ajustar después usando el nuevo campo de retorno).
+- Webhook `account.updated` (ya existe en `src/routes/api/public/stripe/connect-webhook.ts`; si quieres, en un cambio siguiente lo enchufo también para actualizar `stripe_onboarding_status`).

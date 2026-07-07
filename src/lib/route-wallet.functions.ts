@@ -133,7 +133,11 @@ export const createStripeConnectOnboarding = createServerFn({ method: "POST" })
       const dbAny = supabase as any;
       await dbAny
         .from("drivers")
-        .update({ stripe_account_id: accountId })
+        .update({
+          stripe_account_id: accountId,
+          stripe_onboarding_status: "pendiente",
+          stripe_updated_at: new Date().toISOString(),
+        })
         .eq("id", userId);
     }
 
@@ -176,14 +180,29 @@ export const refreshStripeConnectStatus = createServerFn({ method: "POST" })
       details_submitted?: boolean;
     }>(`/v1/accounts/${driver.stripe_account_id}`, env);
 
-    const enabled = !!acct.payouts_enabled;
+    const payoutsEnabled = !!acct.payouts_enabled;
+    const chargesEnabled = !!acct.charges_enabled;
+    const detailsSubmitted = !!acct.details_submitted;
+    const status: "pendiente" | "completo" =
+      payoutsEnabled && chargesEnabled && detailsSubmitted ? "completo" : "pendiente";
+
     const dbAny = supabase as any;
     await dbAny
       .from("drivers")
-      .update({ stripe_payouts_enabled: enabled })
+      .update({
+        stripe_payouts_enabled: payoutsEnabled,
+        stripe_onboarding_status: status,
+        stripe_updated_at: new Date().toISOString(),
+      })
       .eq("id", userId);
 
-    return { connected: true, payouts_enabled: enabled };
+    return {
+      connected: true,
+      payouts_enabled: payoutsEnabled,
+      charges_enabled: chargesEnabled,
+      details_submitted: detailsSubmitted,
+      onboarding_status: status,
+    };
   });
 
 // ---------- Solicitar retiro instantáneo ----------
