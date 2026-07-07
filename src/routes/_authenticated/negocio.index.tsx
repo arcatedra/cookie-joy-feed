@@ -82,7 +82,7 @@ function MyBusinessPage() {
         </p>
         <Link
           to="/negocios/registro"
-          className="mt-6 inline-flex rounded-md bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700"
+          className="mt-6 inline-flex rounded-md min-h-11 bg-[#E6C35C] px-4 py-2.5 text-sm font-semibold text-[#1e3a5f] hover:bg-[#d4b04a]"
         >
           Postular mi negocio
         </Link>
@@ -197,7 +197,7 @@ function TabBtn({
       disabled={disabled}
       className={`inline-flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
         active
-          ? "border-amber-600 text-amber-700"
+          ? "border-[#E6C35C] text-[#1e3a5f]"
           : "border-transparent text-muted-foreground hover:text-foreground"
       } ${disabled ? "cursor-not-allowed opacity-40" : ""}`}
     >
@@ -294,7 +294,7 @@ function CatalogTab({ businessId }: { businessId: string }) {
         <h2 className="text-lg font-semibold">Productos</h2>
         <button
           onClick={() => setShowForm((s) => !s)}
-          className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+          className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-3 py-2 text-sm font-semibold text-white hover:bg-[#16294a]"
         >
           {showForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
           {showForm ? "Cancelar" : "Nuevo"}
@@ -349,7 +349,7 @@ function CatalogTab({ businessId }: { businessId: string }) {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-4 py-2 text-sm font-semibold text-white hover:bg-[#16294a] disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
           </button>
@@ -468,7 +468,7 @@ function OffersTab({ businessId }: { businessId: string }) {
         <h2 className="text-lg font-semibold">Ofertas</h2>
         <button
           onClick={() => setShowForm((s) => !s)}
-          className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+          className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-3 py-2 text-sm font-semibold text-white hover:bg-[#16294a]"
         >
           {showForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
           {showForm ? "Cancelar" : "Nueva"}
@@ -521,7 +521,7 @@ function OffersTab({ businessId }: { businessId: string }) {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-4 py-2 text-sm font-semibold text-white hover:bg-[#16294a] disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Crear oferta"}
           </button>
