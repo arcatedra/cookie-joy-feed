@@ -344,12 +344,12 @@ function BusinessRegistrationPage() {
 
 
 const inputCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "w-full rounded-lg border border-[#c8862e]/40 bg-white px-4 py-3 text-sm text-[#1e3a5f] placeholder:text-[#4a3525]/50 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-semibold text-slate-700">{label}</span>
+      <span className="mb-1 block text-xs font-semibold text-[#1e3a5f]">{label}</span>
       {children}
     </label>
   );
@@ -357,9 +357,10 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Benefit({ icon, text }: { icon: string; text: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm">
+    <div className="rounded-xl border border-[#c8862e]/30 bg-white p-4 text-center shadow-sm">
       <div className="text-2xl">{icon}</div>
-      <p className="mt-1 text-xs font-semibold text-slate-700">{text}</p>
+      <p className="mt-1 text-xs font-semibold text-[#1e3a5f]">{text}</p>
     </div>
   );
 }
+
