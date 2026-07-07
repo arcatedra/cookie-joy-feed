@@ -1430,26 +1430,35 @@ export type Database = {
       }
       notification_queue: {
         Row: {
+          attempts: number
           created_at: string
           id: string
+          last_error: string | null
           payload: Json
           processed: boolean
+          processed_at: string | null
           route_stop_id: string | null
           type: string
         }
         Insert: {
+          attempts?: number
           created_at?: string
           id?: string
+          last_error?: string | null
           payload?: Json
           processed?: boolean
+          processed_at?: string | null
           route_stop_id?: string | null
           type: string
         }
         Update: {
+          attempts?: number
           created_at?: string
           id?: string
+          last_error?: string | null
           payload?: Json
           processed?: boolean
+          processed_at?: string | null
           route_stop_id?: string | null
           type?: string
         }
