@@ -8,6 +8,7 @@ import { template as securityAlert } from './security-alert'
 import { template as preDrawNotification } from './pre-draw-notification'
 import { template as driverApproved } from './driver-approved'
 import { template as driverRejected } from './driver-rejected'
+import { template as driverApplicationReceived } from './driver-application-received'
 import { template as deliveryCompleted } from './delivery-completed'
 
 
