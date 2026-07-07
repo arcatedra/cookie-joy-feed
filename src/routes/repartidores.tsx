@@ -548,9 +548,15 @@ const step1Schema = z.object({
   phone: z
     .string()
     .trim()
-    .min(7, "Teléfono inválido")
+    .min(10, "Teléfono inválido")
     .max(20)
-    .regex(/^[+\d\s()-]+$/, "Solo números y símbolos de teléfono"),
+    .refine((v) => {
+      // Accept US 10-digit numbers, with optional +1/1 country code and common separators.
+      const digits = v.replace(/[^\d]/g, "");
+      if (digits.length === 10) return true;
+      if (digits.length === 11 && digits.startsWith("1")) return true;
+      return false;
+    }, "Ingresa un número de EE. UU. de 10 dígitos, ej. +1 (718) 555 0000"),
   dateOfBirth: z
     .string()
     .min(1, "Selecciona tu fecha de nacimiento")
