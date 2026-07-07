@@ -1327,7 +1327,7 @@ function FileUpload({
   const ref = useRef<HTMLInputElement>(null);
   const info = DOC_LABELS[docKey];
   const inputId = `file-${docKey}`;
-  const isImageOnly = docKey === "foto_perfil";
+  const isImageOnly = docKey === "foto_perfil" || docKey === "casco";
   return (
     <div className="space-y-1.5">
       <Label htmlFor={inputId} className="text-sm font-medium text-[#1e3a5f]">
