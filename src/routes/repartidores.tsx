@@ -917,7 +917,7 @@ function ApplicationForm({
                 >
                   <option value="">Selecciona…</option>
                   {ZONES.map((zone) => (
-                    <option key={zone} value={zone}>
+                    <option key={zone} value={zone} translate="no">
                       {zone}
                     </option>
                   ))}
