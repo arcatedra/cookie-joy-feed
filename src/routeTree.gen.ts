@@ -77,6 +77,7 @@ import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/publ
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
 import { Route as AuthenticatedPedidoIdSeguimientoRouteImport } from './routes/_authenticated/pedido.$id.seguimiento'
 import { Route as AuthenticatedPedidoIdCalificarRouteImport } from './routes/_authenticated/pedido.$id.calificar'
+import { Route as AuthenticatedAdminRutasPublicarRouteImport } from './routes/_authenticated/admin.rutas.publicar'
 import { Route as AuthenticatedRepartidorPedidoIdResumenRouteImport } from './routes/_authenticated/repartidor.pedido.$id.resumen'
 import { Route as AuthenticatedRepartidorPedidoIdNavegacionRouteImport } from './routes/_authenticated/repartidor.pedido.$id.navegacion'
 import { Route as AuthenticatedRepartidorPedidoIdCompletadoRouteImport } from './routes/_authenticated/repartidor.pedido.$id.completado'
@@ -451,6 +452,12 @@ const AuthenticatedPedidoIdCalificarRoute =
     path: '/pedido/$id/calificar',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminRutasPublicarRoute =
+  AuthenticatedAdminRutasPublicarRouteImport.update({
+    id: '/admin/rutas/publicar',
+    path: '/admin/rutas/publicar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorPedidoIdResumenRoute =
   AuthenticatedRepartidorPedidoIdResumenRouteImport.update({
     id: '/pedido/$id/resumen',
@@ -524,6 +531,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
+  '/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -595,6 +603,7 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
+  '/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -669,6 +678,7 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
+  '/_authenticated/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -743,6 +753,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/negocio/'
     | '/repartidor/'
+    | '/admin/rutas/publicar'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -814,6 +825,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/negocio'
     | '/repartidor'
+    | '/admin/rutas/publicar'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -887,6 +899,7 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
+    | '/_authenticated/admin/rutas/publicar'
     | '/_authenticated/pedido/$id/calificar'
     | '/_authenticated/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -1431,6 +1444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPedidoIdCalificarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/rutas/publicar': {
+      id: '/_authenticated/admin/rutas/publicar'
+      path: '/admin/rutas/publicar'
+      fullPath: '/admin/rutas/publicar'
+      preLoaderRoute: typeof AuthenticatedAdminRutasPublicarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/pedido/$id/resumen': {
       id: '/_authenticated/repartidor/pedido/$id/resumen'
       path: '/pedido/$id/resumen'
@@ -1507,6 +1527,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
+  AuthenticatedAdminRutasPublicarRoute: typeof AuthenticatedAdminRutasPublicarRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
   AuthenticatedPedidoIdSeguimientoRoute: typeof AuthenticatedPedidoIdSeguimientoRoute
 }
@@ -1527,6 +1548,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
+  AuthenticatedAdminRutasPublicarRoute: AuthenticatedAdminRutasPublicarRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
   AuthenticatedPedidoIdSeguimientoRoute: AuthenticatedPedidoIdSeguimientoRoute,
 }
