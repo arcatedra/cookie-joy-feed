@@ -7,6 +7,7 @@ import {
   BUSINESS_TYPE_LABELS,
   type BusinessType,
 } from "@/lib/businesses";
+import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/negocios/registro")({
@@ -84,7 +85,7 @@ function BusinessRegistrationPage() {
     if (!formData.email.trim()) return setError("El correo electrónico es obligatorio"), false;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError("Ingresa un correo válido"), false;
     if (!formData.phone.trim()) return setError("El teléfono es obligatorio"), false;
-    if (formData.phone.replace(/\D/g, "").length < 8) return setError("El teléfono debe tener mínimo 8 dígitos"), false;
+    if (formData.phone.replace(/\D/g, "").length < 10) return setError("El teléfono debe tener 10 dígitos (formato EE. UU.)"), false;
     if (!formData.address.trim()) return setError("La dirección es obligatoria"), false;
     if (!formData.city.trim()) return setError("La ciudad es obligatoria"), false;
     return true;
@@ -263,7 +264,8 @@ function BusinessRegistrationPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 className={inputCls}
-                placeholder="+52 555 123 4567"
+                placeholder="+1 (718) 555 0123"
+                inputMode="tel"
               />
             </Field>
           </div>
@@ -279,16 +281,22 @@ function BusinessRegistrationPage() {
           </Field>
 
           <Field label="Ciudad *">
-            <input
+            <select
               name="city"
               value={formData.city}
               onChange={handleChange}
               className={inputCls}
-              placeholder="Ciudad"
-            />
+            >
+              <option value="">Selecciona una zona</option>
+              {NYC_DELIVERY_ZONES.map((z) => (
+                <option key={z} value={z} translate="no">
+                  {z}
+                </option>
+              ))}
+            </select>
           </Field>
 
-          <div className="rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
             ⏱️ <strong>Aprobación en 48 horas.</strong> Revisaremos tu solicitud y te notificaremos
             por correo. Una vez aprobado, podrás subir tu catálogo, inventario y ofertas.
           </div>
@@ -329,7 +337,7 @@ function BusinessRegistrationPage() {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm transition focus:border-transparent focus:ring-2 focus:ring-blue-500";
+  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
