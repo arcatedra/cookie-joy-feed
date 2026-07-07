@@ -1042,7 +1042,7 @@ function ApplicationForm({
             <SectionHeader
               icon={<FileText className="size-5" />}
               title="Documentos"
-              subtitle="Todos los archivos son opcionales de reordenar; pero todos son obligatorios."
+              subtitle="Todos los documentos siguientes son obligatorios para completar tu postulación."
             />
 
             <div className="rounded-lg border border-[#1e3a5f]/20 bg-[#f4f1ea] p-4 text-xs leading-relaxed text-[#4a3525]">
