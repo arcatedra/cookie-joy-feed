@@ -296,7 +296,7 @@ function BusinessRegistrationPage() {
             </select>
           </Field>
 
-          <div className="rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
             ⏱️ <strong>Aprobación en 48 horas.</strong> Revisaremos tu solicitud y te notificaremos
             por correo. Una vez aprobado, podrás subir tu catálogo, inventario y ofertas.
           </div>
