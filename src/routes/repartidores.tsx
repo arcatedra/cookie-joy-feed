@@ -231,13 +231,13 @@ function RepartidoresLanding() {
               icon: Bike,
               label: "Moto",
               desc: "Ideal para tráfico denso. Entregas más rápidas.",
-              perks: ["Licencia A vigente", "Seguro/SOAT vigente", "Casco"],
+              perks: ["Licencia A vigente", "Seguro del vehículo vigente", "Casco"],
             },
             {
               icon: Car,
               label: "Auto",
               desc: "Perfecto para pedidos grandes y clima variable.",
-              perks: ["Licencia B vigente", "Seguro vigente", "Revisión al día"],
+              perks: ["Licencia B vigente", "Seguro del vehículo vigente", "Revisión al día"],
             },
           ].map(({ icon: Icon, label, desc, perks }) => (
             <Card
@@ -320,7 +320,7 @@ function RepartidoresLanding() {
                 "Ser mayor de 18 años",
                 "Moto o auto propio (no aceptamos a pie ni bicicleta)",
                 "Licencia de conducir vigente (tipo A para moto, tipo B para auto)",
-                "Seguro/SOAT del vehículo vigente",
+                "Seguro del vehículo vigente",
                 "Identificación oficial vigente",
                 "Foto de perfil clara (selfie)",
               ].map((r) => (
@@ -917,7 +917,7 @@ function ApplicationForm({
                 >
                   <option value="">Selecciona…</option>
                   {ZONES.map((zone) => (
-                    <option key={zone} value={zone}>
+                    <option key={zone} value={zone} translate="no">
                       {zone}
                     </option>
                   ))}
