@@ -169,52 +169,54 @@ function BusinessRegistrationPage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
-      <Link
-        to="/"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Volver
-      </Link>
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-3xl px-4 py-8">
+        <Link
+          to="/"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver
+        </Link>
 
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-          🏪 Para negocios
-        </span>
-        <h1 className="mt-3 font-serif text-3xl font-bold text-slate-900 sm:text-4xl">
-          Lleva tu negocio a miles de clientes
-        </h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
-          Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú
-          vendes.
-        </p>
-      </div>
-
-      {!hasAccount && (
-        <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm">
-          Necesitas iniciar sesión para postular tu negocio.{" "}
-          <Link to="/auth" className="font-semibold text-amber-700 underline">
-            Iniciar sesión
-          </Link>
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#E6C35C] px-3 py-1 text-xs font-semibold text-[#1e3a5f]">
+            🏪 Para negocios
+          </span>
+          <h1 className="mt-3 font-serif text-3xl font-bold text-[#1e3a5f] sm:text-4xl">
+            Lleva tu negocio a miles de clientes
+          </h1>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[#4a3525]">
+            Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú
+            vendes.
+          </p>
         </div>
-      )}
 
-      {existing && (
-        <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-4 text-sm">
-          Ya tienes un negocio registrado.{" "}
-          <Link to="/negocio" className="font-semibold text-blue-700 underline">
-            Ver estado
-          </Link>
-        </div>
-      )}
+        {!hasAccount && (
+          <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
+            Necesitas iniciar sesión para postular tu negocio.{" "}
+            <Link to="/auth" className="font-semibold text-amber-900 underline">
+              Iniciar sesión
+            </Link>
+          </div>
+        )}
 
-      {/* Form Card */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-lg font-bold text-slate-900">Formulario de registro</h2>
-          <p className="text-xs text-slate-600">Completa todos los campos para solicitar tu acceso</p>
-        </div>
+        {existing && (
+          <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
+            Ya tienes un negocio registrado.{" "}
+            <Link to="/negocio" className="font-semibold text-amber-900 underline">
+              Ver estado
+            </Link>
+          </div>
+        )}
+
+        {/* Form Card */}
+        <div className="overflow-hidden rounded-2xl border border-[#c8862e]/30 bg-white shadow-sm">
+          <div className="border-b border-[#c8862e]/20 bg-[#f4f1ea] px-6 py-4">
+            <h2 className="text-lg font-bold text-[#1e3a5f]">Formulario de registro</h2>
+            <p className="text-xs text-[#4a3525]">Completa todos los campos para solicitar tu acceso</p>
+          </div>
+
 
         <form onSubmit={handleSubmit} className="space-y-5 p-6">
           {error && (
