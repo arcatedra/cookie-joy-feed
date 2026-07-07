@@ -916,9 +916,9 @@ function ApplicationForm({
                   className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">Selecciona…</option>
-                  {ZONES.map((z) => (
-                    <option key={z} value={z}>
-                      {z}
+                  {ZONES.map((zone) => (
+                    <option key={zone} value={zone}>
+                      {zone}
                     </option>
                   ))}
                 </select>
