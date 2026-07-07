@@ -132,37 +132,40 @@ function BusinessRegistrationPage() {
 
   if (submitted) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-16">
-        <div className="rounded-2xl border border-emerald-200 bg-white p-8 text-center shadow-sm">
-          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-            <CheckCircle className="h-9 w-9" />
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <main className="mx-auto max-w-2xl px-4 py-16">
+          <div className="rounded-2xl border border-[#c8862e]/30 bg-white p-8 text-center shadow-sm">
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+              <CheckCircle className="h-9 w-9" />
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">¡Solicitud enviada!</h1>
+            <p className="mt-2 text-sm text-[#4a3525]">
+              Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas
+              48 horas y te notificaremos al correo que proporcionaste.
+            </p>
+            <div className="mt-5 rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4 text-left text-sm text-[#1e3a5f]">
+              <strong>Próximo paso:</strong> Una vez aprobado, accederás a tu panel para subir
+              catálogo, inventario y ofertas.
+            </div>
+            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+              <button
+                onClick={() => navigate({ to: "/negocio" })}
+                className="min-h-11 w-full rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#d4b04a]"
+              >
+                Ver estado de mi negocio
+              </button>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="min-h-11 w-full rounded-lg border border-[#1e3a5f]/30 bg-white px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#f4f1ea]"
+              >
+                Registrar otro
+              </button>
+            </div>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-slate-900">¡Solicitud enviada!</h1>
-          <p className="mt-2 text-sm text-slate-600">
-            Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas
-            48 horas y te notificaremos al correo que proporcionaste.
-          </p>
-          <div className="mt-5 rounded-lg bg-blue-50 p-4 text-left text-sm text-blue-900">
-            <strong>Próximo paso:</strong> Una vez aprobado, accederás a tu panel para subir
-            catálogo, inventario y ofertas.
-          </div>
-          <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button
-              onClick={() => navigate({ to: "/negocio" })}
-              className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-            >
-              Ver estado de mi negocio
-            </button>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-            >
-              Registrar otro
-            </button>
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     );
+
   }
 
   return (
