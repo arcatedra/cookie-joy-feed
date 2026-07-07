@@ -75,7 +75,7 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
                   stripe_event_id: event.id,
                   event_type: eventType,
                   driver_id: driverId,
-                  payload: event as unknown as Record<string, unknown>,
+                  payload: event as unknown as import("@/integrations/supabase/types").Json,
                 },
                 { onConflict: "stripe_event_id", ignoreDuplicates: true },
               )
