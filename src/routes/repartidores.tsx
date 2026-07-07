@@ -743,10 +743,16 @@ function ApplicationForm({
     },
   });
 
-  const requiredDocs: DocKey[] = useMemo(
-    () => ["identificacion", "licencia_conducir", "seguro_vehiculo", "foto_perfil"],
-    [],
-  );
+  const requiredDocs: DocKey[] = useMemo(() => {
+    const base: DocKey[] = [
+      "identificacion",
+      "licencia_conducir",
+      "seguro_vehiculo",
+      "foto_perfil",
+    ];
+    if (s2.vehicleType === "moto") base.push("casco");
+    return base;
+  }, [s2.vehicleType]);
 
   // ---------- SUCCESS SCREEN ----------
   if (submittedRef) {
