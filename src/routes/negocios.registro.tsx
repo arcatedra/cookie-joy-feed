@@ -7,6 +7,7 @@ import {
   BUSINESS_TYPE_LABELS,
   type BusinessType,
 } from "@/lib/businesses";
+import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/negocios/registro")({
