@@ -133,7 +133,11 @@ export const createStripeConnectOnboarding = createServerFn({ method: "POST" })
       const dbAny = supabase as any;
       await dbAny
         .from("drivers")
-        .update({ stripe_account_id: accountId })
+        .update({
+          stripe_account_id: accountId,
+          stripe_onboarding_status: "pendiente",
+          stripe_updated_at: new Date().toISOString(),
+        })
         .eq("id", userId);
     }
 
