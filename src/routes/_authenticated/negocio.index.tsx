@@ -39,9 +39,13 @@ export const Route = createFileRoute("/_authenticated/negocio/")({
   }),
   component: MyBusinessPage,
   errorComponent: ({ error }) => (
-    <div className="p-6 text-sm text-destructive">{error.message}</div>
+    <div className="min-h-screen bg-[#f4f1ea] p-6 text-sm text-destructive">
+      {error.message}
+    </div>
   ),
-  notFoundComponent: () => <div className="p-6 text-sm">No encontrado</div>,
+  notFoundComponent: () => (
+    <div className="min-h-screen bg-[#f4f1ea] p-6 text-sm text-[#1e3a5f]">No encontrado</div>
+  ),
 });
 
 const STATUS_COLOR: Record<BusinessStatus, string> = {
