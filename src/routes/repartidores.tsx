@@ -1330,6 +1330,18 @@ function FileUpload({
   const info = DOC_LABELS[docKey];
   const inputId = `file-${docKey}`;
   const isImageOnly = docKey === "foto_perfil" || docKey === "casco";
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!file || !file.type.startsWith("image/")) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
   return (
     <div className="space-y-1.5">
       <Label htmlFor={inputId} className="text-sm font-medium text-[#1e3a5f]">
@@ -1340,6 +1352,19 @@ function FileUpload({
           error ? "border-red-400 bg-red-50" : "border-[#c8862e]/40 bg-[#f4f1ea]/40"
         }`}
       >
+        {file && (
+          <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-md border border-[#c8862e]/30 bg-white">
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt={`Vista previa de ${info.label}`}
+                className="size-full object-cover"
+              />
+            ) : (
+              <FileText className="size-5 text-[#1e3a5f]" aria-hidden />
+            )}
+          </div>
+        )}
         <div className="min-w-0 flex-1">
           {file ? (
             <div className="flex items-center gap-2 text-sm text-[#1e3a5f]">
