@@ -686,6 +686,13 @@ export type Database = {
             foreignKeyName: "delivery_routes_zone_id_fkey"
             columns: ["zone_id"]
             isOneToOne: false
+            referencedRelation: "v_pending_batch_summary"
+            referencedColumns: ["zone_id"]
+          },
+          {
+            foreignKeyName: "delivery_routes_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
             referencedRelation: "v_zone_dispatch_summary"
             referencedColumns: ["zone_id"]
           },
@@ -1976,7 +1983,7 @@ export type Database = {
           {
             foreignKeyName: "route_stops_order_id_fkey"
             columns: ["order_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "subscription_orders"
             referencedColumns: ["id"]
           },
@@ -2179,9 +2186,15 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: string
+          delivery_address: string | null
           delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          delivery_lat: number | null
+          delivery_lng: number | null
           dispatch_date: string | null
           id: string
+          package_code: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
           status: string
           weight_kg: number
           zone_id: string
@@ -2189,9 +2202,15 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id: string
+          delivery_address?: string | null
           delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          delivery_lat?: number | null
+          delivery_lng?: number | null
           dispatch_date?: string | null
           id?: string
+          package_code?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
           status?: string
           weight_kg: number
           zone_id: string
@@ -2199,9 +2218,15 @@ export type Database = {
         Update: {
           created_at?: string
           customer_id?: string
+          delivery_address?: string | null
           delivery_day?: Database["public"]["Enums"]["dispatch_day"]
+          delivery_lat?: number | null
+          delivery_lng?: number | null
           dispatch_date?: string | null
           id?: string
+          package_code?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
           status?: string
           weight_kg?: number
           zone_id?: string
@@ -2213,6 +2238,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "delivery_zones"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscription_orders_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "v_pending_batch_summary"
+            referencedColumns: ["zone_id"]
           },
           {
             foreignKeyName: "subscription_orders_zone_id_fkey"
@@ -2762,6 +2794,17 @@ export type Database = {
       }
     }
     Views: {
+      v_pending_batch_summary: {
+        Row: {
+          delivery_day: Database["public"]["Enums"]["dispatch_day"] | null
+          dispatch_date: string | null
+          total_orders: number | null
+          total_weight_kg: number | null
+          zone_id: string | null
+          zone_name: string | null
+        }
+        Relationships: []
+      }
       v_zone_dispatch_summary: {
         Row: {
           delivery_day: Database["public"]["Enums"]["dispatch_day"] | null
@@ -3035,6 +3078,36 @@ export type Database = {
         }
         Returns: string
       }
+      publish_route: {
+        Args: {
+          p_delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          p_dispatch_date: string
+          p_fixed_pay: number
+          p_route_name: string
+          p_zone_id: string
+        }
+        Returns: {
+          accepted_at: string | null
+          completed_at: string | null
+          created_at: string
+          delivery_day: Database["public"]["Enums"]["dispatch_day"]
+          dispatch_date: string
+          driver_id: string | null
+          fixed_pay: number
+          id: string
+          route_name: string
+          status: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          warehouse_checkin_at: string | null
+          zone_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "delivery_routes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
@@ -3056,6 +3129,10 @@ export type Database = {
           like_count: number
           reel_id: string
         }[]
+      }
+      reorder_route_stop: {
+        Args: { p_new_sequence: number; p_stop_id: string }
+        Returns: undefined
       }
       request_driver_payout: {
         Args: { p_amount: number; p_fee: number }
