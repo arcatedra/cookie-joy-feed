@@ -31,5 +31,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'pre-draw-notification': preDrawNotification,
   'driver-approved': driverApproved,
   'driver-rejected': driverRejected,
+  'driver-application-received': driverApplicationReceived,
   'delivery-completed': deliveryCompleted,
 }
