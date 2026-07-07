@@ -56,11 +56,11 @@ export function LanguageSwitcher({ className = "", variant = "dark" }: Props) {
               aria-pressed={active}
               className="flex items-center justify-between gap-3 text-sm"
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2" translate="no">
                 <span aria-hidden className="text-base leading-none">
                   {m.flag}
                 </span>
-                <span className="font-medium">{m.nativeName}</span>
+                <span className="font-medium">{m.nativeName || m.label}</span>
               </span>
               {active ? (
                 <Check className="h-4 w-4 text-primary" aria-hidden />
