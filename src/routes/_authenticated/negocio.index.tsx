@@ -48,7 +48,7 @@ const STATUS_COLOR: Record<BusinessStatus, string> = {
   pendiente: "bg-amber-100 text-amber-800 border-amber-200",
   aprobado: "bg-emerald-100 text-emerald-800 border-emerald-200",
   rechazado: "bg-red-100 text-red-800 border-red-200",
-  suspendido: "bg-slate-200 text-slate-800 border-slate-300",
+  suspendido: "bg-muted text-[#1e3a5f] border-[#d9d2c2]",
 };
 
 function MyBusinessPage() {
@@ -60,121 +60,131 @@ function MyBusinessPage() {
 
   if (isLoading) {
     return (
-      <div className="grid min-h-[50vh] place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="grid min-h-[50vh] place-items-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
       </div>
     );
   }
 
   if (error) {
-    return <div className="p-6 text-sm text-destructive">{(error as Error).message}</div>;
+    return (
+      <div className="min-h-screen bg-[#f4f1ea] p-6 text-sm text-destructive">
+        {(error as Error).message}
+      </div>
+    );
   }
 
   if (!data) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-10 text-center">
-        <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-amber-100 text-amber-700">
-          <Store className="h-7 w-7" />
-        </div>
-        <h1 className="font-serif text-2xl font-bold">Aún no tienes un negocio registrado</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Postula el tuyo para vender en Hazorex.
-        </p>
-        <Link
-          to="/negocios/registro"
-          className="mt-6 inline-flex rounded-md min-h-11 bg-[#E6C35C] px-4 py-2.5 text-sm font-semibold text-[#1e3a5f] hover:bg-[#d4b04a]"
-        >
-          Postular mi negocio
-        </Link>
-      </main>
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <main className="mx-auto max-w-2xl px-4 py-10 text-center">
+          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-amber-100 text-amber-700">
+            <Store className="h-7 w-7" />
+          </div>
+          <h1 className="font-serif text-2xl font-bold">Aún no tienes un negocio registrado</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Postula el tuyo para vender en Hazorex.
+          </p>
+          <Link
+            to="/negocios/registro"
+            className="mt-6 inline-flex rounded-md min-h-11 bg-[#E6C35C] px-4 py-2.5 text-sm font-semibold text-[#1e3a5f] hover:bg-[#d4b04a]"
+          >
+            Postular mi negocio
+          </Link>
+        </main>
+      </div>
     );
   }
 
   const approved = data.status === "aprobado";
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
-      <Link
-        to="/profile"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Volver
-      </Link>
-
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold">{data.business_name}</h1>
-          <p className="text-sm text-muted-foreground">
-            {BUSINESS_TYPE_LABELS[data.business_type]}
-            {data.city ? ` · ${data.city}` : ""}
-          </p>
-        </div>
-        <span
-          className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_COLOR[data.status]}`}
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-4xl px-4 py-8">
+        <Link
+          to="/profile"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
         >
-          {BUSINESS_STATUS_LABELS[data.status]}
-        </span>
-      </div>
+          <ArrowLeft className="h-4 w-4" /> Volver
+        </Link>
 
-      {data.status === "pendiente" && (
-        <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          Tu postulación está en revisión. Te notificaremos cuando sea aprobada.
-        </div>
-      )}
-      {data.status === "rechazado" && data.rejection_reason && (
-        <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-900">
-          <strong>Rechazado:</strong> {data.rejection_reason}
-        </div>
-      )}
-      {data.status === "suspendido" && (
-        <div className="mb-6 rounded-md border border-slate-300 bg-slate-100 p-4 text-sm text-slate-900">
-          Tu negocio está suspendido.{" "}
-          {data.rejection_reason ?? "Contáctanos para más información."}
-        </div>
-      )}
-
-      {/* Tabs */}
-      <div className="mb-6 flex gap-1 border-b border-border">
-        <TabBtn active={tab === "info"} onClick={() => setTab("info")} icon={<Store className="h-4 w-4" />}>
-          Información
-        </TabBtn>
-        <TabBtn
-          active={tab === "catalogo"}
-          onClick={() => approved && setTab("catalogo")}
-          disabled={!approved}
-          icon={<Package className="h-4 w-4" />}
-        >
-          Catálogo
-        </TabBtn>
-        <TabBtn
-          active={tab === "ofertas"}
-          onClick={() => approved && setTab("ofertas")}
-          disabled={!approved}
-          icon={<Tag className="h-4 w-4" />}
-        >
-          Ofertas
-        </TabBtn>
-      </div>
-
-      {tab === "info" && (
-        <>
-          <dl className="grid grid-cols-1 gap-3 rounded-md border border-border p-4 text-sm sm:grid-cols-2">
-            <Row label="Email" value={data.email} />
-            <Row label="Teléfono" value={data.phone} />
-            <Row label="Dirección" value={data.address} />
-            <Row label="Ciudad" value={data.city ?? "—"} />
-          </dl>
-          {!approved && (
-            <p className="mt-4 text-xs text-muted-foreground">
-              Podrás gestionar productos y ofertas una vez que tu negocio sea aprobado.
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">{data.business_name}</h1>
+            <p className="text-sm text-muted-foreground">
+              {BUSINESS_TYPE_LABELS[data.business_type]}
+              {data.city ? ` · ${data.city}` : ""}
             </p>
-          )}
-        </>
-      )}
+          </div>
+          <span
+            className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_COLOR[data.status]}`}
+          >
+            {BUSINESS_STATUS_LABELS[data.status]}
+          </span>
+        </div>
 
-      {tab === "catalogo" && approved && <CatalogTab businessId={data.id} />}
-      {tab === "ofertas" && approved && <OffersTab businessId={data.id} />}
-    </main>
+        {data.status === "pendiente" && (
+          <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            Tu postulación está en revisión. Te notificaremos cuando sea aprobada.
+          </div>
+        )}
+        {data.status === "rechazado" && data.rejection_reason && (
+          <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+            <strong>Rechazado:</strong> {data.rejection_reason}
+          </div>
+        )}
+        {data.status === "suspendido" && (
+          <div className="mb-6 rounded-md border border-[#d9d2c2] bg-muted p-4 text-sm text-[#1e3a5f]">
+            Tu negocio está suspendido.{" "}
+            {data.rejection_reason ?? "Contáctanos para más información."}
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div className="mb-6 flex gap-1 border-b border-border">
+          <TabBtn active={tab === "info"} onClick={() => setTab("info")} icon={<Store className="h-4 w-4" />}>
+            Información
+          </TabBtn>
+          <TabBtn
+            active={tab === "catalogo"}
+            onClick={() => approved && setTab("catalogo")}
+            disabled={!approved}
+            icon={<Package className="h-4 w-4" />}
+          >
+            Catálogo
+          </TabBtn>
+          <TabBtn
+            active={tab === "ofertas"}
+            onClick={() => approved && setTab("ofertas")}
+            disabled={!approved}
+            icon={<Tag className="h-4 w-4" />}
+          >
+            Ofertas
+          </TabBtn>
+        </div>
+
+        {tab === "info" && (
+          <>
+            <dl className="grid grid-cols-1 gap-3 rounded-md border border-border p-4 text-sm sm:grid-cols-2">
+              <Row label="Email" value={data.email} />
+              <Row label="Teléfono" value={data.phone} />
+              <Row label="Dirección" value={data.address} />
+              <Row label="Ciudad" value={data.city ?? "—"} />
+            </dl>
+            {!approved && (
+              <p className="mt-4 text-xs text-muted-foreground">
+                Podrás gestionar productos y ofertas una vez que tu negocio sea aprobado.
+              </p>
+            )}
+          </>
+        )}
+
+        {tab === "catalogo" && approved && <CatalogTab businessId={data.id} />}
+        {tab === "ofertas" && approved && <OffersTab businessId={data.id} />}
+      </main>
+    </div>
   );
 }
 
@@ -198,7 +208,7 @@ function TabBtn({
       className={`inline-flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
         active
           ? "border-[#E6C35C] text-[#1e3a5f]"
-          : "border-transparent text-muted-foreground hover:text-foreground"
+          : "border-transparent text-muted-foreground hover:text-[#1e3a5f]"
       } ${disabled ? "cursor-not-allowed opacity-40" : ""}`}
     >
       {icon}
@@ -380,7 +390,7 @@ function CatalogTab({ businessId }: { businessId: string }) {
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
                   p.is_active
                     ? "bg-emerald-100 text-emerald-800"
-                    : "bg-slate-200 text-slate-700"
+                    : "bg-muted text-muted-foreground"
                 }`}
               >
                 {p.is_active ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
@@ -555,7 +565,7 @@ function OffersTab({ businessId }: { businessId: string }) {
               </div>
               <span
                 className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                  o.is_active ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"
+                  o.is_active ? "bg-emerald-100 text-emerald-800" : "bg-muted text-muted-foreground"
                 }`}
               >
                 {o.is_active ? "Activa" : "Inactiva"}
