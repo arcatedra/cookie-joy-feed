@@ -36,6 +36,7 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
         }
 
         let event: {
+          id?: string;
           type?: string;
           account?: string;
           data?: { object?: Record<string, unknown> };
@@ -49,6 +50,47 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
         const eventType = event.type ?? "";
         const obj = event.data?.object ?? {};
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+        // Resolver driver_id desde el stripe_account_id asociado al evento.
+        const accountId =
+          event.account ??
+          (eventType.startsWith("account.") ? (obj.id as string | undefined) : undefined);
+        let driverId: string | null = null;
+        if (accountId) {
+          const { data: driverRow } = await supabaseAdmin
+            .from("drivers")
+            .select("id")
+            .eq("stripe_account_id", accountId)
+            .maybeSingle();
+          driverId = driverRow?.id ?? null;
+        }
+
+        // Log idempotente en stripe_onboarding_events.
+        if (event.id) {
+          try {
+            const { data: inserted, error: logErr } = await supabaseAdmin
+              .from("stripe_onboarding_events")
+              .upsert(
+                {
+                  stripe_event_id: event.id,
+                  event_type: eventType,
+                  driver_id: driverId,
+                  payload: event as unknown as import("@/integrations/supabase/types").Json,
+                },
+                { onConflict: "stripe_event_id", ignoreDuplicates: true },
+              )
+              .select("id")
+              .maybeSingle();
+            if (logErr) {
+              console.error("[stripe-connect-webhook] log insert error", logErr);
+            } else if (!inserted) {
+              // Ya procesado: cortar temprano.
+              return Response.json({ received: true, duplicate: true });
+            }
+          } catch (e) {
+            console.error("[stripe-connect-webhook] log exception", e);
+          }
+        }
 
         try {
           switch (eventType) {
@@ -119,16 +161,63 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
             }
 
             case "account.updated": {
-              const accountId = (obj.id as string | undefined) ?? event.account;
-              if (!accountId) break;
+              const acctId = (obj.id as string | undefined) ?? event.account;
+              if (!acctId) break;
               const payoutsEnabled = Boolean(obj.payouts_enabled);
               const chargesEnabled = Boolean(obj.charges_enabled);
+              const detailsSubmitted = Boolean(obj.details_submitted);
+              const requirements =
+                (obj.requirements as { disabled_reason?: string | null } | undefined) ?? {};
+              const disabledReason = requirements.disabled_reason ?? null;
+
+              let onboardingStatus: "pendiente" | "completo" | "rechazado";
+              if (detailsSubmitted && chargesEnabled && payoutsEnabled) {
+                onboardingStatus = "completo";
+              } else if (
+                disabledReason &&
+                disabledReason !== "requirements.pending_verification"
+              ) {
+                onboardingStatus = "rechazado";
+              } else {
+                onboardingStatus = "pendiente";
+              }
+
               await supabaseAdmin
                 .from("drivers")
                 .update({
                   stripe_payouts_enabled: payoutsEnabled && chargesEnabled,
+                  stripe_onboarding_status: onboardingStatus,
+                  stripe_updated_at: new Date().toISOString(),
                 })
-                .eq("stripe_account_id", accountId);
+                .eq("stripe_account_id", acctId);
+              break;
+            }
+
+            case "capability.updated":
+            case "account.application.authorized": {
+              if (!driverId) break;
+              // Solo mover a 'pendiente' si aún no está 'completo'.
+              await supabaseAdmin
+                .from("drivers")
+                .update({
+                  stripe_onboarding_status: "pendiente",
+                  stripe_updated_at: new Date().toISOString(),
+                })
+                .eq("id", driverId)
+                .neq("stripe_onboarding_status", "completo");
+              break;
+            }
+
+            case "account.application.deauthorized": {
+              if (!driverId) break;
+              await supabaseAdmin
+                .from("drivers")
+                .update({
+                  stripe_onboarding_status: "rechazado",
+                  stripe_payouts_enabled: false,
+                  stripe_updated_at: new Date().toISOString(),
+                })
+                .eq("id", driverId);
               break;
             }
 

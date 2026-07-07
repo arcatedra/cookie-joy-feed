@@ -1,41 +1,55 @@
-# Sincronizar `stripe_onboarding_status`
+## Objetivo
 
-Objetivo: mantener la columna `drivers.stripe_onboarding_status` alineada con la realidad de la cuenta Stripe Connect, sin cambiar nada más.
+Extender el webhook existente `src/routes/api/public/stripe/connect-webhook.ts` para:
+1. Registrar cada evento de Stripe en `stripe_onboarding_events` (idempotente por `stripe_event_id`).
+2. Actualizar `drivers.stripe_onboarding_status` según el `event_type` del evento.
+
+No se toca el flujo de payouts ya implementado.
 
 ## Cambios
 
-**Archivo único:** `src/lib/route-wallet.functions.ts`
+### 1. Log de eventos en `stripe_onboarding_events`
 
-### 1. `createStripeConnectOnboarding` (líneas ~117-138)
+Al inicio del handler (después de parsear el JSON y antes del `switch`):
 
-Al crear una cuenta Express nueva, en el mismo `update` que guarda `stripe_account_id`, agregar:
+- Leer `event.id` del payload.
+- Resolver `driver_id` desde `stripe_account_id`:
+  - Preferir `event.account` (evento Connect).
+  - Fallback: `obj.id` si el evento es `account.*`.
+  - Query a `drivers` para obtener `id` por `stripe_account_id`.
+- `insert` en `stripe_onboarding_events` con `{ stripe_event_id, event_type, driver_id, payload: event }`.
+- Usar `.upsert(..., { onConflict: 'stripe_event_id', ignoreDuplicates: true })` para idempotencia — si el evento ya fue procesado, cortar temprano y responder 200 sin ejecutar el resto.
 
-- `stripe_onboarding_status: 'pendiente'`
-- `stripe_updated_at: new Date().toISOString()`
+### 2. Actualizar `stripe_onboarding_status`
 
-No se toca cuando la cuenta ya existía (se actualizará en el refresh).
+Solo aplica cuando hay `driver_id` resuelto. Mapeo por `event_type`:
 
-### 2. `refreshStripeConnectStatus` (líneas ~154-187)
+- **`account.updated`**: dentro del case existente, calcular:
+  - `completo` si `details_submitted && charges_enabled && payouts_enabled`.
+  - `rechazado` si `requirements.disabled_reason` está presente y no es `requirements.pending_verification`.
+  - `pendiente` en cualquier otro caso (cuenta creada pero incompleta).
+  
+  Escribir junto al `stripe_payouts_enabled` existente: `stripe_onboarding_status` y `stripe_updated_at`.
 
-Tras leer la cuenta con `stripeGet /v1/accounts/{id}`:
+- **`account.application.authorized`** / **`capability.updated`**: setear `pendiente` si el driver no está ya en `completo`.
 
-- Calcular:
-  ```ts
-  const payoutsEnabled = !!acct.payouts_enabled;
-  const chargesEnabled = !!acct.charges_enabled;
-  const detailsSubmitted = !!acct.details_submitted;
-  const status = (payoutsEnabled && chargesEnabled && detailsSubmitted)
-    ? 'completo'
-    : 'pendiente';
-  ```
-- En el `update` de `drivers`, además de `stripe_payouts_enabled`, escribir:
-  - `stripe_onboarding_status: status`
-  - `stripe_updated_at: new Date().toISOString()`
-- Ampliar el objeto retornado a `{ connected, payouts_enabled, charges_enabled, details_submitted, onboarding_status }` para que la UI pueda mostrar el estado.
+- **`account.application.deauthorized`**: setear `rechazado`.
 
-Nota: no se marca `'rechazado'` desde aquí — ese estado queda reservado para el webhook `account.updated` cuando Stripe reporte `requirements.disabled_reason`, que ya está fuera del alcance de este cambio.
+- Otros eventos: no tocan status.
 
-## Fuera de alcance
+### 3. Sin cambios en
 
-- Cambios en la UI del repartidor (se puede ajustar después usando el nuevo campo de retorno).
-- Webhook `account.updated` (ya existe en `src/routes/api/public/stripe/connect-webhook.ts`; si quieres, en un cambio siguiente lo enchufo también para actualizar `stripe_onboarding_status`).
+- Casos de `payout.*` y `transfer.failed` — quedan idénticos.
+- Verificación de firma.
+- Tabla / RLS de `stripe_onboarding_events` (ya existen).
+
+## Detalles técnicos
+
+- Toda la escritura usa `supabaseAdmin` (ya importado dinámicamente).
+- El insert de log se envuelve en try/catch propio: un fallo de log NO debe romper el procesamiento del evento; se loguea a consola y se sigue.
+- La respuesta sigue siendo `200 {received:true}` en éxito y `500` solo en errores no recuperables del handler principal (para reintento de Stripe).
+- No hay migraciones ni cambios de types (la tabla ya existe en `types.ts`).
+
+## Archivos
+
+- Editar únicamente `src/routes/api/public/stripe/connect-webhook.ts`.
