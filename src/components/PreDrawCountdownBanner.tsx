@@ -13,8 +13,9 @@ function formatMMSS(ms: number): string {
 }
 
 export function PreDrawCountdownBanner() {
+  // Share cache with LiveDrawSection to avoid duplicate polling of get_today_draw.
   const { data } = useQuery({
-    queryKey: ["pre-draw-banner-today"],
+    queryKey: ["daily-draw"],
     queryFn: () => getTodayDraw(),
     refetchInterval: 30_000,
     staleTime: 25_000,
