@@ -320,7 +320,7 @@ function RepartidoresLanding() {
                 "Ser mayor de 18 años",
                 "Moto o auto propio (no aceptamos a pie ni bicicleta)",
                 "Licencia de conducir vigente (tipo A para moto, tipo B para auto)",
-                "Seguro/SOAT del vehículo vigente",
+                "Seguro del vehículo vigente",
                 "Identificación oficial vigente",
                 "Foto de perfil clara (selfie)",
               ].map((r) => (
