@@ -309,7 +309,7 @@ function BusinessRegistrationPage() {
           <button
             type="submit"
             disabled={loading || !hasAccount || existing}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] shadow-sm transition hover:bg-[#d4b04a] disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -324,22 +324,24 @@ function BusinessRegistrationPage() {
             )}
           </button>
 
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-[#4a3525]">
             * Campos obligatorios. Tu información está protegida y segura.
           </p>
         </form>
       </div>
 
-      {/* Benefits */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Benefit icon="⏱️" text="Aprobación en 48h" />
-        <Benefit icon="💰" text="Sin cuota inicial" />
-        <Benefit icon="🚚" text="Delivery incluido" />
-        <Benefit icon="📊" text="Panel de ventas" />
-      </div>
-    </main>
+        {/* Benefits */}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Benefit icon="⏱️" text="Aprobación en 48h" />
+          <Benefit icon="💰" text="Sin cuota inicial" />
+          <Benefit icon="🚚" text="Delivery incluido" />
+          <Benefit icon="📊" text="Panel de ventas" />
+        </div>
+      </main>
+    </div>
   );
 }
+
 
 const inputCls =
   "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500";
