@@ -1107,26 +1107,60 @@ function ApplicationForm({
               title="Confirmación"
             />
 
-            <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4 text-sm text-[#4a3525]">
-              <p>
-                <strong>{s1.fullName}</strong>
-              </p>
-              <p>
-                {s1.email} · {s1.phone}
-              </p>
-              <p>
-                {s1.city} — {s1.address}
-              </p>
-              <p className="mt-2">
-                Vehículo: <strong>{s2.vehicleType === "moto" ? "Moto" : "Auto"}</strong> ·
-                Licencia {s2.licenseNumber} · {s2.insurer}
-              </p>
-              <p className="mt-2">
-                Documentos subidos:{" "}
-                <strong>
-                  {Object.values(files).filter(Boolean).length} / {requiredDocs.length}
-                </strong>
-              </p>
+            <p className="text-xs text-[#4a3525]/70">
+              Revisa que todo esté correcto. Puedes editar cualquier sección antes de
+              enviar tu postulación.
+            </p>
+
+            <SummarySection
+              title="Datos personales"
+              onEdit={() => setStep(1)}
+              rows={[
+                { label: "Nombre", value: s1.fullName },
+                { label: "Correo", value: s1.email },
+                { label: "Teléfono", value: s1.phone },
+                { label: "Fecha de nacimiento", value: s1.dateOfBirth },
+                { label: "Zona", value: s1.city },
+                { label: "Dirección", value: s1.address },
+              ]}
+            />
+
+            <SummarySection
+              title="Vehículo"
+              onEdit={() => setStep(2)}
+              rows={[
+                { label: "Tipo", value: s2.vehicleType === "moto" ? "Moto" : "Auto" },
+                { label: "Licencia", value: s2.licenseNumber },
+                { label: "Aseguradora", value: s2.insurer },
+                { label: "Placa", value: s2.plateNumber || "—" },
+              ]}
+            />
+
+            <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="font-serif text-sm font-bold text-[#1e3a5f]">Documentos</p>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
+                >
+                  Editar
+                </button>
+              </div>
+              <ul className="space-y-1.5">
+                {requiredDocs.map((k) => {
+                  const f = files[k];
+                  return (
+                    <li
+                      key={k}
+                      className="flex items-center justify-between gap-3 text-xs text-[#4a3525]"
+                    >
+                      <span className="truncate">{DOC_LABELS[k].label}</span>
+                      <DocStatusBadge state={f ? "subido" : "pendiente"} />
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#c8862e]/30 bg-white p-4 text-sm text-[#4a3525] min-h-11">
