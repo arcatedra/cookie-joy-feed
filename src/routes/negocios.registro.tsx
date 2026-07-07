@@ -132,86 +132,91 @@ function BusinessRegistrationPage() {
 
   if (submitted) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-16">
-        <div className="rounded-2xl border border-emerald-200 bg-white p-8 text-center shadow-sm">
-          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-            <CheckCircle className="h-9 w-9" />
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <main className="mx-auto max-w-2xl px-4 py-16">
+          <div className="rounded-2xl border border-[#c8862e]/30 bg-white p-8 text-center shadow-sm">
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+              <CheckCircle className="h-9 w-9" />
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">¡Solicitud enviada!</h1>
+            <p className="mt-2 text-sm text-[#4a3525]">
+              Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas
+              48 horas y te notificaremos al correo que proporcionaste.
+            </p>
+            <div className="mt-5 rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4 text-left text-sm text-[#1e3a5f]">
+              <strong>Próximo paso:</strong> Una vez aprobado, accederás a tu panel para subir
+              catálogo, inventario y ofertas.
+            </div>
+            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+              <button
+                onClick={() => navigate({ to: "/negocio" })}
+                className="min-h-11 w-full rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#d4b04a]"
+              >
+                Ver estado de mi negocio
+              </button>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="min-h-11 w-full rounded-lg border border-[#1e3a5f]/30 bg-white px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#f4f1ea]"
+              >
+                Registrar otro
+              </button>
+            </div>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-slate-900">¡Solicitud enviada!</h1>
-          <p className="mt-2 text-sm text-slate-600">
-            Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas
-            48 horas y te notificaremos al correo que proporcionaste.
-          </p>
-          <div className="mt-5 rounded-lg bg-blue-50 p-4 text-left text-sm text-blue-900">
-            <strong>Próximo paso:</strong> Una vez aprobado, accederás a tu panel para subir
-            catálogo, inventario y ofertas.
-          </div>
-          <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button
-              onClick={() => navigate({ to: "/negocio" })}
-              className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-            >
-              Ver estado de mi negocio
-            </button>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-            >
-              Registrar otro
-            </button>
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     );
+
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
-      <Link
-        to="/"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Volver
-      </Link>
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-3xl px-4 py-8">
+        <Link
+          to="/"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver
+        </Link>
 
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-          🏪 Para negocios
-        </span>
-        <h1 className="mt-3 font-serif text-3xl font-bold text-slate-900 sm:text-4xl">
-          Lleva tu negocio a miles de clientes
-        </h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
-          Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú
-          vendes.
-        </p>
-      </div>
-
-      {!hasAccount && (
-        <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm">
-          Necesitas iniciar sesión para postular tu negocio.{" "}
-          <Link to="/auth" className="font-semibold text-amber-700 underline">
-            Iniciar sesión
-          </Link>
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#E6C35C] px-3 py-1 text-xs font-semibold text-[#1e3a5f]">
+            🏪 Para negocios
+          </span>
+          <h1 className="mt-3 font-serif text-3xl font-bold text-[#1e3a5f] sm:text-4xl">
+            Lleva tu negocio a miles de clientes
+          </h1>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[#4a3525]">
+            Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú
+            vendes.
+          </p>
         </div>
-      )}
 
-      {existing && (
-        <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-4 text-sm">
-          Ya tienes un negocio registrado.{" "}
-          <Link to="/negocio" className="font-semibold text-blue-700 underline">
-            Ver estado
-          </Link>
-        </div>
-      )}
+        {!hasAccount && (
+          <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
+            Necesitas iniciar sesión para postular tu negocio.{" "}
+            <Link to="/auth" className="font-semibold text-amber-900 underline">
+              Iniciar sesión
+            </Link>
+          </div>
+        )}
 
-      {/* Form Card */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
-          <h2 className="text-lg font-bold text-slate-900">Formulario de registro</h2>
-          <p className="text-xs text-slate-600">Completa todos los campos para solicitar tu acceso</p>
-        </div>
+        {existing && (
+          <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
+            Ya tienes un negocio registrado.{" "}
+            <Link to="/negocio" className="font-semibold text-amber-900 underline">
+              Ver estado
+            </Link>
+          </div>
+        )}
+
+        {/* Form Card */}
+        <div className="overflow-hidden rounded-2xl border border-[#c8862e]/30 bg-white shadow-sm">
+          <div className="border-b border-[#c8862e]/20 bg-[#f4f1ea] px-6 py-4">
+            <h2 className="text-lg font-bold text-[#1e3a5f]">Formulario de registro</h2>
+            <p className="text-xs text-[#4a3525]">Completa todos los campos para solicitar tu acceso</p>
+          </div>
+
 
         <form onSubmit={handleSubmit} className="space-y-5 p-6">
           {error && (
@@ -304,7 +309,7 @@ function BusinessRegistrationPage() {
           <button
             type="submit"
             disabled={loading || !hasAccount || existing}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] shadow-sm transition hover:bg-[#d4b04a] disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -319,30 +324,32 @@ function BusinessRegistrationPage() {
             )}
           </button>
 
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-[#4a3525]">
             * Campos obligatorios. Tu información está protegida y segura.
           </p>
         </form>
       </div>
 
-      {/* Benefits */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Benefit icon="⏱️" text="Aprobación en 48h" />
-        <Benefit icon="💰" text="Sin cuota inicial" />
-        <Benefit icon="🚚" text="Delivery incluido" />
-        <Benefit icon="📊" text="Panel de ventas" />
-      </div>
-    </main>
+        {/* Benefits */}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Benefit icon="⏱️" text="Aprobación en 48h" />
+          <Benefit icon="💰" text="Sin cuota inicial" />
+          <Benefit icon="🚚" text="Delivery incluido" />
+          <Benefit icon="📊" text="Panel de ventas" />
+        </div>
+      </main>
+    </div>
   );
 }
 
+
 const inputCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "w-full rounded-lg border border-[#c8862e]/40 bg-white px-4 py-3 text-sm text-[#1e3a5f] placeholder:text-[#4a3525]/50 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-semibold text-slate-700">{label}</span>
+      <span className="mb-1 block text-xs font-semibold text-[#1e3a5f]">{label}</span>
       {children}
     </label>
   );
@@ -350,9 +357,10 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Benefit({ icon, text }: { icon: string; text: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm">
+    <div className="rounded-xl border border-[#c8862e]/30 bg-white p-4 text-center shadow-sm">
       <div className="text-2xl">{icon}</div>
-      <p className="mt-1 text-xs font-semibold text-slate-700">{text}</p>
+      <p className="mt-1 text-xs font-semibold text-[#1e3a5f]">{text}</p>
     </div>
   );
 }
+
