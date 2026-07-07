@@ -66,7 +66,7 @@ function ProfilePage() {
     "Alex R.";
 
   return (
-    <main className="min-h-screen bg-background pb-24">
+    <main className="profile-page min-h-screen bg-background pb-24">
       {/* Top blue banner */}
       <header className="relative bg-primary px-5 pt-12 pb-20">
         <div className="flex items-center justify-between">
@@ -145,7 +145,7 @@ function ProfilePage() {
         <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
           {t("profile.account")}
         </h3>
-        <div className="mt-3 rounded-2xl bg-card shadow-sm ring-1 ring-border overflow-hidden">
+          <div className="mt-3 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
           {menuItems.map((item, i) => (
             <button
               key={item.key}
@@ -210,7 +210,7 @@ function ProfilePage() {
 
 
       <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
-        <SheetContent side="right" className="w-full sm:max-w-sm p-0">
+          <SheetContent side="right" className="w-full bg-card text-card-foreground sm:max-w-sm p-0">
           <SheetHeader className="px-5 pt-6 pb-3">
             <SheetTitle className="text-lg font-bold capitalize">
               {sheet ? t(`profile.menu.${sheet}`) : ""}

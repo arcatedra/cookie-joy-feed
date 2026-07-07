@@ -27,6 +27,8 @@
   --color-orange-foreground: var(--orange-foreground);
   --color-cream: var(--cream);
   --color-brown: var(--brown);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -88,6 +90,16 @@
 @utility no-scrollbar {
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
+}
+
+@layer components {
+  .profile-page .bg-card .text-foreground {
+    color: var(--card-foreground);
+  }
+
+  .profile-page .bg-card .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
 }
 
 /* ============================================================
