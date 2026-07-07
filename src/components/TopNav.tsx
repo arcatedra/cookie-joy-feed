@@ -220,17 +220,17 @@ export function TopNav() {
               </span>
             </button>
             {acctOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-56 overflow-hidden rounded-md border border-border bg-white text-foreground shadow-xl">
-                <div className="bg-muted px-3 py-2 text-xs font-semibold">
+              <div className="absolute right-0 top-full z-50 mt-1 w-56 overflow-hidden rounded-md border border-border bg-white text-slate-900 shadow-xl">
+                <div className="bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-900">
                   {user ? user.email : t("topnav.signInPrompt")}
                 </div>
-                <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm hover:bg-amber-50">
+                <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.yourAccount")}
                 </Link>
-                <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm hover:bg-amber-50">
+                <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.ordersReturns")}
                 </Link>
-                <Link to="/subscribe" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm hover:bg-amber-50">
+                <Link to="/subscribe" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.subscriptions")}
                 </Link>
                 <div className="border-t border-border" />
@@ -243,7 +243,7 @@ export function TopNav() {
                         await signOut();
                         navigate({ to: "/auth" });
                       }}
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-amber-50"
+                      className="block w-full px-3 py-2 text-left text-sm text-slate-900 hover:bg-amber-50"
                     >
                       {t("auth.switchAccount", "Cambiar de cuenta")}
                     </button>
@@ -266,6 +266,7 @@ export function TopNav() {
                 )}
               </div>
             )}
+
           </div>
 
           {/* Returns & Orders */}
