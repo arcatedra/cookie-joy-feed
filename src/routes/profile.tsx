@@ -100,7 +100,7 @@ function ProfilePage() {
           </div>
 
           <div className="mt-4 text-center">
-            <h2 className="text-xl font-bold text-foreground">{displayName}</h2>
+            <h2 className="text-xl font-bold text-card-foreground">{displayName}</h2>
             <p className="mt-0.5 text-sm text-muted-foreground">{user?.email ?? t("profile.city")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t("profile.joined")}</p>
             <DonorBadge userId={user?.id ?? null} />
@@ -253,7 +253,7 @@ function AdminSuggestionsLink({ userId }: { userId: string }) {
             <Inbox className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">Admin · Buzón de sugerencias</p>
+            <p className="text-sm font-bold text-card-foreground">Admin · Buzón de sugerencias</p>
             <p className="text-xs text-muted-foreground">
               {data.unreadCount > 0 ? `${data.unreadCount} sin leer` : "Todo al día"}
             </p>
