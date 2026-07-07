@@ -337,7 +337,7 @@ function BusinessRegistrationPage() {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm transition focus:border-transparent focus:ring-2 focus:ring-blue-500";
+  "w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
