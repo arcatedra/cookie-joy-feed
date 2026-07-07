@@ -85,7 +85,7 @@ function BusinessRegistrationPage() {
     if (!formData.email.trim()) return setError("El correo electrónico es obligatorio"), false;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError("Ingresa un correo válido"), false;
     if (!formData.phone.trim()) return setError("El teléfono es obligatorio"), false;
-    if (formData.phone.replace(/\D/g, "").length < 8) return setError("El teléfono debe tener mínimo 8 dígitos"), false;
+    if (formData.phone.replace(/\D/g, "").length < 10) return setError("El teléfono debe tener 10 dígitos (formato EE. UU.)"), false;
     if (!formData.address.trim()) return setError("La dirección es obligatoria"), false;
     if (!formData.city.trim()) return setError("La ciudad es obligatoria"), false;
     return true;
