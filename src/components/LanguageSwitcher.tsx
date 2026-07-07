@@ -37,7 +37,6 @@ export function LanguageSwitcher({ className = "", variant = "dark" }: Props) {
         } ${className}`}
       >
         <Globe className="h-3.5 w-3.5" aria-hidden />
-        <span aria-hidden>{meta.flag}</span>
         <span>{meta.label}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[12rem]">
