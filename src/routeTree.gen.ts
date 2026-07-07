@@ -73,6 +73,7 @@ import { Route as ApiPublicHooksSecurityAlertRouteImport } from './routes/api/pu
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
 import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/public/hooks/notify-pre-draw'
+import { Route as ApiPublicHooksNotifyOrderRouteImport } from './routes/api/public/hooks/notify-order'
 import { Route as ApiPublicHooksBackupPruneRouteImport } from './routes/api/public/hooks/backup-prune'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
 import { Route as AuthenticatedPedidoIdSeguimientoRouteImport } from './routes/_authenticated/pedido.$id.seguimiento'
@@ -429,6 +430,12 @@ const ApiPublicHooksNotifyPreDrawRoute =
     path: '/api/public/hooks/notify-pre-draw',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksNotifyOrderRoute =
+  ApiPublicHooksNotifyOrderRouteImport.update({
+    id: '/api/public/hooks/notify-order',
+    path: '/api/public/hooks/notify-order',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksBackupPruneRoute =
   ApiPublicHooksBackupPruneRouteImport.update({
     id: '/api/public/hooks/backup-prune',
@@ -536,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-order': typeof ApiPublicHooksNotifyOrderRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
@@ -608,6 +616,7 @@ export interface FileRoutesByTo {
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-order': typeof ApiPublicHooksNotifyOrderRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
@@ -683,6 +692,7 @@ export interface FileRoutesById {
   '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
   '/api/public/hooks/backup-prune': typeof ApiPublicHooksBackupPruneRoute
+  '/api/public/hooks/notify-order': typeof ApiPublicHooksNotifyOrderRoute
   '/api/public/hooks/notify-pre-draw': typeof ApiPublicHooksNotifyPreDrawRoute
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
@@ -758,6 +768,7 @@ export interface FileRouteTypes {
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-order'
     | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
@@ -830,6 +841,7 @@ export interface FileRouteTypes {
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-order'
     | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
@@ -904,6 +916,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
     | '/api/public/hooks/backup-prune'
+    | '/api/public/hooks/notify-order'
     | '/api/public/hooks/notify-pre-draw'
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
@@ -954,6 +967,7 @@ export interface RootRouteChildren {
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
   ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
+  ApiPublicHooksNotifyOrderRoute: typeof ApiPublicHooksNotifyOrderRoute
   ApiPublicHooksNotifyPreDrawRoute: typeof ApiPublicHooksNotifyPreDrawRoute
   ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
@@ -1416,6 +1430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksNotifyPreDrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/notify-order': {
+      id: '/api/public/hooks/notify-order'
+      path: '/api/public/hooks/notify-order'
+      fullPath: '/api/public/hooks/notify-order'
+      preLoaderRoute: typeof ApiPublicHooksNotifyOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/backup-prune': {
       id: '/api/public/hooks/backup-prune'
       path: '/api/public/hooks/backup-prune'
@@ -1602,6 +1623,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
   ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,
+  ApiPublicHooksNotifyOrderRoute: ApiPublicHooksNotifyOrderRoute,
   ApiPublicHooksNotifyPreDrawRoute: ApiPublicHooksNotifyPreDrawRoute,
   ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
