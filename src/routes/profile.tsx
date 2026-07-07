@@ -157,7 +157,7 @@ function ProfilePage() {
             >
               <div className="flex items-center gap-3">
                 <item.Icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">{t(`profile.menu.${item.key}`)}</span>
+                <span className="text-sm font-semibold text-card-foreground">{t(`profile.menu.${item.key}`)}</span>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </button>
@@ -198,7 +198,7 @@ function ProfilePage() {
               <MessageSquare className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground">Buzón de sugerencias</p>
+              <p className="text-sm font-bold text-card-foreground">Buzón de sugerencias</p>
               <p className="text-xs text-muted-foreground">Danos tu opinión — la lee nuestro equipo</p>
             </div>
           </div>
@@ -355,7 +355,7 @@ function RecentOrders({ userId, lang, t }: { userId: string | null; lang: string
                       <Cookie className="h-5 w-5 text-brown" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-foreground">{t("profile.order", { id: shortId })}</p>
+                      <p className="text-sm font-bold text-card-foreground">{t("profile.order", { id: shortId })}</p>
                       <p className="text-xs text-muted-foreground">
                         {order.tokens} ⭐ · ${Number(order.amount_usd).toFixed(2)}
                       </p>
@@ -410,17 +410,17 @@ function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string
   return (
     <div className="mt-5 flex items-center justify-around">
       <div className="flex flex-col items-center px-4">
-        <span className="text-lg font-bold text-foreground">{formatNumber(orders, lang)}</span>
+        <span className="text-lg font-bold text-card-foreground">{formatNumber(orders, lang)}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.orders")}</span>
       </div>
       <div className="h-8 w-px bg-border" />
       <div className="flex flex-col items-center px-4">
-        <span className="text-lg font-bold text-foreground">{formatNumber(favorites, lang)}</span>
+        <span className="text-lg font-bold text-card-foreground">{formatNumber(favorites, lang)}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.favorites")}</span>
       </div>
       <div className="h-8 w-px bg-border" />
       <div className="flex flex-col items-center px-4">
-        <span className="text-sm font-bold text-foreground">{level}</span>
+        <span className="text-sm font-bold text-card-foreground">{level}</span>
         <span className="text-[11px] font-medium text-muted-foreground">{t("profile.level")}</span>
       </div>
     </div>
