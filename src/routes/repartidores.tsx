@@ -231,13 +231,13 @@ function RepartidoresLanding() {
               icon: Bike,
               label: "Moto",
               desc: "Ideal para tráfico denso. Entregas más rápidas.",
-              perks: ["Licencia A vigente", "Seguro/SOAT vigente", "Casco"],
+              perks: ["Licencia A vigente", "Seguro del vehículo vigente", "Casco"],
             },
             {
               icon: Car,
               label: "Auto",
               desc: "Perfecto para pedidos grandes y clima variable.",
-              perks: ["Licencia B vigente", "Seguro vigente", "Revisión al día"],
+              perks: ["Licencia B vigente", "Seguro del vehículo vigente", "Revisión al día"],
             },
           ].map(({ icon: Icon, label, desc, perks }) => (
             <Card
