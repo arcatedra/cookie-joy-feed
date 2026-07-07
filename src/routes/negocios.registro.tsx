@@ -264,7 +264,8 @@ function BusinessRegistrationPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 className={inputCls}
-                placeholder="+52 555 123 4567"
+                placeholder="+1 (718) 555 0123"
+                inputMode="tel"
               />
             </Field>
           </div>
@@ -280,13 +281,19 @@ function BusinessRegistrationPage() {
           </Field>
 
           <Field label="Ciudad *">
-            <input
+            <select
               name="city"
               value={formData.city}
               onChange={handleChange}
               className={inputCls}
-              placeholder="Ciudad"
-            />
+            >
+              <option value="">Selecciona una zona</option>
+              {NYC_DELIVERY_ZONES.map((z) => (
+                <option key={z} value={z} translate="no">
+                  {z}
+                </option>
+              ))}
+            </select>
           </Field>
 
           <div className="rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
