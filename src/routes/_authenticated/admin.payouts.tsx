@@ -85,6 +85,7 @@ function AdminPayoutsPage() {
                   <th className="px-4 py-2 text-right">Comisión</th>
                   <th className="px-4 py-2 text-right">Neto</th>
                   <th className="px-4 py-2">Estado</th>
+                  <th className="px-4 py-2"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -109,6 +110,9 @@ function AdminPayoutsPage() {
                         </div>
                       )}
                     </td>
+                    <td className="px-4 py-2 text-right">
+                      <SyncButton payoutId={p.id} disabled={!p.stripe_payout_id} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -117,6 +121,42 @@ function AdminPayoutsPage() {
         )}
       </section>
     </main>
+  );
+}
+
+function SyncButton({ payoutId, disabled }: { payoutId: string; disabled: boolean }) {
+  const qc = useQueryClient();
+  const [msg, setMsg] = useState<string | null>(null);
+  const m = useMutation({
+    mutationFn: () => adminSyncRoutePayout({ data: { payout_id: payoutId } }),
+    onSuccess: (r) => {
+      setMsg(r.updated ? `→ ${r.status}` : "sin cambios");
+      qc.invalidateQueries({ queryKey: ["admin-payouts"] });
+      setTimeout(() => setMsg(null), 3000);
+    },
+    onError: (e: any) => {
+      setMsg(e?.message ?? "Error");
+      setTimeout(() => setMsg(null), 4000);
+    },
+  });
+  return (
+    <div className="inline-flex items-center gap-2">
+      {msg && <span className="text-xs text-muted-foreground">{msg}</span>}
+      <button
+        type="button"
+        disabled={disabled || m.isPending}
+        onClick={() => m.mutate()}
+        title={disabled ? "Sin ID de Stripe" : "Sincronizar con Stripe"}
+        className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-xs hover:bg-muted disabled:opacity-40"
+      >
+        {m.isPending ? (
+          <Loader2 className="h-3 w-3 animate-spin" />
+        ) : (
+          <RefreshCw className="h-3 w-3" />
+        )}
+        Sync
+      </button>
+    </div>
   );
 }
 
