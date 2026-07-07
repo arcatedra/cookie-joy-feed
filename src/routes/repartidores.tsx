@@ -709,7 +709,7 @@ function ApplicationForm({
         }),
       );
       if (docRows.length > 0) {
-        const { error: docErr } = await supabase.from("driver_documents").insert(docRows);
+        const { error: docErr } = await supabase.from("driver_documents").insert(docRows as any);
         if (docErr) throw new Error(`No se pudieron guardar tus documentos: ${docErr.message}`);
       }
 
