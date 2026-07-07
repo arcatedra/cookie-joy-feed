@@ -36,6 +36,7 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
         }
 
         let event: {
+          id?: string;
           type?: string;
           account?: string;
           data?: { object?: Record<string, unknown> };
@@ -49,6 +50,47 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
         const eventType = event.type ?? "";
         const obj = event.data?.object ?? {};
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+        // Resolver driver_id desde el stripe_account_id asociado al evento.
+        const accountId =
+          event.account ??
+          (eventType.startsWith("account.") ? (obj.id as string | undefined) : undefined);
+        let driverId: string | null = null;
+        if (accountId) {
+          const { data: driverRow } = await supabaseAdmin
+            .from("drivers")
+            .select("id")
+            .eq("stripe_account_id", accountId)
+            .maybeSingle();
+          driverId = driverRow?.id ?? null;
+        }
+
+        // Log idempotente en stripe_onboarding_events.
+        if (event.id) {
+          try {
+            const { data: inserted, error: logErr } = await supabaseAdmin
+              .from("stripe_onboarding_events")
+              .upsert(
+                {
+                  stripe_event_id: event.id,
+                  event_type: eventType,
+                  driver_id: driverId,
+                  payload: event as unknown as Record<string, unknown>,
+                },
+                { onConflict: "stripe_event_id", ignoreDuplicates: true },
+              )
+              .select("id")
+              .maybeSingle();
+            if (logErr) {
+              console.error("[stripe-connect-webhook] log insert error", logErr);
+            } else if (!inserted) {
+              // Ya procesado: cortar temprano.
+              return Response.json({ received: true, duplicate: true });
+            }
+          } catch (e) {
+            console.error("[stripe-connect-webhook] log exception", e);
+          }
+        }
 
         try {
           switch (eventType) {
