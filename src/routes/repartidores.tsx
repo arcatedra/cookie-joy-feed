@@ -1351,6 +1351,7 @@ function FileUpload({
             <p className="text-xs text-[#4a3525]/70">{info.hint}</p>
           )}
         </div>
+        <DocStatusBadge state={file ? "subido" : "pendiente"} />
         <Button
           type="button"
           variant={file ? "outline" : "default"}
@@ -1376,5 +1377,59 @@ function FileUpload({
         </p>
       )}
     </div>
+  );
+}
+
+function SummarySection({
+  title,
+  onEdit,
+  rows,
+}: {
+  title: string;
+  onEdit: () => void;
+  rows: { label: string; value: string }[];
+}) {
+  return (
+    <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="font-serif text-sm font-bold text-[#1e3a5f]">{title}</p>
+        <button
+          type="button"
+          onClick={onEdit}
+          className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
+        >
+          Editar
+        </button>
+      </div>
+      <dl className="grid grid-cols-1 gap-1 text-xs text-[#4a3525] sm:grid-cols-2">
+        {rows.map((r) => (
+          <div key={r.label} className="flex gap-1">
+            <dt className="text-[#4a3525]/70">{r.label}:</dt>
+            <dd className="truncate font-medium text-[#1e3a5f]">{r.value || "—"}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+function DocStatusBadge({
+  state,
+}: {
+  state: "pendiente" | "subido" | "verificado" | "rechazado";
+}) {
+  const map = {
+    pendiente: { label: "Pendiente", cls: "bg-amber-100 text-amber-800 border-amber-300" },
+    subido: { label: "Subido", cls: "bg-blue-100 text-blue-800 border-blue-300" },
+    verificado: { label: "Verificado", cls: "bg-emerald-100 text-emerald-800 border-emerald-300" },
+    rechazado: { label: "Rechazado", cls: "bg-red-100 text-red-800 border-red-300" },
+  } as const;
+  const m = map[state];
+  return (
+    <span
+      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${m.cls}`}
+    >
+      {m.label}
+    </span>
   );
 }
