@@ -23,15 +23,15 @@ import { NotificationBell } from "@/components/NotificationBell";
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
-  { key: "deals", to: "/explore" },
   { key: "shop", to: "/shop", label: "🛍️ Tienda" },
   { key: "roulette", to: "/ruleta", label: "🎰 Porsenge" },
+  { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
+  { key: "businesses", to: "/negocios/registro", label: "🏪 Postula tu negocio" },
+  { key: "deals", to: "/explore" },
   { key: "bestSellers", to: "/menu" },
   { key: "buildPack", to: "/menu" },
   { key: "support", to: "/profile" },
   { key: "subscriptions", to: "/subscribe" },
-  { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
-  { key: "businesses", to: "/negocios/registro", label: "🏪 Postula tu negocio" },
 ] as const;
 
 
