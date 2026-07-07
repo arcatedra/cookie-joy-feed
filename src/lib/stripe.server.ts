@@ -77,10 +77,14 @@ export async function stripePost<T = unknown>(
   return JSON.parse(text) as T;
 }
 
-export async function stripeGet<T = unknown>(path: string, env: StripeEnv = "sandbox"): Promise<T> {
+export async function stripeGet<T = unknown>(
+  path: string,
+  env: StripeEnv = "sandbox",
+  extraHeaders: Record<string, string> = {},
+): Promise<T> {
   const res = await fetch(`${GATEWAY_BASE}${path}`, {
     method: "GET",
-    headers: gatewayHeaders(env),
+    headers: { ...gatewayHeaders(env), ...extraHeaders },
   });
   const text = await res.text();
   if (!res.ok) {

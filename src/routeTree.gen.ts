@@ -66,6 +66,7 @@ import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_auth
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as ApiPublicStripeConnectWebhookRouteImport } from './routes/api/public/stripe/connect-webhook'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
 import { Route as ApiPublicHooksSecurityAlertRouteImport } from './routes/api/public/hooks/security-alert'
@@ -385,6 +386,12 @@ const LovableEmailQueueProcessRoute =
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicStripeConnectWebhookRoute =
+  ApiPublicStripeConnectWebhookRouteImport.update({
+    id: '/api/public/stripe/connect-webhook',
+    path: '/api/public/stripe/connect-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -527,6 +534,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
@@ -597,6 +605,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
@@ -670,6 +679,7 @@ export interface FileRoutesById {
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
@@ -743,6 +753,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
+    | '/api/public/stripe/connect-webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
@@ -813,6 +824,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
+    | '/api/public/stripe/connect-webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
@@ -885,6 +897,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/security-alert'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
+    | '/api/public/stripe/connect-webhook'
     | '/lovable/email/queue/process'
     | '/lovable/email/transactional/preview'
     | '/lovable/email/transactional/send'
@@ -934,6 +947,7 @@ export interface RootRouteChildren {
   ApiPublicHooksSecurityAlertRoute: typeof ApiPublicHooksSecurityAlertRoute
   ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicStripeConnectWebhookRoute: typeof ApiPublicStripeConnectWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
   LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
@@ -1340,6 +1354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/stripe/connect-webhook': {
+      id: '/api/public/stripe/connect-webhook'
+      path: '/api/public/stripe/connect-webhook'
+      fullPath: '/api/public/stripe/connect-webhook'
+      preLoaderRoute: typeof ApiPublicStripeConnectWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -1565,6 +1586,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksSecurityAlertRoute: ApiPublicHooksSecurityAlertRoute,
   ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicStripeConnectWebhookRoute: ApiPublicStripeConnectWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
   LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
