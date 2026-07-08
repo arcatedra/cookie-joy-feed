@@ -64,6 +64,7 @@ function DeliveriesPage() {
   const scheduleFn = useServerFn(scheduleDelivery);
   const cancelFn = useServerFn(cancelDelivery);
   const rescheduleFn = useServerFn(rescheduleDelivery);
+  const extraFn = useServerFn(scheduleExtraDelivery);
 
   const statusQuery = useQuery({ queryKey: ["delivery-status"], queryFn: () => getStatus() });
   const listQuery = useQuery({ queryKey: ["delivery-list"], queryFn: () => getList() });
