@@ -530,6 +530,7 @@ export type Database = {
           delivered_at: string | null
           delivered_by: string | null
           id: string
+          is_extra: boolean
           notes: string | null
           period_end: string
           period_start: string
@@ -548,6 +549,7 @@ export type Database = {
           delivered_at?: string | null
           delivered_by?: string | null
           id?: string
+          is_extra?: boolean
           notes?: string | null
           period_end: string
           period_start: string
@@ -566,6 +568,7 @@ export type Database = {
           delivered_at?: string | null
           delivered_by?: string | null
           id?: string
+          is_extra?: boolean
           notes?: string | null
           period_end?: string
           period_start?: string
