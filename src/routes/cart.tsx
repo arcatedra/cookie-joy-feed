@@ -69,20 +69,27 @@ function CartPage() {
         </h1>
 
         <ul className="flex flex-col divide-y divide-gray-200 rounded-xl bg-white shadow-sm ring-1 ring-black/5">
-          {items.map((item) => (
+          {items.map((item) => {
+            const { name: localizedName } = localizeShopifyProduct(
+              item.product.node.handle,
+              item.product.node.title,
+              "",
+              t,
+            );
+            return (
             <li key={item.variantId} className="flex items-center gap-4 p-4">
               <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-secondary/20">
                 {item.product.node.images?.edges?.[0]?.node && (
                   <img
                     src={item.product.node.images.edges[0].node.url}
-                    alt={item.product.node.title}
+                    alt={localizedName}
                     className="h-full w-full object-cover"
                   />
                 )}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-[#1e3a5f]">
-                  {item.product.node.title}
+                  {localizedName}
                 </p>
                 {item.selectedOptions.length > 0 && (
                   <p className="text-xs text-gray-500">
