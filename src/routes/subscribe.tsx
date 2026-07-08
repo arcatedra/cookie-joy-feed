@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, Check, Calendar as CalendarIcon, Sparkles, X, Loader2 } from "lucide-react";
+import { ChevronLeft, Check, Calendar as CalendarIcon, X, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -14,62 +14,29 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plans — HAZOREX" },
+      { title: "Subscription Plan — HAZOREX" },
       {
         name: "description",
         content:
-          "Choose your HAZOREX cookie subscription plan. Delivered Mondays and Fridays only.",
+          "HAZOREX cookie subscription. 2 deliveries per month on Mondays or Fridays, plus $10 per extra delivery.",
       },
     ],
   }),
   component: SubscribePage,
 });
 
-interface Tier {
-  id: "starter" | "essential" | "intermediate" | "premium";
-  price: number;
-  maxDeliveries: number;
-  badgeColor: string;
-  badgeTextColor: string;
-  accentColor: string;
-  popular?: boolean;
-}
+// Single available plan. Kept as a config object so the rest of the page
+// (calendar limit, summary math, translations) keeps working unchanged.
+const STARTER_TIER = {
+  id: "starter" as const,
+  price: 19.99,
+  maxDeliveries: 2,
+  badgeColor: "bg-[oklch(0.85_0.06_150)]",
+  badgeTextColor: "text-[oklch(0.28_0.05_150)]",
+  accentColor: "bg-[oklch(0.78_0.06_150)]",
+};
 
-const tiers: Tier[] = [
-  {
-    id: "starter",
-    price: 19.99,
-    maxDeliveries: 2,
-    badgeColor: "bg-[oklch(0.85_0.06_150)]",
-    badgeTextColor: "text-[oklch(0.28_0.05_150)]",
-    accentColor: "bg-[oklch(0.78_0.06_150)]",
-  },
-  {
-    id: "essential",
-    price: 29.99,
-    maxDeliveries: 4,
-    badgeColor: "bg-[oklch(0.85_0.08_280)]",
-    badgeTextColor: "text-[oklch(0.28_0.06_280)]",
-    accentColor: "bg-[oklch(0.78_0.08_280)]",
-    popular: true,
-  },
-  {
-    id: "intermediate",
-    price: 44.99,
-    maxDeliveries: 6,
-    badgeColor: "bg-[oklch(0.85_0.10_80)]",
-    badgeTextColor: "text-[oklch(0.32_0.08_80)]",
-    accentColor: "bg-[oklch(0.80_0.12_80)]",
-  },
-  {
-    id: "premium",
-    price: 59.99,
-    maxDeliveries: 8,
-    badgeColor: "bg-[oklch(0.82_0.12_50)]",
-    badgeTextColor: "text-[oklch(0.28_0.06_50)]",
-    accentColor: "bg-[oklch(0.72_0.14_50)]",
-  },
-];
+const STARTER_PRICE_LOOKUP_KEY = "plan_starter_monthly";
 
 function getMonthGrid(year: number, month: number) {
   const first = new Date(year, month, 1);
@@ -91,24 +58,20 @@ function fmtKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
-const TIER_TO_PRICE: Record<Tier["id"], string> = {
-  starter: "plan_starter_monthly",
-  essential: "plan_essential_monthly",
-  intermediate: "plan_intermediate_monthly",
-  premium: "plan_premium_monthly",
-};
-
 function SubscribePage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const gate = useSubscriptionGate();
-  const [payingTierId, setPayingTierId] = useState<Tier["id"] | null>(null);
+  const [paying, setPaying] = useState(false);
   const [, setActivating] = useState(false);
   const today = useMemo(() => new Date(), []);
-  const [selectedTierId, setSelectedTierId] = useState<Tier["id"]>("essential");
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+
+  const tier = STARTER_TIER;
+  const activeDeliveryStatus = gate.deliveryStatus.hasActiveSubscription ? gate.deliveryStatus : null;
+  const hasActive = !!activeDeliveryStatus;
 
   // On return from Stripe checkout (?status=success), poll the subscription
   // status until the webhook upserts the row, then update the UI without a reload.
@@ -117,7 +80,6 @@ function SubscribePage() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get("status");
     if (!status) return;
-    // Clean the URL so a refresh doesn't re-trigger this effect.
     params.delete("status");
     params.delete("session_id");
     const clean = window.location.pathname + (params.toString() ? `?${params}` : "");
@@ -133,11 +95,8 @@ function SubscribePage() {
     const toastId = toast.loading("Activando tu suscripción…");
 
     const verify = async () => {
-      // First attempt: 20s window.
       const first = await gate.refreshUntilActive(20_000);
       if (first.active) return first;
-
-      // Auto-retry once with a longer window and a clear message.
       toast.loading(
         first.errors > 0
           ? "Reintentando verificación… estamos confirmando tu pago."
@@ -151,45 +110,10 @@ function SubscribePage() {
     verify()
       .then((result) => {
         if (result.active) {
-          toast.success(
-            "¡Suscripción activada! Ya puedes comprar y programar entregas.",
-            { id: toastId },
-          );
-        } else if (result.errors > 0) {
-          toast.error(
-            "No pudimos verificar la activación automáticamente. Tu pago llegó a Stripe; pulsa Reintentar.",
-            {
-              id: toastId,
-              duration: Infinity,
-              action: {
-                label: "Reintentar",
-                onClick: () => {
-                  const retryId = toast.loading("Verificando suscripción…");
-                  gate
-                    .refreshUntilActive(25_000)
-                    .then((r) => {
-                      if (r.active) {
-                        toast.success("¡Suscripción activada!", { id: retryId });
-                      } else {
-                        toast.error(
-                          "Sigue sin confirmarse. Contáctanos si el cobro ya aparece en tu banco.",
-                          { id: retryId },
-                        );
-                      }
-                    })
-                    .catch((e) => {
-                      toast.error(
-                        e instanceof Error ? e.message : "Error verificando la suscripción.",
-                        { id: retryId },
-                      );
-                    });
-                },
-              },
-            },
-          );
+          toast.success("¡Suscripción activada!", { id: toastId });
         } else {
           toast.message(
-            "Tu pago se procesó. La activación puede tardar unos segundos — actualizaremos esta página automáticamente.",
+            "Tu pago se procesó. La activación puede tardar unos segundos.",
             { id: toastId, duration: 8000 },
           );
         }
@@ -203,16 +127,6 @@ function SubscribePage() {
       .finally(() => setActivating(false));
   }, [gate]);
 
-
-
-
-  const selectedTier = tiers.find((t) => t.id === selectedTierId)!;
-  const remaining = selectedTier.maxDeliveries - selectedDates.length;
-  const activeDeliveryStatus = gate.deliveryStatus.hasActiveSubscription ? gate.deliveryStatus : null;
-  const summaryPlanName = activeDeliveryStatus?.planName ?? t(`subscribe.tiers.${selectedTier.id}.title`);
-  const summaryRemaining = activeDeliveryStatus?.remaining ?? remaining;
-  const summaryTotal = activeDeliveryStatus?.deliveriesPerMonth ?? selectedTier.maxDeliveries;
-  const summaryUsed = activeDeliveryStatus?.used ?? selectedDates.length;
   const grid = useMemo(() => getMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
 
   const monthLabel = new Intl.DateTimeFormat(getLocale(i18n.language), {
@@ -222,7 +136,6 @@ function SubscribePage() {
 
   const weekdayHeaders = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(getLocale(i18n.language), { weekday: "narrow" });
-    // Sunday = base date 2024-06-02 (Sun)
     const base = new Date(2024, 5, 2);
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
@@ -231,12 +144,15 @@ function SubscribePage() {
     });
   }, [i18n.language]);
 
+  const scheduleLimit = activeDeliveryStatus?.deliveriesPerMonth ?? tier.maxDeliveries;
+  const remaining = scheduleLimit - selectedDates.length;
+
   function toggleDate(d: Date) {
     if (!isMondayOrFriday(d)) return;
     const key = fmtKey(d);
     setSelectedDates((prev) => {
       if (prev.includes(key)) return prev.filter((k) => k !== key);
-      if (prev.length >= selectedTier.maxDeliveries) return prev;
+      if (prev.length >= scheduleLimit) return prev;
       return [...prev, key];
     });
   }
@@ -250,13 +166,7 @@ function SubscribePage() {
     setViewYear(y);
   }
 
-  function selectTier(id: Tier["id"]) {
-    setSelectedTierId(id);
-    const max = tiers.find((t) => t.id === id)!.maxDeliveries;
-    setSelectedDates((prev) => prev.slice(0, max));
-  }
-
-  function handleSubscribe(id: Tier["id"]) {
+  function handleSubscribe() {
     if (!user) {
       toast.error(t("auth.signInToLike", { defaultValue: "Inicia sesión para suscribirte" }));
       return;
@@ -265,10 +175,8 @@ function SubscribePage() {
       toast.error("Tu cuenta no tiene un email asociado.");
       return;
     }
-    setPayingTierId(id);
+    setPaying(true);
   }
-
-
 
   return (
     <main className="min-h-screen bg-background pb-28">
@@ -293,106 +201,107 @@ function SubscribePage() {
         </div>
       </header>
 
-      <section className="-mt-5 px-5">
-        <div className="rounded-2xl bg-card p-4 shadow-lg ring-1 ring-border">
+      {/* Only show the "Active Plan" summary card when the user actually has an active subscription.
+          Otherwise the same field is used across /subscribe and /deliveries via gate.deliveryStatus. */}
+      {hasActive && (
+        <section className="-mt-5 px-5">
+          <div className="rounded-2xl bg-card p-4 shadow-lg ring-1 ring-border">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  {t("subscribe.activePlan")}
+                </p>
+                <p className="mt-0.5 text-base font-bold text-foreground">
+                  {activeDeliveryStatus.planName}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  {t("subscribe.remaining")}
+                </p>
+                <p className="mt-0.5 text-base font-extrabold text-primary">
+                  {formatNumber(activeDeliveryStatus.remaining, i18n.language)} /{" "}
+                  {formatNumber(activeDeliveryStatus.deliveriesPerMonth, i18n.language)}
+                </p>
+              </div>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-300"
+                style={{
+                  width: `${(activeDeliveryStatus.used / Math.max(1, activeDeliveryStatus.deliveriesPerMonth)) * 100}%`,
+                }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("subscribe.scheduledCount", {
+                used: activeDeliveryStatus.used,
+                total: activeDeliveryStatus.deliveriesPerMonth,
+              })}
+            </p>
+          </div>
+        </section>
+      )}
+
+      <section className={`px-5 ${hasActive ? "pt-6" : "-mt-5"}`}>
+        {!hasActive && (
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground">
+            {t("subscribe.yourPlan", { defaultValue: "Your Hazorex Plan" })}
+          </h2>
+        )}
+        <article className="relative overflow-hidden rounded-2xl bg-card p-5 shadow-md ring-2 ring-primary">
+          <span
+            className={`inline-block rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${tier.badgeColor} ${tier.badgeTextColor}`}
+          >
+            {t(`subscribe.tiers.${tier.id}.cadence`)}
+          </span>
+
+          <h3 className="mt-3 text-xl font-bold text-foreground">
+            {t(`subscribe.tiers.${tier.id}.title`)}
+          </h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+            {t(`subscribe.tiers.${tier.id}.desc`)}
+          </p>
+
+          <div className="my-4 h-px bg-border" />
+
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                {t("subscribe.activePlan")}
-              </p>
-              <p className="mt-0.5 text-base font-bold text-foreground">{summaryPlanName}</p>
+              <span className="text-2xl font-extrabold text-primary">
+                {formatPrice(tier.price, i18n.language)}
+              </span>
+              <span className="text-sm font-medium text-muted-foreground">
+                {" "}
+                {t("subscribe.perMonth")}
+              </span>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                {t("subscribe.remaining")}
-              </p>
-              <p className="mt-0.5 text-base font-extrabold text-primary">
-                {formatNumber(summaryRemaining, i18n.language)} / {formatNumber(summaryTotal, i18n.language)}
-              </p>
-            </div>
-          </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-300"
-              style={{
-                width: `${(summaryUsed / Math.max(1, summaryTotal)) * 100}%`,
-              }}
-            />
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {t("subscribe.scheduledCount", { used: summaryUsed, total: summaryTotal })}
-          </p>
-        </div>
-      </section>
-
-      <section className="px-5 pt-6">
-        <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground">
-          {t("subscribe.choosePlan")}
-        </h2>
-        <div className="flex flex-col gap-4">
-          {tiers.map((tier) => {
-            const isSelected = selectedTierId === tier.id;
-            return (
-              <article
-                key={tier.id}
-                className={`relative overflow-hidden rounded-2xl bg-card p-5 shadow-md transition-all duration-300 ${
-                  isSelected ? "ring-2 ring-primary" : "ring-1 ring-border"
-                }`}
+            {hasActive ? (
+              <span className="flex items-center gap-1.5 rounded-full bg-emerald-100 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <Check className="h-3.5 w-3.5" />
+                {t("subscribe.currentPlan", { defaultValue: "Active" })}
+              </span>
+            ) : (
+              <button
+                type="button"
+                disabled={paying}
+                onClick={handleSubscribe}
+                className="flex items-center gap-1.5 rounded-full bg-cta px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-cta-foreground shadow-md transition-all hover:brightness-105 disabled:opacity-60"
               >
-                {tier.popular && (
-                  <div className="absolute right-0 top-0 flex items-center gap-1 rounded-bl-2xl bg-cta px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-cta-foreground shadow-md">
-                    <Sparkles className="h-3 w-3" /> {t("subscribe.mostPopular")}
-                  </div>
+                {paying ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
+                  </>
+                ) : (
+                  <>
+                    <Check className="h-3.5 w-3.5" /> {t("common.signUp")}
+                  </>
                 )}
+              </button>
+            )}
+          </div>
 
-                <span
-                  className={`inline-block rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${tier.badgeColor} ${tier.badgeTextColor}`}
-                >
-                  {t(`subscribe.tiers.${tier.id}.cadence`)}
-                </span>
-
-                <h3 className="mt-3 text-xl font-bold text-foreground">{t(`subscribe.tiers.${tier.id}.title`)}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                  {t(`subscribe.tiers.${tier.id}.desc`)}
-                </p>
-
-                <div className="my-4 h-px bg-border" />
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-2xl font-extrabold text-primary">{formatPrice(tier.price, i18n.language)}</span>
-                    <span className="text-sm font-medium text-muted-foreground"> {t("subscribe.perMonth")}</span>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={payingTierId === tier.id}
-                    onClick={() => (isSelected ? handleSubscribe(tier.id) : selectTier(tier.id))}
-                    className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md transition-all disabled:opacity-60 ${
-                      isSelected
-                        ? "bg-cta text-cta-foreground hover:brightness-105"
-                        : "bg-primary text-primary-foreground hover:brightness-110"
-                    }`}
-                  >
-                    {payingTierId === tier.id ? (
-                      <>
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("common.loading")}
-                      </>
-                    ) : isSelected ? (
-                      <>
-                        <Check className="h-3.5 w-3.5" /> {t("common.signUp")}
-                      </>
-                    ) : (
-                      t("common.selected", { defaultValue: "Elegir" })
-                    )}
-                  </button>
-
-                </div>
-
-                <div className={`absolute inset-x-0 bottom-0 h-1 ${tier.accentColor} opacity-70`} />
-              </article>
-            );
-          })}
-        </div>
+          <div className={`absolute inset-x-0 bottom-0 h-1 ${tier.accentColor} opacity-70`} />
+        </article>
       </section>
 
       <section className="px-5 pt-8">
@@ -507,7 +416,7 @@ function SubscribePage() {
 
           {remaining === 0 && (
             <p className="mt-4 rounded-lg bg-cta/15 px-3 py-2 text-xs font-semibold text-foreground">
-              {t("subscribe.usedAll", { count: selectedTier.maxDeliveries })}
+              {t("subscribe.usedAll", { count: scheduleLimit })}
             </p>
           )}
         </div>
@@ -520,14 +429,13 @@ function SubscribePage() {
       </footer>
 
 
-      {payingTierId && user?.email && (
+      {paying && user?.email && (
         <SubscriptionPaymentModal
-          priceId={TIER_TO_PRICE[payingTierId]}
+          priceId={STARTER_PRICE_LOOKUP_KEY}
           email={user.email}
-          onClose={() => setPayingTierId(null)}
+          onClose={() => setPaying(false)}
           onSuccess={() => {
-            setPayingTierId(null);
-            // Reuse the existing success polling via the query param effect.
+            setPaying(false);
             const url = new URL(window.location.href);
             url.searchParams.set("status", "success");
             window.history.replaceState({}, "", url.toString());
