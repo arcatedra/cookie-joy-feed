@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
 import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
+import { useAuth } from "@/lib/auth";
 import { getLocale } from "@/i18n";
 
 
