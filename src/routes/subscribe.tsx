@@ -208,6 +208,11 @@ function SubscribePage() {
 
   const selectedTier = tiers.find((t) => t.id === selectedTierId)!;
   const remaining = selectedTier.maxDeliveries - selectedDates.length;
+  const activeDeliveryStatus = gate.deliveryStatus.hasActiveSubscription ? gate.deliveryStatus : null;
+  const summaryPlanName = activeDeliveryStatus?.planName ?? t(`subscribe.tiers.${selectedTier.id}.title`);
+  const summaryRemaining = activeDeliveryStatus?.remaining ?? remaining;
+  const summaryTotal = activeDeliveryStatus?.deliveriesPerMonth ?? selectedTier.maxDeliveries;
+  const summaryUsed = activeDeliveryStatus?.used ?? selectedDates.length;
   const grid = useMemo(() => getMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
 
   const monthLabel = new Intl.DateTimeFormat(getLocale(i18n.language), {
@@ -295,14 +300,14 @@ function SubscribePage() {
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 {t("subscribe.activePlan")}
               </p>
-              <p className="mt-0.5 text-base font-bold text-foreground">{t(`subscribe.tiers.${selectedTier.id}.title`)}</p>
+              <p className="mt-0.5 text-base font-bold text-foreground">{summaryPlanName}</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 {t("subscribe.remaining")}
               </p>
               <p className="mt-0.5 text-base font-extrabold text-primary">
-                {formatNumber(remaining, i18n.language)} / {formatNumber(selectedTier.maxDeliveries, i18n.language)}
+                {formatNumber(summaryRemaining, i18n.language)} / {formatNumber(summaryTotal, i18n.language)}
               </p>
             </div>
           </div>
@@ -310,12 +315,12 @@ function SubscribePage() {
             <div
               className="h-full rounded-full bg-primary transition-all duration-300"
               style={{
-                width: `${(selectedDates.length / selectedTier.maxDeliveries) * 100}%`,
+                width: `${(summaryUsed / Math.max(1, summaryTotal)) * 100}%`,
               }}
             />
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            {t("subscribe.scheduledCount", { used: selectedDates.length, total: selectedTier.maxDeliveries })}
+            {t("subscribe.scheduledCount", { used: summaryUsed, total: summaryTotal })}
           </p>
         </div>
       </section>

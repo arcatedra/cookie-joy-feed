@@ -149,7 +149,6 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
         { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` },
         () => {
           qc.invalidateQueries({ queryKey });
-          qc.invalidateQueries({ queryKey: ["delivery-status"] });
         },
       )
       .subscribe();
