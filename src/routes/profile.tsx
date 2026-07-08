@@ -146,22 +146,37 @@ function ProfilePage() {
           {t("profile.account")}
         </h3>
           <div className="mt-3 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
-          {menuItems.map((item, i) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => setSheet(item.key)}
-              className={`flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-accent ${
-                i !== menuItems.length - 1 ? "border-b border-border" : ""
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <item.Icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-card-foreground">{t(`profile.menu.${item.key}`)}</span>
-              </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </button>
-          ))}
+          {menuItems.map((item, i) => {
+            const className = `flex w-full items-center justify-between px-4 py-3.5 text-left transition hover:bg-accent ${
+              i !== menuItems.length - 1 ? "border-b border-border" : ""
+            }`;
+            const inner = (
+              <>
+                <div className="flex items-center gap-3">
+                  <item.Icon className="h-5 w-5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-card-foreground">{t(`profile.menu.${item.key}`)}</span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </>
+            );
+            if (item.key === "help") {
+              return (
+                <Link key={item.key} to="/support" className={className}>
+                  {inner}
+                </Link>
+              );
+            }
+            return (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => setSheet(item.key)}
+                className={className}
+              >
+                {inner}
+              </button>
+            );
+          })}
         </div>
 
         <div className="mt-4">
