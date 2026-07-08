@@ -669,14 +669,15 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
 
 function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
 
-  // Scope to auth session so a stale admin=true cannot leak into another user.
+  // Scope query to user id so admin flag can never leak into another session.
   const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin", typeof window !== "undefined" ? window.localStorage.getItem("sb-dmoqrcagdhsuqlbmlckt-auth-token")?.slice(0, 32) ?? "anon" : "ssr"],
-    queryFn: () => checkAdminFn().catch(() => ({ isAdmin: false })),
-    staleTime: 30 * 1000,
+    queryKey: ["is-admin", user?.id ?? "anon"],
+    queryFn: () => (user ? checkAdminFn().catch(() => ({ isAdmin: false })) : Promise.resolve({ isAdmin: false })),
+    staleTime: 60 * 1000,
     retry: false,
   });
 
