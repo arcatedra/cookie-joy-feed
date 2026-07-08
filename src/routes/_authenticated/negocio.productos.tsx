@@ -48,30 +48,36 @@ function ProductsPage() {
 
   if (loadingBiz) {
     return (
-      <div className="grid min-h-[40vh] place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="grid min-h-[50vh] place-items-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
       </div>
     );
   }
 
   if (!business) {
     return (
-      <div className="mx-auto max-w-xl p-6 text-center text-sm">
-        No tienes un negocio registrado.{" "}
-        <Link to="/negocios/registro" className="text-amber-700 underline">
-          Postúlate
-        </Link>
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="mx-auto max-w-xl p-6 text-center text-sm">
+          No tienes un negocio registrado.{" "}
+          <Link to="/negocios/registro" className="font-semibold text-[#1e3a5f] underline">
+            Postúlate
+          </Link>
+        </div>
       </div>
     );
   }
 
   if (business.status !== "aprobado") {
     return (
-      <div className="mx-auto max-w-xl p-6 text-center text-sm">
-        Solo puedes administrar productos cuando tu negocio esté aprobado.{" "}
-        <Link to="/negocio" className="text-amber-700 underline">
-          Ver estado
-        </Link>
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="mx-auto max-w-xl p-6 text-center text-sm">
+          Solo puedes administrar productos cuando tu negocio esté aprobado.{" "}
+          <Link to="/negocio" className="font-semibold text-[#1e3a5f] underline">
+            Ver estado
+          </Link>
+        </div>
       </div>
     );
   }
