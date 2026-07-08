@@ -111,7 +111,7 @@ export async function fetchApprovedBusinesses(filters?: {
   type?: BusinessType;
   city?: string;
 }): Promise<Business[]> {
-  let q = db.from("businesses").select("*").eq("status", "aprobado");
+  let q = db.from("approved_businesses_public").select("*");
   if (filters?.type) q = q.eq("business_type", filters.type);
   if (filters?.city) q = q.eq("city", filters.city);
   const { data, error } = await q.order("business_name", { ascending: true });

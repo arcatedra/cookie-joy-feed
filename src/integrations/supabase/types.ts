@@ -146,6 +146,13 @@ export type Database = {
             foreignKeyName: "business_offers_business_id_fkey"
             columns: ["business_id"]
             isOneToOne: false
+            referencedRelation: "approved_businesses_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
@@ -199,6 +206,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "business_products_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "approved_businesses_public"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "business_products_business_id_fkey"
             columns: ["business_id"]
@@ -2847,6 +2861,36 @@ export type Database = {
       }
     }
     Views: {
+      approved_businesses_public: {
+        Row: {
+          business_name: string | null
+          business_type: string | null
+          city: string | null
+          created_at: string | null
+          id: string | null
+          logo_url: string | null
+          status: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          business_type?: string | null
+          city?: string | null
+          created_at?: string | null
+          id?: string | null
+          logo_url?: string | null
+          status?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          business_type?: string | null
+          city?: string | null
+          created_at?: string | null
+          id?: string | null
+          logo_url?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       v_pending_batch_summary: {
         Row: {
           delivery_day: Database["public"]["Enums"]["dispatch_day"] | null
