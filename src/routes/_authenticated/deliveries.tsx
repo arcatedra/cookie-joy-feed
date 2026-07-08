@@ -176,8 +176,9 @@ function DeliveriesPage() {
       (periodStart && d < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
       (periodEnd && d > periodEnd);
     const already = scheduledKeys.has(key);
+    const canExtra = !!status?.supportsExtra;
     const disabled =
-      !monFri || past || !!outOfPeriod || (limitReached && !already) || !status?.hasActiveSubscription;
+      !monFri || past || !!outOfPeriod || (limitReached && !already && !canExtra) || !status?.hasActiveSubscription;
     return { key, monFri, past, already, disabled };
   }
 
