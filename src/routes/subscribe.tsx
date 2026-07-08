@@ -38,7 +38,7 @@ interface Tier {
 const tiers: Tier[] = [
   {
     id: "starter",
-    price: 14.99,
+    price: 19.99,
     maxDeliveries: 2,
     badgeColor: "bg-[oklch(0.85_0.06_150)]",
     badgeTextColor: "text-[oklch(0.28_0.05_150)]",

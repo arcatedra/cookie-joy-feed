@@ -20,6 +20,7 @@ import {
   scheduleDelivery,
   cancelDelivery,
   rescheduleDelivery,
+  scheduleExtraDelivery,
 } from "@/lib/deliveries.functions";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
@@ -63,6 +64,7 @@ function DeliveriesPage() {
   const scheduleFn = useServerFn(scheduleDelivery);
   const cancelFn = useServerFn(cancelDelivery);
   const rescheduleFn = useServerFn(rescheduleDelivery);
+  const extraFn = useServerFn(scheduleExtraDelivery);
 
   const statusQuery = useQuery({ queryKey: ["delivery-status"], queryFn: () => getStatus() });
   const listQuery = useQuery({ queryKey: ["delivery-list"], queryFn: () => getList() });
@@ -135,6 +137,28 @@ function DeliveriesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const extraMut = useMutation({
+    mutationFn: async () => {
+      if (!selectedDate) throw new Error("Elige una fecha");
+      return extraFn({
+        data: {
+          date: selectedDate,
+          address: address.trim() || undefined,
+          notes: notes.trim() || undefined,
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.success("Entrega adicional agendada. Se cobrarán $10 en tu próxima factura.");
+      setSelectedDate(null);
+      setAddress("");
+      setNotes("");
+      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      qc.invalidateQueries({ queryKey: ["delivery-list"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   function changeMonth(delta: number) {
     let m = viewMonth + delta;
     let y = viewYear;
@@ -152,8 +176,9 @@ function DeliveriesPage() {
       (periodStart && d < new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate())) ||
       (periodEnd && d > periodEnd);
     const already = scheduledKeys.has(key);
+    const canExtra = !!status?.supportsExtra;
     const disabled =
-      !monFri || past || !!outOfPeriod || (limitReached && !already) || !status?.hasActiveSubscription;
+      !monFri || past || !!outOfPeriod || (limitReached && !already && !canExtra) || !status?.hasActiveSubscription;
     return { key, monFri, past, already, disabled };
   }
 
@@ -283,9 +308,16 @@ function DeliveriesPage() {
                 })}
               </div>
 
-              {limitReached && (
+              {limitReached && !status?.supportsExtra && (
                 <p className="rounded-md bg-amber-500/10 p-3 text-sm text-amber-700">
                   Has usado todas tus entregas del mes. El botón se reactiva en tu próximo período.
+                </p>
+              )}
+
+              {limitReached && status?.supportsExtra && (
+                <p className="rounded-md bg-emerald-500/10 p-3 text-sm text-emerald-800">
+                  Ya usaste tus {status.deliveriesPerMonth} entregas incluidas. Puedes agendar entregas
+                  adicionales por <strong>$10</strong> cada una — se cobrarán en tu próxima factura.
                 </p>
               )}
 
@@ -310,21 +342,37 @@ function DeliveriesPage() {
                 />
               </div>
 
-              <Button
-                className="w-full"
-                disabled={!selectedDate || limitReached || scheduleMut.isPending}
-                onClick={() => scheduleMut.mutate()}
-              >
-                {scheduleMut.isPending ? (
-                  <><Loader2 className="mr-2 size-4 animate-spin" /> Programando…</>
-                ) : limitReached ? (
-                  "Sin entregas disponibles"
-                ) : selectedDate ? (
-                  `Programar entrega del ${selectedDate}`
-                ) : (
-                  "Selecciona una fecha"
-                )}
-              </Button>
+              {limitReached && status?.supportsExtra ? (
+                <Button
+                  className="w-full"
+                  disabled={!selectedDate || extraMut.isPending}
+                  onClick={() => extraMut.mutate()}
+                >
+                  {extraMut.isPending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" /> Agendando…</>
+                  ) : selectedDate ? (
+                    `Agendar entrega adicional del ${selectedDate} (+$10)`
+                  ) : (
+                    "Selecciona una fecha para la entrega adicional"
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  disabled={!selectedDate || limitReached || scheduleMut.isPending}
+                  onClick={() => scheduleMut.mutate()}
+                >
+                  {scheduleMut.isPending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" /> Programando…</>
+                  ) : limitReached ? (
+                    "Sin entregas disponibles"
+                  ) : selectedDate ? (
+                    `Programar entrega del ${selectedDate}`
+                  ) : (
+                    "Selecciona una fecha"
+                  )}
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}

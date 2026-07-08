@@ -1,0 +1,2 @@
+ALTER TABLE public.delivery_bookings ADD COLUMN IF NOT EXISTS is_extra boolean NOT NULL DEFAULT false;
+UPDATE public.subscription_plans SET price_cents = 1999, updated_at = now() WHERE price_id = 'plan_starter_monthly';

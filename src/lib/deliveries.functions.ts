@@ -1,8 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { syncLatestSubscriptionFromStripe } from "./subscriptions.functions";
 
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
+const ACTIVE_SET = new Set<string>(ACTIVE_STATUSES);
+const EXTRA_DELIVERY_PRICE_CENTS = 1000;
 
 export interface DeliveryStatus {
   hasActiveSubscription: boolean;
@@ -14,6 +18,8 @@ export interface DeliveryStatus {
   periodStart: string | null;
   periodEnd: string | null;
   subscriptionId: string | null;
+  supportsExtra: boolean;
+  extraPriceCents: number;
 }
 
 export interface DeliveryBookingRow {
@@ -23,6 +29,7 @@ export interface DeliveryBookingRow {
   address: string | null;
   notes: string | null;
   created_at: string;
+  is_extra?: boolean;
 }
 
 function isMondayOrFriday(d: Date) {
@@ -33,26 +40,51 @@ function isMondayOrFriday(d: Date) {
 async function loadActiveContext(
   supabase: any,
   userId: string,
+  email: string | null,
 ) {
-  const { data: sub } = await supabase
+  const { paymentsEnvironmentForHost } = await import("./stripe.server");
+  const env = paymentsEnvironmentForHost(getRequestHost());
+
+  // Same read pattern as getMySubscription: env-scoped, latest row.
+  const { data: latest } = await supabase
     .from("subscriptions")
-    .select("id, price_id, status, current_period_start, current_period_end")
+    .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
     .eq("user_id", userId)
-    .in("status", ACTIVE_STATUSES as unknown as string[])
+    .eq("environment", env)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  let sub = latest && ACTIVE_SET.has(latest.status ?? "") ? latest : null;
+
+  // Fallback: reconcile with Stripe (mirrors getMySubscription behaviour).
+  if (!sub) {
+    try {
+      const synced = await syncLatestSubscriptionFromStripe(userId, env, {
+        knownSubscriptionId: latest?.stripe_subscription_id ?? undefined,
+        email,
+      });
+      if (synced && ACTIVE_SET.has(synced.status ?? "")) {
+        const { data: refreshed } = await supabase
+          .from("subscriptions")
+          .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
+          .eq("stripe_subscription_id", synced.stripe_subscription_id)
+          .maybeSingle();
+        sub = refreshed ?? null;
+      }
+    } catch (e) {
+      console.error("[deliveries] stripe fallback failed", e);
+    }
+  }
 
   if (!sub) return null;
 
   const { data: plan } = await supabase
     .from("subscription_plans")
-    .select("name, deliveries_per_month")
+    .select("name, deliveries_per_month, price_id")
     .eq("price_id", sub.price_id)
     .maybeSingle();
 
-
-  // Fallback to current calendar month if Stripe period is missing
   const now = new Date();
   const start = sub.current_period_start
     ? new Date(sub.current_period_start)
@@ -63,17 +95,21 @@ async function loadActiveContext(
 
   return {
     sub,
+    env,
     planName: plan?.name ?? "Plan",
     deliveriesPerMonth: plan?.deliveries_per_month ?? 0,
+    supportsExtra: sub.price_id === "plan_starter_monthly",
     periodStart: start,
     periodEnd: end,
   };
+
 }
 
 export const getMyDeliveryStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<DeliveryStatus> => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const email = (context.claims.email as string | undefined) ?? null;
+    const ctx = await loadActiveContext(context.supabase, context.userId, email);
     if (!ctx) {
       return {
         hasActiveSubscription: false,
@@ -85,6 +121,8 @@ export const getMyDeliveryStatus = createServerFn({ method: "GET" })
         periodStart: null,
         periodEnd: null,
         subscriptionId: null,
+        supportsExtra: false,
+        extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
       };
     }
 
@@ -107,8 +145,11 @@ export const getMyDeliveryStatus = createServerFn({ method: "GET" })
       periodStart: ctx.periodStart.toISOString(),
       periodEnd: ctx.periodEnd.toISOString(),
       subscriptionId: ctx.sub.id,
+      supportsExtra: ctx.supportsExtra,
+      extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
     };
   });
+
 
 export const listMyDeliveries = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -132,7 +173,7 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => scheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa para programar entregas.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -220,7 +261,7 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => rescheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -288,3 +329,90 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const extraSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida"),
+  address: z.string().min(1).max(500).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+/**
+ * Books an additional delivery beyond the plan's monthly limit for
+ * Starter Plan users. Charges $10 via a Stripe invoice item that will be
+ * added to the customer's next invoice.
+ */
+export const scheduleExtraDelivery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => extraSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const email = (context.claims.email as string | undefined) ?? null;
+    const ctx = await loadActiveContext(context.supabase, context.userId, email);
+    if (!ctx) throw new Error("Necesitas una suscripción activa.");
+    if (!ctx.supportsExtra) {
+      throw new Error("Tu plan no admite entregas adicionales. Actualiza al plan superior.");
+    }
+
+    const date = new Date(`${data.date}T12:00:00Z`);
+    if (Number.isNaN(date.getTime())) throw new Error("Fecha inválida.");
+    if (!isMondayOrFriday(date)) {
+      throw new Error("Solo puedes programar entregas en lunes o viernes.");
+    }
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    if (date < today) throw new Error("No puedes programar una entrega en el pasado.");
+    if (date < ctx.periodStart || date > ctx.periodEnd) {
+      throw new Error("La fecha está fuera de tu período de suscripción actual.");
+    }
+
+    const { data: dup } = await context.supabase
+      .from("delivery_bookings")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("scheduled_date", data.date)
+      .eq("status", "scheduled")
+      .maybeSingle();
+    if (dup) throw new Error("Ya tienes una entrega programada para ese día.");
+
+    // Charge $10 via Stripe invoice item on the customer's next invoice.
+    const customerId = (ctx.sub as { stripe_customer_id?: string | null }).stripe_customer_id;
+    if (!customerId) {
+      throw new Error("No pudimos localizar tu método de pago. Contáctanos.");
+    }
+    try {
+      const { stripePost } = await import("./stripe.server");
+      await stripePost(
+        "/v1/invoiceitems",
+        {
+          customer: customerId,
+          amount: EXTRA_DELIVERY_PRICE_CENTS,
+          currency: "usd",
+          description: `Extra delivery on ${data.date}`,
+          metadata: { userId: context.userId, scheduled_date: data.date, kind: "extra_delivery" },
+        },
+        ctx.env,
+      );
+    } catch (e) {
+      console.error("[deliveries] stripe invoice item failed", e);
+      throw new Error("No pudimos registrar el cobro adicional. Inténtalo de nuevo.");
+    }
+
+    const { data: row, error } = await context.supabase
+      .from("delivery_bookings")
+      .insert({
+        user_id: context.userId,
+        subscription_id: ctx.sub.id,
+        price_id: ctx.sub.price_id,
+        scheduled_date: data.date,
+        period_start: ctx.periodStart.toISOString(),
+        period_end: ctx.periodEnd.toISOString(),
+        address: data.address ?? null,
+        notes: data.notes ?? null,
+        is_extra: true,
+      })
+      .select("id")
+      .single();
+
+    if (error) throw new Error(error.message);
+    return { id: row.id, chargedCents: EXTRA_DELIVERY_PRICE_CENTS };
+  });
+
