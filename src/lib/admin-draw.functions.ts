@@ -32,13 +32,14 @@ export const checkIsAdmin = createServerFn({ method: "GET" }).handler(async () =
 export const triggerTestDraw = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    // Verify admin
+    // Server-side authorization is mandatory: the UI hides this action, but
+    // direct server-function calls must still be rejected for non-admin users.
     const { data: isAdmin, error: roleErr } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
       _role: "admin",
     });
     if (roleErr || !isAdmin) {
-      return { ok: false as const, error: "Solo administradores pueden ejecutar el sorteo de prueba." };
+      throw new Response("Forbidden", { status: 403 });
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin.rpc("run_daily_draw");

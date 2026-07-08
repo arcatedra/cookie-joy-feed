@@ -669,17 +669,26 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
 
 function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Scope query to user id so admin flag can never leak into another session.
-  const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin", user?.id ?? "anon"],
-    queryFn: () => (user ? checkAdminFn().catch(() => ({ isAdmin: false })) : Promise.resolve({ isAdmin: false })),
-    staleTime: 60 * 1000,
-    retry: false,
-  });
+  // Do not use shared query cache for this permission gate: a cached admin
+  // result must never flash the panel for a later normal session.
+  useEffect(() => {
+    let cancelled = false;
+    setIsAdmin(false);
+    if (loading || !user) return () => { cancelled = true; };
+    checkAdminFn()
+      .then((result) => {
+        if (!cancelled) setIsAdmin(result.isAdmin === true);
+      })
+      .catch(() => {
+        if (!cancelled) setIsAdmin(false);
+      });
+    return () => { cancelled = true; };
+  }, [checkAdminFn, loading, user?.id]);
 
   const [lastResult, setLastResult] = useState<{
     status: string;
@@ -710,7 +719,7 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   });
 
 
-  if (!adminCheck?.isAdmin) return null;
+  if (loading || !user || !isAdmin) return null;
 
   const isAlreadyDrawn = lastResult && lastResult.status !== "open";
 
