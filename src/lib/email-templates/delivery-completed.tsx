@@ -21,7 +21,7 @@ const DeliveryCompleted = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>HAZOREX ORIGEN</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>¡Entrega completada! 📦</Heading>
@@ -44,7 +44,7 @@ const DeliveryCompleted = ({
           <Hr style={hr} />
           <Text style={text}>Gracias por confiar en HAZOREX 🍪</Text>
         </Section>
-        <Text style={footer}>HAZOREX ORIGEN · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
       </Container>
     </Body>
   </Html>

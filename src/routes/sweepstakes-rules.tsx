@@ -28,7 +28,7 @@ function RulesPage() {
     gcTime: 30 * 60_000,
   });
 
-  const sponsorName = cfg?.sponsor_name ?? "HAZOREX ORIGEN LLC";
+  const sponsorName = cfg?.sponsor_name ?? "HAZOREX LLC";
   const sponsorAddress = cfg?.address_valid
     ? cfg!.sponsor_address
     : t("sweepstakesRules.addressPlaceholder");

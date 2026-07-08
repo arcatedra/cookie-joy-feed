@@ -495,9 +495,9 @@
     "priceDisclaimer": "价格为常见注册商第一年注册费用的估算值（美元），可能会有变化。* 第一年的促销价。"
   },
   "ruleta": {
-    "metaTitle": "ORIGEN 轮盘 — 旋转即赢 ⭐",
-    "metaDesc": "旋转 ORIGEN 轮盘。购买星星，或通过关注我们的社交渠道免费参与，赢取丰厚奖品。",
-    "ogTitle": "ORIGEN 轮盘 — 旋转即赢",
+    "metaTitle": "HAZOREX 轮盘 — 旋转即赢 ⭐",
+    "metaDesc": "旋转 HAZOREX 轮盘。购买星星，或通过关注我们的社交渠道免费参与，赢取丰厚奖品。",
+    "ogTitle": "HAZOREX 轮盘 — 旋转即赢",
     "ogDesc": "奖品、折扣和惊喜口味。提供免费参与。",
     "sweepstakes": "抽奖活动",
     "starsLabel": "星星",
@@ -552,7 +552,7 @@
       "city": "城市",
       "state": "州（加利福尼亚州）",
       "zip": "邮政编码",
-      "essay": "原创文章：告诉我们您为什么喜欢 ORIGEN（至少 300 词）",
+      "essay": "原创文章：告诉我们您为什么喜欢 HAZOREX（至少 300 词）",
       "wordCount": "{{count}} / 300 词"
     },
     "rulesCheckbox": "我确认我已年满 18 岁，是合法的美国居民（佛罗里达州、罗德岛州除外）并接受",
@@ -594,7 +594,7 @@
     "close": "关闭",
     "spinGo": "旋转！",
     "winnerHeader": "抽奖中奖者",
-    "inStars": "ORIGEN 星星 ⭐",
+    "inStars": "HAZOREX 星星 ⭐",
     "challengeHeader": "法律验证 — 技能挑战",
     "challengeQuestion": "{{a}} + {{b}} 等于多少？",
     "timeRemaining": "剩余时间：",
@@ -808,9 +808,9 @@
     "showResults": "显示 {{n}} 个结果"
   },
   "historial": {
-    "metaTitle": "抽奖历史 — ORIGEN",
-    "metaDesc": "浏览 ORIGEN 轮盘每日获奖者的完整历史记录：姓名、日期、奖金金额和公开验证。",
-    "ogTitle": "抽奖历史 — ORIGEN",
+    "metaTitle": "抽奖历史 — HAZOREX",
+    "metaDesc": "浏览 HAZOREX 轮盘每日获奖者的完整历史记录：姓名、日期、奖金金额和公开验证。",
+    "ogTitle": "抽奖历史 — HAZOREX",
     "ogDesc": "完全透明：查看每一轮的获奖者、日期和金额。",
     "notFound": "未找到。",
     "errorPrefix": "错误：",
@@ -848,13 +848,13 @@
     "backHome": "← 返回主页"
   },
   "terms": {
-    "metaTitle": "条款与条件 — HAZOREX ORIGEN",
-    "metaDesc": "HAZOREX ORIGEN 抽奖活动的条款与条件。",
+    "metaTitle": "条款与条件 — HAZOREX",
+    "metaDesc": "HAZOREX 抽奖活动的条款与条件。",
     "backToRoulette": "← 返回轮盘",
     "title": "条款与条件",
     "lastUpdated": "最后更新：",
     "s1Title": "1. 接受",
-    "s1BodyPre": "使用 HAZOREX ORIGEN 即表示您接受这些条款和我们的 ",
+    "s1BodyPre": "使用 HAZOREX 即表示您接受这些条款和我们的 ",
     "s1Link": "官方抽奖规则",
     "s1BodyPost": "。",
     "s2Title": "2. 资格",
@@ -873,8 +873,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "官方抽奖规则 — HAZOREX ORIGEN",
-    "metaDesc": "HAZOREX ORIGEN 每日抽奖活动官方规则 — 无需购买，年满18岁的美国居民可参与。",
+    "metaTitle": "官方抽奖规则 — HAZOREX",
+    "metaDesc": "HAZOREX 每日抽奖活动官方规则 — 无需购买，年满18岁的美国居民可参与。",
     "backToRoulette": "← 返回轮盘",
     "title": "官方抽奖规则",
     "lastUpdated": "最后更新：",
@@ -951,7 +951,7 @@
     "error": "发生错误。请重试。"
   },
   "claim": {
-    "metaTitle": "领取奖品 — HAZOREX ORIGEN",
+    "metaTitle": "领取奖品 — HAZOREX",
     "loading": "正在加载…",
     "back": "← 返回",
     "backToRoulette": "← 返回轮盘",

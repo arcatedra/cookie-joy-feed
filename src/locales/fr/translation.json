@@ -495,9 +495,9 @@
     "priceDisclaimer": "Les prix sont des estimations du coût d'enregistrement pour la première année en USD chez les registraires courants et peuvent varier. * prix promotionnel pour la première année."
   },
   "ruleta": {
-    "metaTitle": "Roulette ORIGEN — Tournez & Gagnez ⭐",
-    "metaDesc": "Faites tourner la Roulette ORIGEN. Achetez des étoiles ou participez gratuitement en suivant nos réseaux sociaux et gagnez des prix premium.",
-    "ogTitle": "Roulette ORIGEN — Tournez & Gagnez",
+    "metaTitle": "Roulette HAZOREX — Tournez & Gagnez ⭐",
+    "metaDesc": "Faites tourner la Roulette HAZOREX. Achetez des étoiles ou participez gratuitement en suivant nos réseaux sociaux et gagnez des prix premium.",
+    "ogTitle": "Roulette HAZOREX — Tournez & Gagnez",
     "ogDesc": "Prix, réductions et saveurs surprises. Participation gratuite disponible.",
     "sweepstakes": "CONCOURS",
     "starsLabel": "ÉTOILES",
@@ -552,7 +552,7 @@
       "city": "Ville",
       "state": "État (CA)",
       "zip": "Code postal",
-      "essay": "Essai original : dites-nous pourquoi vous aimez ORIGEN (min. 300 mots)",
+      "essay": "Essai original : dites-nous pourquoi vous aimez HAZOREX (min. 300 mots)",
       "wordCount": "{{count}} / 300 mots"
     },
     "rulesCheckbox": "Je confirme avoir 18 ans ou plus, être un résident légal des États-Unis (sauf FL, RI) et accepter le ",
@@ -594,7 +594,7 @@
     "close": "Fermer",
     "spinGo": "TOURNER !",
     "winnerHeader": "GAGNANT DU TIRAGE",
-    "inStars": "en étoiles ORIGEN ⭐",
+    "inStars": "en étoiles HAZOREX ⭐",
     "challengeHeader": "VALIDATION LÉGALE — DÉFI D'HABILITÉ",
     "challengeQuestion": "Que fait {{a}} + {{b}} ?",
     "timeRemaining": "Temps restant :",
@@ -808,9 +808,9 @@
     "showResults": "Afficher {{n}} résultats"
   },
   "historial": {
-    "metaTitle": "Historique des tirages — ORIGEN",
-    "metaDesc": "Consultez l'historique complet des gagnants quotidiens de la Roulette ORIGEN : nom, date, montant du prix et vérification publique.",
-    "ogTitle": "Historique des tirages — ORIGEN",
+    "metaTitle": "Historique des tirages — HAZOREX",
+    "metaDesc": "Consultez l'historique complet des gagnants quotidiens de la Roulette HAZOREX : nom, date, montant du prix et vérification publique.",
+    "ogTitle": "Historique des tirages — HAZOREX",
     "ogDesc": "Transparence totale : examinez chaque tour avec son gagnant, sa date et son montant.",
     "notFound": "Non trouvé.",
     "errorPrefix": "Erreur : ",
@@ -848,13 +848,13 @@
     "backHome": "← Retour à l'accueil"
   },
   "terms": {
-    "metaTitle": "Termes et Conditions — HAZOREX ORIGEN",
-    "metaDesc": "Termes et Conditions du concours HAZOREX ORIGEN.",
+    "metaTitle": "Termes et Conditions — HAZOREX",
+    "metaDesc": "Termes et Conditions du concours HAZOREX.",
     "backToRoulette": "← Retour à la Roulette",
     "title": "Termes et Conditions",
     "lastUpdated": "Dernière mise à jour :",
     "s1Title": "1. Acceptation",
-    "s1BodyPre": "En utilisant HAZOREX ORIGEN, vous acceptez ces Termes et notre ",
+    "s1BodyPre": "En utilisant HAZOREX, vous acceptez ces Termes et notre ",
     "s1Link": "Règlement Officiel du Concours",
     "s1BodyPost": ".",
     "s2Title": "2. Éligibilité",
@@ -873,8 +873,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Règlement Officiel du Concours — HAZOREX ORIGEN",
-    "metaDesc": "Règlement Officiel du concours quotidien HAZOREX ORIGEN — aucun achat nécessaire, résidents américains de 18 ans et plus.",
+    "metaTitle": "Règlement Officiel du Concours — HAZOREX",
+    "metaDesc": "Règlement Officiel du concours quotidien HAZOREX — aucun achat nécessaire, résidents américains de 18 ans et plus.",
     "backToRoulette": "← Retour à la Roulette",
     "title": "Règlement Officiel du Concours",
     "lastUpdated": "Dernière mise à jour :",
@@ -951,7 +951,7 @@
     "error": "Une erreur est survenue. Veuillez réessayer."
   },
   "claim": {
-    "metaTitle": "Réclamer le prix — HAZOREX ORIGEN",
+    "metaTitle": "Réclamer le prix — HAZOREX",
     "loading": "Chargement…",
     "back": "← Retour",
     "backToRoulette": "← Retour à la Roulette",

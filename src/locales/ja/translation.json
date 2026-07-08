@@ -138,9 +138,9 @@
     "showResults": "{{n}}件の結果を表示"
   },
   "historial": {
-    "metaTitle": "抽選履歴 — ORIGEN",
-    "metaDesc": "ORIGENルーレットの日次当選者の全履歴をご覧ください：名前、日付、賞金額、および公開検証。",
-    "ogTitle": "抽選履歴 — ORIGEN",
+    "metaTitle": "抽選履歴 — HAZOREX",
+    "metaDesc": "HAZOREXルーレットの日次当選者の全履歴をご覧ください：名前、日付、賞金額、および公開検証。",
+    "ogTitle": "抽選履歴 — HAZOREX",
     "ogDesc": "完全な透明性：各ラウンドの当選者、日付、金額を確認できます。",
     "notFound": "見つかりません。",
     "errorPrefix": "エラー: ",
@@ -178,13 +178,13 @@
     "backHome": "← ホームに戻る"
   },
   "terms": {
-    "metaTitle": "利用規約 — HAZOREX ORIGEN",
-    "metaDesc": "HAZOREX ORIGEN抽選の利用規約。",
+    "metaTitle": "利用規約 — HAZOREX",
+    "metaDesc": "HAZOREX抽選の利用規約。",
     "backToRoulette": "← ルーレットに戻る",
     "title": "利用規約",
     "lastUpdated": "最終更新日:",
     "s1Title": "1. 同意",
-    "s1BodyPre": "HAZOREX ORIGENを使用することにより、お客様は本規約および当社の",
+    "s1BodyPre": "HAZOREXを使用することにより、お客様は本規約および当社の",
     "s1Link": "公式抽選規則",
     "s1BodyPost": "に同意するものとします。",
     "s2Title": "2. 参加資格",
@@ -203,8 +203,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "公式懸賞ルール — HAZOREX ORIGEN",
-    "metaDesc": "HAZOREX ORIGEN 日替わり懸賞公式ルール — 購入不要、18歳以上のアメリカ居住者対象。",
+    "metaTitle": "公式懸賞ルール — HAZOREX",
+    "metaDesc": "HAZOREX 日替わり懸賞公式ルール — 購入不要、18歳以上のアメリカ居住者対象。",
     "backToRoulette": "← ルーレットに戻る",
     "title": "公式懸賞ルール",
     "lastUpdated": "最終更新日：",
@@ -281,7 +281,7 @@
     "error": "エラーが発生しました。もう一度お試しください。"
   },
   "claim": {
-    "metaTitle": "賞品を請求する — HAZOREX ORIGEN",
+    "metaTitle": "賞品を請求する — HAZOREX",
     "loading": "読み込み中...",
     "back": "← 戻る",
     "backToRoulette": "← ルーレットに戻る",
@@ -841,9 +841,9 @@
     "priceDisclaimer": "価格は、一般的なレジストラでの初年度登録のUSDでの見積もりであり、変動する可能性があります。* 初年度プロモーション価格。"
   },
   "ruleta": {
-    "metaTitle": "ORIGEN Roulette — スピンして当てよう ⭐",
-    "metaDesc": "ORIGEN Rouletteを回そう。スターを購入するか、ソーシャルチャンネルをフォローして無料で参加し、プレミアム賞品を獲得しよう。",
-    "ogTitle": "ORIGEN Roulette — スピンして当てよう",
+    "metaTitle": "HAZOREX Roulette — スピンして当てよう ⭐",
+    "metaDesc": "HAZOREX Rouletteを回そう。スターを購入するか、ソーシャルチャンネルをフォローして無料で参加し、プレミアム賞品を獲得しよう。",
+    "ogTitle": "HAZOREX Roulette — スピンして当てよう",
     "ogDesc": "賞品、割引、サプライズフレーバー。無料エントリーあり。",
     "sweepstakes": "懸賞",
     "starsLabel": "スター",
@@ -898,7 +898,7 @@
       "city": "市区町村",
       "state": "州 (例: CA)",
       "zip": "郵便番号",
-      "essay": "オリジナルエッセイ：ORIGENが好きな理由を教えてください（300語以上）",
+      "essay": "オリジナルエッセイ：HAZOREXが好きな理由を教えてください（300語以上）",
       "wordCount": "{{count}} / 300語"
     },
     "rulesCheckbox": "私は18歳以上であり、米国（FL、RIを除く）の合法的な居住者であることを確認し、",
@@ -940,7 +940,7 @@
     "close": "閉じる",
     "spinGo": "スピン！",
     "winnerHeader": "懸賞の当選者",
-    "inStars": "ORIGENスター ⭐で",
+    "inStars": "HAZOREXスター ⭐で",
     "challengeHeader": "法的検証 — スキルチャレンジ",
     "challengeQuestion": "{{a}} + {{b}} はいくつですか？",
     "timeRemaining": "残り時間：",
@@ -1016,7 +1016,7 @@
     "preWarn1": "まもなくスピン！"
   },
   "hero": {
-    "eyebrow": "HAZOREX ORIGEN",
+    "eyebrow": "HAZOREX",
     "titlePart1": "プレミアムクッキーと",
     "titlePart2": "本物のデイリー抽選",
     "subtitle": "ご購入ごとにその日の抽選へ自動的にエントリー。結果は暗号学的シードにより100%検証可能 — 第三者の介在なし。",

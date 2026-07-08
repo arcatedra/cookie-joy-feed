@@ -19,7 +19,7 @@ const PreDrawNotification = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>HAZOREX ORIGEN</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>🎰 ¡El sorteo gira en 5 minutos!</Heading>
@@ -33,11 +33,11 @@ const PreDrawNotification = ({
           </Section>
           <Hr style={hr} />
           <Text style={small}>
-            Recibes este aviso porque tienes una cuenta en HAZOREX ORIGEN. Puedes desactivar
+            Recibes este aviso porque tienes una cuenta en HAZOREX. Puedes desactivar
             los avisos del sorteo desde tu perfil en cualquier momento.
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX ORIGEN · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
       </Container>
     </Body>
   </Html>

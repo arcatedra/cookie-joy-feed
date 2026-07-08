@@ -220,7 +220,7 @@ function AdminSweepstakesPage() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="sponsor_name">Razón social</Label>
-            <Input id="sponsor_name" value={sponsorName} onChange={(e) => setSponsorName(e.target.value)} maxLength={200} placeholder="HAZOREX ORIGEN LLC" />
+            <Input id="sponsor_name" value={sponsorName} onChange={(e) => setSponsorName(e.target.value)} maxLength={200} placeholder="HAZOREX LLC" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="sponsor_address">Dirección física *</Label>

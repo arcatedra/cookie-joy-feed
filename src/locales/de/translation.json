@@ -590,9 +590,9 @@
     "becomeDriver": "Werde Fahrer"
   },
   "ruleta": {
-    "metaTitle": "ORIGEN Roulette — Drehen und Gewinnen ⭐",
-    "metaDesc": "Drehe das ORIGEN Roulette. Kaufe Sterne oder nimm kostenlos teil, indem du unseren sozialen Kanälen folgst und Premium-Preise gewinnst.",
-    "ogTitle": "ORIGEN Roulette — Drehen und Gewinnen",
+    "metaTitle": "HAZOREX Roulette — Drehen und Gewinnen ⭐",
+    "metaDesc": "Drehe das HAZOREX Roulette. Kaufe Sterne oder nimm kostenlos teil, indem du unseren sozialen Kanälen folgst und Premium-Preise gewinnst.",
+    "ogTitle": "HAZOREX Roulette — Drehen und Gewinnen",
     "ogDesc": "Preise, Rabatte und Überraschungsgeschmacksrichtungen. Kostenlose Teilnahme möglich.",
     "sweepstakes": "GEWINNSPIEL",
     "starsLabel": "STERNE",
@@ -647,7 +647,7 @@
       "city": "Stadt",
       "state": "Staat (z.B. CA)",
       "zip": "Postleitzahl",
-      "essay": "Original-Aufsatz: Erzähle uns, warum du ORIGEN magst (mind. 300 Wörter)",
+      "essay": "Original-Aufsatz: Erzähle uns, warum du HAZOREX magst (mind. 300 Wörter)",
       "wordCount": "{{count}} / 300 Wörter"
     },
     "rulesCheckbox": "Ich bestätige, dass ich 18 Jahre oder älter bin, ein rechtmäßiger Einwohner der USA bin (außer FL, RI) und die ",
@@ -689,7 +689,7 @@
     "close": "Schließen",
     "spinGo": "DREHEN!",
     "winnerHeader": "GEWINNSPIELGEWINNER",
-    "inStars": "in ORIGEN-Sternen ⭐",
+    "inStars": "in HAZOREX-Sternen ⭐",
     "challengeHeader": "RECHTLICHE VALIDIERUNG — GESCHICKLICHKEITSHERAUSFORDERUNG",
     "challengeQuestion": "Wie viel ist {{a}} + {{b}}?",
     "timeRemaining": "Verbleibende Zeit:",
@@ -840,9 +840,9 @@
     "showResults": "{{n}} Ergebnisse anzeigen"
   },
   "historial": {
-    "metaTitle": "Verlosungsverlauf – ORIGEN",
-    "metaDesc": "Entdecken Sie den vollständigen Verlauf der täglichen Gewinner des ORIGEN-Roulettes: Name, Datum, Preisbetrag und öffentliche Verifizierung.",
-    "ogTitle": "Verlosungsverlauf – ORIGEN",
+    "metaTitle": "Verlosungsverlauf – HAZOREX",
+    "metaDesc": "Entdecken Sie den vollständigen Verlauf der täglichen Gewinner des HAZOREX-Roulettes: Name, Datum, Preisbetrag und öffentliche Verifizierung.",
+    "ogTitle": "Verlosungsverlauf – HAZOREX",
     "ogDesc": "Vollständige Transparenz: Überprüfen Sie jede Runde mit ihrem Gewinner, Datum und Betrag.",
     "notFound": "Nicht gefunden.",
     "errorPrefix": "Fehler: ",
@@ -880,13 +880,13 @@
     "backHome": "← Zurück zur Startseite"
   },
   "terms": {
-    "metaTitle": "Allgemeine Geschäftsbedingungen – HAZOREX ORIGEN",
-    "metaDesc": "Allgemeine Geschäftsbedingungen des HAZOREX ORIGEN Gewinnspiels.",
+    "metaTitle": "Allgemeine Geschäftsbedingungen – HAZOREX",
+    "metaDesc": "Allgemeine Geschäftsbedingungen des HAZOREX Gewinnspiels.",
     "backToRoulette": "← Zurück zum Roulette",
     "title": "Allgemeine Geschäftsbedingungen",
     "lastUpdated": "Zuletzt aktualisiert:",
     "s1Title": "1. Annahme",
-    "s1BodyPre": "Durch die Nutzung von HAZOREX ORIGEN akzeptieren Sie diese Bedingungen und unsere ",
+    "s1BodyPre": "Durch die Nutzung von HAZOREX akzeptieren Sie diese Bedingungen und unsere ",
     "s1Link": "Offiziellen Gewinnspielregeln",
     "s1BodyPost": ".",
     "s2Title": "2. Teilnahmeberechtigung",
@@ -905,8 +905,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Offizielle Gewinnspielregeln – HAZOREX ORIGEN",
-    "metaDesc": "Offizielle Regeln für das tägliche HAZOREX ORIGEN Gewinnspiel – kein Kauf erforderlich, für in den USA ansässige Personen ab 18 Jahren.",
+    "metaTitle": "Offizielle Gewinnspielregeln – HAZOREX",
+    "metaDesc": "Offizielle Regeln für das tägliche HAZOREX Gewinnspiel – kein Kauf erforderlich, für in den USA ansässige Personen ab 18 Jahren.",
     "backToRoulette": "← Zurück zum Roulette",
     "title": "Offizielle Gewinnspielregeln",
     "lastUpdated": "Zuletzt aktualisiert:",
@@ -983,7 +983,7 @@
     "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
   },
   "claim": {
-    "metaTitle": "Preis beanspruchen – HAZOREX ORIGEN",
+    "metaTitle": "Preis beanspruchen – HAZOREX",
     "loading": "Wird geladen...",
     "back": "← Zurück",
     "backToRoulette": "← Zurück zum Roulette",

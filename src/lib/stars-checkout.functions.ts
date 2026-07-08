@@ -93,7 +93,7 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
                 currency: "usd",
                 unit_amount: Math.round(pkg.priceUsd * 100),
                 product_data: {
-                  name: `${pkg.tokens} Estrellas — HAZOREX ORIGEN`,
+                  name: `${pkg.tokens} Estrellas — HAZOREX`,
                   description: `Paquete ${pkg.id} de Estrellas.`,
                 },
               },

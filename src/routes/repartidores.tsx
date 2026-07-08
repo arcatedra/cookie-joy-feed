@@ -1124,7 +1124,7 @@ function ApplicationForm({
               <span>
                 {t("repartidoresPage.form.accept.part1")}{" "}
                 <Link
-                  to="/terminos"
+                  to="/terms"
                   className="font-semibold text-[#1e3a5f] underline underline-offset-2"
                 >
                   {t("repartidoresPage.form.accept.terms")}

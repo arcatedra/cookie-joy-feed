@@ -106,7 +106,7 @@ function Home() {
       <section className="bg-gradient-to-b from-[#1e3a5f] to-[#2a4a73] px-4 py-4 text-white md:py-6">
         <div className="mx-auto max-w-[1100px] text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6C35C]">
-            {t("hero.eyebrow", "HAZOREX ORIGEN")}
+            {t("hero.eyebrow", "HAZOREX")}
           </p>
           <h1 className="mt-1 text-xl font-black leading-tight md:text-3xl">
             {t("hero.titlePart1", "Premium cookies with")}{" "}
