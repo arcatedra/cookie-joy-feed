@@ -137,6 +137,28 @@ function DeliveriesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const extraMut = useMutation({
+    mutationFn: async () => {
+      if (!selectedDate) throw new Error("Elige una fecha");
+      return extraFn({
+        data: {
+          date: selectedDate,
+          address: address.trim() || undefined,
+          notes: notes.trim() || undefined,
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.success("Entrega adicional agendada. Se cobrarán $10 en tu próxima factura.");
+      setSelectedDate(null);
+      setAddress("");
+      setNotes("");
+      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      qc.invalidateQueries({ queryKey: ["delivery-list"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   function changeMonth(delta: number) {
     let m = viewMonth + delta;
     let y = viewYear;
