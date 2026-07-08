@@ -56,6 +56,7 @@ import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './rou
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
+import { Route as AuthenticatedAdminTestingRouteImport } from './routes/_authenticated/admin.testing'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
@@ -329,6 +330,12 @@ const AuthenticatedClaimDrawDateRoute =
     path: '/claim/$drawDate',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminTestingRoute =
+  AuthenticatedAdminTestingRouteImport.update({
+    id: '/admin/testing',
+    path: '/admin/testing',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminSupportRoute =
   AuthenticatedAdminSupportRouteImport.update({
     id: '/admin/support',
@@ -532,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/admin/testing': typeof AuthenticatedAdminTestingRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -606,6 +614,7 @@ export interface FileRoutesByTo {
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/admin/testing': typeof AuthenticatedAdminTestingRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -683,6 +692,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/_authenticated/admin/testing': typeof AuthenticatedAdminTestingRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -760,6 +770,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
+    | '/admin/testing'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
@@ -834,6 +845,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/suggestions'
     | '/admin/support'
+    | '/admin/testing'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
@@ -910,6 +922,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
+    | '/_authenticated/admin/testing'
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
@@ -1324,6 +1337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClaimDrawDateRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/testing': {
+      id: '/_authenticated/admin/testing'
+      path: '/admin/testing'
+      fullPath: '/admin/testing'
+      preLoaderRoute: typeof AuthenticatedAdminTestingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/support': {
       id: '/_authenticated/admin/support'
       path: '/admin/support'
@@ -1564,6 +1584,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
+  AuthenticatedAdminTestingRoute: typeof AuthenticatedAdminTestingRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
@@ -1585,6 +1606,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
+  AuthenticatedAdminTestingRoute: AuthenticatedAdminTestingRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
