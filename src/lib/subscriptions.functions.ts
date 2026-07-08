@@ -88,7 +88,7 @@ async function resolveOrCreateCustomer(
 
 const PURCHASE_STATUSES = new Set(["active", "trialing", "past_due"]);
 
-async function syncLatestSubscriptionFromStripe(
+export async function syncLatestSubscriptionFromStripe(
   userId: string,
   env: "sandbox" | "live",
   opts: { knownSubscriptionId?: string; email?: string | null } = {},
