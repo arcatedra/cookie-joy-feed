@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { loadSubscriptionSnapshot } from "./subscription-status.server";
+import { loadActiveDeliveryContext, loadSubscriptionSnapshot } from "./subscription-status.server";
 import { EXTRA_DELIVERY_PRICE_CENTS, type DeliveryStatus } from "./subscription-status";
 
 export interface DeliveryBookingRow {
@@ -18,41 +18,6 @@ export interface DeliveryBookingRow {
 function isMondayOrFriday(d: Date) {
   const day = d.getUTCDay();
   return day === 1 || day === 5;
-}
-
-async function loadActiveContext(
-  supabase: any,
-  userId: string,
-  email: string | null,
-) {
-  const { paymentsEnvironmentForHost } = await import("./stripe.server");
-  const env = paymentsEnvironmentForHost(getRequestHost());
-  const snapshot = await loadSubscriptionSnapshot({ supabase, userId, email, env });
-  const status = snapshot.deliveryStatus;
-  if (!status.hasActiveSubscription || !status.subscriptionId || !status.priceId || !status.periodStart || !status.periodEnd) {
-    return null;
-  }
-
-  const { data: sub } = await supabase
-    .from("subscriptions")
-    .select("id, price_id, stripe_customer_id")
-    .eq("id", status.subscriptionId)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  return {
-    sub: {
-      id: status.subscriptionId,
-      price_id: status.priceId,
-      stripe_customer_id: sub?.stripe_customer_id ?? null,
-    },
-    env,
-    planName: status.planName,
-    deliveriesPerMonth: status.deliveriesPerMonth,
-    supportsExtra: status.supportsExtra,
-    periodStart: new Date(status.periodStart),
-    periodEnd: new Date(status.periodEnd),
-  };
 }
 
 export const getMyDeliveryStatus = createServerFn({ method: "GET" })
@@ -93,7 +58,7 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => scheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa para programar entregas.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -181,7 +146,7 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => rescheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -266,7 +231,7 @@ export const scheduleExtraDelivery = createServerFn({ method: "POST" })
   .inputValidator((data) => extraSchema.parse(data))
   .handler(async ({ data, context }) => {
     const email = (context.claims.email as string | undefined) ?? null;
-    const ctx = await loadActiveContext(context.supabase, context.userId, email);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, email);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
     if (!ctx.supportsExtra) {
       throw new Error("Tu plan no admite entregas adicionales. Actualiza al plan superior.");

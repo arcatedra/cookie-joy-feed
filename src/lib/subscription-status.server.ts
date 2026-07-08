@@ -8,6 +8,7 @@ import {
   type SubscriptionSnapshot,
   type SubscriptionSummary,
 } from "./subscription-status";
+import { getRequestHost } from "@tanstack/react-start/server";
 
 type StripeEnv = "sandbox" | "live";
 
@@ -251,4 +252,39 @@ export async function loadSubscriptionSnapshot(opts: {
   };
 
   return { subscription, deliveryStatus };
+}
+
+export async function loadActiveDeliveryContext(
+  supabase: any,
+  userId: string,
+  email: string | null,
+) {
+  const { paymentsEnvironmentForHost } = await import("./stripe.server");
+  const env = paymentsEnvironmentForHost(getRequestHost());
+  const snapshot = await loadSubscriptionSnapshot({ supabase, userId, email, env });
+  const status = snapshot.deliveryStatus;
+  if (!status.hasActiveSubscription || !status.subscriptionId || !status.priceId || !status.periodStart || !status.periodEnd) {
+    return null;
+  }
+
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("id, price_id, stripe_customer_id")
+    .eq("id", status.subscriptionId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  return {
+    sub: {
+      id: status.subscriptionId,
+      price_id: status.priceId,
+      stripe_customer_id: sub?.stripe_customer_id ?? null,
+    },
+    env,
+    planName: status.planName,
+    deliveriesPerMonth: status.deliveriesPerMonth,
+    supportsExtra: status.supportsExtra,
+    periodStart: new Date(status.periodStart),
+    periodEnd: new Date(status.periodEnd),
+  };
 }
