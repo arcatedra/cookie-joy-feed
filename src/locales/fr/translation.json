@@ -572,7 +572,21 @@
     "nextDraw": "⏱ Prochain tirage officiel dans",
     "dailyDrawAt": "Tirage quotidien à 20h00 (heure de l'Est) · automatisé",
     "lastWinner": "DERNIER GAGNANT",
-    "recentHistory": "HISTORIQUE RÉCENT"
+    "recentHistory": "HISTORIQUE RÉCENT",
+    "packages": {
+      "starter": {
+        "label": "Initial",
+        "tagline": "Tentez votre chance"
+      },
+      "popular": {
+        "label": "Meilleure Vente",
+        "tagline": "Meilleure option · +50% de valeur"
+      },
+      "premium": {
+        "label": "Premium",
+        "tagline": "Valeur maximale par étoile"
+      }
+    }
   },
   "fullscreenDraw": {
     "ariaLabel": "Tirage en direct",
@@ -1022,6 +1036,326 @@
     "privacy": "Confidentialité",
     "rules": "Règles du tirage",
     "trust": "Confiance",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "becomeDriver": "Devenir livreur"
+  },
+  "repartidoresPage": {
+    "metaTitle": "Devenir livreur · Hazorex",
+    "metaDesc": "Rejoignez l'équipe des livreurs Hazorex. Postulez en quelques minutes, choisissez vos horaires et gagnez de l'argent en livrant des commandes dans votre ville.",
+    "metaOg": "Postulez comme livreur Hazorex. Horaires flexibles, paiements hebdomadaires et processus d'approbation transparent.",
+    "hero": {
+      "badge": "Postulez en 5 minutes",
+      "titlePart1": "Gagnez jusqu'à",
+      "titleHighlight": "$25/hora",
+      "titlePart2": "en livrant avec Hazorex",
+      "subtitlePart1": "Vous gérez votre temps, nous nous occupons des commandes. Vous avez seulement besoin d'une",
+      "subtitleHighlight": "moto ou d'une voiture",
+      "subtitlePart2": ", d'un permis de conduire valide et de l'envie de rouler.",
+      "viewRequirements": "Voir les exigences →",
+      "perks": {
+        "flexible": "Horaires flexibles",
+        "weekly": "Paiements hebdomadaires",
+        "noFee": "Sans frais initiaux",
+        "reply48": "Réponse en 48 h"
+      }
+    },
+    "signInGate": {
+      "title": "Commencez votre candidature",
+      "body": "Connectez-vous d'abord ou créez votre compte Hazorex. C'est rapide.",
+      "cta": "Se connecter et postuler"
+    },
+    "readyGate": {
+      "title": "Tout est prêt pour votre candidature",
+      "body": "Cela prend environ 5 minutes. Ayez à portée de main votre pièce d'identité, votre permis de conduire et votre assurance en cours de validité.",
+      "cta": "Commencer la candidature"
+    },
+    "cta": {
+      "loading": "Chargement…",
+      "viewStatus": "Voir l'état de ma candidature"
+    },
+    "vehicles": {
+      "badge": "Véhicules acceptés",
+      "title": "Nous acceptons uniquement les motos ou les voitures",
+      "bodyPart1": "Pour garantir des livraisons rapides et une couverture complète, chez Hazorex",
+      "bodyStrong": "nous n'acceptons que les livreurs à moto ou en voiture",
+      "bodyPart2": ". Nous n'acceptons pas les livraisons à pied ou à vélo.",
+      "hint": "Choisissez le vôtre ci-dessous et nous ne vous demanderons que les documents correspondants.",
+      "moto": {
+        "label": "Moto",
+        "desc": "Idéal pour le trafic dense. Livraisons plus rapides.",
+        "perk1": "Permis A en cours de validité",
+        "perk2": "Assurance du véhicule en cours de validité",
+        "perk3": "Casque"
+      },
+      "auto": {
+        "label": "Voiture",
+        "desc": "Parfait pour les grosses commandes et les conditions météorologiques variables.",
+        "perk1": "Permis B en cours de validité",
+        "perk2": "Assurance du véhicule en cours de validité",
+        "perk3": "Contrôle technique à jour"
+      }
+    },
+    "how": {
+      "title": "Comment ça marche",
+      "s1": {
+        "title": "Postulez",
+        "body": "Remplissez vos informations, choisissez votre véhicule et téléchargez les documents que nous vous demandons."
+      },
+      "s2": {
+        "title": "Nous vérifions",
+        "body": "Notre équipe vérifie vos informations dans un délai maximum de 48 heures. Nous vous prévenons par e-mail."
+      },
+      "s3": {
+        "title": "Commencez à gagner",
+        "body": "Une fois approuvé, activez votre disponibilité et recevez des commandes près de chez vous."
+      }
+    },
+    "requirements": {
+      "title": "Exigences",
+      "r1": "Avoir plus de 18 ans",
+      "r2": "Posséder une moto ou une voiture (nous n'acceptons pas à pied ni à vélo)",
+      "r3": "Permis de conduire en cours de validité (type A pour moto, type B pour voiture)",
+      "r4": "Assurance du véhicule en cours de validité",
+      "r5": "Pièce d'identité officielle en cours de validité",
+      "r6": "Photo de profil claire (selfie)"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": {
+        "q": "Dois-je posséder mon propre véhicule ?",
+        "a": "Oui. Chez Hazorex, nous n'acceptons que les livreurs à moto ou en voiture pour garantir les délais de livraison et la couverture de la zone. Nous n'acceptons pas les livraisons à pied ou à vélo."
+      },
+      "q2": {
+        "q": "Combien de temps prend l'approbation ?",
+        "a": "Nous vous répondons dans un délai maximum de 48 heures après que vous ayez téléchargé tous vos documents."
+      },
+      "q3": {
+        "q": "Quand suis-je payé ?",
+        "a": "Les paiements sont traités chaque semaine pour le total des livraisons effectuées."
+      },
+      "q4": {
+        "q": "Puis-je choisir mes horaires ?",
+        "a": "Oui. Vous activez votre disponibilité lorsque vous souhaitez recevoir des commandes."
+      },
+      "q5": {
+        "q": "Qu'advient-il de mes documents ?",
+        "a": "Vos documents sont utilisés uniquement pour vérifier votre identité et votre éligibilité. Ils sont stockés de manière chiffrée et seule l'équipe de vérification y a accès. Vous pouvez demander leur suppression à tout moment."
+      }
+    },
+    "status": {
+      "approved": {
+        "title": "Vous êtes approuvé comme livreur Hazorex !",
+        "body": "Accédez à votre tableau de bord pour configurer votre disponibilité et commencer à livrer.",
+        "cta": "Aller à mon tableau de bord"
+      },
+      "pending": {
+        "title": "Candidature reçue",
+        "body": "Nous examinons vos informations. Nous vous préviendrons par e-mail dans un délai maximum de 48 heures."
+      },
+      "inReview": {
+        "title": "Candidature en cours d'examen",
+        "body": "L'équipe est en train de vérifier vos documents. Nous vous préviendrons bientôt par e-mail."
+      },
+      "rejected": {
+        "title": "Candidature rejetée",
+        "body": "Vous pouvez nous écrire à soporte@hazorex.com pour régler les détails et postuler à nouveau."
+      },
+      "suspended": {
+        "title": "Compte suspendu",
+        "body": "Écrivez-nous à soporte@hazorex.com pour plus de détails."
+      }
+    },
+    "docs": {
+      "identificacion": {
+        "label": "Pièce d'identité officielle (permis de conduire de l'État, passeport ou carte d'identité gouvernementale)",
+        "hint": "Image ou PDF, 5 Mo max"
+      },
+      "licencia_conducir": {
+        "label": "Permis de conduire en vigueur (État de NY)",
+        "hint": "Image ou PDF, 5 Mo max"
+      },
+      "seguro_vehiculo": {
+        "label": "Assurance du véhicule en vigueur",
+        "hint": "Image ou PDF, 5 Mo max"
+      },
+      "foto_perfil": {
+        "label": "Selfie clair (photo de profil)",
+        "hint": "Image jpg/png, 5 Mo max"
+      },
+      "casco": {
+        "label": "Photo de votre casque approuvé DOT (moto uniquement)",
+        "hint": "Image jpg/png du casque porté ou de face, 5 Mo max"
+      }
+    },
+    "docStatus": {
+      "pendiente": "En attente",
+      "subido": "Téléchargé",
+      "verificado": "Vérifié",
+      "rechazado": "Rejeté"
+    },
+    "steps": {
+      "s1": "Informations",
+      "s2": "Véhicule",
+      "s3": "Documents",
+      "s4": "Confirmer",
+      "progressAria": "Progression"
+    },
+    "form": {
+      "step1": {
+        "title": "Données personnelles"
+      },
+      "step2": {
+        "title": "Véhicule",
+        "subtitle": "Nous acceptons uniquement les motos ou les voitures."
+      },
+      "step3": {
+        "title": "Documents",
+        "subtitle": "Tous les documents suivants sont obligatoires pour compléter votre candidature (image ou PDF, 5 Mo max)."
+      },
+      "step4": {
+        "title": "Confirmation",
+        "hint": "Vérifiez que tout est correct. Vous pouvez modifier n'importe quelle section avant de soumettre votre candidature."
+      },
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "phone": "Téléphone",
+      "dob": "Date de naissance (18+)",
+      "zone": "Zone de livraison",
+      "address": "Adresse",
+      "licenseNumber": "Numéro de permis de conduire",
+      "insurer": "Assureur",
+      "plate": "Plaque d'immatriculation (optionnel)",
+      "selectEllipsis": "Sélectionnez…",
+      "continue": "Continuer",
+      "back": "Retour",
+      "submit": "Envoyer la candidature",
+      "submitting": "Envoi de la candidature…",
+      "change": "Modifier",
+      "upload": "Télécharger",
+      "required": "Requis",
+      "uploadAll": "Téléchargez tous les documents requis",
+      "fileTypeError": "Format non autorisé. Utilisez JPG, PNG ou PDF.",
+      "fileSizeError": "Fichier trop volumineux (max {{size}} Mo).",
+      "uploadError": "Impossible de télécharger {{doc}}: {{msg}}",
+      "driverError": "Impossible de créer votre inscription : {{msg}}",
+      "vehicleError": "Impossible d'enregistrer votre véhicule : {{msg}}",
+      "docsError": "Impossible d'enregistrer vos documents : {{msg}}",
+      "previewAlt": "Aperçu de {{name}}",
+      "privacy": {
+        "strong": "Confidentialité de vos documents.",
+        "body": "Ils sont utilisés uniquement pour vérifier votre identité et votre éligibilité. Ils sont stockés de manière chiffrée et seule l'équipe de vérification y a accès. Vous pouvez demander leur suppression à tout moment en écrivant à soporte@hazorex.com. Voir aussi notre",
+        "link": "Politique de confidentialité"
+      },
+      "accept": {
+        "part1": "Je confirme que les informations fournies sont exactes et j'accepte les",
+        "terms": "Conditions",
+        "and": "et la",
+        "privacy": "Politique de confidentialité",
+        "part2": "de Hazorex."
+      },
+      "errors": {
+        "err_fullName": "Entrez votre nom complet",
+        "err_email": "Adresse e-mail invalide",
+        "err_phone_short": "Numéro de téléphone invalide",
+        "err_phone_format": "Entrez un numéro américain à 10 chiffres, ex : +1 (718) 555 0000",
+        "err_dob_required": "Sélectionnez votre date de naissance",
+        "err_dob_underage": "Vous devez avoir plus de 18 ans",
+        "err_zone": "Sélectionnez votre zone de livraison",
+        "err_address": "Entrez votre adresse",
+        "err_vehicle": "Sélectionnez moto ou voiture",
+        "err_license": "Entrez votre numéro de permis",
+        "err_insurer": "Entrez votre assureur"
+      }
+    },
+    "summary": {
+      "name": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "dob": "Date de naissance",
+      "zone": "Zone",
+      "address": "Adresse",
+      "type": "Type",
+      "license": "Permis",
+      "insurer": "Assureur",
+      "plate": "Plaque d'immatriculation",
+      "edit": "Modifier"
+    },
+    "success": {
+      "title": "Candidature reçue !",
+      "bodyPart1": "Nous vous contacterons par e-mail dans un délai maximum de ",
+      "bodyStrong": "48 heures",
+      "bodyPart2": ".",
+      "refLabel": "Numéro de référence",
+      "copied": "Copié",
+      "copyAria": "Copier le numéro de référence",
+      "tip": "Conservez ce numéro. Il vous sera utile si vous avez besoin de nous contacter."
+    }
+  },
+  "negociosRegistro": {
+    "metaTitle": "Inscrivez votre commerce — Hazorex",
+    "metaDesc": "Inscrivez votre supermarché, magasin, boulangerie ou pharmacie sur Hazorex et touchez des milliers de clients.",
+    "notFound": "Non trouvé",
+    "back": "Retour",
+    "badge": "Pour les commerces",
+    "title": "Amenez votre commerce à des milliers de clients",
+    "subtitle": "Inscrivez votre supermarché ou magasin. Nous nous occupons de la livraison pendant que vous vendez.",
+    "signInPrompt": "Vous devez vous connecter pour inscrire votre commerce.",
+    "signInLink": "Se connecter",
+    "existing": "Vous avez déjà un commerce enregistré.",
+    "existingLink": "Voir le statut",
+    "form": {
+      "title": "Formulaire d'inscription",
+      "subtitle": "Remplissez tous les champs pour demander votre accès",
+      "name": "Nom du commerce *",
+      "namePlaceholder": "Mon Supermarché",
+      "type": "Type de commerce *",
+      "email": "Adresse e-mail *",
+      "emailPlaceholder": "commerce@email.com",
+      "phone": "Téléphone *",
+      "address": "Adresse du commerce *",
+      "addressPlaceholder": "Rue, numéro, quartier",
+      "city": "Ville *",
+      "selectZone": "Sélectionnez une zone",
+      "required": "* Champs obligatoires. Vos informations sont protégées et sécurisées."
+    },
+    "types": {
+      "supermercado": "Supermarché",
+      "tienda": "Magasin",
+      "panaderia": "Boulangerie",
+      "farmacia": "Pharmacie",
+      "otro": "Autre"
+    },
+    "notice": {
+      "strong": "Approbation en 48 heures.",
+      "body": "Nous examinerons votre demande et vous informerons par e-mail. Une fois approuvé, vous pourrez télécharger votre catalogue, votre inventaire et vos offres."
+    },
+    "submit": "Envoyer la demande",
+    "submitting": "Envoi de la demande...",
+    "errors": {
+      "nameRequired": "Le nom du commerce est obligatoire",
+      "emailRequired": "L'adresse e-mail est obligatoire",
+      "emailInvalid": "Entrez une adresse e-mail valide",
+      "phoneRequired": "Le numéro de téléphone est obligatoire",
+      "phoneFormat": "Le téléphone doit comporter 10 chiffres (format américain)",
+      "addressRequired": "L'adresse est obligatoire",
+      "cityRequired": "La ville est obligatoire",
+      "mustSignIn": "Vous devez vous connecter pour enregistrer un commerce",
+      "alreadyRegistered": "Vous avez déjà un commerce enregistré",
+      "generic": "Erreur lors de l'enregistrement du commerce"
+    },
+    "success": {
+      "title": "Demande envoyée !",
+      "body": "Votre commerce a été enregistré avec succès. Nous examinerons votre demande dans les 48 prochaines heures et vous informerons à l'adresse e-mail que vous avez fournie.",
+      "nextStrong": "Prochaine étape :",
+      "nextBody": "Une fois approuvé, vous accéderez à votre tableau de bord pour télécharger le catalogue, l'inventaire et les offres.",
+      "viewStatus": "Voir le statut de mon commerce",
+      "registerAnother": "Enregistrer un autre"
+    },
+    "benefits": {
+      "b1": "Approbation en 48h",
+      "b2": "Sans frais initiaux",
+      "b3": "Livraison incluse",
+      "b4": "Tableau de bord des ventes"
+    }
   }
 }

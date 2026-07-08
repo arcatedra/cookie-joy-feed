@@ -71,6 +71,20 @@ SUPPORTED_LANGS.forEach((lang) => {
   i18n.addResourceBundle(lang, "translation", resources[lang].translation, true, true);
 });
 
+// On the client, apply the stored preference synchronously before the first
+// render pass so route head()s (metaTitle, description) and any code that
+// reads i18n.t() at module scope render in the user's language.
+if (typeof window !== "undefined") {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored && (SUPPORTED_LANGS as readonly string[]).includes(stored) && stored !== i18n.language) {
+      void i18n.changeLanguage(stored);
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Call from a useEffect after hydration to switch to the user's preferred language. */
 export function syncClientLanguage() {
   if (typeof window === "undefined") return;

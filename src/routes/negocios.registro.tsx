@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle, Loader, ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   registerBusiness,
   fetchMyBusiness,
@@ -9,16 +10,13 @@ import {
 } from "@/lib/businesses";
 import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
 import { supabase } from "@/integrations/supabase/client";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/negocios/registro")({
   head: () => ({
     meta: [
-      { title: "Postula tu negocio — Hazorex" },
-      {
-        name: "description",
-        content:
-          "Registra tu supermercado, tienda, panadería o farmacia en Hazorex y llega a miles de clientes.",
-      },
+      { title: i18n.t("negociosRegistro.metaTitle") },
+      { name: "description", content: i18n.t("negociosRegistro.metaDesc") },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -26,8 +24,13 @@ export const Route = createFileRoute("/negocios/registro")({
   errorComponent: ({ error }) => (
     <div className="p-6 text-sm text-destructive">{error.message}</div>
   ),
-  notFoundComponent: () => <div className="p-6 text-sm">No encontrado</div>,
+  notFoundComponent: () => <NotFoundBlock />,
 });
+
+function NotFoundBlock() {
+  const { t } = useTranslation();
+  return <div className="p-6 text-sm">{t("negociosRegistro.notFound")}</div>;
+}
 
 const TYPES: BusinessType[] = ["supermercado", "tienda", "panaderia", "farmacia", "otro"];
 
@@ -50,6 +53,7 @@ const INITIAL: FormState = {
 };
 
 function BusinessRegistrationPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [bootLoading, setBootLoading] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -81,13 +85,13 @@ function BusinessRegistrationPage() {
   };
 
   const validateForm = () => {
-    if (!formData.business_name.trim()) return setError("El nombre del negocio es obligatorio"), false;
-    if (!formData.email.trim()) return setError("El correo electrónico es obligatorio"), false;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError("Ingresa un correo válido"), false;
-    if (!formData.phone.trim()) return setError("El teléfono es obligatorio"), false;
-    if (formData.phone.replace(/\D/g, "").length < 10) return setError("El teléfono debe tener 10 dígitos (formato EE. UU.)"), false;
-    if (!formData.address.trim()) return setError("La dirección es obligatoria"), false;
-    if (!formData.city.trim()) return setError("La ciudad es obligatoria"), false;
+    if (!formData.business_name.trim()) return setError(t("negociosRegistro.errors.nameRequired")), false;
+    if (!formData.email.trim()) return setError(t("negociosRegistro.errors.emailRequired")), false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError(t("negociosRegistro.errors.emailInvalid")), false;
+    if (!formData.phone.trim()) return setError(t("negociosRegistro.errors.phoneRequired")), false;
+    if (formData.phone.replace(/\D/g, "").length < 10) return setError(t("negociosRegistro.errors.phoneFormat")), false;
+    if (!formData.address.trim()) return setError(t("negociosRegistro.errors.addressRequired")), false;
+    if (!formData.city.trim()) return setError(t("negociosRegistro.errors.cityRequired")), false;
     return true;
   };
 
@@ -95,11 +99,11 @@ function BusinessRegistrationPage() {
     e.preventDefault();
     if (!validateForm()) return;
     if (!hasAccount) {
-      setError("Debes iniciar sesión para registrar un negocio");
+      setError(t("negociosRegistro.errors.mustSignIn"));
       return;
     }
     if (existing) {
-      setError("Ya tienes un negocio registrado");
+      setError(t("negociosRegistro.errors.alreadyRegistered"));
       return;
     }
     setLoading(true);
@@ -116,7 +120,7 @@ function BusinessRegistrationPage() {
       setSubmitted(true);
       setFormData(INITIAL);
     } catch (err: any) {
-      setError(err?.message ?? "Error al registrar el negocio");
+      setError(err?.message ?? t("negociosRegistro.errors.generic"));
     } finally {
       setLoading(false);
     }
@@ -138,27 +142,28 @@ function BusinessRegistrationPage() {
             <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700">
               <CheckCircle className="h-9 w-9" />
             </div>
-            <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">¡Solicitud enviada!</h1>
+            <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">
+              {t("negociosRegistro.success.title")}
+            </h1>
             <p className="mt-2 text-sm text-[#4a3525]">
-              Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas
-              48 horas y te notificaremos al correo que proporcionaste.
+              {t("negociosRegistro.success.body")}
             </p>
             <div className="mt-5 rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4 text-left text-sm text-[#1e3a5f]">
-              <strong>Próximo paso:</strong> Una vez aprobado, accederás a tu panel para subir
-              catálogo, inventario y ofertas.
+              <strong>{t("negociosRegistro.success.nextStrong")}</strong>{" "}
+              {t("negociosRegistro.success.nextBody")}
             </div>
             <div className="mt-6 grid gap-2 sm:grid-cols-2">
               <button
                 onClick={() => navigate({ to: "/negocio" })}
                 className="min-h-11 w-full rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#d4b04a]"
               >
-                Ver estado de mi negocio
+                {t("negociosRegistro.success.viewStatus")}
               </button>
               <button
                 onClick={() => setSubmitted(false)}
                 className="min-h-11 w-full rounded-lg border border-[#1e3a5f]/30 bg-white px-4 py-3 text-sm font-semibold text-[#1e3a5f] transition hover:bg-[#f4f1ea]"
               >
-                Registrar otro
+                {t("negociosRegistro.success.registerAnother")}
               </button>
             </div>
           </div>
@@ -174,173 +179,171 @@ function BusinessRegistrationPage() {
           to="/"
           className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
         >
-          <ArrowLeft className="h-4 w-4" /> Volver
+          <ArrowLeft className="h-4 w-4" /> {t("negociosRegistro.back")}
         </Link>
 
-        {/* Header */}
         <div className="mb-8 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-[#E6C35C] px-3 py-1 text-xs font-semibold text-[#1e3a5f]">
-            🏪 Para negocios
+            🏪 {t("negociosRegistro.badge")}
           </span>
           <h1 className="mt-3 font-serif text-3xl font-bold text-[#1e3a5f] sm:text-4xl">
-            Lleva tu negocio a miles de clientes
+            {t("negociosRegistro.title")}
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-[#4a3525]">
-            Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú
-            vendes.
+            {t("negociosRegistro.subtitle")}
           </p>
         </div>
 
         {!hasAccount && (
           <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
-            Necesitas iniciar sesión para postular tu negocio.{" "}
+            {t("negociosRegistro.signInPrompt")}{" "}
             <Link to="/auth" className="font-semibold text-amber-900 underline">
-              Iniciar sesión
+              {t("negociosRegistro.signInLink")}
             </Link>
           </div>
         )}
 
         {existing && (
           <div className="mb-4 rounded-md border border-amber-300 bg-amber-100 p-4 text-sm text-amber-900">
-            Ya tienes un negocio registrado.{" "}
+            {t("negociosRegistro.existing")}{" "}
             <Link to="/negocio" className="font-semibold text-amber-900 underline">
-              Ver estado
+              {t("negociosRegistro.existingLink")}
             </Link>
           </div>
         )}
 
-        {/* Form Card */}
         <div className="overflow-hidden rounded-2xl border border-[#c8862e]/30 bg-white shadow-sm">
           <div className="border-b border-[#c8862e]/20 bg-[#f4f1ea] px-6 py-4">
-            <h2 className="text-lg font-bold text-[#1e3a5f]">Formulario de registro</h2>
-            <p className="text-xs text-[#4a3525]">Completa todos los campos para solicitar tu acceso</p>
+            <h2 className="text-lg font-bold text-[#1e3a5f]">
+              {t("negociosRegistro.form.title")}
+            </h2>
+            <p className="text-xs text-[#4a3525]">
+              {t("negociosRegistro.form.subtitle")}
+            </p>
           </div>
 
+          <form onSubmit={handleSubmit} className="space-y-5 p-6">
+            {error && (
+              <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>{error}</p>
+              </div>
+            )}
 
-        <form onSubmit={handleSubmit} className="space-y-5 p-6">
-          {error && (
-            <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-              <p>{error}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label={t("negociosRegistro.form.name")}>
+                <input
+                  name="business_name"
+                  value={formData.business_name}
+                  onChange={handleChange}
+                  className={inputCls}
+                  placeholder={t("negociosRegistro.form.namePlaceholder")}
+                />
+              </Field>
+              <Field label={t("negociosRegistro.form.type")}>
+                <select
+                  name="business_type"
+                  value={formData.business_type}
+                  onChange={handleChange}
+                  className={inputCls}
+                >
+                  {TYPES.map((tp) => (
+                    <option key={tp} value={tp}>
+                      {t(`negociosRegistro.types.${tp}`, BUSINESS_TYPE_LABELS[tp])}
+                    </option>
+                  ))}
+                </select>
+              </Field>
             </div>
-          )}
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Nombre del negocio *">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label={t("negociosRegistro.form.email")}>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={inputCls}
+                  placeholder={t("negociosRegistro.form.emailPlaceholder")}
+                />
+              </Field>
+              <Field label={t("negociosRegistro.form.phone")}>
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className={inputCls}
+                  placeholder="+1 (718) 555 0123"
+                  inputMode="tel"
+                />
+              </Field>
+            </div>
+
+            <Field label={t("negociosRegistro.form.address")}>
               <input
-                name="business_name"
-                value={formData.business_name}
+                name="address"
+                value={formData.address}
                 onChange={handleChange}
                 className={inputCls}
-                placeholder="Mi Supermercado"
+                placeholder={t("negociosRegistro.form.addressPlaceholder")}
               />
             </Field>
-            <Field label="Tipo de negocio *">
+
+            <Field label={t("negociosRegistro.form.city")}>
               <select
-                name="business_type"
-                value={formData.business_type}
+                name="city"
+                value={formData.city}
                 onChange={handleChange}
                 className={inputCls}
               >
-                {TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {BUSINESS_TYPE_LABELS[t]}
+                <option value="">{t("negociosRegistro.form.selectZone")}</option>
+                {NYC_DELIVERY_ZONES.map((z) => (
+                  <option key={z} value={z} translate="no">
+                    {z}
                   </option>
                 ))}
               </select>
             </Field>
-          </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Correo electrónico *">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={inputCls}
-                placeholder="negocio@correo.com"
-              />
-            </Field>
-            <Field label="Teléfono *">
-              <input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={inputCls}
-                placeholder="+1 (718) 555 0123"
-                inputMode="tel"
-              />
-            </Field>
-          </div>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+              ⏱️ <strong>{t("negociosRegistro.notice.strong")}</strong>{" "}
+              {t("negociosRegistro.notice.body")}
+            </div>
 
-          <Field label="Dirección del negocio *">
-            <input
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className={inputCls}
-              placeholder="Calle, número, colonia"
-            />
-          </Field>
-
-          <Field label="Ciudad *">
-            <select
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className={inputCls}
+            <button
+              type="submit"
+              disabled={loading || !hasAccount || existing}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] shadow-sm transition hover:bg-[#d4b04a] disabled:opacity-50"
             >
-              <option value="">Selecciona una zona</option>
-              {NYC_DELIVERY_ZONES.map((z) => (
-                <option key={z} value={z} translate="no">
-                  {z}
-                </option>
-              ))}
-            </select>
-          </Field>
+              {loading ? (
+                <>
+                  <Loader className="h-4 w-4 animate-spin" />
+                  {t("negociosRegistro.submitting")}
+                </>
+              ) : (
+                <>
+                  {t("negociosRegistro.submit")}
+                  <span aria-hidden>→</span>
+                </>
+              )}
+            </button>
 
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
-            ⏱️ <strong>Aprobación en 48 horas.</strong> Revisaremos tu solicitud y te notificaremos
-            por correo. Una vez aprobado, podrás subir tu catálogo, inventario y ofertas.
-          </div>
+            <p className="text-center text-xs text-[#4a3525]">
+              {t("negociosRegistro.form.required")}
+            </p>
+          </form>
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading || !hasAccount || existing}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#E6C35C] px-4 py-3 text-sm font-semibold text-[#1e3a5f] shadow-sm transition hover:bg-[#d4b04a] disabled:opacity-50"
-          >
-            {loading ? (
-              <>
-                <Loader className="h-4 w-4 animate-spin" />
-                Enviando solicitud...
-              </>
-            ) : (
-              <>
-                Enviar solicitud
-                <span aria-hidden>→</span>
-              </>
-            )}
-          </button>
-
-          <p className="text-center text-xs text-[#4a3525]">
-            * Campos obligatorios. Tu información está protegida y segura.
-          </p>
-        </form>
-      </div>
-
-        {/* Benefits */}
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Benefit icon="⏱️" text="Aprobación en 48h" />
-          <Benefit icon="💰" text="Sin cuota inicial" />
-          <Benefit icon="🚚" text="Delivery incluido" />
-          <Benefit icon="📊" text="Panel de ventas" />
+          <Benefit icon="⏱️" text={t("negociosRegistro.benefits.b1")} />
+          <Benefit icon="💰" text={t("negociosRegistro.benefits.b2")} />
+          <Benefit icon="🚚" text={t("negociosRegistro.benefits.b3")} />
+          <Benefit icon="📊" text={t("negociosRegistro.benefits.b4")} />
         </div>
       </main>
     </div>
   );
 }
-
 
 const inputCls =
   "w-full rounded-lg border border-[#c8862e]/40 bg-white px-4 py-3 text-sm text-[#1e3a5f] placeholder:text-[#4a3525]/50 transition focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]";
@@ -362,4 +365,3 @@ function Benefit({ icon, text }: { icon: string; text: string }) {
     </div>
   );
 }
-

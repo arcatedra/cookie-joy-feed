@@ -12,6 +12,7 @@ import {
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { useShopifyCartSync } from "@/hooks/useShopifyCartSync";
 import i18n from "@/i18n";
+import { localizeShopifyProduct } from "@/lib/shopify-i18n";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -97,6 +98,15 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
   const image = product.node.images.edges[0]?.node;
   const price = product.node.priceRange.minVariantPrice;
 
+  // Localize product name/description via handle → i18n key mapping,
+  // so /shop reads from the same translation source as /explore and /menu.
+  const { name, description } = localizeShopifyProduct(
+    product.node.handle,
+    product.node.title,
+    product.node.description,
+    t,
+  );
+
   const handleAdd = async () => {
     if (!variant) return;
     const { toKilograms } = await import("@/lib/shopify");
@@ -121,7 +131,7 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
         {image ? (
           <img
             src={image.url}
-            alt={image.altText ?? product.node.title}
+            alt={image.altText ?? name}
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />
         ) : (
@@ -136,10 +146,10 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
           params={{ handle: product.node.handle }}
           className="font-semibold text-foreground hover:underline"
         >
-          {product.node.title}
+          {name}
         </Link>
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-          {product.node.description}
+          {description}
         </p>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-lg font-bold">

@@ -79,7 +79,7 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
             kind: "stars_purchase",
           },
           payment_intent_data: {
-            description: `HAZOREX — ${pkg.tokens} Estrellas (${pkg.label})`,
+            description: `HAZOREX — ${pkg.tokens} Estrellas (${pkg.id})`,
             metadata: {
               package_id: pkg.id,
               tokens: String(pkg.tokens),
@@ -94,7 +94,7 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
                 unit_amount: Math.round(pkg.priceUsd * 100),
                 product_data: {
                   name: `${pkg.tokens} Estrellas — HAZOREX ORIGEN`,
-                  description: `Paquete ${pkg.label} de Estrellas.`,
+                  description: `Paquete ${pkg.id} de Estrellas.`,
                 },
               },
             },

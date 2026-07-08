@@ -572,7 +572,21 @@
     "nextDraw": "⏱ 下次官方抽奖时间",
     "dailyDrawAt": "每日抽奖时间：晚上 8:00（东部时间）· 自动",
     "lastWinner": "上次中奖者",
-    "recentHistory": "近期历史记录"
+    "recentHistory": "近期历史记录",
+    "packages": {
+      "starter": {
+        "label": "入门级",
+        "tagline": "试试你的运气"
+      },
+      "popular": {
+        "label": "最畅销",
+        "tagline": "最佳选择 · +50% 价值"
+      },
+      "premium": {
+        "label": "高级",
+        "tagline": "每颗星星的最大价值"
+      }
+    }
   },
   "fullscreenDraw": {
     "ariaLabel": "实时抽奖",
@@ -1022,6 +1036,326 @@
     "privacy": "隐私",
     "rules": "抽奖规则",
     "trust": "信任",
-    "rights": "版权所有。"
+    "rights": "版权所有。",
+    "becomeDriver": "成为配送员"
+  },
+  "repartidoresPage": {
+    "metaTitle": "成为配送员 · Hazorex",
+    "metaDesc": "加入 Hazorex 配送员团队。几分钟内即可申请，选择您的工作时间，在您的城市配送订单赚钱。",
+    "metaOg": "申请成为 Hazorex 配送员。灵活的工作时间，每周付款，以及透明的审批流程。",
+    "hero": {
+      "badge": "5分钟内申请",
+      "titlePart1": "最高可赚",
+      "titleHighlight": "$25/小时",
+      "titlePart2": "，为 Hazorex 配送",
+      "subtitlePart1": "您管理您的时间，我们处理订单。您只需要",
+      "subtitleHighlight": "摩托车或汽车",
+      "subtitlePart2": "、有效驾照和上路的热情。",
+      "viewRequirements": "查看要求 →",
+      "perks": {
+        "flexible": "灵活工作时间",
+        "weekly": "每周付款",
+        "noFee": "无初始费用",
+        "reply48": "48小时内回复"
+      }
+    },
+    "signInGate": {
+      "title": "开始您的申请",
+      "body": "首先登录或创建您的 Hazorex 账户。这很快捷。",
+      "cta": "登录并申请"
+    },
+    "readyGate": {
+      "title": "一切就绪，可以开始您的申请了",
+      "body": "大约需要5分钟。请准备好您的有效身份证件、驾照和保险。",
+      "cta": "开始申请"
+    },
+    "cta": {
+      "loading": "加载中…",
+      "viewStatus": "查看我的申请状态"
+    },
+    "vehicles": {
+      "badge": "接受的车辆",
+      "title": "我们只接受摩托车或汽车",
+      "bodyPart1": "为了保证快速和全覆盖的配送，在 Hazorex",
+      "bodyStrong": "我们只接受使用摩托车或汽车的配送员",
+      "bodyPart2": "。我们不接受步行或骑自行车配送。",
+      "hint": "在下方选择您的车辆，我们将只要求您提供相应的文件。",
+      "moto": {
+        "label": "摩托车",
+        "desc": "适合交通拥堵路段。配送速度更快。",
+        "perk1": "有效A类驾照",
+        "perk2": "有效车辆保险",
+        "perk3": "头盔"
+      },
+      "auto": {
+        "label": "汽车",
+        "desc": "非常适合大订单和多变的天气。",
+        "perk1": "有效B类驾照",
+        "perk2": "有效车辆保险",
+        "perk3": "最新年检"
+      }
+    },
+    "how": {
+      "title": "运作方式",
+      "s1": {
+        "title": "申请",
+        "body": "填写您的信息，选择您的车辆，并上传我们要求的文件。"
+      },
+      "s2": {
+        "title": "我们审核",
+        "body": "我们的团队将在最多48小时内审核您的信息。我们会通过电子邮件通知您。"
+      },
+      "s3": {
+        "title": "开始赚钱",
+        "body": "一旦获得批准，即可激活您的空闲状态并开始接收附近的订单。"
+      }
+    },
+    "requirements": {
+      "title": "要求",
+      "r1": "年满18岁",
+      "r2": "拥有自己的摩托车或汽车（不接受步行或骑自行车）",
+      "r3": "有效的驾照（摩托车为A类，汽车为B类）",
+      "r4": "有效的车辆保险",
+      "r5": "有效的官方身份证件",
+      "r6": "清晰的个人资料照片（自拍）"
+    },
+    "faq": {
+      "title": "常见问题",
+      "q1": {
+        "q": "我需要有自己的车辆吗？",
+        "a": "是的。在 Hazorex，我们只接受使用摩托车或汽车的配送员，以保证配送时间和区域覆盖。我们不接受步行或骑自行车配送。"
+      },
+      "q2": {
+        "q": "审批需要多长时间？",
+        "a": "在您上传所有文件后，我们将在最多48小时内给您答复。"
+      },
+      "q3": {
+        "q": "我什么时候能收到报酬？",
+        "a": "付款每周处理一次，按完成的配送总额计算。"
+      },
+      "q4": {
+        "q": "我可以选择自己的工作时间吗？",
+        "a": "可以。当您想接收订单时，可以自行激活您的空闲状态。"
+      },
+      "q5": {
+        "q": "我的文件会如何处理？",
+        "a": "您的文件仅用于验证您的身份和资格。它们以加密方式存储，只有审核团队可以访问。您可以随时请求删除它们。"
+      }
+    },
+    "status": {
+      "approved": {
+        "title": "您已被批准成为 Hazorex 配送员！",
+        "body": "进入您的控制面板设置您的空闲状态并开始配送。",
+        "cta": "前往我的控制面板"
+      },
+      "pending": {
+        "title": "申请已收到",
+        "body": "我们正在审核您的信息。我们将在最多48小时内通过电子邮件通知您。"
+      },
+      "inReview": {
+        "title": "申请审核中",
+        "body": "团队正在验证您的文件。我们将很快通过电子邮件通知您。"
+      },
+      "rejected": {
+        "title": "申请被拒绝",
+        "body": "您可以发送邮件至 soporte@hazorex.com 以解决问题并重新申请。"
+      },
+      "suspended": {
+        "title": "账户已暂停",
+        "body": "请发送邮件至 soporte@hazorex.com 了解更多详情。"
+      }
+    },
+    "docs": {
+      "identificacion": {
+        "label": "官方身份证件（州驾照、护照或政府ID）",
+        "hint": "图片或PDF，最大5MB"
+      },
+      "licencia_conducir": {
+        "label": "有效驾照（纽约州）",
+        "hint": "图片或PDF，最大5MB"
+      },
+      "seguro_vehiculo": {
+        "label": "有效车辆保险",
+        "hint": "图片或PDF，最大5MB"
+      },
+      "foto_perfil": {
+        "label": "清晰的自拍照（个人资料照片）",
+        "hint": "jpg/png 图片，最大5MB"
+      },
+      "casco": {
+        "label": "您的DOT认证头盔照片（仅限摩托车）",
+        "hint": "戴着或正面摆放的头盔 jpg/png 图片，最大5MB"
+      }
+    },
+    "docStatus": {
+      "pendiente": "待处理",
+      "subido": "已上传",
+      "verificado": "已验证",
+      "rechazado": "已拒绝"
+    },
+    "steps": {
+      "s1": "信息",
+      "s2": "车辆",
+      "s3": "文件",
+      "s4": "确认",
+      "progressAria": "进度"
+    },
+    "form": {
+      "step1": {
+        "title": "个人信息"
+      },
+      "step2": {
+        "title": "车辆",
+        "subtitle": "我们只接受摩托车或汽车。"
+      },
+      "step3": {
+        "title": "文件",
+        "subtitle": "以下所有文件均为完成申请所必需（图片或PDF，最大5MB）。"
+      },
+      "step4": {
+        "title": "确认",
+        "hint": "请检查所有信息是否正确。您可以在提交申请前编辑任何部分。"
+      },
+      "fullName": "全名",
+      "email": "电子邮件",
+      "phone": "电话",
+      "dob": "出生日期 (18+)",
+      "zone": "配送区域",
+      "address": "地址",
+      "licenseNumber": "驾照号码",
+      "insurer": "保险公司",
+      "plate": "车牌号（可选）",
+      "selectEllipsis": "选择…",
+      "continue": "继续",
+      "back": "返回",
+      "submit": "提交申请",
+      "submitting": "正在提交申请…",
+      "change": "更改",
+      "upload": "上传",
+      "required": "必填",
+      "uploadAll": "上传所有必需文件",
+      "fileTypeError": "不允许的格式。请使用 JPG、PNG 或 PDF。",
+      "fileSizeError": "文件太大（最大 {{size}}MB）。",
+      "uploadError": "无法上传 {{doc}}：{{msg}}",
+      "driverError": "无法创建您的注册信息：{{msg}}",
+      "vehicleError": "无法保存您的车辆信息：{{msg}}",
+      "docsError": "无法保存您的文件：{{msg}}",
+      "previewAlt": "{{name}} 的预览",
+      "privacy": {
+        "strong": "您的文件隐私。",
+        "body": "仅用于验证您的身份和资格。它们以加密方式存储，只有审核团队可以访问。您可以随时通过发送邮件至 soporte@hazorex.com 请求删除。另请参阅我们的",
+        "link": "隐私政策"
+      },
+      "accept": {
+        "part1": "我确认所提供的信息是真实的，并接受 Hazorex 的",
+        "terms": "条款",
+        "and": "和",
+        "privacy": "隐私政策",
+        "part2": "。"
+      },
+      "errors": {
+        "err_fullName": "请输入您的全名",
+        "err_email": "无效的电子邮件",
+        "err_phone_short": "无效的电话号码",
+        "err_phone_format": "请输入一个10位数的美国电话号码，例如 +1 (718) 555 0000",
+        "err_dob_required": "请选择您的出生日期",
+        "err_dob_underage": "您必须年满18岁",
+        "err_zone": "请选择您的配送区域",
+        "err_address": "请输入您的地址",
+        "err_vehicle": "请选择摩托车或汽车",
+        "err_license": "请输入您的驾照号码",
+        "err_insurer": "请输入您的保险公司"
+      }
+    },
+    "summary": {
+      "name": "姓名",
+      "email": "电子邮件",
+      "phone": "电话",
+      "dob": "出生日期",
+      "zone": "区域",
+      "address": "地址",
+      "type": "类型",
+      "license": "驾照",
+      "insurer": "保险公司",
+      "plate": "车牌号",
+      "edit": "编辑"
+    },
+    "success": {
+      "title": "申请已收到！",
+      "bodyPart1": "我们将在最多 ",
+      "bodyStrong": "48小时",
+      "bodyPart2": " 内通过电子邮件与您联系。",
+      "refLabel": "参考编号",
+      "copied": "已复制",
+      "copyAria": "复制参考编号",
+      "tip": "请保存此编号。如果您需要联系我们，它将对您有所帮助。"
+    }
+  },
+  "negociosRegistro": {
+    "metaTitle": "申请您的业务 — Hazorex",
+    "metaDesc": "在 Hazorex 注册您的超市、商店、面包店或药店，触达数千名客户。",
+    "notFound": "未找到",
+    "back": "返回",
+    "badge": "面向企业",
+    "title": "让您的业务触达数千名客户",
+    "subtitle": "注册您的超市或商店。您负责销售，我们负责配送。",
+    "signInPrompt": "您需要登录才能申请您的业务。",
+    "signInLink": "登录",
+    "existing": "您已经注册了一项业务。",
+    "existingLink": "查看状态",
+    "form": {
+      "title": "注册表",
+      "subtitle": "填写所有字段以申请访问权限",
+      "name": "企业名称 *",
+      "namePlaceholder": "我的超市",
+      "type": "业务类型 *",
+      "email": "电子邮件 *",
+      "emailPlaceholder": "negocio@correo.com",
+      "phone": "电话 *",
+      "address": "企业地址 *",
+      "addressPlaceholder": "街道，门牌号，社区",
+      "city": "城市 *",
+      "selectZone": "选择一个区域",
+      "required": "* 必填字段。您的信息受到保护且安全。"
+    },
+    "types": {
+      "supermercado": "超市",
+      "tienda": "商店",
+      "panaderia": "面包店",
+      "farmacia": "药店",
+      "otro": "其他"
+    },
+    "notice": {
+      "strong": "48小时内批准。",
+      "body": "我们将审核您的申请并通过电子邮件通知您。一旦获得批准，您将可以上传您的商品目录、库存和优惠信息。"
+    },
+    "submit": "提交申请",
+    "submitting": "正在提交申请...",
+    "errors": {
+      "nameRequired": "企业名称是必填项",
+      "emailRequired": "电子邮件是必填项",
+      "emailInvalid": "请输入有效的电子邮件地址",
+      "phoneRequired": "电话是必填项",
+      "phoneFormat": "电话号码必须是10位数（美国格式）",
+      "addressRequired": "地址是必填项",
+      "cityRequired": "城市是必填项",
+      "mustSignIn": "您必须登录才能注册企业",
+      "alreadyRegistered": "您已经注册了一项业务",
+      "generic": "注册企业时出错"
+    },
+    "success": {
+      "title": "申请已发送！",
+      "body": "您的企业已成功注册。我们将在接下来的48小时内审核您的申请，并通过您提供的电子邮件通知您。",
+      "nextStrong": "下一步：",
+      "nextBody": "一旦获得批准，您将可以访问您的控制面板以上传商品目录、库存和优惠信息。",
+      "viewStatus": "查看我的业务状态",
+      "registerAnother": "注册另一个"
+    },
+    "benefits": {
+      "b1": "48小时内批准",
+      "b2": "无初始费用",
+      "b3": "包含配送服务",
+      "b4": "销售仪表板"
+    }
   }
 }
