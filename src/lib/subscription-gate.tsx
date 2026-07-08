@@ -25,12 +25,18 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { getMySubscription } from "@/lib/subscriptions.functions";
-
-const ACTIVE = new Set(["active", "trialing", "past_due"]);
+import {
+  emptyDeliveryStatus,
+  isSubscriptionActive,
+  type DeliveryStatus,
+  type SubscriptionSummary,
+} from "@/lib/subscription-status";
 
 interface GateValue {
   canPurchase: boolean;
   loading: boolean;
+  subscription: SubscriptionSummary | null;
+  deliveryStatus: DeliveryStatus;
   /** Returns true and runs `action` if the user can purchase; otherwise opens the prompt and returns false. */
   guard: (action?: () => void) => boolean;
   openPrompt: () => void;
@@ -67,7 +73,8 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
   });
 
   const sub = query.data?.subscription;
-  const canPurchase = !!sub && ACTIVE.has(sub.status ?? "");
+  const deliveryStatus = query.data?.deliveryStatus ?? emptyDeliveryStatus();
+  const canPurchase = isSubscriptionActive(sub);
 
   const openPrompt = useCallback(() => setOpen(true), []);
 
@@ -103,7 +110,7 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
           await qc.invalidateQueries({ queryKey });
           const data = await qc.fetchQuery({ queryKey, queryFn: () => getSub() });
           const sub = data?.subscription;
-          if (sub && ACTIVE.has(sub.status ?? "")) {
+          if (isSubscriptionActive(sub)) {
             return { active: true, attempts, errors, lastError };
           }
         } catch (e) {
@@ -142,7 +149,6 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
         { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${user.id}` },
         () => {
           qc.invalidateQueries({ queryKey });
-          qc.invalidateQueries({ queryKey: ["delivery-status"] });
         },
       )
       .subscribe();
@@ -155,12 +161,14 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
     () => ({
       canPurchase,
       loading: authLoading || (!!user && query.isLoading),
+      subscription: sub ?? null,
+      deliveryStatus,
       guard,
       openPrompt,
       refresh,
       refreshUntilActive,
     }),
-    [canPurchase, authLoading, user, query.isLoading, guard, openPrompt, refresh, refreshUntilActive],
+    [canPurchase, authLoading, user, query.isLoading, sub, deliveryStatus, guard, openPrompt, refresh, refreshUntilActive],
   );
 
   return (
@@ -178,6 +186,8 @@ export function useSubscriptionGate(): GateValue {
     return {
       canPurchase: false,
       loading: false,
+        subscription: null,
+        deliveryStatus: emptyDeliveryStatus(),
       guard: () => false,
       openPrompt: () => {},
       refresh: async () => {},

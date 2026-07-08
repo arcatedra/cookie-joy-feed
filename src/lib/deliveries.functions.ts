@@ -2,25 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { syncLatestSubscriptionFromStripe } from "./subscriptions.functions";
-
-const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
-const ACTIVE_SET = new Set<string>(ACTIVE_STATUSES);
-const EXTRA_DELIVERY_PRICE_CENTS = 1000;
-
-export interface DeliveryStatus {
-  hasActiveSubscription: boolean;
-  planName: string | null;
-  priceId: string | null;
-  deliveriesPerMonth: number;
-  used: number;
-  remaining: number;
-  periodStart: string | null;
-  periodEnd: string | null;
-  subscriptionId: string | null;
-  supportsExtra: boolean;
-  extraPriceCents: number;
-}
+import { loadActiveDeliveryContext, loadSubscriptionSnapshot } from "./subscription-status.server";
+import { EXTRA_DELIVERY_PRICE_CENTS, type DeliveryStatus } from "./subscription-status";
 
 export interface DeliveryBookingRow {
   id: string;
@@ -37,117 +20,19 @@ function isMondayOrFriday(d: Date) {
   return day === 1 || day === 5;
 }
 
-async function loadActiveContext(
-  supabase: any,
-  userId: string,
-  email: string | null,
-) {
-  const { paymentsEnvironmentForHost } = await import("./stripe.server");
-  const env = paymentsEnvironmentForHost(getRequestHost());
-
-  // Same read pattern as getMySubscription: env-scoped, latest row.
-  const { data: latest } = await supabase
-    .from("subscriptions")
-    .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
-    .eq("user_id", userId)
-    .eq("environment", env)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  let sub = latest && ACTIVE_SET.has(latest.status ?? "") ? latest : null;
-
-  // Fallback: reconcile with Stripe (mirrors getMySubscription behaviour).
-  if (!sub) {
-    try {
-      const synced = await syncLatestSubscriptionFromStripe(userId, env, {
-        knownSubscriptionId: latest?.stripe_subscription_id ?? undefined,
-        email,
-      });
-      if (synced && ACTIVE_SET.has(synced.status ?? "")) {
-        const { data: refreshed } = await supabase
-          .from("subscriptions")
-          .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
-          .eq("stripe_subscription_id", synced.stripe_subscription_id)
-          .maybeSingle();
-        sub = refreshed ?? null;
-      }
-    } catch (e) {
-      console.error("[deliveries] stripe fallback failed", e);
-    }
-  }
-
-  if (!sub) return null;
-
-  const { data: plan } = await supabase
-    .from("subscription_plans")
-    .select("name, deliveries_per_month, price_id")
-    .eq("price_id", sub.price_id)
-    .maybeSingle();
-
-  const now = new Date();
-  const start = sub.current_period_start
-    ? new Date(sub.current_period_start)
-    : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-  const end = sub.current_period_end
-    ? new Date(sub.current_period_end)
-    : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
-
-  return {
-    sub,
-    env,
-    planName: plan?.name ?? "Plan",
-    deliveriesPerMonth: plan?.deliveries_per_month ?? 0,
-    supportsExtra: sub.price_id === "plan_starter_monthly",
-    periodStart: start,
-    periodEnd: end,
-  };
-
-}
-
 export const getMyDeliveryStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<DeliveryStatus> => {
     const email = (context.claims.email as string | undefined) ?? null;
-    const ctx = await loadActiveContext(context.supabase, context.userId, email);
-    if (!ctx) {
-      return {
-        hasActiveSubscription: false,
-        planName: null,
-        priceId: null,
-        deliveriesPerMonth: 0,
-        used: 0,
-        remaining: 0,
-        periodStart: null,
-        periodEnd: null,
-        subscriptionId: null,
-        supportsExtra: false,
-        extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
-      };
-    }
-
-    const { count } = await context.supabase
-      .from("delivery_bookings")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", context.userId)
-      .eq("status", "scheduled")
-      .gte("period_start", ctx.periodStart.toISOString())
-      .lte("period_end", ctx.periodEnd.toISOString());
-
-    const used = count ?? 0;
-    return {
-      hasActiveSubscription: true,
-      planName: ctx.planName,
-      priceId: ctx.sub.price_id,
-      deliveriesPerMonth: ctx.deliveriesPerMonth,
-      used,
-      remaining: Math.max(0, ctx.deliveriesPerMonth - used),
-      periodStart: ctx.periodStart.toISOString(),
-      periodEnd: ctx.periodEnd.toISOString(),
-      subscriptionId: ctx.sub.id,
-      supportsExtra: ctx.supportsExtra,
-      extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
-    };
+    const { paymentsEnvironmentForHost } = await import("./stripe.server");
+    const env = paymentsEnvironmentForHost(getRequestHost());
+    const snapshot = await loadSubscriptionSnapshot({
+      supabase: context.supabase,
+      userId: context.userId,
+      email,
+      env,
+    });
+    return snapshot.deliveryStatus;
   });
 
 
@@ -173,7 +58,7 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => scheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa para programar entregas.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -261,7 +146,7 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => rescheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -346,7 +231,7 @@ export const scheduleExtraDelivery = createServerFn({ method: "POST" })
   .inputValidator((data) => extraSchema.parse(data))
   .handler(async ({ data, context }) => {
     const email = (context.claims.email as string | undefined) ?? null;
-    const ctx = await loadActiveContext(context.supabase, context.userId, email);
+    const ctx = await loadActiveDeliveryContext(context.supabase, context.userId, email);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
     if (!ctx.supportsExtra) {
       throw new Error("Tu plan no admite entregas adicionales. Actualiza al plan superior.");
