@@ -131,7 +131,8 @@ function CartPage() {
                 {(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
               </p>
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         <div className="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-black/5">
