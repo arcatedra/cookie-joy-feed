@@ -1,201 +1,58 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { loadStripe } from "@stripe/stripe-js";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import {
-  Lock,
-  Cookie,
-  ChevronDown,
-  ChevronUp,
-  CreditCard,
-  Truck,
-  Zap,
-  CheckCircle2,
-  MapPin,
-  ShoppingBag,
-  Minus,
-  Plus,
-  Trash2,
-  X,
-} from "lucide-react";
-import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
-import { useAuth } from "@/lib/auth";
-import { HazorexLogo } from "@/components/HazorexLogo";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { createCartCheckout } from "@/lib/cart-checkout.functions";
+import { ExternalLink, Loader2, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useShopifyCartStore } from "@/stores/shopifyCartStore";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Secure Checkout — HAZOREX" },
-      { name: "description", content: "Complete your cookie order securely." },
+      { title: "Tu carrito — HAZOREX" },
+      { name: "description", content: "Revisa los productos de tu carrito antes de finalizar la compra." },
     ],
   }),
-  component: CheckoutPage,
+  component: CartPage,
 });
 
-const stripeToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
-const stripePromise = stripeToken ? loadStripe(stripeToken) : null;
-
-type StepKey = "address" | "payment" | "review";
-type Shipping = "standard" | "express";
-type PayMethod = "card" | "wallet";
-
-function CheckoutPage() {
-  const { items, total, setQty, remove, count } = useCart();
-  const gate = useSubscriptionGate();
-  const navigate = useNavigate();
+function CartPage() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const items = useShopifyCartStore((s) => s.items);
+  const isLoading = useShopifyCartStore((s) => s.isLoading);
+  const isSyncing = useShopifyCartStore((s) => s.isSyncing);
+  const updateQuantity = useShopifyCartStore((s) => s.updateQuantity);
+  const removeItem = useShopifyCartStore((s) => s.removeItem);
+  const getCheckoutUrl = useShopifyCartStore((s) => s.getCheckoutUrl);
 
-
-  const [openStep, setOpenStep] = useState<StepKey>("address");
-  const [shipping, setShipping] = useState<Shipping>("standard");
-  const [pay, setPay] = useState<PayMethod>("card");
-  const [confirmed, setConfirmed] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [trackingId] = useState(
-    () => `AMZ-GAL-${Math.floor(1000 + Math.random() * 9000)}`,
+  const totalItems = items.reduce((s, i) => s + i.quantity, 0);
+  const totalPrice = items.reduce(
+    (s, i) => s + parseFloat(i.price.amount) * i.quantity,
+    0,
   );
+  const currency = items[0]?.price.currencyCode || "$";
 
-  // Address form
-  const [addr, setAddr] = useState({
-    name: "",
-    street: "",
-    apt: "",
-    city: "",
-    zip: "",
-    phone: "",
-    email: "",
-    makeDefault: true,
-  });
-
-  // Card form (placeholder — real payment runs in the embedded Stripe modal below)
-  const [card, setCard] = useState({ number: "", exp: "", cvv: "" });
-
-  const shippingCost = items.length === 0 ? 0 : shipping === "express" ? 4.99 : 0;
-  const taxes = useMemo(() => Math.round(total * 0.08 * 100) / 100, [total]);
-  const grandTotal = useMemo(
-    () => Math.round((total + shippingCost + taxes) * 100) / 100,
-    [total, shippingCost, taxes],
-  );
-
-  const fmt = (n: number) => `$${n.toFixed(2)}`;
-
-  const buyerEmail = (user?.email ?? addr.email ?? "").trim().toLowerCase();
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail);
-
-  const addressComplete = Boolean(
-    addr.name.trim() &&
-      addr.street.trim() &&
-      addr.city.trim() &&
-      addr.zip.trim() &&
-      addr.phone.trim() &&
-      emailValid,
-  );
-
-  const handleConfirm = async () => {
-    if (!gate.guard()) return;
-    if (!addressComplete) {
-      setOpenStep("address");
-      return;
-    }
-    if (!stripePromise) {
-      setCheckoutError("El pago no está configurado en este entorno.");
-      return;
-    }
-    setProcessing(true);
-    setCheckoutError(null);
-    try {
-      const res = await createCartCheckout({
-        data: {
-          items: items.map((it) => ({
-            id: it.id,
-            name: it.name,
-            price: it.price,
-            qty: it.qty,
-            image: it.image,
-          })),
-          email: buyerEmail,
-          shipping,
-          address: {
-            name: addr.name,
-            street: addr.street,
-            apt: addr.apt,
-            city: addr.city,
-            zip: addr.zip,
-            phone: addr.phone,
-            country: "US",
-          },
-        },
-      });
-      setClientSecret(res.clientSecret);
-    } catch (e) {
-      console.error(e);
-      setCheckoutError(e instanceof Error ? e.message : "No se pudo iniciar el pago.");
-    } finally {
-      setProcessing(false);
-    }
+  const handleCheckout = () => {
+    const url = getCheckoutUrl();
+    if (url) window.open(url, "_blank");
   };
 
-  // ============ Success screen ============
-  if (confirmed) {
-    return (
-      <main className="min-h-screen bg-[#eaeded]">
-        <MiniHeader />
-        <div className="mx-auto max-w-2xl px-4 py-16">
-          <div className="rounded-2xl bg-white p-8 text-center shadow-lg ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-500">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-600">
-              <CheckCircle2 className="h-12 w-12" strokeWidth={2.2} />
-            </div>
-            <h1 className="mt-5 text-2xl font-extrabold text-[#1a0f0a]">
-              {t("checkout.orderConfirmed")} <span className="text-3xl">🍪</span>
-            </h1>
-            <p className="mt-3 text-sm text-gray-600">
-              {t("checkout.bakingMsg")}
-            </p>
-            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
-              <p className="text-xs uppercase tracking-wider text-amber-800">
-                {t("checkout.trackingNumber")}
-              </p>
-              <p className="mt-1 font-mono text-lg font-bold text-[#1a0f0a]">
-                #{trackingId}
-              </p>
-            </div>
-            <button
-              onClick={() => navigate({ to: "/" })}
-              className="mt-7 w-full rounded-lg bg-amber-400 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
-            >
-              {t("checkout.backToStore")}
-            </button>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  // ============ Empty cart ============
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-[#eaeded]">
-        <MiniHeader />
+      <main className="min-h-screen bg-[#f4f1ea]">
         <div className="mx-auto max-w-2xl px-4 py-20 text-center">
           <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-white shadow">
-            <ShoppingBag className="h-9 w-9 text-[#1a0f0a]" />
+            <ShoppingBag className="h-9 w-9 text-[#1e3a5f]" />
           </div>
-          <h1 className="mt-5 text-xl font-bold text-[#1a0f0a]">{t("checkout.emptyTitle")}</h1>
+          <h1 className="mt-5 text-xl font-bold text-[#1e3a5f]">
+            {t("checkout.emptyTitle", "Tu carrito está vacío")}
+          </h1>
           <p className="mt-2 text-sm text-gray-600">
-            {t("checkout.emptyDesc")}
+            {t("checkout.emptyDesc", "Explora nuestros productos y añade algo delicioso.")}
           </p>
           <Link
-            to="/"
-            className="mt-6 inline-block rounded-lg bg-amber-400 px-6 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
+            to="/shop"
+            className="mt-6 inline-block rounded-lg bg-[#1e3a5f] px-6 py-3 text-sm font-bold text-white shadow hover:bg-[#16294a]"
           >
-            {t("checkout.exploreCookies")}
+            {t("checkout.exploreCookies", "Ver tienda")}
           </Link>
         </div>
       </main>
@@ -203,519 +60,97 @@ function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#eaeded]">
-      <MiniHeader />
+    <main className="min-h-screen bg-[#f4f1ea]">
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <h1 className="mb-6 text-2xl font-extrabold text-[#1e3a5f]">
+          {t("cartDrawer.title", "Tu carrito")} ({totalItems})
+        </h1>
 
-      <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-extrabold text-[#1a0f0a] lg:text-3xl">
-            {t("checkout.title")}
-          </h1>
-          <button
-            type="button"
-            onClick={() => {
-              setOpenStep("review");
-              setTimeout(() => {
-                document
-                  .getElementById("review-step")
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }, 50);
-            }}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-[#1a0f0a] bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#1a0f0a] shadow-sm hover:bg-amber-50"
-          >
-            <ShoppingBag className="h-4 w-4" />
-            {t("checkout.viewCart")} ({count})
-          </button>
-        </div>
-
-
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
-          {/* ============ LEFT: Steps accordion ============ */}
-          <div className="flex flex-col gap-4">
-            {/* STEP 1 — Address */}
-            <StepCard
-              num={1}
-              title={t("checkout.shippingAddress")}
-              open={openStep === "address"}
-              onToggle={() => setOpenStep(openStep === "address" ? "review" : "address")}
-              summary={
-                addr.name && addr.city
-                  ? `${addr.name} · ${addr.street}, ${addr.city} ${addr.zip}`
-                  : undefined
-              }
-              icon={<MapPin className="h-5 w-5" />}
-            >
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                <Field
-                  label={t("checkout.fullName")}
-                  value={addr.name}
-                  onChange={(v) => setAddr({ ...addr, name: v })}
-                  full
-                />
-                <Field
-                  label={t("checkout.street")}
-                  value={addr.street}
-                  onChange={(v) => setAddr({ ...addr, street: v })}
-                  full
-                />
-                <Field
-                  label={t("checkout.apt")}
-                  value={addr.apt}
-                  onChange={(v) => setAddr({ ...addr, apt: v })}
-                />
-                <Field
-                  label={t("checkout.city")}
-                  value={addr.city}
-                  onChange={(v) => setAddr({ ...addr, city: v })}
-                />
-                <Field
-                  label={t("checkout.zip")}
-                  value={addr.zip}
-                  onChange={(v) => setAddr({ ...addr, zip: v })}
-                />
-                <Field
-                  label={t("checkout.phone")}
-                  value={addr.phone}
-                  onChange={(v) => setAddr({ ...addr, phone: v })}
-                />
-                <Field
-                  label="Email"
-                  value={addr.email || user?.email || ""}
-                  onChange={(v) => setAddr({ ...addr, email: v })}
-                  placeholder="tu@email.com"
-                  full
-                />
-              </div>
-              <label className="mt-4 flex items-center gap-2 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  checked={addr.makeDefault}
-                  onChange={(e) =>
-                    setAddr({ ...addr, makeDefault: e.target.checked })
-                  }
-                  className="h-4 w-4 accent-amber-500"
-                />
-                {t("checkout.makeDefault")}
-              </label>
-              {!addressComplete && (
-                <p className="mt-3 text-xs font-semibold text-red-600">
-                  {t("checkout.addressRequired")}
-                </p>
-              )}
-              <button
-                onClick={() => setOpenStep("payment")}
-                disabled={!addressComplete}
-                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {t("checkout.useAddress")}
-              </button>
-            </StepCard>
-
-            {/* STEP 2 — Payment */}
-            <StepCard
-              num={2}
-              title={t("checkout.paymentMethod")}
-              open={openStep === "payment"}
-              onToggle={() => setOpenStep(openStep === "payment" ? "review" : "payment")}
-              summary={
-                pay === "card" && card.number
-                  ? t("checkout.cardLast4", { last4: card.number.slice(-4) })
-                  : pay === "wallet"
-                    ? t("checkout.walletOption")
-                    : undefined
-              }
-              icon={<CreditCard className="h-5 w-5" />}
-            >
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => setPay("card")}
-                  className={`flex items-center justify-between rounded-lg border-2 p-3 text-left transition ${
-                    pay === "card"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-gray-200 bg-white hover:border-gray-300"
-                  }`}
-                >
-                  <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <CreditCard className="h-5 w-5" /> {t("checkout.cardOption")}
-                  </span>
-                  <span
-                    className={`h-4 w-4 rounded-full border-2 ${
-                      pay === "card"
-                        ? "border-amber-500 bg-amber-500"
-                        : "border-gray-300"
-                    }`}
+        <ul className="flex flex-col divide-y divide-gray-200 rounded-xl bg-white shadow-sm ring-1 ring-black/5">
+          {items.map((item) => (
+            <li key={item.variantId} className="flex items-center gap-4 p-4">
+              <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-secondary/20">
+                {item.product.node.images?.edges?.[0]?.node && (
+                  <img
+                    src={item.product.node.images.edges[0].node.url}
+                    alt={item.product.node.title}
+                    className="h-full w-full object-cover"
                   />
-                </button>
-                {pay === "card" && (
-                  <div className="grid grid-cols-1 gap-3 rounded-lg bg-gray-50 p-3 md:grid-cols-3">
-                    <div className="md:col-span-3">
-                      <Field
-                        label={t("checkout.cardNumber")}
-                        value={card.number}
-                        onChange={(v) =>
-                          setCard({ ...card, number: v.replace(/\D/g, "").slice(0, 19) })
-                        }
-                        placeholder="1234 5678 9012 3456"
-                        full
-                      />
-                    </div>
-                    <Field
-                      label={t("checkout.expiry")}
-                      value={card.exp}
-                      onChange={(v) => setCard({ ...card, exp: v.slice(0, 5) })}
-                      placeholder="08/28"
-                    />
-                    <Field
-                      label={t("checkout.cvv")}
-                      value={card.cvv}
-                      onChange={(v) =>
-                        setCard({ ...card, cvv: v.replace(/\D/g, "").slice(0, 4) })
-                      }
-                      placeholder="123"
-                    />
-                  </div>
                 )}
-
-                <button
-                  onClick={() => setPay("wallet")}
-                  className={`flex items-center justify-between rounded-lg border-2 p-3 text-left transition ${
-                    pay === "wallet"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-gray-200 bg-white hover:border-gray-300"
-                  }`}
-                >
-                  <span className="flex items-center gap-2 text-sm font-semibold text-[#1a0f0a]">
-                    <Zap className="h-5 w-5 text-emerald-600" /> {t("checkout.walletOption")}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-600">{t("checkout.fast")}</span>
-                </button>
               </div>
-              <button
-                onClick={() => setOpenStep("review")}
-                className="mt-4 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
-              >
-                {t("checkout.continueBtn")}
-              </button>
-            </StepCard>
-
-            {/* STEP 3 — Review */}
-            <div id="review-step">
-            <StepCard
-              num={3}
-              title={t("checkout.reviewLogistics")}
-              open={openStep === "review"}
-              onToggle={() => setOpenStep(openStep === "review" ? "address" : "review")}
-              icon={<Truck className="h-5 w-5" />}
-            >
-
-              <ul className="flex flex-col divide-y divide-gray-100 rounded-lg border border-gray-200">
-                {items.map((it) => (
-                  <li key={it.id} className="flex items-center gap-3 p-3">
-                    <img
-                      src={it.image}
-                      alt={it.name}
-                      className="h-14 w-14 rounded-md object-cover"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-[#1a0f0a]">
-                        {it.name}
-                      </p>
-                      <p className="text-xs text-gray-500">{fmt(it.price)} {t("checkout.each")}</p>
-                      <div className="mt-1.5 flex items-center gap-2">
-                        <button
-                          onClick={() => setQty(it.id, it.qty - 1)}
-                          className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label={t("checkout.decrease")}
-                        >
-                          <Minus className="h-3 w-3" />
-                        </button>
-                        <span className="min-w-[20px] text-center text-sm font-bold">
-                          {it.qty}
-                        </span>
-                        <button
-                          onClick={() => setQty(it.id, it.qty + 1)}
-                          className="grid h-6 w-6 place-items-center rounded border border-gray-300 hover:bg-gray-50"
-                          aria-label={t("checkout.increase")}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
-                        <button
-                          onClick={() => remove(it.id)}
-                          className="ml-2 text-gray-400 hover:text-red-500"
-                          aria-label={t("checkout.remove")}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-sm font-bold text-[#1a0f0a]">
-                      {fmt(it.price * it.qty)}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-4">
-                <p className="mb-2 text-sm font-bold text-[#1a0f0a]">{t("checkout.shippingType")}</p>
-                <div className="flex flex-col gap-2">
-                  <ShippingOption
-                    active={shipping === "standard"}
-                    onClick={() => setShipping("standard")}
-                    icon={<Truck className="h-5 w-5" />}
-                    title={t("checkout.standardShipping")}
-                    sub={t("checkout.standardSub")}
-                    price={t("checkout.free")}
-                    priceClass="text-emerald-600"
-                  />
-                  {/* Envío Express Dulce desactivado temporalmente */}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-[#1e3a5f]">
+                  {item.product.node.title}
+                </p>
+                {item.selectedOptions.length > 0 && (
+                  <p className="text-xs text-gray-500">
+                    {item.selectedOptions.map((o) => o.value).join(" • ")}
+                  </p>
+                )}
+                <p className="mt-1 text-sm font-semibold text-[#1e3a5f]">
+                  {item.price.currencyCode} {parseFloat(item.price.amount).toFixed(2)}
+                </p>
+                <div className="mt-2 flex items-center gap-2">
+                  <button
+                    onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                    className="grid h-7 w-7 place-items-center rounded border border-gray-300 hover:bg-gray-50"
+                    aria-label={t("checkout.decrease", "Restar")}
+                  >
+                    <Minus className="h-3 w-3" />
+                  </button>
+                  <span className="min-w-[24px] text-center text-sm font-bold">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                    className="grid h-7 w-7 place-items-center rounded border border-gray-300 hover:bg-gray-50"
+                    aria-label={t("checkout.increase", "Sumar")}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </button>
+                  <button
+                    onClick={() => removeItem(item.variantId)}
+                    className="ml-2 text-gray-400 hover:text-red-500"
+                    aria-label={t("checkout.remove", "Eliminar")}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setOpenStep("payment");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-2 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
-              >
-                {t("checkout.backToPayment")}
-              </button>
-            </StepCard>
-            </div>
-          </div>
-
-
-          {/* ============ RIGHT: Order summary ============ */}
-          <aside className="lg:sticky lg:top-6 lg:self-start">
-            <div className="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-black/5">
-              <button
-                onClick={handleConfirm}
-                disabled={processing || !addressComplete}
-                className="w-full rounded-lg bg-gradient-to-b from-amber-400 to-amber-500 py-3.5 text-sm font-extrabold text-[#1a0f0a] shadow-md transition hover:from-amber-300 hover:to-amber-400 disabled:opacity-60"
-              >
-                {processing
-                  ? t("subscribeGate.cartProcessing")
-                  : !addressComplete
-                    ? t("checkout.addAddressToBuy")
-                    : t("subscribeGate.cartConfirm")}
-              </button>
-
-              {checkoutError && (
-                <p className="mt-2 rounded-md bg-red-50 px-3 py-2 text-center text-xs font-semibold text-red-700">
-                  {checkoutError}
-                </p>
-              )}
-
-              <p className="mt-3 text-center text-[11px] text-gray-500">
-                {t("subscribeGate.cartTerms")}
+              <p className="text-sm font-bold text-[#1e3a5f]">
+                {item.price.currencyCode}{" "}
+                {(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
               </p>
+            </li>
+          ))}
+        </ul>
 
-
-
-              <div className="my-4 h-px bg-gray-200" />
-
-              <h2 className="text-base font-bold text-[#1a0f0a]">{t("checkout.orderSummary")}</h2>
-              <div className="mt-3 space-y-1.5 text-sm">
-                <SummaryRow label={`${t("checkout.productsCount")} (${count})`} value={fmt(total)} />
-                <SummaryRow
-                  label={t("checkout.shippingHandling")}
-                  value={shippingCost === 0 ? t("checkout.free") : fmt(shippingCost)}
-                  valueClass={shippingCost === 0 ? "text-emerald-600 font-semibold" : ""}
-                />
-                <SummaryRow label={t("checkout.taxes")} value={fmt(taxes)} />
-              </div>
-
-              <div className="my-3 h-px bg-gray-200" />
-
-              <div className="flex items-baseline justify-between">
-                <span className="text-base font-bold text-red-700">{t("checkout.orderTotal")}</span>
-                <span className="text-2xl font-extrabold text-red-700">
-                  {fmt(grandTotal)}
-                </span>
-              </div>
-
-              <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-gray-500">
-                <Lock className="h-3 w-3" /> {t("checkout.secureEncrypted")}
-              </div>
-            </div>
-          </aside>
+        <div className="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-black/5">
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-semibold text-[#1e3a5f]">
+              {t("cartDrawer.total", "Total")}
+            </span>
+            <span className="text-xl font-extrabold text-[#1e3a5f]">
+              {currency} {totalPrice.toFixed(2)}
+            </span>
+          </div>
+          <Button
+            onClick={handleCheckout}
+            className="mt-4 w-full bg-[#1e3a5f] hover:bg-[#16294a]"
+            size="lg"
+            disabled={isLoading || isSyncing}
+          >
+            {isLoading || isSyncing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                {t("cartDrawer.checkoutBtn", "Finaliza tu compra")}
+              </>
+            )}
+          </Button>
         </div>
       </div>
-
-      {clientSecret && stripePromise && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 md:p-8">
-          <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
-            <button
-              type="button"
-              onClick={() => setClientSecret(null)}
-              className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-gray-500 shadow ring-1 ring-black/10 hover:text-gray-900"
-              aria-label="Cerrar"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <div className="p-2 md:p-4">
-              <EmbeddedCheckoutProvider
-                stripe={stripePromise}
-                options={{ clientSecret }}
-              >
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
-  );
-}
-
-// ============ Minimal header (Amazon-style focus mode) ============
-function MiniHeader() {
-  const { t } = useTranslation();
-  return (
-    <header className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-6">
-        <Link to="/" className="flex items-center gap-3" aria-label="HAZOREX">
-          <HazorexLogo size={28} />
-          <span className="ml-1 border-l border-gray-300 pl-3 text-sm font-semibold text-gray-500">{t("checkout.miniLabel")}</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher variant="light" />
-          <div className="hidden items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:flex">
-            <Lock className="h-3.5 w-3.5" /> {t("checkout.secure")}
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-// ============ Step card ============
-function StepCard({
-  num,
-  title,
-  open,
-  onToggle,
-  summary,
-  icon,
-  children,
-}: {
-  num: number;
-  title: string;
-  open: boolean;
-  onToggle: () => void;
-  summary?: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-gray-50"
-      >
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#1a0f0a] text-sm font-bold text-amber-300">
-          {num}
-        </span>
-        <div className="flex-1">
-          <h2 className="flex items-center gap-2 text-base font-bold text-[#1a0f0a]">
-            {icon} {title}
-          </h2>
-          {!open && summary && (
-            <p className="mt-0.5 truncate text-xs text-gray-500">{summary}</p>
-          )}
-        </div>
-        {open ? (
-          <ChevronUp className="h-5 w-5 text-gray-400" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-gray-400" />
-        )}
-      </button>
-      {open && <div className="border-t border-gray-100 px-5 py-5">{children}</div>}
-    </section>
-  );
-}
-
-function Field({
-  label,
-  value,
-  onChange,
-  placeholder,
-  full,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  full?: boolean;
-}) {
-  return (
-    <label className={`block text-sm ${full ? "md:col-span-2" : ""}`}>
-      <span className="mb-1 block text-xs font-semibold text-gray-700">{label}</span>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
-      />
-    </label>
-  );
-}
-
-function ShippingOption({
-  active,
-  onClick,
-  icon,
-  title,
-  sub,
-  price,
-  priceClass,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  title: string;
-  sub: string;
-  price: string;
-  priceClass?: string;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-3 rounded-lg border-2 p-3 text-left transition ${
-        active
-          ? "border-amber-500 bg-amber-50"
-          : "border-gray-200 bg-white hover:border-gray-300"
-      }`}
-    >
-      <span
-        className={`h-4 w-4 shrink-0 rounded-full border-2 ${
-          active ? "border-amber-500 bg-amber-500" : "border-gray-300"
-        }`}
-      />
-      <span className="shrink-0">{icon}</span>
-      <div className="flex-1">
-        <p className="text-sm font-bold text-[#1a0f0a]">{title}</p>
-        <p className="text-xs text-gray-500">{sub}</p>
-      </div>
-      <p className={`text-sm font-bold ${priceClass ?? ""}`}>{price}</p>
-    </button>
-  );
-}
-
-function SummaryRow({
-  label,
-  value,
-  valueClass,
-}: {
-  label: string;
-  value: string;
-  valueClass?: string;
-}) {
-  return (
-    <div className="flex justify-between text-gray-700">
-      <span>{label}:</span>
-      <span className={valueClass}>{value}</span>
-    </div>
   );
 }
