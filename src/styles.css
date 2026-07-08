@@ -38,9 +38,9 @@
 
 :root {
   --radius: 1rem;
-  /* Background matches the blue-grey header palette */
-  --background: #7A8BA3;
-  --foreground: #F4F1EA;
+  /* Light cream background with dark foreground for readable text on cards */
+  --background: #F4F1EA;
+  --foreground: #1a1a1a;
 
   /* Navy blue header */
   --primary: #1e3a5f;
