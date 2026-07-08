@@ -54,19 +54,23 @@ function OffersPage() {
 
   if (loadingBiz) {
     return (
-      <div className="grid min-h-[40vh] place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="grid min-h-[50vh] place-items-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
       </div>
     );
   }
 
   if (!business || business.status !== "aprobado") {
     return (
-      <div className="mx-auto max-w-xl p-6 text-center text-sm">
-        Solo puedes crear ofertas con un negocio aprobado.{" "}
-        <Link to="/negocio" className="text-amber-700 underline">
-          Ver estado
-        </Link>
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="mx-auto max-w-xl p-6 text-center text-sm">
+          Solo puedes crear ofertas con un negocio aprobado.{" "}
+          <Link to="/negocio" className="font-semibold text-[#1e3a5f] underline">
+            Ver estado
+          </Link>
+        </div>
       </div>
     );
   }
