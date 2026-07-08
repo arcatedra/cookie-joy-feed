@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { loadSubscriptionSnapshot, syncLatestSubscriptionFromStripe } from "./subscription-status.server";
+import { loadSubscriptionSnapshot } from "./subscription-status.server";
 
 const PLAN_PRICE_IDS = [
   "plan_starter_monthly",
@@ -86,8 +86,6 @@ async function resolveOrCreateCustomer(
   );
   return created.id;
 }
-
-const PURCHASE_STATUSES = new Set(["active", "trialing", "past_due"]);
 
 export const createSubscriptionCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

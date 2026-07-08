@@ -1,22 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { Truck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "@/lib/auth";
-import { getMyDeliveryStatus } from "@/lib/deliveries.functions";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 export function DeliveryCounter() {
   const { t } = useTranslation();
-  const { user } = useAuth();
-  const getStatus = useServerFn(getMyDeliveryStatus);
-
-  const { data: status } = useQuery({
-    queryKey: ["delivery-status"],
-    queryFn: () => getStatus(),
-    enabled: !!user,
-    staleTime: 30_000,
-  });
+  const { deliveryStatus: status } = useSubscriptionGate();
 
   if (!status?.hasActiveSubscription) return null;
 
