@@ -37,7 +37,7 @@ const quickLinkKeys = [
 
 export function TopNav() {
   const { t } = useTranslation();
-  const cart = useCart();
+  const cartCount = useShopifyCartStore((s) => s.items.reduce((a, i) => a + i.quantity, 0));
   const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
