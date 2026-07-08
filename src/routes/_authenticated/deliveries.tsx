@@ -20,6 +20,7 @@ import {
   scheduleDelivery,
   cancelDelivery,
   rescheduleDelivery,
+  scheduleExtraDelivery,
 } from "@/lib/deliveries.functions";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
