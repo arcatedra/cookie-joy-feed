@@ -54,19 +54,23 @@ function OffersPage() {
 
   if (loadingBiz) {
     return (
-      <div className="grid min-h-[40vh] place-items-center">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="grid min-h-[50vh] place-items-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
       </div>
     );
   }
 
   if (!business || business.status !== "aprobado") {
     return (
-      <div className="mx-auto max-w-xl p-6 text-center text-sm">
-        Solo puedes crear ofertas con un negocio aprobado.{" "}
-        <Link to="/negocio" className="text-amber-700 underline">
-          Ver estado
-        </Link>
+      <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+        <div className="mx-auto max-w-xl p-6 text-center text-sm">
+          Solo puedes crear ofertas con un negocio aprobado.{" "}
+          <Link to="/negocio" className="font-semibold text-[#1e3a5f] underline">
+            Ver estado
+          </Link>
+        </div>
       </div>
     );
   }
@@ -113,23 +117,24 @@ function OffersPage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
-      <Link
-        to="/negocio"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Mi negocio
-      </Link>
-
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-serif text-2xl font-bold">Ofertas</h1>
-        <button
-          onClick={() => setShowForm((s) => !s)}
-          className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-4xl px-4 py-8">
+        <Link
+          to="/negocio"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
         >
-          <Plus className="h-4 w-4" /> Nueva
-        </button>
-      </div>
+          <ArrowLeft className="h-4 w-4" /> Mi negocio
+        </Link>
+
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">Ofertas</h1>
+          <button
+            onClick={() => setShowForm((s) => !s)}
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-3 py-2 text-sm font-semibold text-white hover:bg-[#16294a]"
+          >
+            <Plus className="h-4 w-4" /> Nueva
+          </button>
+        </div>
 
       {showForm && (
         <form
@@ -177,7 +182,7 @@ function OffersPage() {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-4 py-2 text-sm font-semibold text-white hover:bg-[#16294a] disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Crear oferta"}
           </button>
@@ -227,6 +232,7 @@ function OffersPage() {
           ))}
         </ul>
       )}
-    </main>
+      </main>
+    </div>
   );
 }
