@@ -165,7 +165,6 @@ function BusinessRegistrationPage() {
         </main>
       </div>
     );
-
   }
 
   return (
