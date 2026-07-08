@@ -173,7 +173,7 @@ export const scheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => scheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa para programar entregas.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
@@ -261,7 +261,7 @@ export const rescheduleDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => rescheduleSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const ctx = await loadActiveContext(context.supabase, context.userId, (context.claims.email as string | undefined) ?? null);
     if (!ctx) throw new Error("Necesitas una suscripción activa.");
 
     const date = new Date(`${data.date}T12:00:00Z`);
