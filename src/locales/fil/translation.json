@@ -498,9 +498,9 @@
     "priceDisclaimer": "Tinatayang halaga ng unang taon ng rehistrasyon sa USD sa karaniwang registrar at maaaring magbago. * promosyonal na presyo para sa unang taon."
   },
   "ruleta": {
-    "metaTitle": "ORIGEN Roulette — Paikutin at Manalo ⭐",
-    "metaDesc": "Paikutin ang Ruleta ng ORIGEN. Bumili ng Stars o sumali nang libre sa pamamagitan ng pagsunod sa aming mga social channel at mag-claim ng mga premium na premyo.",
-    "ogTitle": "ORIGEN Roulette — Paikutin at Manalo",
+    "metaTitle": "HAZOREX Roulette — Paikutin at Manalo ⭐",
+    "metaDesc": "Paikutin ang Ruleta ng HAZOREX. Bumili ng Stars o sumali nang libre sa pamamagitan ng pagsunod sa aming mga social channel at mag-claim ng mga premium na premyo.",
+    "ogTitle": "HAZOREX Roulette — Paikutin at Manalo",
     "ogDesc": "Mga premyo, diskwento at surpresang lasa. Available ang libreng entry.",
     "sweepstakes": "SWEEPSTAKES",
     "starsLabel": "STARS",
@@ -555,7 +555,7 @@
       "city": "Lungsod",
       "state": "Estado (CA)",
       "zip": "ZIP",
-      "essay": "Orihinal na essay: sabihin sa amin kung bakit mo gusto ang ORIGEN (min. 300 salita)",
+      "essay": "Orihinal na essay: sabihin sa amin kung bakit mo gusto ang HAZOREX (min. 300 salita)",
       "wordCount": "{{count}} / 300 salita"
     },
     "rulesCheckbox": "Kinukumpirma kong ako ay 18+, isang legal U.S. resident (maliban sa FL, RI) at tinatanggap ko ang ",
@@ -597,7 +597,7 @@
     "close": "Isara",
     "spinGo": "PAIKUTIN!",
     "winnerHeader": "NANALO SA DRAW",
-    "inStars": "sa ORIGEN stars ⭐",
+    "inStars": "sa HAZOREX stars ⭐",
     "challengeHeader": "LEGAL VALIDATION — SKILL CHALLENGE",
     "challengeQuestion": "Ano ang {{a}} + {{b}}?",
     "timeRemaining": "Oras na natitira:",
@@ -811,9 +811,9 @@
     "showResults": "Ipakita ang {{n}} na resulta"
   },
   "historial": {
-    "metaTitle": "Kasaysayan ng Draw — ORIGEN",
-    "metaDesc": "Tingnan ang buong kasaysayan ng mga araw-araw na nanalo sa ORIGEN Roulette: pangalan, petsa, halaga ng premyo at pampublikong pag-verify.",
-    "ogTitle": "Kasaysayan ng Draw — ORIGEN",
+    "metaTitle": "Kasaysayan ng Draw — HAZOREX",
+    "metaDesc": "Tingnan ang buong kasaysayan ng mga araw-araw na nanalo sa HAZOREX Roulette: pangalan, petsa, halaga ng premyo at pampublikong pag-verify.",
+    "ogTitle": "Kasaysayan ng Draw — HAZOREX",
     "ogDesc": "Buong transparency: suriin ang bawat round kasama ang nanalo, petsa at halaga.",
     "notFound": "Hindi nahanap.",
     "errorPrefix": "Error: ",
@@ -851,13 +851,13 @@
     "backHome": "← Bumalik sa home"
   },
   "terms": {
-    "metaTitle": "Mga Tuntunin at Kundisyon — HAZOREX ORIGEN",
-    "metaDesc": "Mga Tuntunin at Kundisyon ng HAZOREX ORIGEN Sweepstakes.",
+    "metaTitle": "Mga Tuntunin at Kundisyon — HAZOREX",
+    "metaDesc": "Mga Tuntunin at Kundisyon ng HAZOREX Sweepstakes.",
     "backToRoulette": "← Bumalik sa Ruleta",
     "title": "Mga Tuntunin at Kundisyon",
     "lastUpdated": "Huling na-update:",
     "s1Title": "1. Pagtanggap",
-    "s1BodyPre": "Sa paggamit ng HAZOREX ORIGEN, tinatanggap mo ang mga Tuntuning ito at ang aming ",
+    "s1BodyPre": "Sa paggamit ng HAZOREX, tinatanggap mo ang mga Tuntuning ito at ang aming ",
     "s1Link": "Opisyal na mga Panuntunan ng Sweepstakes",
     "s1BodyPost": ".",
     "s2Title": "2. Pagiging Karapat-dapat",
@@ -876,8 +876,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Opisyal na mga Panuntunan ng Sweepstakes — HAZOREX ORIGEN",
-    "metaDesc": "Opisyal na mga Panuntunan ng araw-araw na HAZOREX ORIGEN Sweepstakes — walang kinakailangang pagbili, mga residente ng U.S. 18+.",
+    "metaTitle": "Opisyal na mga Panuntunan ng Sweepstakes — HAZOREX",
+    "metaDesc": "Opisyal na mga Panuntunan ng araw-araw na HAZOREX Sweepstakes — walang kinakailangang pagbili, mga residente ng U.S. 18+.",
     "backToRoulette": "← Bumalik sa Ruleta",
     "title": "Opisyal na mga Panuntunan ng Sweepstakes",
     "lastUpdated": "Huling na-update:",
@@ -954,7 +954,7 @@
     "error": "Nagkaroon ng error. Pakisubukang muli."
   },
   "claim": {
-    "metaTitle": "I-claim ang premyo — HAZOREX ORIGEN",
+    "metaTitle": "I-claim ang premyo — HAZOREX",
     "loading": "Nilo-load…",
     "back": "← Bumalik",
     "backToRoulette": "← Bumalik sa Ruleta",

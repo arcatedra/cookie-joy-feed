@@ -19,11 +19,11 @@ const WinnerNotification = ({
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
-    <Preview>¡Felicidades! Ganaste el sorteo HAZOREX ORIGEN del {drawDate}</Preview>
+    <Preview>¡Felicidades! Ganaste el sorteo HAZOREX del {drawDate}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>HAZOREX ORIGEN</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>🎉 ¡Felicidades, {winnerName}!</Heading>
@@ -50,7 +50,7 @@ const WinnerNotification = ({
             <span style={url}>{claimUrl}</span>
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX ORIGEN · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
       </Container>
     </Body>
   </Html>
@@ -58,7 +58,7 @@ const WinnerNotification = ({
 
 export const template = {
   component: WinnerNotification,
-  subject: '🎉 ¡Ganaste el sorteo HAZOREX ORIGEN!',
+  subject: '🎉 ¡Ganaste el sorteo HAZOREX!',
   displayName: 'Winner Notification',
   previewData: {
     winnerName: 'María',

@@ -495,9 +495,9 @@
     "priceDisclaimer": "I prezzi sono stime del costo di registrazione per il primo anno in USD presso registratori comuni e possono variare. * prezzo promozionale per il primo anno."
   },
   "ruleta": {
-    "metaTitle": "Roulette ORIGEN — Gira e vinci ⭐",
-    "metaDesc": "Gira la Roulette ORIGEN. Acquista Stelle o partecipa gratuitamente seguendo i nostri canali social per vincere premi premium.",
-    "ogTitle": "Roulette ORIGEN — Gira e vinci",
+    "metaTitle": "Roulette HAZOREX — Gira e vinci ⭐",
+    "metaDesc": "Gira la Roulette HAZOREX. Acquista Stelle o partecipa gratuitamente seguendo i nostri canali social per vincere premi premium.",
+    "ogTitle": "Roulette HAZOREX — Gira e vinci",
     "ogDesc": "Premi, sconti e gusti a sorpresa. Accesso gratuito disponibile.",
     "sweepstakes": "CONCORSO A PREMI",
     "starsLabel": "STELLE",
@@ -552,7 +552,7 @@
       "city": "Città",
       "state": "Stato (CA)",
       "zip": "CAP",
-      "essay": "Saggio originale: raccontaci perché ti piace ORIGEN (min. 300 parole)",
+      "essay": "Saggio originale: raccontaci perché ti piace HAZOREX (min. 300 parole)",
       "wordCount": "{{count}} / 300 parole"
     },
     "rulesCheckbox": "Confermo di avere 18+ anni, di essere un residente legale degli Stati Uniti (eccetto FL, RI) e accetto il ",
@@ -594,7 +594,7 @@
     "close": "Chiudi",
     "spinGo": "GIRA!",
     "winnerHeader": "VINCITORE DELL'ESTRAZIONE",
-    "inStars": "in stelle ORIGEN ⭐",
+    "inStars": "in stelle HAZOREX ⭐",
     "challengeHeader": "VALIDAZIONE LEGALE — SFIDA DI ABILITÀ",
     "challengeQuestion": "Quanto fa {{a}} + {{b}}?",
     "timeRemaining": "Tempo rimanente:",
@@ -808,9 +808,9 @@
     "showResults": "Mostra {{n}} risultati"
   },
   "historial": {
-    "metaTitle": "Storico Estrazioni — ORIGEN",
-    "metaDesc": "Sfoglia lo storico completo dei vincitori giornalieri della Roulette ORIGEN: nome, data, importo del premio e verifica pubblica.",
-    "ogTitle": "Storico Estrazioni — ORIGEN",
+    "metaTitle": "Storico Estrazioni — HAZOREX",
+    "metaDesc": "Sfoglia lo storico completo dei vincitori giornalieri della Roulette HAZOREX: nome, data, importo del premio e verifica pubblica.",
+    "ogTitle": "Storico Estrazioni — HAZOREX",
     "ogDesc": "Trasparenza totale: rivedi ogni round con il suo vincitore, data e importo.",
     "notFound": "Non trovato.",
     "errorPrefix": "Errore: ",
@@ -848,13 +848,13 @@
     "backHome": "← Torna alla home"
   },
   "terms": {
-    "metaTitle": "Termini e Condizioni — HAZOREX ORIGEN",
-    "metaDesc": "Termini e Condizioni del concorso a premi HAZOREX ORIGEN.",
+    "metaTitle": "Termini e Condizioni — HAZOREX",
+    "metaDesc": "Termini e Condizioni del concorso a premi HAZOREX.",
     "backToRoulette": "← Torna alla Roulette",
     "title": "Termini e Condizioni",
     "lastUpdated": "Ultimo aggiornamento:",
     "s1Title": "1. Accettazione",
-    "s1BodyPre": "Utilizzando HAZOREX ORIGEN accetti questi Termini e il nostro ",
+    "s1BodyPre": "Utilizzando HAZOREX accetti questi Termini e il nostro ",
     "s1Link": "Regolamento Ufficiale del Concorso a Premi",
     "s1BodyPost": ".",
     "s2Title": "2. Idoneità",
@@ -873,8 +873,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Regolamento Ufficiale del Concorso a Premi — HAZOREX ORIGEN",
-    "metaDesc": "Regolamento Ufficiale del concorso a premi giornaliero HAZOREX ORIGEN — nessun acquisto necessario, residenti negli Stati Uniti 18+.",
+    "metaTitle": "Regolamento Ufficiale del Concorso a Premi — HAZOREX",
+    "metaDesc": "Regolamento Ufficiale del concorso a premi giornaliero HAZOREX — nessun acquisto necessario, residenti negli Stati Uniti 18+.",
     "backToRoulette": "← Torna alla Roulette",
     "title": "Regolamento Ufficiale del Concorso a Premi",
     "lastUpdated": "Ultimo aggiornamento:",
@@ -951,7 +951,7 @@
     "error": "Si è verificato un errore. Riprova."
   },
   "claim": {
-    "metaTitle": "Riscuoti premio — HAZOREX ORIGEN",
+    "metaTitle": "Riscuoti premio — HAZOREX",
     "loading": "Caricamento in corso…",
     "back": "← Indietro",
     "backToRoulette": "← Torna alla Roulette",

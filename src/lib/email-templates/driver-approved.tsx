@@ -17,7 +17,7 @@ const DriverApproved = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>HAZOREX ORIGEN</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>🎉 ¡Bienvenido/a al equipo, {driverName}!</Heading>
@@ -34,7 +34,7 @@ const DriverApproved = ({
             de tu licencia o seguro.
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX ORIGEN · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
       </Container>
     </Body>
   </Html>

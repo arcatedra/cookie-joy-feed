@@ -495,9 +495,9 @@
     "priceDisclaimer": "Los precios son estimaciones del primer año de registro en USD en registradores comunes y pueden variar. * precio promocional del primer año."
   },
   "ruleta": {
-    "metaTitle": "ORIGEN Roulette — Gira y Gana ⭐",
-    "metaDesc": "Gira la Ruleta ORIGEN. Compra Estrellas o participa gratis siguiendo nuestros canales sociales y gana premios premium.",
-    "ogTitle": "ORIGEN Roulette — Gira y Gana",
+    "metaTitle": "HAZOREX Roulette — Gira y Gana ⭐",
+    "metaDesc": "Gira la Ruleta HAZOREX. Compra Estrellas o participa gratis siguiendo nuestros canales sociales y gana premios premium.",
+    "ogTitle": "HAZOREX Roulette — Gira y Gana",
     "ogDesc": "Premios, descuentos y sabores sorpresa. Entrada gratuita disponible.",
     "sweepstakes": "SORTEO",
     "starsLabel": "ESTRELLAS",
@@ -552,7 +552,7 @@
       "city": "Ciudad",
       "state": "Estado (CA)",
       "zip": "Código postal",
-      "essay": "Ensayo original: cuéntanos por qué te gusta ORIGEN (mín. 300 palabras)",
+      "essay": "Ensayo original: cuéntanos por qué te gusta HAZOREX (mín. 300 palabras)",
       "wordCount": "{{count}} / 300 palabras"
     },
     "rulesCheckbox": "Confirmo que tengo 18 años o más, soy residente legal de EE. UU. (excepto FL, RI) y acepto las ",
@@ -594,7 +594,7 @@
     "close": "Cerrar",
     "spinGo": "¡GIRAR!",
     "winnerHeader": "GANADOR DEL SORTEO",
-    "inStars": "en estrellas ORIGEN ⭐",
+    "inStars": "en estrellas HAZOREX ⭐",
     "challengeHeader": "VALIDACIÓN LEGAL — DESAFÍO DE HABILIDAD",
     "challengeQuestion": "¿Cuánto es {{a}} + {{b}}?",
     "timeRemaining": "Tiempo restante:",
@@ -808,9 +808,9 @@
     "showResults": "Mostrar {{n}} resultados"
   },
   "historial": {
-    "metaTitle": "Historial de Sorteos — ORIGEN",
-    "metaDesc": "Explora el historial completo de ganadores diarios de la Ruleta ORIGEN: nombre, fecha, monto del premio y verificación pública.",
-    "ogTitle": "Historial de Sorteos — ORIGEN",
+    "metaTitle": "Historial de Sorteos — HAZOREX",
+    "metaDesc": "Explora el historial completo de ganadores diarios de la Ruleta HAZOREX: nombre, fecha, monto del premio y verificación pública.",
+    "ogTitle": "Historial de Sorteos — HAZOREX",
     "ogDesc": "Transparencia total: revisa cada ronda con su ganador, fecha y monto.",
     "notFound": "No encontrado.",
     "errorPrefix": "Error: ",
@@ -848,13 +848,13 @@
     "backHome": "← Volver al inicio"
   },
   "terms": {
-    "metaTitle": "Términos y Condiciones — HAZOREX ORIGEN",
-    "metaDesc": "Términos y Condiciones del Sorteo HAZOREX ORIGEN.",
+    "metaTitle": "Términos y Condiciones — HAZOREX",
+    "metaDesc": "Términos y Condiciones del Sorteo HAZOREX.",
     "backToRoulette": "← Volver a la Ruleta",
     "title": "Términos y Condiciones",
     "lastUpdated": "Última actualización:",
     "s1Title": "1. Aceptación",
-    "s1BodyPre": "Al usar HAZOREX ORIGEN, aceptas estos Términos y nuestras ",
+    "s1BodyPre": "Al usar HAZOREX, aceptas estos Términos y nuestras ",
     "s1Link": "Reglas Oficiales del Sorteo",
     "s1BodyPost": ".",
     "s2Title": "2. Elegibilidad",
@@ -873,8 +873,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Reglas Oficiales del Sorteo — HAZOREX ORIGEN",
-    "metaDesc": "Reglas Oficiales del Sorteo diario HAZOREX ORIGEN — no se requiere compra, residentes de EE. UU. mayores de 18 años.",
+    "metaTitle": "Reglas Oficiales del Sorteo — HAZOREX",
+    "metaDesc": "Reglas Oficiales del Sorteo diario HAZOREX — no se requiere compra, residentes de EE. UU. mayores de 18 años.",
     "backToRoulette": "← Volver a la Ruleta",
     "title": "Reglas Oficiales del Sorteo",
     "lastUpdated": "Última actualización:",
@@ -951,7 +951,7 @@
     "error": "Ocurrió un error. Por favor, intenta de nuevo."
   },
   "claim": {
-    "metaTitle": "Reclamar premio — HAZOREX ORIGEN",
+    "metaTitle": "Reclamar premio — HAZOREX",
     "loading": "Cargando...",
     "back": "← Volver",
     "backToRoulette": "← Volver a la Ruleta",
@@ -1011,7 +1011,7 @@
     }
   },
   "hero": {
-    "eyebrow": "HAZOREX ORIGEN",
+    "eyebrow": "HAZOREX",
     "titlePart1": "Galletas premium con",
     "titlePart2": "sorteos diarios reales",
     "subtitle": "Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.",

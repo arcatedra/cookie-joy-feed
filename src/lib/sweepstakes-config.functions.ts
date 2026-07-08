@@ -22,7 +22,7 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
   if (error) {
     console.error("[sweepstakes] public config error", error);
     return {
-      sponsor_name: "HAZOREX ORIGEN LLC",
+      sponsor_name: "HAZOREX LLC",
       sponsor_address: "",
       sponsor_email: "soporte@hazorex.com",
       excluded_states: ["FL", "RI"] as string[],
@@ -34,7 +34,7 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
   }
   const row = Array.isArray(data) ? data[0] : data;
   return {
-    sponsor_name: (row?.sponsor_name as string) ?? "HAZOREX ORIGEN LLC",
+    sponsor_name: (row?.sponsor_name as string) ?? "HAZOREX LLC",
     sponsor_address: (row?.sponsor_address as string) ?? "",
     sponsor_email: (row?.sponsor_email as string) ?? "soporte@hazorex.com",
     excluded_states: ((row?.excluded_states as string[]) ?? ["FL", "RI"]),

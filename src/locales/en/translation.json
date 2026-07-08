@@ -495,9 +495,9 @@
     "priceDisclaimer": "Prices are estimates of first-year registration cost in USD at common registrars and may vary. * promotional price for the first year."
   },
   "ruleta": {
-    "metaTitle": "ORIGEN Roulette — Spin & Win ⭐",
-    "metaDesc": "Spin the ORIGEN Roulette. Buy Stars or enter free by following our social channels and claim premium prizes.",
-    "ogTitle": "ORIGEN Roulette — Spin & Win",
+    "metaTitle": "HAZOREX Roulette — Spin & Win ⭐",
+    "metaDesc": "Spin the HAZOREX Roulette. Buy Stars or enter free by following our social channels and claim premium prizes.",
+    "ogTitle": "HAZOREX Roulette — Spin & Win",
     "ogDesc": "Prizes, discounts and surprise flavors. Free entry available.",
     "sweepstakes": "SWEEPSTAKES",
     "starsLabel": "STARS",
@@ -552,7 +552,7 @@
       "city": "City",
       "state": "State (CA)",
       "zip": "ZIP",
-      "essay": "Original essay: tell us why you like ORIGEN (min. 300 words)",
+      "essay": "Original essay: tell us why you like HAZOREX (min. 300 words)",
       "wordCount": "{{count}} / 300 words"
     },
     "rulesCheckbox": "I confirm I am 18+, a legal U.S. resident (except FL, RI) and accept the ",
@@ -594,7 +594,7 @@
     "close": "Close",
     "spinGo": "SPIN!",
     "winnerHeader": "DRAW WINNER",
-    "inStars": "in ORIGEN stars ⭐",
+    "inStars": "in HAZOREX stars ⭐",
     "challengeHeader": "LEGAL VALIDATION — SKILL CHALLENGE",
     "challengeQuestion": "What is {{a}} + {{b}}?",
     "timeRemaining": "Time remaining:",
@@ -808,9 +808,9 @@
     "showResults": "Show {{n}} results"
   },
   "historial": {
-    "metaTitle": "Draw History — ORIGEN",
-    "metaDesc": "Browse the full history of daily winners of the ORIGEN Roulette: name, date, prize amount and public verification.",
-    "ogTitle": "Draw History — ORIGEN",
+    "metaTitle": "Draw History — HAZOREX",
+    "metaDesc": "Browse the full history of daily winners of the HAZOREX Roulette: name, date, prize amount and public verification.",
+    "ogTitle": "Draw History — HAZOREX",
     "ogDesc": "Full transparency: review each round with its winner, date and amount.",
     "notFound": "Not found.",
     "errorPrefix": "Error: ",
@@ -848,13 +848,13 @@
     "backHome": "← Back home"
   },
   "terms": {
-    "metaTitle": "Terms and Conditions — HAZOREX ORIGEN",
-    "metaDesc": "Terms and Conditions of HAZOREX ORIGEN Sweepstakes.",
+    "metaTitle": "Terms and Conditions — HAZOREX",
+    "metaDesc": "Terms and Conditions of HAZOREX Sweepstakes.",
     "backToRoulette": "← Back to the Roulette",
     "title": "Terms and Conditions",
     "lastUpdated": "Last updated:",
     "s1Title": "1. Acceptance",
-    "s1BodyPre": "By using HAZOREX ORIGEN you accept these Terms and our ",
+    "s1BodyPre": "By using HAZOREX you accept these Terms and our ",
     "s1Link": "Official Sweepstakes Rules",
     "s1BodyPost": ".",
     "s2Title": "2. Eligibility",
@@ -873,8 +873,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Official Sweepstakes Rules — HAZOREX ORIGEN",
-    "metaDesc": "Official Rules of the daily HAZOREX ORIGEN Sweepstakes — no purchase necessary, U.S. residents 18+.",
+    "metaTitle": "Official Sweepstakes Rules — HAZOREX",
+    "metaDesc": "Official Rules of the daily HAZOREX Sweepstakes — no purchase necessary, U.S. residents 18+.",
     "backToRoulette": "← Back to the Roulette",
     "title": "Official Sweepstakes Rules",
     "lastUpdated": "Last updated:",
@@ -951,7 +951,7 @@
     "error": "An error occurred. Please try again."
   },
   "claim": {
-    "metaTitle": "Claim prize — HAZOREX ORIGEN",
+    "metaTitle": "Claim prize — HAZOREX",
     "loading": "Loading…",
     "back": "← Back",
     "backToRoulette": "← Back to the Roulette",

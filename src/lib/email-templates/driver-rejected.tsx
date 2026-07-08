@@ -19,7 +19,7 @@ const DriverRejected = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>HAZOREX ORIGEN</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>Sobre tu postulación</Heading>
@@ -36,7 +36,7 @@ const DriverRejected = ({
             <strong>{supportEmail}</strong> y con gusto revisaremos tu caso.
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX ORIGEN · {supportEmail}</Text>
+        <Text style={footer}>HAZOREX · {supportEmail}</Text>
       </Container>
     </Body>
   </Html>

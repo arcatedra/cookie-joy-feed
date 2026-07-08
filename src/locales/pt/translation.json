@@ -498,9 +498,9 @@
     "priceDisclaimer": "Os preços são estimativas do primeiro ano de registro em USD em registradores comuns e podem variar. * preço promocional no primeiro ano."
   },
   "ruleta": {
-    "metaTitle": "Roleta ORIGEN — Gire e Ganhe ⭐",
-    "metaDesc": "Gire a Roleta ORIGEN. Compre estrelas ou entre de graça seguindo nossos canais sociais e concorra a prêmios premium.",
-    "ogTitle": "Roleta ORIGEN — Gire e Ganhe",
+    "metaTitle": "Roleta HAZOREX — Gire e Ganhe ⭐",
+    "metaDesc": "Gire a Roleta HAZOREX. Compre estrelas ou entre de graça seguindo nossos canais sociais e concorra a prêmios premium.",
+    "ogTitle": "Roleta HAZOREX — Gire e Ganhe",
     "ogDesc": "Prêmios, descontos e sabores surpresa. Entrada gratuita disponível.",
     "sweepstakes": "SORTEIOS",
     "starsLabel": "ESTRELAS",
@@ -555,7 +555,7 @@
       "city": "Cidade",
       "state": "Estado (SP)",
       "zip": "CEP",
-      "essay": "Ensaio original: diga-nos por que você gosta da ORIGEN (mín. 300 palavras)",
+      "essay": "Ensaio original: diga-nos por que você gosta da HAZOREX (mín. 300 palavras)",
       "wordCount": "{{count}} / 300 palavras"
     },
     "rulesCheckbox": "Confirmo que tenho mais de 18 anos, sou residente legal dos EUA (exceto FL, RI) e aceito as ",
@@ -597,7 +597,7 @@
     "close": "Fechar",
     "spinGo": "GIRAR!",
     "winnerHeader": "VENCEDOR DO SORTEIO",
-    "inStars": "em estrelas ORIGEN ⭐",
+    "inStars": "em estrelas HAZOREX ⭐",
     "challengeHeader": "VALIDAÇÃO LEGAL — DESAFIO DE HABILIDADE",
     "challengeQuestion": "Qual é {{a}} + {{b}}?",
     "timeRemaining": "Tempo restante:",
@@ -811,9 +811,9 @@
     "showResults": "Mostrar {{n}} resultados"
   },
   "historial": {
-    "metaTitle": "Histórico de Sorteios — ORIGEN",
-    "metaDesc": "Navegue pelo histórico completo dos vencedores diários da Roleta ORIGEN: nome, data, valor do prêmio e verificação pública.",
-    "ogTitle": "Histórico de Sorteios — ORIGEN",
+    "metaTitle": "Histórico de Sorteios — HAZOREX",
+    "metaDesc": "Navegue pelo histórico completo dos vencedores diários da Roleta HAZOREX: nome, data, valor do prêmio e verificação pública.",
+    "ogTitle": "Histórico de Sorteios — HAZOREX",
     "ogDesc": "Transparência total: revise cada rodada com seu vencedor, data e valor.",
     "notFound": "Não encontrado.",
     "errorPrefix": "Erro: ",
@@ -851,13 +851,13 @@
     "backHome": "← Voltar ao início"
   },
   "terms": {
-    "metaTitle": "Termos e Condições — HAZOREX ORIGEN",
-    "metaDesc": "Termos e Condições do Sorteio HAZOREX ORIGEN.",
+    "metaTitle": "Termos e Condições — HAZOREX",
+    "metaDesc": "Termos e Condições do Sorteio HAZOREX.",
     "backToRoulette": "← Voltar para a Roleta",
     "title": "Termos e Condições",
     "lastUpdated": "Última atualização:",
     "s1Title": "1. Aceitação",
-    "s1BodyPre": "Ao usar o HAZOREX ORIGEN, você aceita estes Termos e nossas ",
+    "s1BodyPre": "Ao usar o HAZOREX, você aceita estes Termos e nossas ",
     "s1Link": "Regras Oficiais do Sorteio",
     "s1BodyPost": ".",
     "s2Title": "2. Elegibilidade",
@@ -876,8 +876,8 @@
     "s7Body": "soporte@hazorex.com"
   },
   "sweepstakesRules": {
-    "metaTitle": "Regras Oficiais do Sorteio — HAZOREX ORIGEN",
-    "metaDesc": "Regras Oficiais do sorteio diário HAZOREX ORIGEN — nenhuma compra necessária, residentes dos EUA com mais de 18 anos.",
+    "metaTitle": "Regras Oficiais do Sorteio — HAZOREX",
+    "metaDesc": "Regras Oficiais do sorteio diário HAZOREX — nenhuma compra necessária, residentes dos EUA com mais de 18 anos.",
     "backToRoulette": "← Voltar para a Roleta",
     "title": "Regras Oficiais do Sorteio",
     "lastUpdated": "Última atualização:",
@@ -954,7 +954,7 @@
     "error": "Ocorreu um erro. Por favor, tente novamente."
   },
   "claim": {
-    "metaTitle": "Reivindicar prêmio — HAZOREX ORIGEN",
+    "metaTitle": "Reivindicar prêmio — HAZOREX",
     "loading": "Carregando…",
     "back": "← Voltar",
     "backToRoulette": "← Voltar para a Roleta",
