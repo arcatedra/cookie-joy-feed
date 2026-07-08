@@ -67,7 +67,7 @@ export function SiteFooter() {
               {t("footer.legal", "Legal")}
             </h3>
             <ul className="mt-3 space-y-2 font-serif text-sm">
-              <li><Link to="/terminos" className="text-white/80 hover:text-[#E6C35C]">{t("footer.terms", "Términos")}</Link></li>
+              <li><Link to="/terms" className="text-white/80 hover:text-[#E6C35C]">{t("footer.terms", "Términos")}</Link></li>
               <li><Link to="/privacidad" className="text-white/80 hover:text-[#E6C35C]">{t("footer.privacy", "Privacidad")}</Link></li>
               <li><Link to="/sweepstakes-rules" className="text-white/80 hover:text-[#E6C35C]">{t("footer.rules", "Reglas del sorteo")}</Link></li>
               <li><Link to="/trust" className="text-white/80 hover:text-[#E6C35C]">{t("footer.trust", "Confianza")}</Link></li>
