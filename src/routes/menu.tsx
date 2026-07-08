@@ -30,7 +30,7 @@ import imgPack12 from "@/assets/pack-12.jpg";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — AMYRAX" },
+      { title: "Menu — HAZOREX" },
       { name: "description", content: "Browse our classic cookies." },
     ],
   }),

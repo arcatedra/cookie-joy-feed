@@ -49,7 +49,7 @@ function UnsubscribePage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-md bg-card rounded-2xl p-8 shadow-sm text-center">
-        <h1 className="font-display text-2xl text-primary tracking-widest mb-2">AMYRAX</h1>
+        <h1 className="font-display text-2xl text-primary tracking-widest mb-2">HAZOREX</h1>
         <h2 className="text-lg font-semibold mb-4">{t('unsubscribe.heading')}</h2>
         {state === 'loading' && <p className="text-muted-foreground">{t('unsubscribe.loading')}</p>}
         {state === 'valid' && (

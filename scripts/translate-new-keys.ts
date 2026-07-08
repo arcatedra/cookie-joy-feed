@@ -41,7 +41,7 @@ STRICT RULES:
 - Preserve the JSON structure and nesting exactly.
 - Preserve placeholders like {{name}}, {{count}}, {{amount}}, {{date}}, etc. exactly.
 - Preserve HTML-like tags and entities, emojis, line breaks, currency symbols ($), and numbers as-is.
-- Do NOT translate brand names: AMYRAX, ORIGEN, HAZOREX, HAZOREX ORIGEN, PayPal, Zelle, Stripe, Shopify, Google, Lovable Cloud, IRS, W-9, 1099-MISC, AMOE, KYC, SHA-256, UUID, Apple Pay.
+- Do NOT translate brand names: HAZOREX, ORIGEN, HAZOREX, HAZOREX ORIGEN, PayPal, Zelle, Stripe, Shopify, Google, Lovable Cloud, IRS, W-9, 1099-MISC, AMOE, KYC, SHA-256, UUID, Apple Pay.
 - Keep email addresses and URLs untouched.
 - Return ONLY valid JSON — no markdown, no commentary, no code fences.
 

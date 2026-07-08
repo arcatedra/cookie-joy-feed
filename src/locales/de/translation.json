@@ -154,8 +154,8 @@
     "didNotLoadDesc": "Etwas ist schiefgelaufen. Bitte aktualisiere oder gehe zurück zur Startseite."
   },
   "home": {
-    "metaTitle": "AMYRAX — Gourmet-Cookies, monatlich geliefert",
-    "metaDesc": "Entdecke handgemachte Gourmet-Cookies und abonniere AMYRAX für frisch gebackene Leckereien.",
+    "metaTitle": "HAZOREX — Gourmet-Cookies, monatlich geliefert",
+    "metaDesc": "Entdecke handgemachte Gourmet-Cookies und abonniere HAZOREX für frisch gebackene Leckereien.",
     "welcome": "Willkommen zurück",
     "greeting": "Guten Morgen, {{name}}!",
     "freshToday": "Frische Chargen heute",
@@ -180,7 +180,7 @@
       "buildPackAlt": "Individuelle Cookie-Box",
       "subscriptionTitle": "Monatsabo",
       "subscriptionLink": "Club entdecken",
-      "subscriptionClub": "AMYRAX CLUB",
+      "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Wöchentlich frisch gebacken geliefert",
       "subscriptionSubcopy": "Jederzeit kündbar · Versand inklusive",
       "subscriptionPrice": "Ab 24 $/Monat",
@@ -207,14 +207,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Cookies durchsuchen — AMYRAX",
-    "metaDesc": "Entdecke das gesamte Sortiment handgemachter Gourmet-Cookies bei AMYRAX.",
+    "metaTitle": "Cookies durchsuchen — HAZOREX",
+    "metaDesc": "Entdecke das gesamte Sortiment handgemachter Gourmet-Cookies bei HAZOREX.",
     "title": "Cookies durchsuchen",
     "sort": "Sortieren",
     "price": "Preis"
   },
   "menu": {
-    "metaTitle": "Menü — AMYRAX",
+    "metaTitle": "Menü — HAZOREX",
     "metaDesc": "Unsere klassischen Cookies entdecken.",
     "title": "Cookies",
     "tabs": {
@@ -310,8 +310,8 @@
     "peanuts": "ERDNÜSSE"
   },
   "subscribe": {
-    "metaTitle": "Abopläne — AMYRAX",
-    "metaDesc": "Wähle dein AMYRAX-Cookie-Abo. Lieferung nur montags und freitags.",
+    "metaTitle": "Abopläne — HAZOREX",
+    "metaDesc": "Wähle dein HAZOREX-Cookie-Abo. Lieferung nur montags und freitags.",
     "title": "Abopläne",
     "deliveryBadge": "Lieferung nur Montag & Freitag",
     "activePlan": "Aktiver Plan",
@@ -352,7 +352,7 @@
     }
   },
   "profile": {
-    "metaTitle": "Mein Profil — AMYRAX",
+    "metaTitle": "Mein Profil — HAZOREX",
     "metaDesc": "Konto, Bestellungen und Abo verwalten.",
     "title": "Mein Profil",
     "settings": "Einstellungen",
@@ -377,7 +377,7 @@
     },
     "qr": {
       "title": "Dein QR-Code",
-      "description": "Scanne, um den AMYRAX-Shop von jedem Gerät zu öffnen.",
+      "description": "Scanne, um den HAZOREX-Shop von jedem Gerät zu öffnen.",
       "download": "QR herunterladen",
       "copyLink": "Link kopieren",
       "downloaded": "QR heruntergeladen",

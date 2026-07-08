@@ -151,8 +151,8 @@
     "didNotLoadDesc": "Something went wrong on our end. You can try refreshing or head back home."
   },
   "home": {
-    "metaTitle": "AMYRAX — Gourmet Cookies, Delivered Monthly",
-    "metaDesc": "Discover artisanal gourmet cookies and join the AMYRAX monthly subscription for freshly baked treats at your door.",
+    "metaTitle": "HAZOREX — Gourmet Cookies, Delivered Monthly",
+    "metaDesc": "Discover artisanal gourmet cookies and join the HAZOREX monthly subscription for freshly baked treats at your door.",
     "welcome": "Welcome back",
     "greeting": "Good Morning, {{name}}!",
     "freshToday": "Fresh batches dropped today",
@@ -177,7 +177,7 @@
       "buildPackAlt": "Custom cookie box",
       "subscriptionTitle": "Monthly Subscription",
       "subscriptionLink": "Discover the club",
-      "subscriptionClub": "AMYRAX CLUB",
+      "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Weekly freshly baked deliveries",
       "subscriptionSubcopy": "Cancel anytime · Shipping included",
       "subscriptionPrice": "From $24/mo",
@@ -204,14 +204,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Browse Cookies — AMYRAX",
-    "metaDesc": "Explore our full range of artisanal gourmet cookies at AMYRAX.",
+    "metaTitle": "Browse Cookies — HAZOREX",
+    "metaDesc": "Explore our full range of artisanal gourmet cookies at HAZOREX.",
     "title": "Browse Cookies",
     "sort": "Sort",
     "price": "Price"
   },
   "menu": {
-    "metaTitle": "Menu — AMYRAX",
+    "metaTitle": "Menu — HAZOREX",
     "metaDesc": "Browse our classic cookies.",
     "title": "Cookies",
     "tabs": {
@@ -307,8 +307,8 @@
     "peanuts": "PEANUTS"
   },
   "subscribe": {
-    "metaTitle": "Subscription Plans — AMYRAX",
-    "metaDesc": "Choose your AMYRAX cookie subscription plan. Delivered Mondays and Fridays only.",
+    "metaTitle": "Subscription Plans — HAZOREX",
+    "metaDesc": "Choose your HAZOREX cookie subscription plan. Delivered Mondays and Fridays only.",
     "title": "Subscription Plans",
     "deliveryBadge": "Monday & Friday Delivery Only",
     "activePlan": "Active Plan",
@@ -349,8 +349,8 @@
     }
   },
   "profile": {
-    "metaTitle": "My Profile — AMYRAX",
-    "metaDesc": "Manage your AMYRAX account, orders, and subscription.",
+    "metaTitle": "My Profile — HAZOREX",
+    "metaDesc": "Manage your HAZOREX account, orders, and subscription.",
     "title": "My Profile",
     "settings": "Settings",
     "city": "New York",
@@ -374,7 +374,7 @@
     },
     "qr": {
       "title": "Your QR Code",
-      "description": "Scan to visit the AMYRAX store directly from any device.",
+      "description": "Scan to visit the HAZOREX store directly from any device.",
       "download": "Download QR",
       "copyLink": "Copy link",
       "downloaded": "QR downloaded",
@@ -675,15 +675,15 @@
     "total": "Total"
   },
   "donate": {
-    "metaTitle": "Donate — AMYRAX",
-    "metaDesc": "Support AMYRAX with a donation and unlock exclusive badges: Blue, Bronze, Gold, Premium, Crown and Supreme Star.",
+    "metaTitle": "Donate — HAZOREX",
+    "metaDesc": "Support HAZOREX with a donation and unlock exclusive badges: Blue, Bronze, Gold, Premium, Crown and Supreme Star.",
     "thanks": "Thanks for your donation! Your badge will activate in seconds.",
     "cancelled": "Donation cancelled. You can try again whenever you want.",
     "signInRequired": "Sign in to donate.",
     "minAmount": "Minimum amount is $1 USD.",
     "noPaymentUrl": "Payment URL was not received.",
     "checkoutError": "Couldn't start payment. Please try again.",
-    "heroTitle": "Support AMYRAX",
+    "heroTitle": "Support HAZOREX",
     "heroDesc": "Every donation helps us keep creating artisan experiences. In return, you get an exclusive badge on your profile.",
     "chooseAmount": "Choose your amount (USD)",
     "customAmount": "Or enter a custom amount",
@@ -705,8 +705,8 @@
     }
   },
   "shop": {
-    "metaTitle": "Shop · AMYRAX Cookies",
-    "metaDesc": "Order gourmet AMYRAX cookies. Curated boxes, monthly favorites, and gift packs shipped to your door.",
+    "metaTitle": "Shop · HAZOREX Cookies",
+    "metaDesc": "Order gourmet HAZOREX cookies. Curated boxes, monthly favorites, and gift packs shipped to your door.",
     "ogDesc": "Curated boxes, monthly favorites, and gift packs shipped to your door.",
     "notFound": "Not found",
     "title": "Our Cookies",
@@ -717,8 +717,8 @@
     "addToCart": "Add to Cart"
   },
   "product": {
-    "metaTitle": "{{handle}} · AMYRAX Shop",
-    "metaDesc": "Order {{handle}} from AMYRAX Cookies.",
+    "metaTitle": "{{handle}} · HAZOREX Shop",
+    "metaDesc": "Order {{handle}} from HAZOREX Cookies.",
     "notFound": "Product not found",
     "backToShop": "Back to shop",
     "variant": "Variant",
@@ -726,11 +726,11 @@
     "soldOut": "Sold out"
   },
   "reel": {
-    "metaTitleFallback": "Reel · AMYRAX Cookies",
-    "metaTitleSuffix": "· AMYRAX Cookies",
+    "metaTitleFallback": "Reel · HAZOREX Cookies",
+    "metaTitleSuffix": "· HAZOREX Cookies",
     "defaultTitle": "Watch this reel",
-    "metaDescWithProduct": "{{product}} at AMYRAX Cookies. Watch the reel and discover our artisan cookies.",
-    "metaDescDefault": "Watch this reel from AMYRAX Cookies — premium artisan cookies.",
+    "metaDescWithProduct": "{{product}} at HAZOREX Cookies. Watch the reel and discover our artisan cookies.",
+    "metaDescDefault": "Watch this reel from HAZOREX Cookies — premium artisan cookies.",
     "notFoundTitle": "Reel not found",
     "notFoundDesc": "This reel may have been removed.",
     "backHome": "Back home",
@@ -740,7 +740,7 @@
     "moreReels": "More reels"
   },
   "searchPage": {
-    "metaTitle": "Search results — AMYRAX Cookies",
+    "metaTitle": "Search results — HAZOREX Cookies",
     "metaDesc": "Find your favorite artisan cookies.",
     "cats": {
       "all": "All",
@@ -803,17 +803,17 @@
     "anonymous": "Anonymous"
   },
   "trust": {
-    "metaTitle": "Trust, privacy and security — AMYRAX",
-    "metaDesc": "How AMYRAX protects your data: authentication, access controls, payments, data retention, subprocessors, and how to exercise your privacy rights.",
+    "metaTitle": "Trust, privacy and security — HAZOREX",
+    "metaDesc": "How HAZOREX protects your data: authentication, access controls, payments, data retention, subprocessors, and how to exercise your privacy rights.",
     "eyebrow": "Trust",
-    "title": "Privacy and security at AMYRAX",
-    "intro": "This page is maintained by the AMYRAX team to answer common questions about security and privacy. It is not an independent certification; it describes the controls currently active in the application and the shared responsibility among AMYRAX, our hosting platform (Lovable Cloud) and our users.",
+    "title": "Privacy and security at HAZOREX",
+    "intro": "This page is maintained by the HAZOREX team to answer common questions about security and privacy. It is not an independent certification; it describes the controls currently active in the application and the shared responsibility among HAZOREX, our hosting platform (Lovable Cloud) and our users.",
     "sections": {
       "authTitle": "Authentication and access",
       "authP1": "Account access is done with email and password or Google sign-in. Passwords are never stored in plain text: credential management and verification is handled by the platform's managed authentication provider.",
       "authP2": "Each user can only read and modify their own profile and their own orders, subscriptions and donations. Administrative roles are restricted and verified server-side.",
       "paymentsTitle": "Payments",
-      "paymentsP1": "Payments are processed through Stripe. AMYRAX does not store or have access to full card numbers, CVV or expiration dates: this data travels directly between your browser and Stripe using their secure elements.",
+      "paymentsP1": "Payments are processed through Stripe. HAZOREX does not store or have access to full card numbers, CVV or expiration dates: this data travels directly between your browser and Stripe using their secure elements.",
       "dataTitle": "Data we collect",
       "dataP1": "We only collect data necessary to operate the application: your email, an optional display name, your shipping address when you make a physical purchase, and a history of orders, subscriptions and donations associated with your account.",
       "subprocessorsTitle": "Subprocessors",
@@ -825,7 +825,7 @@
       "reportTitle": "How to report a security issue",
       "reportP1": "If you believe you have found a vulnerability, please contact us before disclosing it publicly. We will investigate every responsible report and keep you updated on the status.",
       "sharedTitle": "Shared responsibility",
-      "sharedP1": "The platform AMYRAX runs on provides infrastructure security, backups and data isolation. AMYRAX configures application-level controls (access policies, payment validation, email content). Users contribute by using unique passwords and keeping their email access secure."
+      "sharedP1": "The platform HAZOREX runs on provides infrastructure security, backups and data isolation. HAZOREX configures application-level controls (access policies, payment validation, email content). Users contribute by using unique passwords and keeping their email access secure."
     },
     "backHome": "← Back home"
   },
@@ -922,10 +922,10 @@
     "footer": "© {{year}} {{sponsor}} · All rights reserved."
   },
   "unsubscribe": {
-    "metaTitle": "Unsubscribe · AMYRAX",
+    "metaTitle": "Unsubscribe · HAZOREX",
     "heading": "Unsubscribe from emails",
     "loading": "Loading…",
-    "confirmQuestion": "Confirm you want to stop receiving AMYRAX emails?",
+    "confirmQuestion": "Confirm you want to stop receiving HAZOREX emails?",
     "confirmBtn": "Confirm unsubscribe",
     "done": "Done. You won't receive any more emails.",
     "already": "This email was already unsubscribed.",
