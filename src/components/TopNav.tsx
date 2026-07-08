@@ -297,10 +297,10 @@ export function TopNav() {
               <ShoppingCart className="h-6 w-6" />
               <span
                 className={`absolute -right-2 -top-1 grid min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[11px] font-bold leading-[18px] text-[#1a0f0a] ${
-                  cart.count === 0 ? "opacity-60" : ""
+                  cartCount === 0 ? "opacity-60" : ""
                 }`}
               >
-                {cart.count}
+                {cartCount}
               </span>
             </div>
             <span className="hidden text-xs font-bold md:inline">{t("topnav.cart")}</span>
