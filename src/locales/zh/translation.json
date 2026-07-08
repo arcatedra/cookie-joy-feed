@@ -151,8 +151,8 @@
     "didNotLoadDesc": "我们这边出了点问题。您可以尝试刷新或返回首页。"
   },
   "home": {
-    "metaTitle": "AMYRAX — 美食曲奇，按月配送",
-    "metaDesc": "探索手工美食曲奇，加入 AMYRAX 月度订阅，享受新鲜出炉的美味直送上门。",
+    "metaTitle": "HAZOREX — 美食曲奇，按月配送",
+    "metaDesc": "探索手工美食曲奇，加入 HAZOREX 月度订阅，享受新鲜出炉的美味直送上门。",
     "welcome": "欢迎回来",
     "greeting": "早上好，{{name}}！",
     "freshToday": "今天有新鲜批次出炉",
@@ -177,7 +177,7 @@
       "buildPackAlt": "自定义曲奇盒",
       "subscriptionTitle": "月度订阅",
       "subscriptionLink": "探索俱乐部",
-      "subscriptionClub": "AMYRAX 俱乐部",
+      "subscriptionClub": "HAZOREX 俱乐部",
       "subscriptionHeadline": "每周新鲜烘焙配送",
       "subscriptionSubcopy": "随时取消 · 含运费",
       "subscriptionPrice": "每月 $24 起",
@@ -204,14 +204,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "浏览曲奇 — AMYRAX",
-    "metaDesc": "在 AMYRAX 探索我们全系列的手工美食曲奇。",
+    "metaTitle": "浏览曲奇 — HAZOREX",
+    "metaDesc": "在 HAZOREX 探索我们全系列的手工美食曲奇。",
     "title": "浏览曲奇",
     "sort": "排序",
     "price": "价格"
   },
   "menu": {
-    "metaTitle": "菜单 — AMYRAX",
+    "metaTitle": "菜单 — HAZOREX",
     "metaDesc": "浏览我们的经典曲奇。",
     "title": "曲奇",
     "tabs": {
@@ -307,8 +307,8 @@
     "peanuts": "花生"
   },
   "subscribe": {
-    "metaTitle": "订阅计划 — AMYRAX",
-    "metaDesc": "选择您的 AMYRAX 曲奇订阅计划。仅限周一和周五配送。",
+    "metaTitle": "订阅计划 — HAZOREX",
+    "metaDesc": "选择您的 HAZOREX 曲奇订阅计划。仅限周一和周五配送。",
     "title": "订阅计划",
     "deliveryBadge": "仅限周一和周五配送",
     "activePlan": "当前计划",
@@ -349,8 +349,8 @@
     }
   },
   "profile": {
-    "metaTitle": "我的个人资料 — AMYRAX",
-    "metaDesc": "管理您的 AMYRAX 账户、订单和订阅。",
+    "metaTitle": "我的个人资料 — HAZOREX",
+    "metaDesc": "管理您的 HAZOREX 账户、订单和订阅。",
     "title": "我的个人资料",
     "settings": "设置",
     "city": "纽约",
@@ -374,7 +374,7 @@
     },
     "qr": {
       "title": "您的二维码",
-      "description": "从任何设备扫描即可直接访问 AMYRAX 商店。",
+      "description": "从任何设备扫描即可直接访问 HAZOREX 商店。",
       "download": "下载二维码",
       "copyLink": "复制链接",
       "downloaded": "二维码已下载",
@@ -675,15 +675,15 @@
     "total": "总计"
   },
   "donate": {
-    "metaTitle": "捐赠 — AMYRAX",
-    "metaDesc": "通过捐赠支持 AMYRAX，解锁专属徽章：蓝色、青铜、黄金、高级、皇冠和至尊之星。",
+    "metaTitle": "捐赠 — HAZOREX",
+    "metaDesc": "通过捐赠支持 HAZOREX，解锁专属徽章：蓝色、青铜、黄金、高级、皇冠和至尊之星。",
     "thanks": "感谢您的捐赠！您的徽章将在几秒钟内激活。",
     "cancelled": "捐赠已取消。您可以随时重试。",
     "signInRequired": "请登录以进行捐赠。",
     "minAmount": "最低金额为 $1 美元。",
     "noPaymentUrl": "未收到付款 URL。",
     "checkoutError": "无法开始付款。请重试。",
-    "heroTitle": "支持 AMYRAX",
+    "heroTitle": "支持 HAZOREX",
     "heroDesc": "您的每一笔捐赠都将帮助我们持续创造匠心体验。作为回报，您将在个人资料上获得一枚专属徽章。",
     "chooseAmount": "选择您的金额 (美元)",
     "customAmount": "或输入自定义金额",
@@ -705,8 +705,8 @@
     }
   },
   "shop": {
-    "metaTitle": "商店 · AMYRAX Cookies",
-    "metaDesc": "订购 AMYRAX 美食曲奇。精选礼盒、月度最爱和礼品套装，为您配送上门。",
+    "metaTitle": "商店 · HAZOREX Cookies",
+    "metaDesc": "订购 HAZOREX 美食曲奇。精选礼盒、月度最爱和礼品套装，为您配送上门。",
     "ogDesc": "精选礼盒、月度最爱和礼品套装，为您配送上门。",
     "notFound": "未找到",
     "title": "我们的曲奇",
@@ -717,8 +717,8 @@
     "addToCart": "加入购物车"
   },
   "product": {
-    "metaTitle": "{{handle}} · AMYRAX 商店",
-    "metaDesc": "从 AMYRAX Cookies 订购 {{handle}}。",
+    "metaTitle": "{{handle}} · HAZOREX 商店",
+    "metaDesc": "从 HAZOREX Cookies 订购 {{handle}}。",
     "notFound": "产品未找到",
     "backToShop": "返回商店",
     "variant": "规格",
@@ -726,11 +726,11 @@
     "soldOut": "已售罄"
   },
   "reel": {
-    "metaTitleFallback": "短视频 · AMYRAX Cookies",
-    "metaTitleSuffix": "· AMYRAX Cookies",
+    "metaTitleFallback": "短视频 · HAZOREX Cookies",
+    "metaTitleSuffix": "· HAZOREX Cookies",
     "defaultTitle": "观看此短视频",
-    "metaDescWithProduct": "AMYRAX Cookies 的 {{product}}。观看短视频，发现我们的匠心曲奇。",
-    "metaDescDefault": "观看 AMYRAX Cookies 的这条短视频 — 高级匠心曲奇。",
+    "metaDescWithProduct": "HAZOREX Cookies 的 {{product}}。观看短视频，发现我们的匠心曲奇。",
+    "metaDescDefault": "观看 HAZOREX Cookies 的这条短视频 — 高级匠心曲奇。",
     "notFoundTitle": "短视频未找到",
     "notFoundDesc": "此短视频可能已被移除。",
     "backHome": "返回主页",
@@ -740,7 +740,7 @@
     "moreReels": "更多短视频"
   },
   "searchPage": {
-    "metaTitle": "搜索结果 — AMYRAX Cookies",
+    "metaTitle": "搜索结果 — HAZOREX Cookies",
     "metaDesc": "找到您最爱的匠心曲奇。",
     "cats": {
       "all": "全部",
@@ -803,17 +803,17 @@
     "anonymous": "匿名"
   },
   "trust": {
-    "metaTitle": "信任、隐私和安全 — AMYRAX",
-    "metaDesc": "AMYRAX 如何保护您的数据：身份验证、访问控制、支付、数据保留、子处理商以及如何行使您的隐私权。",
+    "metaTitle": "信任、隐私和安全 — HAZOREX",
+    "metaDesc": "HAZOREX 如何保护您的数据：身份验证、访问控制、支付、数据保留、子处理商以及如何行使您的隐私权。",
     "eyebrow": "信任",
-    "title": "AMYRAX 的隐私与安全",
-    "intro": "此页面由 AMYRAX 团队维护，旨在回答有关安全和隐私的常见问题。它不是独立的认证；它描述了当前在应用程序中启用的控制措施以及 AMYRAX、我们的托管平台 (Lovable Cloud) 和我们的用户之间的共同责任。",
+    "title": "HAZOREX 的隐私与安全",
+    "intro": "此页面由 HAZOREX 团队维护，旨在回答有关安全和隐私的常见问题。它不是独立的认证；它描述了当前在应用程序中启用的控制措施以及 HAZOREX、我们的托管平台 (Lovable Cloud) 和我们的用户之间的共同责任。",
     "sections": {
       "authTitle": "身份验证和访问",
       "authP1": "账户访问通过电子邮件和密码或 Google 登录完成。密码从不以纯文本形式存储：凭证管理和验证由平台的托管身份验证提供商处理。",
       "authP2": "每个用户只能读取和修改自己的个人资料以及自己的订单、订阅和捐赠。管理角色受限制并在服务器端进行验证。",
       "paymentsTitle": "支付",
-      "paymentsP1": "支付通过 Stripe 处理。AMYRAX 不存储也无法访问完整的卡号、CVV 或有效期：这些数据使用其安全元素在您的浏览器和 Stripe 之间直接传输。",
+      "paymentsP1": "支付通过 Stripe 处理。HAZOREX 不存储也无法访问完整的卡号、CVV 或有效期：这些数据使用其安全元素在您的浏览器和 Stripe 之间直接传输。",
       "dataTitle": "我们收集的数据",
       "dataP1": "我们仅收集运营此应用程序所必需的数据：您的电子邮件、可选的显示名称、您进行实物购买时的邮寄地址，以及与您账户关联的订单、订阅和捐赠历史记录。",
       "subprocessorsTitle": "子处理商",
@@ -825,7 +825,7 @@
       "reportTitle": "如何报告安全问题",
       "reportP1": "如果您认为发现了安全漏洞，请在公开发布前联系我们。我们将调查每一份负责任的报告，并向您通报最新状态。",
       "sharedTitle": "共同责任",
-      "sharedP1": "AMYRAX 运行的平台提供基础设施安全、备份和数据隔离。AMYRAX 配置应用程序级别的控制（访问策略、支付验证、电子邮件内容）。用户通过使用独特的密码并确保其电子邮件访问安全来做出贡献。"
+      "sharedP1": "HAZOREX 运行的平台提供基础设施安全、备份和数据隔离。HAZOREX 配置应用程序级别的控制（访问策略、支付验证、电子邮件内容）。用户通过使用独特的密码并确保其电子邮件访问安全来做出贡献。"
     },
     "backHome": "← 返回主页"
   },
@@ -922,10 +922,10 @@
     "footer": "© {{year}} {{sponsor}} · 版权所有。"
   },
   "unsubscribe": {
-    "metaTitle": "退订 · AMYRAX",
+    "metaTitle": "退订 · HAZOREX",
     "heading": "退订电子邮件",
     "loading": "正在加载…",
-    "confirmQuestion": "确认您想停止接收 AMYRAX 的电子邮件吗？",
+    "confirmQuestion": "确认您想停止接收 HAZOREX 的电子邮件吗？",
     "confirmBtn": "确认退订",
     "done": "完成。您将不会再收到任何电子邮件。",
     "already": "此电子邮件地址已经退订。",

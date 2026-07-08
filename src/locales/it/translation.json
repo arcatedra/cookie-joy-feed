@@ -151,8 +151,8 @@
     "didNotLoadDesc": "Qualcosa è andato storto da parte nostra. Puoi provare ad aggiornare o tornare alla home."
   },
   "home": {
-    "metaTitle": "AMYRAX — Biscotti Gourmet, Consegnati Mensilmente",
-    "metaDesc": "Scopri i biscotti gourmet artigianali e unisciti all'abbonamento mensile AMYRAX per delizie appena sfornate a casa tua.",
+    "metaTitle": "HAZOREX — Biscotti Gourmet, Consegnati Mensilmente",
+    "metaDesc": "Scopri i biscotti gourmet artigianali e unisciti all'abbonamento mensile HAZOREX per delizie appena sfornate a casa tua.",
     "welcome": "Bentornato",
     "greeting": "Buongiorno, {{name}}!",
     "freshToday": "Nuove sfornate oggi",
@@ -177,7 +177,7 @@
       "buildPackAlt": "Scatola di biscotti personalizzata",
       "subscriptionTitle": "Abbonamento Mensile",
       "subscriptionLink": "Scopri il club",
-      "subscriptionClub": "AMYRAX CLUB",
+      "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Consegne settimanali di biscotti appena sfornati",
       "subscriptionSubcopy": "Annulla in qualsiasi momento · Spedizione inclusa",
       "subscriptionPrice": "Da $24/mese",
@@ -204,14 +204,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Sfoglia i Biscotti — AMYRAX",
-    "metaDesc": "Esplora la nostra gamma completa di biscotti gourmet artigianali su AMYRAX.",
+    "metaTitle": "Sfoglia i Biscotti — HAZOREX",
+    "metaDesc": "Esplora la nostra gamma completa di biscotti gourmet artigianali su HAZOREX.",
     "title": "Sfoglia i Biscotti",
     "sort": "Ordina",
     "price": "Prezzo"
   },
   "menu": {
-    "metaTitle": "Menu — AMYRAX",
+    "metaTitle": "Menu — HAZOREX",
     "metaDesc": "Sfoglia i nostri biscotti classici.",
     "title": "Biscotti",
     "tabs": {
@@ -307,8 +307,8 @@
     "peanuts": "ARACHIDI"
   },
   "subscribe": {
-    "metaTitle": "Piani di Abbonamento — AMYRAX",
-    "metaDesc": "Scegli il tuo piano di abbonamento ai biscotti AMYRAX. Consegne solo il lunedì e il venerdì.",
+    "metaTitle": "Piani di Abbonamento — HAZOREX",
+    "metaDesc": "Scegli il tuo piano di abbonamento ai biscotti HAZOREX. Consegne solo il lunedì e il venerdì.",
     "title": "Piani di Abbonamento",
     "deliveryBadge": "Consegna Solo Lunedì e Venerdì",
     "activePlan": "Piano Attivo",
@@ -349,8 +349,8 @@
     }
   },
   "profile": {
-    "metaTitle": "Il mio Profilo — AMYRAX",
-    "metaDesc": "Gestisci il tuo account, ordini e abbonamento AMYRAX.",
+    "metaTitle": "Il mio Profilo — HAZOREX",
+    "metaDesc": "Gestisci il tuo account, ordini e abbonamento HAZOREX.",
     "title": "Il mio Profilo",
     "settings": "Impostazioni",
     "city": "New York",
@@ -374,7 +374,7 @@
     },
     "qr": {
       "title": "Il tuo Codice QR",
-      "description": "Scansiona per visitare il negozio AMYRAX direttamente da qualsiasi dispositivo.",
+      "description": "Scansiona per visitare il negozio HAZOREX direttamente da qualsiasi dispositivo.",
       "download": "Scarica QR",
       "copyLink": "Copia link",
       "downloaded": "QR scaricato",
@@ -675,15 +675,15 @@
     "total": "Totale"
   },
   "donate": {
-    "metaTitle": "Dona — AMYRAX",
-    "metaDesc": "Sostieni AMYRAX con una donazione e sblocca badge esclusivi: Blu, Bronzo, Oro, Premium, Corona e Stella Suprema.",
+    "metaTitle": "Dona — HAZOREX",
+    "metaDesc": "Sostieni HAZOREX con una donazione e sblocca badge esclusivi: Blu, Bronzo, Oro, Premium, Corona e Stella Suprema.",
     "thanks": "Grazie per la tua donazione! Il tuo badge si attiverà in pochi secondi.",
     "cancelled": "Donazione annullata. Puoi riprovare quando vuoi.",
     "signInRequired": "Accedi per donare.",
     "minAmount": "L'importo minimo è di $1 USD.",
     "noPaymentUrl": "URL di pagamento non ricevuto.",
     "checkoutError": "Impossibile avviare il pagamento. Riprova.",
-    "heroTitle": "Sostieni AMYRAX",
+    "heroTitle": "Sostieni HAZOREX",
     "heroDesc": "Ogni donazione ci aiuta a continuare a creare esperienze artigianali. In cambio, ricevi un badge esclusivo sul tuo profilo.",
     "chooseAmount": "Scegli il tuo importo (USD)",
     "customAmount": "Oppure inserisci un importo personalizzato",
@@ -705,8 +705,8 @@
     }
   },
   "shop": {
-    "metaTitle": "Negozio · AMYRAX Cookies",
-    "metaDesc": "Ordina i biscotti gourmet AMYRAX. Scatole curate, preferiti del mese e confezioni regalo spedite a casa tua.",
+    "metaTitle": "Negozio · HAZOREX Cookies",
+    "metaDesc": "Ordina i biscotti gourmet HAZOREX. Scatole curate, preferiti del mese e confezioni regalo spedite a casa tua.",
     "ogDesc": "Scatole curate, preferiti del mese e confezioni regalo spedite a casa tua.",
     "notFound": "Non trovato",
     "title": "I nostri Biscotti",
@@ -717,8 +717,8 @@
     "addToCart": "Aggiungi al carrello"
   },
   "product": {
-    "metaTitle": "{{handle}} · Negozio AMYRAX",
-    "metaDesc": "Ordina {{handle}} da AMYRAX Cookies.",
+    "metaTitle": "{{handle}} · Negozio HAZOREX",
+    "metaDesc": "Ordina {{handle}} da HAZOREX Cookies.",
     "notFound": "Prodotto non trovato",
     "backToShop": "Torna al negozio",
     "variant": "Variante",
@@ -726,11 +726,11 @@
     "soldOut": "Esaurito"
   },
   "reel": {
-    "metaTitleFallback": "Reel · AMYRAX Cookies",
-    "metaTitleSuffix": "· AMYRAX Cookies",
+    "metaTitleFallback": "Reel · HAZOREX Cookies",
+    "metaTitleSuffix": "· HAZOREX Cookies",
     "defaultTitle": "Guarda questo reel",
-    "metaDescWithProduct": "{{product}} da AMYRAX Cookies. Guarda il reel e scopri i nostri biscotti artigianali.",
-    "metaDescDefault": "Guarda questo reel di AMYRAX Cookies — biscotti artigianali premium.",
+    "metaDescWithProduct": "{{product}} da HAZOREX Cookies. Guarda il reel e scopri i nostri biscotti artigianali.",
+    "metaDescDefault": "Guarda questo reel di HAZOREX Cookies — biscotti artigianali premium.",
     "notFoundTitle": "Reel non trovato",
     "notFoundDesc": "Questo reel potrebbe essere stato rimosso.",
     "backHome": "Torna alla home",
@@ -740,7 +740,7 @@
     "moreReels": "Altri reel"
   },
   "searchPage": {
-    "metaTitle": "Risultati della ricerca — AMYRAX Cookies",
+    "metaTitle": "Risultati della ricerca — HAZOREX Cookies",
     "metaDesc": "Trova i tuoi biscotti artigianali preferiti.",
     "cats": {
       "all": "Tutti",
@@ -803,17 +803,17 @@
     "anonymous": "Anonimo"
   },
   "trust": {
-    "metaTitle": "Fiducia, privacy e sicurezza — AMYRAX",
-    "metaDesc": "Come AMYRAX protegge i tuoi dati: autenticazione, controlli di accesso, pagamenti, conservazione dei dati, sub-processori e come esercitare i tuoi diritti sulla privacy.",
+    "metaTitle": "Fiducia, privacy e sicurezza — HAZOREX",
+    "metaDesc": "Come HAZOREX protegge i tuoi dati: autenticazione, controlli di accesso, pagamenti, conservazione dei dati, sub-processori e come esercitare i tuoi diritti sulla privacy.",
     "eyebrow": "Fiducia",
-    "title": "Privacy e sicurezza su AMYRAX",
-    "intro": "Questa pagina è gestita dal team di AMYRAX per rispondere a domande comuni su sicurezza e privacy. Non è una certificazione indipendente; descrive i controlli attualmente attivi nell'applicazione e la responsabilità condivisa tra AMYRAX, la nostra piattaforma di hosting (Lovable Cloud) e i nostri utenti.",
+    "title": "Privacy e sicurezza su HAZOREX",
+    "intro": "Questa pagina è gestita dal team di HAZOREX per rispondere a domande comuni su sicurezza e privacy. Non è una certificazione indipendente; descrive i controlli attualmente attivi nell'applicazione e la responsabilità condivisa tra HAZOREX, la nostra piattaforma di hosting (Lovable Cloud) e i nostri utenti.",
     "sections": {
       "authTitle": "Autenticazione e accesso",
       "authP1": "L'accesso all'account avviene tramite email e password o con l'accesso Google. Le password non vengono mai memorizzate in chiaro: la gestione e la verifica delle credenziali sono gestite dal provider di autenticazione gestito della piattaforma.",
       "authP2": "Ogni utente può solo leggere e modificare il proprio profilo e i propri ordini, abbonamenti e donazioni. I ruoli amministrativi sono limitati e verificati lato server.",
       "paymentsTitle": "Pagamenti",
-      "paymentsP1": "I pagamenti vengono elaborati tramite Stripe. AMYRAX non memorizza né ha accesso a numeri di carta completi, CVV o date di scadenza: questi dati viaggiano direttamente tra il tuo browser e Stripe utilizzando i loro elementi sicuri.",
+      "paymentsP1": "I pagamenti vengono elaborati tramite Stripe. HAZOREX non memorizza né ha accesso a numeri di carta completi, CVV o date di scadenza: questi dati viaggiano direttamente tra il tuo browser e Stripe utilizzando i loro elementi sicuri.",
       "dataTitle": "Dati che raccogliamo",
       "dataP1": "Raccogliamo solo i dati necessari per il funzionamento dell'applicazione: la tua email, un nome visualizzato opzionale, il tuo indirizzo di spedizione quando effettui un acquisto fisico e uno storico di ordini, abbonamenti e donazioni associati al tuo account.",
       "subprocessorsTitle": "Sub-processori",
@@ -825,7 +825,7 @@
       "reportTitle": "Come segnalare un problema di sicurezza",
       "reportP1": "Se ritieni di aver trovato una vulnerabilità, ti preghiamo di contattarci prima di divulgarla pubblicamente. Indagheremo su ogni segnalazione responsabile e ti terremo aggiornato sullo stato.",
       "sharedTitle": "Responsabilità condivisa",
-      "sharedP1": "La piattaforma su cui gira AMYRAX fornisce sicurezza infrastrutturale, backup e isolamento dei dati. AMYRAX configura i controlli a livello di applicazione (policy di accesso, convalida dei pagamenti, contenuto delle email). Gli utenti contribuiscono utilizzando password uniche e mantenendo sicuro l'accesso alla propria email."
+      "sharedP1": "La piattaforma su cui gira HAZOREX fornisce sicurezza infrastrutturale, backup e isolamento dei dati. HAZOREX configura i controlli a livello di applicazione (policy di accesso, convalida dei pagamenti, contenuto delle email). Gli utenti contribuiscono utilizzando password uniche e mantenendo sicuro l'accesso alla propria email."
     },
     "backHome": "← Torna alla home"
   },
@@ -922,10 +922,10 @@
     "footer": "© {{year}} {{sponsor}} · Tutti i diritti riservati."
   },
   "unsubscribe": {
-    "metaTitle": "Annulla iscrizione · AMYRAX",
+    "metaTitle": "Annulla iscrizione · HAZOREX",
     "heading": "Annulla l'iscrizione alle email",
     "loading": "Caricamento in corso…",
-    "confirmQuestion": "Confermi di voler smettere di ricevere email da AMYRAX?",
+    "confirmQuestion": "Confermi di voler smettere di ricevere email da HAZOREX?",
     "confirmBtn": "Conferma annullamento iscrizione",
     "done": "Fatto. Non riceverai più email.",
     "already": "Questo indirizzo email è già stato rimosso.",

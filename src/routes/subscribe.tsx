@@ -14,11 +14,11 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plans — AMYRAX" },
+      { title: "Subscription Plans — HAZOREX" },
       {
         name: "description",
         content:
-          "Choose your AMYRAX cookie subscription plan. Delivered Mondays and Fridays only.",
+          "Choose your HAZOREX cookie subscription plan. Delivered Mondays and Fridays only.",
       },
     ],
   }),

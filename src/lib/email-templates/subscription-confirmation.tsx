@@ -12,18 +12,18 @@ interface Props {
 
 const SubscriptionConfirmation = ({
   customerName = 'Cliente',
-  planName = 'Plan AMYRAX',
+  planName = 'Plan HAZOREX',
   planPrice = '$15.00 / mes',
   deliveryDays = 'Lunes y Viernes',
   nextChargeDate = '—',
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
-    <Preview>Tu suscripción a AMYRAX está activa</Preview>
+    <Preview>Tu suscripción a HAZOREX está activa</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={brandBar}>
-          <Heading as="h1" style={brand}>AMYRAX</Heading>
+          <Heading as="h1" style={brand}>HAZOREX</Heading>
         </Section>
         <Section style={card}>
           <Heading as="h2" style={h2}>Bienvenido al club, {customerName}</Heading>
@@ -48,7 +48,7 @@ const SubscriptionConfirmation = ({
         <Text style={footer}>
           Puedes gestionar o cancelar tu suscripción en cualquier momento desde tu cuenta.
         </Text>
-        <Text style={footerSmall}>AMYRAX · origen.management</Text>
+        <Text style={footerSmall}>HAZOREX · origen.management</Text>
       </Container>
     </Body>
   </Html>
@@ -56,7 +56,7 @@ const SubscriptionConfirmation = ({
 
 export const template = {
   component: SubscriptionConfirmation,
-  subject: 'Tu suscripción a AMYRAX está activa',
+  subject: 'Tu suscripción a HAZOREX está activa',
   displayName: 'Subscription Confirmation (Customer)',
   previewData: {
     customerName: 'María',

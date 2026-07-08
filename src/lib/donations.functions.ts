@@ -59,7 +59,7 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
         metadata: { donation_id: donation.id, tier, user_id: userId },
         payment_intent_data: {
           metadata: { donation_id: donation.id, tier, user_id: userId },
-          description: `Donación AMYRAX — ${tier}`,
+          description: `Donación HAZOREX — ${tier}`,
         },
         line_items: [
           {
@@ -68,8 +68,8 @@ export const createDonationCheckout = createServerFn({ method: "POST" })
               currency: "usd",
               unit_amount: Math.round(amount * 100),
               product_data: {
-                name: `Donación AMYRAX — ${tier}`,
-                description: "Gracias por apoyar a AMYRAX.",
+                name: `Donación HAZOREX — ${tier}`,
+                description: "Gracias por apoyar a HAZOREX.",
               },
             },
           },

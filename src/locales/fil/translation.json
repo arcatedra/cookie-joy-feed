@@ -154,8 +154,8 @@
     "didNotLoadDesc": "May problemang naganap. Subukang i-refresh o bumalik sa home."
   },
   "home": {
-    "metaTitle": "AMYRAX — Gourmet Cookies, Buwanang Pinapadala",
-    "metaDesc": "Tuklasin ang artisanal gourmet cookies at mag-subscribe sa AMYRAX para sa sariwang inihurnong cookies.",
+    "metaTitle": "HAZOREX — Gourmet Cookies, Buwanang Pinapadala",
+    "metaDesc": "Tuklasin ang artisanal gourmet cookies at mag-subscribe sa HAZOREX para sa sariwang inihurnong cookies.",
     "welcome": "Maligayang pagbabalik",
     "greeting": "Magandang umaga, {{name}}!",
     "freshToday": "Mga bagong batch ngayong araw",
@@ -180,7 +180,7 @@
       "buildPackAlt": "Custom cookie box",
       "subscriptionTitle": "Buwanang Subscription",
       "subscriptionLink": "Tuklasin ang club",
-      "subscriptionClub": "AMYRAX CLUB",
+      "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Lingguhang sariwang inihurnong padala",
       "subscriptionSubcopy": "Kanselahin anumang oras · Kasama na ang padala",
       "subscriptionPrice": "Simula sa $24/buwan",
@@ -207,14 +207,14 @@
   },
   "_reelsLegacy": {},
   "explore": {
-    "metaTitle": "Mag-browse ng Cookies — AMYRAX",
-    "metaDesc": "Tuklasin ang buong hanay ng artisanal gourmet cookies sa AMYRAX.",
+    "metaTitle": "Mag-browse ng Cookies — HAZOREX",
+    "metaDesc": "Tuklasin ang buong hanay ng artisanal gourmet cookies sa HAZOREX.",
     "title": "Mag-browse ng Cookies",
     "sort": "Ayusin",
     "price": "Presyo"
   },
   "menu": {
-    "metaTitle": "Menu — AMYRAX",
+    "metaTitle": "Menu — HAZOREX",
     "metaDesc": "Tingnan ang aming klasikong cookies.",
     "title": "Cookies",
     "tabs": {
@@ -310,8 +310,8 @@
     "peanuts": "MANI"
   },
   "subscribe": {
-    "metaTitle": "Mga Subscription Plan — AMYRAX",
-    "metaDesc": "Pumili ng AMYRAX cookie subscription plan. Padala tuwing Lunes at Biyernes lamang.",
+    "metaTitle": "Mga Subscription Plan — HAZOREX",
+    "metaDesc": "Pumili ng HAZOREX cookie subscription plan. Padala tuwing Lunes at Biyernes lamang.",
     "title": "Mga Subscription Plan",
     "deliveryBadge": "Padala tuwing Lunes at Biyernes lamang",
     "activePlan": "Aktibong Plan",
@@ -352,8 +352,8 @@
     }
   },
   "profile": {
-    "metaTitle": "Aking Profile — AMYRAX",
-    "metaDesc": "Pamahalaan ang iyong AMYRAX account, mga order, at subscription.",
+    "metaTitle": "Aking Profile — HAZOREX",
+    "metaDesc": "Pamahalaan ang iyong HAZOREX account, mga order, at subscription.",
     "title": "Aking Profile",
     "settings": "Mga setting",
     "city": "New York",
@@ -377,7 +377,7 @@
     },
     "qr": {
       "title": "Iyong QR Code",
-      "description": "I-scan para bisitahin ang AMYRAX store mula sa anumang device.",
+      "description": "I-scan para bisitahin ang HAZOREX store mula sa anumang device.",
       "download": "I-download ang QR",
       "copyLink": "Kopyahin ang link",
       "downloaded": "Na-download ang QR",
@@ -678,15 +678,15 @@
     "total": "Kabuuan"
   },
   "donate": {
-    "metaTitle": "Mag-donate — AMYRAX",
-    "metaDesc": "Suportahan ang AMYRAX sa pamamagitan ng donasyon at i-unlock ang mga eksklusibong badge: Blue, Bronze, Gold, Premium, Crown at Supreme Star.",
+    "metaTitle": "Mag-donate — HAZOREX",
+    "metaDesc": "Suportahan ang HAZOREX sa pamamagitan ng donasyon at i-unlock ang mga eksklusibong badge: Blue, Bronze, Gold, Premium, Crown at Supreme Star.",
     "thanks": "Salamat sa iyong donasyon! Magsisimulang gumana ang iyong badge sa loob ng ilang segundo.",
     "cancelled": "Kinansela ang donasyon. Maaari kang sumubok muli kahit kailan mo gusto.",
     "signInRequired": "Mag-sign in para mag-donate.",
     "minAmount": "Ang pinakamababang halaga ay $1 USD.",
     "noPaymentUrl": "Hindi natanggap ang URL para sa pagbabayad.",
     "checkoutError": "Hindi masimulan ang pagbabayad. Pakisubukang muli.",
-    "heroTitle": "Suportahan ang AMYRAX",
+    "heroTitle": "Suportahan ang HAZOREX",
     "heroDesc": "Bawat donasyon ay tumutulong sa amin na patuloy na lumikha ng mga karanasang artisan. Bilang kapalit, makakatanggap ka ng eksklusibong badge sa iyong profile.",
     "chooseAmount": "Piliin ang iyong halaga (USD)",
     "customAmount": "O maglagay ng sarili mong halaga",
@@ -708,8 +708,8 @@
     }
   },
   "shop": {
-    "metaTitle": "Tindahan · AMYRAX Cookies",
-    "metaDesc": "Mag-order ng mga gourmet AMYRAX cookie. Mga piniling kahon, buwanang paborito, at mga gift pack na ipapadala sa iyong pintuan.",
+    "metaTitle": "Tindahan · HAZOREX Cookies",
+    "metaDesc": "Mag-order ng mga gourmet HAZOREX cookie. Mga piniling kahon, buwanang paborito, at mga gift pack na ipapadala sa iyong pintuan.",
     "ogDesc": "Mga piniling kahon, buwanang paborito, at mga gift pack na ipapadala sa iyong pintuan.",
     "notFound": "Hindi nahanap",
     "title": "Aming mga Cookie",
@@ -720,8 +720,8 @@
     "addToCart": "Idagdag sa Cart"
   },
   "product": {
-    "metaTitle": "{{handle}} · Tindahan ng AMYRAX",
-    "metaDesc": "Mag-order ng {{handle}} mula sa AMYRAX Cookies.",
+    "metaTitle": "{{handle}} · Tindahan ng HAZOREX",
+    "metaDesc": "Mag-order ng {{handle}} mula sa HAZOREX Cookies.",
     "notFound": "Hindi nahanap ang produkto",
     "backToShop": "Balik sa tindahan",
     "variant": "Uri",
@@ -729,11 +729,11 @@
     "soldOut": "Naubos na"
   },
   "reel": {
-    "metaTitleFallback": "Reel · AMYRAX Cookies",
-    "metaTitleSuffix": "· AMYRAX Cookies",
+    "metaTitleFallback": "Reel · HAZOREX Cookies",
+    "metaTitleSuffix": "· HAZOREX Cookies",
     "defaultTitle": "Panoorin ang reel na ito",
-    "metaDescWithProduct": "{{product}} sa AMYRAX Cookies. Panoorin ang reel at tuklasin ang aming mga artisan cookie.",
-    "metaDescDefault": "Panoorin ang reel na ito mula sa AMYRAX Cookies — mga premium na artisan cookie.",
+    "metaDescWithProduct": "{{product}} sa HAZOREX Cookies. Panoorin ang reel at tuklasin ang aming mga artisan cookie.",
+    "metaDescDefault": "Panoorin ang reel na ito mula sa HAZOREX Cookies — mga premium na artisan cookie.",
     "notFoundTitle": "Hindi nahanap ang reel",
     "notFoundDesc": "Maaaring inalis na ang reel na ito.",
     "backHome": "Bumalik sa home",
@@ -743,7 +743,7 @@
     "moreReels": "Higit pang mga reel"
   },
   "searchPage": {
-    "metaTitle": "Mga resulta ng paghahanap — AMYRAX Cookies",
+    "metaTitle": "Mga resulta ng paghahanap — HAZOREX Cookies",
     "metaDesc": "Hanapin ang iyong mga paboritong artisan cookie.",
     "cats": {
       "all": "Lahat",
@@ -806,17 +806,17 @@
     "anonymous": "Hindi nagpakilala"
   },
   "trust": {
-    "metaTitle": "Tiwala, privacy at seguridad — AMYRAX",
-    "metaDesc": "Paano pinoprotektahan ng AMYRAX ang iyong data: pagpapatunay, mga kontrol sa pag-access, mga pagbabayad, pagpapanatili ng data, mga subprocessor, at kung paano gamitin ang iyong mga karapatan sa privacy.",
+    "metaTitle": "Tiwala, privacy at seguridad — HAZOREX",
+    "metaDesc": "Paano pinoprotektahan ng HAZOREX ang iyong data: pagpapatunay, mga kontrol sa pag-access, mga pagbabayad, pagpapanatili ng data, mga subprocessor, at kung paano gamitin ang iyong mga karapatan sa privacy.",
     "eyebrow": "Tiwala",
-    "title": "Privacy at seguridad sa AMYRAX",
-    "intro": "Ang pahinang ito ay pinapanatili ng AMYRAX team upang sagutin ang mga karaniwang tanong tungkol sa seguridad at privacy. Ito ay hindi isang independiyenteng sertipikasyon; inilalarawan nito ang mga kontrol na kasalukuyang aktibo sa aplikasyon at ang pinagsasaluhang responsibilidad sa pagitan ng AMYRAX, ng aming hosting platform (Lovable Cloud) at ng aming mga user.",
+    "title": "Privacy at seguridad sa HAZOREX",
+    "intro": "Ang pahinang ito ay pinapanatili ng HAZOREX team upang sagutin ang mga karaniwang tanong tungkol sa seguridad at privacy. Ito ay hindi isang independiyenteng sertipikasyon; inilalarawan nito ang mga kontrol na kasalukuyang aktibo sa aplikasyon at ang pinagsasaluhang responsibilidad sa pagitan ng HAZOREX, ng aming hosting platform (Lovable Cloud) at ng aming mga user.",
     "sections": {
       "authTitle": "Pagpapatunay at pag-access",
       "authP1": "Ang pag-access sa account ay ginagawa gamit ang email at password o Google sign-in. Ang mga password ay hindi kailanman iniimbak sa plain text: ang pamamahala at pag-verify ng kredensyal ay pinangangasiwaan ng managed authentication provider ng platform.",
       "authP2": "Ang bawat user ay maaari lamang basahin at baguhin ang kanilang sariling profile at ang kanilang sariling mga order, subscription at donasyon. Ang mga tungkuling administratibo ay limitado at vini-verify sa server-side.",
       "paymentsTitle": "Mga Pagbabayad",
-      "paymentsP1": "Ang mga pagbabayad ay pinoproseso sa pamamagitan ng Stripe. Hindi iniimbak o may access ang AMYRAX sa buong numero ng card, CVV o mga petsa ng expiration: ang data na ito ay direktang naglalakbay sa pagitan ng iyong browser at Stripe gamit ang kanilang mga secure element.",
+      "paymentsP1": "Ang mga pagbabayad ay pinoproseso sa pamamagitan ng Stripe. Hindi iniimbak o may access ang HAZOREX sa buong numero ng card, CVV o mga petsa ng expiration: ang data na ito ay direktang naglalakbay sa pagitan ng iyong browser at Stripe gamit ang kanilang mga secure element.",
       "dataTitle": "Data na aming kinokolekta",
       "dataP1": "Kinokolekta lamang namin ang data na kinakailangan upang mapatakbo ang aplikasyon: iyong email, isang opsyonal na display name, iyong shipping address kapag gumawa ka ng isang pisikal na pagbili, at isang kasaysayan ng mga order, subscription at donasyon na nauugnay sa iyong account.",
       "subprocessorsTitle": "Mga Subprocessor",
@@ -828,7 +828,7 @@
       "reportTitle": "Paano mag-ulat ng isyu sa seguridad",
       "reportP1": "Kung naniniwala kang nakahanap ka ng isang kahinaan, mangyaring makipag-ugnayan sa amin bago ito isapubliko. Susuriin namin ang bawat responsableng ulat at pananatilihin kang updated sa status.",
       "sharedTitle": "Pinagsasaluhang responsibilidad",
-      "sharedP1": "Ang platform na pinapatakbuhan ng AMYRAX ay nagbibigay ng seguridad sa imprastraktura, mga backup at paghihiwalay ng data. Kino-configure ng AMYRAX ang mga kontrol sa antas ng aplikasyon (mga patakaran sa pag-access, pagpapatunay ng pagbabayad, nilalaman ng email). Nag-aambag ang mga user sa pamamagitan ng paggamit ng mga natatanging password at pagpapanatiling ligtas ang kanilang email access."
+      "sharedP1": "Ang platform na pinapatakbuhan ng HAZOREX ay nagbibigay ng seguridad sa imprastraktura, mga backup at paghihiwalay ng data. Kino-configure ng HAZOREX ang mga kontrol sa antas ng aplikasyon (mga patakaran sa pag-access, pagpapatunay ng pagbabayad, nilalaman ng email). Nag-aambag ang mga user sa pamamagitan ng paggamit ng mga natatanging password at pagpapanatiling ligtas ang kanilang email access."
     },
     "backHome": "← Bumalik sa home"
   },
@@ -925,10 +925,10 @@
     "footer": "© {{year}} {{sponsor}} · Lahat ng karapatan ay nakalaan."
   },
   "unsubscribe": {
-    "metaTitle": "Mag-unsubscribe · AMYRAX",
+    "metaTitle": "Mag-unsubscribe · HAZOREX",
     "heading": "Mag-unsubscribe mula sa mga email",
     "loading": "Nilo-load…",
-    "confirmQuestion": "Kumpirmahin na nais mong ihinto ang pagtanggap ng mga email mula sa AMYRAX?",
+    "confirmQuestion": "Kumpirmahin na nais mong ihinto ang pagtanggap ng mga email mula sa HAZOREX?",
     "confirmBtn": "Kumpirmahin ang pag-unsubscribe",
     "done": "Tapos na. Hindi ka na makakatanggap ng anumang email.",
     "already": "Naka-unsubscribe na ang email na ito.",

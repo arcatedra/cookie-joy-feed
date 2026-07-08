@@ -40,8 +40,8 @@ import {
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — AMYRAX" },
-      { name: "description", content: "Manage your AMYRAX account, orders, and subscription." },
+      { title: "My Profile — HAZOREX" },
+      { name: "description", content: "Manage your HAZOREX account, orders, and subscription." },
     ],
   }),
   component: ProfilePage,

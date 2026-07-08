@@ -97,7 +97,7 @@ interface DbComment {
   author_name?: string;
 }
 
-const BRAND = "AMYRAX Cookies";
+const BRAND = "HAZOREX Cookies";
 
 const FALLBACK_VIDEO: Record<string, string> = {
   "demo-nutella": reel1.url,

@@ -26,8 +26,8 @@ import imgBox from "@/assets/cookie-box.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AMYRAX — Galletas Artesanales Premium" },
-      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en AMYRAX." },
+      { title: "HAZOREX — Galletas Artesanales Premium" },
+      { name: "description", content: "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en HAZOREX." },
     ],
   }),
   component: Home,

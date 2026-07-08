@@ -19,8 +19,8 @@ import imgMint from "@/assets/ins-mint.jpg";
 export const Route = createFileRoute("/explore")({
   head: () => ({
     meta: [
-      { title: "Browse Cookies — AMYRAX" },
-      { name: "description", content: "Explore our full range of artisanal gourmet cookies at AMYRAX." },
+      { title: "Browse Cookies — HAZOREX" },
+      { name: "description", content: "Explore our full range of artisanal gourmet cookies at HAZOREX." },
     ],
   }),
   component: ExplorePage,
