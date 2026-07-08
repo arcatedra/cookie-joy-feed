@@ -30,7 +30,7 @@ const quickLinkKeys = [
   { key: "deals", to: "/explore" },
   { key: "bestSellers", to: "/menu" },
   { key: "buildPack", to: "/menu" },
-  { key: "support", to: "/profile" },
+  { key: "support", to: "/support" },
   { key: "subscriptions", to: "/subscribe" },
 ] as const;
 
