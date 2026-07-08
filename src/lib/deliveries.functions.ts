@@ -1,8 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { syncLatestSubscriptionFromStripe } from "./subscriptions.functions";
 
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
+const ACTIVE_SET = new Set<string>(ACTIVE_STATUSES);
+const EXTRA_DELIVERY_PRICE_CENTS = 1000;
 
 export interface DeliveryStatus {
   hasActiveSubscription: boolean;
@@ -14,6 +18,8 @@ export interface DeliveryStatus {
   periodStart: string | null;
   periodEnd: string | null;
   subscriptionId: string | null;
+  supportsExtra: boolean;
+  extraPriceCents: number;
 }
 
 export interface DeliveryBookingRow {
@@ -23,6 +29,7 @@ export interface DeliveryBookingRow {
   address: string | null;
   notes: string | null;
   created_at: string;
+  is_extra?: boolean;
 }
 
 function isMondayOrFriday(d: Date) {
@@ -33,26 +40,51 @@ function isMondayOrFriday(d: Date) {
 async function loadActiveContext(
   supabase: any,
   userId: string,
+  email: string | null,
 ) {
-  const { data: sub } = await supabase
+  const { paymentsEnvironmentForHost } = await import("./stripe.server");
+  const env = paymentsEnvironmentForHost(getRequestHost());
+
+  // Same read pattern as getMySubscription: env-scoped, latest row.
+  const { data: latest } = await supabase
     .from("subscriptions")
-    .select("id, price_id, status, current_period_start, current_period_end")
+    .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
     .eq("user_id", userId)
-    .in("status", ACTIVE_STATUSES as unknown as string[])
+    .eq("environment", env)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  let sub = latest && ACTIVE_SET.has(latest.status ?? "") ? latest : null;
+
+  // Fallback: reconcile with Stripe (mirrors getMySubscription behaviour).
+  if (!sub) {
+    try {
+      const synced = await syncLatestSubscriptionFromStripe(userId, env, {
+        knownSubscriptionId: latest?.stripe_subscription_id ?? undefined,
+        email,
+      });
+      if (synced && ACTIVE_SET.has(synced.status ?? "")) {
+        const { data: refreshed } = await supabase
+          .from("subscriptions")
+          .select("id, price_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id")
+          .eq("stripe_subscription_id", synced.stripe_subscription_id)
+          .maybeSingle();
+        sub = refreshed ?? null;
+      }
+    } catch (e) {
+      console.error("[deliveries] stripe fallback failed", e);
+    }
+  }
 
   if (!sub) return null;
 
   const { data: plan } = await supabase
     .from("subscription_plans")
-    .select("name, deliveries_per_month")
+    .select("name, deliveries_per_month, price_id")
     .eq("price_id", sub.price_id)
     .maybeSingle();
 
-
-  // Fallback to current calendar month if Stripe period is missing
   const now = new Date();
   const start = sub.current_period_start
     ? new Date(sub.current_period_start)
@@ -63,11 +95,14 @@ async function loadActiveContext(
 
   return {
     sub,
+    env,
     planName: plan?.name ?? "Plan",
     deliveriesPerMonth: plan?.deliveries_per_month ?? 0,
+    supportsExtra: sub.price_id === "plan_starter_monthly",
     periodStart: start,
     periodEnd: end,
   };
+
 }
 
 export const getMyDeliveryStatus = createServerFn({ method: "GET" })
