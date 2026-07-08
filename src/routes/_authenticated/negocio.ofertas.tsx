@@ -117,23 +117,24 @@ function OffersPage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
-      <Link
-        to="/negocio"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Mi negocio
-      </Link>
-
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-serif text-2xl font-bold">Ofertas</h1>
-        <button
-          onClick={() => setShowForm((s) => !s)}
-          className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-4xl px-4 py-8">
+        <Link
+          to="/negocio"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-[#4a3525] hover:text-[#1e3a5f]"
         >
-          <Plus className="h-4 w-4" /> Nueva
-        </button>
-      </div>
+          <ArrowLeft className="h-4 w-4" /> Mi negocio
+        </Link>
+
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="font-serif text-2xl font-bold text-[#1e3a5f]">Ofertas</h1>
+          <button
+            onClick={() => setShowForm((s) => !s)}
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-3 py-2 text-sm font-semibold text-white hover:bg-[#16294a]"
+          >
+            <Plus className="h-4 w-4" /> Nueva
+          </button>
+        </div>
 
       {showForm && (
         <form
