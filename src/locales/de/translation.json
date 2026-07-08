@@ -1361,5 +1361,94 @@
       "b3": "Lieferung inbegriffen",
       "b4": "Verkaufs-Dashboard"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Kundensupport — HAZOREX",
+    "metaDesc": "Kontaktiere das HAZOREX-Support-Team. E-Mail und FAQs zu Bestellungen, Lieferungen, Abos und dem Gewinnspiel.",
+    "metaOg": "Wir sind für dich da. Schreib uns an soporte@hazorex.com.",
+    "heroTitle": "Wie können wir helfen?",
+    "heroSubtitle": "Unser Team beantwortet alle Fragen zu deinen Bestellungen, Lieferungen, deinem Abo oder dem täglichen Gewinnspiel.",
+    "contactTitle": "Kontakt",
+    "contactSubtitle": "Wir antworten während der Geschäftszeiten, in der Regel innerhalb von 24 Stunden.",
+    "emailLabel": "E-Mail",
+    "inboxLabel": "Postfach",
+    "inboxCta": "Vorschlag senden",
+    "faqTitle": "Häufige Fragen",
+    "faq": {
+      "order": {
+        "q": "Wie gebe ich eine Bestellung auf?",
+        "a": "Wähle deine Produkte im Shop, lege sie in den Warenkorb und schließe die Bestellung ab. Du erhältst eine Bestätigungs-E-Mail mit den Details."
+      },
+      "delivery": {
+        "q": "Wie lange dauert die Lieferung?",
+        "a": "Die Lieferzeiten hängen von deiner Region ab. Du erhältst per E-Mail Updates zu jedem Schritt deiner Sendung."
+      },
+      "cancel": {
+        "q": "Wie kündige ich mein Abo?",
+        "a": "Gehe zu deinem Profil, öffne dein aktives Abo und klicke auf kündigen. Wenn du Hilfe brauchst, schreib uns an soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "Wie nehme ich am täglichen Gewinnspiel teil?",
+        "a": "Du kannst jeden Tag kostenlos auf der Gewinnspielseite teilnehmen. Die offiziellen Regeln findest du unter /sweepstakes-rules."
+      }
+    },
+    "footerPre": "Nicht gefunden, was du suchst? Schreib uns an"
+  },
+  "privacyPage": {
+    "metaTitle": "Datenschutzerklärung — Hazorex",
+    "metaDesc": "Datenschutzerklärung von Hazorex: welche Daten wir erfassen, wie wir sie verwenden und deine Rechte.",
+    "back": "← Zurück zur Startseite",
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Letzte Aktualisierung:",
+    "s1": {
+      "title": "1. Wer wir sind",
+      "body": "Hazorex („wir\" oder „die Plattform\") betreibt die Website <strong>{{domain}}</strong>. Diese Erklärung beschreibt, welche personenbezogenen Daten wir erfassen, wie wir sie verwenden und welche Rechte du hast."
+    },
+    "s2": {
+      "title": "2. Erfasste Daten",
+      "bullets": [
+        "<strong>Kontodaten:</strong> Name, E-Mail-Adresse und Profilbild beim Anmelden (z. B. mit Google).",
+        "<strong>Nutzungsdaten:</strong> besuchte Seiten, Interaktionen mit dem Gewinnspiel und Benachrichtigungseinstellungen.",
+        "<strong>Technische Daten:</strong> IP-Adresse, Browser und Betriebssystem, zu Sicherheits- und Diagnosezwecken."
+      ]
+    },
+    "s3": {
+      "title": "3. Wofür wir sie nutzen",
+      "bullets": [
+        "Dein Konto erstellen und verwalten.",
+        "Deine Teilnahme am täglichen Gewinnspiel ermöglichen.",
+        "Dir Benachrichtigungen senden, denen du zugestimmt hast.",
+        "Betrug und Missbrauch verhindern.",
+        "Gesetzliche Pflichten erfüllen."
+      ]
+    },
+    "s4": {
+      "title": "4. Anmeldung mit Google",
+      "body": "Wenn du dich mit Google anmeldest, erhalten wir nur deine E-Mail, deinen Namen und dein Profilbild. Wir greifen nicht auf dein Gmail, deine Kontakte oder andere Daten deines Google-Kontos zu."
+    },
+    "s5": {
+      "title": "5. Weitergabe von Daten",
+      "body": "Wir verkaufen deine Daten nicht. Wir teilen sie nur mit Anbietern, die uns beim Betrieb der Plattform helfen (Hosting, E-Mail-Versand, Analytics), und wenn dies gesetzlich vorgeschrieben ist."
+    },
+    "s6": {
+      "title": "6. Deine Rechte",
+      "body": "Du kannst jederzeit Zugriff, Berichtigung oder Löschung deiner Daten anfordern, indem du an <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a> schreibst."
+    },
+    "s7": {
+      "title": "7. Speicherdauer",
+      "body": "Wir speichern deine Daten, solange dein Konto aktiv ist. Wenn du dein Konto löschst, löschen wir deine personenbezogenen Daten, ausgenommen was zur Erfüllung gesetzlicher Pflichten erforderlich ist."
+    },
+    "s8": {
+      "title": "8. Änderungen",
+      "body": "Wir können diese Erklärung aktualisieren. Änderungen veröffentlichen wir auf dieser Seite und informieren dich, wenn es relevant ist."
+    },
+    "s9": {
+      "title": "9. Kontakt",
+      "body": "Bei Fragen zum Datenschutz: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Dein Warenkorb — HAZOREX",
+    "metaDesc": "Überprüfe die Artikel in deinem Warenkorb, bevor du zur Kasse gehst."
   }
 }

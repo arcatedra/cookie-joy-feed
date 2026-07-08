@@ -1358,5 +1358,94 @@
       "b3": "Delivery incluido",
       "b4": "Panel de ventas"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Atención al cliente — HAZOREX",
+    "metaDesc": "Contacta con el equipo de soporte de HAZOREX. Correo, preguntas frecuentes sobre pedidos, entregas, suscripciones y sorteo.",
+    "metaOg": "Estamos aquí para ayudarte. Escríbenos a soporte@hazorex.com.",
+    "heroTitle": "¿En qué podemos ayudarte?",
+    "heroSubtitle": "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos, entregas, suscripción o el sorteo diario.",
+    "contactTitle": "Contáctanos",
+    "contactSubtitle": "Respondemos en horario laboral, normalmente en menos de 24 horas.",
+    "emailLabel": "Correo",
+    "inboxLabel": "Buzón",
+    "inboxCta": "Envía una sugerencia",
+    "faqTitle": "Preguntas frecuentes",
+    "faq": {
+      "order": {
+        "q": "¿Cómo hago un pedido?",
+        "a": "Elige tus productos en la tienda, añádelos a la cesta y completa el pago desde el carrito. Recibirás confirmación por correo con los detalles."
+      },
+      "delivery": {
+        "q": "¿Cuánto tarda la entrega?",
+        "a": "Los tiempos de entrega dependen de tu zona. Recibirás actualizaciones por correo con el estado de tu envío en cada etapa."
+      },
+      "cancel": {
+        "q": "¿Cómo cancelo mi suscripción?",
+        "a": "Entra en tu perfil, ve a la sección de suscripción activa y pulsa cancelar. Si necesitas ayuda, escríbenos a soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "¿Cómo participo en el sorteo diario?",
+        "a": "Puedes participar cada día de forma gratuita desde la página del sorteo. Consulta las reglas oficiales en /sweepstakes-rules."
+      }
+    },
+    "footerPre": "¿No encontraste lo que buscabas? Escríbenos a"
+  },
+  "privacyPage": {
+    "metaTitle": "Política de Privacidad — Hazorex",
+    "metaDesc": "Política de Privacidad de Hazorex: qué datos recopilamos, cómo los usamos y tus derechos.",
+    "back": "← Volver al inicio",
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última actualización:",
+    "s1": {
+      "title": "1. Quiénes somos",
+      "body": "Hazorex (en adelante, \"nosotros\" o \"la plataforma\") opera el sitio web <strong>{{domain}}</strong>. Esta política explica qué información personal recopilamos, cómo la usamos y qué derechos tienes sobre ella."
+    },
+    "s2": {
+      "title": "2. Datos que recopilamos",
+      "bullets": [
+        "<strong>Datos de cuenta:</strong> nombre, dirección de correo electrónico y foto de perfil cuando inicias sesión (por ejemplo, con Google).",
+        "<strong>Datos de uso:</strong> páginas visitadas, interacciones con el sorteo y preferencias de notificación.",
+        "<strong>Datos técnicos:</strong> dirección IP, tipo de navegador y sistema operativo, con fines de seguridad y diagnóstico."
+      ]
+    },
+    "s3": {
+      "title": "3. Para qué los usamos",
+      "bullets": [
+        "Crear y mantener tu cuenta.",
+        "Permitirte participar en el sorteo diario.",
+        "Enviarte notificaciones que tú hayas autorizado.",
+        "Prevenir fraude y abuso.",
+        "Cumplir con obligaciones legales."
+      ]
+    },
+    "s4": {
+      "title": "4. Inicio de sesión con Google",
+      "body": "Si te registras con Google, recibimos únicamente tu correo, tu nombre y tu foto de perfil. No accedemos a tu Gmail, contactos ni a ningún otro dato de tu cuenta Google."
+    },
+    "s5": {
+      "title": "5. Compartir información",
+      "body": "No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a operar la plataforma (hosting, envío de emails, analítica) y cuando la ley lo exige."
+    },
+    "s6": {
+      "title": "6. Tus derechos",
+      "body": "Puedes solicitar acceso, corrección o eliminación de tus datos en cualquier momento escribiendo a <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s7": {
+      "title": "7. Conservación",
+      "body": "Conservamos tus datos mientras tu cuenta esté activa. Si eliminas tu cuenta, borramos tu información personal salvo lo necesario para cumplir obligaciones legales."
+    },
+    "s8": {
+      "title": "8. Cambios",
+      "body": "Podemos actualizar esta política. Publicaremos cualquier cambio en esta misma página y, si es relevante, te lo notificaremos."
+    },
+    "s9": {
+      "title": "9. Contacto",
+      "body": "Para cualquier duda sobre privacidad: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Tu carrito — HAZOREX",
+    "metaDesc": "Revisa los productos de tu carrito antes de finalizar la compra."
   }
 }

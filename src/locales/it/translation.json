@@ -1358,5 +1358,94 @@
       "b3": "Consegna inclusa",
       "b4": "Pannello di vendita"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Assistenza clienti — HAZOREX",
+    "metaDesc": "Contatta il team di supporto HAZOREX. E-mail e FAQ su ordini, consegne, abbonamenti e concorso.",
+    "metaOg": "Siamo qui per aiutarti. Scrivici a soporte@hazorex.com.",
+    "heroTitle": "Come possiamo aiutarti?",
+    "heroSubtitle": "Il nostro team è qui per rispondere a qualsiasi domanda su ordini, consegne, abbonamento o il concorso giornaliero.",
+    "contactTitle": "Contattaci",
+    "contactSubtitle": "Rispondiamo negli orari lavorativi, di solito entro 24 ore.",
+    "emailLabel": "E-mail",
+    "inboxLabel": "Casella",
+    "inboxCta": "Invia un suggerimento",
+    "faqTitle": "Domande frequenti",
+    "faq": {
+      "order": {
+        "q": "Come effettuo un ordine?",
+        "a": "Scegli i tuoi prodotti nello shop, aggiungili al carrello e completa il pagamento. Riceverai un'e-mail di conferma con i dettagli."
+      },
+      "delivery": {
+        "q": "Quanto ci mette la consegna?",
+        "a": "I tempi dipendono dalla tua zona. Riceverai aggiornamenti via e-mail sullo stato della spedizione in ogni fase."
+      },
+      "cancel": {
+        "q": "Come annullo il mio abbonamento?",
+        "a": "Vai al tuo profilo, apri l'abbonamento attivo e clicca su annulla. Se hai bisogno di aiuto, scrivici a soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "Come partecipo al concorso giornaliero?",
+        "a": "Puoi partecipare gratis ogni giorno dalla pagina del concorso. Consulta il regolamento ufficiale su /sweepstakes-rules."
+      }
+    },
+    "footerPre": "Non hai trovato quello che cercavi? Scrivici a"
+  },
+  "privacyPage": {
+    "metaTitle": "Informativa sulla privacy — Hazorex",
+    "metaDesc": "Informativa sulla privacy di Hazorex: quali dati raccogliamo, come li usiamo e i tuoi diritti.",
+    "back": "← Torna alla home",
+    "title": "Informativa sulla privacy",
+    "lastUpdated": "Ultimo aggiornamento:",
+    "s1": {
+      "title": "1. Chi siamo",
+      "body": "Hazorex (\"noi\" o \"la piattaforma\") gestisce il sito <strong>{{domain}}</strong>. Questa informativa spiega quali informazioni personali raccogliamo, come le usiamo e quali diritti hai."
+    },
+    "s2": {
+      "title": "2. Dati che raccogliamo",
+      "bullets": [
+        "<strong>Dati dell'account:</strong> nome, indirizzo e-mail e foto profilo al momento dell'accesso (ad esempio con Google).",
+        "<strong>Dati di utilizzo:</strong> pagine visitate, interazioni con il concorso e preferenze di notifica.",
+        "<strong>Dati tecnici:</strong> indirizzo IP, tipo di browser e sistema operativo, per finalità di sicurezza e diagnostica."
+      ]
+    },
+    "s3": {
+      "title": "3. A cosa servono",
+      "bullets": [
+        "Creare e gestire il tuo account.",
+        "Permetterti di partecipare al concorso giornaliero.",
+        "Inviarti le notifiche che hai autorizzato.",
+        "Prevenire frodi e abusi.",
+        "Adempiere agli obblighi di legge."
+      ]
+    },
+    "s4": {
+      "title": "4. Accesso con Google",
+      "body": "Se ti registri con Google, riceviamo solo la tua e-mail, il tuo nome e la foto profilo. Non accediamo alla tua Gmail, ai contatti o ad altri dati del tuo account Google."
+    },
+    "s5": {
+      "title": "5. Condivisione delle informazioni",
+      "body": "Non vendiamo i tuoi dati. Li condividiamo solo con fornitori che ci aiutano a gestire la piattaforma (hosting, invio e-mail, analytics) e quando richiesto dalla legge."
+    },
+    "s6": {
+      "title": "6. I tuoi diritti",
+      "body": "Puoi richiedere l'accesso, la correzione o la cancellazione dei tuoi dati in qualsiasi momento scrivendo a <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s7": {
+      "title": "7. Conservazione",
+      "body": "Conserviamo i tuoi dati finché il tuo account è attivo. Se elimini il tuo account, cancelliamo le tue informazioni personali salvo quanto necessario per adempiere agli obblighi di legge."
+    },
+    "s8": {
+      "title": "8. Modifiche",
+      "body": "Possiamo aggiornare questa informativa. Pubblicheremo eventuali modifiche in questa pagina e, se rilevante, te lo comunicheremo."
+    },
+    "s9": {
+      "title": "9. Contatti",
+      "body": "Per qualsiasi domanda sulla privacy: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Il tuo carrello — HAZOREX",
+    "metaDesc": "Controlla gli articoli nel carrello prima di completare l'acquisto."
   }
 }

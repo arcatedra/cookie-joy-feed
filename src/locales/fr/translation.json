@@ -1358,5 +1358,94 @@
       "b3": "Livraison incluse",
       "b4": "Tableau de bord des ventes"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Service client — HAZOREX",
+    "metaDesc": "Contactez l'équipe de support HAZOREX. E-mail et questions fréquentes sur les commandes, livraisons, abonnements et le tirage.",
+    "metaOg": "Nous sommes là pour vous aider. Écrivez-nous à soporte@hazorex.com.",
+    "heroTitle": "Comment pouvons-nous vous aider ?",
+    "heroSubtitle": "Notre équipe est là pour répondre à toutes vos questions sur vos commandes, livraisons, abonnement ou le tirage quotidien.",
+    "contactTitle": "Nous contacter",
+    "contactSubtitle": "Nous répondons pendant les heures ouvrables, généralement en moins de 24 heures.",
+    "emailLabel": "E-mail",
+    "inboxLabel": "Boîte",
+    "inboxCta": "Envoyer une suggestion",
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "order": {
+        "q": "Comment passer une commande ?",
+        "a": "Choisissez vos produits dans la boutique, ajoutez-les au panier et finalisez le paiement. Vous recevrez une confirmation par e-mail avec les détails."
+      },
+      "delivery": {
+        "q": "Combien de temps prend la livraison ?",
+        "a": "Les délais dépendent de votre zone. Vous recevrez des mises à jour par e-mail sur le statut de votre expédition à chaque étape."
+      },
+      "cancel": {
+        "q": "Comment annuler mon abonnement ?",
+        "a": "Accédez à votre profil, ouvrez votre abonnement actif et cliquez sur annuler. Si vous avez besoin d'aide, écrivez-nous à soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "Comment participer au tirage quotidien ?",
+        "a": "Vous pouvez participer gratuitement chaque jour depuis la page du tirage. Consultez le règlement officiel sur /sweepstakes-rules."
+      }
+    },
+    "footerPre": "Vous n'avez pas trouvé ce que vous cherchiez ? Écrivez-nous à"
+  },
+  "privacyPage": {
+    "metaTitle": "Politique de confidentialité — Hazorex",
+    "metaDesc": "Politique de confidentialité de Hazorex : quelles données nous collectons, comment nous les utilisons et vos droits.",
+    "back": "← Retour à l'accueil",
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour :",
+    "s1": {
+      "title": "1. Qui sommes-nous",
+      "body": "Hazorex (« nous » ou « la plateforme ») exploite le site <strong>{{domain}}</strong>. Cette politique explique quelles informations personnelles nous collectons, comment nous les utilisons et quels sont vos droits."
+    },
+    "s2": {
+      "title": "2. Données collectées",
+      "bullets": [
+        "<strong>Données du compte :</strong> nom, adresse e-mail et photo de profil lors de la connexion (par exemple, avec Google).",
+        "<strong>Données d'utilisation :</strong> pages visitées, interactions avec le tirage et préférences de notification.",
+        "<strong>Données techniques :</strong> adresse IP, navigateur et système d'exploitation, à des fins de sécurité et de diagnostic."
+      ]
+    },
+    "s3": {
+      "title": "3. Utilisation",
+      "bullets": [
+        "Créer et maintenir votre compte.",
+        "Vous permettre de participer au tirage quotidien.",
+        "Vous envoyer les notifications que vous avez autorisées.",
+        "Prévenir la fraude et les abus.",
+        "Respecter les obligations légales."
+      ]
+    },
+    "s4": {
+      "title": "4. Connexion avec Google",
+      "body": "Si vous vous inscrivez avec Google, nous recevons uniquement votre e-mail, votre nom et votre photo de profil. Nous n'accédons pas à votre Gmail, à vos contacts ni à aucune autre donnée de votre compte Google."
+    },
+    "s5": {
+      "title": "5. Partage d'informations",
+      "body": "Nous ne vendons pas vos données. Nous les partageons uniquement avec des prestataires qui nous aident à exploiter la plateforme (hébergement, envoi d'e-mails, analytics) et lorsque la loi l'exige."
+    },
+    "s6": {
+      "title": "6. Vos droits",
+      "body": "Vous pouvez demander l'accès, la rectification ou la suppression de vos données à tout moment en écrivant à <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s7": {
+      "title": "7. Conservation",
+      "body": "Nous conservons vos données tant que votre compte est actif. Si vous supprimez votre compte, nous effaçons vos informations personnelles, sauf ce qui est nécessaire pour respecter nos obligations légales."
+    },
+    "s8": {
+      "title": "8. Modifications",
+      "body": "Nous pouvons mettre à jour cette politique. Nous publierons tout changement sur cette page et, si nécessaire, vous en informerons."
+    },
+    "s9": {
+      "title": "9. Contact",
+      "body": "Pour toute question de confidentialité : <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Votre panier — HAZOREX",
+    "metaDesc": "Vérifiez les articles de votre panier avant de finaliser la commande."
   }
 }
