@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import {
   Bike,
   Car,
@@ -30,22 +31,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteFooter } from "@/components/SiteFooter";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/repartidores")({
   head: () => ({
     meta: [
-      { title: "Sé repartidor · Hazorex" },
-      {
-        name: "description",
-        content:
-          "Únete al equipo de repartidores de Hazorex. Postúlate en minutos, elige tus horarios y gana dinero entregando pedidos en tu ciudad.",
-      },
-      { property: "og:title", content: "Sé repartidor · Hazorex" },
-      {
-        property: "og:description",
-        content:
-          "Postúlate como repartidor de Hazorex. Horarios flexibles, pagos semanales y proceso de aprobación transparente.",
-      },
+      { title: i18n.t("repartidoresPage.metaTitle") },
+      { name: "description", content: i18n.t("repartidoresPage.metaDesc") },
+      { property: "og:title", content: i18n.t("repartidoresPage.metaTitle") },
+      { property: "og:description", content: i18n.t("repartidoresPage.metaOg") },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://hazorex.com/repartidores" },
     ],
@@ -63,6 +57,7 @@ import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
 const ZONES = NYC_DELIVERY_ZONES;
 
 function RepartidoresLanding() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
 
   const { data: driver, isLoading: driverLoading, refetch: refetchDriver } = useQuery({
@@ -90,19 +85,22 @@ function RepartidoresLanding() {
 
         <div className="relative mx-auto max-w-5xl px-4 py-14 md:px-6 md:py-20">
           <Badge className="mb-4 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#E6C35C]">
-            <Zap className="mr-1 size-3.5" /> Postúlate en 5 minutos
+            <Zap className="mr-1 size-3.5" /> {t("repartidoresPage.hero.badge")}
           </Badge>
 
           <h1 className="font-serif text-4xl font-black leading-[1.05] md:text-6xl">
-            Gana hasta <span className="text-[#E6C35C]">$25/hora</span>
+            {t("repartidoresPage.hero.titlePart1")}{" "}
+            <span className="text-[#E6C35C]">{t("repartidoresPage.hero.titleHighlight")}</span>
             <br className="hidden md:block" />
-            repartiendo con Hazorex
+            {t("repartidoresPage.hero.titlePart2")}
           </h1>
 
           <p className="mt-5 max-w-2xl text-lg text-white/85 md:text-xl">
-            Tú manejas tu tiempo, nosotros los pedidos. Solo necesitas{" "}
-            <span className="font-semibold text-[#E6C35C]">moto o auto</span>, licencia
-            vigente y ganas de rodar.
+            {t("repartidoresPage.hero.subtitlePart1")}{" "}
+            <span className="font-semibold text-[#E6C35C]">
+              {t("repartidoresPage.hero.subtitleHighlight")}
+            </span>
+            {t("repartidoresPage.hero.subtitlePart2")}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -126,22 +124,22 @@ function RepartidoresLanding() {
               href="#requisitos"
               className="text-sm text-white/70 underline-offset-4 hover:text-[#E6C35C] hover:underline"
             >
-              Ver requisitos →
+              {t("repartidoresPage.hero.viewRequirements")}
             </a>
           </div>
 
           <div className="mt-10 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 sm:grid-cols-4">
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <Clock className="size-4 shrink-0 text-[#E6C35C]" /> Horarios flexibles
+              <Clock className="size-4 shrink-0 text-[#E6C35C]" /> {t("repartidoresPage.hero.perks.flexible")}
             </div>
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <DollarSign className="size-4 shrink-0 text-[#E6C35C]" /> Pagos semanales
+              <DollarSign className="size-4 shrink-0 text-[#E6C35C]" /> {t("repartidoresPage.hero.perks.weekly")}
             </div>
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <ShieldCheck className="size-4 shrink-0 text-[#E6C35C]" /> Sin cuota inicial
+              <ShieldCheck className="size-4 shrink-0 text-[#E6C35C]" /> {t("repartidoresPage.hero.perks.noFee")}
             </div>
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <CheckCircle2 className="size-4 shrink-0 text-[#E6C35C]" /> Respuesta en 48 h
+              <CheckCircle2 className="size-4 shrink-0 text-[#E6C35C]" /> {t("repartidoresPage.hero.perks.reply48")}
             </div>
           </div>
         </div>
@@ -158,17 +156,15 @@ function RepartidoresLanding() {
         ) : !user ? (
           <Card className="border-[#c8862e]/30 bg-white">
             <CardContent className="p-8 text-center">
-              <h2 className="font-serif text-2xl font-bold">Empieza tu postulación</h2>
-              <p className="mt-2 text-[#4a3525]">
-                Primero inicia sesión o crea tu cuenta de Hazorex. Es rápido.
-              </p>
+              <h2 className="font-serif text-2xl font-bold">{t("repartidoresPage.signInGate.title")}</h2>
+              <p className="mt-2 text-[#4a3525]">{t("repartidoresPage.signInGate.body")}</p>
               <Button
                 asChild
                 size="lg"
                 className="mt-6 min-h-11 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#d4b04a]"
               >
                 <Link to="/auth" search={{ redirect: "/repartidores" }}>
-                  Iniciar sesión y postularme
+                  {t("repartidoresPage.signInGate.cta")}
                 </Link>
               </Button>
             </CardContent>
@@ -185,43 +181,40 @@ function RepartidoresLanding() {
           <Card className="border-[#c8862e]/30 bg-white">
             <CardContent className="p-8 text-center">
               <h2 className="font-serif text-2xl font-bold">
-                Todo listo para tu postulación
+                {t("repartidoresPage.readyGate.title")}
               </h2>
-              <p className="mt-2 text-[#4a3525]">
-                Tarda ~5 minutos. Ten a la mano tu identificación, licencia y seguro
-                vigentes.
-              </p>
+              <p className="mt-2 text-[#4a3525]">{t("repartidoresPage.readyGate.body")}</p>
               <Button
                 size="lg"
                 className="mt-6 min-h-11 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#d4b04a]"
                 onClick={() => setShowForm(true)}
               >
-                Empezar postulación
+                {t("repartidoresPage.readyGate.cta")}
               </Button>
             </CardContent>
           </Card>
         )}
       </section>
 
-      {/* VEHÍCULOS — solo motorizados (canonical statement) */}
+      {/* VEHÍCULOS */}
       <section id="requisitos" className="mx-auto max-w-5xl px-4 py-14 md:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Badge
             variant="outline"
             className="mb-3 border-[#1e3a5f]/20 bg-white text-[#1e3a5f]"
           >
-            Vehículos aceptados
+            {t("repartidoresPage.vehicles.badge")}
           </Badge>
           <h2 className="mb-3 font-serif text-3xl font-bold md:text-4xl">
-            Solo aceptamos moto o auto
+            {t("repartidoresPage.vehicles.title")}
           </h2>
           <p className="mb-2 text-[#4a3525]">
-            Para garantizar entregas rápidas y con cobertura completa, en Hazorex{" "}
-            <strong>solo aceptamos repartidores en moto o auto</strong>. No aceptamos
-            entregas a pie ni en bicicleta.
+            {t("repartidoresPage.vehicles.bodyPart1")}{" "}
+            <strong>{t("repartidoresPage.vehicles.bodyStrong")}</strong>
+            {t("repartidoresPage.vehicles.bodyPart2")}
           </p>
           <p className="mb-10 text-sm text-[#4a3525]/70">
-            Elige el tuyo abajo y te pediremos solo los documentos correspondientes.
+            {t("repartidoresPage.vehicles.hint")}
           </p>
         </div>
 
@@ -229,15 +222,23 @@ function RepartidoresLanding() {
           {[
             {
               icon: Bike,
-              label: "Moto",
-              desc: "Ideal para tráfico denso. Entregas más rápidas.",
-              perks: ["Licencia A vigente", "Seguro del vehículo vigente", "Casco"],
+              label: t("repartidoresPage.vehicles.moto.label"),
+              desc: t("repartidoresPage.vehicles.moto.desc"),
+              perks: [
+                t("repartidoresPage.vehicles.moto.perk1"),
+                t("repartidoresPage.vehicles.moto.perk2"),
+                t("repartidoresPage.vehicles.moto.perk3"),
+              ],
             },
             {
               icon: Car,
-              label: "Auto",
-              desc: "Perfecto para pedidos grandes y clima variable.",
-              perks: ["Licencia B vigente", "Seguro del vehículo vigente", "Revisión al día"],
+              label: t("repartidoresPage.vehicles.auto.label"),
+              desc: t("repartidoresPage.vehicles.auto.desc"),
+              perks: [
+                t("repartidoresPage.vehicles.auto.perk1"),
+                t("repartidoresPage.vehicles.auto.perk2"),
+                t("repartidoresPage.vehicles.auto.perk3"),
+              ],
             },
           ].map(({ icon: Icon, label, desc, perks }) => (
             <Card
@@ -267,30 +268,17 @@ function RepartidoresLanding() {
         </div>
       </section>
 
-      {/* CÓMO FUNCIONA */}
+      {/* HOW IT WORKS */}
       <section className="border-t border-[#c8862e]/20 bg-white">
         <div className="mx-auto max-w-5xl px-4 py-14 md:px-6">
-          <h2 className="mb-10 text-center font-serif text-3xl font-bold">Cómo funciona</h2>
+          <h2 className="mb-10 text-center font-serif text-3xl font-bold">
+            {t("repartidoresPage.how.title")}
+          </h2>
           <ol className="grid gap-6 md:grid-cols-3">
             {[
-              {
-                n: 1,
-                title: "Postúlate",
-                body: "Completa tus datos, elige tu vehículo y sube los documentos que te pedimos.",
-                icon: FileCheck2,
-              },
-              {
-                n: 2,
-                title: "Te revisamos",
-                body: "Nuestro equipo verifica tu información en un máximo de 48 horas. Te avisamos por email.",
-                icon: ShieldCheck,
-              },
-              {
-                n: 3,
-                title: "Empieza a ganar",
-                body: "Una vez aprobado, activa tu disponibilidad y recibe pedidos cerca de ti.",
-                icon: DollarSign,
-              },
+              { n: 1, title: t("repartidoresPage.how.s1.title"), body: t("repartidoresPage.how.s1.body"), icon: FileCheck2 },
+              { n: 2, title: t("repartidoresPage.how.s2.title"), body: t("repartidoresPage.how.s2.body"), icon: ShieldCheck },
+              { n: 3, title: t("repartidoresPage.how.s3.title"), body: t("repartidoresPage.how.s3.body"), icon: DollarSign },
             ].map(({ n, title, body, icon: Icon }) => (
               <li
                 key={n}
@@ -310,19 +298,21 @@ function RepartidoresLanding() {
         </div>
       </section>
 
-      {/* REQUISITOS */}
+      {/* REQUIREMENTS */}
       <section className="mx-auto max-w-5xl px-4 py-14 md:px-6">
-        <h2 className="mb-6 text-center font-serif text-3xl font-bold">Requisitos</h2>
+        <h2 className="mb-6 text-center font-serif text-3xl font-bold">
+          {t("repartidoresPage.requirements.title")}
+        </h2>
         <Card className="border-[#c8862e]/30 bg-white">
           <CardContent className="p-6 md:p-8">
             <ul className="grid gap-4 md:grid-cols-2">
               {[
-                "Ser mayor de 18 años",
-                "Moto o auto propio (no aceptamos a pie ni bicicleta)",
-                "Licencia de conducir vigente (tipo A para moto, tipo B para auto)",
-                "Seguro del vehículo vigente",
-                "Identificación oficial vigente",
-                "Foto de perfil clara (selfie)",
+                t("repartidoresPage.requirements.r1"),
+                t("repartidoresPage.requirements.r2"),
+                t("repartidoresPage.requirements.r3"),
+                t("repartidoresPage.requirements.r4"),
+                t("repartidoresPage.requirements.r5"),
+                t("repartidoresPage.requirements.r6"),
               ].map((r) => (
                 <li key={r} className="flex items-start gap-3">
                   <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-[#1e3a5f] text-[10px] font-bold text-[#E6C35C]">
@@ -340,32 +330,15 @@ function RepartidoresLanding() {
       <section className="border-t border-[#c8862e]/20 bg-white">
         <div className="mx-auto max-w-3xl px-4 py-14 md:px-6">
           <h2 className="mb-8 text-center font-serif text-3xl font-bold">
-            Preguntas frecuentes
+            {t("repartidoresPage.faq.title")}
           </h2>
           <div className="space-y-3">
-            {[
-              {
-                q: "¿Necesito tener un vehículo propio?",
-                a: "Sí. En Hazorex solo aceptamos repartidores en moto o auto para garantizar tiempos de entrega y cobertura de zona. No aceptamos entregas a pie ni en bicicleta.",
-              },
-              {
-                q: "¿Cuánto tarda la aprobación?",
-                a: "Te respondemos en un máximo de 48 horas después de que subes todos tus documentos.",
-              },
-              {
-                q: "¿Cuándo cobro?",
-                a: "Los pagos se procesan semanalmente por el total de entregas completadas.",
-              },
-              {
-                q: "¿Puedo elegir mis horarios?",
-                a: "Sí. Tú activas tu disponibilidad cuando quieres recibir pedidos.",
-              },
-              {
-                q: "¿Qué pasa con mis documentos?",
-                a: "Tus documentos se usan únicamente para verificar tu identidad y elegibilidad. Se almacenan de forma cifrada y solo el equipo de verificación tiene acceso. Puedes solicitar su eliminación en cualquier momento.",
-              },
-            ].map(({ q, a }) => (
-              <FaqItem key={q} q={q} a={a} />
+            {(["q1","q2","q3","q4","q5"] as const).map((k) => (
+              <FaqItem
+                key={k}
+                q={t(`repartidoresPage.faq.${k}.q`)}
+                a={t(`repartidoresPage.faq.${k}.a`)}
+              />
             ))}
           </div>
         </div>
@@ -377,7 +350,7 @@ function RepartidoresLanding() {
 }
 
 // ============================================================
-// FAQ item (keyboard-accessible)
+// FAQ item
 // ============================================================
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -403,7 +376,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 // ============================================================
-// Apply CTA (hero button)
+// Apply CTA
 // ============================================================
 function ApplyCta({
   authLoading,
@@ -418,10 +391,11 @@ function ApplyCta({
   driverLoading: boolean;
   onStart: () => void;
 }) {
+  const { t } = useTranslation();
   if (authLoading || (isLoggedIn && driverLoading)) {
     return (
       <Button size="lg" disabled className="min-h-11 bg-[#E6C35C] text-[#1e3a5f]">
-        <Loader2 className="mr-2 size-4 animate-spin" /> Cargando…
+        <Loader2 className="mr-2 size-4 animate-spin" /> {t("repartidoresPage.cta.loading")}
       </Button>
     );
   }
@@ -434,7 +408,7 @@ function ApplyCta({
         className="min-h-11 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#d4b04a]"
       >
         <Link to="/auth" search={{ redirect: "/repartidores" }}>
-          Iniciar sesión y postularme
+          {t("repartidoresPage.signInGate.cta")}
         </Link>
       </Button>
     );
@@ -447,26 +421,26 @@ function ApplyCta({
         onClick={onStart}
         className="min-h-11 bg-[#E6C35C] text-[#1e3a5f] hover:bg-[#d4b04a]"
       >
-        Empezar postulación
+        {t("repartidoresPage.readyGate.cta")}
       </Button>
     );
   }
 
-  // Ya tiene una postulación
   return (
     <a
       href="#postulacion"
       className="inline-flex min-h-11 items-center rounded-md bg-[#E6C35C] px-6 py-2 font-semibold text-[#1e3a5f] hover:bg-[#d4b04a]"
     >
-      Ver estado de mi postulación
+      {t("repartidoresPage.cta.viewStatus")}
     </a>
   );
 }
 
 // ============================================================
-// Application status card (existing driver)
+// Application status card
 // ============================================================
 function ApplicationStatusCard({ driver }: { driver: DriverRow }) {
+  const { t } = useTranslation();
   const status = driver.application_status;
 
   if (status === "aprobado") {
@@ -475,50 +449,43 @@ function ApplicationStatusCard({ driver }: { driver: DriverRow }) {
         <CardContent className="p-8 text-center">
           <CheckCircle2 className="mx-auto mb-3 size-10 text-emerald-600" />
           <h2 className="font-serif text-2xl font-bold text-[#1e3a5f]">
-            ¡Estás aprobado como repartidor de Hazorex!
+            {t("repartidoresPage.status.approved.title")}
           </h2>
-          <p className="mt-2 text-[#4a3525]">
-            Entra a tu panel para configurar tu disponibilidad y empezar a repartir.
-          </p>
+          <p className="mt-2 text-[#4a3525]">{t("repartidoresPage.status.approved.body")}</p>
           <Button
             asChild
             size="lg"
             className="mt-6 min-h-11 bg-[#1e3a5f] text-white hover:bg-[#16294a]"
           >
-            <Link to="/repartidor">Ir a mi panel</Link>
+            <Link to="/repartidor">{t("repartidoresPage.status.approved.cta")}</Link>
           </Button>
         </CardContent>
       </Card>
     );
   }
 
-  const map: Record<
-    string,
-    { title: string; body: string; tone: string; icon: React.ReactNode }
-  > = {
+  const map: Record<string, { title: string; body: string; tone: string; icon: React.ReactNode }> = {
     pendiente: {
-      title: "Postulación recibida",
-      body: "Estamos revisando tu información. Te avisaremos por correo en un máximo de 48 horas.",
+      title: t("repartidoresPage.status.pending.title"),
+      body: t("repartidoresPage.status.pending.body"),
       tone: "border-amber-500/40",
       icon: <Clock className="mx-auto mb-3 size-10 text-amber-600" />,
     },
     en_revision: {
-      title: "Postulación en revisión",
-      body: "El equipo está verificando tus documentos. Te avisaremos por correo pronto.",
+      title: t("repartidoresPage.status.inReview.title"),
+      body: t("repartidoresPage.status.inReview.body"),
       tone: "border-amber-500/40",
       icon: <Clock className="mx-auto mb-3 size-10 text-amber-600" />,
     },
     rechazado: {
-      title: "Postulación rechazada",
-      body:
-        driver.rejection_reason ??
-        "Puedes escribirnos a soporte@hazorex.com para resolver los detalles y volver a postular.",
+      title: t("repartidoresPage.status.rejected.title"),
+      body: driver.rejection_reason ?? t("repartidoresPage.status.rejected.body"),
       tone: "border-red-500/40",
       icon: <FileText className="mx-auto mb-3 size-10 text-red-600" />,
     },
     suspendido: {
-      title: "Cuenta suspendida",
-      body: "Escríbenos a soporte@hazorex.com para más detalles.",
+      title: t("repartidoresPage.status.suspended.title"),
+      body: t("repartidoresPage.status.suspended.body"),
       tone: "border-red-500/40",
       icon: <FileText className="mx-auto mb-3 size-10 text-red-600" />,
     },
@@ -543,23 +510,22 @@ const MAX_FILE_MB = 5;
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/jpg", "application/pdf"];
 
 const step1Schema = z.object({
-  fullName: z.string().trim().min(3, "Ingresa tu nombre completo").max(120),
-  email: z.string().trim().email("Correo inválido").max(255),
+  fullName: z.string().trim().min(3, "err_fullName").max(120),
+  email: z.string().trim().email("err_email").max(255),
   phone: z
     .string()
     .trim()
-    .min(10, "Teléfono inválido")
+    .min(10, "err_phone_short")
     .max(20)
     .refine((v) => {
-      // Accept US 10-digit numbers, with optional +1/1 country code and common separators.
       const digits = v.replace(/[^\d]/g, "");
       if (digits.length === 10) return true;
       if (digits.length === 11 && digits.startsWith("1")) return true;
       return false;
-    }, "Ingresa un número de EE. UU. de 10 dígitos, ej. +1 (718) 555 0000"),
+    }, "err_phone_format"),
   dateOfBirth: z
     .string()
-    .min(1, "Selecciona tu fecha de nacimiento")
+    .min(1, "err_dob_required")
     .refine((v) => {
       const d = new Date(v);
       if (Number.isNaN(d.getTime())) return false;
@@ -570,17 +536,17 @@ const step1Schema = z.object({
         today.getDate(),
       );
       return d <= eighteen;
-    }, "Debes ser mayor de 18 años"),
-  city: z.string().trim().min(1, "Selecciona tu zona de reparto"),
-  address: z.string().trim().min(3, "Ingresa tu dirección").max(200),
+    }, "err_dob_underage"),
+  city: z.string().trim().min(1, "err_zone"),
+  address: z.string().trim().min(3, "err_address").max(200),
 });
 
 const step2Schema = z.object({
   vehicleType: z.enum(["moto", "auto"], {
-    errorMap: () => ({ message: "Selecciona moto o auto" }),
+    errorMap: () => ({ message: "err_vehicle" }),
   }),
-  licenseNumber: z.string().trim().min(3, "Ingresa tu número de licencia").max(50),
-  insurer: z.string().trim().min(2, "Ingresa tu aseguradora").max(80),
+  licenseNumber: z.string().trim().min(3, "err_license").max(50),
+  insurer: z.string().trim().min(2, "err_insurer").max(80),
   plateNumber: z.string().trim().max(20).optional(),
 });
 
@@ -593,29 +559,6 @@ type DocKey =
   | "seguro_vehiculo"
   | "foto_perfil"
   | "casco";
-const DOC_LABELS: Record<DocKey, { label: string; hint: string; onlyMoto?: boolean }> = {
-  identificacion: {
-    label: "Identificación oficial (licencia estatal, pasaporte o ID gubernamental)",
-    hint: "Imagen o PDF, máx 5MB",
-  },
-  licencia_conducir: {
-    label: "Licencia de conducir vigente (NY State)",
-    hint: "Imagen o PDF, máx 5MB",
-  },
-  seguro_vehiculo: {
-    label: "Seguro del vehículo vigente",
-    hint: "Imagen o PDF, máx 5MB",
-  },
-  foto_perfil: {
-    label: "Selfie clara (foto de perfil)",
-    hint: "Imagen jpg/png, máx 5MB",
-  },
-  casco: {
-    label: "Foto de tu casco DOT-aprobado (solo moto)",
-    hint: "Imagen jpg/png del casco puesto o al frente, máx 5MB",
-    onlyMoto: true,
-  },
-};
 
 function ApplicationForm({
   userEmail,
@@ -626,6 +569,7 @@ function ApplicationForm({
   userId: string;
   onSuccess: () => void;
 }) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
@@ -647,19 +591,21 @@ function ApplicationForm({
   const [files, setFiles] = useState<Partial<Record<DocKey, File>>>({});
   const [accept, setAccept] = useState(false);
 
+  const docLabel = (k: DocKey) => t(`repartidoresPage.docs.${k}.label`);
+  const docHint = (k: DocKey) => t(`repartidoresPage.docs.${k}.hint`);
+
   const validateFile = (f: File): string | null => {
     if (!ALLOWED_MIME.includes(f.type)) {
-      return "Formato no permitido. Usa JPG, PNG o PDF.";
+      return t("repartidoresPage.form.fileTypeError");
     }
     if (f.size > MAX_FILE_MB * 1024 * 1024) {
-      return `Archivo muy grande (máx ${MAX_FILE_MB}MB).`;
+      return t("repartidoresPage.form.fileSizeError", { size: MAX_FILE_MB });
     }
     return null;
   };
 
   const submitMutation = useMutation({
     mutationFn: async () => {
-      // 1) Upload files
       const uploaded: Partial<Record<DocKey, string>> = {};
       for (const [key, file] of Object.entries(files) as [DocKey, File][]) {
         if (!file) continue;
@@ -667,12 +613,8 @@ function ApplicationForm({
         const path = `${userId}/${key}-${Date.now()}.${ext}`;
         const { error: upErr } = await supabase.storage
           .from("driver-documents")
-          .upload(path, file, {
-            contentType: file.type,
-            upsert: true,
-          });
-        if (upErr) throw new Error(`No se pudo subir ${DOC_LABELS[key].label}: ${upErr.message}`);
-        // Signed URL good for 1 year — admin reviewers open via <a href>
+          .upload(path, file, { contentType: file.type, upsert: true });
+        if (upErr) throw new Error(t("repartidoresPage.form.uploadError", { doc: docLabel(key), msg: upErr.message }));
         const { data: signed, error: signErr } = await supabase.storage
           .from("driver-documents")
           .createSignedUrl(path, 60 * 60 * 24 * 365);
@@ -680,7 +622,6 @@ function ApplicationForm({
         uploaded[key] = signed.signedUrl;
       }
 
-      // 2) Insert drivers row
       const profilePhotoUrl = uploaded.foto_perfil ?? null;
       const { error: drvErr } = await supabase.from("drivers").insert({
         id: userId,
@@ -692,33 +633,25 @@ function ApplicationForm({
         city: s1.city,
         profile_photo_url: profilePhotoUrl,
       });
-      if (drvErr) throw new Error(`No se pudo crear tu registro: ${drvErr.message}`);
+      if (drvErr) throw new Error(t("repartidoresPage.form.driverError", { msg: drvErr.message }));
 
-      // 3) Vehicle
       const { error: vehErr } = await supabase.from("driver_vehicles").insert({
         driver_id: userId,
         vehicle_type: s2.vehicleType,
         plate_number: s2.plateNumber || null,
       });
-      if (vehErr) throw new Error(`No se pudo guardar tu vehículo: ${vehErr.message}`);
+      if (vehErr) throw new Error(t("repartidoresPage.form.vehicleError", { msg: vehErr.message }));
 
-      // 4) Documents
       const docRows = (Object.entries(uploaded) as [DocKey, string][]).map(
-        ([document_type, file_url]) => ({
-          driver_id: userId,
-          document_type,
-          file_url,
-        }),
+        ([document_type, file_url]) => ({ driver_id: userId, document_type, file_url }),
       );
       if (docRows.length > 0) {
         const { error: docErr } = await supabase.from("driver_documents").insert(docRows as any);
-        if (docErr) throw new Error(`No se pudieron guardar tus documentos: ${docErr.message}`);
+        if (docErr) throw new Error(t("repartidoresPage.form.docsError", { msg: docErr.message }));
       }
 
-      // 5) Reference id
       const refId = `HZX-DRV-${userId.slice(0, 8).toUpperCase()}`;
 
-      // 6) Confirmation email (non-blocking)
       try {
         await sendTransactionalEmail({
           templateName: "driver-application-received",
@@ -746,31 +679,30 @@ function ApplicationForm({
   });
 
   const requiredDocs: DocKey[] = useMemo(() => {
-    const base: DocKey[] = [
-      "identificacion",
-      "licencia_conducir",
-      "seguro_vehiculo",
-      "foto_perfil",
-    ];
+    const base: DocKey[] = ["identificacion", "licencia_conducir", "seguro_vehiculo", "foto_perfil"];
     if (s2.vehicleType === "moto") base.push("casco");
     return base;
   }, [s2.vehicleType]);
 
-  // ---------- SUCCESS SCREEN ----------
+  // Translate zod error codes to localized messages
+  const errMsg = (code: string) => t(`repartidoresPage.form.errors.${code}`, code);
+
   if (submittedRef) {
     return (
       <Card className="border-emerald-500/40 bg-white">
         <CardContent className="p-8 text-center">
           <CheckCircle2 className="mx-auto mb-3 size-12 text-emerald-600" />
           <h2 className="font-serif text-2xl font-bold text-[#1e3a5f]">
-            ¡Postulación recibida!
+            {t("repartidoresPage.success.title")}
           </h2>
           <p className="mt-2 text-[#4a3525]">
-            Te contactaremos por correo en un máximo de <strong>48 horas</strong>.
+            {t("repartidoresPage.success.bodyPart1")}
+            <strong>{t("repartidoresPage.success.bodyStrong")}</strong>
+            {t("repartidoresPage.success.bodyPart2")}
           </p>
           <div className="mx-auto mt-6 max-w-xs rounded-xl border border-[#c8862e]/40 bg-[#f4f1ea] p-4">
             <p className="text-[10px] uppercase tracking-widest text-[#8a7a6a]">
-              Número de referencia
+              {t("repartidoresPage.success.refLabel")}
             </p>
             <div className="mt-1 flex items-center justify-center gap-2">
               <span className="font-serif text-xl tracking-widest text-[#1e3a5f]">
@@ -780,9 +712,9 @@ function ApplicationForm({
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(submittedRef);
-                  toast.success("Copiado");
+                  toast.success(t("repartidoresPage.success.copied"));
                 }}
-                aria-label="Copiar número de referencia"
+                aria-label={t("repartidoresPage.success.copyAria")}
                 className="grid size-8 place-items-center rounded-md hover:bg-white"
               >
                 <Copy className="size-4 text-[#1e3a5f]" />
@@ -790,19 +722,18 @@ function ApplicationForm({
             </div>
           </div>
           <p className="mt-4 text-xs text-[#4a3525]/70">
-            Guarda este número. Te ayudará si necesitas contactarnos.
+            {t("repartidoresPage.success.tip")}
           </p>
         </CardContent>
       </Card>
     );
   }
 
-  // ---------- STEP UI ----------
   const goStep1Next = () => {
     const res = step1Schema.safeParse(s1);
     if (!res.success) {
       const errs: Record<string, string> = {};
-      for (const issue of res.error.issues) errs[issue.path[0] as string] = issue.message;
+      for (const issue of res.error.issues) errs[issue.path[0] as string] = errMsg(issue.message);
       setErrors(errs);
       return;
     }
@@ -813,7 +744,7 @@ function ApplicationForm({
     const res = step2Schema.safeParse(s2);
     if (!res.success) {
       const errs: Record<string, string> = {};
-      for (const issue of res.error.issues) errs[issue.path[0] as string] = issue.message;
+      for (const issue of res.error.issues) errs[issue.path[0] as string] = errMsg(issue.message);
       setErrors(errs);
       return;
     }
@@ -823,11 +754,11 @@ function ApplicationForm({
   const goStep3Next = () => {
     const errs: Record<string, string> = {};
     for (const key of requiredDocs) {
-      if (!files[key]) errs[key] = "Requerido";
+      if (!files[key]) errs[key] = t("repartidoresPage.form.required");
     }
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
-      toast.error("Sube todos los documentos requeridos");
+      toast.error(t("repartidoresPage.form.uploadAll"));
       return;
     }
     setErrors({});
@@ -839,15 +770,15 @@ function ApplicationForm({
       <CardContent className="p-6 md:p-8">
         <StepIndicator step={step} />
 
-        {/* STEP 1: Personal data */}
+        {/* STEP 1 */}
         {step === 1 && (
           <div className="mt-6 space-y-4">
             <SectionHeader
               icon={<UserIcon className="size-5" />}
-              title="Datos personales"
+              title={t("repartidoresPage.form.step1.title")}
             />
             <Field
-              label="Nombre completo"
+              label={t("repartidoresPage.form.fullName")}
               htmlFor="fullName"
               error={errors.fullName}
               required
@@ -862,7 +793,7 @@ function ApplicationForm({
             </Field>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
-                label="Correo electrónico"
+                label={t("repartidoresPage.form.email")}
                 htmlFor="email"
                 error={errors.email}
                 required
@@ -876,7 +807,12 @@ function ApplicationForm({
                   className="min-h-11"
                 />
               </Field>
-              <Field label="Teléfono" htmlFor="phone" error={errors.phone} required>
+              <Field
+                label={t("repartidoresPage.form.phone")}
+                htmlFor="phone"
+                error={errors.phone}
+                required
+              >
                 <Input
                   id="phone"
                   type="tel"
@@ -890,7 +826,7 @@ function ApplicationForm({
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
-                label="Fecha de nacimiento (18+)"
+                label={t("repartidoresPage.form.dob")}
                 htmlFor="dateOfBirth"
                 error={errors.dateOfBirth}
                 required
@@ -904,7 +840,7 @@ function ApplicationForm({
                 />
               </Field>
               <Field
-                label="Zona de reparto"
+                label={t("repartidoresPage.form.zone")}
                 htmlFor="city"
                 error={errors.city}
                 required
@@ -915,7 +851,7 @@ function ApplicationForm({
                   onChange={(e) => setS1({ ...s1, city: e.target.value })}
                   className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
-                  <option value="">Selecciona…</option>
+                  <option value="">{t("repartidoresPage.form.selectEllipsis")}</option>
                   {ZONES.map((zone) => (
                     <option key={zone} value={zone} translate="no">
                       {zone}
@@ -924,7 +860,12 @@ function ApplicationForm({
                 </select>
               </Field>
             </div>
-            <Field label="Dirección" htmlFor="address" error={errors.address} required>
+            <Field
+              label={t("repartidoresPage.form.address")}
+              htmlFor="address"
+              error={errors.address}
+              required
+            >
               <Input
                 id="address"
                 autoComplete="street-address"
@@ -940,19 +881,19 @@ function ApplicationForm({
                 className="min-h-11 bg-[#1e3a5f] text-white hover:bg-[#16294a]"
                 onClick={goStep1Next}
               >
-                Continuar <ArrowRight className="ml-2 size-4" />
+                {t("repartidoresPage.form.continue")} <ArrowRight className="ml-2 size-4" />
               </Button>
             </div>
           </div>
         )}
 
-        {/* STEP 2: Vehicle */}
+        {/* STEP 2 */}
         {step === 2 && (
           <div className="mt-6 space-y-4">
             <SectionHeader
               icon={<Bike className="size-5" />}
-              title="Vehículo"
-              subtitle="Solo aceptamos moto o auto."
+              title={t("repartidoresPage.form.step2.title")}
+              subtitle={t("repartidoresPage.form.step2.subtitle")}
             />
             <div className="grid grid-cols-2 gap-3">
               {(["moto", "auto"] as const).map((v) => {
@@ -970,7 +911,9 @@ function ApplicationForm({
                     }`}
                   >
                     <Icon className="size-5" />
-                    {v === "moto" ? "Moto" : "Auto"}
+                    {v === "moto"
+                      ? t("repartidoresPage.vehicles.moto.label")
+                      : t("repartidoresPage.vehicles.auto.label")}
                   </button>
                 );
               })}
@@ -980,7 +923,7 @@ function ApplicationForm({
             )}
 
             <Field
-              label="Número de licencia de conducir"
+              label={t("repartidoresPage.form.licenseNumber")}
               htmlFor="licenseNumber"
               error={errors.licenseNumber}
               required
@@ -993,7 +936,7 @@ function ApplicationForm({
               />
             </Field>
             <Field
-              label="Aseguradora"
+              label={t("repartidoresPage.form.insurer")}
               htmlFor="insurer"
               error={errors.insurer}
               required
@@ -1006,7 +949,7 @@ function ApplicationForm({
               />
             </Field>
             <Field
-              label="Placa (opcional)"
+              label={t("repartidoresPage.form.plate")}
               htmlFor="plateNumber"
               error={errors.plateNumber}
             >
@@ -1025,38 +968,36 @@ function ApplicationForm({
                 className="min-h-11"
                 onClick={() => setStep(1)}
               >
-                <ArrowLeft className="mr-2 size-4" /> Atrás
+                <ArrowLeft className="mr-2 size-4" /> {t("repartidoresPage.form.back")}
               </Button>
               <Button
                 size="lg"
                 className="min-h-11 bg-[#1e3a5f] text-white hover:bg-[#16294a]"
                 onClick={goStep2Next}
               >
-                Continuar <ArrowRight className="ml-2 size-4" />
+                {t("repartidoresPage.form.continue")} <ArrowRight className="ml-2 size-4" />
               </Button>
             </div>
           </div>
         )}
 
-        {/* STEP 3: Documents */}
+        {/* STEP 3 */}
         {step === 3 && (
           <div className="mt-6 space-y-4">
             <SectionHeader
               icon={<FileText className="size-5" />}
-              title="Documentos"
-              subtitle="Todos los documentos siguientes son obligatorios para completar tu postulación (imagen o PDF, máx. 5MB)."
+              title={t("repartidoresPage.form.step3.title")}
+              subtitle={t("repartidoresPage.form.step3.subtitle")}
             />
 
             <div className="rounded-lg border border-[#1e3a5f]/20 bg-[#f4f1ea] p-4 text-xs leading-relaxed text-[#4a3525]">
-              <strong>Privacidad de tus documentos.</strong> Se usan únicamente para
-              verificar tu identidad y elegibilidad. Se almacenan de forma cifrada y solo
-              el equipo de verificación tiene acceso. Puedes solicitar su eliminación en
-              cualquier momento escribiendo a soporte@hazorex.com. Ver también nuestra{" "}
+              <strong>{t("repartidoresPage.form.privacy.strong")}</strong>{" "}
+              {t("repartidoresPage.form.privacy.body")}{" "}
               <Link
                 to="/privacidad"
                 className="font-semibold text-[#1e3a5f] underline underline-offset-2"
               >
-                Política de privacidad
+                {t("repartidoresPage.form.privacy.link")}
               </Link>
               .
             </div>
@@ -1066,6 +1007,8 @@ function ApplicationForm({
                 key={key}
                 docKey={key}
                 file={files[key]}
+                label={docLabel(key)}
+                hint={docHint(key)}
                 onChange={(f) => {
                   if (f) {
                     const err = validateFile(f);
@@ -1088,65 +1031,71 @@ function ApplicationForm({
                 className="min-h-11"
                 onClick={() => setStep(2)}
               >
-                <ArrowLeft className="mr-2 size-4" /> Atrás
+                <ArrowLeft className="mr-2 size-4" /> {t("repartidoresPage.form.back")}
               </Button>
               <Button
                 size="lg"
                 className="min-h-11 bg-[#1e3a5f] text-white hover:bg-[#16294a]"
                 onClick={goStep3Next}
               >
-                Continuar <ArrowRight className="ml-2 size-4" />
+                {t("repartidoresPage.form.continue")} <ArrowRight className="ml-2 size-4" />
               </Button>
             </div>
           </div>
         )}
 
-        {/* STEP 4: Confirmation + submit */}
+        {/* STEP 4 */}
         {step === 4 && (
           <div className="mt-6 space-y-4">
             <SectionHeader
               icon={<CheckCircle2 className="size-5" />}
-              title="Confirmación"
+              title={t("repartidoresPage.form.step4.title")}
             />
 
             <p className="text-xs text-[#4a3525]/70">
-              Revisa que todo esté correcto. Puedes editar cualquier sección antes de
-              enviar tu postulación.
+              {t("repartidoresPage.form.step4.hint")}
             </p>
 
             <SummarySection
-              title="Datos personales"
+              title={t("repartidoresPage.form.step1.title")}
               onEdit={() => setStep(1)}
               rows={[
-                { label: "Nombre", value: s1.fullName },
-                { label: "Correo", value: s1.email },
-                { label: "Teléfono", value: s1.phone },
-                { label: "Fecha de nacimiento", value: s1.dateOfBirth },
-                { label: "Zona", value: s1.city },
-                { label: "Dirección", value: s1.address },
+                { label: t("repartidoresPage.summary.name"), value: s1.fullName },
+                { label: t("repartidoresPage.summary.email"), value: s1.email },
+                { label: t("repartidoresPage.summary.phone"), value: s1.phone },
+                { label: t("repartidoresPage.summary.dob"), value: s1.dateOfBirth },
+                { label: t("repartidoresPage.summary.zone"), value: s1.city },
+                { label: t("repartidoresPage.summary.address"), value: s1.address },
               ]}
             />
 
             <SummarySection
-              title="Vehículo"
+              title={t("repartidoresPage.form.step2.title")}
               onEdit={() => setStep(2)}
               rows={[
-                { label: "Tipo", value: s2.vehicleType === "moto" ? "Moto" : "Auto" },
-                { label: "Licencia", value: s2.licenseNumber },
-                { label: "Aseguradora", value: s2.insurer },
-                { label: "Placa", value: s2.plateNumber || "—" },
+                {
+                  label: t("repartidoresPage.summary.type"),
+                  value: s2.vehicleType === "moto"
+                    ? t("repartidoresPage.vehicles.moto.label")
+                    : t("repartidoresPage.vehicles.auto.label"),
+                },
+                { label: t("repartidoresPage.summary.license"), value: s2.licenseNumber },
+                { label: t("repartidoresPage.summary.insurer"), value: s2.insurer },
+                { label: t("repartidoresPage.summary.plate"), value: s2.plateNumber || "—" },
               ]}
             />
 
             <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
               <div className="mb-2 flex items-center justify-between">
-                <p className="font-serif text-sm font-bold text-[#1e3a5f]">Documentos</p>
+                <p className="font-serif text-sm font-bold text-[#1e3a5f]">
+                  {t("repartidoresPage.form.step3.title")}
+                </p>
                 <button
                   type="button"
                   onClick={() => setStep(3)}
                   className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
                 >
-                  Editar
+                  {t("repartidoresPage.summary.edit")}
                 </button>
               </div>
               <ul className="space-y-1.5">
@@ -1157,7 +1106,7 @@ function ApplicationForm({
                       key={k}
                       className="flex items-center justify-between gap-3 text-xs text-[#4a3525]"
                     >
-                      <span className="truncate">{DOC_LABELS[k].label}</span>
+                      <span className="truncate">{docLabel(k)}</span>
                       <DocStatusBadge state={f ? "subido" : "pendiente"} />
                     </li>
                   );
@@ -1173,21 +1122,21 @@ function ApplicationForm({
                 className="mt-1 size-4 shrink-0"
               />
               <span>
-                Confirmo que la información proporcionada es verídica y acepto los{" "}
+                {t("repartidoresPage.form.accept.part1")}{" "}
                 <Link
                   to="/terminos"
                   className="font-semibold text-[#1e3a5f] underline underline-offset-2"
                 >
-                  Términos
+                  {t("repartidoresPage.form.accept.terms")}
                 </Link>{" "}
-                y la{" "}
+                {t("repartidoresPage.form.accept.and")}{" "}
                 <Link
                   to="/privacidad"
                   className="font-semibold text-[#1e3a5f] underline underline-offset-2"
                 >
-                  Política de Privacidad
+                  {t("repartidoresPage.form.accept.privacy")}
                 </Link>{" "}
-                de Hazorex.
+                {t("repartidoresPage.form.accept.part2")}
               </span>
             </label>
 
@@ -1199,7 +1148,7 @@ function ApplicationForm({
                 disabled={submitMutation.isPending}
                 onClick={() => setStep(3)}
               >
-                <ArrowLeft className="mr-2 size-4" /> Atrás
+                <ArrowLeft className="mr-2 size-4" /> {t("repartidoresPage.form.back")}
               </Button>
               <Button
                 size="lg"
@@ -1210,10 +1159,10 @@ function ApplicationForm({
                 {submitMutation.isPending ? (
                   <>
                     <Loader2 className="mr-2 size-4 animate-spin" />
-                    Enviando postulación…
+                    {t("repartidoresPage.form.submitting")}
                   </>
                 ) : (
-                  "Enviar postulación"
+                  t("repartidoresPage.form.submit")
                 )}
               </Button>
             </div>
@@ -1225,12 +1174,18 @@ function ApplicationForm({
 }
 
 // ============================================================
-// Small helpers
+// Helpers
 // ============================================================
 function StepIndicator({ step }: { step: 1 | 2 | 3 | 4 }) {
-  const labels = ["Datos", "Vehículo", "Documentos", "Confirmar"];
+  const { t } = useTranslation();
+  const labels = [
+    t("repartidoresPage.steps.s1"),
+    t("repartidoresPage.steps.s2"),
+    t("repartidoresPage.steps.s3"),
+    t("repartidoresPage.steps.s4"),
+  ];
   return (
-    <ol className="flex items-center justify-between gap-2" aria-label="Progreso">
+    <ol className="flex items-center justify-between gap-2" aria-label={t("repartidoresPage.steps.progressAria")}>
       {labels.map((l, i) => {
         const n = (i + 1) as 1 | 2 | 3 | 4;
         const active = n === step;
@@ -1318,16 +1273,20 @@ function Field({
 function FileUpload({
   docKey,
   file,
+  label,
+  hint,
   onChange,
   error,
 }: {
   docKey: DocKey;
   file: File | undefined;
+  label: string;
+  hint: string;
   onChange: (f: File | null) => void;
   error?: string;
 }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLInputElement>(null);
-  const info = DOC_LABELS[docKey];
   const inputId = `file-${docKey}`;
   const isImageOnly = docKey === "foto_perfil" || docKey === "casco";
 
@@ -1345,7 +1304,7 @@ function FileUpload({
   return (
     <div className="space-y-1.5">
       <Label htmlFor={inputId} className="text-sm font-medium text-[#1e3a5f]">
-        {info.label} <span className="text-red-600">*</span>
+        {label} <span className="text-red-600">*</span>
       </Label>
       <div
         className={`flex min-h-11 items-center justify-between gap-3 rounded-lg border-2 border-dashed p-3 ${
@@ -1357,7 +1316,7 @@ function FileUpload({
             {previewUrl ? (
               <img
                 src={previewUrl}
-                alt={`Vista previa de ${info.label}`}
+                alt={t("repartidoresPage.form.previewAlt", { name: label })}
                 className="size-full object-cover"
               />
             ) : (
@@ -1375,7 +1334,7 @@ function FileUpload({
               </span>
             </div>
           ) : (
-            <p className="text-xs text-[#4a3525]/70">{info.hint}</p>
+            <p className="text-xs text-[#4a3525]/70">{hint}</p>
           )}
         </div>
         <DocStatusBadge state={file ? "subido" : "pendiente"} />
@@ -1387,7 +1346,7 @@ function FileUpload({
           onClick={() => ref.current?.click()}
         >
           <Upload className="mr-1.5 size-3.5" />
-          {file ? "Cambiar" : "Subir"}
+          {file ? t("repartidoresPage.form.change") : t("repartidoresPage.form.upload")}
         </Button>
         <input
           ref={ref}
@@ -1416,6 +1375,7 @@ function SummarySection({
   onEdit: () => void;
   rows: { label: string; value: string }[];
 }) {
+  const { t } = useTranslation();
   return (
     <div className="rounded-lg border border-[#c8862e]/30 bg-[#f4f1ea] p-4">
       <div className="mb-2 flex items-center justify-between">
@@ -1425,7 +1385,7 @@ function SummarySection({
           onClick={onEdit}
           className="text-xs font-semibold text-[#1e3a5f] underline underline-offset-2 hover:text-[#c8862e]"
         >
-          Editar
+          {t("repartidoresPage.summary.edit")}
         </button>
       </div>
       <dl className="grid grid-cols-1 gap-1 text-xs text-[#4a3525] sm:grid-cols-2">
@@ -1445,18 +1405,18 @@ function DocStatusBadge({
 }: {
   state: "pendiente" | "subido" | "verificado" | "rechazado";
 }) {
-  const map = {
-    pendiente: { label: "Pendiente", cls: "bg-amber-100 text-amber-800 border-amber-300" },
-    subido: { label: "Subido", cls: "bg-blue-100 text-blue-800 border-blue-300" },
-    verificado: { label: "Verificado", cls: "bg-emerald-100 text-emerald-800 border-emerald-300" },
-    rechazado: { label: "Rechazado", cls: "bg-red-100 text-red-800 border-red-300" },
-  } as const;
-  const m = map[state];
+  const { t } = useTranslation();
+  const cls: Record<typeof state, string> = {
+    pendiente: "bg-amber-100 text-amber-800 border-amber-300",
+    subido: "bg-blue-100 text-blue-800 border-blue-300",
+    verificado: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    rechazado: "bg-red-100 text-red-800 border-red-300",
+  };
   return (
     <span
-      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${m.cls}`}
+      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${cls[state]}`}
     >
-      {m.label}
+      {t(`repartidoresPage.docStatus.${state}`)}
     </span>
   );
 }

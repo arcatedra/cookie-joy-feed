@@ -930,9 +930,9 @@ function BuyTokensPanel({ balance }: { balance: number }) {
                     fontWeight: 800,
                   }}
                 >
-                  {pkg.label.toUpperCase()}
+                  {t(pkg.labelKey).toUpperCase()}
                 </div>
-                <div style={{ fontSize: 12, color: BLUE_SOFT, marginTop: 2 }}>{pkg.tagline}</div>
+                <div style={{ fontSize: 12, color: BLUE_SOFT, marginTop: 2 }}>{t(pkg.taglineKey)}</div>
               </header>
 
               <div style={{ display: "grid", placeItems: "center", gap: 6 }}>

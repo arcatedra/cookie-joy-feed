@@ -42,8 +42,10 @@ export type TokenPackage = {
   id: "stars_starter" | "stars_popular" | "stars_premium";
   tokens: number;
   priceUsd: number;
-  label: string;
-  tagline: string;
+  /** i18n key under `ruleta.packages.<id>.label` */
+  labelKey: string;
+  /** i18n key under `ruleta.packages.<id>.tagline` */
+  taglineKey: string;
   featured?: boolean;
 };
 
@@ -52,23 +54,24 @@ export const TOKEN_PACKAGES: readonly TokenPackage[] = [
     id: "stars_starter",
     tokens: 10,
     priceUsd: 1.99,
-    label: "Inicial",
-    tagline: "Prueba tu suerte",
+    labelKey: "ruleta.packages.starter.label",
+    taglineKey: "ruleta.packages.starter.tagline",
   },
   {
     id: "stars_popular",
     tokens: 30,
     priceUsd: 4.99,
-    label: "Más Vendido",
-    tagline: "Mejor opción · +50% valor",
+    labelKey: "ruleta.packages.popular.label",
+    taglineKey: "ruleta.packages.popular.tagline",
     featured: true,
   },
   {
     id: "stars_premium",
     tokens: 150,
     priceUsd: 9.99,
-    label: "Premium",
-    tagline: "Máximo valor por estrella",
+    labelKey: "ruleta.packages.premium.label",
+    taglineKey: "ruleta.packages.premium.tagline",
   },
 ] as const;
+
 

@@ -586,7 +586,8 @@
     "privacy": "Datenschutz",
     "rules": "Verlosungsregeln",
     "trust": "Vertrauen",
-    "rights": "Alle Rechte vorbehalten."
+    "rights": "Alle Rechte vorbehalten.",
+    "becomeDriver": "Werde Fahrer"
   },
   "ruleta": {
     "metaTitle": "ORIGEN Roulette — Drehen und Gewinnen ⭐",
@@ -666,7 +667,21 @@
     "nextDraw": "⏱ Nächste offizielle Ziehung in",
     "dailyDrawAt": "Tägliche Ziehung um 20:00 Uhr (Eastern Time) · automatisiert",
     "lastWinner": "LETZTER GEWINNER",
-    "recentHistory": "NEUESTE HISTORIE"
+    "recentHistory": "NEUESTE HISTORIE",
+    "packages": {
+      "starter": {
+        "label": "Starter",
+        "tagline": "Versuch dein Glück"
+      },
+      "popular": {
+        "label": "Bestseller",
+        "tagline": "Beste Wahl · +50% Wert"
+      },
+      "premium": {
+        "label": "Premium",
+        "tagline": "Maximaler Wert pro Stern"
+      }
+    }
   },
   "fullscreenDraw": {
     "ariaLabel": "Live-Verlosung",
@@ -1025,6 +1040,325 @@
       "paid": "Bezahlt",
       "rejected": "Abgelehnt",
       "expired": "Abgelaufen"
+    }
+  },
+  "repartidoresPage": {
+    "metaTitle": "Werde Fahrer · Hazorex",
+    "metaDesc": "Werde Teil des Hazorex-Fahrerteams. Bewirb dich in Minuten, wähle deine Arbeitszeiten und verdiene Geld, indem du Bestellungen in deiner Stadt auslieferst.",
+    "metaOg": "Bewirb dich als Hazorex-Fahrer. Flexible Arbeitszeiten, wöchentliche Zahlungen und transparenter Genehmigungsprozess.",
+    "hero": {
+      "badge": "Bewirb dich in 5 Minuten",
+      "titlePart1": "Verdiene bis zu",
+      "titleHighlight": "$25/Stunde",
+      "titlePart2": "als Fahrer für Hazorex",
+      "subtitlePart1": "Du bestimmst deine Zeit, wir die Bestellungen. Du brauchst nur ein",
+      "subtitleHighlight": "Motorrad oder Auto",
+      "subtitlePart2": ", einen gültigen Führerschein und Lust zu fahren.",
+      "viewRequirements": "Anforderungen ansehen →",
+      "perks": {
+        "flexible": "Flexible Arbeitszeiten",
+        "weekly": "Wöchentliche Zahlungen",
+        "noFee": "Keine Anmeldegebühr",
+        "reply48": "Antwort in 48 Std."
+      }
+    },
+    "signInGate": {
+      "title": "Starte deine Bewerbung",
+      "body": "Melde dich zuerst an oder erstelle ein Hazorex-Konto. Das geht schnell.",
+      "cta": "Anmelden und bewerben"
+    },
+    "readyGate": {
+      "title": "Alles bereit für deine Bewerbung",
+      "body": "Dauert ca. 5 Minuten. Halte deinen gültigen Ausweis, Führerschein und Versicherung bereit.",
+      "cta": "Bewerbung starten"
+    },
+    "cta": {
+      "loading": "Lädt…",
+      "viewStatus": "Bewerbungsstatus ansehen"
+    },
+    "vehicles": {
+      "badge": "Akzeptierte Fahrzeuge",
+      "title": "Wir akzeptieren nur Motorräder oder Autos",
+      "bodyPart1": "Um schnelle Lieferungen und eine vollständige Abdeckung zu gewährleisten, akzeptieren wir bei Hazorex",
+      "bodyStrong": "nur Fahrer mit Motorrad oder Auto",
+      "bodyPart2": ". Wir akzeptieren keine Lieferungen zu Fuß oder mit dem Fahrrad.",
+      "hint": "Wähle unten dein Fahrzeug aus und wir fordern nur die entsprechenden Dokumente an.",
+      "moto": {
+        "label": "Motorrad",
+        "desc": "Ideal für dichten Verkehr. Schnellere Lieferungen.",
+        "perk1": "Gültiger Führerschein Klasse A",
+        "perk2": "Gültige Fahrzeugversicherung",
+        "perk3": "Helm"
+      },
+      "auto": {
+        "label": "Auto",
+        "desc": "Perfekt für große Bestellungen und wechselhaftes Wetter.",
+        "perk1": "Gültiger Führerschein Klasse B",
+        "perk2": "Gültige Fahrzeugversicherung",
+        "perk3": "Gültige Hauptuntersuchung"
+      }
+    },
+    "how": {
+      "title": "So funktioniert's",
+      "s1": {
+        "title": "Bewirb dich",
+        "body": "Gib deine Daten ein, wähle dein Fahrzeug und lade die angeforderten Dokumente hoch."
+      },
+      "s2": {
+        "title": "Wir prüfen",
+        "body": "Unser Team überprüft deine Informationen innerhalb von maximal 48 Stunden. Wir benachrichtigen dich per E-Mail."
+      },
+      "s3": {
+        "title": "Verdiene Geld",
+        "body": "Sobald du genehmigt bist, aktiviere deine Verfügbarkeit und erhalte Bestellungen in deiner Nähe."
+      }
+    },
+    "requirements": {
+      "title": "Anforderungen",
+      "r1": "Mindestalter 18 Jahre",
+      "r2": "Eigenes Motorrad oder Auto (wir akzeptieren keine Fußgänger oder Radfahrer)",
+      "r3": "Gültiger Führerschein (Klasse A für Motorrad, Klasse B für Auto)",
+      "r4": "Gültige Fahrzeugversicherung",
+      "r5": "Gültiger amtlicher Ausweis",
+      "r6": "Klares Profilfoto (Selfie)"
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "q1": {
+        "q": "Brauche ich ein eigenes Fahrzeug?",
+        "a": "Ja. Bei Hazorex akzeptieren wir nur Fahrer mit Motorrad oder Auto, um Lieferzeiten und Gebietsabdeckung zu gewährleisten. Wir akzeptieren keine Lieferungen zu Fuß oder mit dem Fahrrad."
+      },
+      "q2": {
+        "q": "Wie lange dauert die Genehmigung?",
+        "a": "Wir antworten dir innerhalb von maximal 48 Stunden, nachdem du all deine Dokumente hochgeladen hast."
+      },
+      "q3": {
+        "q": "Wann werde ich bezahlt?",
+        "a": "Die Zahlungen werden wöchentlich für die Gesamtzahl der abgeschlossenen Lieferungen abgewickelt."
+      },
+      "q4": {
+        "q": "Kann ich meine Arbeitszeiten selbst wählen?",
+        "a": "Ja. Du aktivierst deine Verfügbarkeit, wann immer du Bestellungen erhalten möchtest."
+      },
+      "q5": {
+        "q": "Was passiert mit meinen Dokumenten?",
+        "a": "Deine Dokumente werden ausschließlich zur Überprüfung deiner Identität und Eignung verwendet. Sie werden verschlüsselt gespeichert und nur das Verifizierungsteam hat Zugriff darauf. Du kannst jederzeit ihre Löschung beantragen."
+      }
+    },
+    "status": {
+      "approved": {
+        "title": "Du bist als Hazorex-Fahrer zugelassen!",
+        "body": "Gehe zu deinem Dashboard, um deine Verfügbarkeit zu konfigurieren und mit dem Ausliefern zu beginnen.",
+        "cta": "Zum Dashboard"
+      },
+      "pending": {
+        "title": "Bewerbung erhalten",
+        "body": "Wir überprüfen deine Informationen. Wir werden dich innerhalb von maximal 48 Stunden per E-Mail benachrichtigen."
+      },
+      "inReview": {
+        "title": "Bewerbung wird geprüft",
+        "body": "Das Team überprüft deine Dokumente. Wir werden dich bald per E-Mail benachrichtigen."
+      },
+      "rejected": {
+        "title": "Bewerbung abgelehnt",
+        "body": "Du kannst uns unter soporte@hazorex.com schreiben, um die Details zu klären und dich erneut zu bewerben."
+      },
+      "suspended": {
+        "title": "Konto gesperrt",
+        "body": "Schreibe uns für weitere Details an soporte@hazorex.com."
+      }
+    },
+    "docs": {
+      "identificacion": {
+        "label": "Amtlicher Ausweis (Führerschein, Reisepass oder amtlicher Lichtbildausweis)",
+        "hint": "Bild oder PDF, max. 5 MB"
+      },
+      "licencia_conducir": {
+        "label": "Gültiger Führerschein (NY State)",
+        "hint": "Bild oder PDF, max. 5 MB"
+      },
+      "seguro_vehiculo": {
+        "label": "Gültige Fahrzeugversicherung",
+        "hint": "Bild oder PDF, max. 5 MB"
+      },
+      "foto_perfil": {
+        "label": "Klares Selfie (Profilfoto)",
+        "hint": "JPG/PNG-Bild, max. 5 MB"
+      },
+      "casco": {
+        "label": "Foto deines DOT-geprüften Helms (nur Motorrad)",
+        "hint": "JPG/PNG-Bild des aufgesetzten oder von vorne gezeigten Helms, max. 5 MB"
+      }
+    },
+    "docStatus": {
+      "pendiente": "Ausstehend",
+      "subido": "Hochgeladen",
+      "verificado": "Verifiziert",
+      "rechazado": "Abgelehnt"
+    },
+    "steps": {
+      "s1": "Daten",
+      "s2": "Fahrzeug",
+      "s3": "Dokumente",
+      "s4": "Bestätigen",
+      "progressAria": "Fortschritt"
+    },
+    "form": {
+      "step1": {
+        "title": "Persönliche Daten"
+      },
+      "step2": {
+        "title": "Fahrzeug",
+        "subtitle": "Wir akzeptieren nur Motorräder oder Autos."
+      },
+      "step3": {
+        "title": "Dokumente",
+        "subtitle": "Alle folgenden Dokumente sind für den Abschluss deiner Bewerbung erforderlich (Bild oder PDF, max. 5MB)."
+      },
+      "step4": {
+        "title": "Bestätigung",
+        "hint": "Überprüfe, ob alles korrekt ist. Du kannst jeden Abschnitt bearbeiten, bevor du deine Bewerbung abschickst."
+      },
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "phone": "Telefon",
+      "dob": "Geburtsdatum (18+)",
+      "zone": "Liefergebiet",
+      "address": "Adresse",
+      "licenseNumber": "Führerscheinnummer",
+      "insurer": "Versicherungsgesellschaft",
+      "plate": "Kennzeichen (optional)",
+      "selectEllipsis": "Auswählen…",
+      "continue": "Weiter",
+      "back": "Zurück",
+      "submit": "Bewerbung abschicken",
+      "submitting": "Bewerbung wird gesendet…",
+      "change": "Ändern",
+      "upload": "Hochladen",
+      "required": "Erforderlich",
+      "uploadAll": "Lade alle erforderlichen Dokumente hoch",
+      "fileTypeError": "Dateityp nicht zulässig. Bitte JPG, PNG oder PDF verwenden.",
+      "fileSizeError": "Datei zu groß (max. {{size}}MB).",
+      "uploadError": "Konnte {{doc}} nicht hochladen: {{msg}}",
+      "driverError": "Deine Registrierung konnte nicht erstellt werden: {{msg}}",
+      "vehicleError": "Dein Fahrzeug konnte nicht gespeichert werden: {{msg}}",
+      "docsError": "Deine Dokumente konnten nicht gespeichert werden: {{msg}}",
+      "previewAlt": "Vorschau von {{name}}",
+      "privacy": {
+        "strong": "Datenschutz deiner Dokumente.",
+        "body": "Sie werden ausschließlich zur Überprüfung deiner Identität und Eignung verwendet. Sie werden verschlüsselt gespeichert und nur das Verifizierungsteam hat Zugriff. Du kannst ihre Löschung jederzeit per E-Mail an soporte@hazorex.com beantragen. Siehe auch unsere",
+        "link": "Datenschutzrichtlinie"
+      },
+      "accept": {
+        "part1": "Ich bestätige, dass die bereitgestellten Informationen wahrheitsgemäß sind und ich die",
+        "terms": "Allgemeinen Geschäftsbedingungen",
+        "and": "und die",
+        "privacy": "Datenschutzrichtlinie",
+        "part2": "von Hazorex akzeptiere."
+      },
+      "errors": {
+        "err_fullName": "Gib deinen vollständigen Namen ein",
+        "err_email": "Ungültige E-Mail-Adresse",
+        "err_phone_short": "Ungültige Telefonnummer",
+        "err_phone_format": "Gib eine 10-stellige US-Nummer ein, z.B. +1 (718) 555 0000",
+        "err_dob_required": "Wähle dein Geburtsdatum",
+        "err_dob_underage": "Du musst mindestens 18 Jahre alt sein",
+        "err_zone": "Wähle dein Liefergebiet",
+        "err_address": "Gib deine Adresse ein",
+        "err_vehicle": "Wähle Motorrad oder Auto",
+        "err_license": "Gib deine Führerscheinnummer ein",
+        "err_insurer": "Gib deine Versicherungsgesellschaft ein"
+      }
+    },
+    "summary": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "dob": "Geburtsdatum",
+      "zone": "Gebiet",
+      "address": "Adresse",
+      "type": "Typ",
+      "license": "Führerschein",
+      "insurer": "Versicherung",
+      "plate": "Kennzeichen",
+      "edit": "Bearbeiten"
+    },
+    "success": {
+      "title": "Bewerbung erhalten!",
+      "bodyPart1": "Wir werden dich innerhalb von maximal ",
+      "bodyStrong": "48 Stunden",
+      "bodyPart2": " per E-Mail kontaktieren.",
+      "refLabel": "Referenznummer",
+      "copied": "Kopiert",
+      "copyAria": "Referenznummer kopieren",
+      "tip": "Bewahre diese Nummer auf. Sie hilft dir, falls du uns kontaktieren musst."
+    }
+  },
+  "negociosRegistro": {
+    "metaTitle": "Bewirb dein Geschäft — Hazorex",
+    "metaDesc": "Registriere deinen Supermarkt, Laden, Bäckerei oder Apotheke bei Hazorex und erreiche Tausende von Kunden.",
+    "notFound": "Nicht gefunden",
+    "back": "Zurück",
+    "badge": "Für Unternehmen",
+    "title": "Bringe dein Geschäft zu Tausenden von Kunden",
+    "subtitle": "Registriere deinen Supermarkt oder Laden. Wir kümmern uns um die Lieferung, während du verkaufst.",
+    "signInPrompt": "Du musst dich anmelden, um dein Geschäft zu bewerben.",
+    "signInLink": "Anmelden",
+    "existing": "Du hast bereits ein Geschäft registriert.",
+    "existingLink": "Status ansehen",
+    "form": {
+      "title": "Registrierungsformular",
+      "subtitle": "Fülle alle Felder aus, um deinen Zugang zu beantragen",
+      "name": "Name des Geschäfts *",
+      "namePlaceholder": "Mein Supermarkt",
+      "type": "Geschäftsart *",
+      "email": "E-Mail-Adresse *",
+      "emailPlaceholder": "geschaeft@email.com",
+      "phone": "Telefon *",
+      "address": "Geschäftsadresse *",
+      "addressPlaceholder": "Straße, Hausnummer, Stadtteil",
+      "city": "Stadt *",
+      "selectZone": "Wähle ein Gebiet",
+      "required": "* Pflichtfelder. Deine Informationen sind geschützt und sicher."
+    },
+    "types": {
+      "supermercado": "Supermarkt",
+      "tienda": "Laden",
+      "panaderia": "Bäckerei",
+      "farmacia": "Apotheke",
+      "otro": "Andere"
+    },
+    "notice": {
+      "strong": "Genehmigung in 48 Stunden.",
+      "body": "Wir werden deinen Antrag prüfen und dich per E-Mail benachrichtigen. Nach der Genehmigung kannst du deinen Katalog, dein Inventar und deine Angebote hochladen."
+    },
+    "submit": "Antrag senden",
+    "submitting": "Antrag wird gesendet...",
+    "errors": {
+      "nameRequired": "Der Name des Geschäfts ist erforderlich",
+      "emailRequired": "Die E-Mail-Adresse ist erforderlich",
+      "emailInvalid": "Gib eine gültige E-Mail-Adresse ein",
+      "phoneRequired": "Die Telefonnummer ist erforderlich",
+      "phoneFormat": "Die Telefonnummer muss 10-stellig sein (US-Format)",
+      "addressRequired": "Die Adresse ist erforderlich",
+      "cityRequired": "Die Stadt ist erforderlich",
+      "mustSignIn": "Du musst dich anmelden, um ein Geschäft zu registrieren",
+      "alreadyRegistered": "Du hast bereits ein Geschäft registriert",
+      "generic": "Fehler bei der Registrierung des Geschäfts"
+    },
+    "success": {
+      "title": "Antrag gesendet!",
+      "body": "Dein Geschäft wurde erfolgreich registriert. Wir werden deinen Antrag innerhalb der nächsten 48 Stunden prüfen und dich unter der von dir angegebenen E-Mail-Adresse benachrichtigen.",
+      "nextStrong": "Nächster Schritt:",
+      "nextBody": "Nach der Genehmigung hast du Zugriff auf dein Dashboard, um Katalog, Inventar und Angebote hochzuladen.",
+      "viewStatus": "Status meines Geschäfts ansehen",
+      "registerAnother": "Weiteres registrieren"
+    },
+    "benefits": {
+      "b1": "Genehmigung in 48 Std.",
+      "b2": "Keine Anmeldegebühr",
+      "b3": "Lieferung inbegriffen",
+      "b4": "Verkaufs-Dashboard"
     }
   }
 }

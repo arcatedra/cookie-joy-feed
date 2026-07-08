@@ -9,6 +9,7 @@ import { PRODUCT_BY_HANDLE_QUERY, storefrontApiRequest } from "@/lib/shopify";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { useShopifyCartSync } from "@/hooks/useShopifyCartSync";
 import i18n from "@/i18n";
+import { localizeShopifyProduct } from "@/lib/shopify-i18n";
 
 interface ProductDetail {
   id: string;
@@ -93,6 +94,13 @@ function ProductPage() {
   const variant = data.variants.edges[variantIndex]?.node;
   const image = data.images.edges[0]?.node;
 
+  const { name: localizedName, description: localizedDesc } = localizeShopifyProduct(
+    data.handle,
+    data.title,
+    data.description,
+    t,
+  );
+
   const handleAdd = async () => {
     if (!variant) return;
     const { toKilograms } = await import("@/lib/shopify");
@@ -124,7 +132,7 @@ function ProductPage() {
           {image ? (
             <img
               src={image.url}
-              alt={image.altText ?? data.title}
+              alt={image.altText ?? localizedName}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -135,14 +143,14 @@ function ProductPage() {
         </div>
 
         <div>
-          <h1 className="font-serif text-3xl font-bold text-foreground">{data.title}</h1>
+          <h1 className="font-serif text-3xl font-bold text-foreground">{localizedName}</h1>
           {variant && (
             <p className="mt-2 text-2xl font-bold">
               {variant.price.currencyCode} {parseFloat(variant.price.amount).toFixed(2)}
             </p>
           )}
           <p className="mt-4 whitespace-pre-line text-sm text-muted-foreground">
-            {data.description}
+            {localizedDesc}
           </p>
 
           {data.variants.edges.length > 1 && (
