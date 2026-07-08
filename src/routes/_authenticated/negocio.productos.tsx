@@ -245,6 +245,7 @@ function ProductsPage() {
           ))}
         </ul>
       )}
-    </main>
+      </main>
+    </div>
   );
 }
