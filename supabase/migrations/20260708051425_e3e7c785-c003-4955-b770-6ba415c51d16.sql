@@ -1,0 +1,1 @@
+UPDATE public.sweepstakes_config SET excluded_states = ARRAY['FL', 'RI'] WHERE id = true;
