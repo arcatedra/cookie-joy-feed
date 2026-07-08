@@ -20,7 +20,13 @@
     "accountLists": "アカウントとリスト",
     "helloSignIn": "こんにちは、ログイン",
     "returns": "返品",
-    "andOrders": "と注文"
+    "andOrders": "と注文",
+    "links": {
+      "shop": "🛍️ ショップ",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 配達員になる",
+      "businesses": "🏪 店舗を登録"
+    }
   },
   "auth": {
     "signIn": "ログイン",

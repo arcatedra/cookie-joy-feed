@@ -123,7 +123,11 @@
       "bestSellers": "Más Vendidas",
       "buildPack": "Crea tu Pack",
       "support": "Servicio al Cliente",
-      "subscriptions": "Suscripciones de Galletas"
+      "subscriptions": "Suscripciones de Galletas",
+      "shop": "🛍️ Tienda",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 Sé repartidor",
+      "businesses": "🏪 Postula tu negocio"
     }
   },
   "ratings": {

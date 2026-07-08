@@ -123,7 +123,11 @@
       "bestSellers": "热销产品",
       "buildPack": "自组套餐",
       "support": "客户服务",
-      "subscriptions": "曲奇订阅"
+      "subscriptions": "曲奇订阅",
+      "shop": "🛍️ 商店",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 成为骑手",
+      "businesses": "🏪 提交您的商家"
     }
   },
   "ratings": {

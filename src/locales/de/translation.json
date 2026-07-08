@@ -123,7 +123,11 @@
       "bestSellers": "Bestseller",
       "buildPack": "Pack zusammenstellen",
       "support": "Kundenservice",
-      "subscriptions": "Cookie-Abos"
+      "subscriptions": "Cookie-Abos",
+      "shop": "🛍️ Shop",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 Fahrer werden",
+      "businesses": "🏪 Unternehmen anmelden"
     }
   },
   "ratings": {
