@@ -21,7 +21,7 @@ const BEIGE = "#f4f1ea";
 function RulesPage() {
   const { t } = useTranslation();
   const fetchCfg = useServerFn(getSweepstakesPublicConfig);
-  const { data: cfg, isLoading } = useQuery({
+  const { data: cfg } = useQuery({
     queryKey: ["sweepstakes-public-config"],
     queryFn: () => fetchCfg(),
     staleTime: 10 * 60_000,
