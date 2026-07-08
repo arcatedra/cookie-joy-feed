@@ -232,6 +232,7 @@ function OffersPage() {
           ))}
         </ul>
       )}
-    </main>
+      </main>
+    </div>
   );
 }
