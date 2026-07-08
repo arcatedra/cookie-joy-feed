@@ -671,11 +671,11 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
 
-
+  // Scope to auth session so a stale admin=true cannot leak into another user.
   const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin"],
+    queryKey: ["is-admin", typeof window !== "undefined" ? window.localStorage.getItem("sb-dmoqrcagdhsuqlbmlckt-auth-token")?.slice(0, 32) ?? "anon" : "ssr"],
     queryFn: () => checkAdminFn().catch(() => ({ isAdmin: false })),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 1000,
     retry: false,
   });
 
