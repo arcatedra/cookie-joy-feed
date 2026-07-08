@@ -14,6 +14,7 @@ import { Route as TrustRouteImport } from './routes/trust'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShopRouteImport } from './routes/shop'
@@ -106,6 +107,11 @@ const TerminosRoute = TerminosRouteImport.update({
 const SweepstakesRulesRoute = SweepstakesRulesRouteImport.update({
   id: '/sweepstakes-rules',
   path: '/sweepstakes-rules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubscribeRoute = SubscribeRouteImport.update({
@@ -502,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
+  '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
@@ -576,6 +583,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
+  '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
@@ -651,6 +659,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
+  '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
@@ -727,6 +736,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sitemap.xml'
     | '/subscribe'
+    | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
@@ -801,6 +811,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sitemap.xml'
     | '/subscribe'
+    | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
@@ -875,6 +886,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sitemap.xml'
     | '/subscribe'
+    | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
@@ -951,6 +963,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
+  SupportRoute: typeof SupportRoute
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
   TerminosRoute: typeof TerminosRoute
   TermsRoute: typeof TermsRoute
@@ -1015,6 +1028,13 @@ declare module '@tanstack/react-router' {
       path: '/sweepstakes-rules'
       fullPath: '/sweepstakes-rules'
       preLoaderRoute: typeof SweepstakesRulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subscribe': {
@@ -1607,6 +1627,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
+  SupportRoute: SupportRoute,
   SweepstakesRulesRoute: SweepstakesRulesRoute,
   TerminosRoute: TerminosRoute,
   TermsRoute: TermsRoute,
