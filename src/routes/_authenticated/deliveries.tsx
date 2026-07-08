@@ -308,9 +308,16 @@ function DeliveriesPage() {
                 })}
               </div>
 
-              {limitReached && (
+              {limitReached && !status?.supportsExtra && (
                 <p className="rounded-md bg-amber-500/10 p-3 text-sm text-amber-700">
                   Has usado todas tus entregas del mes. El botón se reactiva en tu próximo período.
+                </p>
+              )}
+
+              {limitReached && status?.supportsExtra && (
+                <p className="rounded-md bg-emerald-500/10 p-3 text-sm text-emerald-800">
+                  Ya usaste tus {status.deliveriesPerMonth} entregas incluidas. Puedes agendar entregas
+                  adicionales por <strong>$10</strong> cada una — se cobrarán en tu próxima factura.
                 </p>
               )}
 
@@ -335,21 +342,37 @@ function DeliveriesPage() {
                 />
               </div>
 
-              <Button
-                className="w-full"
-                disabled={!selectedDate || limitReached || scheduleMut.isPending}
-                onClick={() => scheduleMut.mutate()}
-              >
-                {scheduleMut.isPending ? (
-                  <><Loader2 className="mr-2 size-4 animate-spin" /> Programando…</>
-                ) : limitReached ? (
-                  "Sin entregas disponibles"
-                ) : selectedDate ? (
-                  `Programar entrega del ${selectedDate}`
-                ) : (
-                  "Selecciona una fecha"
-                )}
-              </Button>
+              {limitReached && status?.supportsExtra ? (
+                <Button
+                  className="w-full"
+                  disabled={!selectedDate || extraMut.isPending}
+                  onClick={() => extraMut.mutate()}
+                >
+                  {extraMut.isPending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" /> Agendando…</>
+                  ) : selectedDate ? (
+                    `Agendar entrega adicional del ${selectedDate} (+$10)`
+                  ) : (
+                    "Selecciona una fecha para la entrega adicional"
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  disabled={!selectedDate || limitReached || scheduleMut.isPending}
+                  onClick={() => scheduleMut.mutate()}
+                >
+                  {scheduleMut.isPending ? (
+                    <><Loader2 className="mr-2 size-4 animate-spin" /> Programando…</>
+                  ) : limitReached ? (
+                    "Sin entregas disponibles"
+                  ) : selectedDate ? (
+                    `Programar entrega del ${selectedDate}`
+                  ) : (
+                    "Selecciona una fecha"
+                  )}
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}
