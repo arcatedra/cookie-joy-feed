@@ -1316,7 +1316,8 @@
       "addressPlaceholder": "Street, number, neighborhood",
       "city": "City *",
       "selectZone": "Select a zone",
-      "required": "* Required fields. Your information is protected and secure."
+      "required": "* Required fields. Your information is protected and secure.",
+      "otherZone": "Other zone"
     },
     "types": {
       "supermercado": "Supermarket",
