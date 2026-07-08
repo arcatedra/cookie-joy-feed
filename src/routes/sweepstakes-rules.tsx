@@ -21,7 +21,7 @@ const BEIGE = "#f4f1ea";
 function RulesPage() {
   const { t } = useTranslation();
   const fetchCfg = useServerFn(getSweepstakesPublicConfig);
-  const { data: cfg, isLoading } = useQuery({
+  const { data: cfg } = useQuery({
     queryKey: ["sweepstakes-public-config"],
     queryFn: () => fetchCfg(),
     staleTime: 10 * 60_000,
@@ -87,7 +87,7 @@ function RulesPage() {
         {t("sweepstakesRules.noPurchaseBanner")}
       </p>
 
-      {isLoading && <p style={{ marginTop: 24 }}>{t("sweepstakesRules.loading")}</p>}
+      
 
       <section style={{ marginTop: 32 }}>
         <h3>{t("sweepstakesRules.s1Title")}</h3>

@@ -3,12 +3,14 @@ import { useTranslation } from "react-i18next";
 import { ExternalLink, Loader2, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { Button } from "@/components/ui/button";
+import { localizeShopifyProduct } from "@/lib/shopify-i18n";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Tu carrito — HAZOREX" },
-      { name: "description", content: "Revisa los productos de tu carrito antes de finalizar la compra." },
+      { title: i18n.t("cartPage.metaTitle", "Tu carrito — HAZOREX") },
+      { name: "description", content: i18n.t("cartPage.metaDesc", "Revisa los productos de tu carrito antes de finalizar la compra.") },
     ],
   }),
   component: CartPage,
@@ -67,20 +69,27 @@ function CartPage() {
         </h1>
 
         <ul className="flex flex-col divide-y divide-gray-200 rounded-xl bg-white shadow-sm ring-1 ring-black/5">
-          {items.map((item) => (
+          {items.map((item) => {
+            const { name: localizedName } = localizeShopifyProduct(
+              item.product.node.handle,
+              item.product.node.title,
+              "",
+              t,
+            );
+            return (
             <li key={item.variantId} className="flex items-center gap-4 p-4">
               <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-secondary/20">
                 {item.product.node.images?.edges?.[0]?.node && (
                   <img
                     src={item.product.node.images.edges[0].node.url}
-                    alt={item.product.node.title}
+                    alt={localizedName}
                     className="h-full w-full object-cover"
                   />
                 )}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-[#1e3a5f]">
-                  {item.product.node.title}
+                  {localizedName}
                 </p>
                 {item.selectedOptions.length > 0 && (
                   <p className="text-xs text-gray-500">
@@ -122,7 +131,8 @@ function CartPage() {
                 {(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
               </p>
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         <div className="mt-6 rounded-xl bg-white p-5 shadow-sm ring-1 ring-black/5">

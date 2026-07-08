@@ -1358,5 +1358,94 @@
       "b3": "Delivery included",
       "b4": "Sales dashboard"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Customer support — HAZOREX",
+    "metaDesc": "Get in touch with the HAZOREX support team. Email us and browse FAQs about orders, delivery, subscriptions, and the sweepstakes.",
+    "metaOg": "We're here to help. Email us at soporte@hazorex.com.",
+    "heroTitle": "How can we help?",
+    "heroSubtitle": "Our team is here to answer any questions about your orders, deliveries, subscription, or the daily sweepstakes.",
+    "contactTitle": "Contact us",
+    "contactSubtitle": "We reply during business hours, usually within 24 hours.",
+    "emailLabel": "Email",
+    "inboxLabel": "Inbox",
+    "inboxCta": "Send a suggestion",
+    "faqTitle": "Frequently asked questions",
+    "faq": {
+      "order": {
+        "q": "How do I place an order?",
+        "a": "Pick your products in the shop, add them to your cart, and complete checkout. You'll receive a confirmation email with the details."
+      },
+      "delivery": {
+        "q": "How long does delivery take?",
+        "a": "Delivery times depend on your area. You'll get email updates on your shipment status at every stage."
+      },
+      "cancel": {
+        "q": "How do I cancel my subscription?",
+        "a": "Go to your profile, open your active subscription, and click cancel. If you need help, email us at soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "How do I enter the daily sweepstakes?",
+        "a": "You can enter for free every day from the sweepstakes page. See the official rules at /sweepstakes-rules."
+      }
+    },
+    "footerPre": "Didn't find what you were looking for? Email us at"
+  },
+  "privacyPage": {
+    "metaTitle": "Privacy Policy — Hazorex",
+    "metaDesc": "Hazorex Privacy Policy: what data we collect, how we use it, and your rights.",
+    "back": "← Back to home",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated:",
+    "s1": {
+      "title": "1. Who we are",
+      "body": "Hazorex (\"we\" or \"the platform\") operates the website <strong>{{domain}}</strong>. This policy explains what personal information we collect, how we use it, and what rights you have over it."
+    },
+    "s2": {
+      "title": "2. Data we collect",
+      "bullets": [
+        "<strong>Account data:</strong> name, email address, and profile picture when you sign in (for example, with Google).",
+        "<strong>Usage data:</strong> pages visited, sweepstakes interactions, and notification preferences.",
+        "<strong>Technical data:</strong> IP address, browser type, and operating system, for security and diagnostic purposes."
+      ]
+    },
+    "s3": {
+      "title": "3. How we use it",
+      "bullets": [
+        "Create and maintain your account.",
+        "Let you take part in the daily sweepstakes.",
+        "Send you notifications you have opted in to.",
+        "Prevent fraud and abuse.",
+        "Comply with legal obligations."
+      ]
+    },
+    "s4": {
+      "title": "4. Sign in with Google",
+      "body": "If you sign up with Google, we only receive your email, name, and profile picture. We do not access your Gmail, contacts, or any other data from your Google account."
+    },
+    "s5": {
+      "title": "5. Sharing information",
+      "body": "We do not sell your data. We only share it with providers that help us operate the platform (hosting, email delivery, analytics) and when required by law."
+    },
+    "s6": {
+      "title": "6. Your rights",
+      "body": "You can request access, correction, or deletion of your data at any time by writing to <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s7": {
+      "title": "7. Retention",
+      "body": "We keep your data while your account is active. If you delete your account, we erase your personal information except what is required to comply with legal obligations."
+    },
+    "s8": {
+      "title": "8. Changes",
+      "body": "We may update this policy. We will post any changes on this page and, if relevant, notify you."
+    },
+    "s9": {
+      "title": "9. Contact",
+      "body": "For any privacy questions: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Your cart — HAZOREX",
+    "metaDesc": "Review the items in your cart before checking out."
   }
 }

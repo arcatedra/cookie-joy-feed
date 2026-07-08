@@ -1361,5 +1361,94 @@
       "b3": "Kasama ang delivery",
       "b4": "Panel ng benta"
     }
+  },
+  "supportPage": {
+    "metaTitle": "Customer support — HAZOREX",
+    "metaDesc": "Makipag-ugnayan sa HAZOREX support team. Email at mga FAQ tungkol sa mga order, delivery, subscription, at sweepstakes.",
+    "metaOg": "Nandito kami para tumulong. I-email kami sa soporte@hazorex.com.",
+    "heroTitle": "Paano ka namin matutulungan?",
+    "heroSubtitle": "Nandito ang aming team para sagutin ang mga tanong mo tungkol sa iyong mga order, delivery, subscription, o araw-araw na sweepstakes.",
+    "contactTitle": "Makipag-ugnayan",
+    "contactSubtitle": "Sumasagot kami tuwing business hours, karaniwang sa loob ng 24 oras.",
+    "emailLabel": "Email",
+    "inboxLabel": "Inbox",
+    "inboxCta": "Magpadala ng suhestiyon",
+    "faqTitle": "Mga madalas itanong",
+    "faq": {
+      "order": {
+        "q": "Paano ako mag-order?",
+        "a": "Pumili ng mga produkto sa shop, idagdag sa cart, at kumpletuhin ang checkout. Makakatanggap ka ng confirmation email na may mga detalye."
+      },
+      "delivery": {
+        "q": "Gaano katagal ang delivery?",
+        "a": "Ang oras ng delivery ay depende sa iyong lugar. Makakatanggap ka ng mga update sa email sa bawat yugto ng shipment mo."
+      },
+      "cancel": {
+        "q": "Paano ko kakanselahin ang subscription ko?",
+        "a": "Pumunta sa iyong profile, buksan ang aktibong subscription, at pindutin ang cancel. Kung kailangan mo ng tulong, i-email kami sa soporte@hazorex.com."
+      },
+      "sweepstakes": {
+        "q": "Paano sumali sa araw-araw na sweepstakes?",
+        "a": "Makakasali ka nang libre araw-araw sa page ng sweepstakes. Tingnan ang opisyal na mga patakaran sa /sweepstakes-rules."
+      }
+    },
+    "footerPre": "Hindi mo nakita ang hinahanap mo? I-email kami sa"
+  },
+  "privacyPage": {
+    "metaTitle": "Patakaran sa Privacy — Hazorex",
+    "metaDesc": "Patakaran sa privacy ng Hazorex: kung anong data ang kinukuha namin, paano namin ginagamit, at ang iyong mga karapatan.",
+    "back": "← Bumalik sa home",
+    "title": "Patakaran sa Privacy",
+    "lastUpdated": "Huling na-update:",
+    "s1": {
+      "title": "1. Sino kami",
+      "body": "Ang Hazorex (\"kami\" o \"ang platform\") ang nagpapatakbo ng website na <strong>{{domain}}</strong>. Ipinapaliwanag ng patakarang ito kung anong personal na impormasyon ang aming kinukuha, paano namin ginagamit, at kung ano ang iyong mga karapatan dito."
+    },
+    "s2": {
+      "title": "2. Data na kinukuha namin",
+      "bullets": [
+        "<strong>Data ng account:</strong> pangalan, email address, at profile picture kapag nag-sign in ka (halimbawa, sa Google).",
+        "<strong>Data ng paggamit:</strong> mga pahinang binisita, mga interaksyon sa sweepstakes, at mga kagustuhan sa notification.",
+        "<strong>Teknikal na data:</strong> IP address, uri ng browser, at operating system, para sa seguridad at diagnostic."
+      ]
+    },
+    "s3": {
+      "title": "3. Paano namin ginagamit",
+      "bullets": [
+        "Gumawa at mag-maintain ng iyong account.",
+        "Pahintulutan kang sumali sa araw-araw na sweepstakes.",
+        "Magpadala ng mga notification na pinayagan mo.",
+        "Pigilan ang panloloko at pang-aabuso.",
+        "Sumunod sa mga legal na obligasyon."
+      ]
+    },
+    "s4": {
+      "title": "4. Pag-sign in sa Google",
+      "body": "Kung mag-sign up ka gamit ang Google, ang matatanggap lang namin ay ang iyong email, pangalan, at profile picture. Hindi namin ina-access ang iyong Gmail, mga contact, o anumang iba pang data ng iyong Google account."
+    },
+    "s5": {
+      "title": "5. Pagbabahagi ng impormasyon",
+      "body": "Hindi namin ibinebenta ang iyong data. Ibinabahagi lang namin ito sa mga provider na tumutulong sa amin sa pagpapatakbo ng platform (hosting, pagpapadala ng email, analytics) at kung kinakailangan ng batas."
+    },
+    "s6": {
+      "title": "6. Ang iyong mga karapatan",
+      "body": "Maaari kang humiling ng access, pagwawasto, o pagtanggal ng iyong data anumang oras sa pamamagitan ng pag-email sa <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s7": {
+      "title": "7. Pagpapanatili",
+      "body": "Iniingatan namin ang iyong data habang aktibo ang iyong account. Kung tatanggalin mo ang iyong account, ide-delete namin ang iyong personal na impormasyon maliban sa kinakailangan para sumunod sa mga legal na obligasyon."
+    },
+    "s8": {
+      "title": "8. Mga pagbabago",
+      "body": "Maaari naming i-update ang patakarang ito. Ilalathala namin ang anumang pagbabago sa pahinang ito at, kung angkop, ipapaalam namin sa iyo."
+    },
+    "s9": {
+      "title": "9. Contact",
+      "body": "Para sa anumang tanong tungkol sa privacy: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    }
+  },
+  "cartPage": {
+    "metaTitle": "Ang iyong cart — HAZOREX",
+    "metaDesc": "Suriin ang mga item sa iyong cart bago mag-checkout."
   }
 }
