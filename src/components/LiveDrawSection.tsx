@@ -672,19 +672,23 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const { user, loading } = useAuth();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Scope query to the authenticated user and render nothing until the server
-  // confirms the current session has the admin role.
-  const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin", user?.id ?? "signed-out"],
-    queryFn: async () => {
-      const result = await checkAdminFn().catch(() => ({ isAdmin: false }));
-      return { isAdmin: result.isAdmin === true };
-    },
-    enabled: !loading && !!user,
-    staleTime: 0,
-    retry: false,
-  });
+  // Do not use shared query cache for this permission gate: a cached admin
+  // result must never flash the panel for a later normal session.
+  useEffect(() => {
+    let cancelled = false;
+    setIsAdmin(false);
+    if (loading || !user) return () => { cancelled = true; };
+    checkAdminFn()
+      .then((result) => {
+        if (!cancelled) setIsAdmin(result.isAdmin === true);
+      })
+      .catch(() => {
+        if (!cancelled) setIsAdmin(false);
+      });
+    return () => { cancelled = true; };
+  }, [checkAdminFn, loading, user?.id]);
 
   const [lastResult, setLastResult] = useState<{
     status: string;
@@ -715,7 +719,7 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   });
 
 
-  if (loading || !user || adminCheck?.isAdmin !== true) return null;
+  if (loading || !user || !isAdmin) return null;
 
   const isAlreadyDrawn = lastResult && lastResult.status !== "open";
 
