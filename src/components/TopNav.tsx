@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useCart } from "@/lib/cart";
+import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
@@ -37,7 +37,7 @@ const quickLinkKeys = [
 
 export function TopNav() {
   const { t } = useTranslation();
-  const cart = useCart();
+  const cartCount = useShopifyCartStore((s) => s.items.reduce((a, i) => a + i.quantity, 0));
   const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
@@ -297,10 +297,10 @@ export function TopNav() {
               <ShoppingCart className="h-6 w-6" />
               <span
                 className={`absolute -right-2 -top-1 grid min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[11px] font-bold leading-[18px] text-[#1a0f0a] ${
-                  cart.count === 0 ? "opacity-60" : ""
+                  cartCount === 0 ? "opacity-60" : ""
                 }`}
               >
-                {cart.count}
+                {cartCount}
               </span>
             </div>
             <span className="hidden text-xs font-bold md:inline">{t("topnav.cart")}</span>

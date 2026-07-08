@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
 import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
+import { useAuth } from "@/lib/auth";
 import { getLocale } from "@/i18n";
 
 
@@ -668,14 +669,15 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
 
 function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
 
-
+  // Scope query to user id so admin flag can never leak into another session.
   const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin"],
-    queryFn: () => checkAdminFn().catch(() => ({ isAdmin: false })),
-    staleTime: 5 * 60 * 1000,
+    queryKey: ["is-admin", user?.id ?? "anon"],
+    queryFn: () => (user ? checkAdminFn().catch(() => ({ isAdmin: false })) : Promise.resolve({ isAdmin: false })),
+    staleTime: 60 * 1000,
     retry: false,
   });
 
