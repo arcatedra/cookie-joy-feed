@@ -32,16 +32,16 @@ import {
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
     meta: [
-      { title: "ORIGEN Roulette — Spin & Win ⭐" },
+      { title: "Porsenge — Sorteo Diario ⭐ HAZOREX" },
       {
         name: "description",
         content:
-          "Spin the ORIGEN Roulette. Buy Stars or enter free by following our social channels and claim premium prizes.",
+          "Participa en el Sorteo Diario de Porsenge. Compra Estrellas o entra gratis siguiendo nuestros canales sociales y gana premios en efectivo.",
       },
-      { property: "og:title", content: "ORIGEN Roulette — Spin & Win" },
+      { property: "og:title", content: "Porsenge — Sorteo Diario" },
       {
         property: "og:description",
-        content: "Prizes, discounts and surprise flavors. Free entry available.",
+        content: "Premios en efectivo, giros diarios y participación gratuita disponible.",
       },
     ],
   }),

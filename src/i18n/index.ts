@@ -43,14 +43,14 @@ function isSupported(value: string | null | undefined): value is Lang {
 }
 
 function detectInitialLang(): Lang {
-  if (typeof window === "undefined") return "en";
+  if (typeof window === "undefined") return "es";
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (isSupported(stored)) return stored;
   } catch {
     /* ignore */
   }
-  return "en";
+  return "es";
 }
 
 if (!i18n.isInitialized) {
@@ -58,8 +58,8 @@ if (!i18n.isInitialized) {
     .use(initReactI18next)
     .init({
       resources,
-      lng: "en", // SSR-stable; switched on the client after hydration
-      fallbackLng: "en",
+      lng: "es", // SSR-stable default (site is Spanish-primary); switched on the client after hydration if user prefers another language
+      fallbackLng: "es",
       initAsync: false,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
