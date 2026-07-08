@@ -182,7 +182,7 @@ function OffersPage() {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md min-h-11 bg-[#1e3a5f] px-4 py-2 text-sm font-semibold text-white hover:bg-[#16294a] disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Crear oferta"}
           </button>
