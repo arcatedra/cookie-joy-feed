@@ -123,7 +123,11 @@
       "bestSellers": "Bestseller",
       "buildPack": "Crea un Pacchetto",
       "support": "Servizio Clienti",
-      "subscriptions": "Abbonamenti Biscotti"
+      "subscriptions": "Abbonamenti Biscotti",
+      "shop": "🛍️ Negozio",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 Diventa corriere",
+      "businesses": "🏪 Registra la tua attività"
     }
   },
   "ratings": {

@@ -123,7 +123,11 @@
       "bestSellers": "Pinakamabili",
       "buildPack": "Gumawa ng pack",
       "support": "Customer Service",
-      "subscriptions": "Cookie subscriptions"
+      "subscriptions": "Cookie subscriptions",
+      "shop": "🛍️ Tindahan",
+      "roulette": "🎰 Porsenge",
+      "drivers": "🛵 Maging driver",
+      "businesses": "🏪 Irehistro ang negosyo"
     }
   },
   "ratings": {

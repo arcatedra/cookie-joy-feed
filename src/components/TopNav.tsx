@@ -23,10 +23,10 @@ import { NotificationBell } from "@/components/NotificationBell";
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
-  { key: "shop", to: "/shop", label: "🛍️ Tienda" },
-  { key: "roulette", to: "/ruleta", label: "🎰 Porsenge" },
-  { key: "drivers", to: "/repartidores", label: "🛵 Sé repartidor" },
-  { key: "businesses", to: "/negocios/registro", label: "🏪 Postula tu negocio" },
+  { key: "shop", to: "/shop", highlighted: true },
+  { key: "roulette", to: "/ruleta", highlighted: true },
+  { key: "drivers", to: "/repartidores", highlighted: true },
+  { key: "businesses", to: "/negocios/registro", highlighted: true },
   { key: "deals", to: "/explore" },
   { key: "bestSellers", to: "/menu" },
   { key: "buildPack", to: "/menu" },
@@ -333,7 +333,7 @@ export function TopNav() {
           </button>
           <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
             {quickLinkKeys.map((l) => {
-              const isHighlighted = l.key === "shop" || l.key === "roulette" || l.key === "drivers";
+              const isHighlighted = "highlighted" in l && l.highlighted;
               return (
                 <Link
                   key={l.key}
@@ -344,7 +344,7 @@ export function TopNav() {
                       : "text-white/90"
                   }`}
                 >
-                  {"label" in l && l.label ? l.label : t(`topnav.links.${l.key}`)}
+                  {t(`topnav.links.${l.key}`)}
                 </Link>
               );
             })}
