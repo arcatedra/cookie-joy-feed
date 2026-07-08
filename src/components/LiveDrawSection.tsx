@@ -669,15 +669,20 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
 
 function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const triggerFn = useServerFn(triggerTestDraw);
 
-  // Scope query to user id so admin flag can never leak into another session.
+  // Scope query to the authenticated user and render nothing until the server
+  // confirms the current session has the admin role.
   const { data: adminCheck } = useQuery({
-    queryKey: ["is-admin", user?.id ?? "anon"],
-    queryFn: () => (user ? checkAdminFn().catch(() => ({ isAdmin: false })) : Promise.resolve({ isAdmin: false })),
-    staleTime: 60 * 1000,
+    queryKey: ["is-admin", user?.id ?? "signed-out"],
+    queryFn: async () => {
+      const result = await checkAdminFn().catch(() => ({ isAdmin: false }));
+      return { isAdmin: result.isAdmin === true };
+    },
+    enabled: !loading && !!user,
+    staleTime: 0,
     retry: false,
   });
 
@@ -710,7 +715,7 @@ function AdminTestDrawPanel({ onResult }: { onResult: () => void }) {
   });
 
 
-  if (!adminCheck?.isAdmin) return null;
+  if (loading || !user || adminCheck?.isAdmin !== true) return null;
 
   const isAlreadyDrawn = lastResult && lastResult.status !== "open";
 
