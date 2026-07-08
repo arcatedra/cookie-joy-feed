@@ -268,7 +268,7 @@ function AdminSweepstakesPage() {
         <CardContent className="space-y-3">
           <Alert>
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Por defecto excluye FL, NY, RI</AlertTitle>
+            <AlertTitle>Por defecto excluye FL, RI</AlertTitle>
             <AlertDescription>
               Quitar uno de estos estados requiere registro previo y bond (fianza) en ese estado antes de aceptar
               participantes. No los quites sin asesoramiento legal.

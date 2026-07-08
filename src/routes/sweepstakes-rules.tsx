@@ -33,7 +33,7 @@ function RulesPage() {
     ? cfg!.sponsor_address
     : t("sweepstakesRules.addressPlaceholder");
   const sponsorEmail = cfg?.sponsor_email ?? "soporte@hazorex.com";
-  const excluded = (cfg?.excluded_states ?? ["FL", "NY", "RI"]).join(", ");
+  const excluded = (cfg?.excluded_states ?? ["FL", "RI"]).join(", ");
   const maxPrize = (cfg?.max_daily_prize_usd ?? 4999).toLocaleString("en-US");
   const claimDays = cfg?.claim_window_days ?? 14;
   const minAge = cfg?.min_age ?? 18;
