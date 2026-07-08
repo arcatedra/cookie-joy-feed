@@ -110,7 +110,7 @@ export function SubscriptionGateProvider({ children }: { children: ReactNode }) 
           await qc.invalidateQueries({ queryKey });
           const data = await qc.fetchQuery({ queryKey, queryFn: () => getSub() });
           const sub = data?.subscription;
-          if (sub && ACTIVE.has(sub.status ?? "")) {
+          if (isSubscriptionActive(sub)) {
             return { active: true, attempts, errors, lastError };
           }
         } catch (e) {

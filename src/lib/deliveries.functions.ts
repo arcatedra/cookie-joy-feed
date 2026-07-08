@@ -2,25 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { syncLatestSubscriptionFromStripe } from "./subscriptions.functions";
+import { loadSubscriptionSnapshot } from "./subscription-status.server";
+import { EXTRA_DELIVERY_PRICE_CENTS, type DeliveryStatus } from "./subscription-status";
 
 const ACTIVE_STATUSES = ["active", "trialing", "past_due"] as const;
 const ACTIVE_SET = new Set<string>(ACTIVE_STATUSES);
-const EXTRA_DELIVERY_PRICE_CENTS = 1000;
-
-export interface DeliveryStatus {
-  hasActiveSubscription: boolean;
-  planName: string | null;
-  priceId: string | null;
-  deliveriesPerMonth: number;
-  used: number;
-  remaining: number;
-  periodStart: string | null;
-  periodEnd: string | null;
-  subscriptionId: string | null;
-  supportsExtra: boolean;
-  extraPriceCents: number;
-}
 
 export interface DeliveryBookingRow {
   id: string;
@@ -109,45 +95,15 @@ export const getMyDeliveryStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<DeliveryStatus> => {
     const email = (context.claims.email as string | undefined) ?? null;
-    const ctx = await loadActiveContext(context.supabase, context.userId, email);
-    if (!ctx) {
-      return {
-        hasActiveSubscription: false,
-        planName: null,
-        priceId: null,
-        deliveriesPerMonth: 0,
-        used: 0,
-        remaining: 0,
-        periodStart: null,
-        periodEnd: null,
-        subscriptionId: null,
-        supportsExtra: false,
-        extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
-      };
-    }
-
-    const { count } = await context.supabase
-      .from("delivery_bookings")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", context.userId)
-      .eq("status", "scheduled")
-      .gte("period_start", ctx.periodStart.toISOString())
-      .lte("period_end", ctx.periodEnd.toISOString());
-
-    const used = count ?? 0;
-    return {
-      hasActiveSubscription: true,
-      planName: ctx.planName,
-      priceId: ctx.sub.price_id,
-      deliveriesPerMonth: ctx.deliveriesPerMonth,
-      used,
-      remaining: Math.max(0, ctx.deliveriesPerMonth - used),
-      periodStart: ctx.periodStart.toISOString(),
-      periodEnd: ctx.periodEnd.toISOString(),
-      subscriptionId: ctx.sub.id,
-      supportsExtra: ctx.supportsExtra,
-      extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
-    };
+    const { paymentsEnvironmentForHost } = await import("./stripe.server");
+    const env = paymentsEnvironmentForHost(getRequestHost());
+    const snapshot = await loadSubscriptionSnapshot({
+      supabase: context.supabase,
+      userId: context.userId,
+      email,
+      env,
+    });
+    return snapshot.deliveryStatus;
   });
 
 

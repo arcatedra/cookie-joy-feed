@@ -15,13 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
-  getMyDeliveryStatus,
   listMyDeliveries,
   scheduleDelivery,
   cancelDelivery,
   rescheduleDelivery,
   scheduleExtraDelivery,
 } from "@/lib/deliveries.functions";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 export const Route = createFileRoute("/_authenticated/deliveries")({
   head: () => ({
@@ -59,14 +59,13 @@ function buildMonthGrid(year: number, month: number) {
 function DeliveriesPage() {
   const { t } = useTranslation();
   const qc = useQueryClient();
-  const getStatus = useServerFn(getMyDeliveryStatus);
+  const gate = useSubscriptionGate();
   const getList = useServerFn(listMyDeliveries);
   const scheduleFn = useServerFn(scheduleDelivery);
   const cancelFn = useServerFn(cancelDelivery);
   const rescheduleFn = useServerFn(rescheduleDelivery);
   const extraFn = useServerFn(scheduleExtraDelivery);
 
-  const statusQuery = useQuery({ queryKey: ["delivery-status"], queryFn: () => getStatus() });
   const listQuery = useQuery({ queryKey: ["delivery-list"], queryFn: () => getList() });
 
   const today = useMemo(() => new Date(), []);
@@ -83,7 +82,7 @@ function DeliveriesPage() {
     year: "numeric",
   }).format(new Date(viewYear, viewMonth, 1));
 
-  const status = statusQuery.data;
+  const status = gate.deliveryStatus;
   const upcoming = (listQuery.data ?? []).filter((d) => d.status === "scheduled");
   const scheduledKeys = new Set(upcoming.map((d) => d.scheduled_date));
 
@@ -105,12 +104,12 @@ function DeliveriesPage() {
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(t("subscribeGate.scheduled"));
       setSelectedDate(null);
       setAddress("");
       setNotes("");
-      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      await gate.refresh();
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -118,9 +117,9 @@ function DeliveriesPage() {
 
   const cancelMut = useMutation({
     mutationFn: (id: string) => cancelFn({ data: { id } }),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(t("subscribeGate.canceled"));
-      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      await gate.refresh();
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -129,9 +128,9 @@ function DeliveriesPage() {
   const rescheduleMut = useMutation({
     mutationFn: ({ id, date }: { id: string; date: string }) =>
       rescheduleFn({ data: { id, date } }),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Fecha actualizada");
-      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      await gate.refresh();
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -148,12 +147,12 @@ function DeliveriesPage() {
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Entrega adicional agendada. Se cobrarán $10 en tu próxima factura.");
       setSelectedDate(null);
       setAddress("");
       setNotes("");
-      qc.invalidateQueries({ queryKey: ["delivery-status"] });
+      await gate.refresh();
       qc.invalidateQueries({ queryKey: ["delivery-list"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -202,7 +201,7 @@ function DeliveriesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {statusQuery.isLoading ? (
+            {gate.loading ? (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Loader2 className="size-4 animate-spin" /> Cargando…
               </div>
