@@ -1321,7 +1321,8 @@
       "addressPlaceholder": "通り、番地、地区",
       "city": "市 *",
       "selectZone": "エリアを選択してください",
-      "required": "* 必須項目。あなたの情報は安全に保護されます。"
+      "required": "* 必須項目。あなたの情報は安全に保護されます。",
+      "otherZone": "その他のエリア"
     },
     "types": {
       "supermercado": "スーパーマーケット",

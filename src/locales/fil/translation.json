@@ -1319,7 +1319,8 @@
       "addressPlaceholder": "Kalye, numero, barangay",
       "city": "Lungsod *",
       "selectZone": "Pumili ng lugar",
-      "required": "* Mga kinakailangang field. Ang iyong impormasyon ay protektado at ligtas."
+      "required": "* Mga kinakailangang field. Ang iyong impormasyon ay protektado at ligtas.",
+      "otherZone": "Ibang sona"
     },
     "types": {
       "supermercado": "Supermarket",

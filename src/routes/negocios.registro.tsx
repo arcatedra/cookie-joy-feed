@@ -297,11 +297,14 @@ function BusinessRegistrationPage() {
                 className={inputCls}
               >
                 <option value="">{t("negociosRegistro.form.selectZone")}</option>
-                {NYC_DELIVERY_ZONES.map((z) => (
-                  <option key={z} value={z} translate="no">
-                    {z}
-                  </option>
-                ))}
+                {NYC_DELIVERY_ZONES.map((z) => {
+                  const isOther = z === "Otra zona";
+                  return (
+                    <option key={z} value={z} translate={isOther ? undefined : "no"}>
+                      {isOther ? t("negociosRegistro.form.otherZone") : z}
+                    </option>
+                  );
+                })}
               </select>
             </Field>
 

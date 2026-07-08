@@ -1319,7 +1319,8 @@
       "addressPlaceholder": "Straße, Hausnummer, Stadtteil",
       "city": "Stadt *",
       "selectZone": "Wähle ein Gebiet",
-      "required": "* Pflichtfelder. Deine Informationen sind geschützt und sicher."
+      "required": "* Pflichtfelder. Deine Informationen sind geschützt und sicher.",
+      "otherZone": "Andere Zone"
     },
     "types": {
       "supermercado": "Supermarkt",

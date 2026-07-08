@@ -1319,7 +1319,8 @@
       "addressPlaceholder": "Rua, número, bairro",
       "city": "Cidade *",
       "selectZone": "Selecione uma área",
-      "required": "* Campos obrigatórios. Suas informações estão protegidas e seguras."
+      "required": "* Campos obrigatórios. Suas informações estão protegidas e seguras.",
+      "otherZone": "Outra zona"
     },
     "types": {
       "supermercado": "Supermercado",

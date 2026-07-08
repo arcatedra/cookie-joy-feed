@@ -1316,7 +1316,8 @@
       "addressPlaceholder": "街道，门牌号，社区",
       "city": "城市 *",
       "selectZone": "选择一个区域",
-      "required": "* 必填字段。您的信息受到保护且安全。"
+      "required": "* 必填字段。您的信息受到保护且安全。",
+      "otherZone": "其他区域"
     },
     "types": {
       "supermercado": "超市",
