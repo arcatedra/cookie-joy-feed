@@ -118,23 +118,31 @@ function ProfilePage() {
       </section>
 
 
-      {/* Active Plan */}
-      <section className="mt-6 px-5">
-        <div className="flex items-center justify-between rounded-2xl bg-primary p-4 text-primary-foreground shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10">
-              <Award className="h-5 w-5" />
+      {/* Active Plan — solo si el usuario realmente tiene una suscripción activa */}
+      {deliveryStatus.hasActiveSubscription && deliveryStatus.planName ? (
+        <section className="mt-6 px-5">
+          <Link
+            to="/subscribe"
+            className="flex items-center justify-between rounded-2xl bg-primary p-4 text-primary-foreground shadow-lg"
+          >
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-foreground/10">
+                <Award className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-primary-foreground/70">{t("profile.currentPlan")}</p>
+                <p className="text-sm font-bold">{deliveryStatus.planName}</p>
+                <p className="text-[11px] text-primary-foreground/70">
+                  {deliveryStatus.used}/{deliveryStatus.deliveriesPerMonth} {t("profile.deliveriesUsed", { defaultValue: "deliveries used" })}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-medium text-primary-foreground/70">{t("profile.currentPlan")}</p>
-              <p className="text-sm font-bold">{t("profile.enthusiast")}</p>
-            </div>
-          </div>
-          <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs font-bold text-green-400">
-            {t("profile.active")}
-          </span>
-        </div>
-      </section>
+            <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs font-bold text-green-400">
+              {t("profile.active")}
+            </span>
+          </Link>
+        </section>
+      ) : null}
 
       {/* Recent Orders */}
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
