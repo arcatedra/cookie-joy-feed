@@ -333,7 +333,7 @@ export function TopNav() {
           </button>
           <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
             {quickLinkKeys.map((l) => {
-              const isHighlighted = l.key === "shop" || l.key === "roulette" || l.key === "drivers";
+              const isHighlighted = "highlighted" in l && l.highlighted;
               return (
                 <Link
                   key={l.key}
@@ -344,7 +344,7 @@ export function TopNav() {
                       : "text-white/90"
                   }`}
                 >
-                  {"label" in l && l.label ? l.label : t(`topnav.links.${l.key}`)}
+                  {t(`topnav.links.${l.key}`)}
                 </Link>
               );
             })}
