@@ -108,7 +108,8 @@ async function loadActiveContext(
 export const getMyDeliveryStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<DeliveryStatus> => {
-    const ctx = await loadActiveContext(context.supabase, context.userId);
+    const email = (context.claims.email as string | undefined) ?? null;
+    const ctx = await loadActiveContext(context.supabase, context.userId, email);
     if (!ctx) {
       return {
         hasActiveSubscription: false,
@@ -120,6 +121,8 @@ export const getMyDeliveryStatus = createServerFn({ method: "GET" })
         periodStart: null,
         periodEnd: null,
         subscriptionId: null,
+        supportsExtra: false,
+        extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
       };
     }
 
@@ -142,8 +145,11 @@ export const getMyDeliveryStatus = createServerFn({ method: "GET" })
       periodStart: ctx.periodStart.toISOString(),
       periodEnd: ctx.periodEnd.toISOString(),
       subscriptionId: ctx.sub.id,
+      supportsExtra: ctx.supportsExtra,
+      extraPriceCents: EXTRA_DELIVERY_PRICE_CENTS,
     };
   });
+
 
 export const listMyDeliveries = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
