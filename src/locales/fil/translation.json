@@ -575,7 +575,21 @@
     "nextDraw": "⏱ Susunod na opisyal na draw sa",
     "dailyDrawAt": "Daily draw sa 8:00 PM (Eastern Time) · automated",
     "lastWinner": "HULING NANALO",
-    "recentHistory": "KAMAKALANG KASAYSAYAN"
+    "recentHistory": "KAMAKALANG KASAYSAYAN",
+    "packages": {
+      "starter": {
+        "label": "Inicial",
+        "tagline": "Prueba tu suerte"
+      },
+      "popular": {
+        "label": "Más Vendido",
+        "tagline": "Mejor opción · +50% valor"
+      },
+      "premium": {
+        "label": "Premium",
+        "tagline": "Máximo valor por estrella"
+      }
+    }
   },
   "fullscreenDraw": {
     "ariaLabel": "Live draw",
@@ -1025,6 +1039,326 @@
     "privacy": "Pagkapribado",
     "rules": "Mga panuntunan",
     "trust": "Tiwala",
-    "rights": "Lahat ng karapatan ay nakalaan."
+    "rights": "Lahat ng karapatan ay nakalaan.",
+    "becomeDriver": "Sé repartidor"
+  },
+  "repartidoresPage": {
+    "metaTitle": "Sé repartidor · Hazorex",
+    "metaDesc": "Únete al equipo de repartidores de Hazorex. Postúlate en minutos, elige tus horarios y gana dinero entregando pedidos en tu ciudad.",
+    "metaOg": "Postúlate como repartidor de Hazorex. Horarios flexibles, pagos semanales y proceso de aprobación transparente.",
+    "hero": {
+      "badge": "Postúlate en 5 minutos",
+      "titlePart1": "Gana hasta",
+      "titleHighlight": "$25/hora",
+      "titlePart2": "repartiendo con Hazorex",
+      "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Solo necesitas",
+      "subtitleHighlight": "moto o auto",
+      "subtitlePart2": ", licencia vigente y ganas de rodar.",
+      "viewRequirements": "Ver requisitos →",
+      "perks": {
+        "flexible": "Horarios flexibles",
+        "weekly": "Pagos semanales",
+        "noFee": "Sin cuota inicial",
+        "reply48": "Respuesta en 48 h"
+      }
+    },
+    "signInGate": {
+      "title": "Empieza tu postulación",
+      "body": "Primero inicia sesión o crea tu cuenta de Hazorex. Es rápido.",
+      "cta": "Iniciar sesión y postularme"
+    },
+    "readyGate": {
+      "title": "Todo listo para tu postulación",
+      "body": "Tarda ~5 minutos. Ten a la mano tu identificación, licencia y seguro vigentes.",
+      "cta": "Empezar postulación"
+    },
+    "cta": {
+      "loading": "Cargando…",
+      "viewStatus": "Ver estado de mi postulación"
+    },
+    "vehicles": {
+      "badge": "Vehículos aceptados",
+      "title": "Solo aceptamos moto o auto",
+      "bodyPart1": "Para garantizar entregas rápidas y con cobertura completa, en Hazorex",
+      "bodyStrong": "solo aceptamos repartidores en moto o auto",
+      "bodyPart2": ". No aceptamos entregas a pie ni en bicicleta.",
+      "hint": "Elige el tuyo abajo y te pediremos solo los documentos correspondientes.",
+      "moto": {
+        "label": "Moto",
+        "desc": "Ideal para tráfico denso. Entregas más rápidas.",
+        "perk1": "Licencia A vigente",
+        "perk2": "Seguro del vehículo vigente",
+        "perk3": "Casco"
+      },
+      "auto": {
+        "label": "Auto",
+        "desc": "Perfecto para pedidos grandes y clima variable.",
+        "perk1": "Licencia B vigente",
+        "perk2": "Seguro del vehículo vigente",
+        "perk3": "Revisión al día"
+      }
+    },
+    "how": {
+      "title": "Cómo funciona",
+      "s1": {
+        "title": "Postúlate",
+        "body": "Completa tus datos, elige tu vehículo y sube los documentos que te pedimos."
+      },
+      "s2": {
+        "title": "Te revisamos",
+        "body": "Nuestro equipo verifica tu información en un máximo de 48 horas. Te avisamos por email."
+      },
+      "s3": {
+        "title": "Empieza a ganar",
+        "body": "Una vez aprobado, activa tu disponibilidad y recibe pedidos cerca de ti."
+      }
+    },
+    "requirements": {
+      "title": "Requisitos",
+      "r1": "Ser mayor de 18 años",
+      "r2": "Moto o auto propio (no aceptamos a pie ni bicicleta)",
+      "r3": "Licencia de conducir vigente (tipo A para moto, tipo B para auto)",
+      "r4": "Seguro del vehículo vigente",
+      "r5": "Identificación oficial vigente",
+      "r6": "Foto de perfil clara (selfie)"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "q1": {
+        "q": "¿Necesito tener un vehículo propio?",
+        "a": "Sí. En Hazorex solo aceptamos repartidores en moto o auto para garantizar tiempos de entrega y cobertura de zona. No aceptamos entregas a pie ni en bicicleta."
+      },
+      "q2": {
+        "q": "¿Cuánto tarda la aprobación?",
+        "a": "Te respondemos en un máximo de 48 horas después de que subes todos tus documentos."
+      },
+      "q3": {
+        "q": "¿Cuándo cobro?",
+        "a": "Los pagos se procesan semanalmente por el total de entregas completadas."
+      },
+      "q4": {
+        "q": "¿Puedo elegir mis horarios?",
+        "a": "Sí. Tú activas tu disponibilidad cuando quieres recibir pedidos."
+      },
+      "q5": {
+        "q": "¿Qué pasa con mis documentos?",
+        "a": "Tus documentos se usan únicamente para verificar tu identidad y elegibilidad. Se almacenan de forma cifrada y solo el equipo de verificación tiene acceso. Puedes solicitar su eliminación en cualquier momento."
+      }
+    },
+    "status": {
+      "approved": {
+        "title": "¡Estás aprobado como repartidor de Hazorex!",
+        "body": "Entra a tu panel para configurar tu disponibilidad y empezar a repartir.",
+        "cta": "Ir a mi panel"
+      },
+      "pending": {
+        "title": "Postulación recibida",
+        "body": "Estamos revisando tu información. Te avisaremos por correo en un máximo de 48 horas."
+      },
+      "inReview": {
+        "title": "Postulación en revisión",
+        "body": "El equipo está verificando tus documentos. Te avisaremos por correo pronto."
+      },
+      "rejected": {
+        "title": "Postulación rechazada",
+        "body": "Puedes escribirnos a soporte@hazorex.com para resolver los detalles y volver a postular."
+      },
+      "suspended": {
+        "title": "Cuenta suspendida",
+        "body": "Escríbenos a soporte@hazorex.com para más detalles."
+      }
+    },
+    "docs": {
+      "identificacion": {
+        "label": "Identificación oficial (licencia estatal, pasaporte o ID gubernamental)",
+        "hint": "Imagen o PDF, máx 5MB"
+      },
+      "licencia_conducir": {
+        "label": "Licencia de conducir vigente (NY State)",
+        "hint": "Imagen o PDF, máx 5MB"
+      },
+      "seguro_vehiculo": {
+        "label": "Seguro del vehículo vigente",
+        "hint": "Imagen o PDF, máx 5MB"
+      },
+      "foto_perfil": {
+        "label": "Selfie clara (foto de perfil)",
+        "hint": "Imagen jpg/png, máx 5MB"
+      },
+      "casco": {
+        "label": "Foto de tu casco DOT-aprobado (solo moto)",
+        "hint": "Imagen jpg/png del casco puesto o al frente, máx 5MB"
+      }
+    },
+    "docStatus": {
+      "pendiente": "Pendiente",
+      "subido": "Subido",
+      "verificado": "Verificado",
+      "rechazado": "Rechazado"
+    },
+    "steps": {
+      "s1": "Datos",
+      "s2": "Vehículo",
+      "s3": "Documentos",
+      "s4": "Confirmar",
+      "progressAria": "Progreso"
+    },
+    "form": {
+      "step1": {
+        "title": "Datos personales"
+      },
+      "step2": {
+        "title": "Vehículo",
+        "subtitle": "Solo aceptamos moto o auto."
+      },
+      "step3": {
+        "title": "Documentos",
+        "subtitle": "Todos los documentos siguientes son obligatorios para completar tu postulación (imagen o PDF, máx. 5MB)."
+      },
+      "step4": {
+        "title": "Confirmación",
+        "hint": "Revisa que todo esté correcto. Puedes editar cualquier sección antes de enviar tu postulación."
+      },
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "dob": "Fecha de nacimiento (18+)",
+      "zone": "Zona de reparto",
+      "address": "Dirección",
+      "licenseNumber": "Número de licencia de conducir",
+      "insurer": "Aseguradora",
+      "plate": "Placa (opcional)",
+      "selectEllipsis": "Selecciona…",
+      "continue": "Continuar",
+      "back": "Atrás",
+      "submit": "Enviar postulación",
+      "submitting": "Enviando postulación…",
+      "change": "Cambiar",
+      "upload": "Subir",
+      "required": "Requerido",
+      "uploadAll": "Sube todos los documentos requeridos",
+      "fileTypeError": "Formato no permitido. Usa JPG, PNG o PDF.",
+      "fileSizeError": "Archivo muy grande (máx {{size}}MB).",
+      "uploadError": "No se pudo subir {{doc}}: {{msg}}",
+      "driverError": "No se pudo crear tu registro: {{msg}}",
+      "vehicleError": "No se pudo guardar tu vehículo: {{msg}}",
+      "docsError": "No se pudieron guardar tus documentos: {{msg}}",
+      "previewAlt": "Vista previa de {{name}}",
+      "privacy": {
+        "strong": "Privacidad de tus documentos.",
+        "body": "Se usan únicamente para verificar tu identidad y elegibilidad. Se almacenan de forma cifrada y solo el equipo de verificación tiene acceso. Puedes solicitar su eliminación en cualquier momento escribiendo a soporte@hazorex.com. Ver también nuestra",
+        "link": "Política de privacidad"
+      },
+      "accept": {
+        "part1": "Confirmo que la información proporcionada es verídica y acepto los",
+        "terms": "Términos",
+        "and": "y la",
+        "privacy": "Política de Privacidad",
+        "part2": "de Hazorex."
+      },
+      "errors": {
+        "err_fullName": "Ingresa tu nombre completo",
+        "err_email": "Correo inválido",
+        "err_phone_short": "Teléfono inválido",
+        "err_phone_format": "Ingresa un número de EE. UU. de 10 dígitos, ej. +1 (718) 555 0000",
+        "err_dob_required": "Selecciona tu fecha de nacimiento",
+        "err_dob_underage": "Debes ser mayor de 18 años",
+        "err_zone": "Selecciona tu zona de reparto",
+        "err_address": "Ingresa tu dirección",
+        "err_vehicle": "Selecciona moto o auto",
+        "err_license": "Ingresa tu número de licencia",
+        "err_insurer": "Ingresa tu aseguradora"
+      }
+    },
+    "summary": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "dob": "Fecha de nacimiento",
+      "zone": "Zona",
+      "address": "Dirección",
+      "type": "Tipo",
+      "license": "Licencia",
+      "insurer": "Aseguradora",
+      "plate": "Placa",
+      "edit": "Editar"
+    },
+    "success": {
+      "title": "¡Postulación recibida!",
+      "bodyPart1": "Te contactaremos por correo en un máximo de ",
+      "bodyStrong": "48 horas",
+      "bodyPart2": ".",
+      "refLabel": "Número de referencia",
+      "copied": "Copiado",
+      "copyAria": "Copiar número de referencia",
+      "tip": "Guarda este número. Te ayudará si necesitas contactarnos."
+    }
+  },
+  "negociosRegistro": {
+    "metaTitle": "Postula tu negocio — Hazorex",
+    "metaDesc": "Registra tu supermercado, tienda, panadería o farmacia en Hazorex y llega a miles de clientes.",
+    "notFound": "No encontrado",
+    "back": "Volver",
+    "badge": "Para negocios",
+    "title": "Lleva tu negocio a miles de clientes",
+    "subtitle": "Registra tu supermercado o tienda. Nosotros nos encargamos del delivery mientras tú vendes.",
+    "signInPrompt": "Necesitas iniciar sesión para postular tu negocio.",
+    "signInLink": "Iniciar sesión",
+    "existing": "Ya tienes un negocio registrado.",
+    "existingLink": "Ver estado",
+    "form": {
+      "title": "Formulario de registro",
+      "subtitle": "Completa todos los campos para solicitar tu acceso",
+      "name": "Nombre del negocio *",
+      "namePlaceholder": "Mi Supermercado",
+      "type": "Tipo de negocio *",
+      "email": "Correo electrónico *",
+      "emailPlaceholder": "negocio@correo.com",
+      "phone": "Teléfono *",
+      "address": "Dirección del negocio *",
+      "addressPlaceholder": "Calle, número, colonia",
+      "city": "Ciudad *",
+      "selectZone": "Selecciona una zona",
+      "required": "* Campos obligatorios. Tu información está protegida y segura."
+    },
+    "types": {
+      "supermercado": "Supermercado",
+      "tienda": "Tienda",
+      "panaderia": "Panadería",
+      "farmacia": "Farmacia",
+      "otro": "Otro"
+    },
+    "notice": {
+      "strong": "Aprobación en 48 horas.",
+      "body": "Revisaremos tu solicitud y te notificaremos por correo. Una vez aprobado, podrás subir tu catálogo, inventario y ofertas."
+    },
+    "submit": "Enviar solicitud",
+    "submitting": "Enviando solicitud...",
+    "errors": {
+      "nameRequired": "El nombre del negocio es obligatorio",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "emailInvalid": "Ingresa un correo válido",
+      "phoneRequired": "El teléfono es obligatorio",
+      "phoneFormat": "El teléfono debe tener 10 dígitos (formato EE. UU.)",
+      "addressRequired": "La dirección es obligatoria",
+      "cityRequired": "La ciudad es obligatoria",
+      "mustSignIn": "Debes iniciar sesión para registrar un negocio",
+      "alreadyRegistered": "Ya tienes un negocio registrado",
+      "generic": "Error al registrar el negocio"
+    },
+    "success": {
+      "title": "¡Solicitud enviada!",
+      "body": "Tu negocio ha sido registrado correctamente. Revisaremos tu solicitud en las próximas 48 horas y te notificaremos al correo que proporcionaste.",
+      "nextStrong": "Próximo paso:",
+      "nextBody": "Una vez aprobado, accederás a tu panel para subir catálogo, inventario y ofertas.",
+      "viewStatus": "Ver estado de mi negocio",
+      "registerAnother": "Registrar otro"
+    },
+    "benefits": {
+      "b1": "Aprobación en 48h",
+      "b2": "Sin cuota inicial",
+      "b3": "Delivery incluido",
+      "b4": "Panel de ventas"
+    }
   }
 }
