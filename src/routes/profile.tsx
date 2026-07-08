@@ -57,6 +57,7 @@ const menuItems = [
 function ProfilePage() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
+  const { deliveryStatus } = useSubscriptionGate();
   const [sheet, setSheet] = useState<string | null>(null);
   
   const displayName =
