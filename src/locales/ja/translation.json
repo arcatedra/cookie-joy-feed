@@ -531,7 +531,13 @@
       "flashProduct": "クッキー9個入り詰め合わせパック",
       "flashAlt": "クッキー9個パック",
       "flashClaimed": "獲得済み: {{pct}}%",
-      "flashEndsIn": "終了まで {{time}}"
+      "flashEndsIn": "終了まで {{time}}",
+      "best": {
+        "classic": "クラシック",
+        "oatRaisin": "オートミール＆レーズン",
+        "redVelvet": "レッドベルベット",
+        "tripleChoc": "トリプルチョコレート"
+      }
     },
     "best": {
       "classic": "クラシック",
