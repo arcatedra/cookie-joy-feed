@@ -58,8 +58,8 @@ if (!i18n.isInitialized) {
     .use(initReactI18next)
     .init({
       resources,
-      lng: "en", // SSR-stable; switched on the client after hydration
-      fallbackLng: "en",
+      lng: "es", // SSR-stable default (site is Spanish-primary); switched on the client after hydration if user prefers another language
+      fallbackLng: "es",
       initAsync: false,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
