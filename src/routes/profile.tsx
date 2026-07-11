@@ -70,6 +70,11 @@ function ProfilePage() {
 
   return (
     <main className="profile-page min-h-screen bg-background pb-24">
+      {/* Referral QR — visible immediately, no scroll required */}
+      <div className="pt-4">
+        <ReferralCard userId={user?.id ?? null} />
+      </div>
+
       {/* Top blue banner */}
       <header className="relative bg-primary px-5 pt-12 pb-20">
         <div className="flex items-center justify-between">
