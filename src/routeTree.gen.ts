@@ -24,6 +24,7 @@ import { Route as RepartidoresRouteImport } from './routes/repartidores'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as JoinRouteImport } from './routes/join'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
@@ -158,6 +159,11 @@ const PrivacidadRoute = PrivacidadRouteImport.update({
 const MenuRoute = MenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistorialRoute = HistorialRouteImport.update({
@@ -506,6 +512,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
+  '/join': typeof JoinRoute
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -582,6 +589,7 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
+  '/join': typeof JoinRoute
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -659,6 +667,7 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
+  '/join': typeof JoinRoute
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -737,6 +746,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/explore'
     | '/historial'
+    | '/join'
     | '/menu'
     | '/privacidad'
     | '/profile'
@@ -813,6 +823,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/explore'
     | '/historial'
+    | '/join'
     | '/menu'
     | '/privacidad'
     | '/profile'
@@ -889,6 +900,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/explore'
     | '/historial'
+    | '/join'
     | '/menu'
     | '/privacidad'
     | '/profile'
@@ -967,6 +979,7 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
   HistorialRoute: typeof HistorialRoute
+  JoinRoute: typeof JoinRoute
   MenuRoute: typeof MenuRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ProfileRoute: typeof ProfileRoute
@@ -1111,6 +1124,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/historial': {
@@ -1640,6 +1660,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,
   HistorialRoute: HistorialRoute,
+  JoinRoute: JoinRoute,
   MenuRoute: MenuRoute,
   PrivacidadRoute: PrivacidadRoute,
   ProfileRoute: ProfileRoute,
@@ -1681,13 +1702,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
