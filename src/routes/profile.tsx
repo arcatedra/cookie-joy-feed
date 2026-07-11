@@ -119,8 +119,8 @@ function ProfilePage() {
         </div>
       </section>
 
-      <ReferralCard userId={user?.id ?? null} />
       <ReferralHistory userId={user?.id ?? null} />
+
 
       {/* Subscription promo (hidden when active) */}
       <section className="mt-6 px-5">
