@@ -36,6 +36,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { FavoritesList } from "@/components/FavoritesList";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -241,7 +242,11 @@ function ProfilePage() {
             </SheetTitle>
           </SheetHeader>
           <div className="px-5 pb-8">
-            <p className="text-sm text-muted-foreground">{t("common.comingSoon")}</p>
+            {sheet === "favorites" ? (
+              <FavoritesList />
+            ) : (
+              <p className="text-sm text-muted-foreground">{t("common.comingSoon")}</p>
+            )}
           </div>
         </SheetContent>
       </Sheet>
@@ -408,8 +413,8 @@ function ProfileStats({ userId, lang, t }: { userId: string | null; lang: string
           .eq("subject_user_id", userId!)
           .in("status", ["paid", "completed", "succeeded"]),
         supabase
-          .from("reel_likes")
-          .select("reel_id", { count: "exact", head: true })
+          .from("favorites")
+          .select("id", { count: "exact", head: true })
           .eq("user_id", userId!),
       ]);
       return {
