@@ -703,6 +703,19 @@ function PrizeCard({ prize }: { prize: { label: string; code: string | null } })
   );
 }
 
+const EXCLUDED_STATES = ["FL", "RI"];
+const MIN_AGE = 18;
+function computeAge(dobIso: string): number {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dobIso)) return -1;
+  const d = new Date(`${dobIso}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return -1;
+  const now = new Date();
+  let age = now.getUTCFullYear() - d.getUTCFullYear();
+  const mo = now.getUTCMonth() - d.getUTCMonth();
+  if (mo < 0 || (mo === 0 && now.getUTCDate() < d.getUTCDate())) age -= 1;
+  return age;
+}
+
 function BuyTokensPanel({ balance }: { balance: number }) {
   const { t } = useTranslation();
   const checkout = useServerFn(createStarsCheckout);
@@ -711,10 +724,35 @@ function BuyTokensPanel({ balance }: { balance: number }) {
   const { user } = useAuth();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [dob, setDob] = useState("");
+  const [stateCode, setStateCode] = useState("");
+
+  const age = dob ? computeAge(dob) : -1;
+  const stateUp = stateCode.trim().toUpperCase();
+  const stateExcluded = stateUp.length === 2 && EXCLUDED_STATES.includes(stateUp);
+  const ageOk = age >= MIN_AGE;
+  const stateOk = /^[A-Z]{2}$/.test(stateUp) && !stateExcluded;
+  const eligibilityOk = ageOk && stateOk;
 
   const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
     if (!acceptedTerms) {
       toast.error(t("ruleta.mustAcceptTerms"));
+      return;
+    }
+    if (!dob || age < 0) {
+      toast.error(t("ruleta.dobRequired", { defaultValue: "Ingresa tu fecha de nacimiento." }));
+      return;
+    }
+    if (!ageOk) {
+      toast.error(t("ruleta.underage", { defaultValue: `Debes tener al menos ${MIN_AGE} años para comprar Estrellas.` }));
+      return;
+    }
+    if (!/^[A-Z]{2}$/.test(stateUp)) {
+      toast.error(t("ruleta.stateRequired", { defaultValue: "Ingresa tu estado (2 letras, ej: NY)." }));
+      return;
+    }
+    if (stateExcluded) {
+      toast.error(t("ruleta.stateExcluded", { defaultValue: "El sorteo no está disponible en tu estado." }));
       return;
     }
     if (!user) {
@@ -724,7 +762,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
     }
     setLoadingId(packageId);
     try {
-      const res = await checkout({ data: { packageId } });
+      const res = await checkout({ data: { packageId, dob, state: stateUp } });
       if (res.url) window.location.href = res.url;
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("ruleta.checkoutError"));
