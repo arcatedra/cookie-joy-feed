@@ -9,8 +9,10 @@ const DOB = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha de nacimiento inváli
 const schema = z.object({
   packageId: z.enum(["stars_starter", "stars_popular", "stars_premium"]),
   email: z.string().trim().email().max(255).optional(),
-  dob: DOB,
-  state: US_STATE,
+  // Optional: if the authenticated user already verified before, they don't need to
+  // resend DOB/state on each purchase. Server will use the stored record.
+  dob: DOB.optional(),
+  state: US_STATE.optional(),
 });
 
 function yearsBetween(dobIso: string, now: Date): number {
@@ -33,9 +35,6 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
     const pkg = TOKEN_PACKAGES.find((p) => p.id === data.packageId);
     if (!pkg) throw new Error("Paquete inválido");
 
-    // --- Age + state gate (authoritative, server-side) ---
-    const declaredState = data.state.toUpperCase();
-
     // Load excluded states + min age from sweepstakes_config (single source of truth).
     let excludedStates: string[] = ["FL", "RI"];
     let minAge = 18;
@@ -50,32 +49,6 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
       if (row?.min_age) minAge = Number(row.min_age);
     } catch (e) {
       console.warn("[stars-checkout] could not load sweepstakes_config, using defaults", e);
-    }
-
-    const age = yearsBetween(data.dob, new Date());
-    if (age < 0) throw new Error("Fecha de nacimiento inválida.");
-    if (age < minAge) {
-      throw new Error(`Debes tener al menos ${minAge} años para comprar Estrellas.`);
-    }
-
-    if (excludedStates.includes(declaredState)) {
-      throw new Error("Lo sentimos, la compra de Estrellas no está disponible en tu estado.");
-    }
-
-    // Defense-in-depth: block by Cloudflare geo headers when available.
-    try {
-      const req = getRequest();
-      const cfCountry = req?.headers.get("cf-ipcountry")?.toUpperCase() ?? null;
-      const cfRegion = req?.headers.get("cf-region-code")?.toUpperCase() ?? null;
-      if (cfCountry && cfCountry !== "US" && cfCountry !== "XX" && cfCountry !== "T1") {
-        throw new Error("El sorteo diario solo está disponible para residentes de EE. UU.");
-      }
-      if (cfRegion && excludedStates.includes(cfRegion)) {
-        throw new Error("Lo sentimos, la compra de Estrellas no está disponible en tu estado.");
-      }
-    } catch (e) {
-      // Rethrow explicit blocks; ignore missing-header cases.
-      if (e instanceof Error && /disponible/.test(e.message)) throw e;
     }
 
     // Resolve subject — bearer user OR HMAC-verified guest email cookie.
@@ -107,12 +80,78 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
       if (guestEmail) email = email ?? guestEmail;
     }
 
-
     if (!userId && !email) {
       throw new Error("Inicia sesión o completa el formulario de participación gratuita primero.");
     }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Resolve DOB + state: prefer stored eligibility for authenticated users.
+    // Only re-validate once; on subsequent purchases the user does not resend it.
+    let dobFinal: string | null = null;
+    let stateFinal: string | null = null;
+    let ageFinal = -1;
+
+    if (userId) {
+      const { data: elig } = await supabaseAdmin
+        .from("user_eligibility")
+        .select("dob, state, verified_age")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (elig) {
+        dobFinal = elig.dob as string;
+        stateFinal = (elig.state as string).toUpperCase();
+        ageFinal = elig.verified_age as number;
+      }
+    }
+
+    // Not yet verified — require it in the payload and persist it now.
+    if (!dobFinal || !stateFinal) {
+      if (!data.dob || !data.state) {
+        throw new Error("Verificación de edad y estado requerida.");
+      }
+      dobFinal = data.dob;
+      stateFinal = data.state.toUpperCase();
+      ageFinal = yearsBetween(dobFinal, new Date());
+      if (ageFinal < 0) throw new Error("Fecha de nacimiento inválida.");
+      if (ageFinal < minAge) throw new Error(`Debes tener al menos ${minAge} años para comprar Estrellas.`);
+      if (excludedStates.includes(stateFinal)) {
+        throw new Error("Lo sentimos, la compra de Estrellas no está disponible en tu estado.");
+      }
+
+      // Persist the verification for future purchases (only when signed in).
+      if (userId) {
+        await supabaseAdmin
+          .from("user_eligibility")
+          .insert({ user_id: userId, dob: dobFinal, state: stateFinal, verified_age: ageFinal })
+          .then(() => undefined, () => undefined); // ignore duplicates
+      }
+    } else {
+      // Stored record: still re-check against current rules (e.g. state list changed).
+      if (ageFinal < minAge) throw new Error(`Debes tener al menos ${minAge} años para comprar Estrellas.`);
+      if (excludedStates.includes(stateFinal)) {
+        throw new Error("Lo sentimos, la compra de Estrellas no está disponible en tu estado.");
+      }
+    }
+
+    const declaredState = stateFinal;
+    const age = ageFinal;
+
+    // Defense-in-depth: block by Cloudflare geo headers when available.
+    try {
+      const req = getRequest();
+      const cfCountry = req?.headers.get("cf-ipcountry")?.toUpperCase() ?? null;
+      const cfRegion = req?.headers.get("cf-region-code")?.toUpperCase() ?? null;
+      if (cfCountry && cfCountry !== "US" && cfCountry !== "XX" && cfCountry !== "T1") {
+        throw new Error("El sorteo diario solo está disponible para residentes de EE. UU.");
+      }
+      if (cfRegion && excludedStates.includes(cfRegion)) {
+        throw new Error("Lo sentimos, la compra de Estrellas no está disponible en tu estado.");
+      }
+    } catch (e) {
+      if (e instanceof Error && /disponible/.test(e.message)) throw e;
+    }
+
     const { stripePost, paymentsEnvironmentForHost } = await import("./stripe.server");
 
     const host = getRequestHost();
@@ -135,7 +174,7 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
             subject_email: email ?? "",
             subject_user_id: userId ?? "",
             kind: "stars_purchase",
-            attested_dob: data.dob,
+            attested_dob: dobFinal,
             attested_state: declaredState,
             attested_age: String(age),
           },
