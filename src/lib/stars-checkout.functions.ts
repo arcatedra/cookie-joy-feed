@@ -135,6 +135,9 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
             subject_email: email ?? "",
             subject_user_id: userId ?? "",
             kind: "stars_purchase",
+            attested_dob: data.dob,
+            attested_state: declaredState,
+            attested_age: String(age),
           },
           payment_intent_data: {
             description: `HAZOREX — ${pkg.tokens} Estrellas (${pkg.id})`,
