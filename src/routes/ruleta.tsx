@@ -906,82 +906,143 @@ function BuyTokensPanel({ balance }: { balance: number }) {
 
       <PrizePoolCounter />
 
-      {/* Eligibility: real age + state gate (not just a checkbox) */}
-      <div
-        style={{
-          display: "grid",
-          gap: 12,
-          padding: "18px 20px",
-          background: BEIGE,
-          border: `2px solid ${eligibilityOk ? GOLD : BLUE_SOFT}55`,
-          borderRadius: 14,
-        }}
-      >
-        <div style={{ fontSize: 12, letterSpacing: "0.2em", color: BLUE, fontWeight: 800 }}>
-          {t("ruleta.eligibilityTitle", { defaultValue: "ELEGIBILIDAD (EE. UU., 18+)" })}
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10 }}>
-          <label style={{ display: "grid", gap: 4 }}>
-            <span style={{ fontSize: 11, color: BLUE_SOFT }}>
-              {t("ruleta.dobLabel", { defaultValue: "Fecha de nacimiento" })}
-            </span>
-            <input
-              type="date"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              max={new Date().toISOString().slice(0, 10)}
-              required
-              style={{
-                padding: "10px 12px",
-                borderRadius: 10,
-                border: `1px solid ${BLUE_SOFT}55`,
-                background: "white",
-                color: BLUE,
-                fontSize: 14,
-              }}
-            />
-          </label>
-          <label style={{ display: "grid", gap: 4 }}>
-            <span style={{ fontSize: 11, color: BLUE_SOFT }}>
-              {t("ruleta.stateLabel", { defaultValue: "Estado (2 letras)" })}
-            </span>
-            <input
-              type="text"
-              value={stateCode}
-              onChange={(e) => setStateCode(e.target.value.toUpperCase().slice(0, 2))}
-              maxLength={2}
-              placeholder="NY"
-              required
-              style={{
-                padding: "10px 12px",
-                borderRadius: 10,
-                border: `1px solid ${BLUE_SOFT}55`,
-                background: "white",
-                color: BLUE,
-                fontSize: 14,
-                textTransform: "uppercase",
-                letterSpacing: "0.15em",
-              }}
-            />
-          </label>
-        </div>
-        {dob && !ageOk && (
-          <div style={{ fontSize: 12, color: "#b91c1c" }}>
-            {t("ruleta.underage", { defaultValue: `Debes tener al menos ${MIN_AGE} años para comprar Estrellas.` })}
+      {/* Eligibility: real age + state gate (not just a checkbox). Verified once per user. */}
+      {alreadyVerified ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "14px 18px",
+            background: BEIGE,
+            border: `2px solid ${GOLD}`,
+            borderRadius: 14,
+          }}
+        >
+          <div style={{ display: "grid", gap: 2 }}>
+            <div style={{ fontSize: 12, letterSpacing: "0.2em", color: BLUE, fontWeight: 800 }}>
+              ✓ {t("ruleta.eligibilityVerified", { defaultValue: "ELEGIBILIDAD VERIFICADA" })}
+            </div>
+            <div style={{ fontSize: 12, color: BLUE_SOFT }}>
+              {t("ruleta.eligibilityVerifiedNote", {
+                defaultValue: "No necesitas volver a ingresar tu fecha de nacimiento ni tu estado.",
+              })}{" "}
+              <span style={{ fontWeight: 700 }}>{eligibility?.state}</span> · {eligibility?.verifiedAge}+
+            </div>
           </div>
-        )}
-        {stateExcluded && (
-          <div style={{ fontSize: 12, color: "#b91c1c" }}>
-            {t("ruleta.stateExcluded", { defaultValue: "El sorteo no está disponible en tu estado (FL, RI)." })}
-          </div>
-        )}
-        <div style={{ fontSize: 11, color: BLUE_SOFT, lineHeight: 1.5 }}>
-          {t("ruleta.eligibilityNote", {
-            defaultValue:
-              "Verificamos tu edad y estado antes de procesar la compra. También aplicamos un filtro por tu ubicación real detectada por IP.",
-          })}
         </div>
-      </div>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gap: 12,
+            padding: "18px 20px",
+            background: BEIGE,
+            border: `2px solid ${eligibilityOk ? GOLD : BLUE_SOFT}55`,
+            borderRadius: 14,
+          }}
+        >
+          <div style={{ fontSize: 12, letterSpacing: "0.2em", color: BLUE, fontWeight: 800 }}>
+            {t("ruleta.eligibilityTitle", { defaultValue: "ELEGIBILIDAD (EE. UU., 18+)" })}
+          </div>
+          {eligibilityLoading && user ? (
+            <div style={{ fontSize: 12, color: BLUE_SOFT }}>…</div>
+          ) : (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10 }}>
+                <label style={{ display: "grid", gap: 4 }}>
+                  <span style={{ fontSize: 11, color: BLUE_SOFT }}>
+                    {t("ruleta.dobLabel", { defaultValue: "Fecha de nacimiento" })}
+                  </span>
+                  <input
+                    type="date"
+                    value={dob}
+                    onChange={(e) => setDob(e.target.value)}
+                    max={new Date().toISOString().slice(0, 10)}
+                    required
+                    style={{
+                      padding: "10px 12px",
+                      borderRadius: 10,
+                      border: `1px solid ${BLUE_SOFT}55`,
+                      background: "white",
+                      color: BLUE,
+                      fontSize: 14,
+                    }}
+                  />
+                </label>
+                <label style={{ display: "grid", gap: 4 }}>
+                  <span style={{ fontSize: 11, color: BLUE_SOFT }}>
+                    {t("ruleta.stateLabel", { defaultValue: "Estado (2 letras)" })}
+                  </span>
+                  <input
+                    type="text"
+                    value={stateCode}
+                    onChange={(e) => setStateCode(e.target.value.toUpperCase().slice(0, 2))}
+                    maxLength={2}
+                    placeholder="NY"
+                    required
+                    style={{
+                      padding: "10px 12px",
+                      borderRadius: 10,
+                      border: `1px solid ${BLUE_SOFT}55`,
+                      background: "white",
+                      color: BLUE,
+                      fontSize: 14,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.15em",
+                    }}
+                  />
+                </label>
+              </div>
+              {dob && !ageOk && (
+                <div style={{ fontSize: 12, color: "#b91c1c" }}>
+                  {t("ruleta.underage", {
+                    defaultValue: `Debes tener al menos ${MIN_AGE} años para comprar Estrellas.`,
+                  })}
+                </div>
+              )}
+              {stateExcluded && (
+                <div style={{ fontSize: 12, color: "#b91c1c" }}>
+                  {t("ruleta.stateExcluded", {
+                    defaultValue: "El sorteo no está disponible en tu estado (FL, RI).",
+                  })}
+                </div>
+              )}
+              <div style={{ fontSize: 11, color: BLUE_SOFT, lineHeight: 1.5 }}>
+                {t("ruleta.eligibilityNote", {
+                  defaultValue:
+                    "Verificamos tu edad y estado UNA sola vez. Después no volverás a ingresarlo.",
+                })}
+              </div>
+              {user && (
+                <button
+                  type="button"
+                  onClick={handleSaveEligibility}
+                  disabled={!ageOk || !stateOk || savingEligibility}
+                  style={{
+                    marginTop: 4,
+                    background: ageOk && stateOk ? GOLD : `${BLUE_SOFT}55`,
+                    color: ageOk && stateOk ? WOOD : BLUE_SOFT,
+                    border: "none",
+                    padding: "10px 18px",
+                    borderRadius: 999,
+                    fontWeight: 800,
+                    letterSpacing: "0.1em",
+                    fontSize: 12,
+                    cursor: ageOk && stateOk && !savingEligibility ? "pointer" : "not-allowed",
+                  }}
+                >
+                  {savingEligibility
+                    ? "…"
+                    : t("ruleta.saveEligibility", { defaultValue: "GUARDAR VERIFICACIÓN" })}
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
 
       <label
         style={{
