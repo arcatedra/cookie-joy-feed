@@ -720,6 +720,8 @@ function computeAge(dobIso: string): number {
 function BuyTokensPanel({ balance }: { balance: number }) {
   const { t } = useTranslation();
   const checkout = useServerFn(createStarsCheckout);
+  const fetchEligibility = useServerFn(getMyEligibility);
+  const saveEligibility = useServerFn(saveMyEligibility);
 
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -727,17 +729,29 @@ function BuyTokensPanel({ balance }: { balance: number }) {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [dob, setDob] = useState("");
   const [stateCode, setStateCode] = useState("");
+  const [savingEligibility, setSavingEligibility] = useState(false);
+
+  const { data: eligibility, isLoading: eligibilityLoading } = useQuery({
+    queryKey: ["my-eligibility", user?.id ?? "guest"],
+    queryFn: () => fetchEligibility(),
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+  });
+  const qcLocal = useQueryClient();
+
+  const alreadyVerified = !!user && eligibility?.verified === true;
 
   const age = dob ? computeAge(dob) : -1;
   const stateUp = stateCode.trim().toUpperCase();
   const stateExcluded = stateUp.length === 2 && EXCLUDED_STATES.includes(stateUp);
   const ageOk = age >= MIN_AGE;
   const stateOk = /^[A-Z]{2}$/.test(stateUp) && !stateExcluded;
-  const eligibilityOk = ageOk && stateOk;
+  const eligibilityOk = alreadyVerified || (ageOk && stateOk);
 
-  const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
-    if (!acceptedTerms) {
-      toast.error(t("ruleta.mustAcceptTerms"));
+  const handleSaveEligibility = async () => {
+    if (!user) {
+      toast.info(t("ruleta.signInToBuy"));
+      navigate({ to: "/auth", search: { redirect: "/ruleta" } });
       return;
     }
     if (!dob || age < 0) {
@@ -745,7 +759,7 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       return;
     }
     if (!ageOk) {
-      toast.error(t("ruleta.underage", { defaultValue: `Debes tener al menos ${MIN_AGE} años para comprar Estrellas.` }));
+      toast.error(t("ruleta.underage", { defaultValue: `Debes tener al menos ${MIN_AGE} años.` }));
       return;
     }
     if (!/^[A-Z]{2}$/.test(stateUp)) {
@@ -756,20 +770,48 @@ function BuyTokensPanel({ balance }: { balance: number }) {
       toast.error(t("ruleta.stateExcluded", { defaultValue: "El sorteo no está disponible en tu estado." }));
       return;
     }
+    setSavingEligibility(true);
+    try {
+      await saveEligibility({ data: { dob, state: stateUp } });
+      await qcLocal.invalidateQueries({ queryKey: ["my-eligibility"] });
+      toast.success(t("ruleta.eligibilitySaved", { defaultValue: "Verificación guardada. No tendrás que repetirla." }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error");
+    } finally {
+      setSavingEligibility(false);
+    }
+  };
+
+  const handleBuy = async (packageId: typeof TOKEN_PACKAGES[number]["id"]) => {
+    if (!acceptedTerms) {
+      toast.error(t("ruleta.mustAcceptTerms"));
+      return;
+    }
     if (!user) {
       toast.info(t("ruleta.signInToBuy"));
       navigate({ to: "/auth", search: { redirect: "/ruleta" } });
       return;
     }
+    if (!alreadyVerified) {
+      // Verify + save once, then start checkout.
+      if (!dob || !ageOk || !stateOk) {
+        toast.error(t("ruleta.mustVerifyFirst", { defaultValue: "Completa y guarda la verificación de edad y estado." }));
+        return;
+      }
+    }
     setLoadingId(packageId);
     try {
-      const res = await checkout({ data: { packageId, dob, state: stateUp } });
+      const payload = alreadyVerified
+        ? { packageId }
+        : { packageId, dob, state: stateUp };
+      const res = await checkout({ data: payload });
       if (res.url) window.location.href = res.url;
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("ruleta.checkoutError"));
       setLoadingId(null);
     }
   };
+
 
 
   const scrollToDraw = () => {
