@@ -152,8 +152,6 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
       if (e instanceof Error && /disponible/.test(e.message)) throw e;
     }
 
-
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { stripePost, paymentsEnvironmentForHost } = await import("./stripe.server");
 
     const host = getRequestHost();
