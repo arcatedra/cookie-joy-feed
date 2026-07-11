@@ -2654,6 +2654,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_eligibility: {
+        Row: {
+          created_at: string
+          dob: string
+          state: string
+          updated_at: string
+          user_id: string
+          verified_age: number
+          verified_at: string
+        }
+        Insert: {
+          created_at?: string
+          dob: string
+          state: string
+          updated_at?: string
+          user_id: string
+          verified_age: number
+          verified_at?: string
+        }
+        Update: {
+          created_at?: string
+          dob?: string
+          state?: string
+          updated_at?: string
+          user_id?: string
+          verified_age?: number
+          verified_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
