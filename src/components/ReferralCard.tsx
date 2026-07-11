@@ -42,8 +42,8 @@ export function ReferralCard({ userId }: ReferralCardProps) {
 
   const referralUrl = useMemo(() => {
     const origin =
-      typeof window !== "undefined" ? window.location.origin : "https://origen.management";
-    return referralCode ? `${origin}/auth?ref=${referralCode}` : `${origin}/auth`;
+      typeof window !== "undefined" ? window.location.origin : "https://hazorex.com";
+    return referralCode ? `${origin}/join?ref=${referralCode}` : `${origin}/join`;
   }, [referralCode]);
 
   const handleCopy = useCallback(async () => {
