@@ -1447,5 +1447,18 @@
   "cartPage": {
     "metaTitle": "Tu carrito — HAZOREX",
     "metaDesc": "Revisa los productos de tu carrito antes de finalizar la compra."
+  },
+  "favorites": {
+    "add": "Guardar en favoritos",
+    "remove": "Quitar de favoritos",
+    "added": "Agregado a favoritos",
+    "removed": "Quitado de favoritos",
+    "empty": "Aún no tienes productos favoritos.",
+    "browseShop": "Explorar tienda",
+    "signInFirst": "Inicia sesión para guardar favoritos",
+    "error": "No se pudo actualizar tus favoritos",
+    "addToCart": "Agregar al carrito",
+    "addedToCart": "Agregado al carrito",
+    "productUnavailable": "Este producto ya no está disponible."
   }
 }
