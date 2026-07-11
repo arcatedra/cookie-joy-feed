@@ -9,8 +9,10 @@ const DOB = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha de nacimiento inváli
 const schema = z.object({
   packageId: z.enum(["stars_starter", "stars_popular", "stars_premium"]),
   email: z.string().trim().email().max(255).optional(),
-  dob: DOB,
-  state: US_STATE,
+  // Optional: if the authenticated user already verified before, they don't need to
+  // resend DOB/state on each purchase. Server will use the stored record.
+  dob: DOB.optional(),
+  state: US_STATE.optional(),
 });
 
 function yearsBetween(dobIso: string, now: Date): number {
