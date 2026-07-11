@@ -79,7 +79,6 @@ export const createStarsCheckout = createServerFn({ method: "POST" })
     }
 
     // Resolve subject — bearer user OR HMAC-verified guest email cookie.
-    const { getRequest } = await import("@tanstack/react-start/server");
     const { verifyGuestCookie } = await import("./guest-cookie.server");
     let userId: string | null = null;
     let email: string | null = data.email?.trim().toLowerCase() ?? null;
