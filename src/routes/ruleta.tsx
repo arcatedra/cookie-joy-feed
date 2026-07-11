@@ -863,6 +863,82 @@ function BuyTokensPanel({ balance }: { balance: number }) {
 
       <PrizePoolCounter />
 
+      {/* Eligibility: real age + state gate (not just a checkbox) */}
+      <div
+        style={{
+          display: "grid",
+          gap: 12,
+          padding: "18px 20px",
+          background: BEIGE,
+          border: `2px solid ${eligibilityOk ? GOLD : BLUE_SOFT}55`,
+          borderRadius: 14,
+        }}
+      >
+        <div style={{ fontSize: 12, letterSpacing: "0.2em", color: BLUE, fontWeight: 800 }}>
+          {t("ruleta.eligibilityTitle", { defaultValue: "ELEGIBILIDAD (EE. UU., 18+)" })}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10 }}>
+          <label style={{ display: "grid", gap: 4 }}>
+            <span style={{ fontSize: 11, color: BLUE_SOFT }}>
+              {t("ruleta.dobLabel", { defaultValue: "Fecha de nacimiento" })}
+            </span>
+            <input
+              type="date"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+              max={new Date().toISOString().slice(0, 10)}
+              required
+              style={{
+                padding: "10px 12px",
+                borderRadius: 10,
+                border: `1px solid ${BLUE_SOFT}55`,
+                background: "white",
+                color: BLUE,
+                fontSize: 14,
+              }}
+            />
+          </label>
+          <label style={{ display: "grid", gap: 4 }}>
+            <span style={{ fontSize: 11, color: BLUE_SOFT }}>
+              {t("ruleta.stateLabel", { defaultValue: "Estado (2 letras)" })}
+            </span>
+            <input
+              type="text"
+              value={stateCode}
+              onChange={(e) => setStateCode(e.target.value.toUpperCase().slice(0, 2))}
+              maxLength={2}
+              placeholder="NY"
+              required
+              style={{
+                padding: "10px 12px",
+                borderRadius: 10,
+                border: `1px solid ${BLUE_SOFT}55`,
+                background: "white",
+                color: BLUE,
+                fontSize: 14,
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+              }}
+            />
+          </label>
+        </div>
+        {dob && !ageOk && (
+          <div style={{ fontSize: 12, color: "#b91c1c" }}>
+            {t("ruleta.underage", { defaultValue: `Debes tener al menos ${MIN_AGE} años para comprar Estrellas.` })}
+          </div>
+        )}
+        {stateExcluded && (
+          <div style={{ fontSize: 12, color: "#b91c1c" }}>
+            {t("ruleta.stateExcluded", { defaultValue: "El sorteo no está disponible en tu estado (FL, RI)." })}
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: BLUE_SOFT, lineHeight: 1.5 }}>
+          {t("ruleta.eligibilityNote", {
+            defaultValue:
+              "Verificamos tu edad y estado antes de procesar la compra. También aplicamos un filtro por tu ubicación real detectada por IP.",
+          })}
+        </div>
+      </div>
 
       <label
         style={{
@@ -891,7 +967,6 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           </Link>
           {t("ruleta.termsAfter")}
         </span>
-
       </label>
 
       <div
@@ -900,11 +975,12 @@ function BuyTokensPanel({ balance }: { balance: number }) {
           gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: 20,
           alignItems: "stretch",
-          opacity: acceptedTerms ? 1 : 0.55,
-          pointerEvents: acceptedTerms ? "auto" : "none",
+          opacity: acceptedTerms && eligibilityOk ? 1 : 0.55,
+          pointerEvents: acceptedTerms && eligibilityOk ? "auto" : "none",
           transition: "opacity 0.2s",
         }}
       >
+
         {TOKEN_PACKAGES.map((pkg) => {
           const featured = pkg.featured ?? false;
           const isLoading = loadingId === pkg.id;
