@@ -13,6 +13,7 @@ import { useShopifyCartStore } from "@/stores/shopifyCartStore";
 import { useShopifyCartSync } from "@/hooks/useShopifyCartSync";
 import i18n from "@/i18n";
 import { localizeShopifyProduct } from "@/lib/shopify-i18n";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -122,7 +123,16 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
   };
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition hover:shadow-md">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition hover:shadow-md">
+      <div className="absolute right-2 top-2 z-10">
+        <FavoriteButton
+          productHandle={product.node.handle}
+          productTitle={name}
+          productImageUrl={image?.url ?? null}
+          productPriceAmount={price ? parseFloat(price.amount) : null}
+          productPriceCurrency={price?.currencyCode ?? null}
+        />
+      </div>
       <Link
         to="/product/$handle"
         params={{ handle: product.node.handle }}
