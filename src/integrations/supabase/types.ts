@@ -1517,6 +1517,13 @@ export type Database = {
             foreignKeyName: "notification_queue_route_stop_id_fkey"
             columns: ["route_stop_id"]
             isOneToOne: false
+            referencedRelation: "available_route_stops_summary"
+            referencedColumns: ["stop_id"]
+          },
+          {
+            foreignKeyName: "notification_queue_route_stop_id_fkey"
+            columns: ["route_stop_id"]
+            isOneToOne: false
             referencedRelation: "route_stops"
             referencedColumns: ["id"]
           },
@@ -2923,6 +2930,25 @@ export type Database = {
           status?: string | null
         }
         Relationships: []
+      }
+      available_route_stops_summary: {
+        Row: {
+          delivery_lat: number | null
+          delivery_lng: number | null
+          route_id: string | null
+          sequence_number: number | null
+          status: Database["public"]["Enums"]["stop_status"] | null
+          stop_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_routes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       v_pending_batch_summary: {
         Row: {
