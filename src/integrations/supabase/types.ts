@@ -3082,6 +3082,15 @@ export type Database = {
       }
       expire_winner_claims: { Args: never; Returns: number }
       generate_referral_code: { Args: never; Returns: string }
+      get_my_referrals: {
+        Args: never
+        Returns: {
+          invited_at: string
+          referee_display_name: string
+          reward_granted: boolean
+          rewarded_at: string
+        }[]
+      }
       get_prize_pool: {
         Args: never
         Returns: {
