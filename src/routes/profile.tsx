@@ -15,6 +15,7 @@ import {
   Inbox,
 } from "lucide-react";
 import { adminUnreadCount } from "@/lib/suggestions.functions";
+import { ReferralHistory } from "@/components/ReferralHistory";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -149,6 +150,7 @@ function ProfilePage() {
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
 
       <ReferralCard userId={user?.id ?? null} />
+      <ReferralHistory userId={user?.id ?? null} />
 
       {/* Account Navigation */}
       <section className="mt-6 px-5">
