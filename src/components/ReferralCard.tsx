@@ -46,11 +46,23 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     return referralCode ? `${origin}/join?ref=${referralCode}` : `${origin}/join`;
   }, [referralCode]);
 
+  const [copied, setCopied] = useState(false);
+  const copiedTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimerRef.current) window.clearTimeout(copiedTimerRef.current);
+    };
+  }, []);
+
   const handleCopy = useCallback(async () => {
     if (!referralUrl) return;
     try {
       await navigator.clipboard.writeText(referralUrl);
       toast.success("Enlace copiado al portapapeles");
+      setCopied(true);
+      if (copiedTimerRef.current) window.clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = window.setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("No se pudo copiar el enlace");
     }
