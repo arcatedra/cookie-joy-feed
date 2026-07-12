@@ -1,0 +1,222 @@
+
+-- Idempotency + concurrency guard for daily draw execution.
+-- Uses a transaction-scoped advisory lock keyed by draw date so parallel
+-- callers cannot both pass the status check and duplicate work.
+
+CREATE OR REPLACE FUNCTION public.run_daily_draw()
+ RETURNS TABLE(draw_date date, status text, winner_display_name text, prize_usd numeric, seed_hash text)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+#variable_conflict use_column
+DECLARE
+  d DATE := public.today_et();
+  row public.daily_draws;
+  cfg public.sweepstakes_config;
+  total_tickets INT := 0;
+  entrants INT := 0;
+  live_pool NUMERIC(12,2) := 0;
+  awarded_prize NUMERIC(12,2) := 0;
+  carry_excess NUMERIC(12,2) := 0;
+  seed TEXT;
+  seed_int BIGINT;
+  cursor_pos BIGINT;
+  acc BIGINT := 0;
+  winner public.daily_draw_entries;
+  e RECORD;
+BEGIN
+  SELECT * INTO cfg FROM public.sweepstakes_config WHERE id = true;
+  IF cfg.sponsor_address IS NULL
+     OR length(trim(cfg.sponsor_address)) < 10
+     OR cfg.sponsor_address ILIKE '%COMPLETAR%'
+     OR cfg.sponsor_address ILIKE '%[%]%' THEN
+    RAISE EXCEPTION 'SPONSOR_ADDRESS_NOT_CONFIGURED';
+  END IF;
+
+  -- Serialize per-day: only one draw execution proceeds at a time.
+  PERFORM pg_advisory_xact_lock(hashtextextended('daily_draw:' || d::text, 0));
+
+  PERFORM public.ensure_today_draw();
+  SELECT * INTO row FROM public.daily_draws WHERE daily_draws.draw_date = d FOR UPDATE;
+
+  -- Idempotency: if the draw already reached a final state, return the stored result.
+  IF row.status IN ('completed','rolled_over') THEN
+    RETURN QUERY SELECT row.draw_date, row.status, row.winner_display_name, row.prize_usd, row.seed_hash;
+    RETURN;
+  END IF;
+
+  UPDATE public.daily_draws SET status = 'drawing' WHERE id = row.id;
+
+  SELECT COALESCE(SUM(pool_share_usd),0) INTO live_pool FROM public.prize_pool_ledger
+   WHERE (created_at AT TIME ZONE 'America/New_York')::date = d;
+  live_pool := live_pool + row.prize_usd;
+
+  IF cfg.max_daily_prize_usd IS NOT NULL AND live_pool > cfg.max_daily_prize_usd THEN
+    awarded_prize := cfg.max_daily_prize_usd;
+    carry_excess := live_pool - cfg.max_daily_prize_usd;
+  ELSE
+    awarded_prize := live_pool;
+    carry_excess := 0;
+  END IF;
+
+  SELECT COALESCE(SUM(tickets),0)::int, COUNT(*)::int
+    INTO total_tickets, entrants
+    FROM public.daily_draw_entries WHERE daily_draw_entries.draw_date = d;
+
+  seed := encode(extensions.digest(d::text || '|' || total_tickets::text || '|' || gen_random_uuid()::text, 'sha256'),'hex');
+
+  IF total_tickets = 0 THEN
+    UPDATE public.daily_draws
+       SET status = 'rolled_over', prize_usd = live_pool, tickets_total = 0,
+           entrants_total = 0, drawn_at = now(), seed_hash = seed
+     WHERE id = row.id;
+    RETURN QUERY SELECT d, 'rolled_over'::text, NULL::text, live_pool, seed;
+    RETURN;
+  END IF;
+
+  seed_int := ('x' || substr(seed,1,15))::bit(60)::bigint;
+  cursor_pos := (abs(seed_int) % total_tickets);
+
+  FOR e IN
+    SELECT * FROM public.daily_draw_entries
+     WHERE daily_draw_entries.draw_date = d
+     ORDER BY created_at ASC, id ASC
+  LOOP
+    acc := acc + e.tickets;
+    IF acc > cursor_pos THEN winner := e; EXIT; END IF;
+  END LOOP;
+
+  UPDATE public.daily_draws
+     SET status = 'completed',
+         winner_display_name = winner.display_name,
+         prize_usd = awarded_prize,
+         tickets_total = total_tickets, entrants_total = entrants,
+         drawn_at = now(), seed_hash = seed
+   WHERE id = row.id;
+
+  IF carry_excess > 0 THEN
+    INSERT INTO public.daily_draws (draw_date, status, scheduled_at, prize_usd, rolled_over_from)
+    VALUES (d + 1, 'open', public.draw_time_for(d + 1), carry_excess, d)
+    ON CONFLICT (draw_date) DO UPDATE
+      SET prize_usd = public.daily_draws.prize_usd + EXCLUDED.prize_usd,
+          rolled_over_from = COALESCE(public.daily_draws.rolled_over_from, EXCLUDED.rolled_over_from);
+  END IF;
+
+  INSERT INTO public.winner_claims (draw_date, user_id, email, display_name, prize_usd, claim_deadline)
+  VALUES (d, winner.subject_user_id, COALESCE(winner.subject_email,''), winner.display_name, awarded_prize,
+          now() + (cfg.claim_window_days || ' days')::interval)
+  ON CONFLICT (draw_date) DO NOTHING;
+
+  INSERT INTO public.winner_announcements (draw_date, winner_display_name, prize_usd, seed_hash)
+  VALUES (d, winner.display_name, awarded_prize, seed)
+  ON CONFLICT (draw_date) DO NOTHING;
+
+  RETURN QUERY SELECT d, 'completed'::text, winner.display_name, awarded_prize, seed;
+END;
+$function$;
+
+
+CREATE OR REPLACE FUNCTION public.run_daily_draw_safe()
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+DECLARE
+  today_d DATE := public.today_et();
+  last_final DATE;
+  d DATE;
+  row public.daily_draws;
+  cfg public.sweepstakes_config;
+  result RECORD;
+  got_lock BOOLEAN;
+BEGIN
+  -- Global lock: at most one run_daily_draw_safe execution at a time.
+  got_lock := pg_try_advisory_xact_lock(hashtextextended('run_daily_draw_safe', 0));
+  IF NOT got_lock THEN
+    INSERT INTO public.draw_run_log (action, draw_date, status, details)
+    VALUES ('run_daily_draw_safe', today_d, 'skipped_concurrent',
+            jsonb_build_object('reason', 'another run in progress'));
+    RETURN;
+  END IF;
+
+  SELECT * INTO cfg FROM public.sweepstakes_config WHERE id = true;
+
+  SELECT COALESCE(MAX(draw_date), today_d - INTERVAL '30 days')
+    INTO last_final
+    FROM public.daily_draws
+   WHERE status IN ('completed','rolled_over')
+     AND draw_date < today_d;
+
+  FOR d IN
+    SELECT gs::date
+      FROM generate_series(GREATEST(last_final + 1, today_d - 30), today_d - 1, INTERVAL '1 day') AS gs
+  LOOP
+    BEGIN
+      INSERT INTO public.daily_draws (draw_date, status, scheduled_at, prize_usd, tickets_total, entrants_total)
+      VALUES (d, 'rolled_over', public.draw_time_for(d), 0, 0, 0)
+      ON CONFLICT (draw_date) DO UPDATE
+        SET status = CASE
+                       WHEN public.daily_draws.status IN ('completed','rolled_over')
+                         THEN public.daily_draws.status
+                       ELSE 'rolled_over'
+                     END;
+
+      -- Log only when we actually filled a gap (avoids duplicate log spam
+      -- on repeated safe runs where the row was already final).
+      IF NOT EXISTS (
+        SELECT 1 FROM public.draw_run_log
+         WHERE action = 'backfill_missed' AND draw_date = d
+      ) THEN
+        INSERT INTO public.draw_run_log (action, draw_date, status, details)
+        VALUES ('backfill_missed', d, 'rolled_over',
+                jsonb_build_object('reason', 'no_run_recorded_for_date'));
+      END IF;
+    EXCEPTION WHEN OTHERS THEN
+      INSERT INTO public.draw_run_log (action, draw_date, status, error_message)
+      VALUES ('backfill_missed', d, 'error', SQLERRM);
+    END;
+  END LOOP;
+
+  BEGIN
+    PERFORM public.ensure_today_draw();
+  EXCEPTION WHEN OTHERS THEN
+    INSERT INTO public.draw_run_log (action, draw_date, status, error_message)
+    VALUES ('ensure_today', today_d, 'error', SQLERRM);
+    RETURN;
+  END;
+
+  SELECT * INTO row FROM public.daily_draws WHERE draw_date = today_d;
+  IF row IS NULL THEN
+    INSERT INTO public.draw_run_log (action, draw_date, status, error_message)
+    VALUES ('ensure_today', today_d, 'error', 'no_row_after_ensure');
+    RETURN;
+  END IF;
+
+  -- Idempotency: if today's draw is already final, do nothing (and don't spam the log).
+  IF row.status IN ('completed','rolled_over') THEN
+    RETURN;
+  END IF;
+
+  IF now() < row.scheduled_at THEN
+    BEGIN PERFORM public.close_draws_for_cutoff(); EXCEPTION WHEN OTHERS THEN NULL; END;
+    RETURN;
+  END IF;
+
+  BEGIN
+    PERFORM public.close_draws_for_cutoff();
+    SELECT * INTO result FROM public.run_daily_draw();
+    -- run_daily_draw is idempotent: if it was already final it returns the stored row
+    -- and we simply record the observed state here.
+    INSERT INTO public.draw_run_log (action, draw_date, status, details)
+    VALUES ('run_daily_draw', today_d, COALESCE(result.status, 'unknown'),
+            jsonb_build_object('winner', result.winner_display_name,
+                               'prize_usd', result.prize_usd,
+                               'seed_hash', result.seed_hash));
+  EXCEPTION WHEN OTHERS THEN
+    INSERT INTO public.draw_run_log (action, draw_date, status, error_message)
+    VALUES ('run_daily_draw', today_d, 'error', SQLERRM);
+  END;
+END;
+$function$;
