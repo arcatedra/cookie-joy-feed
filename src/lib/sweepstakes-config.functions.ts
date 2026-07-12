@@ -30,6 +30,7 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
       claim_window_days: 14,
       max_daily_prize_usd: 4999,
       address_valid: false,
+      sweepstakes_active: false,
     };
   }
   const row = Array.isArray(data) ? data[0] : data;
@@ -42,8 +43,10 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
     claim_window_days: Number(row?.claim_window_days ?? 14),
     max_daily_prize_usd: Number(row?.max_daily_prize_usd ?? 4999),
     address_valid: Boolean(row?.address_valid ?? false),
+    sweepstakes_active: Boolean(row?.sweepstakes_active ?? false),
   };
 });
+
 
 export const getSweepstakesConfig = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
