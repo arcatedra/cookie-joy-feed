@@ -391,7 +391,7 @@
     }
   },
   "cart": {
-    "title": "Iyong Cart",
+    "title": "Iyong cart",
     "checkout": "Mag-checkout",
     "empty": "Walang laman ang iyong cart",
     "emptyDesc": "Magdagdag ng masarap na cookies para magsimula.",
@@ -689,11 +689,11 @@
     "remainingShort": "natitira"
   },
   "cartDrawer": {
-    "title": "Shopify Cart",
+    "title": "Cart",
     "empty": "Walang laman ang iyong shop cart",
     "itemsCount": "{{count}} item sa iyong cart",
     "itemCount": "{{count}} item sa iyong cart",
-    "checkoutBtn": "Mag-checkout gamit ang Shopify",
+    "checkoutBtn": "Mag-checkout gamit ang",
     "total": "Kabuuan"
   },
   "donate": {

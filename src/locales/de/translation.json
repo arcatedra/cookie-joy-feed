@@ -718,11 +718,11 @@
     "remainingShort": "verbleibend"
   },
   "cartDrawer": {
-    "title": "Shopify-Warenkorb",
+    "title": "-Warenkorb",
     "empty": "Dein Warenkorb ist leer",
     "itemsCount": "{{count}} Artikel in deinem Warenkorb",
     "itemCount": "{{count}} Artikel in deinem Warenkorb",
-    "checkoutBtn": "Mit Shopify bezahlen",
+    "checkoutBtn": "Mit bezahlen",
     "total": "Gesamt"
   },
   "donate": {

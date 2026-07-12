@@ -388,7 +388,7 @@
     }
   },
   "cart": {
-    "title": "您的购物车",
+    "title": "购物车",
     "checkout": "结算",
     "empty": "您的购物车是空的",
     "emptyDesc": "添加一些美味的曲奇开始购物吧。",
@@ -686,11 +686,11 @@
     "remainingShort": "剩余"
   },
   "cartDrawer": {
-    "title": "Shopify 购物车",
+    "title": "购物车",
     "empty": "您的购物车为空",
     "itemsCount": "您的购物车中有 {{count}} 件商品",
     "itemCount": "您的购物车中有 {{count}} 件商品",
-    "checkoutBtn": "使用 Shopify 结账",
+    "checkoutBtn": "使用 结账",
     "total": "总计"
   },
   "donate": {
