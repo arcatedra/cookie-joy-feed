@@ -43,13 +43,22 @@ function maskName(name: string): string {
 function WinnersPage() {
   const { t } = useTranslation();
   const fetchWinners = useServerFn(listPublicWinners);
+  const fetchCfg = useServerFn(getSweepstakesPublicConfig);
+  const { data: cfg } = useQuery({
+    queryKey: ["sweepstakes-public-config"],
+    queryFn: () => fetchCfg(),
+    staleTime: 10 * 60_000,
+  });
+  const active = cfg?.sweepstakes_active ?? false;
   const { data, isLoading } = useQuery({
     queryKey: ["public-winners"],
     queryFn: () => fetchWinners(),
     staleTime: 60_000,
+    enabled: active,
   });
 
   const locale = getLocale();
+
 
   return (
     <main
