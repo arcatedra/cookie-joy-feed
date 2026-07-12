@@ -158,8 +158,11 @@ export const enterDailyDraw = createServerFn({ method: "POST" })
     });
     if (error) {
       const msg = error.message || "";
+      if (msg.includes("SWEEPSTAKES_INACTIVE"))
+        return { ok: false as const, error: "El sorteo diario aún no está activo. Pronto anunciaremos la fecha de lanzamiento." };
       if (msg.includes("SPONSOR_ADDRESS_NOT_CONFIGURED"))
         return { ok: false as const, error: "El sorteo diario en USD aún no está activo. Pronto se anunciará la fecha de lanzamiento." };
+
       if (msg.includes("INSUFFICIENT_STARS"))
         return { ok: false as const, error: "No tienes suficientes estrellas (10⭐ por boleto)." };
       if (msg.includes("DRAW_CLOSED"))
