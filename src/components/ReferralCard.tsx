@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SafeQR } from "@/components/SafeQR";
 import { toast } from "sonner";
-import { Share2, Sparkles, Star, Users, Download } from "lucide-react";
+import { Share2, Sparkles, Star, Users, Download, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ReferralCardProps {
