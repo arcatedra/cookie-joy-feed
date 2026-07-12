@@ -235,10 +235,16 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
   const canAfford = balance >= ticketCost;
 
   const segments = useMemo(() => {
+    // Reserved test keywords are never rendered on the public wheel.
+    const RESERVED = new Set(["prueba", "pruebas", "test", "testing", "demo", "qa", "dummy", "ejemplo", "sample"]);
     const labels: string[] = (winners ?? [])
-      .slice(0, 8)
-      .map((w: { winnerDisplayName: string | null }) => w.winnerDisplayName ?? "?");
-    while (labels.length < 8) labels.push("Porsenge");
+      .map((w: { winnerDisplayName: string | null }) => (w.winnerDisplayName ?? "").trim())
+      .filter((n: string) => n.length > 0 && !RESERVED.has(n.toLowerCase()))
+      .slice(0, 8);
+    // Neutral placeholders (not real-looking user names) to fill the wheel.
+    const placeholders = ["★", "✦", "◆", "●", "◇", "○", "✧", "☆"];
+    let i = 0;
+    while (labels.length < 8) labels.push(placeholders[i++ % placeholders.length]);
     return labels;
   }, [winners]);
 
