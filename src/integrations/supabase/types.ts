@@ -775,6 +775,36 @@ export type Database = {
         }
         Relationships: []
       }
+      draw_run_log: {
+        Row: {
+          action: string
+          details: Json
+          draw_date: string | null
+          error_message: string | null
+          id: string
+          run_at: string
+          status: string | null
+        }
+        Insert: {
+          action: string
+          details?: Json
+          draw_date?: string | null
+          error_message?: string | null
+          id?: string
+          run_at?: string
+          status?: string | null
+        }
+        Update: {
+          action?: string
+          details?: Json
+          draw_date?: string | null
+          error_message?: string | null
+          id?: string
+          run_at?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
       driver_documents: {
         Row: {
           document_type: Database["public"]["Enums"]["driver_document_type"]
@@ -3040,6 +3070,7 @@ export type Database = {
         }
         Returns: string
       }
+      audit_missed_draws: { Args: never; Returns: undefined }
       close_draws_for_cutoff: { Args: never; Returns: number }
       complete_driver_payout: {
         Args: { p_payout_id: string; p_stripe_payout_id: string }
@@ -3402,6 +3433,7 @@ export type Database = {
           winner_display_name: string
         }[]
       }
+      run_daily_draw_safe: { Args: never; Returns: undefined }
       run_test_draw_tick: {
         Args: never
         Returns: {
