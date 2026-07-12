@@ -323,12 +323,19 @@ function SearchPage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-3 py-4 md:px-6">
+      <div className="mb-3 flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900 md:text-sm">
+        <span className="mt-0.5 inline-flex shrink-0 items-center rounded-full bg-amber-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+          {t("searchPage.subscribersOnly", "Solo suscriptores")}
+        </span>
+        <p>{t("searchPage.subscribersOnlyNotice", "Este catálogo es exclusivo para miembros con una suscripción activa. Podrás agregar productos al carrito solo si tienes un plan activo.")}</p>
+      </div>
       <div className="flex gap-6">
         <aside className="hidden w-64 shrink-0 rounded-md border border-border bg-white p-4 md:block lg:w-72">
           <FiltersPanel {...filterProps} />
         </aside>
 
         <section className="min-w-0 flex-1">
+
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm">
             <p className="text-foreground">
               {q ? (
@@ -392,10 +399,19 @@ function SearchPage() {
                       <Stars value={p.rating} />
                       <span className="text-xs text-muted-foreground">({p.reviews.toLocaleString()})</span>
                     </div>
-                    <div className="text-xl font-bold text-[#1a0f0a]">
-                      <span className="text-xs align-top">$</span>
-                      {p.price.toFixed(2)}
+                    <div className="flex items-center gap-2">
+                      <div className="text-xl font-bold text-[#1a0f0a]">
+                        <span className="text-xs align-top">$</span>
+                        {p.price.toFixed(2)}
+                      </div>
+                      <span
+                        className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800"
+                        title={t("searchPage.subscribersOnlyNotice", "Este catálogo es exclusivo para miembros con una suscripción activa. Podrás agregar productos al carrito solo si tienes un plan activo.")}
+                      >
+                        {t("searchPage.subscribersOnly", "Solo suscriptores")}
+                      </span>
                     </div>
+
                     <p className="text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: deliveryDate })}</span>
                     </p>
