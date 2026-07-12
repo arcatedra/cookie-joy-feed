@@ -82,6 +82,14 @@ function RuletaPage() {
     queryFn: () => fetchState(),
     refetchOnWindowFocus: false,
   });
+  const fetchCfg = useServerFn(getSweepstakesPublicConfig);
+  const { data: cfg } = useQuery({
+    queryKey: ["sweepstakes-public-config"],
+    queryFn: () => fetchCfg(),
+    staleTime: 10 * 60_000,
+  });
+  const sweepstakesActive = cfg?.sweepstakes_active ?? false;
+
 
   const balance = state?.balance ?? 0;
   const canSpin = balance >= SPIN_COST;
