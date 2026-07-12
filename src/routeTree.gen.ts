@@ -38,6 +38,7 @@ import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
@@ -231,6 +232,11 @@ const NegociosRegistroRoute = NegociosRegistroRouteImport.update({
   id: '/negocios/registro',
   path: '/negocios/registro',
   getParentRoute: () => rootRouteImport,
+} as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/$code',
+  path: '/$code',
+  getParentRoute: () => JoinRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -525,7 +531,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
-  '/join': typeof JoinRoute
+  '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -548,6 +554,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -604,7 +611,7 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
-  '/join': typeof JoinRoute
+  '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -626,6 +633,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -684,7 +692,7 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
-  '/join': typeof JoinRoute
+  '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
@@ -707,6 +715,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
@@ -788,6 +797,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -866,6 +876,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -946,6 +957,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes'
     | '/checkout/success'
     | '/email/unsubscribe'
+    | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
@@ -1004,7 +1016,7 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
   HistorialRoute: typeof HistorialRoute
-  JoinRoute: typeof JoinRoute
+  JoinRoute: typeof JoinRouteWithChildren
   MenuRoute: typeof MenuRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ProfileRoute: typeof ProfileRoute
@@ -1249,6 +1261,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/negocios/registro'
       preLoaderRoute: typeof NegociosRegistroRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
+      parentRoute: typeof JoinRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1681,6 +1700,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface JoinRouteChildren {
+  JoinCodeRoute: typeof JoinCodeRoute
+}
+
+const JoinRouteChildren: JoinRouteChildren = {
+  JoinCodeRoute: JoinCodeRoute,
+}
+
+const JoinRouteWithChildren = JoinRoute._addFileChildren(JoinRouteChildren)
+
 interface AdminSweepstakesRouteChildren {
   AdminSweepstakesWinnersRoute: typeof AdminSweepstakesWinnersRoute
 }
@@ -1702,7 +1731,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,
   HistorialRoute: HistorialRoute,
-  JoinRoute: JoinRoute,
+  JoinRoute: JoinRouteWithChildren,
   MenuRoute: MenuRoute,
   PrivacidadRoute: PrivacidadRoute,
   ProfileRoute: ProfileRoute,
