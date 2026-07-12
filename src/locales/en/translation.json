@@ -388,7 +388,7 @@
     }
   },
   "cart": {
-    "title": "Your Cart",
+    "title": "Your cart",
     "checkout": "Checkout",
     "empty": "Your cart is empty",
     "emptyDesc": "Add some delicious cookies to get started.",
@@ -686,11 +686,11 @@
     "remainingShort": "left"
   },
   "cartDrawer": {
-    "title": "Shopify Cart",
+    "title": "Cart",
     "empty": "Your shop cart is empty",
     "itemsCount": "{{count}} items in your cart",
     "itemCount": "{{count}} item in your cart",
-    "checkoutBtn": "Checkout with Shopify",
+    "checkoutBtn": "Checkout with",
     "total": "Total"
   },
   "donate": {

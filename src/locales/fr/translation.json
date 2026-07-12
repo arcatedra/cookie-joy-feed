@@ -388,7 +388,7 @@
     }
   },
   "cart": {
-    "title": "Votre Panier",
+    "title": "Ton panier",
     "checkout": "Commander",
     "empty": "Votre panier est vide",
     "emptyDesc": "Ajoutez de délicieux cookies pour commencer.",
@@ -686,11 +686,11 @@
     "remainingShort": "restantes"
   },
   "cartDrawer": {
-    "title": "Panier Shopify",
+    "title": "Panier",
     "empty": "Votre panier est vide",
     "itemsCount": "{{count}} articles dans votre panier",
     "itemCount": "{{count}} article dans votre panier",
-    "checkoutBtn": "Payer avec Shopify",
+    "checkoutBtn": "Payer avec",
     "total": "Total"
   },
   "donate": {

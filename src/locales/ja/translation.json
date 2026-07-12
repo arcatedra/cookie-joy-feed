@@ -15,11 +15,11 @@
     "remainingShort": "残り"
   },
   "cartDrawer": {
-    "title": "Shopify カート",
+    "title": "カート",
     "empty": "ショッピングカートは空です",
     "itemsCount": "カートに{{count}}個の商品があります",
     "itemCount": "カートに{{count}}個の商品があります",
-    "checkoutBtn": "Shopifyで支払う",
+    "checkoutBtn": "で支払う",
     "total": "合計"
   },
   "donate": {

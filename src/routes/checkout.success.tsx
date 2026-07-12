@@ -184,7 +184,7 @@ function SuccessPage() {
                   <Package className="h-4 w-4" /> Ver mis pedidos
                 </Link>
                 <Link
-                  to="/shop"
+                  to="/subscribe"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-3 text-sm font-bold text-[#1a0f0a] shadow hover:bg-amber-300"
                 >
                   <ShoppingBag className="h-4 w-4" /> Seguir comprando

@@ -40,7 +40,7 @@ export function SiteFooter() {
               {t("footer.shop", "Tienda")}
             </h3>
             <ul className="mt-3 space-y-2 font-serif text-sm">
-              <li><Link to="/shop" className="text-white/80 hover:text-[#E6C35C]">{t("footer.allCookies", "Galletas")}</Link></li>
+              <li><Link to="/subscribe" className="text-white/80 hover:text-[#E6C35C]">{t("footer.allCookies", "Galletas")}</Link></li>
               <li><Link to="/ruleta" className="text-white/80 hover:text-[#E6C35C]">{t("footer.roulette", "Ruleta del día")}</Link></li>
               <li><Link to="/subscribe" className="text-white/80 hover:text-[#E6C35C]">{t("footer.subscribe", "Suscripción")}</Link></li>
               <li><Link to="/explore" className="text-white/80 hover:text-[#E6C35C]">{t("footer.explore", "Explorar")}</Link></li>

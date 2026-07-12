@@ -388,7 +388,7 @@
     }
   },
   "cart": {
-    "title": "Il tuo Carrello",
+    "title": "Il tuo carrello",
     "checkout": "Vai al Checkout",
     "empty": "Il tuo carrello è vuoto",
     "emptyDesc": "Aggiungi deliziosi biscotti per iniziare.",
@@ -686,11 +686,11 @@
     "remainingShort": "rimanenti"
   },
   "cartDrawer": {
-    "title": "Carrello Shopify",
+    "title": "Carrello",
     "empty": "Il tuo carrello è vuoto",
     "itemsCount": "{{count}} articoli nel tuo carrello",
     "itemCount": "{{count}} articolo nel tuo carrello",
-    "checkoutBtn": "Checkout con Shopify",
+    "checkoutBtn": "Checkout con",
     "total": "Totale"
   },
   "donate": {

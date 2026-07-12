@@ -117,7 +117,7 @@ function Home() {
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
-              to="/shop"
+              to="/subscribe"
               className="rounded-full bg-[#E6C35C] px-5 py-2 text-xs font-bold text-[#1a0f0a] shadow transition hover:bg-[#f0d175]"
             >
               {t("hero.ctaShop", "Shop cookies")}

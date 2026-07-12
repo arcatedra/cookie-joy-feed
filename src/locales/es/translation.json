@@ -686,11 +686,11 @@
     "remainingShort": "restantes"
   },
   "cartDrawer": {
-    "title": "Carrito de Shopify",
+    "title": "Carrito de",
     "empty": "Tu cesta de la compra está vacía",
     "itemsCount": "{{count}} artículos en tu carrito",
     "itemCount": "{{count}} artículo en tu carrito",
-    "checkoutBtn": "Pagar con Shopify",
+    "checkoutBtn": "Pagar con",
     "total": "Total"
   },
   "donate": {
