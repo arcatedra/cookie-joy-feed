@@ -2596,6 +2596,7 @@ export type Database = {
           sponsor_address: string
           sponsor_email: string
           sponsor_name: string
+          sweepstakes_active: boolean
           updated_at: string
         }
         Insert: {
@@ -2608,6 +2609,7 @@ export type Database = {
           sponsor_address?: string
           sponsor_email?: string
           sponsor_name?: string
+          sweepstakes_active?: boolean
           updated_at?: string
         }
         Update: {
@@ -2620,6 +2622,7 @@ export type Database = {
           sponsor_address?: string
           sponsor_email?: string
           sponsor_name?: string
+          sweepstakes_active?: boolean
           updated_at?: string
         }
         Relationships: []
@@ -3028,6 +3031,15 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_register_amoe_entry: {
+        Args: {
+          p_display_name: string
+          p_dob: string
+          p_email: string
+          p_state: string
+        }
+        Returns: string
+      }
       close_draws_for_cutoff: { Args: never; Returns: number }
       complete_driver_payout: {
         Args: { p_payout_id: string; p_stripe_payout_id: string }
@@ -3201,6 +3213,7 @@ export type Database = {
           sponsor_address: string
           sponsor_email: string
           sponsor_name: string
+          sweepstakes_active: boolean
         }[]
       }
       get_today_draw: {

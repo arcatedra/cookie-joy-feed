@@ -1,72 +1,76 @@
-## Objetivo
+# Plan: Sorteo Diario HAZOREX — cumplimiento y unificación
 
-Dejar el Sorteo Diario en cumplimiento legal mínimo para EE.UU. sin apagarlo. Foco: AMOE real con igual peso, disclaimers visibles, tope de premio, exclusiones, y guardado real de la dirección postal del sponsor.
+> Nota: no es asesoría legal. Antes de activar el sorteo con dinero real, un abogado especializado debe revisar la versión final. Este plan implementa la parte técnica del prompt.
 
-No se toca la aleatoriedad (Random.org queda para otra fase). No se cambia el flujo de ganador ni la regla core "no admin winner override".
+## Estado actual (verificado en el código)
 
-## Cambios
+- Tabla existente: `public.daily_draw_entries` (columnas: draw_date, subject_user_id, subject_email, display_name, tickets, source). Ya soporta `source ∈ {'paid','amoe',...}` — es la "tabla única" pedida, no hace falta duplicarla.
+- Método pago: `stars-checkout` + RPC `enter_daily_draw` inserta con `source='paid'`. 10⭐ = 1 boleto (memoria confirmada).
+- Método AMOE: hoy `/amoe` es solo informativo (Mail-in). El formulario con ensayo digital ya no existe en UI. La tabla `amoe_entries` sigue en DB pero sin flujo activo.
+- `sweepstakes_config` ya existe con `sponsor_address`, `excluded_states`, `min_age`, `max_daily_prize_usd`, `entry_cutoff_minutes`. Falta bandera global `sweepstakes_active`.
+- Panel admin en `/ruleta`: ya se corrigió en turnos previos para exigir rol `admin` (verificar que sigue así).
+- Random.org / hash verificable: `run_daily_draw` ya publica `seed_hash`. Falta confirmar la fuente pública del seed.
+- Checkout: pagos en modo sandbox (Stripe). El "Shopify" del carrito es solo storefront de productos físicos, no del sorteo — clarificar en UI.
 
-### 1. Dirección postal del sponsor (habilita AMOE real)
+## Cambios propuestos
 
-Actualmente `sweepstakes_config.sponsor_address` está vacío/placeholder, por lo que `/sweepstakes-rules` muestra el aviso "pre-launch". Cuando confirmes el plan te pediré la dirección exacta en un mensaje aparte (no la incluyas en el chat todavía si es privada — la guardaré con el tool de datos, no en el repo).
+### 1. Bandera global `sweepstakes_active`
+- Migración: agregar `sweepstakes_active BOOLEAN NOT NULL DEFAULT false` a `public.sweepstakes_config`.
+- Exponerla en `get_sweepstakes_public_config()`.
+- Consumirla en: home banner, `/ruleta` (LiveDrawSection + BuyTokens), `/sweepstakes-rules`, `/sorteo/ganadores`, footer.
+- Cuando `false`: ocultar prize pool, últimos ganadores, contador de recaudación, botón "Girar/Comprar boletos". Mostrar tarjeta uniforme "Próximamente" en las 4 vistas.
+- Guardas server-side: `enter_daily_draw` y `submitAmoeEntry` rechazan con `SWEEPSTAKES_INACTIVE` si la bandera está en `false`.
 
-Guardar en `sweepstakes_config` vía tool de datos:
-- `sponsor_address` = dirección real (calle, ciudad, estado, ZIP)
-- `sponsor_name` = "HAZOREX LLC" (confirmar)
-- `sponsor_email` = "soporte@hazorex.com" (confirmar)
+### 2. Método 1 — Comprar Estrellas → Boletos
+- Confirmar en UI que "Girar la Ruleta" es solo el canje 10⭐ → 1 boleto (no un juego aparte). Actualizar copy en `/ruleta` y `/sweepstakes-rules` sección de canje.
+- El registro en `daily_draw_entries` ya se genera server-side vía RPC — no cambia.
+- Aclarar en el checkout que la pasarela es Stripe (sandbox actual). El drawer "Shopify" queda para productos, con un badge visible que lo distinga del flujo de estrellas.
 
-Esto automáticamente:
-- Quita el banner "PRE-LAUNCH" de `/sweepstakes-rules`.
-- Muestra la dirección real en las reglas oficiales.
-- Habilita legalmente la vía de entrada gratuita por correo.
+### 3. Método 2 — AMOE gratis (Mail-in, ya vigente)
+- Mantener `/amoe` como está: informativo, tarjeta postal manuscrita. Este es el AMOE legal principal.
+- Reforzar la ruta admin `admin.sweepstakes` para registrar entradas AMOE recibidas por correo, insertando en `daily_draw_entries` con `source='amoe'`, `tickets=1`, respetando cutoff y bandera activa.
+- Validaciones server-side al registrar AMOE por admin:
+  - Edad ≥ `min_age` a partir de DOB del sobre.
+  - Estado no en `excluded_states`.
+  - Deduplicación por (email + draw_date) o (dirección + draw_date).
+- Igual peso: mismo `tickets=1` que un boleto comprado (ya lo es).
 
-### 2. AMOE (Alternative Method of Entry) real y con igual peso
+### 4. Reglas Oficiales y textos
+- Actualizar `/sweepstakes-rules`:
+  - Sección de canje: "10 estrellas compradas = 1 boleto. La animación de ruleta es solo visual; no altera la probabilidad."
+  - Igual peso explícito entre `paid` y `amoe`.
+  - Placeholder de dirección: mostrar la real solo cuando `sweepstakes_active=true` y `sponsor_address` esté completa.
 
-Tabla `amoe_entries` ya existe. Falta:
+### 5. Panel de administrador
+- Auditar `/ruleta`, `LiveDrawSection`, `TopNav` y confirmar que ningún control admin (TEST DRAW, seed override, etc.) se muestra sin `has_role(admin)`.
+- Blindar en cliente + server (RLS). Si algo sigue expuesto, cerrarlo aquí.
 
-- **Endpoint admin** `/admin/sweepstakes/amoe` (nueva ruta bajo `_authenticated/`) donde un admin registra manualmente las entradas por correo recibidas ese día (nombre, dirección, fecha de matasellos, día del sorteo).
-- **Peso igual**: al ejecutar el sorteo diario (`run-daily-draw`), incluir las filas de `amoe_entries` del día como participantes con el mismo peso que un ticket comprado. Auditar en la fila `daily_draws` cuántas entradas fueron AMOE vs pagadas.
-- **Instrucciones claras** en `/sweepstakes-rules` (ya están en la sección s4Mail) — verificar que muestren la dirección real después del cambio 1.
+### 6. Verificabilidad del sorteo
+- `run_daily_draw` ya guarda `seed_hash`. Añadir en `/sorteo/ganadores` el enlace con el hash + explicación de cómo verificar (SHA-256 del seed publicado tras el sorteo).
+- Random.org queda como fase futura (no bloqueante para MVP legal).
 
-### 3. Disclaimer "NO PURCHASE NECESSARY" visible
+### 7. Reclamo de premio
+- El flujo `winner_claims` ya existe con W-9 para premios altos. Verificar que el aviso de "premios > $600 requieren W-9" aparece en `/sweepstakes-rules` y en la página de reclamo.
 
-- Añadir banner permanente en `/ruleta` (encima del panel de compra de estrellas) con texto localizado:
-  > "NO SE REQUIERE COMPRA. Nulo donde esté prohibido. Ver [reglas oficiales](/sweepstakes-rules)."
-- Añadir el mismo disclaimer corto en el modal/panel de "Comprar Estrellas" antes del botón de pago.
-- Añadir en el footer del sitio un enlace permanente a `/sweepstakes-rules`.
+### 8. Checklist antes de activar (`sweepstakes_active=true`)
+- [ ] Dirección postal real cargada en `sweepstakes_config.sponsor_address`.
+- [ ] Panel admin verificado (login + rol) en staging.
+- [ ] Prueba end-to-end: 1 boleto pago + 1 boleto AMOE en el mismo sorteo → confirmar en DB mismo peso.
+- [ ] Prize pool y ganadores muestran "Próximamente" con bandera en `false`.
+- [ ] Textos consistentes en banner / reglas / formulario / footer.
+- [ ] Revisión legal del abogado.
 
-### 4. Tope de premio diario visible y aplicado
+## Detalles técnicos
 
-- `sweepstakes_config.max_daily_prize_usd` ya está en $4999 (bajo el umbral federal de $5000 que dispara registros/bond).
-- Verificar que `run-daily-draw` respete el tope: si el pozo del día supera $4999, el exceso rueda al día siguiente (no se paga más de $4999 en un mismo sorteo).
-- Mostrar el tope en `/ruleta` cerca del contador de pozo: "Premio máximo diario: $4,999".
+- **DB**: 1 migración — agrega `sweepstakes_active`, extiende `get_sweepstakes_public_config`, añade guarda en `enter_daily_draw`, RPC `admin_register_amoe_entry(email, name, dob, state, draw_date)` con validaciones.
+- **Frontend**: hook `useSweepstakesActive()` consumido por home banner, `/ruleta`, `/sweepstakes-rules`, `/sorteo/ganadores`, footer.
+- **No se crea** una tabla nueva `entradas_sorteo`: `daily_draw_entries` ya cumple la función. Renombrar sería un refactor destructivo sin beneficio.
+- **Pagos**: mantener Stripe sandbox hasta que el usuario decida go-live; añadir label "Powered by Stripe" en el modal de estrellas para eliminar la ambigüedad con Shopify.
 
-### 5. Exclusiones geográficas y edad (ya implementado, solo verificar)
+## Fuera de alcance (siguiente iteración)
+- Integración Random.org en vivo.
+- Panel público de auditoría de seeds pasados.
+- Registro estatal si el premio supera $5,000.
 
-- FL y RI excluidos ✔
-- 18+ verificado una sola vez vía `user_eligibility` ✔
-- Verificar que `/sweepstakes-rules` refleja "FL, RI" (ya OK tras última corrección).
-
-### 6. Registro público de ganadores
-
-- `/sweepstakes-rules` sección s9 ya menciona lista de ganadores. Verificar/crear ruta pública `/sorteo/ganadores` con la lista de ganadores anteriores (fecha, nombre parcial estilo "Juan P., NY", premio). Datos vienen de `winner_claims` con estado publicable.
-
-## Fuera de alcance (fases siguientes)
-
-- Random.org / aleatoriedad verificable de tercero.
-- Bond/registro en estados con umbrales altos.
-- W-9 / 1099 automatizado para ganadores >$600.
-- Revisión por abogado.
-
-## Verificación
-
-- `/sweepstakes-rules` sin banner amarillo "pre-launch", con dirección real.
-- `/ruleta` muestra disclaimer NO PURCHASE NECESSARY y tope $4,999.
-- Admin puede añadir una entrada AMOE de prueba y aparece con peso 1 en el próximo sorteo.
-- Footer tiene link a reglas oficiales.
-- `/sorteo/ganadores` lista al menos los ganadores existentes.
-
-## Lo que necesito de ti después de aprobar
-
-1. Dirección postal real del sponsor (calle, ciudad, estado, ZIP).
-2. Confirmar `sponsor_name` = "HAZOREX LLC" y `sponsor_email` = "soporte@hazorex.com" o darme los correctos.
+## Pregunta abierta
+¿Quieres que en el mismo turno prepare también el hardening del panel admin (segundo prompt que mencionaste), o lo dejamos como plan aparte para revisarlo primero?

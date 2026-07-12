@@ -55,6 +55,7 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
   if (!row) return null;
   const cfgRow = Array.isArray(cfgRes.data) ? cfgRes.data[0] : cfgRes.data;
   const addressValid = Boolean(cfgRow?.address_valid ?? false);
+  const sweepstakesActive = Boolean(cfgRow?.sweepstakes_active ?? false);
   return {
     drawDate: row.draw_date as string,
     status: row.status as "open" | "drawing" | "completed" | "rolled_over",
@@ -66,10 +67,12 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
     seedHash: (row.seed_hash as string | null) ?? null,
     rolledOverFrom: (row.rolled_over_from as string | null) ?? null,
     addressValid,
+    sweepstakesActive,
     maxDailyPrizeUsd: Number(cfgRow?.max_daily_prize_usd ?? 4999),
     entryCutoffMinutes: Number(cfgRow?.entry_cutoff_minutes ?? 5),
   };
 });
+
 
 export const getRecentWinners = createServerFn({ method: "GET" }).handler(async () => {
   const { createClient } = await import("@supabase/supabase-js");
@@ -155,8 +158,11 @@ export const enterDailyDraw = createServerFn({ method: "POST" })
     });
     if (error) {
       const msg = error.message || "";
+      if (msg.includes("SWEEPSTAKES_INACTIVE"))
+        return { ok: false as const, error: "El sorteo diario aún no está activo. Pronto anunciaremos la fecha de lanzamiento." };
       if (msg.includes("SPONSOR_ADDRESS_NOT_CONFIGURED"))
         return { ok: false as const, error: "El sorteo diario en USD aún no está activo. Pronto se anunciará la fecha de lanzamiento." };
+
       if (msg.includes("INSUFFICIENT_STARS"))
         return { ok: false as const, error: "No tienes suficientes estrellas (10⭐ por boleto)." };
       if (msg.includes("DRAW_CLOSED"))

@@ -3,7 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { listPublicWinners } from "@/lib/winners-public.functions";
+import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 import { getLocale } from "@/i18n";
+
 
 export const Route = createFileRoute("/sorteo/ganadores")({
   head: () => ({
@@ -41,13 +43,22 @@ function maskName(name: string): string {
 function WinnersPage() {
   const { t } = useTranslation();
   const fetchWinners = useServerFn(listPublicWinners);
+  const fetchCfg = useServerFn(getSweepstakesPublicConfig);
+  const { data: cfg } = useQuery({
+    queryKey: ["sweepstakes-public-config"],
+    queryFn: () => fetchCfg(),
+    staleTime: 10 * 60_000,
+  });
+  const active = cfg?.sweepstakes_active ?? false;
   const { data, isLoading } = useQuery({
     queryKey: ["public-winners"],
     queryFn: () => fetchWinners(),
     staleTime: 60_000,
+    enabled: active,
   });
 
   const locale = getLocale();
+
 
   return (
     <main
@@ -72,7 +83,15 @@ function WinnersPage() {
         })}
       </p>
 
-      {isLoading ? (
+      {!active ? (
+        <p style={{ marginTop: 24, background: BEIGE, padding: 20, borderRadius: 12, border: `1px solid ${GOLD}` }}>
+          <strong>Próximamente.</strong>{" "}
+          {t("winners.inactive", {
+            defaultValue:
+              "El sorteo diario aún no está activo. Cuando se lance, aquí verás el registro público y verificable de cada ganador.",
+          })}
+        </p>
+      ) : isLoading ? (
         <p style={{ marginTop: 24 }}>…</p>
       ) : !data || data.length === 0 ? (
         <p style={{ marginTop: 24, background: BEIGE, padding: 20, borderRadius: 12 }}>
@@ -81,6 +100,7 @@ function WinnersPage() {
               "Todavía no hay ganadores publicados. Vuelve pronto — el sorteo se ejecuta a diario.",
           })}
         </p>
+
       ) : (
         <ul style={{ listStyle: "none", padding: 0, marginTop: 24, display: "grid", gap: 12 }}>
           {data.map((w) => (

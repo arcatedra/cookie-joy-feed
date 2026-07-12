@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { getTodayDraw } from "@/lib/daily-draw.functions";
+import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 
 const STORAGE_KEY = "pre-draw-banner-dismissed";
 
@@ -20,6 +21,11 @@ export function PreDrawCountdownBanner() {
     refetchInterval: 30_000,
     staleTime: 25_000,
   });
+  const { data: cfg } = useQuery({
+    queryKey: ["sweepstakes-public-config"],
+    queryFn: () => getSweepstakesPublicConfig(),
+    staleTime: 10 * 60_000,
+  });
 
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -34,7 +40,9 @@ export function PreDrawCountdownBanner() {
     } catch {/* ignore */}
   }, []);
 
+  if (!(cfg?.sweepstakes_active ?? false)) return null;
   if (!data?.scheduledAt || data.status !== "open" && data.status !== "drawing") return null;
+
 
   const scheduled = new Date(data.scheduledAt).getTime();
   const msLeft = scheduled - now;
