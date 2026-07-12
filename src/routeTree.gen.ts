@@ -34,6 +34,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
@@ -208,6 +209,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SorteoGanadoresRoute = SorteoGanadoresRouteImport.update({
+  id: '/sorteo/ganadores',
+  path: '/sorteo/ganadores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReelReelIdRoute = ReelReelIdRouteImport.update({
@@ -538,6 +544,7 @@ export interface FileRoutesByFullPath {
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
@@ -614,6 +621,7 @@ export interface FileRoutesByTo {
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
@@ -693,6 +701,7 @@ export interface FileRoutesById {
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
   '/reel/$reelId': typeof ReelReelIdRoute
+  '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
   '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
@@ -772,6 +781,7 @@ export interface FileRouteTypes {
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/sorteo/ganadores'
     | '/admin/deliveries'
     | '/admin/live'
     | '/admin/negocios'
@@ -848,6 +858,7 @@ export interface FileRouteTypes {
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/sorteo/ganadores'
     | '/admin/deliveries'
     | '/admin/live'
     | '/admin/negocios'
@@ -926,6 +937,7 @@ export interface FileRouteTypes {
     | '/negocios/registro'
     | '/product/$handle'
     | '/reel/$reelId'
+    | '/sorteo/ganadores'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/live'
     | '/_authenticated/admin/negocios'
@@ -1002,6 +1014,7 @@ export interface RootRouteChildren {
   NegociosRegistroRoute: typeof NegociosRegistroRoute
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
+  SorteoGanadoresRoute: typeof SorteoGanadoresRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
@@ -1194,6 +1207,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sorteo/ganadores': {
+      id: '/sorteo/ganadores'
+      path: '/sorteo/ganadores'
+      fullPath: '/sorteo/ganadores'
+      preLoaderRoute: typeof SorteoGanadoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reel/$reelId': {
@@ -1683,6 +1703,7 @@ const rootRouteChildren: RootRouteChildren = {
   NegociosRegistroRoute: NegociosRegistroRoute,
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
+  SorteoGanadoresRoute: SorteoGanadoresRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
