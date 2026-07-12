@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -6,9 +6,34 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
-import { checkIsAdmin, triggerTestDraw } from "@/lib/admin-draw.functions";
+import { checkIsAdmin } from "@/lib/admin-check.functions";
 import { useAuth } from "@/lib/auth";
 import { getLocale } from "@/i18n";
+
+// Lazy-loaded so the admin-draw bundle (triggerTestDraw, etc.) is NEVER
+// shipped to non-admin visitors of /ruleta.
+const AdminTestDrawPanel = lazy(() => import("./AdminTestDrawPanel"));
+
+function AdminTestDrawGate({ onResult }: { onResult: () => void }) {
+  const { user, loading } = useAuth();
+  const checkAdminFn = useServerFn(checkIsAdmin);
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    setIsAdmin(false);
+    if (loading || !user) return () => { cancelled = true; };
+    checkAdminFn()
+      .then((r) => { if (!cancelled) setIsAdmin(r.isAdmin === true); })
+      .catch(() => { if (!cancelled) setIsAdmin(false); });
+    return () => { cancelled = true; };
+  }, [checkAdminFn, loading, user?.id]);
+  if (loading || !user || !isAdmin) return null;
+  return (
+    <Suspense fallback={null}>
+      <AdminTestDrawPanel onResult={onResult} />
+    </Suspense>
+  );
+}
 
 
 const BEIGE = "#f3ead8";
@@ -482,7 +507,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
 
 
       {/* Admin-only test draw */}
-      <AdminTestDrawPanel onResult={() => qc.invalidateQueries({ queryKey: ["daily-draw"] })} />
+      <AdminTestDrawGate onResult={() => qc.invalidateQueries({ queryKey: ["daily-draw"] })} />
 
       {/* Winners leaderboard */}
       <WinnersLeaderboard winners={winners ?? []} />
