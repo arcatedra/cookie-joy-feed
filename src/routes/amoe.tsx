@@ -26,14 +26,6 @@ export const Route = createFileRoute("/amoe")({
   component: AmoePage,
 });
 
-const BLUE = "#1e3a5f";
-const BLUE_SOFT = "#4a6b8a";
-const BEIGE = "#f4f1ea";
-const BEIGE_DEEP = "#d9d2c1";
-const GOLD = "#c9a36b";
-const DANGER = "#a63232";
-const OK = "#1f7a3a";
-
 const MIN_WORDS = 300;
 const MAX_WORDS = 1500;
 const PROMPT_ES = `¿Por qué te gusta HAZOREX y cómo impacta el comercio local en tu comunidad?`;
@@ -42,14 +34,12 @@ function countWords(s: string): number {
   return s.trim().split(/\s+/).filter(Boolean).length;
 }
 
-// Very lightweight heuristic red flags. Server does the real audit.
 function detectSuspicious(essay: string): string | null {
   const trimmed = essay.trim();
   if (!trimmed) return null;
   const words = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
   if (words.length < 10) return null;
 
-  // Repetition: same 5-word window repeated 3+ times.
   const windows = new Map<string, number>();
   for (let i = 0; i + 5 <= words.length; i++) {
     const key = words.slice(i, i + 5).join(" ");
@@ -59,7 +49,6 @@ function detectSuspicious(essay: string): string | null {
     if (n >= 3) return "Detectamos frases repetidas. Reescribe el ensayo con contenido único.";
   }
 
-  // Lexical diversity (unique / total). AI/plagio suele ser alto pero bajo en variación aquí filtramos textos triviales.
   const uniq = new Set(words).size;
   const ratio = uniq / words.length;
   if (words.length >= 60 && ratio < 0.35) {
@@ -110,7 +99,8 @@ function AmoePage() {
   const wc = useMemo(() => countWords(form.essay), [form.essay]);
   const suspicious = useMemo(() => detectSuspicious(form.essay), [form.essay]);
 
-  const wcColor = wc >= MIN_WORDS ? OK : wc >= MIN_WORDS - 30 ? "#a97a1e" : DANGER;
+  const counterClass =
+    wc >= MIN_WORDS ? "counter-ok" : wc >= MIN_WORDS - 30 ? "counter-warn" : "counter-bad";
 
   const canSubmit =
     wc >= MIN_WORDS &&
@@ -151,85 +141,29 @@ function AmoePage() {
     },
   });
 
-  const inputStyle = {
-    width: "100%",
-    padding: "12px 14px",
-    borderRadius: 10,
-    border: `1px solid ${BEIGE_DEEP}`,
-    background: "white",
-    color: BLUE,
-    fontSize: 15,
-    fontFamily: "inherit",
-  } as const;
-
   return (
-    <main
-      style={{
-        maxWidth: 760,
-        margin: "0 auto",
-        padding: "2.5rem 1.25rem 4rem",
-        fontFamily: "system-ui, sans-serif",
-        color: BLUE,
-        lineHeight: 1.6,
-      }}
-    >
-      <Link to="/ruleta" style={{ color: BLUE, fontSize: 13 }}>
+    <main className="amoe-modal">
+      <Link to="/ruleta" className="amoe-back-link">
         ← Volver a la Ruleta
       </Link>
 
-      <h1 style={{ fontSize: 32, fontWeight: 900, marginTop: 12, marginBottom: 4 }}>
-        Entrada Gratuita — AMOE
-      </h1>
-      <p style={{ color: BLUE_SOFT, marginTop: 0 }}>
-        Método Alternativo de Entrada Gratuita al sorteo diario de HAZOREX.
-      </p>
-
-      <div
-        style={{
-          background: BEIGE,
-          border: `1px solid ${BEIGE_DEEP}`,
-          padding: 16,
-          borderRadius: 12,
-          marginTop: 16,
-          fontSize: 14,
-        }}
-      >
-        <strong>NO ES NECESARIO COMPRAR PARA PARTICIPAR O GANAR.</strong> Esta entrada gratuita
-        tiene <strong>exactamente las mismas probabilidades</strong> de ganar que las entradas
-        pagadas. Máx. 1 entrada AMOE por persona, correo, IP y hogar cada 24 h.{" "}
-        <Link to="/sweepstakes-rules" style={{ color: BLUE, fontWeight: 700 }}>
-          Ver reglas oficiales
-        </Link>
-        .
+      <div className="amoe-header">
+        <h2>Entrada Gratuita — AMOE</h2>
       </div>
 
-      <div
-        style={{
-          background: "#fff7e0",
-          border: `1px solid ${GOLD}`,
-          padding: 16,
-          borderRadius: 12,
-          marginTop: 12,
-          fontSize: 13,
-          lineHeight: 1.7,
-        }}
-      >
-        <strong>Antes de escribir, lee esto:</strong>
-        <ul style={{ margin: "8px 0 0 18px", padding: 0 }}>
-          <li>El ensayo debe ser <strong>original, redactado por ti</strong>, mínimo 300 palabras.</li>
-          <li>
-            <strong>Prohibido</strong> usar IA (ChatGPT, Claude, Gemini, etc.), copiar/pegar de
-            internet, o reenviar el mismo texto.
-          </li>
-          <li>
-            Auditamos con software antiplagio y detección de IA. Los envíos marcados quedan{" "}
-            <strong>descalificados automáticamente</strong>.
-          </li>
-          <li>Solo se acepta 1 entrada AMOE por día por persona.</li>
-        </ul>
+      <p className="law-notice">
+        NO ES NECESARIO COMPRAR PARA PARTICIPAR O GANAR
+      </p>
+
+      <div className="instruction-text">
+        Método Alternativo de Entrada Gratuita al sorteo diario de HAZOREX. Esta entrada tiene{" "}
+        <strong>exactamente las mismas probabilidades</strong> de ganar que las entradas pagadas.
+        Máx. 1 entrada AMOE por persona, correo, IP y hogar cada 24 h.{" "}
+        <Link to="/sweepstakes-rules">Ver reglas oficiales</Link>.
       </div>
 
       <form
+        className="amoe-form"
         onSubmit={(e) => {
           e.preventDefault();
           if (!canSubmit) {
@@ -240,145 +174,153 @@ function AmoePage() {
           }
           m.mutate();
         }}
-        style={{ display: "grid", gap: 12, marginTop: 24 }}
       >
-        <h2 style={{ fontSize: 18, fontWeight: 800, marginBottom: 0 }}>1. Tus datos</h2>
+        <h3 className="amoe-section-title">1. Tus datos</h3>
 
-        <input
-          required
-          placeholder="Nombre completo"
-          value={form.fullName}
-          maxLength={120}
-          onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-          style={inputStyle}
-          autoComplete="name"
-        />
-        <input
-          required
-          type="email"
-          placeholder="Correo electrónico"
-          value={form.email}
-          maxLength={255}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          style={inputStyle}
-          autoComplete="email"
-        />
-        <input
-          required
-          type="tel"
-          placeholder="Teléfono"
-          value={form.phone}
-          maxLength={40}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-          style={inputStyle}
-          autoComplete="tel"
-        />
-        <div style={{ display: "grid", gap: 6 }}>
-          <label style={{ fontSize: 12, color: BLUE_SOFT }}>Fecha de nacimiento (18+)</label>
+        <div className="input-group">
+          <label htmlFor="fullName">Nombre completo</label>
           <input
+            id="fullName"
+            required
+            value={form.fullName}
+            maxLength={120}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            autoComplete="name"
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="email">Correo electrónico</label>
+          <input
+            id="email"
+            required
+            type="email"
+            value={form.email}
+            maxLength={255}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            autoComplete="email"
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="phone">Teléfono</label>
+          <input
+            id="phone"
+            required
+            type="tel"
+            value={form.phone}
+            maxLength={40}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            autoComplete="tel"
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="dob">Fecha de nacimiento (18+)</label>
+          <input
+            id="dob"
             required
             type="date"
             value={form.dob}
             onChange={(e) => setForm({ ...form, dob: e.target.value })}
-            style={inputStyle}
             autoComplete="bday"
           />
         </div>
-        <input
-          required
-          placeholder="Dirección postal"
-          value={form.address1}
-          maxLength={200}
-          onChange={(e) => setForm({ ...form, address1: e.target.value })}
-          style={inputStyle}
-          autoComplete="address-line1"
-        />
-        <input
-          placeholder="Apto / Suite (opcional)"
-          value={form.address2}
-          maxLength={200}
-          onChange={(e) => setForm({ ...form, address2: e.target.value })}
-          style={inputStyle}
-          autoComplete="address-line2"
-        />
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8 }}>
+
+        <div className="input-group">
+          <label htmlFor="address1">Dirección postal</label>
           <input
+            id="address1"
             required
-            placeholder="Ciudad"
-            value={form.city}
-            maxLength={100}
-            onChange={(e) => setForm({ ...form, city: e.target.value })}
-            style={inputStyle}
-            autoComplete="address-level2"
-          />
-          <input
-            required
-            placeholder="Estado"
-            maxLength={2}
-            value={form.state}
-            onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })}
-            style={inputStyle}
-            autoComplete="address-level1"
-          />
-          <input
-            required
-            placeholder="ZIP"
-            value={form.zip}
-            maxLength={20}
-            onChange={(e) => setForm({ ...form, zip: e.target.value })}
-            style={inputStyle}
-            autoComplete="postal-code"
+            value={form.address1}
+            maxLength={200}
+            onChange={(e) => setForm({ ...form, address1: e.target.value })}
+            autoComplete="address-line1"
           />
         </div>
 
-        <h2 style={{ fontSize: 18, fontWeight: 800, marginTop: 12, marginBottom: 0 }}>
-          2. Ensayo original
-        </h2>
-        <div
-          style={{
-            background: "white",
-            border: `1px dashed ${BEIGE_DEEP}`,
-            padding: 12,
-            borderRadius: 10,
-            fontSize: 14,
-          }}
-        >
+        <div className="input-group">
+          <label htmlFor="address2">Apto / Suite (opcional)</label>
+          <input
+            id="address2"
+            value={form.address2}
+            maxLength={200}
+            onChange={(e) => setForm({ ...form, address2: e.target.value })}
+            autoComplete="address-line2"
+          />
+        </div>
+
+        <div className="input-group-grid">
+          <div className="input-group">
+            <label htmlFor="city">Ciudad</label>
+            <input
+              id="city"
+              required
+              value={form.city}
+              maxLength={100}
+              onChange={(e) => setForm({ ...form, city: e.target.value })}
+              autoComplete="address-level2"
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="state">Estado</label>
+            <input
+              id="state"
+              required
+              maxLength={2}
+              value={form.state}
+              onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })}
+              autoComplete="address-level1"
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="zip">ZIP</label>
+            <input
+              id="zip"
+              required
+              value={form.zip}
+              maxLength={20}
+              onChange={(e) => setForm({ ...form, zip: e.target.value })}
+              autoComplete="postal-code"
+            />
+          </div>
+        </div>
+
+        <h3 className="amoe-section-title">2. Ensayo original</h3>
+
+        <div className="textarea-help">
           <strong>Pregunta:</strong> {PROMPT_ES}
+          <br />
+          <br />
+          El ensayo debe ser <strong>original, escrito por ti</strong> (mín. 300 palabras).
+          Prohibido usar IA (ChatGPT, Claude, Gemini, etc.) o copiar de internet. Auditamos
+          con software antiplagio; los envíos marcados quedan descalificados.
         </div>
 
-        <textarea
-          required
-          placeholder="Escribe aquí tu ensayo original (mín. 300 palabras)…"
-          value={form.essay}
-          onChange={(e) => setForm({ ...form, essay: e.target.value })}
-          onPaste={(e) => {
-            // Discourage paste. Allow but flag.
-            const pasted = e.clipboardData.getData("text");
-            if (pasted && pasted.split(/\s+/).filter(Boolean).length >= 30) {
-              setPasteBlocked(true);
-              toast.warning(
-                "Detectamos que pegaste texto largo. El ensayo debe estar escrito por ti — puede ser descalificado.",
-              );
-            }
-          }}
-          rows={12}
-          maxLength={20000}
-          style={{
-            ...inputStyle,
-            resize: "vertical",
-            minHeight: 240,
-            lineHeight: 1.6,
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: 12,
-            color: wcColor,
-            fontWeight: 700,
-          }}
-        >
+        <div className="input-group">
+          <label htmlFor="essay">Tu ensayo</label>
+          <textarea
+            id="essay"
+            required
+            placeholder="Escribe aquí tu ensayo original (mín. 300 palabras)…"
+            value={form.essay}
+            onChange={(e) => setForm({ ...form, essay: e.target.value })}
+            onPaste={(e) => {
+              const pasted = e.clipboardData.getData("text");
+              if (pasted && pasted.split(/\s+/).filter(Boolean).length >= 30) {
+                setPasteBlocked(true);
+                toast.warning(
+                  "Detectamos que pegaste texto largo. El ensayo debe estar escrito por ti — puede ser descalificado.",
+                );
+              }
+            }}
+            rows={12}
+            maxLength={20000}
+            style={{ minHeight: 240, resize: "vertical", lineHeight: 1.6 }}
+          />
+        </div>
+
+        <div className={`counter-container ${counterClass}`}>
           <span>
             {wc < MIN_WORDS
               ? `Faltan ${MIN_WORDS - wc} palabras`
@@ -391,99 +333,68 @@ function AmoePage() {
           </span>
         </div>
 
-        {suspicious && (
-          <div
-            style={{
-              background: "#fdecec",
-              border: `1px solid ${DANGER}`,
-              color: DANGER,
-              padding: 10,
-              borderRadius: 8,
-              fontSize: 13,
-            }}
-          >
-            {suspicious}
-          </div>
-        )}
+        {suspicious && <div className="amoe-alert">{suspicious}</div>}
         {pasteBlocked && (
-          <div style={{ fontSize: 12, color: DANGER }}>
+          <div className="amoe-alert">
             ⚠ Se detectó texto pegado. Recomendamos reescribir con tus propias palabras.
           </div>
         )}
 
-        <h2 style={{ fontSize: 18, fontWeight: 800, marginTop: 12, marginBottom: 0 }}>
-          3. Declaraciones obligatorias
-        </h2>
+        <h3 className="amoe-section-title">3. Declaraciones obligatorias</h3>
 
-        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: BLUE }}>
+        <div className="checkbox-group">
           <input
+            id="attestOriginal"
             type="checkbox"
             checked={form.attestOriginal}
             onChange={(e) => setForm({ ...form, attestOriginal: e.target.checked })}
-            style={{ marginTop: 3 }}
           />
-          <span>
-            Declaro bajo pena de perjurio que este ensayo fue <strong>redactado personalmente por mí</strong>,
-            es original, inédito, y no fue copiado de ninguna fuente.
-          </span>
-        </label>
+          <label htmlFor="attestOriginal">
+            Declaro bajo pena de perjurio que este ensayo fue{" "}
+            <strong>redactado personalmente por mí</strong>, es original, inédito, y no fue
+            copiado de ninguna fuente.
+          </label>
+        </div>
 
-        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: BLUE }}>
+        <div className="checkbox-group">
           <input
+            id="attestNoAI"
             type="checkbox"
             checked={form.attestNoAI}
             onChange={(e) => setForm({ ...form, attestNoAI: e.target.checked })}
-            style={{ marginTop: 3 }}
           />
-          <span>
-            Declaro que <strong>no utilicé herramientas de inteligencia artificial</strong> (ChatGPT,
-            Claude, Gemini, Copilot, u otras) ni asistentes de reescritura para generar este texto.
-          </span>
-        </label>
+          <label htmlFor="attestNoAI">
+            Declaro que <strong>no utilicé herramientas de inteligencia artificial</strong>{" "}
+            (ChatGPT, Claude, Gemini, Copilot, u otras) ni asistentes de reescritura para
+            generar este texto.
+          </label>
+        </div>
 
-        <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: BLUE }}>
+        <div className="checkbox-group">
           <input
+            id="acceptRules"
             type="checkbox"
             checked={form.acceptRules}
             onChange={(e) => setForm({ ...form, acceptRules: e.target.checked })}
-            style={{ marginTop: 3 }}
           />
-          <span>
+          <label htmlFor="acceptRules">
             He leído y acepto las{" "}
-            <Link to="/sweepstakes-rules" target="_blank" style={{ color: BLUE, fontWeight: 700 }}>
+            <Link to="/sweepstakes-rules" target="_blank">
               Reglas Oficiales del Sorteo
             </Link>{" "}
-            y entiendo que envíos plagiados, generados por IA o duplicados serán descalificados
-            automáticamente sin previo aviso.
-          </span>
-        </label>
+            y entiendo que envíos plagiados, generados por IA o duplicados serán
+            descalificados automáticamente.
+          </label>
+        </div>
 
-        <button
-          type="submit"
-          disabled={m.isPending || !canSubmit}
-          style={{
-            marginTop: 12,
-            padding: "16px",
-            background: canSubmit ? BLUE : BEIGE_DEEP,
-            color: canSubmit ? BEIGE : BLUE_SOFT,
-            border: "none",
-            borderRadius: 10,
-            fontWeight: 900,
-            fontSize: 15,
-            cursor: canSubmit ? "pointer" : "not-allowed",
-            letterSpacing: "0.08em",
-          }}
-        >
+        <button type="submit" disabled={m.isPending || !canSubmit} className="btn-submit-amoe">
           {m.isPending ? "ENVIANDO…" : "ENVIAR ENTRADA GRATUITA"}
         </button>
 
-        <p style={{ fontSize: 11, color: BLUE_SOFT, margin: 0, lineHeight: 1.6 }}>
+        <p className="amoe-footnote">
           Alternativa por correo postal: también puedes enviar tu ensayo manuscrito por correo — ver
           la dirección y requisitos en las{" "}
-          <Link to="/sweepstakes-rules" style={{ color: BLUE }}>
-            Reglas Oficiales
-          </Link>
-          .
+          <Link to="/sweepstakes-rules">Reglas Oficiales</Link>.
         </p>
       </form>
     </main>
