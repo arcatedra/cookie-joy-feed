@@ -42,7 +42,7 @@ type Allergen = "glutenFree" | "noSugar" | "nuts" | "belgian";
 
 interface Product {
   id: string;
-  name: string;
+  nameKey: string;
   image: string;
   price: number;
   rating: number;
@@ -51,46 +51,53 @@ interface Product {
   allergens: Allergen[];
   badge?: "bestSeller" | "deal";
   expressShipping: boolean;
-  deliveryDate: string;
 }
 
 const PRODUCTS: Product[] = [
-  { id: "p1", name: "Chocolate Chunk", image: imgChocChunk, price: 4.5, rating: 4.8, reviews: 2310, category: "traditional", allergens: ["belgian"], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p2", name: "Snickerdoodle", image: imgSnicker, price: 3.9, rating: 4.6, reviews: 1208, category: "traditional", allergens: [], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p3", name: "Sugar Cookie", image: imgSugar, price: 3.2, rating: 4.3, reviews: 890, category: "traditional", allergens: [], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p4", name: "Double Choc Mint", image: imgDoubleChoc, price: 5.2, rating: 4.9, reviews: 3104, category: "filled", allergens: ["belgian"], badge: "deal", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p5", name: "Oatmeal Raisin", image: imgOatmeal, price: 3.5, rating: 4.2, reviews: 612, category: "healthy", allergens: ["noSugar"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p6", name: "White Macadamia", image: imgWhiteMac, price: 4.8, rating: 4.5, reviews: 980, category: "traditional", allergens: ["nuts"], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p7", name: "M&M Cookie", image: imgMM, price: 4.1, rating: 4.7, reviews: 1740, category: "filled", allergens: [], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p8", name: "Peanut Butter", image: imgPB, price: 3.8, rating: 4.4, reviews: 720, category: "traditional", allergens: ["nuts"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p9", name: "Vegan Choc", image: imgVeganChoc, price: 5.5, rating: 4.6, reviews: 450, category: "healthy", allergens: ["glutenFree", "noSugar"], badge: "deal", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p10", name: "Mint Crunch", image: imgMint, price: 4.3, rating: 4.5, reviews: 540, category: "filled", allergens: ["belgian"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p11", name: "Pack of 6", image: imgPack6, price: 22, rating: 4.8, reviews: 1320, category: "gift", allergens: [], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p12", name: "Pack of 9", image: imgPack9, price: 32, rating: 4.9, reviews: 980, category: "gift", allergens: [], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p13", name: "Pack of 12", image: imgPack12, price: 42, rating: 4.9, reviews: 1620, category: "gift", allergens: ["belgian"], badge: "deal", expressShipping: false, deliveryDate: "Wed, Jun 11" },
+  { id: "c1", nameKey: "cookies.c1.name", image: imgChocChunk, price: 3.75, rating: 4.9, reviews: 2310, category: "traditional", allergens: ["belgian"], badge: "bestSeller", expressShipping: true },
+  { id: "c2", nameKey: "cookies.c2.name", image: imgSnicker, price: 3.75, rating: 4.7, reviews: 1208, category: "traditional", allergens: [], expressShipping: true },
+  { id: "c3", nameKey: "cookies.c3.name", image: imgSugar, price: 3.75, rating: 4.6, reviews: 890, category: "traditional", allergens: [], expressShipping: false },
+  { id: "c4", nameKey: "cookies.c4.name", image: imgDoubleChoc, price: 3.75, rating: 4.9, reviews: 3104, category: "filled", allergens: ["belgian"], badge: "deal", expressShipping: true },
+  { id: "c5", nameKey: "cookies.c5.name", image: imgOatmeal, price: 3.75, rating: 4.5, reviews: 612, category: "healthy", allergens: [], expressShipping: false },
+  { id: "c6", nameKey: "cookies.c6.name", image: imgWhiteMac, price: 3.75, rating: 4.7, reviews: 980, category: "traditional", allergens: ["nuts"], expressShipping: true },
+  { id: "c7", nameKey: "cookies.c7.name", image: imgMM, price: 3.75, rating: 4.8, reviews: 1740, category: "filled", allergens: [], badge: "bestSeller", expressShipping: true },
+  { id: "c8", nameKey: "cookies.c8.name", image: imgPB, price: 3.75, rating: 4.6, reviews: 720, category: "traditional", allergens: ["nuts"], expressShipping: false },
+  { id: "c9", nameKey: "cookies.c9.name", image: imgVeganChoc, price: 3.75, rating: 4.7, reviews: 450, category: "healthy", allergens: ["glutenFree", "noSugar"], badge: "deal", expressShipping: true },
+  { id: "c10", nameKey: "cookies.c10.name", image: imgMint, price: 3.75, rating: 4.6, reviews: 540, category: "filled", allergens: ["belgian"], expressShipping: false },
+  { id: "cookies-cream", nameKey: "cookies.c2.name", image: imgCookiesCream, price: 3.75, rating: 4.7, reviews: 184, category: "filled", allergens: [], expressShipping: true },
+  { id: "p6", nameKey: "packs.p6.name", image: imgPack6, price: 22, rating: 4.9, reviews: 1320, category: "gift", allergens: [], badge: "bestSeller", expressShipping: true },
+  { id: "p9", nameKey: "packs.p9.name", image: imgPack9, price: 32, rating: 4.9, reviews: 980, category: "gift", allergens: [], expressShipping: true },
+  { id: "p12", nameKey: "packs.p12.name", image: imgPack12, price: 42, rating: 4.9, reviews: 1620, category: "gift", allergens: ["belgian"], badge: "deal", expressShipping: false },
 ];
 
 const CAT_KEYS: ("all" | Category)[] = ["all", "traditional", "filled", "healthy", "gift"];
 const ALLERGEN_KEYS: Allergen[] = ["glutenFree", "noSugar", "nuts", "belgian"];
 
 const PRODUCT_KEYWORDS: Record<string, string[]> = {
-  p1: ["chocolate", "chunk", "cocoa", "belgian"],
-  p2: ["snickerdoodle", "cinnamon", "sugar", "canela"],
-  p3: ["sugar", "vanilla", "azucar", "vainilla"],
-  p4: ["chocolate", "double", "mint", "menta", "cocoa", "belgian"],
-  p5: ["oatmeal", "raisin", "avena", "pasas", "healthy", "keto"],
-  p6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco"],
-  p7: ["m&m", "mm", "chocolate", "candy", "colors"],
-  p8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
-  p9: ["vegan", "chocolate", "gluten", "sugar-free", "vegana", "sin azucar", "sin gluten"],
-  p10: ["mint", "menta", "crunch", "chocolate", "belgian"],
-  p11: ["pack", "gift", "box", "6", "regalo", "caja"],
-  p12: ["pack", "gift", "box", "9", "regalo", "caja"],
-  p13: ["pack", "gift", "box", "12", "regalo", "caja", "belgian"],
+  c1: ["chocolate", "chunk", "chip", "cocoa", "trozos", "chispas", "belgian", "belga"],
+  c2: ["snickerdoodle", "cinnamon", "sugar", "canela", "azucar"],
+  c3: ["sugar", "vanilla", "azucar", "vainilla"],
+  c4: ["chocolate", "double", "doble", "cocoa", "cacao", "belgian", "belga"],
+  c5: ["oatmeal", "raisin", "avena", "pasas", "healthy"],
+  c6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco", "coco"],
+  c7: ["m&m", "mm", "chocolate", "candy", "caramelos"],
+  c8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
+  c9: ["vegan", "vegana", "chocolate", "gluten", "sugar-free", "sin azucar", "sin gluten"],
+  c10: ["mint", "menta", "chocolate", "belgian", "belga"],
+  "cookies-cream": ["cookies", "cream", "crema", "oreo"],
+  p6: ["pack", "gift", "box", "6", "regalo", "caja"],
+  p9: ["pack", "gift", "box", "9", "regalo", "caja"],
+  p12: ["pack", "gift", "box", "12", "regalo", "caja", "belgian", "belga"],
 };
 
 function normalize(s: string) {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function computeDeliveryDate(express: boolean, lang: string): string {
+  const d = new Date();
+  d.setDate(d.getDate() + (express ? 1 : 3));
+  return formatDate(d, { weekday: "short", month: "short", day: "numeric" }, lang);
 }
 
 
