@@ -189,7 +189,7 @@ function RuletaPage() {
           margin: "0 auto",
         }}
       >
-        <NextDrawCountdown />
+        {sweepstakesActive && <NextDrawCountdown />}
 
         <ComplianceBanner />
 
