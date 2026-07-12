@@ -354,7 +354,7 @@ function BuildPackCard() {
   return (
     <CardShell
       title={t("home.cards.buildPackTitle")}
-      link={{ to: "/menu", label: t("home.cards.buildPackLink") }}
+      link={{ to: "/build-pack", label: t("home.cards.buildPackLink") }}
     >
       <Link to="/menu" className="block">
         <div className="aspect-[4/3] overflow-hidden rounded-sm bg-[#f7f7f7]">
