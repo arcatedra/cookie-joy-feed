@@ -103,39 +103,51 @@ function WinnersPage() {
 
       ) : (
         <ul style={{ listStyle: "none", padding: 0, marginTop: 24, display: "grid", gap: 12 }}>
-          {data.map((w) => (
-            <li
-              key={`${w.draw_date}-${w.seed_hash ?? ""}`}
-              style={{
-                background: "#fff",
-                border: `1px solid ${GOLD}`,
-                borderRadius: 12,
-                padding: 16,
-                display: "grid",
-                gap: 4,
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-                <strong style={{ fontSize: 16 }}>{maskName(w.winner_display_name)}</strong>
-                <span style={{ fontWeight: 900, color: GOLD }}>
-                  ${w.prize_usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-              </div>
-              <div style={{ fontSize: 12, color: "#666" }}>
-                {t("winners.drawDate", { defaultValue: "Sorteo del" })}{" "}
-                {new Date(w.draw_date + "T12:00:00").toLocaleDateString(locale, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </div>
-              {w.seed_hash && (
-                <div style={{ fontSize: 10, color: "#999", fontFamily: "monospace", wordBreak: "break-all" }}>
-                  seed: {w.seed_hash}
+          {data.map((w) => {
+            const hasWinner = !!w.winner_display_name && w.status === "completed";
+            const noParticipants = w.entrants_total === 0;
+            const label = hasWinner
+              ? maskName(w.winner_display_name!)
+              : noParticipants
+                ? t("winners.noParticipants", { defaultValue: "Sin participantes" })
+                : t("winners.rolledOver", { defaultValue: "Sin ganador — pozo acumulado" });
+            return (
+              <li
+                key={w.draw_date}
+                style={{
+                  background: hasWinner ? "#fff" : BEIGE,
+                  border: `1px solid ${GOLD}`,
+                  borderRadius: 12,
+                  padding: 16,
+                  display: "grid",
+                  gap: 4,
+                  opacity: hasWinner ? 1 : 0.85,
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+                  <strong style={{ fontSize: 16, fontStyle: hasWinner ? "normal" : "italic" }}>{label}</strong>
+                  <span style={{ fontWeight: 900, color: GOLD }}>
+                    ${w.prize_usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
                 </div>
-              )}
-            </li>
-          ))}
+                <div style={{ fontSize: 12, color: "#666" }}>
+                  {t("winners.drawDate", { defaultValue: "Sorteo del" })}{" "}
+                  {new Date(w.draw_date + "T12:00:00").toLocaleDateString(locale, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  {" · "}
+                  {t("winners.entrants", { defaultValue: "Participantes" })}: {w.entrants_total}
+                </div>
+                {w.seed_hash && (
+                  <div style={{ fontSize: 10, color: "#999", fontFamily: "monospace", wordBreak: "break-all" }}>
+                    seed: {w.seed_hash}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 
