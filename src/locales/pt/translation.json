@@ -670,7 +670,8 @@
     "stageEyebrowWin": "🎉 VENCEDOR DO DIA! 🎉",
     "transparencyHash": "🔐 Hash de transparência: {{hash}}…",
     "preWarn5": "Sorteio em 5 minutos",
-    "preWarn1": "Prestes a girar!"
+    "preWarn1": "Prestes a girar!",
+    "amoeOnlyNote": "Sem contribuições pagas · O prêmio de hoje é $0.00 apenas com participações AMOE gratuitas."
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTÓRICO ARRECADADO ★",

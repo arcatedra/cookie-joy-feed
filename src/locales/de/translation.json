@@ -558,7 +558,8 @@
     "stageEyebrowPre": "★ LIVE-VERLOSUNG · BEGINNT IN ★",
     "stageEyebrowSpin": "🔴 WIRD GEDREHT · LIVE",
     "stageEyebrowWin": "🎉 GEWINNER DES TAGES! 🎉",
-    "transparencyHash": "🔐 Transparenz-Hash: {{hash}}…"
+    "transparencyHash": "🔐 Transparenz-Hash: {{hash}}…",
+    "amoeOnlyNote": "Keine bezahlten Beiträge · Der heutige Pot beträgt $0.00 mit ausschließlich kostenlosen AMOE-Teilnahmen."
   },
   "hero": {
     "eyebrow": "HAZOREX URSPRUNG",
