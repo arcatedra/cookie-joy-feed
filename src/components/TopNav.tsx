@@ -23,7 +23,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
-  { key: "shop", to: "/subscribe", highlighted: true },
+  { key: "shop", to: "/shop", highlighted: true },
   { key: "roulette", to: "/ruleta", highlighted: true },
   { key: "drivers", to: "/repartidores", highlighted: true },
   { key: "businesses", to: "/negocios/registro", highlighted: true },
