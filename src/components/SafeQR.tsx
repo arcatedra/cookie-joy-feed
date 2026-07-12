@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 interface SafeQRProps {
   value: string;
@@ -15,33 +15,46 @@ interface SafeQRProps {
  * primary SVG generator fails to output a drawable code. Never leaves a
  * blank/white square: shows a visible error message as last resort.
  */
-export const SafeQR = forwardRef<SVGSVGElement, SafeQRProps>(function SafeQR(
+export const SafeQR = forwardRef<HTMLCanvasElement, SafeQRProps>(function SafeQR(
   { value, size = 200, bgColor = "#ffffff", fgColor = "#0f172a", level = "M", className },
   ref,
 ) {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [mode, setMode] = useState<"svg" | "img" | "error">("svg");
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [hasRenderError, setHasRenderError] = useState(false);
 
-  useImperativeHandle(ref, () => svgRef.current as SVGSVGElement);
+  useImperativeHandle(ref, () => canvasRef.current as HTMLCanvasElement);
 
   useEffect(() => {
-    setMode("svg");
+    setHasRenderError(false);
   }, [value]);
 
   useEffect(() => {
-    if (mode !== "svg") return;
-    // Wait a tick to let qrcode.react paint, then verify it produced paths.
+    if (hasRenderError) return;
     const id = window.setTimeout(() => {
-      const svg = svgRef.current;
-      const hasContent =
-        !!svg &&
-        (svg.querySelector("path") ||
-          svg.querySelector("rect:not(:first-child)") ||
-          svg.children.length > 1);
-      if (!hasContent) setMode("img");
-    }, 50);
+      const canvas = canvasRef.current;
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        setHasRenderError(true);
+        return;
+      }
+      try {
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        if (!ctx) {
+          setHasRenderError(true);
+          return;
+        }
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let darkPixels = 0;
+        for (let i = 0; i < pixels.length; i += 64) {
+          if (pixels[i + 3] > 0 && pixels[i] + pixels[i + 1] + pixels[i + 2] < 600) darkPixels += 1;
+          if (darkPixels > 8) break;
+        }
+        if (darkPixels <= 8) setHasRenderError(true);
+      } catch {
+        setHasRenderError(true);
+      }
+    }, 100);
     return () => window.clearTimeout(id);
-  }, [mode, value]);
+  }, [hasRenderError, value]);
 
   const hasValue = typeof value === "string" && value.length > 0;
 
@@ -60,23 +73,7 @@ export const SafeQR = forwardRef<SVGSVGElement, SafeQRProps>(function SafeQR(
     );
   }
 
-  if (mode === "img") {
-    const src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=0&data=${encodeURIComponent(
-      value,
-    )}`;
-    return (
-      <img
-        src={src}
-        width={size}
-        height={size}
-        alt="Código QR de invitación"
-        className={className}
-        onError={() => setMode("error")}
-      />
-    );
-  }
-
-  if (mode === "error") {
+  if (hasRenderError) {
     return (
       <div
         className={className}
@@ -92,14 +89,15 @@ export const SafeQR = forwardRef<SVGSVGElement, SafeQRProps>(function SafeQR(
   }
 
   return (
-    <QRCodeSVG
-      ref={svgRef}
+    <QRCodeCanvas
+      ref={canvasRef}
       value={value}
       size={size}
       level={level}
       bgColor={bgColor}
       fgColor={fgColor}
-      marginSize={0}
+      marginSize={2}
+      title="Código QR de invitación"
       className={className}
     />
   );

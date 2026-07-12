@@ -1,38 +1,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { SafeQR } from "@/components/SafeQR";
 import { toast } from "sonner";
 import { Share2, Sparkles, Star, Users, Download, Copy, Check } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { getMyReferralProfile } from "@/lib/referrals.functions";
 
 interface ReferralCardProps {
   userId: string | null | undefined;
 }
 
 export function ReferralCard({ userId }: ReferralCardProps) {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const qrRef = useRef<HTMLCanvasElement | null>(null);
+  const fetchReferralProfile = useServerFn(getMyReferralProfile);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["referral-profile", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const [profileRes, countRes] = await Promise.all([
-        supabase
-          .from("profiles")
-          .select("referral_code, stars_count")
-          .eq("id", userId!)
-          .maybeSingle(),
-        supabase
-          .from("referrals")
-          .select("id", { count: "exact", head: true })
-          .eq("referrer_id", userId!),
-      ]);
-      if (profileRes.error) throw profileRes.error;
-      return {
-        referralCode: (profileRes.data?.referral_code ?? null) as string | null,
-        stars: (profileRes.data?.stars_count ?? 0) as number,
-        invited: countRes.count ?? 0,
-      };
+      return fetchReferralProfile();
     },
   });
 
@@ -41,9 +27,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
   const invited = data?.invited ?? 0;
 
   const referralUrl = useMemo(() => {
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "https://hazorex.com";
-    return referralCode ? `${origin}/join?ref=${referralCode}` : `${origin}/join`;
+    return referralCode ? `https://hazorex.com/join/${referralCode}` : "";
   }, [referralCode]);
 
   const [copied, setCopied] = useState(false);
@@ -136,54 +120,34 @@ export function ReferralCard({ userId }: ReferralCardProps) {
   const handleDownload = useCallback(() => {
     const size = 1024;
     const filename = `referral-${referralCode ?? "qr"}.png`;
-    const svg = svgRef.current;
+    const canvas = qrRef.current;
 
-    // Fallback path: SVG generator failed, download from the QR image API directly.
-    if (!svg || !svg.querySelector("path, rect:nth-child(n+2)")) {
-      const src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=10&data=${encodeURIComponent(
-        referralUrl,
-      )}`;
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = filename;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      toast.success("QR descargado");
+    if (!referralUrl || !canvas) {
+      toast.error("No se pudo descargar el QR");
       return;
     }
 
-    const serializer = new XMLSerializer();
-    const svgString = serializer.serializeToString(svg);
-    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const img = new Image();
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    canvas.width = size;
-    canvas.height = size;
-    img.onload = () => {
+    try {
+      const output = document.createElement("canvas");
+      output.width = size;
+      output.height = size;
+      const ctx = output.getContext("2d");
+      if (!ctx) throw new Error("Canvas no disponible");
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, size, size);
-      ctx.drawImage(img, 0, 0, size, size);
-      const png = canvas.toDataURL("image/png");
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(canvas, 0, 0, size, size);
+      const png = output.toDataURL("image/png");
       const a = document.createElement("a");
       a.href = png;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      URL.revokeObjectURL(url);
       toast.success("QR descargado");
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
+    } catch {
       toast.error("No se pudo descargar el QR");
-    };
-    img.src = url;
+    }
   }, [referralCode, referralUrl]);
 
   if (!userId) {
@@ -225,9 +189,13 @@ export function ReferralCard({ userId }: ReferralCardProps) {
           <div className="rounded-2xl bg-white p-4 shadow-lg">
             {isLoading ? (
               <div className="h-[200px] w-[200px] animate-pulse rounded bg-muted" />
+            ) : isError || !referralUrl ? (
+              <div className="flex h-[200px] w-[200px] items-center justify-center rounded bg-red-50 p-3 text-center text-[11px] font-semibold text-red-600">
+                No se pudo generar tu código QR. Intenta cerrar sesión e iniciar nuevamente.
+              </div>
             ) : (
               <SafeQR
-                ref={svgRef}
+                ref={qrRef}
                 value={referralUrl}
                 size={200}
                 level="M"
