@@ -29,7 +29,6 @@ import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as DomainsRouteImport } from './routes/domains'
-import { Route as DemoRouteImport } from './routes/demo'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AmoeRouteImport } from './routes/amoe'
@@ -187,11 +186,6 @@ const DonateRoute = DonateRouteImport.update({
 const DomainsRoute = DomainsRouteImport.update({
   id: '/domains',
   path: '/domains',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoRoute = DemoRouteImport.update({
-  id: '/demo',
-  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -527,7 +521,6 @@ export interface FileRoutesByFullPath {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
-  '/demo': typeof DemoRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -607,7 +600,6 @@ export interface FileRoutesByTo {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
-  '/demo': typeof DemoRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -688,7 +680,6 @@ export interface FileRoutesById {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
-  '/demo': typeof DemoRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -770,7 +761,6 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/cart'
-    | '/demo'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -850,7 +840,6 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/cart'
-    | '/demo'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -930,7 +919,6 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/cart'
-    | '/demo'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -1012,7 +1000,6 @@ export interface RootRouteChildren {
   AmoeRoute: typeof AmoeRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
-  DemoRoute: typeof DemoRoute
   DomainsRoute: typeof DomainsRoute
   DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
@@ -1198,13 +1185,6 @@ declare module '@tanstack/react-router' {
       path: '/domains'
       fullPath: '/domains'
       preLoaderRoute: typeof DomainsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -1718,7 +1698,6 @@ const rootRouteChildren: RootRouteChildren = {
   AmoeRoute: AmoeRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
-  DemoRoute: DemoRoute,
   DomainsRoute: DomainsRoute,
   DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,
