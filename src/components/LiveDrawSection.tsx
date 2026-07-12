@@ -6,6 +6,7 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
+import { logUiEvent } from "@/lib/ui-analytics.functions";
 import { checkIsAdmin } from "@/lib/admin-check.functions";
 import { useAuth } from "@/lib/auth";
 import { getLocale } from "@/i18n";
