@@ -72,6 +72,27 @@ const PRODUCTS: Product[] = [
 const CAT_KEYS: ("all" | Category)[] = ["all", "traditional", "filled", "healthy", "gift"];
 const ALLERGEN_KEYS: Allergen[] = ["glutenFree", "noSugar", "nuts", "belgian"];
 
+const PRODUCT_KEYWORDS: Record<string, string[]> = {
+  p1: ["chocolate", "chunk", "cocoa", "belgian"],
+  p2: ["snickerdoodle", "cinnamon", "sugar", "canela"],
+  p3: ["sugar", "vanilla", "azucar", "vainilla"],
+  p4: ["chocolate", "double", "mint", "menta", "cocoa", "belgian"],
+  p5: ["oatmeal", "raisin", "avena", "pasas", "healthy", "keto"],
+  p6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco"],
+  p7: ["m&m", "mm", "chocolate", "candy", "colors"],
+  p8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
+  p9: ["vegan", "chocolate", "gluten", "sugar-free", "vegana", "sin azucar", "sin gluten"],
+  p10: ["mint", "menta", "crunch", "chocolate", "belgian"],
+  p11: ["pack", "gift", "box", "6", "regalo", "caja"],
+  p12: ["pack", "gift", "box", "9", "regalo", "caja"],
+  p13: ["pack", "gift", "box", "12", "regalo", "caja", "belgian"],
+};
+
+function normalize(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+
 const PRICE_RANGES: { key: string; min: number; max: number }[] = [
   { key: "u10", min: 0, max: 10 },
   { key: "1025", min: 10, max: 25 },
