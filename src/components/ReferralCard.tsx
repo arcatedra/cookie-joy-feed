@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SafeQR } from "@/components/SafeQR";
 import { toast } from "sonner";
-import { Share2, Sparkles, Star, Users, Download } from "lucide-react";
+import { Share2, Sparkles, Star, Users, Download, Copy, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ReferralCardProps {
@@ -46,11 +46,23 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     return referralCode ? `${origin}/join?ref=${referralCode}` : `${origin}/join`;
   }, [referralCode]);
 
+  const [copied, setCopied] = useState(false);
+  const copiedTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimerRef.current) window.clearTimeout(copiedTimerRef.current);
+    };
+  }, []);
+
   const handleCopy = useCallback(async () => {
     if (!referralUrl) return;
     try {
       await navigator.clipboard.writeText(referralUrl);
       toast.success("Enlace copiado al portapapeles");
+      setCopied(true);
+      if (copiedTimerRef.current) window.clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = window.setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("No se pudo copiar el enlace");
     }
@@ -343,10 +355,24 @@ export function ReferralCard({ userId }: ReferralCardProps) {
             <button
               type="button"
               onClick={handleCopy}
-  
-              className="flex-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/5 py-2.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary-foreground/15 disabled:opacity-50"
+              aria-live="polite"
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-full border py-2.5 text-xs font-semibold transition disabled:opacity-50 ${
+                copied
+                  ? "border-emerald-300/60 bg-emerald-400/20 text-emerald-100"
+                  : "border-primary-foreground/30 bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/15"
+              }`}
             >
-              Copiar enlace
+              {copied ? (
+                <>
+                  <Check className="h-3.5 w-3.5" />
+                  ¡Copiado!
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3.5 w-3.5" />
+                  Copiar enlace
+                </>
+              )}
             </button>
             <button
               type="button"
