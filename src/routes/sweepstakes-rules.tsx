@@ -37,7 +37,7 @@ function RulesPage() {
   const maxPrize = (cfg?.max_daily_prize_usd ?? 4999).toLocaleString("en-US");
   const claimDays = cfg?.claim_window_days ?? 14;
   const minAge = cfg?.min_age ?? 18;
-  const ready = cfg?.address_valid ?? false;
+  const ready = (cfg?.address_valid ?? false) && (cfg?.sweepstakes_active ?? false);
 
   const lastUpdated = new Date().toLocaleDateString(getLocale(), {
     year: "numeric",
