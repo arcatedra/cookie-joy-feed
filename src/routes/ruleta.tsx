@@ -195,7 +195,40 @@ function RuletaPage() {
 
         <ComplianceBanner />
 
-        {!sweepstakesActive && (
+        {!cfgReady && (
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              background: "#fff",
+              border: `1px solid ${GOLD}`,
+              borderRadius: 16,
+              padding: "28px 24px",
+              display: "grid",
+              placeItems: "center",
+              gap: 10,
+              minHeight: 140,
+            }}
+          >
+            <div
+              aria-hidden
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                border: `3px solid ${GOLD}`,
+                borderTopColor: "transparent",
+                animation: "ruleta-spin 0.9s linear infinite",
+              }}
+            />
+            <div style={{ fontSize: 13, color: BLUE_SOFT, letterSpacing: "0.1em" }}>
+              {t("common.loading", { defaultValue: "Cargando…" })}
+            </div>
+            <style>{`@keyframes ruleta-spin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        )}
+
+        {sweepstakesInactiveConfirmed && (
           <div
             role="note"
             style={{
