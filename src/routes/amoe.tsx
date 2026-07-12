@@ -148,17 +148,16 @@ function AmoePage() {
       </Link>
 
       <div className="amoe-header">
-        <h2>Entrada Gratuita — AMOE</h2>
+        <h2>Entrada Gratuita Oficial (AMOE)</h2>
       </div>
 
       <p className="law-notice">
-        NO ES NECESARIO COMPRAR PARA PARTICIPAR O GANAR
+        NO PURCHASE NECESSARY TO ENTER OR WIN. A PURCHASE WILL NOT INCREASE YOUR CHANCES OF WINNING.
       </p>
 
       <div className="instruction-text">
-        Método Alternativo de Entrada Gratuita al sorteo diario de HAZOREX. Esta entrada tiene{" "}
-        <strong>exactamente las mismas probabilidades</strong> de ganar que las entradas pagadas.
-        Máx. 1 entrada AMOE por persona, correo, IP y hogar cada 24 h.{" "}
+        Cada envío válido y aprobado otorga <strong>10 estrellas</strong> para el sorteo, con el
+        mismo peso que una participación de pago. Límite de 1 formulario por persona al día.{" "}
         <Link to="/sweepstakes-rules">Ver reglas oficiales</Link>.
       </div>
 
@@ -170,15 +169,13 @@ function AmoePage() {
             if (wc < MIN_WORDS) return toast.error(`El ensayo debe tener al menos ${MIN_WORDS} palabras.`);
             if (wc > MAX_WORDS) return toast.error(`El ensayo excede el máximo de ${MAX_WORDS} palabras.`);
             if (suspicious) return toast.error(suspicious);
-            return toast.error("Debes aceptar todas las declaraciones para continuar.");
+            return toast.error("Debes aceptar la declaración para continuar.");
           }
           m.mutate();
         }}
       >
-        <h3 className="amoe-section-title">1. Tus datos</h3>
-
         <div className="input-group">
-          <label htmlFor="fullName">Nombre completo</label>
+          <label htmlFor="fullName">Nombre y Apellidos completos *</label>
           <input
             id="fullName"
             required
@@ -190,11 +187,12 @@ function AmoePage() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="email">Correo electrónico</label>
+          <label htmlFor="email">Correo Electrónico *</label>
           <input
             id="email"
             required
             type="email"
+            placeholder="tu@correo.com"
             value={form.email}
             maxLength={255}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -203,7 +201,7 @@ function AmoePage() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="phone">Teléfono</label>
+          <label htmlFor="phone">Teléfono Móvil *</label>
           <input
             id="phone"
             required
@@ -216,7 +214,7 @@ function AmoePage() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="dob">Fecha de nacimiento (18+)</label>
+          <label htmlFor="dob">Fecha de Nacimiento * (Mín. 18 años)</label>
           <input
             id="dob"
             required
@@ -228,7 +226,7 @@ function AmoePage() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="address1">Dirección postal</label>
+          <label htmlFor="address1">Dirección (Línea 1) *</label>
           <input
             id="address1"
             required
@@ -239,20 +237,9 @@ function AmoePage() {
           />
         </div>
 
-        <div className="input-group">
-          <label htmlFor="address2">Apto / Suite (opcional)</label>
-          <input
-            id="address2"
-            value={form.address2}
-            maxLength={200}
-            onChange={(e) => setForm({ ...form, address2: e.target.value })}
-            autoComplete="address-line2"
-          />
-        </div>
-
         <div className="input-group-grid">
           <div className="input-group">
-            <label htmlFor="city">Ciudad</label>
+            <label htmlFor="city">Ciudad *</label>
             <input
               id="city"
               required
@@ -263,7 +250,7 @@ function AmoePage() {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="state">Estado</label>
+            <label htmlFor="state">Estado *</label>
             <input
               id="state"
               required
@@ -274,7 +261,7 @@ function AmoePage() {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="zip">ZIP</label>
+            <label htmlFor="zip">Código Postal *</label>
             <input
               id="zip"
               required
@@ -286,23 +273,15 @@ function AmoePage() {
           </div>
         </div>
 
-        <h3 className="amoe-section-title">2. Ensayo original</h3>
-
-        <div className="textarea-help">
-          <strong>Pregunta:</strong> {PROMPT_ES}
-          <br />
-          <br />
-          El ensayo debe ser <strong>original, escrito por ti</strong> (mín. 300 palabras).
-          Prohibido usar IA (ChatGPT, Claude, Gemini, etc.) o copiar de internet. Auditamos
-          con software antiplagio; los envíos marcados quedan descalificados.
-        </div>
-
         <div className="input-group">
-          <label htmlFor="essay">Tu ensayo</label>
+          <label htmlFor="essay">Ensayo Original Obligatorio *</label>
+          <div className="textarea-help">
+            <strong>Tema:</strong> Cuéntanos detalladamente por qué te interesa la plataforma
+            HAZOREX y cómo impacta el comercio local en tu área. (Mínimo 300 palabras).
+          </div>
           <textarea
             id="essay"
             required
-            placeholder="Escribe aquí tu ensayo original (mín. 300 palabras)…"
             value={form.essay}
             onChange={(e) => setForm({ ...form, essay: e.target.value })}
             onPaste={(e) => {
@@ -318,19 +297,18 @@ function AmoePage() {
             maxLength={20000}
             style={{ minHeight: 240, resize: "vertical", lineHeight: 1.6 }}
           />
-        </div>
-
-        <div className={`counter-container ${counterClass}`}>
-          <span>
-            {wc < MIN_WORDS
-              ? `Faltan ${MIN_WORDS - wc} palabras`
-              : wc > MAX_WORDS
-              ? `Excedes por ${wc - MAX_WORDS} palabras`
-              : "Cumple el mínimo ✓"}
-          </span>
-          <span>
-            {wc} / {MIN_WORDS} palabras
-          </span>
+          <div className={`counter-container ${counterClass}`}>
+            <span>
+              {wc < MIN_WORDS
+                ? `Faltan ${MIN_WORDS - wc} palabras`
+                : wc > MAX_WORDS
+                ? `Excedes por ${wc - MAX_WORDS} palabras`
+                : "Cumple el mínimo ✓"}
+            </span>
+            <span>
+              {wc} / {MIN_WORDS} palabras mínimas
+            </span>
+          </div>
         </div>
 
         {suspicious && <div className="amoe-alert">{suspicious}</div>}
@@ -340,62 +318,35 @@ function AmoePage() {
           </div>
         )}
 
-        <h3 className="amoe-section-title">3. Declaraciones obligatorias</h3>
-
         <div className="checkbox-group">
           <input
-            id="attestOriginal"
+            id="attest"
             type="checkbox"
-            checked={form.attestOriginal}
-            onChange={(e) => setForm({ ...form, attestOriginal: e.target.checked })}
+            checked={form.attestOriginal && form.attestNoAI && form.acceptRules}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                attestOriginal: e.target.checked,
+                attestNoAI: e.target.checked,
+                acceptRules: e.target.checked,
+              })
+            }
           />
-          <label htmlFor="attestOriginal">
-            Declaro bajo pena de perjurio que este ensayo fue{" "}
-            <strong>redactado personalmente por mí</strong>, es original, inédito, y no fue
-            copiado de ninguna fuente.
-          </label>
-        </div>
-
-        <div className="checkbox-group">
-          <input
-            id="attestNoAI"
-            type="checkbox"
-            checked={form.attestNoAI}
-            onChange={(e) => setForm({ ...form, attestNoAI: e.target.checked })}
-          />
-          <label htmlFor="attestNoAI">
-            Declaro que <strong>no utilicé herramientas de inteligencia artificial</strong>{" "}
-            (ChatGPT, Claude, Gemini, Copilot, u otras) ni asistentes de reescritura para
-            generar este texto.
-          </label>
-        </div>
-
-        <div className="checkbox-group">
-          <input
-            id="acceptRules"
-            type="checkbox"
-            checked={form.acceptRules}
-            onChange={(e) => setForm({ ...form, acceptRules: e.target.checked })}
-          />
-          <label htmlFor="acceptRules">
-            He leído y acepto las{" "}
+          <label htmlFor="attest">
+            Certifico que este ensayo es de mi autoría exclusiva, redactado de forma manual y
+            original. Acepto que el uso de Inteligencia Artificial (ChatGPT, etc.), plagio o textos
+            duplicados resultará en la descalificación automática y permanente de mi cuenta en
+            todos los sorteos. He leído las{" "}
             <Link to="/sweepstakes-rules" target="_blank">
-              Reglas Oficiales del Sorteo
-            </Link>{" "}
-            y entiendo que envíos plagiados, generados por IA o duplicados serán
-            descalificados automáticamente.
+              Reglas Oficiales
+            </Link>
+            .
           </label>
         </div>
 
         <button type="submit" disabled={m.isPending || !canSubmit} className="btn-submit-amoe">
-          {m.isPending ? "ENVIANDO…" : "ENVIAR ENTRADA GRATUITA"}
+          {m.isPending ? "ENVIANDO…" : "Enviar Participación Gratuita"}
         </button>
-
-        <p className="amoe-footnote">
-          Alternativa por correo postal: también puedes enviar tu ensayo manuscrito por correo — ver
-          la dirección y requisitos en las{" "}
-          <Link to="/sweepstakes-rules">Reglas Oficiales</Link>.
-        </p>
       </form>
     </main>
   );
