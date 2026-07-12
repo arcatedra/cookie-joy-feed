@@ -323,10 +323,21 @@ function SearchPage() {
         <section className="min-w-0 flex-1">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm">
             <p className="text-foreground">
-              <span className="font-semibold">1-{filtered.length}</span>
-              {t("searchPage.resultsCountPre")}
-              <span className="font-semibold">{PRODUCTS.length}</span>
-              {t("searchPage.resultsCountPost")}
+              {q ? (
+                <>
+                  <span className="font-semibold">{filtered.length}</span>
+                  {t("searchPage.resultsCountPost")}
+                  {" — "}
+                  <span className="italic">"{q}"</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold">1-{filtered.length}</span>
+                  {t("searchPage.resultsCountPre")}
+                  <span className="font-semibold">{PRODUCTS.length}</span>
+                  {t("searchPage.resultsCountPost")}
+                </>
+              )}
             </p>
             <label className="flex items-center gap-2">
               <span className="text-xs font-semibold">{t("searchPage.sortBy")}</span>
