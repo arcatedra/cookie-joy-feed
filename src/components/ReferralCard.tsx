@@ -122,8 +122,27 @@ export function ReferralCard({ userId }: ReferralCardProps) {
 
 
   const handleDownload = useCallback(() => {
+    const size = 1024;
+    const filename = `referral-${referralCode ?? "qr"}.png`;
     const svg = svgRef.current;
-    if (!svg) return;
+
+    // Fallback path: SVG generator failed, download from the QR image API directly.
+    if (!svg || !svg.querySelector("path, rect:nth-child(n+2)")) {
+      const src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=10&data=${encodeURIComponent(
+        referralUrl,
+      )}`;
+      const a = document.createElement("a");
+      a.href = src;
+      a.download = filename;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      toast.success("QR descargado");
+      return;
+    }
+
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svg);
     const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
@@ -132,7 +151,6 @@ export function ReferralCard({ userId }: ReferralCardProps) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const size = 1024;
     canvas.width = size;
     canvas.height = size;
     img.onload = () => {
@@ -142,15 +160,19 @@ export function ReferralCard({ userId }: ReferralCardProps) {
       const png = canvas.toDataURL("image/png");
       const a = document.createElement("a");
       a.href = png;
-      a.download = `referral-${referralCode ?? "qr"}.png`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
       toast.success("QR descargado");
     };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      toast.error("No se pudo descargar el QR");
+    };
     img.src = url;
-  }, [referralCode]);
+  }, [referralCode, referralUrl]);
 
   if (!userId) {
     return (
