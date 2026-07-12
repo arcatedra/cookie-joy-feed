@@ -241,7 +241,41 @@ function RuletaPage() {
   );
 }
 
+function ComplianceBanner() {
+  const { t } = useTranslation();
+  return (
+    <div
+      role="note"
+      style={{
+        background: "#fff8e6",
+        border: `2px solid ${GOLD}`,
+        borderRadius: 14,
+        padding: "12px 16px",
+        display: "grid",
+        gap: 6,
+        textAlign: "center",
+      }}
+    >
+      <div style={{ fontWeight: 900, letterSpacing: "0.08em", fontSize: 12, color: BLUE }}>
+        {t("ruleta.complianceBannerTitle", {
+          defaultValue: "NO ES NECESARIO COMPRAR PARA PARTICIPAR NI GANAR",
+        })}
+      </div>
+      <div style={{ fontSize: 11, color: BLUE_SOFT, lineHeight: 1.5 }}>
+        {t("ruleta.complianceBannerBody", {
+          defaultValue:
+            "Comprar Estrellas no aumenta tus probabilidades de ganar. Existe una entrada gratuita (AMOE) más abajo. Premio máximo diario: $4,999. Mayores de 18 años. Nulo donde esté prohibido (FL, RI). ",
+        })}
+        <a href="/sweepstakes-rules" style={{ color: BLUE, fontWeight: 700, textDecoration: "underline" }}>
+          {t("ruleta.complianceBannerLink", { defaultValue: "Ver reglas oficiales" })}
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function TokenChip({ balance, loading }: { balance: number; loading: boolean }) {
+
   const { t } = useTranslation();
 
   return (
