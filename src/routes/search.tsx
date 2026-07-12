@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
+import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
 import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
@@ -19,7 +20,7 @@ import imgMint from "@/assets/ins-mint.jpg";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
-import i18n from "@/i18n";
+import i18n, { formatDate } from "@/i18n";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -41,7 +42,7 @@ type Allergen = "glutenFree" | "noSugar" | "nuts" | "belgian";
 
 interface Product {
   id: string;
-  name: string;
+  nameKey: string;
   image: string;
   price: number;
   rating: number;
@@ -50,46 +51,53 @@ interface Product {
   allergens: Allergen[];
   badge?: "bestSeller" | "deal";
   expressShipping: boolean;
-  deliveryDate: string;
 }
 
 const PRODUCTS: Product[] = [
-  { id: "p1", name: "Chocolate Chunk", image: imgChocChunk, price: 4.5, rating: 4.8, reviews: 2310, category: "traditional", allergens: ["belgian"], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p2", name: "Snickerdoodle", image: imgSnicker, price: 3.9, rating: 4.6, reviews: 1208, category: "traditional", allergens: [], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p3", name: "Sugar Cookie", image: imgSugar, price: 3.2, rating: 4.3, reviews: 890, category: "traditional", allergens: [], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p4", name: "Double Choc Mint", image: imgDoubleChoc, price: 5.2, rating: 4.9, reviews: 3104, category: "filled", allergens: ["belgian"], badge: "deal", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p5", name: "Oatmeal Raisin", image: imgOatmeal, price: 3.5, rating: 4.2, reviews: 612, category: "healthy", allergens: ["noSugar"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p6", name: "White Macadamia", image: imgWhiteMac, price: 4.8, rating: 4.5, reviews: 980, category: "traditional", allergens: ["nuts"], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p7", name: "M&M Cookie", image: imgMM, price: 4.1, rating: 4.7, reviews: 1740, category: "filled", allergens: [], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p8", name: "Peanut Butter", image: imgPB, price: 3.8, rating: 4.4, reviews: 720, category: "traditional", allergens: ["nuts"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p9", name: "Vegan Choc", image: imgVeganChoc, price: 5.5, rating: 4.6, reviews: 450, category: "healthy", allergens: ["glutenFree", "noSugar"], badge: "deal", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p10", name: "Mint Crunch", image: imgMint, price: 4.3, rating: 4.5, reviews: 540, category: "filled", allergens: ["belgian"], expressShipping: false, deliveryDate: "Wed, Jun 11" },
-  { id: "p11", name: "Pack of 6", image: imgPack6, price: 22, rating: 4.8, reviews: 1320, category: "gift", allergens: [], badge: "bestSeller", expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p12", name: "Pack of 9", image: imgPack9, price: 32, rating: 4.9, reviews: 980, category: "gift", allergens: [], expressShipping: true, deliveryDate: "Tomorrow, Jun 9" },
-  { id: "p13", name: "Pack of 12", image: imgPack12, price: 42, rating: 4.9, reviews: 1620, category: "gift", allergens: ["belgian"], badge: "deal", expressShipping: false, deliveryDate: "Wed, Jun 11" },
+  { id: "c1", nameKey: "cookies.c1.name", image: imgChocChunk, price: 3.75, rating: 4.9, reviews: 2310, category: "traditional", allergens: ["belgian"], badge: "bestSeller", expressShipping: true },
+  { id: "c2", nameKey: "cookies.c2.name", image: imgSnicker, price: 3.75, rating: 4.7, reviews: 1208, category: "traditional", allergens: [], expressShipping: true },
+  { id: "c3", nameKey: "cookies.c3.name", image: imgSugar, price: 3.75, rating: 4.6, reviews: 890, category: "traditional", allergens: [], expressShipping: false },
+  { id: "c4", nameKey: "cookies.c4.name", image: imgDoubleChoc, price: 3.75, rating: 4.9, reviews: 3104, category: "filled", allergens: ["belgian"], badge: "deal", expressShipping: true },
+  { id: "c5", nameKey: "cookies.c5.name", image: imgOatmeal, price: 3.75, rating: 4.5, reviews: 612, category: "healthy", allergens: [], expressShipping: false },
+  { id: "c6", nameKey: "cookies.c6.name", image: imgWhiteMac, price: 3.75, rating: 4.7, reviews: 980, category: "traditional", allergens: ["nuts"], expressShipping: true },
+  { id: "c7", nameKey: "cookies.c7.name", image: imgMM, price: 3.75, rating: 4.8, reviews: 1740, category: "filled", allergens: [], badge: "bestSeller", expressShipping: true },
+  { id: "c8", nameKey: "cookies.c8.name", image: imgPB, price: 3.75, rating: 4.6, reviews: 720, category: "traditional", allergens: ["nuts"], expressShipping: false },
+  { id: "c9", nameKey: "cookies.c9.name", image: imgVeganChoc, price: 3.75, rating: 4.7, reviews: 450, category: "healthy", allergens: ["glutenFree", "noSugar"], badge: "deal", expressShipping: true },
+  { id: "c10", nameKey: "cookies.c10.name", image: imgMint, price: 3.75, rating: 4.6, reviews: 540, category: "filled", allergens: ["belgian"], expressShipping: false },
+  { id: "cookies-cream", nameKey: "cookies.c2.name", image: imgCookiesCream, price: 3.75, rating: 4.7, reviews: 184, category: "filled", allergens: [], expressShipping: true },
+  { id: "p6", nameKey: "packs.p6.name", image: imgPack6, price: 22, rating: 4.9, reviews: 1320, category: "gift", allergens: [], badge: "bestSeller", expressShipping: true },
+  { id: "p9", nameKey: "packs.p9.name", image: imgPack9, price: 32, rating: 4.9, reviews: 980, category: "gift", allergens: [], expressShipping: true },
+  { id: "p12", nameKey: "packs.p12.name", image: imgPack12, price: 42, rating: 4.9, reviews: 1620, category: "gift", allergens: ["belgian"], badge: "deal", expressShipping: false },
 ];
 
 const CAT_KEYS: ("all" | Category)[] = ["all", "traditional", "filled", "healthy", "gift"];
 const ALLERGEN_KEYS: Allergen[] = ["glutenFree", "noSugar", "nuts", "belgian"];
 
 const PRODUCT_KEYWORDS: Record<string, string[]> = {
-  p1: ["chocolate", "chunk", "cocoa", "belgian"],
-  p2: ["snickerdoodle", "cinnamon", "sugar", "canela"],
-  p3: ["sugar", "vanilla", "azucar", "vainilla"],
-  p4: ["chocolate", "double", "mint", "menta", "cocoa", "belgian"],
-  p5: ["oatmeal", "raisin", "avena", "pasas", "healthy", "keto"],
-  p6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco"],
-  p7: ["m&m", "mm", "chocolate", "candy", "colors"],
-  p8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
-  p9: ["vegan", "chocolate", "gluten", "sugar-free", "vegana", "sin azucar", "sin gluten"],
-  p10: ["mint", "menta", "crunch", "chocolate", "belgian"],
-  p11: ["pack", "gift", "box", "6", "regalo", "caja"],
-  p12: ["pack", "gift", "box", "9", "regalo", "caja"],
-  p13: ["pack", "gift", "box", "12", "regalo", "caja", "belgian"],
+  c1: ["chocolate", "chunk", "chip", "cocoa", "trozos", "chispas", "belgian", "belga"],
+  c2: ["snickerdoodle", "cinnamon", "sugar", "canela", "azucar"],
+  c3: ["sugar", "vanilla", "azucar", "vainilla"],
+  c4: ["chocolate", "double", "doble", "cocoa", "cacao", "belgian", "belga"],
+  c5: ["oatmeal", "raisin", "avena", "pasas", "healthy"],
+  c6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco", "coco"],
+  c7: ["m&m", "mm", "chocolate", "candy", "caramelos"],
+  c8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
+  c9: ["vegan", "vegana", "chocolate", "gluten", "sugar-free", "sin azucar", "sin gluten"],
+  c10: ["mint", "menta", "chocolate", "belgian", "belga"],
+  "cookies-cream": ["cookies", "cream", "crema", "oreo"],
+  p6: ["pack", "gift", "box", "6", "regalo", "caja"],
+  p9: ["pack", "gift", "box", "9", "regalo", "caja"],
+  p12: ["pack", "gift", "box", "12", "regalo", "caja", "belgian", "belga"],
 };
 
 function normalize(s: string) {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function computeDeliveryDate(express: boolean, lang: string): string {
+  const d = new Date();
+  d.setDate(d.getDate() + (express ? 1 : 3));
+  return formatDate(d, { weekday: "short", month: "short", day: "numeric" }, lang);
 }
 
 
@@ -280,7 +288,7 @@ function SearchPage() {
       list = list.filter((p) => {
         const hay = normalize(
           [
-            p.name,
+            t(p.nameKey),
             t(`searchPage.cats.${p.category}`),
             ...p.allergens.map((a) => t(`searchPage.allergens.${a}`)),
             ...(PRODUCT_KEYWORDS[p.id] ?? []),
@@ -360,7 +368,10 @@ function SearchPage() {
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filtered.map((p) => (
+              {filtered.map((p) => {
+                const name = t(p.nameKey);
+                const deliveryDate = computeDeliveryDate(p.expressShipping, i18n.language);
+                return (
                 <li key={p.id} className="group flex flex-col overflow-hidden rounded-md border border-border bg-white transition hover:shadow-md">
                   <div className="relative aspect-square overflow-hidden bg-muted">
                     {p.badge && (
@@ -368,14 +379,14 @@ function SearchPage() {
                         {p.badge === "bestSeller" ? t("searchPage.bestSeller") : t("searchPage.deal")}
                       </span>
                     )}
-                    <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
+                    <img src={p.image} alt={name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col gap-1.5 p-3">
                     <Link
                       to="/menu"
                       className="line-clamp-2 text-sm font-semibold text-[#1a0f0a] hover:text-amber-700 hover:underline"
                     >
-                      {p.name}
+                      {name}
                     </Link>
                     <div className="flex items-center gap-1.5">
                       <Stars value={p.rating} />
@@ -386,14 +397,14 @@ function SearchPage() {
                       {p.price.toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: p.deliveryDate })}</span>
+                      <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: deliveryDate })}</span>
                     </p>
                     {p.expressShipping && (
                       <p className="text-[11px] font-semibold text-emerald-700">{t("searchPage.expressAvailable")}</p>
                     )}
                     <button
                       type="button"
-                      onClick={() => gate.guard(() => cart.add({ id: p.id, name: p.name, price: p.price, image: p.image }))}
+                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, price: p.price, image: p.image }))}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
@@ -401,7 +412,8 @@ function SearchPage() {
                     </button>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           )}
         </section>
