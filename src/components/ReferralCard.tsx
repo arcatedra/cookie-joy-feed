@@ -192,14 +192,13 @@ export function ReferralCard({ userId }: ReferralCardProps) {
             {isLoading ? (
               <div className="h-[200px] w-[200px] animate-pulse rounded bg-muted" />
             ) : (
-              <QRCodeSVG
+              <SafeQR
                 ref={svgRef}
                 value={referralUrl}
                 size={200}
                 level="M"
                 bgColor="#ffffff"
                 fgColor="#0f172a"
-                includeMargin={false}
               />
             )}
           </div>
