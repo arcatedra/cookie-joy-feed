@@ -55,6 +55,7 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
   if (!row) return null;
   const cfgRow = Array.isArray(cfgRes.data) ? cfgRes.data[0] : cfgRes.data;
   const addressValid = Boolean(cfgRow?.address_valid ?? false);
+  const sweepstakesActive = Boolean(cfgRow?.sweepstakes_active ?? false);
   return {
     drawDate: row.draw_date as string,
     status: row.status as "open" | "drawing" | "completed" | "rolled_over",
@@ -66,10 +67,12 @@ export const getTodayDraw = createServerFn({ method: "GET" }).handler(async () =
     seedHash: (row.seed_hash as string | null) ?? null,
     rolledOverFrom: (row.rolled_over_from as string | null) ?? null,
     addressValid,
+    sweepstakesActive,
     maxDailyPrizeUsd: Number(cfgRow?.max_daily_prize_usd ?? 4999),
     entryCutoffMinutes: Number(cfgRow?.entry_cutoff_minutes ?? 5),
   };
 });
+
 
 export const getRecentWinners = createServerFn({ method: "GET" }).handler(async () => {
   const { createClient } = await import("@supabase/supabase-js");
