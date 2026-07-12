@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Filter, Star, ShoppingCart, X } from "lucide-react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -19,7 +21,12 @@ import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
 import i18n from "@/i18n";
 
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/search")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: i18n.t("searchPage.metaTitle") },
