@@ -16,9 +16,11 @@ import {
 } from "@/lib/roulette.functions";
 import { createStarsCheckout } from "@/lib/stars-checkout.functions";
 import { getMyEligibility, saveMyEligibility } from "@/lib/eligibility.functions";
+import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 import { PrizePoolCounter } from "@/components/PrizePoolCounter";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LiveDrawSection } from "@/components/LiveDrawSection";
+
 
 
 import {
