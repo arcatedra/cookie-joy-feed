@@ -2687,6 +2687,36 @@ export type Database = {
         }
         Relationships: []
       }
+      ui_analytics_events: {
+        Row: {
+          created_at: string
+          event_data: Json
+          event_name: string
+          id: string
+          occurred_at: string
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json
+          event_name: string
+          id?: string
+          occurred_at?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json
+          event_name?: string
+          id?: string
+          occurred_at?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_eligibility: {
         Row: {
           created_at: string

@@ -6,6 +6,7 @@ import confetti from "canvas-confetti";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { getTodayDraw, getRecentWinners, enterDailyDraw } from "@/lib/daily-draw.functions";
+import { logUiEvent } from "@/lib/ui-analytics.functions";
 import { checkIsAdmin } from "@/lib/admin-check.functions";
 import { useAuth } from "@/lib/auth";
 import { getLocale } from "@/i18n";
@@ -112,6 +113,52 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
 
   const cd = useCountdownTo(draw?.scheduledAt);
   const prize = useAnimatedNumber(draw?.prizeUsd ?? 0);
+
+  // Analytics: log once per (session + draw date) when the pot is $0.00 and
+  // there are only AMOE (free) entries — for auditing impact and detecting
+  // days without any paid contributions.
+  const zeroPotLoggedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!draw) return;
+    const isOpen = draw.status === "open";
+    const prizeZero = Number(draw.prizeUsd ?? 0) === 0;
+    const hasEntries = Number(draw.entrantsTotal ?? 0) > 0;
+    if (!(isOpen && prizeZero && hasEntries)) return;
+    const dedupeKey = `ui:zero-pot-amoe-only:${draw.drawDate}`;
+    if (zeroPotLoggedRef.current === dedupeKey) return;
+    try {
+      if (typeof window !== "undefined" && sessionStorage.getItem(dedupeKey) === "1") {
+        zeroPotLoggedRef.current = dedupeKey;
+        return;
+      }
+    } catch { /* sessionStorage unavailable */ }
+    zeroPotLoggedRef.current = dedupeKey;
+    let sessionId: string | undefined;
+    try {
+      if (typeof window !== "undefined") {
+        sessionId = sessionStorage.getItem("ui:session-id") ?? undefined;
+        if (!sessionId) {
+          sessionId = (crypto.randomUUID?.() ?? `s_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+          sessionStorage.setItem("ui:session-id", sessionId);
+        }
+        sessionStorage.setItem(dedupeKey, "1");
+      }
+    } catch { /* ignore */ }
+    void logUiEvent({
+      data: {
+        eventName: "daily_draw_zero_pot_amoe_only",
+        sessionId,
+        eventData: {
+          drawDate: draw.drawDate,
+          entrantsTotal: draw.entrantsTotal,
+          ticketsTotal: draw.ticketsTotal,
+          rolledOverFrom: draw.rolledOverFrom,
+          language: typeof navigator !== "undefined" ? navigator.language : null,
+          path: typeof window !== "undefined" ? window.location.pathname : null,
+        },
+      },
+    }).catch((e) => console.warn("[ui-analytics] log failed", e));
+  }, [draw?.drawDate, draw?.status, draw?.prizeUsd, draw?.entrantsTotal, draw?.ticketsTotal, draw?.rolledOverFrom]);
 
   // Animation orchestrator: when status flips to completed, spin + confetti
   const [spinDeg, setSpinDeg] = useState(0);
