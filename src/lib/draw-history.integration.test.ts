@@ -47,7 +47,7 @@ const DRAWS: DrawRow[] = [
 ];
 
 const WINNERS: WinnerRow[] = [
-  { draw_date: "2026-06-22", winner_display_name: "Prueba", seed_hash: "c1cb2ccda6adadd9778c12fd52f0e5a7778cc66805934601cc9b6d34400f76c5", published_at: "2026-06-23T02:23:48.505174+00:00", prize_usd: "1.98" },
+  
   { draw_date: "2026-06-24", winner_display_name: "naveajhol", seed_hash: "c0309c906eb2cb4a54934a0e28d3099062e3279c053e8011c3a446b0174ef336", published_at: "2026-06-25T09:34:31.708608+00:00", prize_usd: "1.98" },
   { draw_date: "2026-06-26", winner_display_name: "naveajhol", seed_hash: "51877f402f77add5b74011041d8cdfcad119a3c8ca17f73253a27ec7ce4bc6e5", published_at: "2026-06-27T00:00:02.508452+00:00", prize_usd: "2.97" },
   { draw_date: "2026-06-27", winner_display_name: "theworldofserviceservice", seed_hash: "2772dba51108337ec5359f68597588f0eeac7294617a8ecf54070398ac71be70", published_at: "2026-06-28T00:00:02.907888+00:00", prize_usd: "0.00" },
