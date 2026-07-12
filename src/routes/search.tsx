@@ -288,7 +288,7 @@ function SearchPage() {
       list = list.filter((p) => {
         const hay = normalize(
           [
-            p.name,
+            t(p.nameKey),
             t(`searchPage.cats.${p.category}`),
             ...p.allergens.map((a) => t(`searchPage.allergens.${a}`)),
             ...(PRODUCT_KEYWORDS[p.id] ?? []),
