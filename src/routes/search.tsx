@@ -275,6 +275,20 @@ function SearchPage() {
 
   const filtered = useMemo(() => {
     let list = PRODUCTS.slice();
+    if (nq) {
+      const terms = nq.split(/\s+/).filter(Boolean);
+      list = list.filter((p) => {
+        const hay = normalize(
+          [
+            p.name,
+            t(`searchPage.cats.${p.category}`),
+            ...p.allergens.map((a) => t(`searchPage.allergens.${a}`)),
+            ...(PRODUCT_KEYWORDS[p.id] ?? []),
+          ].join(" "),
+        );
+        return terms.every((term) => hay.includes(term));
+      });
+    }
     if (cat !== "all") list = list.filter((p) => p.category === cat);
     if (minRating > 0) list = list.filter((p) => p.rating >= minRating);
     if (allergens.length) list = list.filter((p) => allergens.every((a) => p.allergens.includes(a)));
