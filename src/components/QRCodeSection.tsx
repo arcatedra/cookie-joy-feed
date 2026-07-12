@@ -68,14 +68,13 @@ export function QRCodeSection({ url = "https://origen.management" }: QRCodeSecti
       </h3>
       <div className="mt-3 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border flex flex-col items-center text-center">
         <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-border">
-          <QRCodeSVG
+          <SafeQR
             ref={svgRef}
             value={url}
             size={180}
             level="M"
             bgColor="#ffffff"
             fgColor="#0f172a"
-            includeMargin={false}
           />
         </div>
         <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
