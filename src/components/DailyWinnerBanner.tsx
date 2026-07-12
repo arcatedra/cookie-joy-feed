@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { getWinnerAnnouncements } from "@/lib/daily-draw.functions";
+import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 import { getLocale } from "@/i18n";
 
 const BEIGE = "#f3ead8";
@@ -14,14 +15,23 @@ const GOLD_BRIGHT = "#e6c181";
 export function DailyWinnerBanner() {
   const { t, i18n } = useTranslation();
   const fetchFn = useServerFn(getWinnerAnnouncements);
+  const fetchCfg = useServerFn(getSweepstakesPublicConfig);
+  const { data: cfg } = useQuery({
+    queryKey: ["sweepstakes-public-config"],
+    queryFn: () => fetchCfg(),
+    staleTime: 10 * 60_000,
+  });
+  const active = cfg?.sweepstakes_active ?? false;
   const { data } = useQuery({
     queryKey: ["winner-announcements"],
     queryFn: () => fetchFn(),
     refetchInterval: 60_000,
+    enabled: active,
   });
 
   const latest = data?.[0];
-  if (!latest) return null;
+  if (!active || !latest) return null;
+
 
   // Parse "YYYY-MM-DD" as local noon to avoid UTC→local shifting the day back by one.
   const date = new Date(latest.drawDate + "T12:00:00").toLocaleDateString(getLocale(i18n.language), {
