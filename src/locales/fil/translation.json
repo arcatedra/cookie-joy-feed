@@ -911,7 +911,7 @@
     "s4MailBody": " isulat sa kamay ang isang postcard (hindi photocopy) na may iyong kumpletong detalye kasama ang pariralang \"FREE ENTRY HAZOREX SWEEPSTAKES [DATE]\" at ipadala sa: {{sponsor}}, AMOE Entry, {{address}}. Limitasyon: 1 AMOE entry bawat tao bawat araw. Maximum na 3 entry bawat IP address bawat araw.",
     "s5Title": "5. Mga Premyo at Tinatayang Halaga sa Pagbebenta (ARV)",
     "s5BodyPre": "Ang araw-araw na premyo ay ang naipon na Prize Pool para sa araw sa USD, na pinondohan ng isang bahagi ng bawat pagbili ng Stars kasama ang rollover mula sa mga hindi na-claim na pool. ",
-    "s5BodyBold": "Minimum na garantisadong halaga: $25 USD. Maximum na araw-araw na halaga ng premyo: ${{maxPrize}} USD.",
+    "s5BodyBold": "Ang premyo ay katumbas ng 100% ng aktwal na naipong pool. Walang minimum na garantisadong premyo; kung walang bayad na kontribusyon, ang premyo ng araw ay maaaring $0.00. Maximum na araw-araw na halaga ng premyo: ${{maxPrize}} USD.",
     "s5BodyPost": " Anumang halaga sa itaas ng cap ay awtomatikong napupunta sa pool ng susunod na araw. Walang katumbas na cash maliban sa halaga ng pool. Hindi maililipat.",
     "s6Title": "6. Mga Pagkakataong Manalo",
     "s6Body": "Ang mga pagkakataon ay nakasalalay sa bilang ng mga karapat-dapat na entry na natanggap para sa bawat araw-araw na drawing.",

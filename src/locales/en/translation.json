@@ -908,7 +908,7 @@
     "s4MailBody": " hand-write a postcard (no photocopy) with your complete details plus the phrase \"FREE ENTRY HAZOREX SWEEPSTAKES [DATE]\" and mail to: {{sponsor}}, AMOE Entry, {{address}}. Limit: 1 AMOE entry per person per day. Maximum 3 entries per IP address per day.",
     "s5Title": "5. Prizes and Approximate Retail Value (ARV)",
     "s5BodyPre": "The daily prize is the accumulated Prize Pool for the day in USD, funded by a portion of each Stars purchase plus rollover from unclaimed pools. ",
-    "s5BodyBold": "Minimum guaranteed value: $25 USD. Maximum daily prize value: ${{maxPrize}} USD.",
+    "s5BodyBold": "The prize equals 100% of the actual accumulated pool. There is no minimum guaranteed prize; if there were no paid contributions, the day's prize may be $0.00. Maximum daily prize value: ${{maxPrize}} USD.",
     "s5BodyPost": " Any amount above the cap automatically rolls into the next day's pool. No cash equivalent beyond the pool amount. Non-transferable.",
     "s6Title": "6. Odds of Winning",
     "s6Body": "Odds depend on the number of eligible entries received for each daily drawing.",

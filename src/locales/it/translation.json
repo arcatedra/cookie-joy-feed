@@ -908,7 +908,7 @@
     "s4MailBody": "scrivi a mano una cartolina (nessuna fotocopia) con i tuoi dati completi più la frase \"PARTECIPAZIONE GRATUITA CONCORSO HAZOREX [DATA]\" e spediscila a: {{sponsor}}, Partecipazione AMOE, {{address}}. Limite: 1 partecipazione AMOE per persona al giorno. Massimo 3 partecipazioni per indirizzo IP al giorno.",
     "s5Title": "5. Premi e Valore Approssimativo al Dettaglio (ARV)",
     "s5BodyPre": "Il premio giornaliero è il Montepremi accumulato per il giorno in USD, finanziato da una parte di ogni acquisto di Stelle più il riporto dei montepremi non reclamati. ",
-    "s5BodyBold": "Valore minimo garantito: $25 USD. Valore massimo del premio giornaliero: ${{maxPrize}} USD.",
+    "s5BodyBold": "Il premio equivale al 100% del montepremi reale accumulato. Non esiste un premio minimo garantito; in assenza di contributi a pagamento, il premio del giorno può essere $0,00. Valore massimo del premio giornaliero: ${{maxPrize}} USD.",
     "s5BodyPost": " Qualsiasi importo superiore al tetto massimo viene automaticamente riportato nel montepremi del giorno successivo. Nessun equivalente in denaro oltre all'importo del montepremi. Non trasferibile.",
     "s6Title": "6. Probabilità di Vincita",
     "s6Body": "Le probabilità dipendono dal numero di partecipazioni idonee ricevute per ogni estrazione giornaliera.",
