@@ -10,46 +10,37 @@ interface QRCodeSectionProps {
 
 export function QRCodeSection({ url = "https://origen.management" }: QRCodeSectionProps) {
   const { t } = useTranslation();
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const qrRef = useRef<HTMLCanvasElement | null>(null);
 
   const handleDownload = useCallback(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    const serializer = new XMLSerializer();
-    const svgString = serializer.serializeToString(svg);
-    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-    const urlObj = URL.createObjectURL(svgBlob);
-
-    const img = new Image();
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const size = 1024;
-    canvas.width = size;
-    canvas.height = size;
-
-    img.onload = () => {
-      // White background
+    const qr = qrRef.current;
+    if (!qr) {
+      toast.error(t("profile.qr.downloadError"));
+      return;
+    }
+    try {
+      const size = 1024;
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas no disponible");
+      canvas.width = size;
+      canvas.height = size;
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, size, size);
-      ctx.drawImage(img, 0, 0, size, size);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(qr, 0, 0, size, size);
 
       const pngUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = pngUrl;
-      link.download = "amyrax-qr-code.png";
+      link.download = "hazorex-qr-code.png";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(urlObj);
       toast.success(t("profile.qr.downloaded"));
-    };
-    img.onerror = () => {
+    } catch {
       toast.error(t("profile.qr.downloadError"));
-    };
-    img.src = urlObj;
+    }
   }, [t]);
 
   const handleCopyLink = useCallback(async () => {
@@ -69,7 +60,7 @@ export function QRCodeSection({ url = "https://origen.management" }: QRCodeSecti
       <div className="mt-3 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border flex flex-col items-center text-center">
         <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-border">
           <SafeQR
-            ref={svgRef}
+            ref={qrRef as unknown as React.Ref<SVGSVGElement>}
             value={url}
             size={180}
             level="M"
