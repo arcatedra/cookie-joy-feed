@@ -2094,7 +2094,7 @@ function NextDrawCountdown() {
               ${Number(latest.prize_usd).toFixed(2)}
             </div>
             <div style={{ fontSize: 11, opacity: 0.75, marginTop: 2 }}>
-              {new Date(latest.draw_date).toLocaleDateString(getLocale(i18n.language))}
+              {new Date(latest.draw_date + "T12:00:00").toLocaleDateString(getLocale(i18n.language))}
             </div>
           </div>
         )}
@@ -2113,7 +2113,7 @@ function NextDrawCountdown() {
                 opacity: 0.9,
               }}
             >
-              <span>{w.winner_display_name} · {new Date(w.draw_date).toLocaleDateString(getLocale(i18n.language))}</span>
+              <span>{w.winner_display_name} · {new Date(w.draw_date + "T12:00:00").toLocaleDateString(getLocale(i18n.language))}</span>
               <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>${Number(w.prize_usd).toFixed(2)}</span>
             </div>
           ))}
