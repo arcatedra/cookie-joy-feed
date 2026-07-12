@@ -83,12 +83,14 @@ function RuletaPage() {
     refetchOnWindowFocus: false,
   });
   const fetchCfg = useServerFn(getSweepstakesPublicConfig);
-  const { data: cfg } = useQuery({
+  const { data: cfg, isLoading: isLoadingCfg } = useQuery({
     queryKey: ["sweepstakes-public-config"],
     queryFn: () => fetchCfg(),
     staleTime: 10 * 60_000,
   });
-  const sweepstakesActive = cfg?.sweepstakes_active ?? false;
+  const cfgReady = cfg !== undefined && !isLoadingCfg;
+  const sweepstakesActive = cfgReady ? (cfg?.sweepstakes_active ?? false) : false;
+  const sweepstakesInactiveConfirmed = cfgReady && !sweepstakesActive;
 
 
   const balance = state?.balance ?? 0;
