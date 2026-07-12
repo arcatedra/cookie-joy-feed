@@ -51,8 +51,9 @@ export function ReferralHistory({ userId }: Props) {
         </div>
 
         <p className="mt-2 text-xs text-muted-foreground">
-          Ganas <span className="font-semibold text-foreground">5 estrellas</span> cuando tu
-          invitado se registra y entra por primera vez al sorteo diario con tickets pagados.
+          Ganas <span className="font-semibold text-foreground">5 Estrellas</span> cuando tu
+          invitado se une y realiza su primera participación válida, ya sea mediante un boleto
+          pagado o una entrada gratuita (AMOE).
         </p>
 
         <div className="mt-4 space-y-2">
