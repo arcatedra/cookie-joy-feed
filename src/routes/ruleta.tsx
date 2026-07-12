@@ -1153,14 +1153,39 @@ function BuyTokensPanel({ balance }: { balance: number }) {
         </span>
       </label>
 
+      {!(acceptedTerms && eligibilityOk) && (
+        <div
+          style={{
+            padding: "12px 16px",
+            borderRadius: 12,
+            background: "#fff4e0",
+            border: `1px solid ${GOLD}`,
+            color: WOOD,
+            fontSize: 13,
+            lineHeight: 1.5,
+          }}
+        >
+          {!acceptedTerms
+            ? t("ruleta.needTerms", { defaultValue: "Acepta los Términos y Condiciones para continuar." })
+            : !user
+            ? t("ruleta.needSignIn", { defaultValue: "Inicia sesión para comprar Estrellas. Al hacer clic serás redirigido." })
+            : !dob
+            ? t("ruleta.needDob", { defaultValue: "Ingresa tu fecha de nacimiento arriba." })
+            : !ageOk
+            ? t("ruleta.underage", { defaultValue: "Debes tener al menos 18 años para comprar Estrellas." })
+            : !stateOk
+            ? t("ruleta.needState", { defaultValue: "Ingresa un estado válido de EE. UU. (no disponible en FL o RI)." })
+            : t("ruleta.completeVerification", { defaultValue: "Completa la verificación arriba para desbloquear la compra." })}
+        </div>
+      )}
+
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: 20,
           alignItems: "stretch",
-          opacity: acceptedTerms && eligibilityOk ? 1 : 0.55,
-          pointerEvents: acceptedTerms && eligibilityOk ? "auto" : "none",
+          opacity: acceptedTerms && eligibilityOk ? 1 : 0.7,
           transition: "opacity 0.2s",
         }}
       >
