@@ -32,6 +32,7 @@ import { Route as DomainsRouteImport } from './routes/domains'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AmoeRouteImport } from './routes/amoe'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
@@ -200,6 +201,11 @@ const CartRoute = CartRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AmoeRoute = AmoeRouteImport.update({
+  id: '/amoe',
+  path: '/amoe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -511,6 +517,7 @@ const AuthenticatedRepartidorPedidoIdCompletadoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/demo': typeof DemoRoute
@@ -589,6 +596,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/demo': typeof DemoRoute
@@ -668,6 +676,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/demo': typeof DemoRoute
@@ -748,6 +757,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/amoe'
     | '/auth'
     | '/cart'
     | '/demo'
@@ -826,6 +836,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/amoe'
     | '/auth'
     | '/cart'
     | '/demo'
@@ -904,6 +915,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/amoe'
     | '/auth'
     | '/cart'
     | '/demo'
@@ -984,6 +996,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AmoeRoute: typeof AmoeRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   DemoRoute: typeof DemoRoute
@@ -1193,6 +1206,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/amoe': {
+      id: '/amoe'
+      path: '/amoe'
+      fullPath: '/amoe'
+      preLoaderRoute: typeof AmoeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1673,6 +1693,7 @@ const AdminSweepstakesRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AmoeRoute: AmoeRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   DemoRoute: DemoRoute,
@@ -1723,13 +1744,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
