@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useShopifyCartStore } from "@/stores/shopifyCartStore";
+import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { CategorySidebar } from "@/components/CategorySidebar";
@@ -23,7 +23,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
-  { key: "shop", to: "/shop", highlighted: true },
+  { key: "shop", to: "/subscribe", highlighted: true },
   { key: "roulette", to: "/ruleta", highlighted: true },
   { key: "drivers", to: "/repartidores", highlighted: true },
   { key: "businesses", to: "/negocios/registro", highlighted: true },
@@ -37,7 +37,7 @@ const quickLinkKeys = [
 
 export function TopNav() {
   const { t } = useTranslation();
-  const cartCount = useShopifyCartStore((s) => s.items.reduce((a, i) => a + i.quantity, 0));
+  const cartCount = useCart().count;
   const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
