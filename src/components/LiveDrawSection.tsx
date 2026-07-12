@@ -324,6 +324,14 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
               {t("liveDraw.participantsAndTickets", { participants: draw?.entrantsTotal ?? 0, tickets: draw?.ticketsTotal ?? 0 })}
               {draw?.rolledOverFrom ? t("liveDraw.rolledOverSince", { date: new Date(draw.rolledOverFrom).toLocaleDateString(getLocale(i18n.language)) }) : null}
             </div>
+            {!isCompleted && (draw?.prizeUsd ?? 0) === 0 && (draw?.entrantsTotal ?? 0) > 0 && (
+              <div style={{
+                fontSize: 11, letterSpacing: "0.12em", color: `${BEIGE}99`, marginTop: 4,
+                fontStyle: "italic", maxWidth: 520, lineHeight: 1.4,
+              }}>
+                {t("liveDraw.amoeOnlyNote")}
+              </div>
+            )}
 
 
           </div>
