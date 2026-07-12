@@ -121,36 +121,48 @@ function HistoryList() {
 
   return (
     <div className="space-y-3">
-      {winners.map((w) => (
-        <Card key={w.drawDate} className="p-4 hover:shadow-md transition-shadow">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">{formatDate(w.drawDate)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-500" />
-                <span className="font-semibold text-lg">
-                  {w.winnerDisplayName || t("historial.anonymous")}
-                </span>
-              </div>
-              {w.seedHash && (
-                <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground font-mono">
-                  <Hash className="w-3 h-3" />
-                  <span className="truncate" title={w.seedHash}>
-                    {w.seedHash.slice(0, 16)}…
+      {winners.map((w) => {
+        const hasWinner = !!w.winnerDisplayName && w.status === "completed";
+        const noEntrants = w.entrantsTotal === 0;
+        const label = hasWinner
+          ? w.winnerDisplayName
+          : noEntrants
+            ? t("historial.noParticipants", { defaultValue: "Sin participantes" })
+            : t("historial.rolledOver", { defaultValue: "Sin ganador — pozo acumulado" });
+        return (
+          <Card key={w.drawDate} className={`p-4 hover:shadow-md transition-shadow ${hasWinner ? "" : "opacity-80"}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">{formatDate(w.drawDate)}</span>
+                  <span className="text-xs text-muted-foreground">
+                    · {t("historial.entrants", { defaultValue: "Participantes" })}: {w.entrantsTotal}
                   </span>
                 </div>
-              )}
+                <div className="flex items-center gap-2">
+                  <Trophy className={`w-5 h-5 ${hasWinner ? "text-yellow-500" : "text-muted-foreground"}`} />
+                  <span className={`font-semibold text-lg ${hasWinner ? "" : "italic text-muted-foreground"}`}>
+                    {label}
+                  </span>
+                </div>
+                {w.seedHash && (
+                  <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground font-mono">
+                    <Hash className="w-3 h-3" />
+                    <span className="truncate" title={w.seedHash}>
+                      {w.seedHash.slice(0, 16)}…
+                    </span>
+                  </div>
+                )}
+              </div>
+              <Badge variant="secondary" className="text-base px-3 py-1 self-start sm:self-center">
+                <DollarSign className="w-4 h-4 mr-1" />
+                {w.prizeUsd.toFixed(2)}
+              </Badge>
             </div>
-            <Badge variant="secondary" className="text-base px-3 py-1 self-start sm:self-center">
-              <DollarSign className="w-4 h-4 mr-1" />
-              {w.prizeUsd.toFixed(2)}
-            </Badge>
-          </div>
-        </Card>
-      ))}
+          </Card>
+        );
+      })}
     </div>
   );
 }
