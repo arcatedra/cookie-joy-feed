@@ -356,7 +356,7 @@ function SearchPage() {
 
           {filtered.length === 0 ? (
             <div className="rounded-md border border-border bg-white p-10 text-center text-muted-foreground">
-              {t("searchPage.noMatches")}
+              {q ? `0 — "${q}". ${t("searchPage.noMatches")}` : t("searchPage.noMatches")}
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
