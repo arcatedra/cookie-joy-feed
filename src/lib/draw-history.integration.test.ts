@@ -43,7 +43,7 @@ const DRAWS: DrawRow[] = [
   { draw_date: "2026-06-25", status: "rolled_over", prize_usd: "0.00", entrants_total: 0, seed_hash: "b48e497cd7f5e7f3f1832c60d86cd2f5e331b1075879d577f47ff46314fa9959", drawn_at: "2026-06-26T00:00:02.920821+00:00" },
   { draw_date: "2026-06-24", status: "completed", prize_usd: "1.98", entrants_total: 2, seed_hash: "c0309c906eb2cb4a54934a0e28d3099062e3279c053e8011c3a446b0174ef336", drawn_at: "2026-06-25T09:34:31.708608+00:00" },
   { draw_date: "2026-06-23", status: "rolled_over", prize_usd: "0.00", entrants_total: 0, seed_hash: "74e10064d269835d63acb791f3efc11eb4f9f29f98d85e0e52c80724e4ad67e2", drawn_at: "2026-06-23T04:34:08.456937+00:00" },
-  { draw_date: "2026-06-22", status: "completed", prize_usd: "1.98", entrants_total: 2, seed_hash: "c1cb2ccda6adadd9778c12fd52f0e5a7778cc66805934601cc9b6d34400f76c5", drawn_at: "2026-06-23T02:23:48.505174+00:00" },
+  { draw_date: "2026-06-22", status: "rolled_over", prize_usd: "0.00", entrants_total: 0, seed_hash: "c1cb2ccda6adadd9778c12fd52f0e5a7778cc66805934601cc9b6d34400f76c5", drawn_at: "2026-06-23T02:23:48.505174+00:00" },
 ];
 
 const WINNERS: WinnerRow[] = [
