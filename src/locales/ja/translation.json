@@ -1013,7 +1013,8 @@
     "stageEyebrowWin": "🎉 本日の当選者！ 🎉",
     "transparencyHash": "🔐 透明性ハッシュ: {{hash}}…",
     "preWarn5": "抽選まであと5分",
-    "preWarn1": "まもなくスピン！"
+    "preWarn1": "まもなくスピン！",
+    "amoeOnlyNote": "有料の貢献なし · 本日のポットは$0.00で、無料のAMOE参加のみです。"
   },
   "hero": {
     "eyebrow": "HAZOREX",

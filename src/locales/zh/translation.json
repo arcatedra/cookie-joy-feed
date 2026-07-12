@@ -667,7 +667,8 @@
     "stageEyebrowWin": "🎉 今日中奖者！🎉",
     "transparencyHash": "🔐 透明度哈希：{{hash}}…",
     "preWarn5": "5分钟后开奖",
-    "preWarn1": "即将转动！"
+    "preWarn1": "即将转动！",
+    "amoeOnlyNote": "今日无付费贡献 · 奖池为$0.00，仅有免费AMOE参与。"
   },
   "prizePool": {
     "eyebrow": "★ 历史累计募集总额 ★",

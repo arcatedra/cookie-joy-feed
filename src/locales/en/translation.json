@@ -667,7 +667,8 @@
     "stageEyebrowWin": "🎉 WINNER OF THE DAY! 🎉",
     "transparencyHash": "🔐 Transparency hash: {{hash}}…",
     "preWarn5": "Draw in 5 minutes",
-    "preWarn1": "About to spin!"
+    "preWarn1": "About to spin!",
+    "amoeOnlyNote": "No paid contributions yet · Today's pot is $0.00 with free AMOE entries only."
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTORICALLY RAISED ★",

@@ -670,7 +670,8 @@
     "stageEyebrowWin": "🎉 NANALO NG ARAW! 🎉",
     "transparencyHash": "🔐 Transparency hash: {{hash}}…",
     "preWarn5": "Bunot sa 5 minuto",
-    "preWarn1": "Malapit nang umikot!"
+    "preWarn1": "Malapit nang umikot!",
+    "amoeOnlyNote": "Walang bayad na kontribusyon · Ang pot ngayong araw ay $0.00 na may libreng AMOE entries lamang."
   },
   "prizePool": {
     "eyebrow": "★ KABUUANG NAIPONG HISTORYA ★",

@@ -667,7 +667,8 @@
     "stageEyebrowWin": "🎉 GAGNANT DU JOUR ! 🎉",
     "transparencyHash": "🔐 Hachage de transparence : {{hash}}…",
     "preWarn5": "Tirage dans 5 minutes",
-    "preWarn1": "Sur le point de tourner !"
+    "preWarn1": "Sur le point de tourner !",
+    "amoeOnlyNote": "Aucune contribution payée · La cagnotte du jour est de $0.00 avec uniquement des participations AMOE gratuites."
   },
   "prizePool": {
     "eyebrow": "★ TOTAL HISTORIQUE COLLECTÉ ★",

@@ -667,7 +667,8 @@
     "stageEyebrowWin": "🎉 VINCITORE DEL GIORNO! 🎉",
     "transparencyHash": "🔐 Hash di trasparenza: {{hash}}…",
     "preWarn5": "Estrazione tra 5 minuti",
-    "preWarn1": "Sta per girare!"
+    "preWarn1": "Sta per girare!",
+    "amoeOnlyNote": "Nessun contributo pagato · Il montepremi di oggi è $0.00 con sole partecipazioni AMOE gratuite."
   },
   "prizePool": {
     "eyebrow": "★ TOTALE STORICO RACCOLTO ★",
