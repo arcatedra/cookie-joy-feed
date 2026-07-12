@@ -193,47 +193,79 @@ function RuletaPage() {
 
         <ComplianceBanner />
 
-
-
-        <div id="live-draw" style={{ scrollMarginTop: 80 }}>
-          <LiveDrawSection
-            balance={balance}
-            onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
-          />
-        </div>
-
-
-        {/* Personal star spin — fullscreen suspense overlay */}
-        <section
-          style={{
-            background: BEIGE_DEEP,
-            borderRadius: 24,
-            padding: "clamp(1.5rem, 4vw, 2.5rem)",
-            border: `1px solid ${GOLD}`,
-            display: "grid",
-            placeItems: "center",
-            gap: 16,
-            textAlign: "center",
-          }}
-        >
-          <div style={{ fontSize: 11, letterSpacing: "0.3em", color: BLUE_SOFT }}>
-            {t("ruleta.sweepstakes")}
+        {!sweepstakesActive && (
+          <div
+            role="note"
+            style={{
+              background: "#fff8e6",
+              border: `2px solid ${GOLD}`,
+              borderRadius: 16,
+              padding: "20px 24px",
+              display: "grid",
+              gap: 8,
+              textAlign: "center",
+            }}
+          >
+            <div style={{ fontSize: 12, letterSpacing: "0.2em", color: BLUE_SOFT, fontWeight: 800 }}>
+              PRÓXIMAMENTE
+            </div>
+            <h2 style={{ margin: 0, fontSize: "clamp(20px, 3.5vw, 26px)", color: BLUE }}>
+              El Sorteo Diario aún no está activo
+            </h2>
+            <p style={{ margin: 0, color: BLUE_SOFT, fontSize: 14 }}>
+              Estamos finalizando la configuración legal. Pronto anunciaremos la fecha de lanzamiento.
+              Mientras tanto puedes revisar las{" "}
+              <Link to="/sweepstakes-rules" style={{ color: BLUE, fontWeight: 700 }}>
+                Reglas Oficiales
+              </Link>
+              .
+            </p>
           </div>
-          <h2 style={{ margin: 0, fontSize: "clamp(22px, 4vw, 32px)", color: BLUE }}>
-            {t("ruleta.spinBtn", { cost: SPIN_COST })}
-          </h2>
-          <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
-        </section>
+        )}
 
-        <BuyTokensPanel balance={balance} />
+        {sweepstakesActive && (
+          <>
+            <div id="live-draw" style={{ scrollMarginTop: 80 }}>
+              <LiveDrawSection
+                balance={balance}
+                onSpend={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+              />
+            </div>
 
-        <AmoeFlow
-          state={state}
-          onChange={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
-        />
+            {/* Personal star spin — fullscreen suspense overlay */}
+            <section
+              style={{
+                background: BEIGE_DEEP,
+                borderRadius: 24,
+                padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                border: `1px solid ${GOLD}`,
+                display: "grid",
+                placeItems: "center",
+                gap: 16,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: 11, letterSpacing: "0.3em", color: BLUE_SOFT }}>
+                {t("ruleta.sweepstakes")}
+              </div>
+              <h2 style={{ margin: 0, fontSize: "clamp(22px, 4vw, 32px)", color: BLUE }}>
+                {t("ruleta.spinBtn", { cost: SPIN_COST })}
+              </h2>
+              <SpinButton onClick={handleSpin} disabled={!canSpin || spinning} balance={balance} />
+            </section>
+
+            <BuyTokensPanel balance={balance} />
+
+            <AmoeFlow
+              state={state}
+              onChange={() => qc.invalidateQueries({ queryKey: ["roulette-state"] })}
+            />
+          </>
+        )}
 
         <Legal />
       </main>
+
 
       {stageOpen && (
         <SpinStageOverlay
