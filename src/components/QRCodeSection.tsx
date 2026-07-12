@@ -60,7 +60,7 @@ export function QRCodeSection({ url = "https://origen.management" }: QRCodeSecti
       <div className="mt-3 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border flex flex-col items-center text-center">
         <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-border">
           <SafeQR
-            ref={qrRef as unknown as React.Ref<SVGSVGElement>}
+            ref={qrRef}
             value={url}
             size={180}
             level="M"

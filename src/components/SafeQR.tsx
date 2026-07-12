@@ -15,14 +15,14 @@ interface SafeQRProps {
  * primary SVG generator fails to output a drawable code. Never leaves a
  * blank/white square: shows a visible error message as last resort.
  */
-export const SafeQR = forwardRef<SVGSVGElement, SafeQRProps>(function SafeQR(
+export const SafeQR = forwardRef<HTMLCanvasElement, SafeQRProps>(function SafeQR(
   { value, size = 200, bgColor = "#ffffff", fgColor = "#0f172a", level = "M", className },
   ref,
 ) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [hasRenderError, setHasRenderError] = useState(false);
 
-  useImperativeHandle(ref, () => canvasRef.current as unknown as SVGSVGElement);
+  useImperativeHandle(ref, () => canvasRef.current as HTMLCanvasElement);
 
   useEffect(() => {
     setHasRenderError(false);

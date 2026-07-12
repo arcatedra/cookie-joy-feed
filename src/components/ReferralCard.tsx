@@ -195,7 +195,7 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               </div>
             ) : (
               <SafeQR
-                ref={qrRef as unknown as React.Ref<SVGSVGElement>}
+                ref={qrRef}
                 value={referralUrl}
                 size={200}
                 level="M"
