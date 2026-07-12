@@ -239,7 +239,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
     const RESERVED = new Set(["prueba", "pruebas", "test", "testing", "demo", "qa", "dummy", "ejemplo", "sample"]);
     const labels: string[] = (winners ?? [])
       .map((w: { winnerDisplayName: string | null }) => (w.winnerDisplayName ?? "").trim())
-      .filter((n) => n.length > 0 && !RESERVED.has(n.toLowerCase()))
+      .filter((n: string) => n.length > 0 && !RESERVED.has(n.toLowerCase()))
       .slice(0, 8);
     // Neutral placeholders (not real-looking user names) to fill the wheel.
     const placeholders = ["★", "✦", "◆", "●", "◇", "○", "✧", "☆"];
