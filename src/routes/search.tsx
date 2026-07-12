@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
+import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
 import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
@@ -19,7 +20,7 @@ import imgMint from "@/assets/ins-mint.jpg";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
-import i18n from "@/i18n";
+import i18n, { formatDate } from "@/i18n";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
