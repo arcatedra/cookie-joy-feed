@@ -3,7 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { listPublicWinners } from "@/lib/winners-public.functions";
+import { getSweepstakesPublicConfig } from "@/lib/sweepstakes-config.functions";
 import { getLocale } from "@/i18n";
+
 
 export const Route = createFileRoute("/sorteo/ganadores")({
   head: () => ({
