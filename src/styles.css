@@ -181,3 +181,168 @@
 .tier-badge.tier-estrella_suprema:hover {
   box-shadow: 0 6px 28px -4px rgba(212, 175, 55, 0.75);
 }
+
+/* AMOE form styles */
+.amoe-modal {
+  max-width: 650px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1a202c;
+  margin: 20px auto;
+}
+.amoe-header h2 {
+  color: #0f172a;
+  font-size: 24px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 700;
+}
+.amoe-back-link {
+  font-size: 13px;
+  color: #0f172a;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.law-notice {
+  font-size: 11px;
+  color: #dc2626;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.instruction-text {
+  font-size: 13px;
+  color: #475569;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
+}
+.amoe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.amoe-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.input-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+.input-group input,
+.input-group textarea {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #1a202c;
+  background: #ffffff;
+}
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+}
+.input-group-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+.textarea-help {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+  background: #fff7e0;
+  border: 1px solid #e2c887;
+  padding: 10px;
+  border-radius: 8px;
+  line-height: 1.6;
+  text-align: left;
+}
+.counter-container {
+  font-size: 12px;
+  color: #64748b;
+  text-align: right;
+  margin-top: 4px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+.counter-ok { color: #1f7a3a; }
+.counter-warn { color: #a97a1e; }
+.counter-bad { color: #dc2626; }
+.amoe-alert {
+  background: #fdecec;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
+.checkbox-group input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.checkbox-group label {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #475569;
+  cursor: pointer;
+}
+.checkbox-group label a { color: #0f172a; font-weight: 700; }
+.btn-submit-amoe {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+  letter-spacing: 0.05em;
+}
+.btn-submit-amoe:hover:not(:disabled) { background: #1e293b; }
+.btn-submit-amoe:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+.amoe-footnote {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  text-align: center;
+}
+.amoe-footnote a { color: #0f172a; }
