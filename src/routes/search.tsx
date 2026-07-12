@@ -248,8 +248,10 @@ function FiltersPanel({
 
 function SearchPage() {
   const { t } = useTranslation();
+  const { q } = Route.useSearch();
   const cart = useCart();
   const gate = useSubscriptionGate();
+  const nq = normalize(q).trim();
   const [cat, setCat] = useState<"all" | Category>("all");
   const [minRating, setMinRating] = useState(0);
   const [allergens, setAllergens] = useState<Allergen[]>([]);
