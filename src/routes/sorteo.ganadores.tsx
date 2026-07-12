@@ -83,7 +83,15 @@ function WinnersPage() {
         })}
       </p>
 
-      {isLoading ? (
+      {!active ? (
+        <p style={{ marginTop: 24, background: BEIGE, padding: 20, borderRadius: 12, border: `1px solid ${GOLD}` }}>
+          <strong>Próximamente.</strong>{" "}
+          {t("winners.inactive", {
+            defaultValue:
+              "El sorteo diario aún no está activo. Cuando se lance, aquí verás el registro público y verificable de cada ganador.",
+          })}
+        </p>
+      ) : isLoading ? (
         <p style={{ marginTop: 24 }}>…</p>
       ) : !data || data.length === 0 ? (
         <p style={{ marginTop: 24, background: BEIGE, padding: 20, borderRadius: 12 }}>
@@ -92,6 +100,7 @@ function WinnersPage() {
               "Todavía no hay ganadores publicados. Vuelve pronto — el sorteo se ejecuta a diario.",
           })}
         </p>
+
       ) : (
         <ul style={{ listStyle: "none", padding: 0, marginTop: 24, display: "grid", gap: 12 }}>
           {data.map((w) => (
