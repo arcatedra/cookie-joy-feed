@@ -181,6 +181,10 @@ function RuletaPage() {
       >
         <NextDrawCountdown />
 
+        <ComplianceBanner />
+
+
+
         <div id="live-draw" style={{ scrollMarginTop: 80 }}>
           <LiveDrawSection
             balance={balance}
