@@ -1,5 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { buildDrawHistory, type DrawRow, type WinnerRow } from "./draw-history";
+import { buildDrawHistory, enumerateDateRange, type DrawRow, type WinnerRow } from "./draw-history";
+
+/**
+ * All draw dates are calendar days (YYYY-MM-DD) anchored to UTC — the same
+ * convention `daily_draws.draw_date` uses in Postgres. Every date comparison
+ * in this test is a lexicographic string compare or is routed through
+ * `enumerateDateRange`, which pins the clock to `T12:00:00Z`. That keeps
+ * results identical on runners in America/Los_Angeles, Asia/Tokyo, UTC, etc.
+ */
+const LAUNCH_DATE_UTC = "2026-06-22";
+const SNAPSHOT_DATE_UTC = "2026-07-12";
 
 /**
  * Integration-style test: snapshot of real production rows from `daily_draws`
