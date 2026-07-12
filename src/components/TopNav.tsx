@@ -172,7 +172,7 @@ export function TopNav() {
 
               <button
                 type="button"
-                onClick={goSearch}
+                onClick={() => goSearch()}
                 aria-label={t("common.search")}
                 className="grid w-12 shrink-0 place-items-center bg-[#1f3a5f] text-white transition hover:bg-[#16294a]"
               >
