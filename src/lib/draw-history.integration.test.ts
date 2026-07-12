@@ -1,5 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { buildDrawHistory, type DrawRow, type WinnerRow } from "./draw-history";
+import { buildDrawHistory, enumerateDateRange, type DrawRow, type WinnerRow } from "./draw-history";
+
+/**
+ * All draw dates are calendar days (YYYY-MM-DD) anchored to UTC — the same
+ * convention `daily_draws.draw_date` uses in Postgres. Every date comparison
+ * in this test is a lexicographic string compare or is routed through
+ * `enumerateDateRange`, which pins the clock to `T12:00:00Z`. That keeps
+ * results identical on runners in America/Los_Angeles, Asia/Tokyo, UTC, etc.
+ */
+const LAUNCH_DATE_UTC = "2026-06-22";
+const SNAPSHOT_DATE_UTC = "2026-07-12";
 
 /**
  * Integration-style test: snapshot of real production rows from `daily_draws`
@@ -138,11 +148,24 @@ describe("draw history integration (real Supabase snapshot 2026-07-12)", () => {
     expect(asPublic).toEqual(serverProjection);
   });
 
-  it("has zero gaps between launch (2026-06-22) and snapshot day (2026-07-12)", () => {
-    const dates = helper.map((h) => h.drawDate).sort();
-    // 21 days inclusive
-    expect(dates).toHaveLength(21);
-    expect(dates[0]).toBe("2026-06-22");
-    expect(dates[dates.length - 1]).toBe("2026-07-12");
+  it("has zero gaps between launch and snapshot day (computed in UTC)", () => {
+    // enumerateDateRange pins to T12:00:00Z, so this is stable regardless of
+    // the runner's TZ (America/Los_Angeles, Asia/Tokyo, UTC, ...).
+    const expected = enumerateDateRange(LAUNCH_DATE_UTC, SNAPSHOT_DATE_UTC);
+    const actual = helper.map((h) => h.drawDate).sort(); // ISO YYYY-MM-DD sorts lexicographically = chronologically
+    expect(actual).toEqual(expected);
+    expect(actual).toHaveLength(21);
+  });
+
+  it("LEFT JOIN key match is a pure string compare, so no TZ drift is possible", () => {
+    // Every merged winner must match a draw by exact ISO date string.
+    // If either side were ever converted through `new Date(...)` in local TZ,
+    // dates near midnight would shift and this assertion would fail.
+    for (const w of WINNERS) {
+      const drawKeys = DRAWS.map((d) => d.draw_date);
+      expect(drawKeys).toContain(w.draw_date);
+      const merged = helper.find((h) => h.drawDate === w.draw_date);
+      expect(merged?.winnerDisplayName).toBe(w.winner_display_name);
+    }
   });
 });
