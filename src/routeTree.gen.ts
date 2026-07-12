@@ -67,6 +67,7 @@ import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminPayoutsRouteImport } from './routes/_authenticated/admin.payouts'
 import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authenticated/admin.negocios'
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
+import { Route as AuthenticatedAdminFinanzasRouteImport } from './routes/_authenticated/admin.finanzas'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -395,6 +396,12 @@ const AuthenticatedAdminLiveRoute = AuthenticatedAdminLiveRouteImport.update({
   path: '/admin/live',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminFinanzasRoute =
+  AuthenticatedAdminFinanzasRouteImport.update({
+    id: '/admin/finanzas',
+    path: '/admin/finanzas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminDeliveriesRoute =
   AuthenticatedAdminDeliveriesRouteImport.update({
     id: '/admin/deliveries',
@@ -553,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
@@ -631,6 +639,7 @@ export interface FileRoutesByTo {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
@@ -712,6 +721,7 @@ export interface FileRoutesById {
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/_authenticated/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
   '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/_authenticated/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
@@ -793,6 +803,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/admin/deliveries'
+    | '/admin/finanzas'
     | '/admin/live'
     | '/admin/negocios'
     | '/admin/payouts'
@@ -871,6 +882,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/admin/deliveries'
+    | '/admin/finanzas'
     | '/admin/live'
     | '/admin/negocios'
     | '/admin/payouts'
@@ -951,6 +963,7 @@ export interface FileRouteTypes {
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/_authenticated/admin/deliveries'
+    | '/_authenticated/admin/finanzas'
     | '/_authenticated/admin/live'
     | '/_authenticated/admin/negocios'
     | '/_authenticated/admin/payouts'
@@ -1453,6 +1466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminLiveRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/finanzas': {
+      id: '/_authenticated/admin/finanzas'
+      path: '/admin/finanzas'
+      fullPath: '/admin/finanzas'
+      preLoaderRoute: typeof AuthenticatedAdminFinanzasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/deliveries': {
       id: '/_authenticated/admin/deliveries'
       path: '/admin/deliveries'
@@ -1637,6 +1657,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
+  AuthenticatedAdminFinanzasRoute: typeof AuthenticatedAdminFinanzasRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
   AuthenticatedAdminNegociosRoute: typeof AuthenticatedAdminNegociosRoute
   AuthenticatedAdminPayoutsRoute: typeof AuthenticatedAdminPayoutsRoute
@@ -1659,6 +1680,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
+  AuthenticatedAdminFinanzasRoute: AuthenticatedAdminFinanzasRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
   AuthenticatedAdminNegociosRoute: AuthenticatedAdminNegociosRoute,
   AuthenticatedAdminPayoutsRoute: AuthenticatedAdminPayoutsRoute,
