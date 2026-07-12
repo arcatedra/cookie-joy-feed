@@ -133,6 +133,10 @@ function RulesPage() {
           <strong>{t("sweepstakesRules.s4MailBold")}</strong>
           {t("sweepstakesRules.s4MailBody", { sponsor: sponsorName, address: sponsorAddress })}
         </p>
+        <p>
+          <strong>{t("sweepstakesRules.s4_3Bold")}</strong>
+          {t("sweepstakesRules.s4_3Body")}
+        </p>
 
         <h3>{t("sweepstakesRules.s5Title")}</h3>
         <p>
