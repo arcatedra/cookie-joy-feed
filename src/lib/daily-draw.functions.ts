@@ -94,24 +94,52 @@ export const getRecentWinners = createServerFn({ method: "GET" }).handler(async 
 });
 
 export const getDrawHistory = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => z.object({ limit: z.number().int().min(1).max(100).default(50) }).parse(data ?? {}))
+  .inputValidator((data: unknown) => z.object({ limit: z.number().int().min(1).max(365).default(50) }).parse(data ?? {}))
   .handler(async ({ data }) => {
-    const { createClient } = await import("@supabase/supabase-js");
-    const sb = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-    });
-    const { data: rows, error } = await sb.rpc("get_recent_winners", { p_limit: data.limit });
-    if (error) {
-      console.error("[daily-draw] getDrawHistory error", error);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: draws, error: drawsErr } = await supabaseAdmin
+      .from("daily_draws")
+      .select("draw_date, status, prize_usd, entrants_total, seed_hash, drawn_at")
+      .order("draw_date", { ascending: false })
+      .limit(data.limit);
+
+    if (drawsErr) {
+      console.error("[daily-draw] getDrawHistory error", drawsErr);
       return [];
     }
-    return (rows ?? []).map((w: { draw_date: string; winner_display_name: string | null; prize_usd: number | string; seed_hash: string | null; drawn_at: string }) => ({
-      drawDate: w.draw_date,
-      winnerDisplayName: w.winner_display_name,
-      prizeUsd: Number(w.prize_usd),
-      seedHash: w.seed_hash,
-      drawnAt: w.drawn_at,
-    }));
+
+    const dates = (draws ?? []).map((d) => d.draw_date as string);
+    const { data: winners } = dates.length
+      ? await supabaseAdmin
+          .from("winner_announcements")
+          .select("draw_date, winner_display_name, seed_hash, published_at, prize_usd")
+          .in("draw_date", dates)
+      : { data: [] as Array<{ draw_date: string; winner_display_name: string; seed_hash: string | null; published_at: string; prize_usd: number | string }> };
+
+    const wMap = new Map<string, { winner_display_name: string; seed_hash: string | null; published_at: string; prize_usd: number }>();
+    for (const w of winners ?? []) {
+      wMap.set(w.draw_date as string, {
+        winner_display_name: (w.winner_display_name as string) ?? "",
+        seed_hash: (w.seed_hash as string | null) ?? null,
+        published_at: w.published_at as string,
+        prize_usd: Number(w.prize_usd ?? 0),
+      });
+    }
+
+    return (draws ?? []).map((d) => {
+      const win = wMap.get(d.draw_date as string);
+      const status = d.status as string;
+      return {
+        drawDate: d.draw_date as string,
+        status,
+        winnerDisplayName: win?.winner_display_name ?? null,
+        prizeUsd: win ? win.prize_usd : Number(d.prize_usd ?? 0),
+        entrantsTotal: Number(d.entrants_total ?? 0),
+        seedHash: win?.seed_hash ?? (d.seed_hash as string | null) ?? null,
+        drawnAt: win?.published_at ?? (d.drawn_at as string | null) ?? null,
+      };
+    });
   });
 
 
