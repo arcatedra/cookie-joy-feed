@@ -253,7 +253,9 @@ export function ReferralCard({ userId }: ReferralCardProps) {
               Por cada usuario que entre al sorteo con tu código QR o enlace, recibirás{" "}
               <span className="font-bold text-yellow-300">5 Estrellas</span> automáticamente en tu cuenta (10 ⭐ = 1 ticket).
             </p>
-
+            <p className="mt-2 text-xs font-semibold leading-relaxed text-yellow-200">
+              Con solo <span className="font-bold text-yellow-300">2 amigos invitados</span> que se unan y participen, ganas un boleto completo gratis (10 Estrellas = 1 boleto).
+            </p>
           </div>
           <button
             type="button"
