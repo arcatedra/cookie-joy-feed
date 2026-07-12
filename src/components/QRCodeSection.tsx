@@ -1,5 +1,5 @@
 import { useRef, useCallback } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import { SafeQR } from "@/components/SafeQR";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Download, Link2 } from "lucide-react";
