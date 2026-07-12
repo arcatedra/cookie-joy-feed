@@ -368,7 +368,10 @@ function SearchPage() {
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filtered.map((p) => (
+              {filtered.map((p) => {
+                const name = t(p.nameKey);
+                const deliveryDate = computeDeliveryDate(p.expressShipping, i18n.language);
+                return (
                 <li key={p.id} className="group flex flex-col overflow-hidden rounded-md border border-border bg-white transition hover:shadow-md">
                   <div className="relative aspect-square overflow-hidden bg-muted">
                     {p.badge && (
@@ -376,14 +379,14 @@ function SearchPage() {
                         {p.badge === "bestSeller" ? t("searchPage.bestSeller") : t("searchPage.deal")}
                       </span>
                     )}
-                    <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
+                    <img src={p.image} alt={name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
                   </div>
                   <div className="flex flex-1 flex-col gap-1.5 p-3">
                     <Link
                       to="/menu"
                       className="line-clamp-2 text-sm font-semibold text-[#1a0f0a] hover:text-amber-700 hover:underline"
                     >
-                      {p.name}
+                      {name}
                     </Link>
                     <div className="flex items-center gap-1.5">
                       <Stars value={p.rating} />
@@ -394,14 +397,14 @@ function SearchPage() {
                       {p.price.toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: p.deliveryDate })}</span>
+                      <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: deliveryDate })}</span>
                     </p>
                     {p.expressShipping && (
                       <p className="text-[11px] font-semibold text-emerald-700">{t("searchPage.expressAvailable")}</p>
                     )}
                     <button
                       type="button"
-                      onClick={() => gate.guard(() => cart.add({ id: p.id, name: p.name, price: p.price, image: p.image }))}
+                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, price: p.price, image: p.image }))}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
@@ -409,7 +412,8 @@ function SearchPage() {
                     </button>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           )}
         </section>
