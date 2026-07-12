@@ -183,7 +183,77 @@
 }
 
 /* AMOE form styles */
-.amoe-modal {
+.amoe-modal { position: relative; }
+.amoe-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s ease;
+}
+.amoe-close-btn:hover { background: #e2e8f0; }
+.amoe-info { padding: 40px 32px; }
+.amoe-info .amoe-header h2 { font-size: 22px; line-height: 1.3; }
+.amoe-intro {
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.65;
+  margin: 8px 0 20px;
+}
+.amoe-step {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.amoe-step h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px;
+  letter-spacing: 0.02em;
+}
+.amoe-step p {
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.65;
+  margin: 0 0 8px;
+}
+.amoe-step ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  color: #334155;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.amoe-step ul li { margin-bottom: 4px; }
+.amoe-address {
+  display: block;
+  background: #0f172a;
+  color: #fef3c7;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.amoe-modal-original {
   max-width: 650px;
   background: #ffffff;
   border-radius: 16px;
