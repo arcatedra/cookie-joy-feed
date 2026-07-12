@@ -30,6 +30,7 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as DomainsRouteImport } from './routes/domains'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as BuildPackRouteImport } from './routes/build-pack'
 import { Route as BestSellersRouteImport } from './routes/best-sellers'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AmoeRouteImport } from './routes/amoe'
@@ -193,6 +194,11 @@ const DomainsRoute = DomainsRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuildPackRoute = BuildPackRouteImport.update({
+  id: '/build-pack',
+  path: '/build-pack',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BestSellersRoute = BestSellersRouteImport.update({
@@ -533,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -614,6 +621,7 @@ export interface FileRoutesByTo {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -696,6 +704,7 @@ export interface FileRoutesById {
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
   '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -779,6 +788,7 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -860,6 +870,7 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -941,6 +952,7 @@ export interface FileRouteTypes {
     | '/amoe'
     | '/auth'
     | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -1024,6 +1036,7 @@ export interface RootRouteChildren {
   AmoeRoute: typeof AmoeRoute
   AuthRoute: typeof AuthRoute
   BestSellersRoute: typeof BestSellersRoute
+  BuildPackRoute: typeof BuildPackRoute
   CartRoute: typeof CartRoute
   DomainsRoute: typeof DomainsRoute
   DonateRoute: typeof DonateRoute
@@ -1217,6 +1230,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/build-pack': {
+      id: '/build-pack'
+      path: '/build-pack'
+      fullPath: '/build-pack'
+      preLoaderRoute: typeof BuildPackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/best-sellers': {
@@ -1747,6 +1767,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmoeRoute: AmoeRoute,
   AuthRoute: AuthRoute,
   BestSellersRoute: BestSellersRoute,
+  BuildPackRoute: BuildPackRoute,
   CartRoute: CartRoute,
   DomainsRoute: DomainsRoute,
   DonateRoute: DonateRoute,
