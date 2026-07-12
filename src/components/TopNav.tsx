@@ -47,7 +47,11 @@ export function TopNav() {
   const [acctOpen, setAcctOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const goSearch = () => { setSearchOpen(false); navigate({ to: "/search" }); };
+  const goSearch = (term?: string) => {
+    setSearchOpen(false);
+    const q = (term ?? searchVal).trim();
+    navigate({ to: "/search", search: q ? { q } : {} });
+  };
   const [searchVal, setSearchVal] = useState("");
   const [category, setCategory] = useState<(typeof categoryKeys)[number]>("all");
 
@@ -168,7 +172,7 @@ export function TopNav() {
 
               <button
                 type="button"
-                onClick={goSearch}
+                onClick={() => goSearch()}
                 aria-label={t("common.search")}
                 className="grid w-12 shrink-0 place-items-center bg-[#1f3a5f] text-white transition hover:bg-[#16294a]"
               >
@@ -185,7 +189,7 @@ export function TopNav() {
                   <li key={s}>
                     <button
                       type="button"
-                      onClick={() => { setSearchVal(s); goSearch(); }}
+                      onClick={() => { setSearchVal(s); goSearch(s); }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground hover:bg-amber-50"
                     >
                       <Search className="h-3.5 w-3.5 text-muted-foreground" />

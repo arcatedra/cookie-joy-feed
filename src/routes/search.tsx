@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Filter, Star, ShoppingCart, X } from "lucide-react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -19,7 +21,12 @@ import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
 import i18n from "@/i18n";
 
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/search")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: i18n.t("searchPage.metaTitle") },
@@ -64,6 +71,27 @@ const PRODUCTS: Product[] = [
 
 const CAT_KEYS: ("all" | Category)[] = ["all", "traditional", "filled", "healthy", "gift"];
 const ALLERGEN_KEYS: Allergen[] = ["glutenFree", "noSugar", "nuts", "belgian"];
+
+const PRODUCT_KEYWORDS: Record<string, string[]> = {
+  p1: ["chocolate", "chunk", "cocoa", "belgian"],
+  p2: ["snickerdoodle", "cinnamon", "sugar", "canela"],
+  p3: ["sugar", "vanilla", "azucar", "vainilla"],
+  p4: ["chocolate", "double", "mint", "menta", "cocoa", "belgian"],
+  p5: ["oatmeal", "raisin", "avena", "pasas", "healthy", "keto"],
+  p6: ["white", "chocolate", "macadamia", "nuts", "nueces", "blanco"],
+  p7: ["m&m", "mm", "chocolate", "candy", "colors"],
+  p8: ["peanut", "butter", "mantequilla", "cacahuate", "mani", "nuts"],
+  p9: ["vegan", "chocolate", "gluten", "sugar-free", "vegana", "sin azucar", "sin gluten"],
+  p10: ["mint", "menta", "crunch", "chocolate", "belgian"],
+  p11: ["pack", "gift", "box", "6", "regalo", "caja"],
+  p12: ["pack", "gift", "box", "9", "regalo", "caja"],
+  p13: ["pack", "gift", "box", "12", "regalo", "caja", "belgian"],
+};
+
+function normalize(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 
 const PRICE_RANGES: { key: string; min: number; max: number }[] = [
   { key: "u10", min: 0, max: 10 },
@@ -220,8 +248,10 @@ function FiltersPanel({
 
 function SearchPage() {
   const { t } = useTranslation();
+  const { q } = Route.useSearch();
   const cart = useCart();
   const gate = useSubscriptionGate();
+  const nq = normalize(q).trim();
   const [cat, setCat] = useState<"all" | Category>("all");
   const [minRating, setMinRating] = useState(0);
   const [allergens, setAllergens] = useState<Allergen[]>([]);
@@ -245,6 +275,20 @@ function SearchPage() {
 
   const filtered = useMemo(() => {
     let list = PRODUCTS.slice();
+    if (nq) {
+      const terms = nq.split(/\s+/).filter(Boolean);
+      list = list.filter((p) => {
+        const hay = normalize(
+          [
+            p.name,
+            t(`searchPage.cats.${p.category}`),
+            ...p.allergens.map((a) => t(`searchPage.allergens.${a}`)),
+            ...(PRODUCT_KEYWORDS[p.id] ?? []),
+          ].join(" "),
+        );
+        return terms.every((term) => hay.includes(term));
+      });
+    }
     if (cat !== "all") list = list.filter((p) => p.category === cat);
     if (minRating > 0) list = list.filter((p) => p.rating >= minRating);
     if (allergens.length) list = list.filter((p) => allergens.every((a) => p.allergens.includes(a)));
@@ -261,7 +305,7 @@ function SearchPage() {
       case "rating": list.sort((a, b) => b.rating - a.rating); break;
     }
     return list;
-  }, [cat, minRating, allergens, priceRange, customApplied, express, sort]);
+  }, [nq, cat, minRating, allergens, priceRange, customApplied, express, sort, t]);
 
   const filterProps = {
     cat, setCat, minRating, setMinRating, allergens, toggleAllergen,
@@ -279,10 +323,21 @@ function SearchPage() {
         <section className="min-w-0 flex-1">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm">
             <p className="text-foreground">
-              <span className="font-semibold">1-{filtered.length}</span>
-              {t("searchPage.resultsCountPre")}
-              <span className="font-semibold">{PRODUCTS.length}</span>
-              {t("searchPage.resultsCountPost")}
+              {q ? (
+                <>
+                  <span className="font-semibold">{filtered.length}</span>
+                  {t("searchPage.resultsCountPost")}
+                  {" — "}
+                  <span className="italic">"{q}"</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold">1-{filtered.length}</span>
+                  {t("searchPage.resultsCountPre")}
+                  <span className="font-semibold">{PRODUCTS.length}</span>
+                  {t("searchPage.resultsCountPost")}
+                </>
+              )}
             </p>
             <label className="flex items-center gap-2">
               <span className="text-xs font-semibold">{t("searchPage.sortBy")}</span>
@@ -301,7 +356,7 @@ function SearchPage() {
 
           {filtered.length === 0 ? (
             <div className="rounded-md border border-border bg-white p-10 text-center text-muted-foreground">
-              {t("searchPage.noMatches")}
+              {q ? `0 — "${q}". ${t("searchPage.noMatches")}` : t("searchPage.noMatches")}
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
