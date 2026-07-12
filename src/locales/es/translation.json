@@ -908,7 +908,7 @@
     "s4MailBody": " escribe a mano una tarjeta postal (no fotocopia) con tus datos completos más la frase \"FREE ENTRY HAZOREX SWEEPSTAKES [FECHA]\" y envíala por correo a: {{sponsor}}, AMOE Entry, {{address}}. Límite: 1 participación AMOE por persona por día. Máximo 3 participaciones por dirección IP por día.",
     "s5Title": "5. Premios y Valor Aproximado de Venta (ARV)",
     "s5BodyPre": "El premio diario es el Pozo de Premios acumulado para el día en USD, financiado por una porción de cada compra de Estrellas más el acumulado de pozos no reclamados. ",
-    "s5BodyBold": "Valor mínimo garantizado: $25 USD. Valor máximo del premio diario: ${{maxPrize}} USD.",
+    "s5BodyBold": "El premio equivale al 100% del pozo acumulado real. No existe un premio mínimo garantizado; si no hubo contribuciones pagadas, el premio del día puede ser $0.00. Valor máximo del premio diario: ${{maxPrize}} USD.",
     "s5BodyPost": " Cualquier cantidad por encima del límite se traslada automáticamente al pozo del día siguiente. No hay equivalente en efectivo más allá del monto del pozo. No transferible.",
     "s6Title": "6. Probabilidades de Ganar",
     "s6Body": "Las probabilidades dependen del número de participaciones elegibles recibidas para cada sorteo diario.",

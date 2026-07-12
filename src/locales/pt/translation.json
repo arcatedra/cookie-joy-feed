@@ -911,7 +911,7 @@
     "s4MailBody": " escreva à mão um cartão postal (sem fotocópia) com seus detalhes completos mais a frase \"ENTRADA GRATUITA SORTEIO HAZOREX [DATA]\" e envie para: {{sponsor}}, Entrada AMOE, {{address}}. Limite: 1 entrada AMOE por pessoa por dia. Máximo de 3 entradas por endereço IP por dia.",
     "s5Title": "5. Prêmios e Valor de Varejo Aproximado (ARV)",
     "s5BodyPre": "O prêmio diário é o Fundo de Prêmios acumulado para o dia em USD, financiado por uma porção de cada compra de Estrelas mais o acúmulo de fundos não reclamados. ",
-    "s5BodyBold": "Valor mínimo garantido: $25 USD. Valor máximo do prêmio diário: ${{maxPrize}} USD.",
+    "s5BodyBold": "O prêmio equivale a 100% do pool real acumulado. Não existe prêmio mínimo garantido; se não houver contribuições pagas, o prêmio do dia pode ser $0.00. Valor máximo do prêmio diário: ${{maxPrize}} USD.",
     "s5BodyPost": " Qualquer valor acima do teto é automaticamente transferido para o fundo do dia seguinte. Nenhum equivalente em dinheiro além do valor do fundo. Intransferível.",
     "s6Title": "6. Probabilidades de Ganhar",
     "s6Body": "As probabilidades dependem do número de inscrições elegíveis recebidas para cada sorteio diário.",

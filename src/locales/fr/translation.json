@@ -908,7 +908,7 @@
     "s4MailBody": "écrivez à la main sur une carte postale (pas de photocopie) vos coordonnées complètes plus la phrase \"FREE ENTRY HAZOREX SWEEPSTAKES [DATE]\" et envoyez-la à : {{sponsor}}, AMOE Entry, {{address}}. Limite : 1 participation AMOE par personne par jour. Maximum de 3 participations par adresse IP par jour.",
     "s5Title": "5. Prix et Valeur au Détail Approximative (VDA)",
     "s5BodyPre": "Le prix quotidien est la Cagnotte accumulée pour la journée en USD, financée par une partie de chaque achat d'Étoiles plus le report des cagnottes non réclamées. ",
-    "s5BodyBold": "Valeur minimale garantie : 25 $ USD. Valeur maximale du prix quotidien : ${{maxPrize}} $ USD.",
+    "s5BodyBold": "Le prix correspond à 100 % de la cagnotte réellement accumulée. Il n'existe pas de prix minimum garanti ; en l'absence de contributions payantes, le prix du jour peut être 0,00 $. Valeur maximale du prix quotidien : ${{maxPrize}} USD.",
     "s5BodyPost": " Tout montant dépassant le plafond est automatiquement reporté dans la cagnotte du jour suivant. Aucun équivalent en espèces au-delà du montant de la cagnotte. Non transférable.",
     "s6Title": "6. Chances de Gagner",
     "s6Body": "Les chances dépendent du nombre de participations éligibles reçues pour chaque tirage quotidien.",
