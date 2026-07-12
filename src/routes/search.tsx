@@ -305,7 +305,7 @@ function SearchPage() {
       case "rating": list.sort((a, b) => b.rating - a.rating); break;
     }
     return list;
-  }, [cat, minRating, allergens, priceRange, customApplied, express, sort]);
+  }, [nq, cat, minRating, allergens, priceRange, customApplied, express, sort, t]);
 
   const filterProps = {
     cat, setCat, minRating, setMinRating, allergens, toggleAllergen,
