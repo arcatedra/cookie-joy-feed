@@ -28,8 +28,9 @@ const quickLinkKeys = [
   { key: "drivers", to: "/repartidores", highlighted: true },
   { key: "businesses", to: "/negocios/registro", highlighted: true },
   { key: "deals", to: "/explore" },
-  { key: "bestSellers", to: "/menu" },
-  { key: "buildPack", to: "/menu" },
+  { key: "bestSellers", to: "/best-sellers" },
+  { key: "buildPack", to: "/build-pack" },
+
   { key: "support", to: "/support" },
   { key: "subscriptions", to: "/subscribe" },
 ] as const;

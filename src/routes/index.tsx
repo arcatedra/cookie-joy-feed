@@ -354,9 +354,9 @@ function BuildPackCard() {
   return (
     <CardShell
       title={t("home.cards.buildPackTitle")}
-      link={{ to: "/menu", label: t("home.cards.buildPackLink") }}
+      link={{ to: "/build-pack", label: t("home.cards.buildPackLink") }}
     >
-      <Link to="/menu" className="block">
+      <Link to="/build-pack" className="block">
         <div className="aspect-[4/3] overflow-hidden rounded-sm bg-[#f7f7f7]">
           <img
             src={imgBox}
@@ -367,7 +367,8 @@ function BuildPackCard() {
         </div>
       </Link>
       <Link
-        to="/menu"
+        to="/build-pack"
+
         className="mt-3 inline-flex w-full items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
       >
         {t("home.cards.buildPackCta")}

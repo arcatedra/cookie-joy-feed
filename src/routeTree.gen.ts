@@ -30,6 +30,8 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as DomainsRouteImport } from './routes/domains'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as BuildPackRouteImport } from './routes/build-pack'
+import { Route as BestSellersRouteImport } from './routes/best-sellers'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AmoeRouteImport } from './routes/amoe'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -192,6 +194,16 @@ const DomainsRoute = DomainsRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuildPackRoute = BuildPackRouteImport.update({
+  id: '/build-pack',
+  path: '/build-pack',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BestSellersRoute = BestSellersRouteImport.update({
+  id: '/best-sellers',
+  path: '/best-sellers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -526,6 +538,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
+  '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -606,6 +620,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
+  '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -687,6 +703,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/amoe': typeof AmoeRoute
   '/auth': typeof AuthRoute
+  '/best-sellers': typeof BestSellersRoute
+  '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
@@ -769,6 +787,8 @@ export interface FileRouteTypes {
     | '/'
     | '/amoe'
     | '/auth'
+    | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -849,6 +869,8 @@ export interface FileRouteTypes {
     | '/'
     | '/amoe'
     | '/auth'
+    | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -929,6 +951,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/amoe'
     | '/auth'
+    | '/best-sellers'
+    | '/build-pack'
     | '/cart'
     | '/domains'
     | '/donate'
@@ -1011,6 +1035,8 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AmoeRoute: typeof AmoeRoute
   AuthRoute: typeof AuthRoute
+  BestSellersRoute: typeof BestSellersRoute
+  BuildPackRoute: typeof BuildPackRoute
   CartRoute: typeof CartRoute
   DomainsRoute: typeof DomainsRoute
   DonateRoute: typeof DonateRoute
@@ -1204,6 +1230,20 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/build-pack': {
+      id: '/build-pack'
+      path: '/build-pack'
+      fullPath: '/build-pack'
+      preLoaderRoute: typeof BuildPackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/best-sellers': {
+      id: '/best-sellers'
+      path: '/best-sellers'
+      fullPath: '/best-sellers'
+      preLoaderRoute: typeof BestSellersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1726,6 +1766,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AmoeRoute: AmoeRoute,
   AuthRoute: AuthRoute,
+  BestSellersRoute: BestSellersRoute,
+  BuildPackRoute: BuildPackRoute,
   CartRoute: CartRoute,
   DomainsRoute: DomainsRoute,
   DonateRoute: DonateRoute,
