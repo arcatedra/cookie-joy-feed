@@ -280,10 +280,48 @@ function AuthPage() {
             HAZOREX
           </span>
         </div>
+        {mfaChallenge ? (
+          <div>
+            <h1 className="text-2xl font-bold text-foreground text-center">Verificación en dos pasos</h1>
+            <p className="mt-1 text-sm text-muted-foreground text-center">
+              Ingresa el código de 6 dígitos de tu app autenticadora.
+            </p>
+            <form onSubmit={onSubmitMfa} className="mt-5 space-y-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="\d{6}"
+                maxLength={6}
+                required
+                autoFocus
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ""))}
+                placeholder="••••••"
+                className="w-full rounded-xl border border-input bg-card px-4 py-3 text-center text-xl tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                type="submit"
+                disabled={busy || mfaCode.length !== 6}
+                className="w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow disabled:opacity-60"
+              >
+                Verificar
+              </button>
+              <button
+                type="button"
+                onClick={cancelMfa}
+                className="w-full text-xs text-muted-foreground hover:text-foreground"
+              >
+                Cancelar e iniciar sesión con otra cuenta
+              </button>
+            </form>
+          </div>
+        ) : (<>
         <h1 className="text-2xl font-bold text-foreground text-center">
           {mode === "signin" ? t("auth.signInTitle") : t("auth.signUpTitle")}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground text-center">{t("auth.subtitle")}</p>
+
 
         <button
           type="button"
