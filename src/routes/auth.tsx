@@ -310,9 +310,26 @@ function AuthPage() {
               </span>
             </label>
           )}
+          {mode === "signin" && requireCaptcha && turnstileSiteKey && (
+            <div className="pt-1">
+              <p className="mb-2 text-[11px] text-muted-foreground text-center">
+                Verifica que no eres un robot para continuar.
+              </p>
+              <TurnstileWidget
+                siteKey={turnstileSiteKey}
+                onToken={(t) => setCaptchaToken(t)}
+                onExpire={() => setCaptchaToken(null)}
+              />
+            </div>
+          )}
           <button
             type="submit"
-            disabled={busy || (mode === "signup" && !acceptedTerms)}
+            disabled={
+              busy ||
+              (mode === "signup" && !acceptedTerms) ||
+              (mode === "signin" && requireCaptcha && !captchaToken) ||
+              (lockedUntil !== null && Date.now() < lockedUntil)
+            }
             className="w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow active:scale-95 transition disabled:opacity-60"
           >
             {mode === "signin" ? t("auth.signIn") : t("auth.signUp")}
