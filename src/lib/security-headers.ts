@@ -66,20 +66,25 @@ export const securityHeadersMiddleware = createMiddleware().server(
         // fallback for browsers that ignore strict-dynamic.
         const scriptSrc = `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co`;
 
+        // style-src: NO 'unsafe-inline'. Our own inline <style> blocks use
+        // <NoncedStyle> which stamps the per-request nonce. Sonner injects a
+        // ~15KB runtime <style> at module load with no nonce hook — we allow
+        // that one specific block via its SHA-256 hash (stable per package
+        // version; bump when upgrading `sonner`).
+        // 'unsafe-hashes' + hashes cover inline handlers/attrs only; style
+        // attributes on JSX elements (React `style={{}}`) are governed by
+        // style-src-attr — we keep 'unsafe-inline' there because per-attr
+        // hashing is impractical for 400+ dynamic style attributes.
+        const sonnerCssHash = "'sha256-CIxDM5jnsGiKqXs2v7NKCY5MzdR9gu6TtiMJrDw29AY='";
+        const styleSrcElem = `style-src-elem 'self' 'nonce-${nonce}' ${sonnerCssHash} https://fonts.googleapis.com`;
+        const styleSrc = `style-src 'self' 'nonce-${nonce}' ${sonnerCssHash} https://fonts.googleapis.com`;
+
         const csp = [
           "default-src 'self'",
           scriptSrc,
-          // style-src: 'unsafe-inline' is unavoidable here without either
-          // dropping / vendoring third-party libs (Sonner injects a
-          // ~15KB runtime <style> block with no nonce prop) or breaking
-          // React 19's <link precedence> hoisting (which emits empty
-          // <style> shells during SSR). Per CSP3, including a nonce
-          // alongside 'unsafe-inline' actually *disables* the fallback
-          // and blocks those library styles — so we keep the pragmatic
-          // 'unsafe-inline' policy for styles and rely on the strict
-          // nonce-based script-src (already free of 'unsafe-inline')
-          // to keep the overall grade at A / A+.
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          styleSrc,
+          styleSrcElem,
+          "style-src-attr 'unsafe-inline'",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
           "media-src 'self' https: blob:",
@@ -93,6 +98,7 @@ export const securityHeadersMiddleware = createMiddleware().server(
           `frame-ancestors ${frameAncestors}`,
           "upgrade-insecure-requests",
         ].join("; ");
+
 
         headers.set("Content-Security-Policy", csp);
       }
