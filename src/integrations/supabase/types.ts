@@ -1457,6 +1457,30 @@ export type Database = {
         }
         Relationships: []
       }
+      login_attempts: {
+        Row: {
+          created_at: string
+          email_hash: string
+          id: string
+          ip: string | null
+          success: boolean
+        }
+        Insert: {
+          created_at?: string
+          email_hash: string
+          id?: string
+          ip?: string | null
+          success?: boolean
+        }
+        Update: {
+          created_at?: string
+          email_hash?: string
+          id?: string
+          ip?: string | null
+          success?: boolean
+        }
+        Relationships: []
+      }
       mission_claims: {
         Row: {
           created_at: string
@@ -3101,6 +3125,14 @@ export type Database = {
         Returns: string
       }
       audit_missed_draws: { Args: never; Returns: undefined }
+      check_login_rate_limit: {
+        Args: { _email_hash: string; _ip: string }
+        Returns: {
+          blocked: boolean
+          fail_count: number
+          retry_after_sec: number
+        }[]
+      }
       close_draws_for_cutoff: { Args: never; Returns: number }
       complete_driver_payout: {
         Args: { p_payout_id: string; p_stripe_payout_id: string }
@@ -3392,6 +3424,10 @@ export type Database = {
           msg_id: number
           read_ct: number
         }[]
+      }
+      record_login_attempt: {
+        Args: { _email_hash: string; _ip: string; _success: boolean }
+        Returns: undefined
       }
       reel_comment_counts: {
         Args: { reel_ids: string[] }
