@@ -76,11 +76,27 @@ function AuthPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const validatePassword = (pw: string): string | null => {
+    if (pw.length < 12) return "La contraseña debe tener al menos 12 caracteres.";
+    if (!/[A-Z]/.test(pw)) return "Incluye al menos una letra mayúscula.";
+    if (!/[a-z]/.test(pw)) return "Incluye al menos una letra minúscula.";
+    if (!/[0-9]/.test(pw)) return "Incluye al menos un número.";
+    if (!/[^A-Za-z0-9]/.test(pw)) return "Incluye al menos un carácter especial (ej. !@#$%).";
+    return null;
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === "signup" && !acceptedTerms) {
       toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
       return;
+    }
+    if (mode === "signup") {
+      const pwError = validatePassword(password);
+      if (pwError) {
+        toast.error(pwError);
+        return;
+      }
     }
     setBusy(true);
     try {
@@ -200,12 +216,19 @@ function AuthPage() {
           <input
             type="password"
             required
-            minLength={6}
+            minLength={mode === "signup" ? 12 : 6}
+            pattern={mode === "signup" ? "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}" : undefined}
+            title={mode === "signup" ? "Mínimo 12 caracteres, con mayúscula, minúscula, número y carácter especial." : undefined}
             placeholder={t("auth.password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {mode === "signup" && (
+            <p className="text-[11px] text-muted-foreground -mt-1 px-1">
+              Mínimo 12 caracteres, con mayúscula, minúscula, número y carácter especial.
+            </p>
+          )}
           {mode === "signup" && (
             <label className="flex items-start gap-2 rounded-xl border border-input bg-card p-3 text-xs text-foreground cursor-pointer">
               <input
