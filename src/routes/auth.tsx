@@ -7,6 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { HazorexSymbol } from "@/components/HazorexLogo";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
+import {
+  getLoginSecurityConfig,
+  preflightLogin,
+  finalizeLoginAttempt,
+} from "@/lib/login-security.functions";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
@@ -34,8 +40,19 @@ function AuthPage() {
   const [region, setRegion] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [failCount, setFailCount] = useState(0);
+  const [requireCaptcha, setRequireCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string>("");
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
 
   const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
+
+  useEffect(() => {
+    getLoginSecurityConfig()
+      .then((c) => setTurnstileSiteKey(c.turnstileSiteKey ?? ""))
+      .catch(() => setTurnstileSiteKey(""));
+  }, []);
 
   const resolveRoleTarget = async (fallback: string): Promise<string> => {
     // Respect explicit redirect param when provided.
@@ -98,6 +115,11 @@ function AuthPage() {
         return;
       }
     }
+    if (lockedUntil && Date.now() < lockedUntil) {
+      const sec = Math.ceil((lockedUntil - Date.now()) / 1000);
+      toast.error(`Demasiados intentos. Vuelve a intentarlo en ~${Math.ceil(sec / 60)} min.`);
+      return;
+    }
     setBusy(true);
     try {
       if (mode === "signup") {
@@ -112,8 +134,49 @@ function AuthPage() {
         if (error) throw error;
         toast.success(t("auth.checkEmail"));
       } else {
+        // Pre-flight: rate-limit + captcha verification server-side.
+        const pre = await preflightLogin({
+          data: { email, captchaToken: captchaToken ?? undefined },
+        });
+        if (pre.blocked) {
+          const until = Date.now() + Math.max(pre.retryAfterSec, 60) * 1000;
+          setLockedUntil(until);
+          toast.error(
+            `Demasiados intentos fallidos. Cuenta bloqueada temporalmente por ~${Math.ceil(
+              pre.retryAfterSec / 60,
+            )} min.`,
+          );
+          return;
+        }
+        if (pre.requireCaptcha && !pre.ok) {
+          setRequireCaptcha(true);
+          setCaptchaToken(null);
+          toast.error("Completa la verificación anti-bot para continuar.");
+          return;
+        }
+        setRequireCaptcha(pre.requireCaptcha);
+
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const success = !error;
+
+        // Record the outcome (fire-and-forget style, but await to keep state consistent).
+        try {
+          await finalizeLoginAttempt({ data: { email, success } });
+        } catch {
+          /* noop */
+        }
+
+        if (error) {
+          const newCount = failCount + 1;
+          setFailCount(newCount);
+          setCaptchaToken(null);
+          if (newCount >= 2) setRequireCaptcha(true);
+          throw error;
+        }
+
+        setFailCount(0);
+        setRequireCaptcha(false);
+        setCaptchaToken(null);
         const to = await resolveRoleTarget(redirectTarget);
         navigate({ to });
       }
@@ -247,9 +310,26 @@ function AuthPage() {
               </span>
             </label>
           )}
+          {mode === "signin" && requireCaptcha && turnstileSiteKey && (
+            <div className="pt-1">
+              <p className="mb-2 text-[11px] text-muted-foreground text-center">
+                Verifica que no eres un robot para continuar.
+              </p>
+              <TurnstileWidget
+                siteKey={turnstileSiteKey}
+                onToken={(t) => setCaptchaToken(t)}
+                onExpire={() => setCaptchaToken(null)}
+              />
+            </div>
+          )}
           <button
             type="submit"
-            disabled={busy || (mode === "signup" && !acceptedTerms)}
+            disabled={
+              busy ||
+              (mode === "signup" && !acceptedTerms) ||
+              (mode === "signin" && requireCaptcha && !captchaToken) ||
+              (lockedUntil !== null && Date.now() < lockedUntil)
+            }
             className="w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow active:scale-95 transition disabled:opacity-60"
           >
             {mode === "signin" ? t("auth.signIn") : t("auth.signUp")}
