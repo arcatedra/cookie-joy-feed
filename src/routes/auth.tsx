@@ -180,8 +180,30 @@ function AuthPage() {
         setFailCount(0);
         setRequireCaptcha(false);
         setCaptchaToken(null);
+
+        // If the account has TOTP 2FA enabled, require the code before continuing.
+        try {
+          const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+          if (aal && aal.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+            const { data: fList } = await supabase.auth.mfa.listFactors();
+            const totp = (fList?.totp ?? []).find((f) => f.status === "verified");
+            if (totp) {
+              const { data: chal, error: chalErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
+              if (chalErr) throw chalErr;
+              setMfaChallenge({ factorId: totp.id, challengeId: chal.id });
+              toast.message("Ingresa el código de 6 dígitos de tu app autenticadora.");
+              return;
+            }
+          }
+        } catch (mfaErr) {
+          toast.error(mfaErr instanceof Error ? mfaErr.message : "Error verificando 2FA");
+          await supabase.auth.signOut();
+          return;
+        }
+
         const to = await resolveRoleTarget(redirectTarget);
         navigate({ to });
+
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error");
