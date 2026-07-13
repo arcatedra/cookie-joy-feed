@@ -9,6 +9,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,6 +19,26 @@ import appleTouchAsset from "@/assets/hazorex-apple-touch.png.asset.json";
 import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
+import { CspNonceProvider } from "@/lib/csp-nonce-context";
+import { getCspNonce } from "@/lib/csp-nonce";
+
+/**
+ * Read the per-request CSP nonce. On the server it comes from
+ * AsyncLocalStorage seeded by the security-headers middleware. On the
+ * client we read it from the `<meta name="csp-nonce">` tag that RootShell
+ * emits during SSR so post-hydration renders of inline `<style>` blocks
+ * still carry the correct nonce.
+ */
+const readCspNonce = createIsomorphicFn()
+  .client((): string | undefined => {
+    if (typeof document === "undefined") return undefined;
+    return (
+      document
+        .querySelector('meta[name="csp-nonce"]')
+        ?.getAttribute("content") ?? undefined
+    );
+  })
+  .server((): string | undefined => getCspNonce());
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { SubscriptionGateProvider } from "@/lib/subscription-gate";
