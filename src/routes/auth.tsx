@@ -7,6 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { HazorexSymbol } from "@/components/HazorexLogo";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
+import {
+  getLoginSecurityConfig,
+  preflightLogin,
+  finalizeLoginAttempt,
+} from "@/lib/login-security.functions";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
