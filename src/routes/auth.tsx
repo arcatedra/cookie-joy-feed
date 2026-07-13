@@ -214,6 +214,39 @@ function AuthPage() {
     }
   };
 
+  const onSubmitMfa = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mfaChallenge) return;
+    if (!/^\d{6}$/.test(mfaCode.trim())) {
+      toast.error("Ingresa el código de 6 dígitos.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.mfa.verify({
+        factorId: mfaChallenge.factorId,
+        challengeId: mfaChallenge.challengeId,
+        code: mfaCode.trim(),
+      });
+      if (error) throw error;
+      setMfaChallenge(null);
+      setMfaCode("");
+      const to = await resolveRoleTarget(redirectTarget);
+      navigate({ to });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Código inválido");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cancelMfa = async () => {
+    await supabase.auth.signOut();
+    setMfaChallenge(null);
+    setMfaCode("");
+  };
+
+
   const onGoogle = async () => {
     if (mode === "signup" && !acceptedTerms) {
       toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
