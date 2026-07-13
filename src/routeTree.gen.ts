@@ -38,6 +38,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
+import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
 import { Route as JoinCodeRouteImport } from './routes/join.$code'
@@ -234,6 +235,11 @@ const ReelReelIdRoute = ReelReelIdRouteImport.update({
   id: '/reel/$reelId',
   path: '/reel/$reelId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileSecurityRoute = ProfileSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => ProfileRoute,
 } as any)
 const ProductHandleRoute = ProductHandleRouteImport.update({
   id: '/product/$handle',
@@ -548,7 +554,7 @@ export interface FileRoutesByFullPath {
   '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -571,6 +577,7 @@ export interface FileRoutesByFullPath {
   '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -630,7 +637,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -652,6 +659,7 @@ export interface FileRoutesByTo {
   '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -713,7 +721,7 @@ export interface FileRoutesById {
   '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/repartidores': typeof RepartidoresRoute
   '/ruleta': typeof RuletaRoute
   '/search': typeof SearchRoute
@@ -736,6 +744,7 @@ export interface FileRoutesById {
   '/join/$code': typeof JoinCodeRoute
   '/negocios/registro': typeof NegociosRegistroRoute
   '/product/$handle': typeof ProductHandleRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -820,6 +829,7 @@ export interface FileRouteTypes {
     | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
+    | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/admin/deliveries'
@@ -901,6 +911,7 @@ export interface FileRouteTypes {
     | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
+    | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/admin/deliveries'
@@ -984,6 +995,7 @@ export interface FileRouteTypes {
     | '/join/$code'
     | '/negocios/registro'
     | '/product/$handle'
+    | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
     | '/_authenticated/admin/deliveries'
@@ -1045,7 +1057,7 @@ export interface RootRouteChildren {
   JoinRoute: typeof JoinRouteWithChildren
   MenuRoute: typeof MenuRoute
   PrivacidadRoute: typeof PrivacidadRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   RepartidoresRoute: typeof RepartidoresRoute
   RuletaRoute: typeof RuletaRoute
   SearchRoute: typeof SearchRoute
@@ -1287,6 +1299,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/reel/$reelId'
       preLoaderRoute: typeof ReelReelIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/profile/security': {
+      id: '/profile/security'
+      path: '/security'
+      fullPath: '/profile/security'
+      preLoaderRoute: typeof ProfileSecurityRouteImport
+      parentRoute: typeof ProfileRoute
     }
     '/product/$handle': {
       id: '/product/$handle'
@@ -1750,6 +1769,17 @@ const JoinRouteChildren: JoinRouteChildren = {
 
 const JoinRouteWithChildren = JoinRoute._addFileChildren(JoinRouteChildren)
 
+interface ProfileRouteChildren {
+  ProfileSecurityRoute: typeof ProfileSecurityRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileSecurityRoute: ProfileSecurityRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
 interface AdminSweepstakesRouteChildren {
   AdminSweepstakesWinnersRoute: typeof AdminSweepstakesWinnersRoute
 }
@@ -1776,7 +1806,7 @@ const rootRouteChildren: RootRouteChildren = {
   JoinRoute: JoinRouteWithChildren,
   MenuRoute: MenuRoute,
   PrivacidadRoute: PrivacidadRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   RepartidoresRoute: RepartidoresRoute,
   RuletaRoute: RuletaRoute,
   SearchRoute: SearchRoute,

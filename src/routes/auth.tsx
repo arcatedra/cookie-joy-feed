@@ -45,6 +45,9 @@ function AuthPage() {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [turnstileSiteKey, setTurnstileSiteKey] = useState<string>("");
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [mfaChallenge, setMfaChallenge] = useState<{ factorId: string; challengeId: string } | null>(null);
+  const [mfaCode, setMfaCode] = useState("");
+
 
   const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
 
@@ -83,6 +86,7 @@ function AuthPage() {
 
   useEffect(() => {
     if (!user) return;
+    if (mfaChallenge) return; // waiting for TOTP code
     let cancelled = false;
     resolveRoleTarget(redirectTarget).then((to) => {
       if (!cancelled) navigate({ to });
@@ -91,7 +95,8 @@ function AuthPage() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, mfaChallenge]);
+
 
   const validatePassword = (pw: string): string | null => {
     if (pw.length < 12) return "La contraseña debe tener al menos 12 caracteres.";
@@ -177,8 +182,30 @@ function AuthPage() {
         setFailCount(0);
         setRequireCaptcha(false);
         setCaptchaToken(null);
+
+        // If the account has TOTP 2FA enabled, require the code before continuing.
+        try {
+          const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+          if (aal && aal.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+            const { data: fList } = await supabase.auth.mfa.listFactors();
+            const totp = (fList?.totp ?? []).find((f) => f.status === "verified");
+            if (totp) {
+              const { data: chal, error: chalErr } = await supabase.auth.mfa.challenge({ factorId: totp.id });
+              if (chalErr) throw chalErr;
+              setMfaChallenge({ factorId: totp.id, challengeId: chal.id });
+              toast.message("Ingresa el código de 6 dígitos de tu app autenticadora.");
+              return;
+            }
+          }
+        } catch (mfaErr) {
+          toast.error(mfaErr instanceof Error ? mfaErr.message : "Error verificando 2FA");
+          await supabase.auth.signOut();
+          return;
+        }
+
         const to = await resolveRoleTarget(redirectTarget);
         navigate({ to });
+
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error");
@@ -186,6 +213,39 @@ function AuthPage() {
       setBusy(false);
     }
   };
+
+  const onSubmitMfa = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mfaChallenge) return;
+    if (!/^\d{6}$/.test(mfaCode.trim())) {
+      toast.error("Ingresa el código de 6 dígitos.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.mfa.verify({
+        factorId: mfaChallenge.factorId,
+        challengeId: mfaChallenge.challengeId,
+        code: mfaCode.trim(),
+      });
+      if (error) throw error;
+      setMfaChallenge(null);
+      setMfaCode("");
+      const to = await resolveRoleTarget(redirectTarget);
+      navigate({ to });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Código inválido");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cancelMfa = async () => {
+    await supabase.auth.signOut();
+    setMfaChallenge(null);
+    setMfaCode("");
+  };
+
 
   const onGoogle = async () => {
     if (mode === "signup" && !acceptedTerms) {
@@ -220,10 +280,48 @@ function AuthPage() {
             HAZOREX
           </span>
         </div>
+        {mfaChallenge ? (
+          <div>
+            <h1 className="text-2xl font-bold text-foreground text-center">Verificación en dos pasos</h1>
+            <p className="mt-1 text-sm text-muted-foreground text-center">
+              Ingresa el código de 6 dígitos de tu app autenticadora.
+            </p>
+            <form onSubmit={onSubmitMfa} className="mt-5 space-y-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="\d{6}"
+                maxLength={6}
+                required
+                autoFocus
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ""))}
+                placeholder="••••••"
+                className="w-full rounded-xl border border-input bg-card px-4 py-3 text-center text-xl tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                type="submit"
+                disabled={busy || mfaCode.length !== 6}
+                className="w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground shadow disabled:opacity-60"
+              >
+                Verificar
+              </button>
+              <button
+                type="button"
+                onClick={cancelMfa}
+                className="w-full text-xs text-muted-foreground hover:text-foreground"
+              >
+                Cancelar e iniciar sesión con otra cuenta
+              </button>
+            </form>
+          </div>
+        ) : (<>
         <h1 className="text-2xl font-bold text-foreground text-center">
           {mode === "signin" ? t("auth.signInTitle") : t("auth.signUpTitle")}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground text-center">{t("auth.subtitle")}</p>
+
 
         <button
           type="button"
@@ -343,7 +441,9 @@ function AuthPage() {
         >
           {mode === "signin" ? t("auth.noAccount") : t("auth.haveAccount")}
         </button>
+        </>)}
       </div>
+
     </main>
   );
 }

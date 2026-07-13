@@ -374,7 +374,8 @@
       "favorites": "Favoritos",
       "payment": "Métodos de pago",
       "general": "Ajustes generales",
-      "help": "Ayuda y soporte"
+      "help": "Ayuda y soporte",
+      "security": "Seguridad y 2FA"
     },
     "qr": {
       "title": "Tu código QR",
