@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import {
   Settings,
   Heart,
@@ -58,15 +59,50 @@ const menuItems = [
 
 function ProfilePage() {
   const { t, i18n } = useTranslation();
-  const { user, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
   const { deliveryStatus } = useSubscriptionGate();
   const [sheet, setSheet] = useState<string | null>(null);
-  
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate({ to: "/auth", search: { redirect: "/profile" } });
+    }
+  }, [loading, user, navigate]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen grid place-items-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="min-h-screen grid place-items-center bg-background px-6">
+        <div className="text-center max-w-sm">
+          <h1 className="text-xl font-bold text-foreground">{t("auth.signIn")}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {t("auth.signInRequired", { defaultValue: "Inicia sesión para ver tu perfil." })}
+          </p>
+          <Link
+            to="/auth"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-primary-foreground shadow"
+          >
+            <LogIn className="h-4 w-4" /> {t("auth.signIn")}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   const displayName =
-    (user?.user_metadata?.name as string | undefined) ??
-    (user?.user_metadata?.full_name as string | undefined) ??
-    user?.email?.split("@")[0] ??
-    "Alex R.";
+    (user.user_metadata?.name as string | undefined) ??
+    (user.user_metadata?.full_name as string | undefined) ??
+    user.email?.split("@")[0] ??
+    t("profile.title");
+
 
   return (
     <main className="profile-page min-h-screen bg-background pb-24">
