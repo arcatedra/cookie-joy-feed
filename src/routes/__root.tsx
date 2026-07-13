@@ -158,6 +158,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const nonce = readCspNonce();
   // /repartidor and /repartidor/* use their own DriverLayout. /repartidores (marketing) keeps store chrome.
   const isDriverZone =
     pathname === "/repartidor" || pathname.startsWith("/repartidor/");
@@ -182,7 +183,8 @@ function RootComponent() {
               {!isDriverZone && <SiteFooter />}
             </div>
             {!isDriverZone && <PushNotificationOptIn />}
-            <Toaster position="top-center" richColors />
+            {/* Sonner injects a runtime <style> block — passing `nonce` lets it pass CSP. */}
+            <Toaster position="top-center" richColors {...(nonce ? { nonce } : {})} />
           </CartProvider>
         </SubscriptionGateProvider>
       </AuthProvider>
