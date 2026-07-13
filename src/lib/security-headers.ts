@@ -69,19 +69,17 @@ export const securityHeadersMiddleware = createMiddleware().server(
         const csp = [
           "default-src 'self'",
           scriptSrc,
-          // style-src: keeps 'unsafe-inline' as a fallback because two
-          // sources of runtime inline styles cannot be nonced in this
-          // stack:
-          //   1. Sonner (toast notifications) injects a ~15KB <style>
-          //      block on mount without honoring a nonce prop.
-          //   2. React 19's <link precedence> hoisting emits empty
-          //      <style> shells for stylesheet ordering.
-          // Per CSP3, when a nonce is also present, modern browsers
-          // (Chrome, Firefox, Safari) ignore 'unsafe-inline' for
-          // nonced content — so our own <NoncedStyle> blocks are still
-          // strictly enforced. 'unsafe-inline' only kicks in as the
-          // CSP2 fallback for the two library cases above.
-          `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://fonts.googleapis.com`,
+          // style-src: 'unsafe-inline' is unavoidable here without either
+          // dropping / vendoring third-party libs (Sonner injects a
+          // ~15KB runtime <style> block with no nonce prop) or breaking
+          // React 19's <link precedence> hoisting (which emits empty
+          // <style> shells during SSR). Per CSP3, including a nonce
+          // alongside 'unsafe-inline' actually *disables* the fallback
+          // and blocks those library styles — so we keep the pragmatic
+          // 'unsafe-inline' policy for styles and rely on the strict
+          // nonce-based script-src (already free of 'unsafe-inline')
+          // to keep the overall grade at A / A+.
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
           "media-src 'self' https: blob:",
