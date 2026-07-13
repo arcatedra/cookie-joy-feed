@@ -88,6 +88,18 @@ export const securityHeadersMiddleware = createMiddleware().server(
           scriptSrc,
           styleSrc,
           styleSrcElem,
+          // style-src-attr: documented exception. React + Radix/shadcn (Progress,
+          // Sidebar, Sheet, Chart, Tooltip, Popover, Select, Dialog), Embla
+          // Carousel, Sonner toast positioning, Recharts and 600+ project
+          // `style={{}}` attributes emit per-attribute inline styles at runtime
+          // with dynamic values (transforms, widths, offsets, colors from theme
+          // tokens) that cannot be pre-hashed and have no nonce hook. This
+          // directive governs ATTRIBUTES ONLY — <style> elements remain locked
+          // down via style-src / style-src-elem above (nonce + specific
+          // hashes, no unsafe-inline). securityheaders.com does not penalize
+          // style-src-attr 'unsafe-inline'; A+ rating is preserved. To remove
+          // this in the future, every `style={{}}` in JSX and each of those
+          // libraries would need to be replaced with class-based styling.
           "style-src-attr 'unsafe-inline'",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
