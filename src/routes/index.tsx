@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n";
-import { ChevronLeft, ChevronRight, Star, Plus, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
@@ -286,7 +286,7 @@ function CategoryCardGrid() {
         <BestSellersCard />
         <BuildPackCard />
         <SubscriptionCard />
-        <FlashDealCard />
+        <FeaturedCard />
       </div>
     </div>
   );
@@ -410,31 +410,15 @@ function SubscriptionCard() {
   );
 }
 
-function useCountdown(targetMs: number) {
-  const [now, setNow] = useState<number>(() => targetMs);
-  useEffect(() => {
-    setNow(Date.now());
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
-  const diff = Math.max(0, targetMs - now);
-  const h = Math.floor(diff / 3_600_000);
-  const m = Math.floor((diff % 3_600_000) / 60_000);
-  const s = Math.floor((diff % 60_000) / 1000);
-  return { h, m, s };
-}
-
-function FlashDealCard() {
+// Honest featured card. Replaces the previous "Flash Deal" card, which showed
+// a hardcoded countdown ("Termina en HH:MM:SS") and a fake "% reclamado"
+// progress bar with no real inventory or expiry backing them — classic
+// false-urgency dark pattern. Removed to comply with consumer-protection
+// expectations. If a real, time-boxed promo is launched later, drive both
+// the end date and the units-sold count from the database before showing
+// any countdown or claim percentage.
+function FeaturedCard() {
   const { t } = useTranslation();
-  // Stable midnight-based target (avoids hydration mismatch)
-  const target = useMemo(() => {
-    const t = new Date();
-    t.setHours(23, 59, 59, 0);
-    return t.getTime();
-  }, []);
-  const { h, m, s } = useCountdown(target);
-  const stockPct = 38;
-  const time = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   return (
     <CardShell
       title={t("home.cards.flashTitle")}
@@ -449,26 +433,12 @@ function FlashDealCard() {
             <p className="line-clamp-2 text-xs font-semibold text-[#1a0f0a]">
               {t("home.cards.flashProduct")}
             </p>
-            <div className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-lg font-extrabold text-[#b12704]">$19.99</span>
-              <span className="text-[11px] text-[#888] line-through">$28.00</span>
-            </div>
-            <span className="mt-1 inline-block rounded-sm bg-[#cc0c39] px-1.5 py-0.5 text-[10px] font-bold text-white">
-              -29%
-            </span>
+            <p className="mt-2 text-[11px] text-[#555]">
+              {t("home.cards.flashLink")}
+            </p>
           </div>
         </div>
       </Link>
-      <div className="mt-3">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#eee]">
-          <div className="h-full rounded-full bg-[#cc0c39]" style={{ width: `${stockPct}%` }} />
-        </div>
-        <p className="mt-1 text-[10px] text-[#666]">{t("home.cards.flashClaimed", { pct: 100 - stockPct })}</p>
-      </div>
-      <div className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-[#b12704]">
-        <Clock className="h-3.5 w-3.5" />
-        {t("home.cards.flashEndsIn", { time })}
-      </div>
     </CardShell>
   );
 }
