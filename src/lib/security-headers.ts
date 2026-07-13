@@ -58,9 +58,12 @@ export const securityHeadersMiddleware = createMiddleware().server(
 
         const csp = [
           "default-src 'self'",
-          // 'unsafe-inline' + 'unsafe-eval' required by TanStack Start SSR
-          // bootstrap script and third-party widgets (Stripe, Turnstile).
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co",
+          // 'unsafe-inline' still required: TanStack Start emits a per-request
+          // SSR bootstrap <script> with serialized router state. Removing it
+          // needs per-request nonce plumbing through getRouter → Scripts →
+          // this middleware, which is not currently wired. 'unsafe-eval' is
+          // NOT required by the production bundle and has been removed.
+          "script-src 'self' 'unsafe-inline' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
