@@ -69,7 +69,19 @@ export const securityHeadersMiddleware = createMiddleware().server(
         const csp = [
           "default-src 'self'",
           scriptSrc,
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          // style-src: NO 'unsafe-inline'. Our own inline <style> blocks
+          // are nonced via <NoncedStyle> (see src/components/NoncedStyle.tsx),
+          // fonts.googleapis.com stays allowlisted for the Google Fonts
+          // stylesheet loaded from the root route head.
+          //
+          // style-src-attr keeps 'unsafe-inline' because React / Radix /
+          // Sonner and other libs emit ~400 `style=""` attributes that
+          // cannot carry a nonce. This split (elem nonced, attr inline)
+          // is the standard CSP3 pattern and is scored A+ by
+          // securityheaders.com — the warning is only raised when
+          // 'unsafe-inline' appears in the base style-src directive.
+          "style-src 'self' 'nonce-" + nonce + "' https://fonts.googleapis.com",
+          "style-src-attr 'unsafe-inline'",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
           "media-src 'self' https: blob:",
