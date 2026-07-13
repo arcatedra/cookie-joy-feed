@@ -1,28 +1,22 @@
 import { createMiddleware } from "@tanstack/react-start";
-
-const NONCE_TRANSPORT_HEADER = "x-csp-nonce";
+import { generateCspNonce, runWithCspNonce } from "./csp-nonce";
 
 /**
  * Adds baseline HTTP security headers to every response served by the
  * TanStack Start worker.
  *
- * CSP is intentionally permissive around third parties we actually use
- * (Supabase, Stripe, Cloudflare Turnstile, Google OAuth, YouTube reels).
- * Tighten with reports before going stricter.
- *
- * Nonce handling: `getRouter()` generates a per-request CSP nonce and
- * exposes it via the temporary `x-csp-nonce` response header. We consume
- * that header here to compose the `script-src` directive, then strip it
- * from the final response.
+ * Per-request CSP nonce: generated here, shared with `getRouter()` via
+ * AsyncLocalStorage (see `./csp-nonce`) so TanStack Router stamps the same
+ * nonce onto every inline `<script>` it emits. That lets us drop
+ * `'unsafe-inline'` from `script-src` entirely while still allowing the
+ * SSR bootstrap, route data, and JSON-LD blocks to execute.
  */
 export const securityHeadersMiddleware = createMiddleware().server(
   async ({ next, request }) => {
-    const result = await next();
+    const nonce = generateCspNonce();
+    const result = await runWithCspNonce(nonce, () => next());
     const response = result.response;
     const headers = new Headers(response.headers);
-
-    const nonce = headers.get(NONCE_TRANSPORT_HEADER) ?? undefined;
-    if (nonce) headers.delete(NONCE_TRANSPORT_HEADER);
 
     const contentType = headers.get("content-type") ?? "";
     const isHtml = contentType.includes("text/html");
@@ -49,7 +43,6 @@ export const securityHeadersMiddleware = createMiddleware().server(
 
     // HTML-only headers
     if (isHtml) {
-      // Detect Lovable editor/preview iframe — allow framing there, DENY elsewhere.
       const host = new URL(request.url).host;
       const isLovablePreview =
         host.endsWith(".lovable.app") || host.endsWith(".lovable.dev");
@@ -66,18 +59,12 @@ export const securityHeadersMiddleware = createMiddleware().server(
           ? "'self' https://*.lovable.app https://*.lovable.dev"
           : "'self'";
 
-        // script-src: NO 'unsafe-inline'. TanStack Router applies the nonce
-        // above to every <script> it emits — SSR bootstrap, route scripts,
-        // asset scripts, and JSON-LD blocks — via router.options.ssr.nonce.
-        // 'strict-dynamic' lets those nonced scripts load their own
-        // dependencies (Stripe.js, Turnstile widget). The https: allowlist
-        // stays as a CSP2 fallback for browsers that ignore strict-dynamic.
-        const scriptSrc = nonce
-          ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co`
-          : // Defensive fallback if the nonce was somehow not produced —
-            // keep the old permissive directive rather than hard-breaking
-            // the page. This branch should not fire in normal operation.
-            "script-src 'self' 'unsafe-inline' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co";
+        // script-src: NO 'unsafe-inline'. TanStack Router stamps this same
+        // nonce on every inline script via `router.options.ssr.nonce`.
+        // 'strict-dynamic' lets those nonced scripts load their own deps
+        // (Stripe.js, Turnstile). The https: allowlist stays as a CSP2
+        // fallback for browsers that ignore strict-dynamic.
+        const scriptSrc = `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://challenges.cloudflare.com https://*.supabase.co`;
 
         const csp = [
           "default-src 'self'",
