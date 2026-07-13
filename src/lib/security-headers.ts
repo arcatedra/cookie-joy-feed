@@ -10,7 +10,8 @@ import { createMiddleware } from "@tanstack/react-start";
  */
 export const securityHeadersMiddleware = createMiddleware().server(
   async ({ next, request }) => {
-    const response = await next();
+    const result = await next();
+    const response = result.response;
     const headers = new Headers(response.headers);
 
     const contentType = headers.get("content-type") ?? "";
@@ -79,10 +80,14 @@ export const securityHeadersMiddleware = createMiddleware().server(
       }
     }
 
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers,
-    });
+    return {
+      ...result,
+      response: new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      }),
+    };
   },
 );
+
