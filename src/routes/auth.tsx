@@ -86,6 +86,7 @@ function AuthPage() {
 
   useEffect(() => {
     if (!user) return;
+    if (mfaChallenge) return; // waiting for TOTP code
     let cancelled = false;
     resolveRoleTarget(redirectTarget).then((to) => {
       if (!cancelled) navigate({ to });
@@ -94,7 +95,8 @@ function AuthPage() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, mfaChallenge]);
+
 
   const validatePassword = (pw: string): string | null => {
     if (pw.length < 12) return "La contraseña debe tener al menos 12 caracteres.";
