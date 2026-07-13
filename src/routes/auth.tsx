@@ -441,7 +441,9 @@ function AuthPage() {
         >
           {mode === "signin" ? t("auth.noAccount") : t("auth.haveAccount")}
         </button>
+        </>)}
       </div>
+
     </main>
   );
 }
