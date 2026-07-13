@@ -53,9 +53,11 @@ export const Route = createFileRoute("/profile")({
 const menuItems = [
   { key: "favorites", Icon: Heart },
   { key: "payment", Icon: CreditCard },
+  { key: "security", Icon: ShieldCheck },
   { key: "general", Icon: SlidersHorizontal },
   { key: "help", Icon: HelpCircle },
 ] as const;
+
 
 function ProfilePage() {
   const { t, i18n } = useTranslation();
