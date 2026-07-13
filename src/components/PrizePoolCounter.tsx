@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { NoncedStyle } from "@/components/NoncedStyle";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useTranslation } from "react-i18next";
@@ -121,12 +122,12 @@ export function PrizePoolCounter() {
         </div>
 
       </div>
-      <style>{`
+      <NoncedStyle>{`
         @keyframes ppGlow {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
         }
-      `}</style>
+      `}</NoncedStyle>
       <div
         aria-hidden
         style={{

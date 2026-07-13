@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { NoncedStyle } from "@/components/NoncedStyle";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -157,12 +158,12 @@ export function DailyWinnerBanner() {
           </Link>
         </div>
       </div>
-      <style>{`
+      <NoncedStyle>{`
         @keyframes winnerPulse {
           0%, 100% { box-shadow: 0 25px 60px -25px rgba(15,39,71,0.7), inset 0 0 0 1px ${GOLD}55; }
           50% { box-shadow: 0 25px 70px -20px ${GOLD_BRIGHT}55, inset 0 0 0 1px ${GOLD_BRIGHT}; }
         }
-      `}</style>
+      `}</NoncedStyle>
     </section>
   );
 }

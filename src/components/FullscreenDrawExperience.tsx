@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { NoncedStyle } from "@/components/NoncedStyle";
 import { useTranslation } from "react-i18next";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
@@ -669,7 +670,7 @@ export function FullscreenDrawExperience({
         </div>
       )}
 
-      <style>{`
+      <NoncedStyle>{`
         @keyframes origen-glow-pulse {
           0%, 100% { opacity: 0.55; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
@@ -679,7 +680,7 @@ export function FullscreenDrawExperience({
           40% { transform: scale(1.1); opacity: 1; }
           100% { transform: scale(1); opacity: 1; }
         }
-      `}</style>
+      `}</NoncedStyle>
     </div>
   );
 }
