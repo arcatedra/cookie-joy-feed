@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { NoncedStyle } from "@/components/NoncedStyle";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -224,7 +225,7 @@ function RuletaPage() {
             <div style={{ fontSize: 13, color: BLUE_SOFT, letterSpacing: "0.1em" }}>
               {t("common.loading", { defaultValue: "Cargando…" })}
             </div>
-            <style>{`@keyframes ruleta-spin { to { transform: rotate(360deg); } }`}</style>
+            <NoncedStyle>{`@keyframes ruleta-spin { to { transform: rotate(360deg); } }`}</NoncedStyle>
           </div>
         )}
 
@@ -556,7 +557,7 @@ function Confetti() {
         contain: "strict",
       }}
     >
-      <style>{`
+      <NoncedStyle>{`
         @keyframes confetti-burst {
           0% {
             transform: translate3d(-50%, -50%, 0) rotate(0deg) scale(0.4);
@@ -573,7 +574,7 @@ function Confetti() {
           25% { opacity: 0.9; }
           100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
         }
-      `}</style>
+      `}</NoncedStyle>
 
       {/* Golden flash ring behind the prize */}
       <div

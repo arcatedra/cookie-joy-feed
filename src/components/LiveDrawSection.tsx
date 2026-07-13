@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { NoncedStyle } from "@/components/NoncedStyle";
 import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -593,7 +594,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
         )
       }
 
-      <style>{`
+      <NoncedStyle>{`
         @keyframes ldGlow {
           0%, 100% { opacity: 0.55; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.05); }
@@ -615,7 +616,7 @@ export function LiveDrawSection({ balance, onSpend }: { balance: number; onSpend
           @keyframes ldRing5 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.4), inset 0 0 0 1px rgba(110,68,42,0.13), 0 0 16px 2px rgba(212,175,55,0.4); } }
           @keyframes ldRing1 { 0%,100% { box-shadow: 0 30px 70px -20px rgba(59,36,23,0.5), inset 0 0 0 1px rgba(110,68,42,0.2), 0 0 24px 6px rgba(255,196,60,0.7); } }
         }
-      `}</style>
+      `}</NoncedStyle>
     </section>
   );
 }
@@ -742,13 +743,13 @@ function WinnerCelebration({ name, prizeUsd, seedHash, onClose }: {
           color: WOOD, fontWeight: 900, fontSize: 14, letterSpacing: "0.2em", cursor: "pointer",
         }}>{t("liveDraw.closeBtn")}</button>
       </div>
-      <style>{`
+      <NoncedStyle>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes popIn {
           0% { transform: scale(0.6); opacity: 0; }
           100% { transform: scale(1); opacity: 1; }
         }
-      `}</style>
+      `}</NoncedStyle>
     </div>
   );
 }
@@ -919,7 +920,7 @@ function DrawStage({
         )}
       </div>
 
-      <style>{`
+      <NoncedStyle>{`
         @keyframes stageFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes winnerIn {
           0% { transform: scale(0.6); opacity: 0; }
@@ -932,7 +933,7 @@ function DrawStage({
         @media (prefers-reduced-motion: reduce) {
           @keyframes stageBlink { 0%, 100% { opacity: 1; transform: none; } }
         }
-      `}</style>
+      `}</NoncedStyle>
     </div>
   );
 }

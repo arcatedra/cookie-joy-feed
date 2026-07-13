@@ -9,6 +9,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,6 +19,26 @@ import appleTouchAsset from "@/assets/hazorex-apple-touch.png.asset.json";
 import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
+import { CspNonceProvider } from "@/lib/csp-nonce-context";
+import { getCspNonce } from "@/lib/csp-nonce";
+
+/**
+ * Read the per-request CSP nonce. On the server it comes from
+ * AsyncLocalStorage seeded by the security-headers middleware. On the
+ * client we read it from the `<meta name="csp-nonce">` tag that RootShell
+ * emits during SSR so post-hydration renders of inline `<style>` blocks
+ * still carry the correct nonce.
+ */
+const readCspNonce = createIsomorphicFn()
+  .client((): string | undefined => {
+    if (typeof document === "undefined") return undefined;
+    return (
+      document
+        .querySelector('meta[name="csp-nonce"]')
+        ?.getAttribute("content") ?? undefined
+    );
+  })
+  .server((): string | undefined => getCspNonce());
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import { SubscriptionGateProvider } from "@/lib/subscription-gate";
@@ -119,13 +140,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const nonce = readCspNonce();
   return (
     <html lang="es">
       <head>
+        {nonce ? <meta name="csp-nonce" content={nonce} /> : null}
         <HeadContent />
       </head>
       <body>
-        {children}
+        <CspNonceProvider nonce={nonce}>{children}</CspNonceProvider>
         <Scripts />
       </body>
     </html>
@@ -135,6 +158,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const nonce = readCspNonce();
   // /repartidor and /repartidor/* use their own DriverLayout. /repartidores (marketing) keeps store chrome.
   const isDriverZone =
     pathname === "/repartidor" || pathname.startsWith("/repartidor/");
@@ -159,7 +183,8 @@ function RootComponent() {
               {!isDriverZone && <SiteFooter />}
             </div>
             {!isDriverZone && <PushNotificationOptIn />}
-            <Toaster position="top-center" richColors />
+            {/* Sonner injects a runtime <style> block — passing `nonce` lets it pass CSP. */}
+            <Toaster position="top-center" richColors {...(nonce ? { nonce } : {})} />
           </CartProvider>
         </SubscriptionGateProvider>
       </AuthProvider>
