@@ -76,11 +76,27 @@ function AuthPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const validatePassword = (pw: string): string | null => {
+    if (pw.length < 12) return "La contraseña debe tener al menos 12 caracteres.";
+    if (!/[A-Z]/.test(pw)) return "Incluye al menos una letra mayúscula.";
+    if (!/[a-z]/.test(pw)) return "Incluye al menos una letra minúscula.";
+    if (!/[0-9]/.test(pw)) return "Incluye al menos un número.";
+    if (!/[^A-Za-z0-9]/.test(pw)) return "Incluye al menos un carácter especial (ej. !@#$%).";
+    return null;
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === "signup" && !acceptedTerms) {
       toast.error("Debes aceptar los Términos y confirmar que es legal en tu lugar de residencia.");
       return;
+    }
+    if (mode === "signup") {
+      const pwError = validatePassword(password);
+      if (pwError) {
+        toast.error(pwError);
+        return;
+      }
     }
     setBusy(true);
     try {
