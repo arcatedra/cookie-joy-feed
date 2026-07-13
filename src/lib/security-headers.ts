@@ -76,8 +76,12 @@ export const securityHeadersMiddleware = createMiddleware().server(
         // style-src-attr — we keep 'unsafe-inline' there because per-attr
         // hashing is impractical for 400+ dynamic style attributes.
         const sonnerCssHash = "'sha256-CIxDM5jnsGiKqXs2v7NKCY5MzdR9gu6TtiMJrDw29AY='";
-        const styleSrcElem = `style-src-elem 'self' 'nonce-${nonce}' ${sonnerCssHash} https://fonts.googleapis.com`;
-        const styleSrc = `style-src 'self' 'nonce-${nonce}' ${sonnerCssHash} https://fonts.googleapis.com`;
+        // React 19 emits empty <style> shells for `<link precedence>` hoisting; SHA-256 of "".
+        const emptyStyleHash = "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='";
+        const inlineStyleHashes = `${sonnerCssHash} ${emptyStyleHash}`;
+        const styleSrcElem = `style-src-elem 'self' 'nonce-${nonce}' ${inlineStyleHashes} https://fonts.googleapis.com`;
+        const styleSrc = `style-src 'self' 'nonce-${nonce}' ${inlineStyleHashes} https://fonts.googleapis.com`;
+
 
         const csp = [
           "default-src 'self'",
