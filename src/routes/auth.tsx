@@ -45,6 +45,9 @@ function AuthPage() {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [turnstileSiteKey, setTurnstileSiteKey] = useState<string>("");
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [mfaChallenge, setMfaChallenge] = useState<{ factorId: string; challengeId: string } | null>(null);
+  const [mfaCode, setMfaCode] = useState("");
+
 
   const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
 
