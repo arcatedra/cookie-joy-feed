@@ -216,12 +216,19 @@ function AuthPage() {
           <input
             type="password"
             required
-            minLength={6}
+            minLength={mode === "signup" ? 12 : 6}
+            pattern={mode === "signup" ? "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}" : undefined}
+            title={mode === "signup" ? "Mínimo 12 caracteres, con mayúscula, minúscula, número y carácter especial." : undefined}
             placeholder={t("auth.password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-input bg-card px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {mode === "signup" && (
+            <p className="text-[11px] text-muted-foreground -mt-1 px-1">
+              Mínimo 12 caracteres, con mayúscula, minúscula, número y carácter especial.
+            </p>
+          )}
           {mode === "signup" && (
             <label className="flex items-start gap-2 rounded-xl border border-input bg-card p-3 text-xs text-foreground cursor-pointer">
               <input
