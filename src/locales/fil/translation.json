@@ -377,7 +377,8 @@
       "favorites": "Mga Paborito",
       "payment": "Mga Paraan ng Bayad",
       "general": "Pangkalahatang Setting",
-      "help": "Tulong at Suporta"
+      "help": "Tulong at Suporta",
+      "security": "Seguridad at 2FA"
     },
     "qr": {
       "title": "Iyong QR Code",

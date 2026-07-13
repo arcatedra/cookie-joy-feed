@@ -722,7 +722,8 @@
       "favorites": "お気に入り",
       "payment": "支払い方法",
       "general": "一般設定",
-      "help": "ヘルプとサポート"
+      "help": "ヘルプとサポート",
+      "security": "セキュリティと2FA"
     },
     "qr": {
       "title": "あなたのQRコード",
