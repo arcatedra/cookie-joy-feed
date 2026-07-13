@@ -40,8 +40,19 @@ function AuthPage() {
   const [region, setRegion] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [failCount, setFailCount] = useState(0);
+  const [requireCaptcha, setRequireCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string>("");
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
 
   const redirectTarget = redirect && redirect.startsWith("/") ? redirect : "/";
+
+  useEffect(() => {
+    getLoginSecurityConfig()
+      .then((c) => setTurnstileSiteKey(c.turnstileSiteKey ?? ""))
+      .catch(() => setTurnstileSiteKey(""));
+  }, []);
 
   const resolveRoleTarget = async (fallback: string): Promise<string> => {
     // Respect explicit redirect param when provided.
