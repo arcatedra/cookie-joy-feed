@@ -140,13 +140,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const nonce = readCspNonce();
   return (
     <html lang="es">
       <head>
+        {nonce ? <meta name="csp-nonce" content={nonce} /> : null}
         <HeadContent />
       </head>
       <body>
-        {children}
+        <CspNonceProvider nonce={nonce}>{children}</CspNonceProvider>
         <Scripts />
       </body>
     </html>
