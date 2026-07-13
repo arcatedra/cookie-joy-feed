@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { createIsomorphicFn } from "@tanstack/react-start";
+import { getCspNonce } from "./lib/csp-nonce";
 import { routeTree } from "./routeTree.gen";
 
 /**
@@ -11,13 +12,7 @@ import { routeTree } from "./routeTree.gen";
  */
 const readCspNonce = createIsomorphicFn()
   .client((): string | undefined => undefined)
-  .server((): string | undefined => {
-    // Imported lazily inside the server branch so the module never
-    // reaches the client bundle.
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { getCspNonce } = require("./lib/csp-nonce") as typeof import("./lib/csp-nonce");
-    return getCspNonce();
-  });
+  .server((): string | undefined => getCspNonce());
 
 export const getRouter = () => {
   const queryClient = new QueryClient();
