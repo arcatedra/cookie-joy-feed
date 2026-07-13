@@ -222,6 +222,14 @@ function ProfilePage() {
                 </Link>
               );
             }
+            if (item.key === "security") {
+              return (
+                <Link key={item.key} to="/profile/security" className={className}>
+                  {inner}
+                </Link>
+              );
+            }
+
             return (
               <button
                 key={item.key}
