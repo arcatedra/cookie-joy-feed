@@ -40,6 +40,30 @@ export const securityHeadersMiddleware = createMiddleware().server(
         "camera=(), microphone=(), geolocation=(self), payment=(self)",
       );
     }
+    // Cross-origin isolation headers.
+    //
+    // COOP: `same-origin-allow-popups` isolates our browsing context group
+    // from cross-origin windows but STILL allows opened popups (Google
+    // OAuth `web_message` flow via `lovable.auth.signInWithOAuth`, Stripe
+    // Checkout popup fallback) to communicate back. Pure `same-origin`
+    // would break Google sign-in.
+    //
+    // CORP: `same-origin` prevents other origins from embedding our
+    // HTML/JSON responses as a resource. Safe for app responses.
+    //
+    // COEP is deliberately NOT set. `require-corp` and `credentialless`
+    // both break Stripe.js, Stripe Checkout iframes, YouTube embeds, and
+    // Turnstile challenges — none of them advertise the CORP header COEP
+    // requires. Revisit only if all third-party embeds support it.
+    if (!headers.has("Cross-Origin-Opener-Policy")) {
+      headers.set("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    }
+    if (!headers.has("Cross-Origin-Resource-Policy")) {
+      headers.set("Cross-Origin-Resource-Policy", "same-origin");
+    }
+    if (!headers.has("X-Permitted-Cross-Domain-Policies")) {
+      headers.set("X-Permitted-Cross-Domain-Policies", "none");
+    }
 
     // HTML-only headers
     if (isHtml) {
