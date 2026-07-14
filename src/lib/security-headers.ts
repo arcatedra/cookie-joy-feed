@@ -135,6 +135,15 @@ export const securityHeadersMiddleware = createMiddleware().server(
         // pre-hashed and have no nonce hook. This directive governs
         // ATTRIBUTES ONLY — <style> elements remain locked via style-src /
         // style-src-elem (nonce + hashes, no unsafe-inline).
+        //
+        // Promotion attempt (2026-07-14): Report-Only had shown 0
+        // style-src-attr violations across production traffic, but a full
+        // localhost smoke test with `style-src-attr 'none'` enforced
+        // produced 24 real violations across /auth (1), /cart (1) and
+        // /ruleta (22 — Recharts/Sonner animations). Report-Only had
+        // missed them because real users had not exercised those exact
+        // UI states during the observation window. Kept as documented
+        // exception; Report-Only continues below to catch future drift.
         const enforcedCsp = [
           ...baseDirectives,
           "style-src-attr 'unsafe-inline'",
