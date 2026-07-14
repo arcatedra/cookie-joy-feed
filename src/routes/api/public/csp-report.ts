@@ -135,7 +135,7 @@ async function persistAndMaybeAlert(
 }
 
 async function sendAlertToAdmins(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   fingerprint: string,
   summary: Summary,
   userAgent: string,
