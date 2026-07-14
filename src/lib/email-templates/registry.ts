@@ -34,4 +34,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'driver-rejected': driverRejected,
   'driver-application-received': driverApplicationReceived,
   'delivery-completed': deliveryCompleted,
+  'csp-violation-alert': cspViolationAlert,
 }
