@@ -74,7 +74,7 @@ function fingerprintOf(s: Summary): string {
 }
 
 async function persistAndMaybeAlert(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   summary: Summary,
   userAgent: string,
 ) {
