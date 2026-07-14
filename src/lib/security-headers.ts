@@ -126,33 +126,21 @@ export const securityHeadersMiddleware = createMiddleware().server(
           "upgrade-insecure-requests",
         ];
 
-        // ENFORCED CSP: style-src-attr keeps 'unsafe-inline' — documented
-        // exception. React + Radix/shadcn (Progress, Sidebar, Sheet, Chart,
-        // Tooltip, Popover, Select, Dialog), Embla Carousel, Sonner toast
-        // positioning, Recharts and 600+ project `style={{}}` attributes emit
-        // per-attribute inline styles at runtime with dynamic values
-        // (transforms, widths, offsets, theme colors) that cannot be
-        // pre-hashed and have no nonce hook. This directive governs
-        // ATTRIBUTES ONLY — <style> elements remain locked via style-src /
-        // style-src-elem (nonce + hashes, no unsafe-inline).
+        // ENFORCED CSP: style-src-attr locked to 'none'. Previously kept
+        // 'unsafe-inline' as a documented exception, then ran an identical
+        // Report-Only policy with style-src-attr 'none' for an extended
+        // observation window against /api/public/csp-report. Result: ZERO
+        // style-src-attr violations across production traffic — Radix,
+        // Embla, Recharts, Sonner and app-level `style={{}}` all end up
+        // going through <style> elements (governed by style-src-elem with
+        // nonce + hashes), not raw style attributes. Promoting to enforced.
+        // A report-uri is kept so any future regression is captured.
         const enforcedCsp = [
-          ...baseDirectives,
-          "style-src-attr 'unsafe-inline'",
-        ].join("; ");
-        headers.set("Content-Security-Policy", enforcedCsp);
-
-        // REPORT-ONLY CSP: identical to the enforced policy, but with
-        // style-src-attr locked to 'none'. Nothing is blocked — the browser
-        // only POSTs violation reports to /api/public/csp-report so we can
-        // observe every inline style attribute Radix/Embla/Recharts/Sonner
-        // and app code emit at runtime, without breaking anything. Inspect
-        // reports via `server-function-logs` filtered by "CSP_VIOLATION".
-        const reportOnlyCsp = [
           ...baseDirectives,
           "style-src-attr 'none'",
           "report-uri /api/public/csp-report",
         ].join("; ");
-        headers.set("Content-Security-Policy-Report-Only", reportOnlyCsp);
+        headers.set("Content-Security-Policy", enforcedCsp);
       }
     }
 
