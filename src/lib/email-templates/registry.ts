@@ -10,6 +10,7 @@ import { template as driverApproved } from './driver-approved'
 import { template as driverRejected } from './driver-rejected'
 import { template as driverApplicationReceived } from './driver-application-received'
 import { template as deliveryCompleted } from './delivery-completed'
+import { template as cspViolationAlert } from './csp-violation-alert'
 
 
 export interface TemplateEntry {
@@ -33,4 +34,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'driver-rejected': driverRejected,
   'driver-application-received': driverApplicationReceived,
   'delivery-completed': deliveryCompleted,
+  'csp-violation-alert': cspViolationAlert,
 }

@@ -412,6 +412,60 @@ export type Database = {
           },
         ]
       }
+      csp_violations: {
+        Row: {
+          blocked_uri: string | null
+          column_number: number | null
+          directive: string
+          disposition: string | null
+          document_url: string | null
+          fingerprint: string
+          first_seen_at: string
+          id: string
+          last_alert_sent_at: string | null
+          last_seen_at: string
+          line_number: number | null
+          occurrence_count: number
+          sample: string | null
+          source_file: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          blocked_uri?: string | null
+          column_number?: number | null
+          directive: string
+          disposition?: string | null
+          document_url?: string | null
+          fingerprint: string
+          first_seen_at?: string
+          id?: string
+          last_alert_sent_at?: string | null
+          last_seen_at?: string
+          line_number?: number | null
+          occurrence_count?: number
+          sample?: string | null
+          source_file?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          blocked_uri?: string | null
+          column_number?: number | null
+          directive?: string
+          disposition?: string | null
+          document_url?: string | null
+          fingerprint?: string
+          first_seen_at?: string
+          id?: string
+          last_alert_sent_at?: string | null
+          last_seen_at?: string
+          line_number?: number | null
+          occurrence_count?: number
+          sample?: string | null
+          source_file?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       customer_notifications: {
         Row: {
           body: string
