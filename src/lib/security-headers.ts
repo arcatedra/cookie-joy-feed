@@ -83,24 +83,11 @@ export const securityHeadersMiddleware = createMiddleware().server(
         const styleSrc = `style-src 'self' 'nonce-${nonce}' ${inlineStyleHashes} https://fonts.googleapis.com`;
 
 
-        const csp = [
+        const baseDirectives = [
           "default-src 'self'",
           scriptSrc,
           styleSrc,
           styleSrcElem,
-          // style-src-attr: documented exception. React + Radix/shadcn (Progress,
-          // Sidebar, Sheet, Chart, Tooltip, Popover, Select, Dialog), Embla
-          // Carousel, Sonner toast positioning, Recharts and 600+ project
-          // `style={{}}` attributes emit per-attribute inline styles at runtime
-          // with dynamic values (transforms, widths, offsets, colors from theme
-          // tokens) that cannot be pre-hashed and have no nonce hook. This
-          // directive governs ATTRIBUTES ONLY — <style> elements remain locked
-          // down via style-src / style-src-elem above (nonce + specific
-          // hashes, no unsafe-inline). securityheaders.com does not penalize
-          // style-src-attr 'unsafe-inline'; A+ rating is preserved. To remove
-          // this in the future, every `style={{}}` in JSX and each of those
-          // libraries would need to be replaced with class-based styling.
-          "style-src-attr 'unsafe-inline'",
           "font-src 'self' data: https://fonts.gstatic.com",
           "img-src 'self' data: blob: https:",
           "media-src 'self' https: blob:",
@@ -113,10 +100,35 @@ export const securityHeadersMiddleware = createMiddleware().server(
           "form-action 'self' https://checkout.stripe.com",
           `frame-ancestors ${frameAncestors}`,
           "upgrade-insecure-requests",
+        ];
+
+        // ENFORCED CSP: style-src-attr keeps 'unsafe-inline' — documented
+        // exception. React + Radix/shadcn (Progress, Sidebar, Sheet, Chart,
+        // Tooltip, Popover, Select, Dialog), Embla Carousel, Sonner toast
+        // positioning, Recharts and 600+ project `style={{}}` attributes emit
+        // per-attribute inline styles at runtime with dynamic values
+        // (transforms, widths, offsets, theme colors) that cannot be
+        // pre-hashed and have no nonce hook. This directive governs
+        // ATTRIBUTES ONLY — <style> elements remain locked via style-src /
+        // style-src-elem (nonce + hashes, no unsafe-inline).
+        const enforcedCsp = [
+          ...baseDirectives,
+          "style-src-attr 'unsafe-inline'",
         ].join("; ");
+        headers.set("Content-Security-Policy", enforcedCsp);
 
-
-        headers.set("Content-Security-Policy", csp);
+        // REPORT-ONLY CSP: identical to the enforced policy, but with
+        // style-src-attr locked to 'none'. Nothing is blocked — the browser
+        // only POSTs violation reports to /api/public/csp-report so we can
+        // observe every inline style attribute Radix/Embla/Recharts/Sonner
+        // and app code emit at runtime, without breaking anything. Inspect
+        // reports via `server-function-logs` filtered by "CSP_VIOLATION".
+        const reportOnlyCsp = [
+          ...baseDirectives,
+          "style-src-attr 'none'",
+          "report-uri /api/public/csp-report",
+        ].join("; ");
+        headers.set("Content-Security-Policy-Report-Only", reportOnlyCsp);
       }
     }
 

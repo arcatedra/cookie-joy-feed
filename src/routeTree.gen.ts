@@ -53,6 +53,7 @@ import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
+import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_authenticated/repartidor.wallet'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
@@ -312,6 +313,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
 const ApiPublicDomainCheckRoute = ApiPublicDomainCheckRouteImport.update({
   id: '/api/public/domain-check',
   path: '/api/public/domain-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
+  id: '/api/public/csp-report',
+  path: '/api/public/csp-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSweepstakesWinnersRoute = AdminSweepstakesWinnersRouteImport.update({
@@ -599,6 +605,7 @@ export interface FileRoutesByFullPath {
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
+  '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio/': typeof AuthenticatedNegocioIndexRoute
@@ -681,6 +688,7 @@ export interface FileRoutesByTo {
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
+  '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio': typeof AuthenticatedNegocioIndexRoute
@@ -766,6 +774,7 @@ export interface FileRoutesById {
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
   '/_authenticated/repartidor/wallet': typeof AuthenticatedRepartidorWalletRoute
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
+  '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
@@ -851,6 +860,7 @@ export interface FileRouteTypes {
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
+    | '/api/public/csp-report'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/negocio/'
@@ -933,6 +943,7 @@ export interface FileRouteTypes {
     | '/repartidor/onboarding'
     | '/repartidor/wallet'
     | '/admin/sweepstakes/winners'
+    | '/api/public/csp-report'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/negocio'
@@ -1017,6 +1028,7 @@ export interface FileRouteTypes {
     | '/_authenticated/repartidor/onboarding'
     | '/_authenticated/repartidor/wallet'
     | '/admin/sweepstakes/winners'
+    | '/api/public/csp-report'
     | '/api/public/domain-check'
     | '/lovable/email/suppression'
     | '/_authenticated/negocio/'
@@ -1078,6 +1090,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
   SorteoGanadoresRoute: typeof SorteoGanadoresRoute
+  ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
@@ -1403,6 +1416,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/domain-check'
       fullPath: '/api/public/domain-check'
       preLoaderRoute: typeof ApiPublicDomainCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/csp-report': {
+      id: '/api/public/csp-report'
+      path: '/api/public/csp-report'
+      fullPath: '/api/public/csp-report'
+      preLoaderRoute: typeof ApiPublicCspReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/sweepstakes/winners': {
@@ -1827,6 +1847,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
   SorteoGanadoresRoute: SorteoGanadoresRoute,
+  ApiPublicCspReportRoute: ApiPublicCspReportRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
