@@ -73,6 +73,7 @@ import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminFinanzasRouteImport } from './routes/_authenticated/admin.finanzas'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
+import { Route as AuthenticatedAdminCspViolationsRouteImport } from './routes/_authenticated/admin.csp-violations'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -432,6 +433,12 @@ const AuthenticatedAdminDeliveriesRoute =
     path: '/admin/deliveries',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCspViolationsRoute =
+  AuthenticatedAdminCspViolationsRouteImport.update({
+    id: '/admin/csp-violations',
+    path: '/admin/csp-violations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const LovableEmailTransactionalSendRoute =
   LovableEmailTransactionalSendRouteImport.update({
     id: '/lovable/email/transactional/send',
@@ -586,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
@@ -669,6 +677,7 @@ export interface FileRoutesByTo {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/admin/live': typeof AuthenticatedAdminLiveRoute
@@ -755,6 +764,7 @@ export interface FileRoutesById {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/_authenticated/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
@@ -841,6 +851,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
     | '/admin/live'
@@ -924,6 +935,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
     | '/admin/live'
@@ -1009,6 +1021,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/_authenticated/admin/csp-violations'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/finanzas'
     | '/_authenticated/admin/live'
@@ -1558,6 +1571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDeliveriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/csp-violations': {
+      id: '/_authenticated/admin/csp-violations'
+      path: '/admin/csp-violations'
+      fullPath: '/admin/csp-violations'
+      preLoaderRoute: typeof AuthenticatedAdminCspViolationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/lovable/email/transactional/send': {
       id: '/lovable/email/transactional/send'
       path: '/lovable/email/transactional/send'
@@ -1734,6 +1754,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
+  AuthenticatedAdminCspViolationsRoute: typeof AuthenticatedAdminCspViolationsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminFinanzasRoute: typeof AuthenticatedAdminFinanzasRoute
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
@@ -1757,6 +1778,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
+  AuthenticatedAdminCspViolationsRoute: AuthenticatedAdminCspViolationsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminFinanzasRoute: AuthenticatedAdminFinanzasRoute,
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
