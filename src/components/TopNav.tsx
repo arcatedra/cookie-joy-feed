@@ -313,9 +313,9 @@ export function TopNav() {
         </div>
 
         {/* Mobile-only address & language row */}
-        <div className="flex min-w-0 items-center justify-between gap-2 bg-[#16294a] px-3 py-1.5 text-[11px] text-white/80 md:hidden">
-          <button type="button" className="flex min-w-0 items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-amber-300" />
+        <div className="flex min-w-0 items-center justify-between gap-2 bg-[#16294a] px-3 py-2.5 text-xs text-white/80 md:hidden">
+          <button type="button" className="flex min-h-[40px] min-w-0 items-center gap-1.5 py-1.5">
+            <MapPin className="h-4 w-4 shrink-0 text-amber-300" />
             <span className="truncate">
               <span className="hidden xs:inline">{t("topnav.deliverTo")} — </span>
               {t("topnav.updateLocation")}
@@ -327,23 +327,23 @@ export function TopNav() {
         </div>
 
         {/* Sub-navbar */}
-        <nav className="flex items-center gap-1 bg-[#16294a] px-2 py-1.5 text-sm md:px-4">
+        <nav className="flex min-w-0 items-center gap-1 bg-[#16294a] px-2 py-1.5 text-sm md:px-4">
           <button
             type="button"
             onClick={() => setSideOpen(true)}
-            className="flex shrink-0 items-center gap-1 rounded px-2 py-1 font-bold text-white hover:ring-1 hover:ring-white/40"
+            className="flex min-h-[36px] shrink-0 items-center gap-1 rounded px-2 py-1.5 font-bold text-white hover:ring-1 hover:ring-white/40"
           >
             <Menu className="h-4 w-4" />
             {t("topnav.all")}
           </button>
-          <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
+          <div className="no-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
             {quickLinkKeys.map((l) => {
               const isHighlighted = "highlighted" in l && l.highlighted;
               return (
                 <Link
                   key={l.key}
                   to={l.to}
-                  className={`shrink-0 rounded px-2 py-1 transition hover:ring-1 hover:ring-white/40 ${
+                  className={`inline-flex min-h-[36px] shrink-0 items-center rounded px-2 py-1.5 transition hover:ring-1 hover:ring-white/40 ${
                     isHighlighted
                       ? "bg-amber-300/20 font-bold text-amber-200 hover:bg-amber-300/30"
                       : "text-white/90"
@@ -361,3 +361,4 @@ export function TopNav() {
     </>
   );
 }
+
