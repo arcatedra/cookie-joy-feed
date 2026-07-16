@@ -416,3 +416,9 @@
   text-align: center;
 }
 .amoe-footnote a { color: #0f172a; }
+
+/* Mobile: prevent any stray horizontal overflow from breaking layout */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; max-width: 100%; }
+}
+
