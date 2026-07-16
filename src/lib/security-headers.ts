@@ -156,9 +156,13 @@ export const securityHeadersMiddleware = createMiddleware().server(
         // observe every inline style attribute Radix/Embla/Recharts/Sonner
         // and app code emit at runtime, without breaking anything. Inspect
         // reports via `server-function-logs` filtered by "CSP_VIOLATION".
+        // `report-sample` asks the browser to include the first ~40 chars
+        // of the offending inline style attribute in the violation report,
+        // so we can attribute reports to concrete components and shrink the
+        // `style={{}}` surface over time.
         const reportOnlyCsp = [
           ...baseDirectives,
-          "style-src-attr 'none'",
+          "style-src-attr 'none' 'report-sample'",
           "report-uri /api/public/csp-report",
         ].join("; ");
         headers.set("Content-Security-Policy-Report-Only", reportOnlyCsp);
