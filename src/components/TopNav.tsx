@@ -296,7 +296,7 @@ export function TopNav() {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex shrink-0 items-center gap-1.5 rounded-md bg-[#4A3525] px-2.5 py-1.5 text-[#F4F1EA] shadow-sm transition hover:bg-[#3a2a1d] hover:ring-1 hover:ring-amber-300/40"
+            className="relative flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-md bg-[#4A3525] px-3 py-2 text-[#F4F1EA] shadow-sm transition hover:bg-[#3a2a1d] hover:ring-1 hover:ring-amber-300/40"
             aria-label={t("common.viewCart")}
           >
             <div className="relative">
@@ -311,6 +311,7 @@ export function TopNav() {
             </div>
             <span className="hidden text-xs font-bold md:inline">{t("topnav.cart")}</span>
           </Link>
+
         </div>
 
         {/* Mobile-only address & language row */}
