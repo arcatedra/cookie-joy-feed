@@ -1,76 +1,94 @@
-# Plan: Sorteo Diario HAZOREX — cumplimiento y unificación
+# Migración a Supabase propio (BYO Supabase)
 
-> Nota: no es asesoría legal. Antes de activar el sorteo con dinero real, un abogado especializado debe revisar la versión final. Este plan implementa la parte técnica del prompt.
+Migrar HAZOREX desde Lovable Cloud a un proyecto Supabase gestionado por ti. Riesgo alto, downtime probable. Antes de tocar nada, necesito confirmaciones tuyas.
 
-## Estado actual (verificado en el código)
+## Lo que implica esta migración
 
-- Tabla existente: `public.daily_draw_entries` (columnas: draw_date, subject_user_id, subject_email, display_name, tickets, source). Ya soporta `source ∈ {'paid','amoe',...}` — es la "tabla única" pedida, no hace falta duplicarla.
-- Método pago: `stars-checkout` + RPC `enter_daily_draw` inserta con `source='paid'`. 10⭐ = 1 boleto (memoria confirmada).
-- Método AMOE: hoy `/amoe` es solo informativo (Mail-in). El formulario con ensayo digital ya no existe en UI. La tabla `amoe_entries` sigue en DB pero sin flujo activo.
-- `sweepstakes_config` ya existe con `sponsor_address`, `excluded_states`, `min_age`, `max_daily_prize_usd`, `entry_cutoff_minutes`. Falta bandera global `sweepstakes_active`.
-- Panel admin en `/ruleta`: ya se corrigió en turnos previos para exigir rol `admin` (verificar que sigue así).
-- Random.org / hash verificable: `run_daily_draw` ya publica `seed_hash`. Falta confirmar la fuente pública del seed.
-- Checkout: pagos en modo sandbox (Stripe). El "Shopify" del carrito es solo storefront de productos físicos, no del sorteo — clarificar en UI.
+- **Reaplicar ~140+ migraciones SQL** al nuevo proyecto (schema, tablas, triggers, funciones, RLS, políticas, GRANTs, extensiones como `pg_cron`).
+- **Exportar y reimportar datos** de todas las tablas de producción (usuarios, sorteos, ganadores, órdenes, referidos, entradas AMOE, CSP violations, etc.).
+- **Migrar `auth.users`**: los usuarios existentes deben re-crearse en el nuevo Supabase (Supabase Admin API). Sus contraseñas hasheadas se pueden portar si Lovable Cloud las expone; si no, se fuerza reset de contraseña vía email a todos.
+- **Reconfigurar Auth**: proveedores (Google OAuth, email templates, Turnstile CAPTCHA, TOTP 2FA, políticas de contraseña, HIBP).
+- **Reconfigurar Storage buckets** y re-subir archivos si los hubiera.
+- **Redeployar `pg_cron`** para el sorteo diario 20:00 ET.
+- **Reconfigurar secretos** (Stripe keys, Resend, etc.) en el nuevo entorno.
+- **Actualizar variables de entorno** del código (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PROJECT_ID`).
+- **Regenerar `src/integrations/supabase/types.ts`** contra el nuevo proyecto.
+- **Reconfigurar dominios** de emails transaccionales y redirect URLs de OAuth.
+- **Ventana de downtime**: durante el corte definitivo, checkout/sorteo/auth quedan fuera para evitar inconsistencia de datos.
 
-## Cambios propuestos
+## Riesgos concretos
 
-### 1. Bandera global `sweepstakes_active`
-- Migración: agregar `sweepstakes_active BOOLEAN NOT NULL DEFAULT false` a `public.sweepstakes_config`.
-- Exponerla en `get_sweepstakes_public_config()`.
-- Consumirla en: home banner, `/ruleta` (LiveDrawSection + BuyTokens), `/sweepstakes-rules`, `/sorteo/ganadores`, footer.
-- Cuando `false`: ocultar prize pool, últimos ganadores, contador de recaudación, botón "Girar/Comprar boletos". Mostrar tarjeta uniforme "Próximamente" en las 4 vistas.
-- Guardas server-side: `enter_daily_draw` y `submitAmoeEntry` rechazan con `SWEEPSTAKES_INACTIVE` si la bandera está en `false`.
+- **Pérdida de sesiones activas**: todos los usuarios deben re-iniciar sesión.
+- **Posible reset masivo de contraseñas** si los hashes de auth no se pueden portar.
+- **Interrupción del sorteo diario** si el corte cae cerca de las 20:00 ET.
+- **Pagos Stripe en vuelo**: webhooks en tránsito pueden apuntar al endpoint viejo durante el corte.
+- **Referidos y entradas AMOE**: cualquier registro creado entre el snapshot y el corte se pierde si no hay doble escritura.
+- Lovable Cloud no expone el service role key ni la contraseña de la BD, así que el export inicial debe hacerse con las herramientas que sí están disponibles (migrations + `read_query`) o pedir asistencia a soporte de Lovable para un dump completo.
 
-### 2. Método 1 — Comprar Estrellas → Boletos
-- Confirmar en UI que "Girar la Ruleta" es solo el canje 10⭐ → 1 boleto (no un juego aparte). Actualizar copy en `/ruleta` y `/sweepstakes-rules` sección de canje.
-- El registro en `daily_draw_entries` ya se genera server-side vía RPC — no cambia.
-- Aclarar en el checkout que la pasarela es Stripe (sandbox actual). El drawer "Shopify" queda para productos, con un badge visible que lo distinga del flujo de estrellas.
+## Fases propuestas
 
-### 3. Método 2 — AMOE gratis (Mail-in, ya vigente)
-- Mantener `/amoe` como está: informativo, tarjeta postal manuscrita. Este es el AMOE legal principal.
-- Reforzar la ruta admin `admin.sweepstakes` para registrar entradas AMOE recibidas por correo, insertando en `daily_draw_entries` con `source='amoe'`, `tickets=1`, respetando cutoff y bandera activa.
-- Validaciones server-side al registrar AMOE por admin:
-  - Edad ≥ `min_age` a partir de DOB del sobre.
-  - Estado no en `excluded_states`.
-  - Deduplicación por (email + draw_date) o (dirección + draw_date).
-- Igual peso: mismo `tickets=1` que un boleto comprado (ya lo es).
+### Fase 0 — Pre-requisitos (tú)
+1. Crear cuenta en supabase.com y un proyecto nuevo en la región deseada.
+2. Anotar: `Project URL`, `anon/publishable key`, `service_role key`, `project ref`, `DB password`.
+3. Decidir región y plan (Free vs Pro; `pg_cron` y `pg_net` requieren extensiones que en Free tier tienen límites).
+4. Confirmar ventana de mantenimiento (recomiendo domingo 03:00–07:00 ET, lejos del sorteo 20:00 ET).
 
-### 4. Reglas Oficiales y textos
-- Actualizar `/sweepstakes-rules`:
-  - Sección de canje: "10 estrellas compradas = 1 boleto. La animación de ruleta es solo visual; no altera la probabilidad."
-  - Igual peso explícito entre `paid` y `amoe`.
-  - Placeholder de dirección: mostrar la real solo cuando `sweepstakes_active=true` y `sponsor_address` esté completa.
+### Fase 1 — Inventario y export (yo, en build mode)
+1. Listar todas las migraciones aplicadas y consolidarlas en un único bundle SQL idempotente.
+2. Volcar el schema completo (`pg_dump --schema-only` equivalente vía queries).
+3. Exportar datos tabla por tabla a JSON/CSV (`read_query` por lotes).
+4. Inventariar: buckets de storage, secretos usados, cron jobs activos, edge functions si las hay.
 
-### 5. Panel de administrador
-- Auditar `/ruleta`, `LiveDrawSection`, `TopNav` y confirmar que ningún control admin (TEST DRAW, seed override, etc.) se muestra sin `has_role(admin)`.
-- Blindar en cliente + server (RLS). Si algo sigue expuesto, cerrarlo aquí.
+### Fase 2 — Provisionar el nuevo Supabase (tú + yo)
+1. Tú: ejecutar el bundle SQL en el SQL Editor de tu Supabase.
+2. Tú: activar extensiones (`pg_cron`, `pg_net`, `pgcrypto`, `uuid-ossp`).
+3. Tú: configurar Auth providers (Google OAuth con nuevos redirect URLs), plantillas de email, política de contraseñas, HIBP, MFA/TOTP.
+4. Tú: crear buckets de Storage con las mismas políticas.
+5. Yo: script de import de datos vía Supabase Admin API + inserts por lotes.
+6. Yo: script de re-creación de usuarios de auth (con reset de contraseña forzado si no hay acceso a hashes).
 
-### 6. Verificabilidad del sorteo
-- `run_daily_draw` ya guarda `seed_hash`. Añadir en `/sorteo/ganadores` el enlace con el hash + explicación de cómo verificar (SHA-256 del seed publicado tras el sorteo).
-- Random.org queda como fase futura (no bloqueante para MVP legal).
+### Fase 3 — Cambio de código (yo)
+1. Reemplazar el cliente auto-generado de Lovable Cloud por un cliente Supabase estándar apuntando a las nuevas env vars.
+2. Actualizar `.env` con las claves nuevas.
+3. Regenerar `types.ts`.
+4. Actualizar redirect URLs de OAuth en el código y en el dashboard de Google Cloud Console.
+5. Reapuntar webhooks de Stripe al nuevo endpoint `/api/public/*`.
+6. Verificar que `attachSupabaseAuth`, `requireSupabaseAuth` y `supabaseAdmin` siguen funcionando con el cliente nuevo.
 
-### 7. Reclamo de premio
-- El flujo `winner_claims` ya existe con W-9 para premios altos. Verificar que el aviso de "premios > $600 requieren W-9" aparece en `/sweepstakes-rules` y en la página de reclamo.
+### Fase 4 — Staging y verificación (yo)
+1. Deploy en un branch/preview con las env vars nuevas.
+2. Smoke test completo: signup, login, Google OAuth, 2FA, checkout Stripe, compra de estrellas, entrada AMOE, sorteo manual de prueba, referidos, QR, perfil, favoritos, admin panels.
+3. Verificar `pg_cron` ejecuta el sorteo de prueba correctamente.
+4. Confirmar que las 68 tablas tienen RLS activo y GRANTs correctos.
+5. Confirmar CSP, headers y endpoint de CSP report siguen funcionando.
 
-### 8. Checklist antes de activar (`sweepstakes_active=true`)
-- [ ] Dirección postal real cargada en `sweepstakes_config.sponsor_address`.
-- [ ] Panel admin verificado (login + rol) en staging.
-- [ ] Prueba end-to-end: 1 boleto pago + 1 boleto AMOE en el mismo sorteo → confirmar en DB mismo peso.
-- [ ] Prize pool y ganadores muestran "Próximamente" con bandera en `false`.
-- [ ] Textos consistentes en banner / reglas / formulario / footer.
-- [ ] Revisión legal del abogado.
+### Fase 5 — Corte de producción (tú + yo, ventana coordinada)
+1. Congelar escrituras: activar modo mantenimiento (banner + bloqueo de checkout/AMOE/spin).
+2. Delta final: re-exportar filas creadas desde el snapshot inicial hasta ahora.
+3. Aplicar delta en el nuevo Supabase.
+4. Actualizar DNS/env de producción para apuntar al nuevo backend.
+5. Verificar sanity checks en producción.
+6. Desactivar modo mantenimiento.
 
-## Detalles técnicos
+### Fase 6 — Post-migración (yo)
+1. Monitorear logs, errores y CSP durante 48h.
+2. Rollback plan: mantener Lovable Cloud accesible en solo-lectura durante 7 días por si hace falta re-consultar algo.
+3. Después de 7 días estables: cerrar Lovable Cloud desde Connectors.
 
-- **DB**: 1 migración — agrega `sweepstakes_active`, extiende `get_sweepstakes_public_config`, añade guarda en `enter_daily_draw`, RPC `admin_register_amoe_entry(email, name, dob, state, draw_date)` con validaciones.
-- **Frontend**: hook `useSweepstakesActive()` consumido por home banner, `/ruleta`, `/sweepstakes-rules`, `/sorteo/ganadores`, footer.
-- **No se crea** una tabla nueva `entradas_sorteo`: `daily_draw_entries` ya cumple la función. Renombrar sería un refactor destructivo sin beneficio.
-- **Pagos**: mantener Stripe sandbox hasta que el usuario decida go-live; añadir label "Powered by Stripe" en el modal de estrellas para eliminar la ambigüedad con Shopify.
+## Detalles técnicos clave
 
-## Fuera de alcance (siguiente iteración)
-- Integración Random.org en vivo.
-- Panel público de auditoría de seeds pasados.
-- Registro estatal si el premio supera $5,000.
+- **Auth**: Supabase permite importar usuarios con `admin.createUser({ email, password_hash })` solo si tenemos los hashes en formato bcrypt. Si Lovable Cloud no los expone (probable), la única opción es crear los usuarios sin contraseña y enviar reset masivo. Esto afecta UX significativamente — necesito tu OK explícito.
+- **RLS**: 68 tablas ya auditadas; todas las políticas y GRANTs se replican tal cual.
+- **`pg_cron`**: se recrea el job `run_daily_draw_safe()` en el nuevo Supabase apuntando al mismo horario (20:00 ET vía TZ correcto).
+- **Stripe**: webhooks apuntan a `/api/public/*` del dominio de la app, no del backend, así que no cambia el endpoint público — solo el destino interno.
+- **Emails**: Resend/dominio de envío no cambian; solo las plantillas de auth de Supabase deben reconfigurarse.
+- **CSP nonce**: la lógica vive en el server runtime del app, no en Supabase — no se afecta.
 
-## Pregunta abierta
-¿Quieres que en el mismo turno prepare también el hardening del panel admin (segundo prompt que mencionaste), o lo dejamos como plan aparte para revisarlo primero?
+## Preguntas que necesito responder antes de empezar
+
+1. **¿Tienes ya el proyecto Supabase creado, o empiezo con las instrucciones de setup?**
+2. **¿Aceptas que TODOS los usuarios existentes pierdan su contraseña y reciban un email de reset?** (probable, salvo que Lovable soporte exportar hashes bcrypt).
+3. **¿Qué ventana de downtime toleras?** (recomiendo 2–4 horas domingo madrugada).
+4. **¿Quieres migración de datos completa (incluye histórico de sorteos, referidos, CSP violations, etc.) o solo lo esencial (users, subscriptions, ganadores)?**
+
+Cuando me confirmes estas 4 respuestas paso a build mode y arranco por Fase 1.
