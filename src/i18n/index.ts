@@ -120,10 +120,15 @@ export function getLocale(lang?: string): string {
   return match ? LANG_META[match].locale : "en-US";
 }
 
-export function formatPrice(value: number, lang?: string): string {
-  return new Intl.NumberFormat(getLocale(lang), {
+export function formatPrice(value: number, _lang?: string): string {
+  // Prices are always denominated in USD and rendered with the en-US locale
+  // ($ before the number, period decimal) regardless of the UI language, so
+  // /shop, /subscribe, /cart and emails all match.
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(value);
 }
 
