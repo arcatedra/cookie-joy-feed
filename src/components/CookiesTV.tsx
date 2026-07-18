@@ -1528,7 +1528,7 @@ function ReelCard({
             </span>
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold ring-1 ring-white/40">
               <ShoppingCart className="h-3 w-3" />
-              Comprar
+              {t("reels.buy", "Comprar")}
             </span>
           </button>
         )}
