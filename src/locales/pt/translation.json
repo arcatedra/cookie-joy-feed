@@ -364,7 +364,8 @@
         "cadence": "8 ENTREGAS / MÊS",
         "desc": "Cobertura mensal completa: até 8 entregas (duas vezes por semana, segundas e sextas)."
       }
-    }
+    },
+    "yourPlan": "Seu Plano Hazorex"
   },
   "profile": {
     "metaTitle": "Meu perfil — HAZOREX",

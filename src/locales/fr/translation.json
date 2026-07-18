@@ -361,7 +361,8 @@
         "cadence": "8 LIVRAISONS / MOIS",
         "desc": "Couverture mensuelle complète. Commodité maximale avec jusqu'à 8 livraisons par mois (deux fois par semaine les lundis et vendredis)."
       }
-    }
+    },
+    "yourPlan": "Votre Plan Hazorex"
   },
   "profile": {
     "metaTitle": "Mon Profil — HAZOREX",

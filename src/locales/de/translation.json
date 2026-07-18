@@ -364,7 +364,8 @@
         "cadence": "8 LIEFERUNGEN / MONAT",
         "desc": "Volle Versorgung: bis zu 8 Lieferungen pro Monat (montags und freitags)."
       }
-    }
+    },
+    "yourPlan": "Dein Hazorex-Plan"
   },
   "profile": {
     "metaTitle": "Mein Profil — HAZOREX",

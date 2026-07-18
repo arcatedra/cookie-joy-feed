@@ -361,7 +361,8 @@
         "cadence": "8 CONSEGNE / MESE",
         "desc": "Copertura mensile completa. Massima comodità con fino a 8 consegne al mese (due volte a settimana il lunedì e il venerdì)."
       }
-    }
+    },
+    "yourPlan": "Il tuo Piano Hazorex"
   },
   "profile": {
     "metaTitle": "Il mio Profilo — HAZOREX",
