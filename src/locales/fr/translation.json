@@ -19,7 +19,8 @@
     "notifications": "Notifications",
     "markRead": "Marquer tout comme lu",
     "settings": "Paramètres",
-    "loading": "Chargement…"
+    "loading": "Chargement…",
+    "cart": "Panier"
   },
   "auth": {
     "signInTitle": "Connexion",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "Fudge triple chocolat fondu 🍫",
-        "product": "Fudge Triple Chocolat"
+        "product": "Triple chocolat fondant"
       },
       "snicker": {
         "title": "Magie sucre cannelle 🌟",
@@ -1462,13 +1463,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Votre panier — HAZOREX",
-    "metaDesc": "Vérifiez les articles de votre panier avant de finaliser la commande."
+    "metaTitle": "Panier — HAZOREX",
+    "metaDesc": "Votre panier HAZOREX. Paiement sécurisé avec Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Cookies Artisanaux Premium",
+    "metaDesc": "Découvrez des cookies gourmets, des packs personnalisés et des abonnements mensuels chez HAZOREX.",
+    "sliderHeading": "Inspiré par vos envies",
+    "sliderSub": "Cuits aujourd'hui · Livraison 24h",
+    "seeMore": "Voir plus",
+    "addToCart": "Ajouter au panier"
+  },
+  "authPage": {
+    "metaTitle": "Connexion — HAZOREX",
+    "metaDesc": "Connectez-vous à HAZOREX pour participer, commenter et enregistrer vos favoris."
+  },
+  "profilePage": {
+    "metaTitle": "Mon profil — HAZOREX",
+    "metaDesc": "Gérez votre compte HAZOREX, commandes et abonnement."
+  },
+  "shopPage": {
+    "subtitle": "Achat à l'unité · Paiement sécurisé avec Stripe",
+    "metaTitle": "Boutique — HAZOREX",
+    "metaDesc": "Achetez des cookies artisanaux HAZOREX à l'unité. Paiement sécurisé avec Stripe."
   }
 }

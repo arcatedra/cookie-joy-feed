@@ -19,7 +19,8 @@
     "notifications": "Notifiche",
     "markRead": "Segna tutti come letti",
     "settings": "Impostazioni",
-    "loading": "Caricamento…"
+    "loading": "Caricamento…",
+    "cart": "Carrello"
   },
   "auth": {
     "signInTitle": "Accedi",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "Scioglievolezza triplo cioccolato fondente 🍫",
-        "product": "Triplo Cioccolato Fondente"
+        "product": "Triplo cioccolato fondente"
       },
       "snicker": {
         "title": "Magia di cannella e zucchero 🌟",
@@ -1462,13 +1463,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Il tuo carrello — HAZOREX",
-    "metaDesc": "Controlla gli articoli nel carrello prima di completare l'acquisto."
+    "metaTitle": "Carrello — HAZOREX",
+    "metaDesc": "Il tuo carrello HAZOREX. Pagamento sicuro con Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Biscotti Artigianali Premium",
+    "metaDesc": "Scopri biscotti gourmet, pack personalizzati e abbonamenti mensili su HAZOREX.",
+    "sliderHeading": "Ispirato alle tue voglie",
+    "sliderSub": "Sfornati oggi · Spedizione in 24h",
+    "seeMore": "Vedi altro",
+    "addToCart": "Aggiungi al carrello"
+  },
+  "authPage": {
+    "metaTitle": "Accedi — HAZOREX",
+    "metaDesc": "Accedi a HAZOREX per partecipare, commentare e salvare i tuoi preferiti."
+  },
+  "profilePage": {
+    "metaTitle": "Il mio profilo — HAZOREX",
+    "metaDesc": "Gestisci il tuo account HAZOREX, ordini e abbonamento."
+  },
+  "shopPage": {
+    "subtitle": "Acquisto a pezzo · Pagamento sicuro con Stripe",
+    "metaTitle": "Negozio — HAZOREX",
+    "metaDesc": "Acquista biscotti artigianali HAZOREX a pezzo. Pagamento sicuro con Stripe."
   }
 }

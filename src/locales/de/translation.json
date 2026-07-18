@@ -19,7 +19,8 @@
     "notifications": "Benachrichtigungen",
     "markRead": "Alle als gelesen markieren",
     "settings": "Einstellungen",
-    "loading": "Wird geladen…"
+    "loading": "Wird geladen…",
+    "cart": "Warenkorb"
   },
   "auth": {
     "signInTitle": "Anmelden",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "Dreifach Schoko-Fudge 🍫",
-        "product": "Triple Chocolate Fudge"
+        "product": "Dreifach-Schokoladen-Fudge"
       },
       "snicker": {
         "title": "Zimt-Zucker-Zauber 🌟",
@@ -1465,13 +1466,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Dein Warenkorb — HAZOREX",
-    "metaDesc": "Überprüfe die Artikel in deinem Warenkorb, bevor du zur Kasse gehst."
+    "metaTitle": "Warenkorb — HAZOREX",
+    "metaDesc": "Dein HAZOREX-Warenkorb. Sichere Zahlung mit Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Premium Handgemachte Kekse",
+    "metaDesc": "Entdecke Gourmet-Kekse, individuelle Packs und Monatsabos bei HAZOREX.",
+    "sliderHeading": "Inspiriert von deinem Verlangen",
+    "sliderSub": "Heute gebacken · 24h Versand",
+    "seeMore": "Mehr sehen",
+    "addToCart": "In den Warenkorb"
+  },
+  "authPage": {
+    "metaTitle": "Anmelden — HAZOREX",
+    "metaDesc": "Melde dich bei HAZOREX an, um teilzunehmen, zu kommentieren und Favoriten zu speichern."
+  },
+  "profilePage": {
+    "metaTitle": "Mein Profil — HAZOREX",
+    "metaDesc": "Verwalte dein HAZOREX-Konto, Bestellungen und Abo."
+  },
+  "shopPage": {
+    "subtitle": "Einzelkauf · Sichere Zahlung mit Stripe",
+    "metaTitle": "Shop — HAZOREX",
+    "metaDesc": "HAZOREX handgemachte Kekse einzeln kaufen. Sichere Stripe-Zahlung."
   }
 }

@@ -19,7 +19,8 @@
     "notifications": "通知",
     "markRead": "全部标记为已读",
     "settings": "设置",
-    "loading": "加载中…"
+    "loading": "加载中…",
+    "cart": "购物车"
   },
   "auth": {
     "signInTitle": "登录",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "三重巧克力软糖融化 🍫",
-        "product": "三重巧克力软糖"
+        "product": "三重巧克力软心"
       },
       "snicker": {
         "title": "肉桂糖魔法 🌟",
@@ -1462,13 +1463,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "您的购物车 — HAZOREX",
-    "metaDesc": "在结账前查看购物车中的商品。"
+    "metaTitle": "购物车 — HAZOREX",
+    "metaDesc": "您的 HAZOREX 购物车。Stripe 安全支付。"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — 手工优质饼干",
+    "metaDesc": "在 HAZOREX 探索美味饼干、定制套装和月度订阅。",
+    "sliderHeading": "灵感来自你的渴望",
+    "sliderSub": "今日新鲜烘焙 · 24小时配送",
+    "seeMore": "查看更多",
+    "addToCart": "加入购物车"
+  },
+  "authPage": {
+    "metaTitle": "登录 — HAZOREX",
+    "metaDesc": "登录 HAZOREX 参加抽奖、评论并保存收藏。"
+  },
+  "profilePage": {
+    "metaTitle": "我的资料 — HAZOREX",
+    "metaDesc": "管理您的 HAZOREX 账户、订单和订阅。"
+  },
+  "shopPage": {
+    "subtitle": "按件购买 · Stripe 安全支付",
+    "metaTitle": "商店 — HAZOREX",
+    "metaDesc": "按件购买 HAZOREX 手工饼干。Stripe 安全支付。"
   }
 }
