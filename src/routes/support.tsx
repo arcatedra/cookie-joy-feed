@@ -74,6 +74,42 @@ function SupportPage() {
               </div>
             </Link>
           </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="flex items-center gap-3 rounded-xl border border-dashed border-border bg-background/50 p-4">
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                <Phone className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("supportPage.phoneLabel", "Teléfono")}
+                </p>
+                <p className="text-sm font-bold text-card-foreground">
+                  {t("supportPage.phoneComingSoon", "Próximamente")}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t("supportPage.phoneNote", "Línea directa en preparación")}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 rounded-xl border border-border bg-background p-4">
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                <Clock className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("supportPage.hoursLabel", "Horario de atención")}
+                </p>
+                <p className="text-sm font-bold text-card-foreground">
+                  {t("supportPage.hoursWeekdays", "Lun–Vie · 9:00–18:00 ET")}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t("supportPage.hoursWeekends", "Sáb 10:00–14:00 ET · Dom cerrado")}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
