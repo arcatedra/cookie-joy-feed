@@ -56,9 +56,13 @@ export function deriveCartItemNameKey(id: string): string | undefined {
 }
 
 function migrateItems(items: CartItem[]): CartItem[] {
-  return items.map((it) =>
-    it.nameKey ? it : { ...it, nameKey: deriveCartItemNameKey(it.id) },
-  );
+  // Prefer the nameKey derived from the stable id when available — it fixes
+  // legacy carts where a stale/incorrect nameKey was persisted (e.g. a
+  // `reel-p-mm` line stored with the Chocolate Chunk key from an older build).
+  return items.map((it) => {
+    const derived = deriveCartItemNameKey(it.id);
+    return { ...it, nameKey: derived ?? it.nameKey };
+  });
 }
 
 function readStorage(): CartItem[] {
@@ -137,10 +141,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const i = prev.findIndex((p) => p.id === withKey.id);
           if (i >= 0) {
             const next = [...prev];
+            // Overwrite metadata with the authoritative incoming values so a
+            // stale/corrupt legacy line can't keep showing the wrong product
+            // name/image while quantity increments.
             next[i] = {
               ...next[i],
+              name: withKey.name,
+              nameKey: withKey.nameKey,
+              price: withKey.price,
+              image: withKey.image,
               qty: next[i].qty + qty,
-              nameKey: next[i].nameKey ?? withKey.nameKey,
             };
             return next;
           }
