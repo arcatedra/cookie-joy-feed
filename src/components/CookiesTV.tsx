@@ -1083,14 +1083,14 @@ function ReelCard({
   };
 
   const buy = () => {
-    const name = translateReelText(reel.product_name);
+    const name = translateReelText(reel.product_name, reel.product_slug);
     const price = reel.product_price;
     if (!name || price == null) return;
     gate.guard(() => {
       cart.add({
         id: `reel-${reel.product_slug || reel.id}`,
         name,
-        nameKey: translateReelKey(reel.product_name),
+        nameKey: translateReelKey(reel.product_name, reel.product_slug),
         price: Number(price),
         image: productImg,
       });
@@ -1109,7 +1109,7 @@ function ReelCard({
   };
   const shareTitle = () => {
     const t = translateReelText(reel.title);
-    const p = translateReelText(reel.product_name);
+    const p = translateReelText(reel.product_name, reel.product_slug);
     return t ? `${t} · ${BRAND}` : p ? `${p} · ${BRAND}` : `Mira este reel de ${BRAND}`;
   };
 
@@ -1221,7 +1221,7 @@ function ReelCard({
           {productImg ? (
             <img
               src={productImg}
-              alt={translateReelText(reel.product_name) || ""}
+              alt={translateReelText(reel.product_name, reel.product_slug) || ""}
               className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px] transition-transform duration-[6000ms] ease-out group-hover:scale-125"
             />
           ) : (
@@ -1607,7 +1607,7 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {translateReelText(reel.product_name)}
+                {translateReelText(reel.product_name, reel.product_slug)}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(reel.product_price ?? 0).toFixed(2)}
@@ -1786,7 +1786,7 @@ function ExpandedReelModal({
   };
   const shareTitle = () => {
     const tt = translateReelText(current.title);
-    const pp = translateReelText(current.product_name);
+    const pp = translateReelText(current.product_name, current.product_slug);
     return tt ? `${tt} · ${BRAND}` : pp ? `${pp} · ${BRAND}` : `Mira este reel de ${BRAND}`;
   };
   const copyLink = async () => {
