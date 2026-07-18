@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SubscriptionPaymentModal } from "@/components/SubscriptionPaymentModal";
-import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
+import i18n, { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 
