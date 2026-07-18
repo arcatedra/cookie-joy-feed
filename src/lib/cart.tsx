@@ -109,7 +109,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }),
       clear: () => setItems([]),
     };
-  }, [items]);
+  }, [items, hydrated]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
