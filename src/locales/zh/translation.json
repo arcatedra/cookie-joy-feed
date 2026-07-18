@@ -80,7 +80,18 @@
         "title": "多彩 M&M 嘎嘣脆 🎉",
         "product": "节日 M&M"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "配送至",
@@ -1041,7 +1052,8 @@
     "rules": "抽奖规则",
     "trust": "信任",
     "rights": "版权所有。",
-    "becomeDriver": "成为配送员"
+    "becomeDriver": "成为配送员",
+    "winners": "获奖者"
   },
   "repartidoresPage": {
     "metaTitle": "成为配送员 · Hazorex",
@@ -1451,5 +1463,11 @@
   "cartPage": {
     "metaTitle": "您的购物车 — HAZOREX",
     "metaDesc": "在结账前查看购物车中的商品。"
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }

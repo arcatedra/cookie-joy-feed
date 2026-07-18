@@ -80,7 +80,18 @@
         "title": "Bunte M&M Crunch 🎉",
         "product": "Festliche M&M"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "Liefern nach",
@@ -589,7 +600,8 @@
     "rules": "Verlosungsregeln",
     "trust": "Vertrauen",
     "rights": "Alle Rechte vorbehalten.",
-    "becomeDriver": "Werde Fahrer"
+    "becomeDriver": "Werde Fahrer",
+    "winners": "Gewinner"
   },
   "ruleta": {
     "metaTitle": "HAZOREX Roulette — Drehen und Gewinnen ⭐",
@@ -1454,5 +1466,11 @@
   "cartPage": {
     "metaTitle": "Dein Warenkorb — HAZOREX",
     "metaDesc": "Überprüfe die Artikel in deinem Warenkorb, bevor du zur Kasse gehst."
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }

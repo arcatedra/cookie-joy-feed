@@ -80,7 +80,18 @@
         "title": "M&M's colorés croquants 🎉",
         "product": "M&M's Festifs"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "Livrer à",
@@ -1041,7 +1052,8 @@
     "rules": "Règles du tirage",
     "trust": "Confiance",
     "rights": "Tous droits réservés.",
-    "becomeDriver": "Devenir livreur"
+    "becomeDriver": "Devenir livreur",
+    "winners": "Gagnants"
   },
   "repartidoresPage": {
     "metaTitle": "Devenir livreur · Hazorex",
@@ -1451,5 +1463,11 @@
   "cartPage": {
     "metaTitle": "Votre panier — HAZOREX",
     "metaDesc": "Vérifiez les articles de votre panier avant de finaliser la commande."
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }

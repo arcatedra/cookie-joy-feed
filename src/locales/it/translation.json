@@ -80,7 +80,18 @@
         "title": "M&M croccanti e colorati 🎉",
         "product": "M&M Festivi"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "Consegna a",
@@ -1041,7 +1052,8 @@
     "rules": "Regole del concorso",
     "trust": "Fiducia",
     "rights": "Tutti i diritti riservati.",
-    "becomeDriver": "Diventa un rider"
+    "becomeDriver": "Diventa un rider",
+    "winners": "Vincitori"
   },
   "repartidoresPage": {
     "metaTitle": "Diventa un rider · Hazorex",
@@ -1451,5 +1463,11 @@
   "cartPage": {
     "metaTitle": "Il tuo carrello — HAZOREX",
     "metaDesc": "Controlla gli articoli nel carrello prima di completare l'acquisto."
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }
