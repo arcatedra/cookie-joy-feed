@@ -90,6 +90,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items,
       count,
       total,
+      hydrated,
       add: (item, qty = 1) =>
         setItems((prev) => {
           const i = prev.findIndex((p) => p.id === item.id);
