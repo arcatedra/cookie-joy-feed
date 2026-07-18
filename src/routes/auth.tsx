@@ -8,6 +8,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth";
 import { HazorexSymbol } from "@/components/HazorexLogo";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
+import i18n from "@/i18n";
 import {
   getLoginSecurityConfig,
   preflightLogin,
@@ -21,8 +22,8 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Iniciar sesión — Hazorex" },
-      { name: "description", content: "Inicia sesión en Hazorex para participar, comentar y guardar tus favoritos." },
+      { title: i18n.t("authPage.metaTitle") },
+      { name: "description", content: i18n.t("authPage.metaDesc") },
     ],
   }),
   component: AuthPage,
