@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart";
-import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
+import { SubscribePromoBanner } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
 import { DailyWinnerBanner } from "@/components/DailyWinnerBanner";
 import imgPack6 from "@/assets/pack-6.jpg";
@@ -448,7 +448,7 @@ function FeaturedCard() {
  * ========================================================== */
 function ProductSlider() {
   const cart = useCart();
-  const gate = useSubscriptionGate();
+  
   return (
     <section className="mx-auto mt-6 max-w-[1500px] px-3 md:px-6">
       <div className="rounded-md bg-white p-4 shadow-sm ring-1 ring-black/5 md:p-6">

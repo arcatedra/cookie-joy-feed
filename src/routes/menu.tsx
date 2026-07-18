@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ProductRating } from "@/components/ProductRating";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
+
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
@@ -110,7 +110,7 @@ function useSnapCarousel(itemCount: number) {
 function MenuPage() {
   const { t, i18n } = useTranslation();
   const globalCart = useCart();
-  const gate = useSubscriptionGate();
+  
   const [activeTab, setActiveTab] = useState<TabKey>("classic");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
   const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
