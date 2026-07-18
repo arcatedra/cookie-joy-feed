@@ -59,6 +59,7 @@ export const Route = createFileRoute("/best-sellers")({
 function BestSellersPage() {
   const { t } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const list = [...ALL].sort((a, b) => b.reviews - a.reviews).slice(0, 12);
 
   return (
