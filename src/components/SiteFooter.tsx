@@ -76,6 +76,28 @@ export function SiteFooter() {
           </div>
         </div>
 
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[#E6C35C]">
+            {t("footer.followUs", "Síguenos")}
+          </h3>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {(["Instagram", "Facebook", "TikTok"] as const).map((name) => (
+              <span
+                key={name}
+                aria-disabled="true"
+                title={t("footer.socialComingSoon", "Próximamente")}
+                className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 font-serif text-xs text-white/70"
+              >
+                <span className="font-semibold text-white/90">{name}</span>
+                <span className="rounded-full bg-[#E6C35C]/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#E6C35C]">
+                  {t("footer.socialComingSoon", "Próximamente")}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 md:flex-row md:items-center">
           <p className="font-serif text-xs text-white/60">
             © {year} HAZOREX. {t("footer.rights", "Todos los derechos reservados.")}
