@@ -105,7 +105,7 @@ function BestSellersPage() {
                   type="button"
                   onClick={() => {
                     gate.guard(() => {
-                      cart.add({ id: p.id, name, price: p.price, image: p.image });
+                      cart.add({ id: p.id, name, nameKey: p.nameKey, price: p.price, image: p.image });
                       toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                     });
                   }}
