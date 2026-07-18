@@ -73,11 +73,11 @@ export function TopNav() {
   }, []);
 
   const suggestions = [
-    "Chocolate Chunk",
-    "Snickerdoodle",
-    "Double Choc Mint",
-    "12-Pack Gift Box",
-    "Vegan Chunk",
+    t("cookies.c1.name"),
+    t("cookies.c2.name"),
+    t("cookies.c10.name"),
+    t("packs.p12.name"),
+    t("cookies.c9.name"),
   ].filter((s) => !searchVal || s.toLowerCase().includes(searchVal.toLowerCase()));
 
   return (
