@@ -80,6 +80,18 @@
       "mm": {
         "title": "Makulay na M&M crunch 🎉",
         "product": "Pistahang M&M"
+      },
+      "pb": {
+        "title": "Sariwang-luto na peanut crunch",
+        "product": "Peanut Butter Crunch"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream: ang premium na klasiko",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Sariwang-luto 🍫 natunaw na tsokolate",
+        "product": "Nutella Explosion Cookie"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "Gusto",
+    "comments": "Mga komento",
+    "share": "Ibahagi",
+    "shareOn": "Ibahagi sa"
   },
   "topnav": {
     "deliverTo": "Ipadala sa",

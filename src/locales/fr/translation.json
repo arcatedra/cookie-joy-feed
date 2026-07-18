@@ -80,6 +80,18 @@
       "mm": {
         "title": "M&M's colorés croquants 🎉",
         "product": "M&M's Festifs"
+      },
+      "pb": {
+        "title": "Croquant de cacahuète fraîchement cuit",
+        "product": "Beurre de Cacahuète Croquant"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream : le classique premium",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Fraîchement cuites 🍫 chocolat fondu",
+        "product": "Cookie Explosion Nutella"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "J'aime",
+    "comments": "Commentaires",
+    "share": "Partager",
+    "shareOn": "Partager sur"
   },
   "topnav": {
     "deliverTo": "Livrer à",

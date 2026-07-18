@@ -423,6 +423,18 @@
       "mm": {
         "title": "カリカリで楽しいM&M 🎉",
         "product": "フェスティブM&M"
+      },
+      "pb": {
+        "title": "焼きたてピーナッツクランチ",
+        "product": "ピーナッツバター クランチ"
+      },
+      "cookiescream": {
+        "title": "クッキー&クリーム：プレミアムな定番",
+        "product": "クッキー&クリーム Premium"
+      },
+      "nutella": {
+        "title": "焼きたて 🍫 とろけるチョコ",
+        "product": "ヌテラ エクスプロージョン クッキー"
       }
     },
     "buy": "Buy",
@@ -435,7 +447,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "いいね",
+    "comments": "コメント",
+    "share": "シェア",
+    "shareOn": "シェア先"
   },
   "topnav": {
     "deliverTo": "お届け先",
