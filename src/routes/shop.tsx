@@ -7,7 +7,6 @@ import i18n, { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
-import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
 import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
@@ -15,6 +14,7 @@ import imgOatmeal from "@/assets/ins-oatmeal.jpg";
 import imgWhiteMac from "@/assets/ins-white-mac.jpg";
 import imgMM from "@/assets/ins-mm.jpg";
 import imgPB from "@/assets/ins-pb.jpg";
+import imgVeganChoc from "@/assets/ins-vegan-choc.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
 
 export const Route = createFileRoute("/shop")({
@@ -30,16 +30,16 @@ export const Route = createFileRoute("/shop")({
 });
 
 const products = [
-  { id: "shop-1", key: "c1", price: 3.75, rating: 5, reviews: 272, image: imgChocChunk },
-  { id: "shop-2", key: "c2", price: 3.75, rating: 5, reviews: 184, image: imgCookiesCream },
-  { id: "shop-3", key: "c2", price: 3.75, rating: 5, reviews: 125, image: imgSnicker },
-  { id: "shop-4", key: "c3", price: 3.75, rating: 5, reviews: 134, image: imgSugar },
-  { id: "shop-5", key: "c4", price: 3.75, rating: 5, reviews: 197, image: imgDoubleChoc },
-  { id: "shop-6", key: "c5", price: 3.75, rating: 5, reviews: 98, image: imgOatmeal },
-  { id: "shop-7", key: "c6", price: 3.75, rating: 5, reviews: 95, image: imgWhiteMac },
-  { id: "shop-8", key: "c7", price: 3.75, rating: 5, reviews: 79, image: imgMM },
-  { id: "shop-9", key: "c8", price: 3.75, rating: 5, reviews: 56, image: imgPB },
-  { id: "shop-10", key: "c10", price: 3.75, rating: 5, reviews: 23, image: imgMint },
+  { id: "shop-c1", key: "c1", price: 3.75, rating: 5, reviews: 272, image: imgChocChunk },
+  { id: "shop-c2", key: "c2", price: 3.75, rating: 5, reviews: 125, image: imgSnicker },
+  { id: "shop-c3", key: "c3", price: 3.75, rating: 5, reviews: 134, image: imgSugar },
+  { id: "shop-c4", key: "c4", price: 3.75, rating: 5, reviews: 197, image: imgDoubleChoc },
+  { id: "shop-c5", key: "c5", price: 3.75, rating: 5, reviews: 98, image: imgOatmeal },
+  { id: "shop-c6", key: "c6", price: 3.75, rating: 5, reviews: 95, image: imgWhiteMac },
+  { id: "shop-c7", key: "c7", price: 3.75, rating: 5, reviews: 79, image: imgMM },
+  { id: "shop-c8", key: "c8", price: 3.75, rating: 5, reviews: 56, image: imgPB },
+  { id: "shop-c9", key: "c9", price: 3.75, rating: 5, reviews: 37, image: imgVeganChoc },
+  { id: "shop-c10", key: "c10", price: 3.75, rating: 5, reviews: 23, image: imgMint },
 ];
 
 function ShopPage() {
