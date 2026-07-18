@@ -51,6 +51,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (stored.length > 0) setItems(stored);
       hydratedRef.current = true;
     }
+    setHydrated(true);
   }, []);
 
   // Persist changes — but never before hydration completes, to avoid
