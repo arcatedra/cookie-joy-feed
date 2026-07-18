@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Star, ShoppingCart, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import i18n from "@/i18n";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
