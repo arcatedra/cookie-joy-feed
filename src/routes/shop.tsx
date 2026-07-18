@@ -138,6 +138,7 @@ function ShopPage() {
                       cart.add({
                         id: p.id,
                         name,
+                        nameKey: `cookies.${p.key}.name`,
                         price: p.price,
                         image: p.image,
                       });
