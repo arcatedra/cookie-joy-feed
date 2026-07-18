@@ -94,14 +94,12 @@ function BuildPackPage() {
       .map(([id, qty]) => `${qty}× ${t(COOKIES.find((c) => c.id === id)!.nameKey)}`)
       .join(", ");
     const name = t("buildPackPage.cartName", "Pack personalizado ({{count}} galletas)", { count: size.count });
-    gate.guard(() =>
-      cart.add({
-        id: `custom-pack-${size.count}-${Date.now()}`,
-        name: `${name} — ${parts}`,
-        price: size.price,
-        image: imgPack6,
-      }),
-    );
+    cart.add({
+      id: `custom-pack-${size.count}-${Date.now()}`,
+      name: `${name} — ${parts}`,
+      price: size.price,
+      image: imgPack6,
+    });
     setSelection({});
   };
 
