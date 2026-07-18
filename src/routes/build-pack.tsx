@@ -58,6 +58,7 @@ export const Route = createFileRoute("/build-pack")({
 function BuildPackPage() {
   const { t } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   
 
   const [sizeIdx, setSizeIdx] = useState(0);
