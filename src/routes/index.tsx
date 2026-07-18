@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart";
-import { SubscribePromoBanner } from "@/lib/subscription-gate";
+import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
 import { DailyWinnerBanner } from "@/components/DailyWinnerBanner";
 import imgPack6 from "@/assets/pack-6.jpg";
