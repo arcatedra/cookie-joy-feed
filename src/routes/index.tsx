@@ -451,6 +451,7 @@ function FeaturedCard() {
  * ========================================================== */
 function ProductSlider() {
   const cart = useCart();
+  const gate = useSubscriptionGate();
   
   return (
     <section className="mx-auto mt-6 max-w-[1500px] px-3 md:px-6">
