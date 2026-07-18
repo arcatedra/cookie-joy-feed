@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Minus, ShoppingCart, Package } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 import i18n from "@/i18n";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
