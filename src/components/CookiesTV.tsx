@@ -1027,6 +1027,7 @@ function ReelCard({
       cart.add({
         id: `reel-${reel.product_slug || reel.id}`,
         name,
+        nameKey: translateReelKey(reel.product_name),
         price: Number(price),
         image: productImg,
       });
