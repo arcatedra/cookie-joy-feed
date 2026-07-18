@@ -210,7 +210,7 @@ function hasPlayableSource(reel: DbReel) {
 const PRODUCT_OPTIONS = [
   { slug: "p-doublechoc", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
   { slug: "p-cc", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
-  { slug: "p-pb", name: "Mantequilla de Maní Crunch", price: 3.75, image: imgPB },
+  { slug: "p-pb", name: "Mantequilla de Maní Crujiente", price: 3.75, image: imgPB },
   { slug: "p-cchunk", name: "Doble Chispas de Chocolate", price: 3.95, image: imgChocChunk },
   { slug: "p-mint", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
   { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
