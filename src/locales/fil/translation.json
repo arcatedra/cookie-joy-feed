@@ -851,7 +851,7 @@
     "backToRoulette": "Ruleta",
     "title": "Kasaysayan ng Draw",
     "intro": "Ang bawat draw ay ginaganap araw-araw sa 8:00 PM (Eastern Time). Ang mga resulta ay pampubliko at maaaring i-verify sa pamamagitan ng seed hash.",
-    "empty": "Wala pang natapos na draw. Bumalik pagkatapos ng 8:00 PM ET!",
+    "empty": "Wala pang nakaraang draw. Bumalik ka sa lalong madaling panahon.",
     "anonymous": "Hindi nagpakilala"
   },
   "trust": {

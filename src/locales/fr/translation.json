@@ -848,7 +848,7 @@
     "backToRoulette": "Roulette",
     "title": "Historique des tirages",
     "intro": "Chaque tirage a lieu quotidiennement à 20h00 (heure de l'Est). Les résultats sont publics et vérifiables via le hash de départ.",
-    "empty": "Aucun tirage terminé pour le moment. Revenez après 20h00 HE !",
+    "empty": "Aucun tirage précédent pour le moment. Revenez bientôt.",
     "anonymous": "Anonyme"
   },
   "trust": {
