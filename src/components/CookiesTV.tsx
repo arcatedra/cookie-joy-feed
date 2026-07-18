@@ -1004,13 +1004,15 @@ function ReelCard({
     const name = translateReelText(reel.product_name);
     const price = reel.product_price;
     if (!name || price == null) return;
-    cart.add({
-      id: `reel-${reel.product_slug || reel.id}`,
-      name,
-      price: Number(price),
-      image: productImg,
+    gate.guard(() => {
+      cart.add({
+        id: `reel-${reel.product_slug || reel.id}`,
+        name,
+        price: Number(price),
+        image: productImg,
+      });
+      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
     });
-    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
   };
 
   const shareUrl = () => {
