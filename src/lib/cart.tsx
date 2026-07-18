@@ -29,6 +29,19 @@ const STORAGE_KEY = "origen.cart.v1";
  * Used to migrate legacy cart entries persisted before `nameKey` was saved,
  * so /cart translates names consistently with /shop, /menu, /best-sellers.
  */
+const REEL_SLUG_KEY_MAP: Record<string, string> = {
+  "p-mm": "reels.items.mm.product",
+  "p-cchunk": "reels.items.cchunk.product",
+  "p-oatmeal": "reels.items.oatmeal.product",
+  "p-snicker": "reels.items.snicker.product",
+  "p-triple": "reels.items.triple.product",
+  "p-mint": "reels.items.mint.product",
+  "p-pista": "reels.items.pista.product",
+  "p-pb": "reels.items.pb.product",
+  "p-cc": "reels.items.cookiescream.product",
+  "p-doublechoc": "reels.items.nutella.product",
+};
+
 export function deriveCartItemNameKey(id: string): string | undefined {
   if (!id) return undefined;
   const cookieMatch = id.match(/^(?:shop-)?(c\d{1,2})$/);
@@ -37,6 +50,8 @@ export function deriveCartItemNameKey(id: string): string | undefined {
   if (packMatch) return `packs.${packMatch[1]}.name`;
   const sliderMatch = id.match(/^slider-(.+)$/);
   if (sliderMatch) return deriveCartItemNameKey(sliderMatch[1]);
+  const reelMatch = id.match(/^reel-(.+)$/);
+  if (reelMatch) return REEL_SLUG_KEY_MAP[reelMatch[1]];
   return undefined;
 }
 
