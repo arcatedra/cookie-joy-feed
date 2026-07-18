@@ -409,7 +409,7 @@ function SearchPage() {
                     )}
                     <button
                       type="button"
-                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, price: p.price, image: p.image }))}
+                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, nameKey: p.nameKey, price: p.price, image: p.image }))}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />

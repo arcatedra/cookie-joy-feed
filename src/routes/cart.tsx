@@ -7,6 +7,7 @@ import {
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
@@ -45,6 +46,7 @@ interface AddressForm {
 
 function CartPage() {
   const cart = useCart();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [email, setEmail] = useState(user?.email ?? "");
   const [address, setAddress] = useState<AddressForm>({
@@ -86,7 +88,7 @@ function CartPage() {
         data: {
           items: cart.items.map((it) => ({
             id: it.id,
-            name: it.name,
+            name: it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name,
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
@@ -143,15 +145,17 @@ function CartPage() {
         <h1 className="text-2xl font-extrabold text-foreground">Tu carrito</h1>
 
         <section className="mt-5 divide-y divide-border rounded-2xl bg-card ring-1 ring-border">
-          {cart.items.map((it) => (
+          {cart.items.map((it) => {
+            const displayName = it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name;
+            return (
             <div key={it.id} className="flex items-center gap-3 p-3">
               <img
                 src={it.image}
-                alt={it.name}
+                alt={displayName}
                 className="h-16 w-16 rounded-lg object-cover"
               />
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-sm font-bold text-foreground">{it.name}</h3>
+                <h3 className="truncate text-sm font-bold text-foreground">{displayName}</h3>
                 <p className="text-xs text-muted-foreground">
                   ${it.price.toFixed(2)} c/u
                 </p>
@@ -191,7 +195,8 @@ function CartPage() {
                 </button>
               </div>
             </div>
-          ))}
+          );
+          })}
         </section>
 
         {!clientSecret && (
