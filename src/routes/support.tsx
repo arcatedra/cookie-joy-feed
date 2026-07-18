@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Mail, MessageCircle, HelpCircle, ShoppingBag, Truck, RotateCcw, Trophy } from "lucide-react";
+import { Mail, MessageCircle, HelpCircle, ShoppingBag, Truck, RotateCcw, Trophy, Phone, Clock } from "lucide-react";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/support")({
