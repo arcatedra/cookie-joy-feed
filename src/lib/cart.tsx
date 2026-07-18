@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState, type R
 export interface CartItem {
   id: string;
   name: string;
+  nameKey?: string;
   price: number;
   image: string;
   qty: number;
