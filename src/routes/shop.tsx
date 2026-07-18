@@ -3,7 +3,7 @@ import { ChevronLeft, Plus, ShoppingCart, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { formatPrice, formatNumber } from "@/i18n";
+import i18n, { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -20,17 +20,10 @@ import imgMint from "@/assets/ins-mint.jpg";
 export const Route = createFileRoute("/shop")({
   head: () => ({
     meta: [
-      { title: "Tienda — HAZOREX" },
-      {
-        name: "description",
-        content:
-          "Compra galletas artesanales HAZOREX por unidad. Pago seguro con Stripe.",
-      },
-      { property: "og:title", content: "Tienda HAZOREX" },
-      {
-        property: "og:description",
-        content: "Catálogo completo de galletas HAZOREX con pago seguro.",
-      },
+      { title: i18n.t("shopPage.metaTitle") },
+      { name: "description", content: i18n.t("shopPage.metaDesc") },
+      { property: "og:title", content: i18n.t("shopPage.metaTitle") },
+      { property: "og:description", content: i18n.t("shopPage.metaDesc") },
     ],
   }),
   component: ShopPage,
@@ -85,7 +78,7 @@ function ShopPage() {
           </div>
         </div>
         <p className="mt-4 text-xs uppercase tracking-wider opacity-80">
-          Compra por unidad · Pago seguro con Stripe
+          {t("shopPage.subtitle")}
         </p>
       </header>
 

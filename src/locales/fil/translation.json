@@ -19,7 +19,8 @@
     "notifications": "Mga abiso",
     "markRead": "Markahang nabasa lahat",
     "settings": "Mga setting",
-    "loading": "Nilo-load…"
+    "loading": "Nilo-load…",
+    "cart": "Cart"
   },
   "auth": {
     "signInTitle": "Mag-sign in",
@@ -1465,13 +1466,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Ang iyong cart — HAZOREX",
-    "metaDesc": "Suriin ang mga item sa iyong cart bago mag-checkout."
+    "metaTitle": "Cart — HAZOREX",
+    "metaDesc": "Ang iyong HAZOREX cart. Ligtas na checkout gamit ang Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
+    "metaDesc": "Tuklasin ang gourmet cookies, custom packs at monthly subscriptions sa HAZOREX.",
+    "sliderHeading": "Inspirado sa iyong crave",
+    "sliderSub": "Baked ngayong araw · 24h shipping",
+    "seeMore": "Tingnan pa",
+    "addToCart": "Idagdag sa cart"
+  },
+  "authPage": {
+    "metaTitle": "Mag-sign in — HAZOREX",
+    "metaDesc": "Mag-sign in sa HAZOREX para sumali, magkomento at i-save ang paborito."
+  },
+  "profilePage": {
+    "metaTitle": "Aking Profile — HAZOREX",
+    "metaDesc": "Pamahalaan ang iyong HAZOREX account, order at subscription."
+  },
+  "shopPage": {
+    "subtitle": "Bilhin bawat piraso · Ligtas na checkout via Stripe",
+    "metaTitle": "Tindahan — HAZOREX",
+    "metaDesc": "Bilhin ang HAZOREX handcrafted cookies bawat piraso. Ligtas via Stripe."
   }
 }

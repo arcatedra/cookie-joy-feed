@@ -19,7 +19,8 @@
     "notifications": "Notifications",
     "markRead": "Mark all as read",
     "settings": "Settings",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "cart": "Cart"
   },
   "auth": {
     "signInTitle": "Sign in",
@@ -1462,13 +1463,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Your cart — HAZOREX",
-    "metaDesc": "Review the items in your cart before checking out."
+    "metaTitle": "Cart — HAZOREX",
+    "metaDesc": "Your HAZOREX cart. Secure checkout with Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
+    "metaDesc": "Discover gourmet cookies, custom packs and monthly subscriptions at HAZOREX.",
+    "sliderHeading": "Inspired by your cravings",
+    "sliderSub": "Baked today · 24h shipping",
+    "seeMore": "See more",
+    "addToCart": "Add to cart"
+  },
+  "authPage": {
+    "metaTitle": "Sign in — HAZOREX",
+    "metaDesc": "Sign in to HAZOREX to enter draws, comment and save your favorites."
+  },
+  "profilePage": {
+    "metaTitle": "My Profile — HAZOREX",
+    "metaDesc": "Manage your HAZOREX account, orders and subscription."
+  },
+  "shopPage": {
+    "subtitle": "Buy by the piece · Secure checkout with Stripe",
+    "metaTitle": "Shop — HAZOREX",
+    "metaDesc": "Buy HAZOREX handcrafted cookies by the piece. Secure Stripe checkout."
   }
 }

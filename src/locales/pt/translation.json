@@ -19,7 +19,8 @@
     "notifications": "Notificações",
     "markRead": "Marcar todas como lidas",
     "settings": "Configurações",
-    "loading": "Carregando…"
+    "loading": "Carregando…",
+    "cart": "Carrinho"
   },
   "auth": {
     "signInTitle": "Entrar",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "Triplo chocolate derretido 🍫",
-        "product": "Triplo Chocolate Fudge"
+        "product": "Chocolate Triplo Cremoso"
       },
       "snicker": {
         "title": "Magia de canela e açúcar 🌟",
@@ -1465,13 +1466,34 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Seu carrinho — HAZOREX",
-    "metaDesc": "Revise os itens do seu carrinho antes de finalizar a compra."
+    "metaTitle": "Carrinho — HAZOREX",
+    "metaDesc": "Seu carrinho HAZOREX. Pagamento seguro com Stripe."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Biscoitos Artesanais Premium",
+    "metaDesc": "Descubra biscoitos gourmet, packs personalizados e assinaturas mensais na HAZOREX.",
+    "sliderHeading": "Inspirado nos seus desejos",
+    "sliderSub": "Assados hoje · Entrega em 24h",
+    "seeMore": "Ver mais",
+    "addToCart": "Adicionar ao carrinho"
+  },
+  "authPage": {
+    "metaTitle": "Entrar — HAZOREX",
+    "metaDesc": "Entre na HAZOREX para participar dos sorteios, comentar e salvar seus favoritos."
+  },
+  "profilePage": {
+    "metaTitle": "Meu Perfil — HAZOREX",
+    "metaDesc": "Gerencie sua conta HAZOREX, pedidos e assinatura."
+  },
+  "shopPage": {
+    "subtitle": "Compre por unidade · Pagamento seguro com Stripe",
+    "metaTitle": "Loja — HAZOREX",
+    "metaDesc": "Compre biscoitos artesanais HAZOREX por unidade. Pagamento seguro com Stripe."
   }
 }

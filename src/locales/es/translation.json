@@ -19,7 +19,8 @@
     "notifications": "Notificaciones",
     "markRead": "Marcar todo como leído",
     "settings": "Ajustes",
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "cart": "Carrito"
   },
   "auth": {
     "signInTitle": "Iniciar sesión",
@@ -58,7 +59,7 @@
       },
       "triple": {
         "title": "Triple chocolate fundido 🍫",
-        "product": "Triple Chocolate Fudge"
+        "product": "Triple Chocolate Fundido"
       },
       "snicker": {
         "title": "Magia de canela y azúcar 🌟",
@@ -508,7 +509,7 @@
     "priceDisclaimer": "Los precios son estimaciones del primer año de registro en USD en registradores comunes y pueden variar. * precio promocional del primer año."
   },
   "ruleta": {
-    "metaTitle": "HAZOREX Roulette — Gira y Gana ⭐",
+    "metaTitle": "HAZOREX Ruleta — Gira y Gana ⭐",
     "metaDesc": "Gira la Ruleta HAZOREX. Compra Estrellas o participa gratis siguiendo nuestros canales sociales y gana premios premium.",
     "ogTitle": "HAZOREX Roulette — Gira y Gana",
     "ogDesc": "Premios, descuentos y sabores sorpresa. Entrada gratuita disponible.",
@@ -1462,8 +1463,8 @@
     }
   },
   "cartPage": {
-    "metaTitle": "Tu carrito — HAZOREX",
-    "metaDesc": "Revisa los productos de tu carrito antes de finalizar la compra."
+    "metaTitle": "Carrito — HAZOREX",
+    "metaDesc": "Tu carrito HAZOREX. Pago seguro con Stripe."
   },
   "favorites": {
     "add": "Guardar en favoritos",
@@ -1483,5 +1484,26 @@
     "other": "{{count}} artículos · ${{total}}",
     "goTo": "Ir al carrito",
     "addAria": "Agregar {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — Galletas Artesanales Premium",
+    "metaDesc": "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en HAZOREX.",
+    "sliderHeading": "Inspirado en tus antojos",
+    "sliderSub": "Selección horneada hoy · Envío en 24h",
+    "seeMore": "Ver más",
+    "addToCart": "Agregar al carrito"
+  },
+  "authPage": {
+    "metaTitle": "Iniciar sesión — HAZOREX",
+    "metaDesc": "Inicia sesión en HAZOREX para participar, comentar y guardar tus favoritos."
+  },
+  "profilePage": {
+    "metaTitle": "Mi Perfil — HAZOREX",
+    "metaDesc": "Administra tu cuenta HAZOREX, pedidos y suscripción."
+  },
+  "shopPage": {
+    "subtitle": "Compra por unidad · Pago seguro con Stripe",
+    "metaTitle": "Tienda — HAZOREX",
+    "metaDesc": "Compra galletas artesanales HAZOREX por unidad. Pago seguro con Stripe."
   }
 }

@@ -362,7 +362,8 @@
     "notifications": "通知",
     "markRead": "すべて既読にする",
     "settings": "設定",
-    "loading": "読み込み中…"
+    "loading": "読み込み中…",
+    "cart": "カート"
   },
   "auth": {
     "signInTitle": "ログイン",
@@ -856,7 +857,7 @@
     "priceDisclaimer": "価格は、一般的なレジストラでの初年度登録のUSDでの見積もりであり、変動する可能性があります。* 初年度プロモーション価格。"
   },
   "ruleta": {
-    "metaTitle": "HAZOREX Roulette — スピンして当てよう ⭐",
+    "metaTitle": "HAZOREX ルーレット — 回して当てよう ⭐",
     "metaDesc": "HAZOREX Rouletteを回そう。スターを購入するか、ソーシャルチャンネルをフォローして無料で参加し、プレミアム賞品を獲得しよう。",
     "ogTitle": "HAZOREX Roulette — スピンして当てよう",
     "ogDesc": "賞品、割引、サプライズフレーバー。無料エントリーあり。",
@@ -1468,12 +1469,33 @@
   },
   "cartPage": {
     "metaTitle": "カート — HAZOREX",
-    "metaDesc": "購入手続きの前にカートの商品をご確認ください。"
+    "metaDesc": "HAZOREXカート。Stripeで安全に決済。"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
     "other": "{{count}} items · ${{total}}",
     "goTo": "Go to cart",
     "addAria": "Add {{name}}"
+  },
+  "homePage": {
+    "metaTitle": "HAZOREX — プレミアム手作りクッキー",
+    "metaDesc": "HAZOREXでグルメクッキー、カスタムパック、月額サブスクを見つけよう。",
+    "sliderHeading": "あなたの気分にインスパイア",
+    "sliderSub": "本日焼き上げ・24時間配送",
+    "seeMore": "もっと見る",
+    "addToCart": "カートに追加"
+  },
+  "authPage": {
+    "metaTitle": "ログイン — HAZOREX",
+    "metaDesc": "HAZOREXにログインして抽選参加・コメント・お気に入り保存。"
+  },
+  "profilePage": {
+    "metaTitle": "マイプロフィール — HAZOREX",
+    "metaDesc": "HAZOREXアカウント・注文・サブスクを管理。"
+  },
+  "shopPage": {
+    "subtitle": "1個から購入・Stripeで安全決済",
+    "metaTitle": "ショップ — HAZOREX",
+    "metaDesc": "HAZOREXの手作りクッキーを1個から。Stripeで安全決済。"
   }
 }

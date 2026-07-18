@@ -39,12 +39,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { FavoritesList } from "@/components/FavoritesList";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — HAZOREX" },
-      { name: "description", content: "Manage your HAZOREX account, orders, and subscription." },
+      { title: i18n.t("profilePage.metaTitle") },
+      { name: "description", content: i18n.t("profilePage.metaDesc") },
     ],
   }),
   component: ProfilePage,
