@@ -295,13 +295,15 @@ function CartPage() {
             disabled={!canCheckout || loadingCheckout}
             className="mt-5 w-full rounded-full bg-cta px-6 py-4 text-sm font-bold uppercase tracking-wider text-cta-foreground shadow-md transition hover:brightness-105 disabled:opacity-50"
           >
-            {loadingCheckout ? "Preparando pago…" : `Pagar $${total.toFixed(2)} con Stripe`}
+            {loadingCheckout
+              ? t("cartPage.preparing")
+              : t("cartPage.pay", { amount: `$${total.toFixed(2)}` })}
           </button>
         )}
 
         {!canCheckout && cart.count > 0 && !clientSecret && (
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            Completa email y datos de envío para continuar.
+            {t("cartPage.completeForm")}
           </p>
         )}
 
@@ -314,8 +316,9 @@ function CartPage() {
         )}
 
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
-          Pagos procesados de forma segura por Stripe.
+          {t("cartPage.securedBy")}
         </p>
+
       </div>
     </main>
   );
