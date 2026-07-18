@@ -1985,24 +1985,24 @@ function ExpandedReelModal({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button type="button" aria-label="Dar las gracias" className="flex flex-col items-center gap-0.5">
+            <button type="button" aria-label={t("reels.thanksAria", "Dar las gracias")} className="flex flex-col items-center gap-0.5">
               <span className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.6)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
                 <HandHeart className="h-5 w-5 text-amber-950" strokeWidth={2.4} />
               </span>
-              <span className="text-[11px] font-semibold text-white drop-shadow">Gracias</span>
+              <span className="text-[11px] font-semibold text-white drop-shadow">{t("reels.thanks", "Gracias")}</span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="z-[110] w-56">
             <DropdownMenuLabel className="flex items-center gap-2">
-              <HandHeart className="h-4 w-4 text-amber-500" /> Enviar Gracias
+              <HandHeart className="h-4 w-4 text-amber-500" /> {t("reels.sendThanks", "Enviar Gracias")}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {[1, 3, 5, 10].map((amount) => (
               <DropdownMenuItem
                 key={amount}
                 onClick={() =>
-                  toast.success("¡Gracias enviado! 🧡", {
-                    description: `Has apoyado este reel con ${amount} €.`,
+                  toast.success(t("reels.thanksSentTitle", "¡Gracias enviado! 🧡"), {
+                    description: t("reels.thanksSentDesc", { amount, defaultValue: "Has apoyado este reel con {{amount}} €." }),
                   })
                 }
               >
@@ -2013,12 +2013,12 @@ function ExpandedReelModal({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() =>
-                toast.success("Pronto podrás elegir otro monto", {
-                  description: "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
+                toast.success(t("reels.otherAmountSoonTitle", "Pronto podrás elegir otro monto"), {
+                  description: t("reels.otherAmountSoonDesc", "Estamos preparando los pagos. ¡Gracias por tu apoyo!"),
                 })
               }
             >
-              <Plus /> Otro monto…
+              <Plus /> {t("reels.otherAmount", "Otro monto…")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
