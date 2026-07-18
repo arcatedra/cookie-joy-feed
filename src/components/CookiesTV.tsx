@@ -1008,7 +1008,7 @@ function ReelCard({
       price: Number(price),
       image: productImg,
     });
-    toast.success(`${name} agregado al carrito`);
+    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
   };
 
   const shareUrl = () => {
