@@ -115,13 +115,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
       hydrated,
       add: (item, qty = 1) =>
         setItems((prev) => {
-          const i = prev.findIndex((p) => p.id === item.id);
+          const withKey: Omit<CartItem, "qty"> = {
+            ...item,
+            nameKey: item.nameKey ?? deriveCartItemNameKey(item.id),
+          };
+          const i = prev.findIndex((p) => p.id === withKey.id);
           if (i >= 0) {
             const next = [...prev];
-            next[i] = { ...next[i], qty: next[i].qty + qty };
+            next[i] = {
+              ...next[i],
+              qty: next[i].qty + qty,
+              nameKey: next[i].nameKey ?? withKey.nameKey,
+            };
             return next;
           }
-          return [...prev, { ...item, qty }];
+          return [...prev, { ...withKey, qty }];
         }),
       remove: (id) => setItems((prev) => prev.filter((p) => p.id !== id)),
       setQty: (id, qty) =>
