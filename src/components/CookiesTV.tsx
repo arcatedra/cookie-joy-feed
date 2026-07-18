@@ -64,27 +64,87 @@ import imgMM from "@/assets/ins-mm.jpg";
 // be localized while remaining backwards-compatible with free-text values.
 // Also maps known Spanish literals stored in the DB to their i18n keys so
 // legacy rows get localized without a data migration.
+// Maps any legacy Spanish or English literal that may live in the DB
+// (from an older admin form) to its canonical i18n key, so every reel
+// product name and title translates correctly across all 9 languages
+// regardless of when the row was inserted.
 const REEL_TEXT_KEY_MAP: Record<string, string> = {
+  // ---- Titles (legacy Spanish) ----
   "Crunch de maní recién salido del horno": "reels.items.pb.title",
+  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  // ---- Product names (Spanish + English variants) ----
+  // pb — Peanut Butter Crunch
   "Mantequilla de Maní Crunch": "reels.items.pb.product",
   "Mantequilla de Maní Crujiente": "reels.items.pb.product",
-  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Peanut Butter Crunch": "reels.items.pb.product",
+  // cookiescream
   "Cookies & Cream Premium": "reels.items.cookiescream.product",
-  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  // nutella
   "Galleta Explosiva de Nutella": "reels.items.nutella.product",
+  "Nutella Explosion Cookie": "reels.items.nutella.product",
+  // cchunk — Double Chocolate Chunk
+  "Doble Chispas de Chocolate": "reels.items.cchunk.product",
+  "Double Chocolate Chunk": "reels.items.cchunk.product",
+  "Chocolate Chunk": "reels.items.cchunk.product",
+  // mint
+  "Menta y Chocolate Dark": "reels.items.mint.product",
+  "Dark Mint Chocolate": "reels.items.mint.product",
+  // pista
+  "Pistacho y Chocolate Blanco": "reels.items.pista.product",
+  "Pistachio & White Chocolate": "reels.items.pista.product",
+  // mm
+  "M&M Festiva": "reels.items.mm.product",
+  "Festive M&M": "reels.items.mm.product",
+  // triple
+  "Triple Chocolate Fundido": "reels.items.triple.product",
+  "Triple Chocolate Fudge": "reels.items.triple.product",
+  // snicker
+  "Snickerdoodle Clásica": "reels.items.snicker.product",
+  "Classic Snickerdoodle": "reels.items.snicker.product",
+  // oatmeal
+  "Avena y Pasas con Canela": "reels.items.oatmeal.product",
+  "Oatmeal & Raisin Cinnamon": "reels.items.oatmeal.product",
 };
-function translateReelKey(value: string | null | undefined): string | undefined {
-  if (!value) return undefined;
-  if (value.startsWith("reels.") && i18n.exists(value)) return value;
-  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
-  if (mapped && i18n.exists(mapped)) return mapped;
-  return undefined;
+
+// Fallback: derive the i18n product key from a reel's stable product_slug,
+// so even a brand-new DB row with a free-text product_name still renders
+// the localized name.
+const SLUG_TO_PRODUCT_KEY: Record<string, string> = {
+  "p-pb": "reels.items.pb.product",
+  "p-cc": "reels.items.cookiescream.product",
+  "p-doublechoc": "reels.items.nutella.product",
+  "p-cchunk": "reels.items.cchunk.product",
+  "p-mint": "reels.items.mint.product",
+  "p-pista": "reels.items.pista.product",
+  "p-mm": "reels.items.mm.product",
+  "p-triple": "reels.items.triple.product",
+  "p-snicker": "reels.items.snicker.product",
+  "p-oatmeal": "reels.items.oatmeal.product",
+};
+export function reelProductKeyFromSlug(slug: string | null | undefined): string | undefined {
+  if (!slug) return undefined;
+  const k = SLUG_TO_PRODUCT_KEY[slug];
+  return k && i18n.exists(k) ? k : undefined;
 }
-function translateReelText(value: string | null | undefined): string {
-  if (!value) return "";
-  const key = translateReelKey(value);
+function translateReelKey(
+  value: string | null | undefined,
+  slugFallback?: string | null,
+): string | undefined {
+  if (value) {
+    if (value.startsWith("reels.") && i18n.exists(value)) return value;
+    const mapped = REEL_TEXT_KEY_MAP[value.trim()];
+    if (mapped && i18n.exists(mapped)) return mapped;
+  }
+  return reelProductKeyFromSlug(slugFallback);
+}
+function translateReelText(
+  value: string | null | undefined,
+  slugFallback?: string | null,
+): string {
+  const key = translateReelKey(value, slugFallback);
   if (key) return i18n.t(key);
-  return value;
+  return value ?? "";
 }
 
 // ============ Types ============
@@ -226,13 +286,16 @@ function hasPlayableSource(reel: DbReel) {
   return Boolean(FALLBACK_VIDEO[reel.slug]);
 }
 
+// nameKey is the i18n key we persist in product_name for new reels so any
+// language switch localizes automatically. name is the Spanish label shown
+// inside the admin form select — the DB never sees it after this change.
 const PRODUCT_OPTIONS = [
-  { slug: "p-doublechoc", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
-  { slug: "p-cc", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
-  { slug: "p-pb", name: "Mantequilla de Maní Crujiente", price: 3.75, image: imgPB },
-  { slug: "p-cchunk", name: "Doble Chispas de Chocolate", price: 3.95, image: imgChocChunk },
-  { slug: "p-mint", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
-  { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
+  { slug: "p-doublechoc", nameKey: "reels.items.nutella.product", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
+  { slug: "p-cc", nameKey: "reels.items.cookiescream.product", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
+  { slug: "p-pb", nameKey: "reels.items.pb.product", name: "Mantequilla de Maní Crujiente", price: 3.75, image: imgPB },
+  { slug: "p-cchunk", nameKey: "reels.items.cchunk.product", name: "Doble Chispas de Chocolate", price: 3.95, image: imgChocChunk },
+  { slug: "p-mint", nameKey: "reels.items.mint.product", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
+  { slug: "p-pista", nameKey: "reels.items.pista.product", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
 ];
 
 // ============ Embed link parser ============
@@ -1020,14 +1083,14 @@ function ReelCard({
   };
 
   const buy = () => {
-    const name = translateReelText(reel.product_name);
+    const name = translateReelText(reel.product_name, reel.product_slug);
     const price = reel.product_price;
     if (!name || price == null) return;
     gate.guard(() => {
       cart.add({
         id: `reel-${reel.product_slug || reel.id}`,
         name,
-        nameKey: translateReelKey(reel.product_name),
+        nameKey: translateReelKey(reel.product_name, reel.product_slug),
         price: Number(price),
         image: productImg,
       });
@@ -1046,7 +1109,7 @@ function ReelCard({
   };
   const shareTitle = () => {
     const t = translateReelText(reel.title);
-    const p = translateReelText(reel.product_name);
+    const p = translateReelText(reel.product_name, reel.product_slug);
     return t ? `${t} · ${BRAND}` : p ? `${p} · ${BRAND}` : `Mira este reel de ${BRAND}`;
   };
 
@@ -1158,7 +1221,7 @@ function ReelCard({
           {productImg ? (
             <img
               src={productImg}
-              alt={translateReelText(reel.product_name) || ""}
+              alt={translateReelText(reel.product_name, reel.product_slug) || ""}
               className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px] transition-transform duration-[6000ms] ease-out group-hover:scale-125"
             />
           ) : (
@@ -1544,7 +1607,7 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {translateReelText(reel.product_name)}
+                {translateReelText(reel.product_name, reel.product_slug)}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(reel.product_price ?? 0).toFixed(2)}
@@ -1723,7 +1786,7 @@ function ExpandedReelModal({
   };
   const shareTitle = () => {
     const tt = translateReelText(current.title);
-    const pp = translateReelText(current.product_name);
+    const pp = translateReelText(current.product_name, current.product_slug);
     return tt ? `${tt} · ${BRAND}` : pp ? `${pp} · ${BRAND}` : `Mira este reel de ${BRAND}`;
   };
   const copyLink = async () => {
@@ -2350,7 +2413,7 @@ function AdminModal({
         title: title.trim(),
         video_url: finalVideoUrl,
         thumb_url: thumbUrl,
-        product_name: product.name,
+        product_name: product.nameKey,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
@@ -2364,7 +2427,7 @@ function AdminModal({
             title: updatedReel.title,
             video_url: finalVideoUrl,
             thumb_url: thumbUrl,
-            product_name: product.name,
+            product_name: product.nameKey,
             product_price: product.price,
             product_image: product.image,
             product_slug: product.slug,
@@ -2393,7 +2456,7 @@ function AdminModal({
         title: title.trim(),
         video_url: videoUrl,
         thumb_url: thumbUrl,
-        product_name: product.name,
+        product_name: product.nameKey,
         product_price: product.price,
         product_image: product.image,
         product_slug: product.slug,
