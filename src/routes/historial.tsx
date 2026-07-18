@@ -110,11 +110,23 @@ function HistoryList() {
     historyQO(() => fetchHistory({ data: { limit: 50 } })),
   );
 
-  if (!winners.length) {
+  // Only surface draws that actually happened: completed with a winner,
+  // or any day that had at least one entrant. Placeholder rows for days
+  // where the sweepstakes was inactive (no entrants, not completed) are
+  // hidden so the page doesn't look like a wall of empty cards.
+  const visible = winners.filter(
+    (w) => (w.status === "completed" && !!w.winnerDisplayName) || w.entrantsTotal > 0,
+  );
+
+  if (!visible.length) {
     return (
       <Card className="p-8 text-center">
         <Trophy className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-        <p className="text-muted-foreground">{t("historial.empty")}</p>
+        <p className="text-muted-foreground">
+          {t("historial.empty", {
+            defaultValue: "Aún no hay sorteos anteriores. Vuelve pronto.",
+          })}
+        </p>
       </Card>
     );
   }
