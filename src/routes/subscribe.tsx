@@ -14,12 +14,8 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plan — HAZOREX" },
-      {
-        name: "description",
-        content:
-          "HAZOREX cookie subscription. 2 deliveries per month on Mondays or Fridays, plus $10 per extra delivery.",
-      },
+      { title: i18n.t("subscribe.metaTitle") },
+      { name: "description", content: i18n.t("subscribe.metaDesc") },
     ],
   }),
   component: SubscribePage,
