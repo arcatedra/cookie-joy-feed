@@ -107,7 +107,7 @@ function CartPage() {
       }, 100);
     } catch (e) {
       console.error(e);
-      toast.error(e instanceof Error ? e.message : "No se pudo iniciar el pago");
+      toast.error(e instanceof Error ? e.message : t("cartPage.checkoutError"));
     } finally {
       setLoadingCheckout(false);
     }
@@ -126,16 +126,17 @@ function CartPage() {
           <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-muted">
             <ShoppingBag className="h-10 w-10 text-muted-foreground" />
           </div>
-          <h1 className="mt-5 text-xl font-bold text-foreground">Tu carrito está vacío</h1>
+          <h1 className="mt-5 text-xl font-bold text-foreground">{t("cartPage.empty")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Explora nuestro catálogo y agrega galletas para empezar.
+            {t("cartPage.emptyDesc")}
           </p>
           <Link
             to="/shop"
             className="mt-6 inline-block rounded-full bg-cta px-6 py-3 text-sm font-bold uppercase tracking-wider text-cta-foreground shadow"
           >
-            Ir a la tienda
+            {t("cartPage.goShop")}
           </Link>
+
         </div>
       </main>
     );
