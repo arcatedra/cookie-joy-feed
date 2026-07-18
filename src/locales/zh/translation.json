@@ -361,7 +361,8 @@
         "cadence": "每月 8 次配送",
         "desc": "全月覆盖。每月最多 8 次配送（每周一和周五各一次），提供最大便利。"
       }
-    }
+    },
+    "yourPlan": "你的 Hazorex 方案"
   },
   "profile": {
     "metaTitle": "我的个人资料 — HAZOREX",

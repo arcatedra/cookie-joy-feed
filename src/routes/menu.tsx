@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ProductRating } from "@/components/ProductRating";
-import { formatPrice, formatNumber } from "@/i18n";
+import i18n, { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
 
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -30,8 +30,8 @@ import imgPack12 from "@/assets/pack-12.jpg";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — HAZOREX" },
-      { name: "description", content: "Browse our classic cookies." },
+      { title: i18n.t("menu.metaTitle") },
+      { name: "description", content: i18n.t("menu.metaDesc") },
     ],
   }),
   component: MenuPage,

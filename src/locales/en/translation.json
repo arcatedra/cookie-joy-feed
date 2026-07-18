@@ -361,7 +361,8 @@
         "cadence": "8 DELIVERIES / MONTH",
         "desc": "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays)."
       }
-    }
+    },
+    "yourPlan": "Your Hazorex Plan"
   },
   "profile": {
     "metaTitle": "My Profile — HAZOREX",

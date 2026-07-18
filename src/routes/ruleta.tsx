@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { getLocale } from "@/i18n";
+import i18n, { getLocale } from "@/i18n";
 
 import {
   getRouletteState,
@@ -36,17 +36,10 @@ import {
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
     meta: [
-      { title: "Porsenge — Sorteo Diario ⭐ HAZOREX" },
-      {
-        name: "description",
-        content:
-          "Participa en el Sorteo Diario de Porsenge. Compra Estrellas o entra gratis siguiendo nuestros canales sociales y gana premios en efectivo.",
-      },
-      { property: "og:title", content: "Porsenge — Sorteo Diario" },
-      {
-        property: "og:description",
-        content: "Premios en efectivo, giros diarios y participación gratuita disponible.",
-      },
+      { title: i18n.t("ruleta.metaTitle") },
+      { name: "description", content: i18n.t("ruleta.metaDesc") },
+      { property: "og:title", content: i18n.t("ruleta.metaTitle") },
+      { property: "og:description", content: i18n.t("ruleta.metaDesc") },
     ],
   }),
   component: RuletaPage,
@@ -169,7 +162,7 @@ function RuletaPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <Star size={32} color={BLUE} />
           <div>
-            <div style={{ fontWeight: 800, letterSpacing: "0.14em", fontSize: "clamp(14px, 4vw, 18px)", whiteSpace: "nowrap" }}>Porsenge</div>
+            <div style={{ fontWeight: 800, letterSpacing: "0.14em", fontSize: "clamp(14px, 4vw, 18px)", whiteSpace: "nowrap" }}>{t("ruleta.brandName", { defaultValue: "HAZOREX" })}</div>
             <div style={{ fontSize: 11, color: BLUE_SOFT, letterSpacing: "0.2em" }}>
               {t("ruleta.sweepstakes")}
             </div>

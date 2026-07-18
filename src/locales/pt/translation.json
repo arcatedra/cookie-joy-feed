@@ -278,7 +278,7 @@
     "c6": {
       "name": "Chocolate Branco e Macadâmia",
       "desc": "Vibe tropical: cookie amanteigado com coco, chocolate branco e macadâmia.",
-      "caption": "Amanteigado com coco, vibe tropical"
+      "caption": "Amanteigado com coco, sabor tropical"
     },
     "c7": {
       "name": "Clássico com M&M'S®",
@@ -364,7 +364,8 @@
         "cadence": "8 ENTREGAS / MÊS",
         "desc": "Cobertura mensal completa: até 8 entregas (duas vezes por semana, segundas e sextas)."
       }
-    }
+    },
+    "yourPlan": "Seu Plano Hazorex"
   },
   "profile": {
     "metaTitle": "Meu perfil — HAZOREX",

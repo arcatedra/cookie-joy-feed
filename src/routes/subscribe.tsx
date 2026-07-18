@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SubscriptionPaymentModal } from "@/components/SubscriptionPaymentModal";
-import { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
+import i18n, { formatPrice, formatDate, formatNumber, getLocale } from "@/i18n";
 import { useAuth } from "@/lib/auth";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 
@@ -14,12 +14,8 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 export const Route = createFileRoute("/subscribe")({
   head: () => ({
     meta: [
-      { title: "Subscription Plan — HAZOREX" },
-      {
-        name: "description",
-        content:
-          "HAZOREX cookie subscription. 2 deliveries per month on Mondays or Fridays, plus $10 per extra delivery.",
-      },
+      { title: i18n.t("subscribe.metaTitle") },
+      { name: "description", content: i18n.t("subscribe.metaDesc") },
     ],
   }),
   component: SubscribePage,
@@ -246,7 +242,7 @@ function SubscribePage() {
       <section className={`px-5 ${hasActive ? "pt-6" : "-mt-5"}`}>
         {!hasActive && (
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground">
-            {t("subscribe.yourPlan", { defaultValue: "Your Hazorex Plan" })}
+            {t("subscribe.yourPlan")}
           </h2>
         )}
         <article className="relative overflow-hidden rounded-2xl bg-card p-5 shadow-md ring-2 ring-primary">

@@ -24,7 +24,7 @@
   "auth": {
     "signInTitle": "Iniciar sesión",
     "signUpTitle": "Crear cuenta",
-    "subtitle": "Da me gusta, comenta y valora galletas.",
+    "subtitle": "Dale like, comenta y valora tus galletas favoritas.",
     "google": "Continuar con Google",
     "or": "o",
     "email": "Correo electrónico",
@@ -228,7 +228,7 @@
   "menu": {
     "metaTitle": "Menú — HAZOREX",
     "metaDesc": "Explora nuestras galletas clásicas.",
-    "title": "Cookies",
+    "title": "Galletas",
     "tabs": {
       "classic": "Galletas clásicas",
       "packs": "Packs",
@@ -275,7 +275,7 @@
     "c6": {
       "name": "Chocolate blanco y macadamia",
       "desc": "Este snack vive a ritmo isleño. Una galleta de coco y mantequilla con chocolate blanco y nueces de macadamia.",
-      "caption": "Mantecosa con coco, vibe tropical"
+      "caption": "Mantecosa con coco, sabor tropical"
     },
     "c7": {
       "name": "Clásica con M&M'S®",
@@ -283,9 +283,9 @@
       "caption": "Toque de caramelos de chocolate"
     },
     "c8": {
-      "name": "Chips de mantequilla de maní",
-      "desc": "Chips de mantequilla de maní envueltos en una suave galleta de vainilla. Paraíso de frutos secos.",
-      "caption": "Vainilla suave con chips de maní"
+      "name": "Mantequilla de Maní Crunch",
+      "desc": "Trozos de mantequilla de maní envueltos en una suave galleta de vainilla. Paraíso de frutos secos.",
+      "caption": "Vainilla suave con trozos de maní"
     },
     "c9": {
       "name": "Trozos de chocolate vegana",
@@ -315,11 +315,11 @@
       "serves": "6 a 12 personas"
     },
     "ingredients": "Harina de trigo enriquecida, mantequilla, azúcar de caña, azúcar moreno, huevos, trozos de chocolate semidulce, extracto de vainilla, bicarbonato, sal marina.",
-    "allergens": "Contiene trigo, lácteos, huevos y soja. Puede contener trazas de frutos secos y cacahuetes."
+    "allergens": "Contiene trigo, lácteos, huevos y soja. Puede contener trazas de frutos secos y maní."
   },
   "tags": {
     "treeNuts": "FRUTOS SECOS",
-    "peanuts": "CACAHUETES"
+    "peanuts": "MANÍ"
   },
   "subscribe": {
     "metaTitle": "Planes de suscripción — HAZOREX",
@@ -361,7 +361,8 @@
         "cadence": "8 ENTREGAS / MES",
         "desc": "Cobertura mensual completa. Máxima comodidad con hasta 8 entregas al mes (dos veces por semana, lunes y viernes)."
       }
-    }
+    },
+    "yourPlan": "Tu Plan Hazorex"
   },
   "profile": {
     "metaTitle": "Mi perfil — HAZOREX",
