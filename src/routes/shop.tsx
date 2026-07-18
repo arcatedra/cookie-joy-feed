@@ -160,14 +160,17 @@ function ShopPage() {
         {cart.count > 0 && (
           <div className="fixed inset-x-0 bottom-16 z-40 mx-auto flex max-w-md items-center justify-between gap-3 rounded-full bg-primary px-5 py-3 text-primary-foreground shadow-2xl md:bottom-6">
             <span className="text-sm font-bold">
-              {cart.count} artículo{cart.count === 1 ? "" : "s"} · $
-              {cart.total.toFixed(2)}
+              {t(cart.count === 1 ? "cartFloating.one" : "cartFloating.other", {
+                count: cart.count,
+                total: cart.total.toFixed(2),
+                defaultValue: cart.count === 1 ? "{{count}} item · ${{total}}" : "{{count}} items · ${{total}}",
+              })}
             </span>
             <Link
               to="/cart"
               className="rounded-full bg-cta px-4 py-2 text-xs font-bold uppercase tracking-wider text-cta-foreground"
             >
-              Ir al carrito
+              {t("cartFloating.goTo", "Ir al carrito")}
             </Link>
           </div>
         )}
