@@ -92,6 +92,7 @@ function BuildPackPage() {
 
   const addToCart = () => {
     if (remaining !== 0) return;
+    if (!gate.guard()) return;
     const parts = Object.entries(selection)
       .map(([id, qty]) => `${qty}× ${t(COOKIES.find((c) => c.id === id)!.nameKey)}`)
       .join(", ");
