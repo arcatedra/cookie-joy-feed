@@ -72,7 +72,7 @@ function ShopPage() {
             <Link
               to="/cart"
               className="relative flex h-10 w-10 items-center justify-center rounded-full bg-primary-foreground/10"
-              aria-label="cart"
+              aria-label={t("common.cart")}
             >
               <ShoppingCart className="h-5 w-5" />
               {cart.count > 0 && (
