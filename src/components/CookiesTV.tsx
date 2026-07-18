@@ -127,18 +127,24 @@ export function reelProductKeyFromSlug(slug: string | null | undefined): string 
   const k = SLUG_TO_PRODUCT_KEY[slug];
   return k && i18n.exists(k) ? k : undefined;
 }
-function translateReelKey(value: string | null | undefined): string | undefined {
-  if (!value) return undefined;
-  if (value.startsWith("reels.") && i18n.exists(value)) return value;
-  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
-  if (mapped && i18n.exists(mapped)) return mapped;
-  return undefined;
+function translateReelKey(
+  value: string | null | undefined,
+  slugFallback?: string | null,
+): string | undefined {
+  if (value) {
+    if (value.startsWith("reels.") && i18n.exists(value)) return value;
+    const mapped = REEL_TEXT_KEY_MAP[value.trim()];
+    if (mapped && i18n.exists(mapped)) return mapped;
+  }
+  return reelProductKeyFromSlug(slugFallback);
 }
-function translateReelText(value: string | null | undefined): string {
-  if (!value) return "";
-  const key = translateReelKey(value);
+function translateReelText(
+  value: string | null | undefined,
+  slugFallback?: string | null,
+): string {
+  const key = translateReelKey(value, slugFallback);
   if (key) return i18n.t(key);
-  return value;
+  return value ?? "";
 }
 
 // ============ Types ============
