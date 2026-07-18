@@ -36,17 +36,10 @@ import {
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
     meta: [
-      { title: "Porsenge — Sorteo Diario ⭐ HAZOREX" },
-      {
-        name: "description",
-        content:
-          "Participa en el Sorteo Diario de Porsenge. Compra Estrellas o entra gratis siguiendo nuestros canales sociales y gana premios en efectivo.",
-      },
-      { property: "og:title", content: "Porsenge — Sorteo Diario" },
-      {
-        property: "og:description",
-        content: "Premios en efectivo, giros diarios y participación gratuita disponible.",
-      },
+      { title: i18n.t("ruleta.metaTitle") },
+      { name: "description", content: i18n.t("ruleta.metaDesc") },
+      { property: "og:title", content: i18n.t("ruleta.metaTitle") },
+      { property: "og:description", content: i18n.t("ruleta.metaDesc") },
     ],
   }),
   component: RuletaPage,
