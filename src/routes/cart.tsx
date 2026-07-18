@@ -88,7 +88,10 @@ function CartPage() {
         data: {
           items: cart.items.map((it) => ({
             id: it.id,
-            name: it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name,
+            name: (() => {
+              const k = it.nameKey ?? deriveCartItemNameKey(it.id);
+              return k && i18n.exists(k) ? t(k) : it.name;
+            })(),
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
