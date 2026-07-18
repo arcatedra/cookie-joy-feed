@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { useCart } from "@/lib/cart";
+import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
@@ -88,7 +88,10 @@ function CartPage() {
         data: {
           items: cart.items.map((it) => ({
             id: it.id,
-            name: it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name,
+            name: (() => {
+              const k = it.nameKey ?? deriveCartItemNameKey(it.id);
+              return k && i18n.exists(k) ? t(k) : it.name;
+            })(),
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
@@ -146,7 +149,8 @@ function CartPage() {
 
         <section className="mt-5 divide-y divide-border rounded-2xl bg-card ring-1 ring-border">
           {cart.items.map((it) => {
-            const displayName = it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name;
+            const resolvedKey = it.nameKey ?? deriveCartItemNameKey(it.id);
+            const displayName = resolvedKey && i18n.exists(resolvedKey) ? t(resolvedKey) : it.name;
             return (
             <div key={it.id} className="flex items-center gap-3 p-3">
               <img

@@ -24,13 +24,35 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "origen.cart.v1";
 
+/**
+ * Derive an i18n key for a cart item's display name from its stable id.
+ * Used to migrate legacy cart entries persisted before `nameKey` was saved,
+ * so /cart translates names consistently with /shop, /menu, /best-sellers.
+ */
+export function deriveCartItemNameKey(id: string): string | undefined {
+  if (!id) return undefined;
+  const cookieMatch = id.match(/^(?:shop-)?(c\d{1,2})$/);
+  if (cookieMatch) return `cookies.${cookieMatch[1]}.name`;
+  const packMatch = id.match(/^(p\d{1,2})$/);
+  if (packMatch) return `packs.${packMatch[1]}.name`;
+  const sliderMatch = id.match(/^slider-(.+)$/);
+  if (sliderMatch) return deriveCartItemNameKey(sliderMatch[1]);
+  return undefined;
+}
+
+function migrateItems(items: CartItem[]): CartItem[] {
+  return items.map((it) =>
+    it.nameKey ? it : { ...it, nameKey: deriveCartItemNameKey(it.id) },
+  );
+}
+
 function readStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as CartItem[]) : [];
+    return Array.isArray(parsed) ? migrateItems(parsed as CartItem[]) : [];
   } catch {
     return [];
   }
@@ -93,13 +115,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
       hydrated,
       add: (item, qty = 1) =>
         setItems((prev) => {
-          const i = prev.findIndex((p) => p.id === item.id);
+          const withKey: Omit<CartItem, "qty"> = {
+            ...item,
+            nameKey: item.nameKey ?? deriveCartItemNameKey(item.id),
+          };
+          const i = prev.findIndex((p) => p.id === withKey.id);
           if (i >= 0) {
             const next = [...prev];
-            next[i] = { ...next[i], qty: next[i].qty + qty };
+            next[i] = {
+              ...next[i],
+              qty: next[i].qty + qty,
+              nameKey: next[i].nameKey ?? withKey.nameKey,
+            };
             return next;
           }
-          return [...prev, { ...item, qty }];
+          return [...prev, { ...withKey, qty }];
         }),
       remove: (id) => setItems((prev) => prev.filter((p) => p.id !== id)),
       setQty: (id, qty) =>
