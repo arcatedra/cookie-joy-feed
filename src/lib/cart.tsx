@@ -13,6 +13,7 @@ interface CartContextValue {
   items: CartItem[];
   count: number;
   total: number;
+  hydrated: boolean;
   add: (item: Omit<CartItem, "qty">, qty?: number) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
