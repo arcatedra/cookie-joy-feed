@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Star, ShoppingCart, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import i18n from "@/i18n";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -58,6 +59,7 @@ export const Route = createFileRoute("/best-sellers")({
 function BestSellersPage() {
   const { t } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const list = [...ALL].sort((a, b) => b.reviews - a.reviews).slice(0, 12);
 
   return (
@@ -102,8 +104,10 @@ function BestSellersPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    cart.add({ id: p.id, name, price: p.price, image: p.image });
-                    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
+                    gate.guard(() => {
+                      cart.add({ id: p.id, name, price: p.price, image: p.image });
+                      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
+                    });
                   }}
                   className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                 >

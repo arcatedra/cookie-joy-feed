@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -51,6 +52,7 @@ const products = [
 function ShopPage() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
 
   return (
     <main className="min-h-screen bg-background pb-24">
@@ -139,13 +141,15 @@ function ShopPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    cart.add({
-                      id: p.id,
-                      name,
-                      price: p.price,
-                      image: p.image,
+                    gate.guard(() => {
+                      cart.add({
+                        id: p.id,
+                        name,
+                        price: p.price,
+                        image: p.image,
+                      });
+                      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                     });
-                    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                   }}
                   className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-orange text-white shadow-md transition active:scale-90"
                   aria-label={t("cartFloating.addAria", { name, defaultValue: "Add {{name}}" })}

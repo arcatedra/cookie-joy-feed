@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Minus, ShoppingCart, Package } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 import i18n from "@/i18n";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
@@ -57,6 +58,7 @@ export const Route = createFileRoute("/build-pack")({
 function BuildPackPage() {
   const { t } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   
 
   const [sizeIdx, setSizeIdx] = useState(0);
@@ -90,6 +92,7 @@ function BuildPackPage() {
 
   const addToCart = () => {
     if (remaining !== 0) return;
+    if (!gate.guard()) return;
     const parts = Object.entries(selection)
       .map(([id, qty]) => `${qty}× ${t(COOKIES.find((c) => c.id === id)!.nameKey)}`)
       .join(", ");

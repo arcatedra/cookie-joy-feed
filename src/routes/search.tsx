@@ -5,6 +5,7 @@ import { Filter, Star, ShoppingCart, X } from "lucide-react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useCart } from "@/lib/cart";
+import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -257,6 +258,7 @@ function SearchPage() {
   const { t } = useTranslation();
   const { q } = Route.useSearch();
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const nq = normalize(q).trim();
   const [cat, setCat] = useState<"all" | Category>("all");
   const [minRating, setMinRating] = useState(0);
@@ -407,7 +409,7 @@ function SearchPage() {
                     )}
                     <button
                       type="button"
-                      onClick={() => cart.add({ id: p.id, name, price: p.price, image: p.image })}
+                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, price: p.price, image: p.image }))}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
