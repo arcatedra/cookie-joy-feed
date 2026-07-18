@@ -30,8 +30,8 @@ import imgPack12 from "@/assets/pack-12.jpg";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — HAZOREX" },
-      { name: "description", content: "Browse our classic cookies." },
+      { title: i18n.t("menu.metaTitle") },
+      { name: "description", content: i18n.t("menu.metaDesc") },
     ],
   }),
   component: MenuPage,
