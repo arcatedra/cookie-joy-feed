@@ -11,12 +11,13 @@ import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
+import i18n from "@/i18n";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Carrito — HAZOREX" },
-      { name: "description", content: "Tu carrito HAZOREX. Pago seguro con Stripe." },
+      { title: i18n.t("cartPage.metaTitle") },
+      { name: "description", content: i18n.t("cartPage.metaDesc") },
       { name: "robots", content: "noindex" },
     ],
   }),
