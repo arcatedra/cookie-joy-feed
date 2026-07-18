@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { Instagram, Facebook, Music2 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
 
