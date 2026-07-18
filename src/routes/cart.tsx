@@ -146,7 +146,7 @@ function CartPage() {
     <main className="min-h-screen bg-background pb-32">
       <Header />
       <div className="mx-auto max-w-3xl px-5 py-6">
-        <h1 className="text-2xl font-extrabold text-foreground">Tu carrito</h1>
+        <h1 className="text-2xl font-extrabold text-foreground">{t("cartPage.title")}</h1>
 
         <section className="mt-5 divide-y divide-border rounded-2xl bg-card ring-1 ring-border">
           {cart.items.map((it) => {
@@ -162,14 +162,14 @@ function CartPage() {
               <div className="min-w-0 flex-1">
                 <h3 className="truncate text-sm font-bold text-foreground">{displayName}</h3>
                 <p className="text-xs text-muted-foreground">
-                  ${it.price.toFixed(2)} c/u
+                  ${it.price.toFixed(2)} {t("cartPage.each")}
                 </p>
                 <div className="mt-2 inline-flex items-center overflow-hidden rounded-full border border-border">
                   <button
                     type="button"
                     onClick={() => cart.setQty(it.id, it.qty - 1)}
                     className="grid h-7 w-7 place-items-center text-foreground hover:bg-muted"
-                    aria-label="disminuir"
+                    aria-label={t("cartPage.decrease")}
                   >
                     <Minus className="h-3 w-3" />
                   </button>
@@ -180,7 +180,7 @@ function CartPage() {
                     type="button"
                     onClick={() => cart.setQty(it.id, it.qty + 1)}
                     className="grid h-7 w-7 place-items-center text-foreground hover:bg-muted"
-                    aria-label="aumentar"
+                    aria-label={t("cartPage.increase")}
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -194,7 +194,7 @@ function CartPage() {
                   type="button"
                   onClick={() => cart.remove(it.id)}
                   className="text-muted-foreground hover:text-destructive"
-                  aria-label="eliminar"
+                  aria-label={t("cartPage.remove")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -208,44 +208,44 @@ function CartPage() {
           <>
             <section className="mt-6 space-y-3 rounded-2xl bg-card p-4 ring-1 ring-border">
               <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
-                Datos de envío
+                {t("cartPage.shippingInfo")}
               </h2>
               <Input
-                label="Email"
+                label={t("cartPage.email")}
                 type="email"
                 value={email}
                 onChange={setEmail}
-                placeholder="tu@email.com"
+                placeholder={t("cartPage.emailPh")}
               />
               <Input
-                label="Nombre completo"
+                label={t("cartPage.fullName")}
                 value={address.name}
                 onChange={(v) => setAddress({ ...address, name: v })}
               />
               <Input
-                label="Calle y número"
+                label={t("cartPage.street")}
                 value={address.street}
                 onChange={(v) => setAddress({ ...address, street: v })}
               />
               <Input
-                label="Apto / Suite (opcional)"
+                label={t("cartPage.apt")}
                 value={address.apt}
                 onChange={(v) => setAddress({ ...address, apt: v })}
               />
               <div className="grid grid-cols-2 gap-3">
                 <Input
-                  label="Ciudad"
+                  label={t("cartPage.city")}
                   value={address.city}
                   onChange={(v) => setAddress({ ...address, city: v })}
                 />
                 <Input
-                  label="ZIP"
+                  label={t("cartPage.zip")}
                   value={address.zip}
                   onChange={(v) => setAddress({ ...address, zip: v })}
                 />
               </div>
               <Input
-                label="Teléfono"
+                label={t("cartPage.phone")}
                 value={address.phone}
                 onChange={(v) => setAddress({ ...address, phone: v })}
               />
@@ -253,19 +253,19 @@ function CartPage() {
 
             <section className="mt-4 rounded-2xl bg-card p-4 ring-1 ring-border">
               <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
-                Envío
+                {t("cartPage.shipping")}
               </h2>
               <div className="mt-3 space-y-2">
                 <ShippingOption
                   checked={shipping === "standard"}
                   onChange={() => setShipping("standard")}
-                  label="Estándar (3-5 días)"
-                  price="Gratis"
+                  label={t("cartPage.standard")}
+                  price={t("cartPage.free")}
                 />
                 <ShippingOption
                   checked={shipping === "express"}
                   onChange={() => setShipping("express")}
-                  label="Exprés (1-2 días)"
+                  label={t("cartPage.express")}
                   price="$4.99"
                 />
               </div>
@@ -274,18 +274,19 @@ function CartPage() {
         )}
 
         <section className="mt-4 space-y-1 rounded-2xl bg-card p-4 ring-1 ring-border text-sm">
-          <Row label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
+          <Row label={t("cartPage.subtotal")} value={`$${subtotal.toFixed(2)}`} />
           <Row
-            label="Envío"
-            value={shippingCost === 0 ? "Gratis" : `$${shippingCost.toFixed(2)}`}
+            label={t("cartPage.shipping")}
+            value={shippingCost === 0 ? t("cartPage.free") : `$${shippingCost.toFixed(2)}`}
           />
           <div className="mt-2 flex items-baseline justify-between border-t border-border pt-3">
-            <span className="text-base font-bold text-foreground">Total</span>
+            <span className="text-base font-bold text-foreground">{t("cartPage.total")}</span>
             <span className="text-2xl font-extrabold text-primary">
               ${total.toFixed(2)}
             </span>
           </div>
         </section>
+
 
         {!clientSecret && (
           <button
