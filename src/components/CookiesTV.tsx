@@ -35,7 +35,6 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { syncReelPlayback } from "@/lib/reel-playback";
@@ -925,7 +924,6 @@ function ReelCard({
 }) {
   useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
-  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -1004,15 +1002,13 @@ function ReelCard({
     const name = translateReelText(reel.product_name);
     const price = reel.product_price;
     if (!name || price == null) return;
-    gate.guard(() => {
-      cart.add({
-        id: `reel-${reel.product_slug || reel.id}`,
-        name,
-        price: Number(price),
-        image: productImg,
-      });
-      toast.success(`${name} agregado al carrito`);
+    cart.add({
+      id: `reel-${reel.product_slug || reel.id}`,
+      name,
+      price: Number(price),
+      image: productImg,
     });
+    toast.success(`${name} agregado al carrito`);
   };
 
   const shareUrl = () => {

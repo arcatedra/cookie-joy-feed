@@ -5,7 +5,6 @@ import { Filter, Star, ShoppingCart, X } from "lucide-react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgCookiesCream from "@/assets/ins-cookies-cream.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
@@ -258,7 +257,6 @@ function SearchPage() {
   const { t } = useTranslation();
   const { q } = Route.useSearch();
   const cart = useCart();
-  const gate = useSubscriptionGate();
   const nq = normalize(q).trim();
   const [cat, setCat] = useState<"all" | Category>("all");
   const [minRating, setMinRating] = useState(0);
@@ -323,12 +321,6 @@ function SearchPage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-3 py-4 md:px-6">
-      <div className="mb-3 flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900 md:text-sm">
-        <span className="mt-0.5 inline-flex shrink-0 items-center rounded-full bg-amber-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-          {t("searchPage.subscribersOnly", "Solo suscriptores")}
-        </span>
-        <p>{t("searchPage.subscribersOnlyNotice", "Este catálogo es exclusivo para miembros con una suscripción activa. Podrás agregar productos al carrito solo si tienes un plan activo.")}</p>
-      </div>
       <div className="flex gap-6">
         <aside className="hidden w-64 shrink-0 rounded-md border border-border bg-white p-4 md:block lg:w-72">
           <FiltersPanel {...filterProps} />
@@ -404,13 +396,8 @@ function SearchPage() {
                         <span className="text-xs align-top">$</span>
                         {p.price.toFixed(2)}
                       </div>
-                      <span
-                        className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800"
-                        title={t("searchPage.subscribersOnlyNotice", "Este catálogo es exclusivo para miembros con una suscripción activa. Podrás agregar productos al carrito solo si tienes un plan activo.")}
-                      >
-                        {t("searchPage.subscribersOnly", "Solo suscriptores")}
-                      </span>
                     </div>
+
 
                     <p className="text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">{t("searchPage.getItOn", { date: deliveryDate })}</span>
@@ -420,7 +407,7 @@ function SearchPage() {
                     )}
                     <button
                       type="button"
-                      onClick={() => gate.guard(() => cart.add({ id: p.id, name, price: p.price, image: p.image }))}
+                      onClick={() => cart.add({ id: p.id, name, price: p.price, image: p.image })}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-400 px-3 py-2 text-xs font-bold text-[#1a0f0a] shadow-sm transition hover:bg-amber-300"
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
