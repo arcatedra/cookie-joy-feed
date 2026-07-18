@@ -73,11 +73,17 @@ const REEL_TEXT_KEY_MAP: Record<string, string> = {
   "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
   "Galleta Explosiva de Nutella": "reels.items.nutella.product",
 };
+function translateReelKey(value: string | null | undefined): string | undefined {
+  if (!value) return undefined;
+  if (value.startsWith("reels.") && i18n.exists(value)) return value;
+  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
+  if (mapped && i18n.exists(mapped)) return mapped;
+  return undefined;
+}
 function translateReelText(value: string | null | undefined): string {
   if (!value) return "";
-  if (value.startsWith("reels.") && i18n.exists(value)) return i18n.t(value);
-  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
-  if (mapped && i18n.exists(mapped)) return i18n.t(mapped);
+  const key = translateReelKey(value);
+  if (key) return i18n.t(key);
   return value;
 }
 
