@@ -1503,7 +1503,7 @@ function ReelCard({
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-3 py-2.5 text-center text-[12px] font-extrabold text-[#1a0f0a] shadow-md ring-1 ring-amber-300 transition hover:bg-amber-300"
           >
             <ExternalLink className="h-3.5 w-3.5" />
-            {reel.cta_label?.trim() || "Más información"}
+            {reel.cta_label?.trim() || t("reels.moreInfo", "Más información")}
           </a>
         ) : reel.product_name && (
           <button
