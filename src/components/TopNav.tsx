@@ -38,7 +38,7 @@ const quickLinkKeys = [
 
 export function TopNav() {
   const { t } = useTranslation();
-  const cartCount = useCart().count;
+  const { count: cartCount, hydrated: cartHydrated } = useCart();
   const { user, signOut } = useAuth();
 
   const navigate = useNavigate();
