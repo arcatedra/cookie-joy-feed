@@ -35,7 +35,6 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { syncReelPlayback } from "@/lib/reel-playback";
@@ -925,7 +924,6 @@ function ReelCard({
 }) {
   useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
-  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
