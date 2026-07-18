@@ -62,9 +62,22 @@ import imgMM from "@/assets/ins-mm.jpg";
 // Translate value if it matches a known i18n key (e.g. "reels.items.pista.title"),
 // otherwise return the raw value. This lets DB-stored reel titles / product names
 // be localized while remaining backwards-compatible with free-text values.
+// Also maps known Spanish literals stored in the DB to their i18n keys so
+// legacy rows get localized without a data migration.
+const REEL_TEXT_KEY_MAP: Record<string, string> = {
+  "Crunch de maní recién salido del horno": "reels.items.pb.title",
+  "Mantequilla de Maní Crunch": "reels.items.pb.product",
+  "Mantequilla de Maní Crujiente": "reels.items.pb.product",
+  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Cookies & Cream Premium": "reels.items.cookiescream.product",
+  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  "Galleta Explosiva de Nutella": "reels.items.nutella.product",
+};
 function translateReelText(value: string | null | undefined): string {
   if (!value) return "";
   if (value.startsWith("reels.") && i18n.exists(value)) return i18n.t(value);
+  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
+  if (mapped && i18n.exists(mapped)) return i18n.t(mapped);
   return value;
 }
 
