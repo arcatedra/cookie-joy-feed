@@ -78,10 +78,10 @@ interface SliderProduct {
 
 const sliderProducts: SliderProduct[] = [
   { id: "sp1", name: "Galleta de Pistacho y Chocolate Blanco", price: 4.5, oldPrice: 5.5, rating: 4.8, reviews: 1284, image: imgWhiteMac, discountPct: 18 },
-  { id: "sp2", name: "Triple Chocolate Fudge", price: 3.95, oldPrice: 4.95, rating: 4.9, reviews: 2156, image: imgDoubleChoc, discountPct: 20 },
+  { id: "sp2", name: "Triple Chocolate Fundido", price: 3.95, oldPrice: 4.95, rating: 4.9, reviews: 2156, image: imgDoubleChoc, discountPct: 20 },
   { id: "sp3", name: "Snickerdoodle Clásica", price: 3.25, oldPrice: 3.95, rating: 4.7, reviews: 892, image: imgSnicker, discountPct: 18 },
   { id: "sp4", name: "Avena y Pasas con Canela", price: 3.5, oldPrice: 4.25, rating: 4.6, reviews: 645, image: imgOatmeal, discountPct: 17 },
-  { id: "sp5", name: "Mantequilla de Maní Crujiente", price: 3.75, oldPrice: 4.5, rating: 4.8, reviews: 1043, image: imgPB, discountPct: 16 },
+  { id: "sp5", name: "Mantequilla de Maní Crunch", price: 3.75, oldPrice: 4.5, rating: 4.8, reviews: 1043, image: imgPB, discountPct: 16 },
   { id: "sp6", name: "Cookies & Cream Premium", price: 4.25, oldPrice: 5.0, rating: 4.9, reviews: 1789, image: imgCookiesCream, discountPct: 15 },
   { id: "sp7", name: "Doble Chispas de Chocolate", price: 3.95, oldPrice: 4.75, rating: 4.7, reviews: 921, image: imgChocChunk, discountPct: 17 },
   { id: "sp8", name: "Menta y Chocolate Dark", price: 4.5, oldPrice: 5.5, rating: 4.6, reviews: 512, image: imgMint, discountPct: 18 },
