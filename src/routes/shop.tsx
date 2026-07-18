@@ -78,7 +78,7 @@ function ShopPage() {
           </div>
         </div>
         <p className="mt-4 text-xs uppercase tracking-wider opacity-80">
-          Compra por unidad · Pago seguro con Stripe
+          {t("shopPage.subtitle")}
         </p>
       </header>
 
