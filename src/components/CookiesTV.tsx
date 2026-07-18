@@ -64,15 +64,69 @@ import imgMM from "@/assets/ins-mm.jpg";
 // be localized while remaining backwards-compatible with free-text values.
 // Also maps known Spanish literals stored in the DB to their i18n keys so
 // legacy rows get localized without a data migration.
+// Maps any legacy Spanish or English literal that may live in the DB
+// (from an older admin form) to its canonical i18n key, so every reel
+// product name and title translates correctly across all 9 languages
+// regardless of when the row was inserted.
 const REEL_TEXT_KEY_MAP: Record<string, string> = {
+  // ---- Titles (legacy Spanish) ----
   "Crunch de maní recién salido del horno": "reels.items.pb.title",
+  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  // ---- Product names (Spanish + English variants) ----
+  // pb — Peanut Butter Crunch
   "Mantequilla de Maní Crunch": "reels.items.pb.product",
   "Mantequilla de Maní Crujiente": "reels.items.pb.product",
-  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Peanut Butter Crunch": "reels.items.pb.product",
+  // cookiescream
   "Cookies & Cream Premium": "reels.items.cookiescream.product",
-  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  // nutella
   "Galleta Explosiva de Nutella": "reels.items.nutella.product",
+  "Nutella Explosion Cookie": "reels.items.nutella.product",
+  // cchunk — Double Chocolate Chunk
+  "Doble Chispas de Chocolate": "reels.items.cchunk.product",
+  "Double Chocolate Chunk": "reels.items.cchunk.product",
+  "Chocolate Chunk": "reels.items.cchunk.product",
+  // mint
+  "Menta y Chocolate Dark": "reels.items.mint.product",
+  "Dark Mint Chocolate": "reels.items.mint.product",
+  // pista
+  "Pistacho y Chocolate Blanco": "reels.items.pista.product",
+  "Pistachio & White Chocolate": "reels.items.pista.product",
+  // mm
+  "M&M Festiva": "reels.items.mm.product",
+  "Festive M&M": "reels.items.mm.product",
+  // triple
+  "Triple Chocolate Fundido": "reels.items.triple.product",
+  "Triple Chocolate Fudge": "reels.items.triple.product",
+  // snicker
+  "Snickerdoodle Clásica": "reels.items.snicker.product",
+  "Classic Snickerdoodle": "reels.items.snicker.product",
+  // oatmeal
+  "Avena y Pasas con Canela": "reels.items.oatmeal.product",
+  "Oatmeal & Raisin Cinnamon": "reels.items.oatmeal.product",
 };
+
+// Fallback: derive the i18n product key from a reel's stable product_slug,
+// so even a brand-new DB row with a free-text product_name still renders
+// the localized name.
+const SLUG_TO_PRODUCT_KEY: Record<string, string> = {
+  "p-pb": "reels.items.pb.product",
+  "p-cc": "reels.items.cookiescream.product",
+  "p-doublechoc": "reels.items.nutella.product",
+  "p-cchunk": "reels.items.cchunk.product",
+  "p-mint": "reels.items.mint.product",
+  "p-pista": "reels.items.pista.product",
+  "p-mm": "reels.items.mm.product",
+  "p-triple": "reels.items.triple.product",
+  "p-snicker": "reels.items.snicker.product",
+  "p-oatmeal": "reels.items.oatmeal.product",
+};
+export function reelProductKeyFromSlug(slug: string | null | undefined): string | undefined {
+  if (!slug) return undefined;
+  const k = SLUG_TO_PRODUCT_KEY[slug];
+  return k && i18n.exists(k) ? k : undefined;
+}
 function translateReelKey(value: string | null | undefined): string | undefined {
   if (!value) return undefined;
   if (value.startsWith("reels.") && i18n.exists(value)) return value;
