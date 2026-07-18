@@ -433,7 +433,10 @@ function FeaturedCard() {
             <p className="line-clamp-2 text-xs font-semibold text-[#1a0f0a]">
               {t("home.cards.flashProduct")}
             </p>
-            <p className="mt-2 text-[11px] text-[#555]">
+            <p className="mt-1 text-sm font-bold text-[#1a0f0a]">
+              <span className="text-[10px] align-top">$</span>32.00
+            </p>
+            <p className="mt-1 text-[11px] text-[#555]">
               {t("home.cards.flashLink")}
             </p>
           </div>
