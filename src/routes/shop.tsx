@@ -145,10 +145,10 @@ function ShopPage() {
                       price: p.price,
                       image: p.image,
                     });
-                    toast.success(`${name} agregado al carrito`);
+                    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                   }}
                   className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-orange text-white shadow-md transition active:scale-90"
-                  aria-label={`Agregar ${name}`}
+                  aria-label={t("cartFloating.addAria", { name, defaultValue: "Add {{name}}" })}
                 >
                   <Plus className="h-4 w-4" />
                 </button>
