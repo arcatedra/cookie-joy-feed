@@ -141,10 +141,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const i = prev.findIndex((p) => p.id === withKey.id);
           if (i >= 0) {
             const next = [...prev];
+            // Overwrite metadata with the authoritative incoming values so a
+            // stale/corrupt legacy line can't keep showing the wrong product
+            // name/image while quantity increments.
             next[i] = {
               ...next[i],
+              name: withKey.name,
+              nameKey: withKey.nameKey,
+              price: withKey.price,
+              image: withKey.image,
               qty: next[i].qty + qty,
-              nameKey: next[i].nameKey ?? withKey.nameKey,
             };
             return next;
           }
