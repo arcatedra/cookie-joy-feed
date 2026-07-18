@@ -400,7 +400,7 @@ function SubscriptionCard() {
             </div>
             <div className="flex items-end justify-between">
               <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#1a0f0a]">
-                {t("home.cards.subscriptionPrice")}
+                {formatPrice(19.99)}{t("subscribe.perMonth")}
               </span>
             </div>
           </div>
