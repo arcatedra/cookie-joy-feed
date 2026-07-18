@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ProductRating } from "@/components/ProductRating";
 import { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
+
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
@@ -110,7 +110,7 @@ function useSnapCarousel(itemCount: number) {
 function MenuPage() {
   const { t, i18n } = useTranslation();
   const globalCart = useCart();
-  const gate = useSubscriptionGate();
+  
   const [activeTab, setActiveTab] = useState<TabKey>("classic");
   const [selectedCookie, setSelectedCookie] = useState<MenuItem | null>(null);
   const [selectedPack, setSelectedPack] = useState<PackItem | null>(null);
@@ -122,17 +122,15 @@ function MenuPage() {
   const cartTotal = globalCart.total;
 
   const add = (id: string) => {
-    gate.guard(() => {
-      const cookie = cookies.find((c) => c.id === id);
-      if (cookie) {
-        globalCart.add({ id: cookie.id, name: t(`cookies.${cookie.tKey}.name`), price: cookie.price, image: cookie.image });
-        return;
-      }
-      const pack = packs.find((p) => p.id === id);
-      if (pack) {
-        globalCart.add({ id: pack.id, name: t(`packs.${pack.id}.name`), price: pack.price, image: pack.image });
-      }
-    });
+    const cookie = cookies.find((c) => c.id === id);
+    if (cookie) {
+      globalCart.add({ id: cookie.id, name: t(`cookies.${cookie.tKey}.name`), price: cookie.price, image: cookie.image });
+      return;
+    }
+    const pack = packs.find((p) => p.id === id);
+    if (pack) {
+      globalCart.add({ id: pack.id, name: t(`packs.${pack.id}.name`), price: pack.price, image: pack.image });
+    }
   };
   const sub = (id: string) => globalCart.setQty(id, qtyOf(id) - 1);
 
