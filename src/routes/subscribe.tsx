@@ -242,7 +242,7 @@ function SubscribePage() {
       <section className={`px-5 ${hasActive ? "pt-6" : "-mt-5"}`}>
         {!hasActive && (
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground">
-            {t("subscribe.yourPlan", { defaultValue: "Your Hazorex Plan" })}
+            {t("subscribe.yourPlan")}
           </h2>
         )}
         <article className="relative overflow-hidden rounded-2xl bg-card p-5 shadow-md ring-2 ring-primary">
