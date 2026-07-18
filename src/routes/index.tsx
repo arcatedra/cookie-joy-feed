@@ -459,25 +459,27 @@ function ProductSlider() {
         <div className="flex items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-extrabold text-[#1a0f0a] md:text-2xl">
-              Inspirado en tus antojos
+              {t("homePage.sliderHeading")}
             </h2>
             <p className="mt-0.5 text-xs text-[#555]">
-              Selección horneada hoy · Envío en 24h
+              {t("homePage.sliderSub")}
             </p>
           </div>
           <Link to="/menu" className="hidden text-xs font-semibold text-[#007185] hover:underline sm:block">
-            Ver más
+            {t("homePage.seeMore")}
           </Link>
         </div>
 
         <div className="no-scrollbar mt-4 flex snap-x gap-3 overflow-x-auto pb-3">
-          {sliderProducts.map((p) => (
+          {sliderProducts.map((p) => {
+            const name = t(p.nameKey);
+            return (
             <article
               key={p.id}
               className="flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-md ring-1 ring-black/5 transition hover:shadow-md sm:w-[200px] md:w-[220px]"
             >
               <Link to="/menu" className="relative block aspect-square overflow-hidden bg-[#f7f7f7]">
-                <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition hover:scale-105" />
+                <img src={p.image} alt={name} loading="lazy" className="h-full w-full object-cover transition hover:scale-105" />
                 {p.discountPct ? (
                   <span className="absolute left-2 top-2 rounded-sm bg-emerald-500 px-1.5 py-0.5 text-[10px] font-extrabold text-white shadow">
                     -{p.discountPct}%
@@ -486,7 +488,7 @@ function ProductSlider() {
               </Link>
               <div className="flex flex-1 flex-col p-3">
                 <h3 className="line-clamp-2 min-h-[2.4em] text-xs font-semibold text-[#0f1111]">
-                  {p.name}
+                  {name}
                 </h3>
                 <div className="mt-1 flex items-center gap-1">
                   <Stars rating={p.rating} />
@@ -504,17 +506,18 @@ function ProductSlider() {
                   type="button"
                   onClick={() =>
                     gate.guard(() =>
-                      cart.add({ id: `slider-${p.id}`, name: p.name, price: p.price, image: p.image }),
+                      cart.add({ id: `slider-${p.id}`, name, price: p.price, image: p.image }),
                     )
                   }
                   className="mt-2 inline-flex items-center justify-center gap-1 rounded-full bg-[#c8956d] px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-[#a87852] active:scale-95"
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  Agregar al carrito
+                  {t("homePage.addToCart")}
                 </button>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
