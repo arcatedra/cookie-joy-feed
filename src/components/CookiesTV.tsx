@@ -1004,15 +1004,13 @@ function ReelCard({
     const name = translateReelText(reel.product_name);
     const price = reel.product_price;
     if (!name || price == null) return;
-    gate.guard(() => {
-      cart.add({
-        id: `reel-${reel.product_slug || reel.id}`,
-        name,
-        price: Number(price),
-        image: productImg,
-      });
-      toast.success(`${name} agregado al carrito`);
+    cart.add({
+      id: `reel-${reel.product_slug || reel.id}`,
+      name,
+      price: Number(price),
+      image: productImg,
     });
+    toast.success(`${name} agregado al carrito`);
   };
 
   const shareUrl = () => {
