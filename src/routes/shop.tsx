@@ -141,13 +141,15 @@ function ShopPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    cart.add({
-                      id: p.id,
-                      name,
-                      price: p.price,
-                      image: p.image,
+                    gate.guard(() => {
+                      cart.add({
+                        id: p.id,
+                        name,
+                        price: p.price,
+                        image: p.image,
+                      });
+                      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                     });
-                    toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
                   }}
                   className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-orange text-white shadow-md transition active:scale-90"
                   aria-label={t("cartFloating.addAria", { name, defaultValue: "Add {{name}}" })}
