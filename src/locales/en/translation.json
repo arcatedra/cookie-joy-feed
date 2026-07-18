@@ -80,6 +80,18 @@
       "mm": {
         "title": "Colorful M&M crunch 🎉",
         "product": "Festive M&M"
+      },
+      "pb": {
+        "title": "Fresh-baked peanut crunch",
+        "product": "Peanut Butter Crunch"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream: the premium classic",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Fresh-baked 🍫 melted chocolate",
+        "product": "Nutella Explosion Cookie"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "Like",
+    "comments": "Comments",
+    "share": "Share",
+    "shareOn": "Share on"
   },
   "topnav": {
     "deliverTo": "Deliver to",

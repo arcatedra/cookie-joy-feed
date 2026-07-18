@@ -80,6 +80,18 @@
       "mm": {
         "title": "M&M festivos e crocantes 🎉",
         "product": "M&M Festivo"
+      },
+      "pb": {
+        "title": "Crocante de amendoim recém-assado",
+        "product": "Manteiga de Amendoim Crocante"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream: o clássico premium",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Recém-assadas 🍫 chocolate derretido",
+        "product": "Biscoito Explosivo de Nutella"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "Curtir",
+    "comments": "Comentários",
+    "share": "Compartilhar",
+    "shareOn": "Compartilhar em"
   },
   "topnav": {
     "deliverTo": "Entregar em",

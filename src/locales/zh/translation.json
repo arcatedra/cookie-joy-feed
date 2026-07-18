@@ -80,6 +80,18 @@
       "mm": {
         "title": "多彩 M&M 嘎嘣脆 🎉",
         "product": "节日 M&M"
+      },
+      "pb": {
+        "title": "新鲜出炉的花生脆饼",
+        "product": "香脆花生酱饼干"
+      },
+      "cookiescream": {
+        "title": "奶油曲奇：高级经典款",
+        "product": "奶油曲奇 Premium"
+      },
+      "nutella": {
+        "title": "新鲜出炉 🍫 融化巧克力",
+        "product": "Nutella 爆浆饼干"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "点赞",
+    "comments": "评论",
+    "share": "分享",
+    "shareOn": "分享到"
   },
   "topnav": {
     "deliverTo": "配送至",

@@ -62,9 +62,22 @@ import imgMM from "@/assets/ins-mm.jpg";
 // Translate value if it matches a known i18n key (e.g. "reels.items.pista.title"),
 // otherwise return the raw value. This lets DB-stored reel titles / product names
 // be localized while remaining backwards-compatible with free-text values.
+// Also maps known Spanish literals stored in the DB to their i18n keys so
+// legacy rows get localized without a data migration.
+const REEL_TEXT_KEY_MAP: Record<string, string> = {
+  "Crunch de maní recién salido del horno": "reels.items.pb.title",
+  "Mantequilla de Maní Crunch": "reels.items.pb.product",
+  "Mantequilla de Maní Crujiente": "reels.items.pb.product",
+  "Cookies & Cream: el clásico premium": "reels.items.cookiescream.title",
+  "Cookies & Cream Premium": "reels.items.cookiescream.product",
+  "Recién horneadas 🍫 chocolate derretido": "reels.items.nutella.title",
+  "Galleta Explosiva de Nutella": "reels.items.nutella.product",
+};
 function translateReelText(value: string | null | undefined): string {
   if (!value) return "";
   if (value.startsWith("reels.") && i18n.exists(value)) return i18n.t(value);
+  const mapped = REEL_TEXT_KEY_MAP[value.trim()];
+  if (mapped && i18n.exists(mapped)) return i18n.t(mapped);
   return value;
 }
 
@@ -1331,7 +1344,7 @@ function ReelCard({
         <button
           type="button"
           onClick={handleLike}
-          aria-label="Me gusta"
+          aria-label={t("reels.like", "Me gusta")}
           className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
         >
           <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
@@ -1353,7 +1366,7 @@ function ReelCard({
         <button
           type="button"
           onClick={onOpenComments}
-          aria-label="Comentarios"
+          aria-label={t("reels.comments", "Comentarios")}
           className="flex flex-col items-center gap-0.5"
         >
           <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
@@ -1392,7 +1405,7 @@ function ReelCard({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              aria-label="Compartir"
+              aria-label={t("reels.share", "Compartir")}
               className="flex flex-col items-center gap-0.5"
             >
               <span className="grid h-10 w-10 place-items-center rounded-full bg-black/50 backdrop-blur transition hover:bg-black/70">
@@ -1401,7 +1414,7 @@ function ReelCard({
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("reels.shareOn", "Compartir en")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => openShare("whatsapp")}>
               <WhatsAppIcon className="text-green-600" /> WhatsApp
@@ -1895,7 +1908,7 @@ function ExpandedReelModal({
         <button
           type="button"
           onClick={handleLike}
-          aria-label="Me gusta"
+          aria-label={t("reels.like", "Me gusta")}
           className="relative flex flex-col items-center gap-0.5 transition active:scale-90"
         >
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/55 backdrop-blur transition hover:bg-black/75">
@@ -1917,7 +1930,7 @@ function ExpandedReelModal({
         <button
           type="button"
           onClick={() => onOpenComments(current.id)}
-          aria-label="Comentarios"
+          aria-label={t("reels.comments", "Comentarios")}
           className="flex flex-col items-center gap-0.5"
         >
           <span className="grid h-12 w-12 place-items-center rounded-full bg-sky-500/80 backdrop-blur transition hover:bg-sky-500">
@@ -1932,7 +1945,7 @@ function ExpandedReelModal({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              aria-label="Compartir"
+              aria-label={t("reels.share", "Compartir")}
               className="flex flex-col items-center gap-0.5"
               onClick={async (e) => {
                 // Prefer native OS share sheet (Instagram, TikTok, WhatsApp, etc.)
@@ -1953,11 +1966,11 @@ function ExpandedReelModal({
               <span className="grid h-12 w-12 place-items-center rounded-full bg-emerald-500/80 backdrop-blur transition hover:bg-emerald-500">
                 <Share2 className="h-5 w-5 text-white" />
               </span>
-              <span className="text-[11px] font-bold text-white drop-shadow">Compartir</span>
+              <span className="text-[11px] font-bold text-white drop-shadow">{t("reels.share", "Compartir")}</span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="z-[110] w-52">
-            <DropdownMenuLabel>Compartir en</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("reels.shareOn", "Compartir en")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => openShare("whatsapp")}>
               <WhatsAppIcon className="text-green-600" /> WhatsApp

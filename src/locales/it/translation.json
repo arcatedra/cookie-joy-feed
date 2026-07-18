@@ -80,6 +80,18 @@
       "mm": {
         "title": "M&M croccanti e colorati 🎉",
         "product": "M&M Festivi"
+      },
+      "pb": {
+        "title": "Croccante di arachidi appena sfornato",
+        "product": "Burro di Arachidi Croccante"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream: il classico premium",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Appena sfornate 🍫 cioccolato fuso",
+        "product": "Biscotto Esplosivo alla Nutella"
       }
     },
     "buy": "Buy",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
     "thanksAria": "Send thanks",
     "moreInfo": "More info",
-    "addedToCart": "{{name}} added to cart"
+    "addedToCart": "{{name}} added to cart",
+    "like": "Mi piace",
+    "comments": "Commenti",
+    "share": "Condividi",
+    "shareOn": "Condividi su"
   },
   "topnav": {
     "deliverTo": "Consegna a",

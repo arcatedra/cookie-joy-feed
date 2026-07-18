@@ -80,6 +80,18 @@
       "mm": {
         "title": "M&M crujientes y festivas 🎉",
         "product": "M&M Festiva"
+      },
+      "pb": {
+        "title": "Crunch de maní recién salido del horno",
+        "product": "Mantequilla de Maní Crujiente"
+      },
+      "cookiescream": {
+        "title": "Cookies & Cream: el clásico premium",
+        "product": "Cookies & Cream Premium"
+      },
+      "nutella": {
+        "title": "Recién horneadas 🍫 chocolate derretido",
+        "product": "Galleta Explosiva de Nutella"
       }
     },
     "buy": "Comprar",
@@ -92,7 +104,11 @@
     "otherAmountSoonDesc": "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
     "thanksAria": "Dar las gracias",
     "moreInfo": "Más información",
-    "addedToCart": "{{name}} agregado al carrito"
+    "addedToCart": "{{name}} agregado al carrito",
+    "like": "Me gusta",
+    "comments": "Comentarios",
+    "share": "Compartir",
+    "shareOn": "Compartir en"
   },
   "topnav": {
     "deliverTo": "Entregar a",
