@@ -325,13 +325,14 @@ function CartPage() {
 }
 
 function Header() {
+  const { t } = useTranslation();
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-4">
         <Link
           to="/shop"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-muted"
-          aria-label="volver"
+          aria-label={t("cartPage.back")}
         >
           <ChevronLeft className="h-5 w-5" />
         </Link>
@@ -341,6 +342,7 @@ function Header() {
         <span className="h-9 w-9" />
       </div>
     </header>
+
   );
 }
 
