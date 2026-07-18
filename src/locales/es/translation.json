@@ -80,7 +80,18 @@
         "title": "M&M crujientes y festivas 🎉",
         "product": "M&M Festiva"
       }
-    }
+    },
+    "buy": "Comprar",
+    "thanks": "Gracias",
+    "sendThanks": "Enviar Gracias",
+    "thanksSentTitle": "¡Gracias enviado! 🧡",
+    "thanksSentDesc": "Has apoyado este reel con {{amount}} €.",
+    "otherAmount": "Otro monto…",
+    "otherAmountSoonTitle": "Pronto podrás elegir otro monto",
+    "otherAmountSoonDesc": "Estamos preparando los pagos. ¡Gracias por tu apoyo!",
+    "thanksAria": "Dar las gracias",
+    "moreInfo": "Más información",
+    "addedToCart": "{{name}} agregado al carrito"
   },
   "topnav": {
     "deliverTo": "Entregar a",
@@ -1041,7 +1052,8 @@
     "rules": "Reglas del sorteo",
     "trust": "Confianza",
     "rights": "Todos los derechos reservados.",
-    "becomeDriver": "Sé repartidor"
+    "becomeDriver": "Sé repartidor",
+    "winners": "Ganadores"
   },
   "repartidoresPage": {
     "metaTitle": "Sé repartidor · Hazorex",
@@ -1464,5 +1476,11 @@
     "addToCart": "Agregar al carrito",
     "addedToCart": "Agregado al carrito",
     "productUnavailable": "Este producto ya no está disponible."
+  },
+  "cartFloating": {
+    "one": "{{count}} artículo · ${{total}}",
+    "other": "{{count}} artículos · ${{total}}",
+    "goTo": "Ir al carrito",
+    "addAria": "Agregar {{name}}"
   }
 }

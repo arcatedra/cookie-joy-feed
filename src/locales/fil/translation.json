@@ -80,7 +80,18 @@
         "title": "Makulay na M&M crunch 🎉",
         "product": "Pistahang M&M"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "Ipadala sa",
@@ -1044,7 +1055,8 @@
     "rules": "Mga panuntunan",
     "trust": "Tiwala",
     "rights": "Lahat ng karapatan ay nakalaan.",
-    "becomeDriver": "Maging delivery driver"
+    "becomeDriver": "Maging delivery driver",
+    "winners": "Mga Panalo"
   },
   "repartidoresPage": {
     "metaTitle": "Maging isang delivery driver · Hazorex",
@@ -1454,5 +1466,11 @@
   "cartPage": {
     "metaTitle": "Ang iyong cart — HAZOREX",
     "metaDesc": "Suriin ang mga item sa iyong cart bago mag-checkout."
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }

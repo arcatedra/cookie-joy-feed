@@ -423,7 +423,18 @@
         "title": "カリカリで楽しいM&M 🎉",
         "product": "フェスティブM&M"
       }
-    }
+    },
+    "buy": "Buy",
+    "thanks": "Thanks",
+    "sendThanks": "Send Thanks",
+    "thanksSentTitle": "Thanks sent! 🧡",
+    "thanksSentDesc": "You supported this reel with {{amount}} €.",
+    "otherAmount": "Other amount…",
+    "otherAmountSoonTitle": "You'll soon be able to choose another amount",
+    "otherAmountSoonDesc": "We're preparing payments. Thanks for your support!",
+    "thanksAria": "Send thanks",
+    "moreInfo": "More info",
+    "addedToCart": "{{name}} added to cart"
   },
   "topnav": {
     "deliverTo": "お届け先",
@@ -1046,7 +1057,8 @@
     "rules": "抽選ルール",
     "trust": "信頼",
     "rights": "すべての権利を留保します。",
-    "becomeDriver": "配達員になる"
+    "becomeDriver": "配達員になる",
+    "winners": "受賞者"
   },
   "repartidoresPage": {
     "metaTitle": "配達員になる · Hazorex",
@@ -1456,5 +1468,11 @@
   "cartPage": {
     "metaTitle": "カート — HAZOREX",
     "metaDesc": "購入手続きの前にカートの商品をご確認ください。"
+  },
+  "cartFloating": {
+    "one": "{{count}} item · ${{total}}",
+    "other": "{{count}} items · ${{total}}",
+    "goTo": "Go to cart",
+    "addAria": "Add {{name}}"
   }
 }
