@@ -48,19 +48,29 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
 });
 
 
-export const getSweepstakesConfig = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
-    .from("sweepstakes_config")
-    .select("sponsor_name, sponsor_address, sponsor_email, excluded_states, min_age, claim_window_days, entry_cutoff_minutes, max_daily_prize_usd, updated_at")
-    .eq("id", true)
-    .maybeSingle();
-  if (error) throw new Error(error.message);
-  return {
-    ...data!,
-    address_valid: isSponsorAddressValid(data?.sponsor_address ?? null),
-  };
-});
+export const getSweepstakesConfig = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin, error: roleErr } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (roleErr || !isAdmin) {
+      throw new Response("Forbidden", { status: 403 });
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("sweepstakes_config")
+      .select("sponsor_name, sponsor_address, sponsor_email, excluded_states, min_age, claim_window_days, entry_cutoff_minutes, max_daily_prize_usd, updated_at")
+      .eq("id", true)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return {
+      ...data!,
+      address_valid: isSponsorAddressValid(data?.sponsor_address ?? null),
+    };
+  });
+
 
 const US_STATE_RE = /^[A-Z]{2}$/;
 
