@@ -56,9 +56,13 @@ export function deriveCartItemNameKey(id: string): string | undefined {
 }
 
 function migrateItems(items: CartItem[]): CartItem[] {
-  return items.map((it) =>
-    it.nameKey ? it : { ...it, nameKey: deriveCartItemNameKey(it.id) },
-  );
+  // Prefer the nameKey derived from the stable id when available — it fixes
+  // legacy carts where a stale/incorrect nameKey was persisted (e.g. a
+  // `reel-p-mm` line stored with the Chocolate Chunk key from an older build).
+  return items.map((it) => {
+    const derived = deriveCartItemNameKey(it.id);
+    return { ...it, nameKey: derived ?? it.nameKey };
+  });
 }
 
 function readStorage(): CartItem[] {
