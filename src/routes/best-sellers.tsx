@@ -34,7 +34,7 @@ const ALL: BestSeller[] = [
   { id: "p12", nameKey: "packs.p12.name", image: imgPack12, price: 42, rating: 4.9, reviews: 1620 },
   { id: "c7", nameKey: "cookies.c7.name", image: imgMM, price: 3.75, rating: 4.8, reviews: 1740 },
   { id: "p6", nameKey: "packs.p6.name", image: imgPack6, price: 22, rating: 4.9, reviews: 1320 },
-  { id: "c2", nameKey: "cookies.c2.name", image: imgSnicker, price: 3.75, rating: 4.7, reviews: 1208 },
+  { id: "c2", nameKey: "cookies.c2.name", image: imgSnicker, price: 3.75, rating: 4.7, reviews: 125 },
   { id: "c6", nameKey: "cookies.c6.name", image: imgWhiteMac, price: 3.75, rating: 4.7, reviews: 980 },
   { id: "p9", nameKey: "packs.p9.name", image: imgPack9, price: 32, rating: 4.9, reviews: 980 },
   { id: "c3", nameKey: "cookies.c3.name", image: imgSugar, price: 3.75, rating: 4.6, reviews: 890 },
