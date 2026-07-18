@@ -46,6 +46,7 @@ interface AddressForm {
 
 function CartPage() {
   const cart = useCart();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [email, setEmail] = useState(user?.email ?? "");
   const [address, setAddress] = useState<AddressForm>({
