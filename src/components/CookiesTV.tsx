@@ -925,6 +925,7 @@ function ReelCard({
 }) {
   const { t } = useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
+  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
