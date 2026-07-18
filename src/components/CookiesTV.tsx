@@ -922,7 +922,7 @@ function ReelCard({
   isFirst?: boolean;
   onExpand: () => void;
 }) {
-  useTranslation(); // subscribe so reel titles re-render on language change
+  const { t } = useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
