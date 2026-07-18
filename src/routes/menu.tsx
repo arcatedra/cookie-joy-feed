@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ProductRating } from "@/components/ProductRating";
-import { formatPrice, formatNumber } from "@/i18n";
+import i18n, { formatPrice, formatNumber } from "@/i18n";
 import { useCart } from "@/lib/cart";
 
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
