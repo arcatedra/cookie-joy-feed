@@ -88,7 +88,7 @@ function CartPage() {
         data: {
           items: cart.items.map((it) => ({
             id: it.id,
-            name: it.name,
+            name: it.nameKey && i18n.exists(it.nameKey) ? t(it.nameKey) : it.name,
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
