@@ -851,7 +851,7 @@
     "backToRoulette": "Roleta",
     "title": "Histórico de Sorteios",
     "intro": "Cada sorteio ocorre diariamente às 20:00 (Horário do Leste). Os resultados são públicos e verificáveis através do hash da semente.",
-    "empty": "Nenhum sorteio concluído ainda. Volte após às 20:00 ET!",
+    "empty": "Ainda não há sorteios anteriores. Volte em breve.",
     "anonymous": "Anônimo"
   },
   "trust": {

@@ -883,7 +883,7 @@
     "backToRoulette": "Roulette",
     "title": "Verlosungsverlauf",
     "intro": "Jede Verlosung findet täglich um 20:00 Uhr (Eastern Time) statt. Die Ergebnisse sind öffentlich und durch den Seed-Hash verifizierbar.",
-    "empty": "Es wurden noch keine Verlosungen abgeschlossen. Komm nach 20:00 Uhr ET wieder!",
+    "empty": "Es gibt noch keine früheren Ziehungen. Schau bald wieder vorbei.",
     "anonymous": "Anonym"
   },
   "trust": {

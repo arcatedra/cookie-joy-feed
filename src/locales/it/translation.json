@@ -848,7 +848,7 @@
     "backToRoulette": "Roulette",
     "title": "Storico Estrazioni",
     "intro": "Ogni estrazione avviene giornalmente alle 20:00 (Eastern Time). I risultati sono pubblici e verificabili tramite l'hash del seme.",
-    "empty": "Nessuna estrazione ancora completata. Torna dopo le 20:00 ET!",
+    "empty": "Nessuna estrazione precedente. Torna presto.",
     "anonymous": "Anonimo"
   },
   "trust": {
