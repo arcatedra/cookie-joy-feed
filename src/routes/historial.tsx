@@ -133,7 +133,7 @@ function HistoryList() {
 
   return (
     <div className="space-y-3">
-      {winners.map((w) => {
+      {visible.map((w) => {
         const hasWinner = !!w.winnerDisplayName && w.status === "completed";
         const noEntrants = w.entrantsTotal === 0;
         const label = hasWinner
