@@ -195,7 +195,8 @@ function CartPage() {
                 </button>
               </div>
             </div>
-          ))}
+          );
+          })}
         </section>
 
         {!clientSecret && (
