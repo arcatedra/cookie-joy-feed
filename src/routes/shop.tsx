@@ -30,16 +30,16 @@ export const Route = createFileRoute("/shop")({
 });
 
 const products = [
-  { id: "shop-1", key: "c1", price: 3.75, rating: 5, reviews: 272, image: imgChocChunk },
-  { id: "shop-2", key: "c2", price: 3.75, rating: 5, reviews: 184, image: imgCookiesCream },
-  { id: "shop-3", key: "c2", price: 3.75, rating: 5, reviews: 125, image: imgSnicker },
-  { id: "shop-4", key: "c3", price: 3.75, rating: 5, reviews: 134, image: imgSugar },
-  { id: "shop-5", key: "c4", price: 3.75, rating: 5, reviews: 197, image: imgDoubleChoc },
-  { id: "shop-6", key: "c5", price: 3.75, rating: 5, reviews: 98, image: imgOatmeal },
-  { id: "shop-7", key: "c6", price: 3.75, rating: 5, reviews: 95, image: imgWhiteMac },
-  { id: "shop-8", key: "c7", price: 3.75, rating: 5, reviews: 79, image: imgMM },
-  { id: "shop-9", key: "c8", price: 3.75, rating: 5, reviews: 56, image: imgPB },
-  { id: "shop-10", key: "c10", price: 3.75, rating: 5, reviews: 23, image: imgMint },
+  { id: "shop-c1", key: "c1", price: 3.75, rating: 5, reviews: 272, image: imgChocChunk },
+  { id: "shop-c2", key: "c2", price: 3.75, rating: 5, reviews: 125, image: imgSnicker },
+  { id: "shop-c3", key: "c3", price: 3.75, rating: 5, reviews: 134, image: imgSugar },
+  { id: "shop-c4", key: "c4", price: 3.75, rating: 5, reviews: 197, image: imgDoubleChoc },
+  { id: "shop-c5", key: "c5", price: 3.75, rating: 5, reviews: 98, image: imgOatmeal },
+  { id: "shop-c6", key: "c6", price: 3.75, rating: 5, reviews: 95, image: imgWhiteMac },
+  { id: "shop-c7", key: "c7", price: 3.75, rating: 5, reviews: 79, image: imgMM },
+  { id: "shop-c8", key: "c8", price: 3.75, rating: 5, reviews: 56, image: imgPB },
+  { id: "shop-c9", key: "c9", price: 3.75, rating: 5, reviews: 37, image: imgVeganChoc },
+  { id: "shop-c10", key: "c10", price: 3.75, rating: 5, reviews: 23, image: imgMint },
 ];
 
 function ShopPage() {
