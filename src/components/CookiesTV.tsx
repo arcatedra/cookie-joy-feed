@@ -280,13 +280,16 @@ function hasPlayableSource(reel: DbReel) {
   return Boolean(FALLBACK_VIDEO[reel.slug]);
 }
 
+// nameKey is the i18n key we persist in product_name for new reels so any
+// language switch localizes automatically. name is the Spanish label shown
+// inside the admin form select — the DB never sees it after this change.
 const PRODUCT_OPTIONS = [
-  { slug: "p-doublechoc", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
-  { slug: "p-cc", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
-  { slug: "p-pb", name: "Mantequilla de Maní Crujiente", price: 3.75, image: imgPB },
-  { slug: "p-cchunk", name: "Doble Chispas de Chocolate", price: 3.95, image: imgChocChunk },
-  { slug: "p-mint", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
-  { slug: "p-pista", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
+  { slug: "p-doublechoc", nameKey: "reels.items.nutella.product", name: "Galleta Explosiva de Nutella", price: 4.95, image: imgDoubleChoc },
+  { slug: "p-cc", nameKey: "reels.items.cookiescream.product", name: "Cookies & Cream Premium", price: 4.25, image: imgCookiesCream },
+  { slug: "p-pb", nameKey: "reels.items.pb.product", name: "Mantequilla de Maní Crujiente", price: 3.75, image: imgPB },
+  { slug: "p-cchunk", nameKey: "reels.items.cchunk.product", name: "Doble Chispas de Chocolate", price: 3.95, image: imgChocChunk },
+  { slug: "p-mint", nameKey: "reels.items.mint.product", name: "Menta y Chocolate Dark", price: 4.5, image: imgMint },
+  { slug: "p-pista", nameKey: "reels.items.pista.product", name: "Pistacho y Chocolate Blanco", price: 4.5, image: imgWhiteMac },
 ];
 
 // ============ Embed link parser ============
