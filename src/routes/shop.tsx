@@ -52,6 +52,7 @@ const products = [
 function ShopPage() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
+  const gate = useSubscriptionGate();
 
   return (
     <main className="min-h-screen bg-background pb-24">
