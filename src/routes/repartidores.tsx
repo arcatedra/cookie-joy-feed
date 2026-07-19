@@ -543,7 +543,7 @@ const step1Schema = z.object({
 
 const step2Schema = z.object({
   vehicleType: z.enum(["moto", "auto"], {
-    errorMap: () => ({ message: "err_vehicle" }),
+    error: () => "err_vehicle",
   }),
   licenseNumber: z.string().trim().min(3, "err_license").max(50),
   insurer: z.string().trim().min(2, "err_insurer").max(80),
