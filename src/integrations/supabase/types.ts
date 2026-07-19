@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      clientes: {
+        Row: {
+          actualizado_en: string
+          ciudad: string | null
+          codigo_postal: string | null
+          creado_en: string
+          direccion_linea1: string | null
+          direccion_linea2: string | null
+          email: string
+          estado_provincia: string | null
+          id: string
+          nombre_completo: string
+          pais: string | null
+          stripe_customer_id: string | null
+          telefono: string | null
+        }
+        Insert: {
+          actualizado_en?: string
+          ciudad?: string | null
+          codigo_postal?: string | null
+          creado_en?: string
+          direccion_linea1?: string | null
+          direccion_linea2?: string | null
+          email: string
+          estado_provincia?: string | null
+          id: string
+          nombre_completo: string
+          pais?: string | null
+          stripe_customer_id?: string | null
+          telefono?: string | null
+        }
+        Update: {
+          actualizado_en?: string
+          ciudad?: string | null
+          codigo_postal?: string | null
+          creado_en?: string
+          direccion_linea1?: string | null
+          direccion_linea2?: string | null
+          email?: string
+          estado_provincia?: string | null
+          id?: string
+          nombre_completo?: string
+          pais?: string | null
+          stripe_customer_id?: string | null
+          telefono?: string | null
+        }
+        Relationships: []
+      }
       HAZOREX: {
         Row: {
           created_at: string
@@ -28,6 +76,199 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      pedido_items: {
+        Row: {
+          cantidad: number
+          id: string
+          nombre_producto: string
+          pedido_id: string
+          precio_unitario: number
+          producto_id: string | null
+          subtotal_item: number
+        }
+        Insert: {
+          cantidad: number
+          id?: string
+          nombre_producto: string
+          pedido_id: string
+          precio_unitario: number
+          producto_id?: string | null
+          subtotal_item: number
+        }
+        Update: {
+          cantidad?: number
+          id?: string
+          nombre_producto?: string
+          pedido_id?: string
+          precio_unitario?: number
+          producto_id?: string | null
+          subtotal_item?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedido_items_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pedido_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedidos: {
+        Row: {
+          actualizado_en: string
+          cliente_id: string
+          costo_envio: number
+          creado_en: string
+          direccion_envio: Json
+          estado: string
+          id: string
+          impuestos: number
+          metodo_pago: string | null
+          moneda: string
+          notas: string | null
+          numero_pedido: string
+          stripe_checkout_session_id: string | null
+          stripe_payment_intent_id: string | null
+          subtotal: number
+          total: number
+        }
+        Insert: {
+          actualizado_en?: string
+          cliente_id: string
+          costo_envio?: number
+          creado_en?: string
+          direccion_envio: Json
+          estado?: string
+          id?: string
+          impuestos?: number
+          metodo_pago?: string | null
+          moneda?: string
+          notas?: string | null
+          numero_pedido?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal?: number
+          total?: number
+        }
+        Update: {
+          actualizado_en?: string
+          cliente_id?: string
+          costo_envio?: number
+          creado_en?: string
+          direccion_envio?: Json
+          estado?: string
+          id?: string
+          impuestos?: number
+          metodo_pago?: string | null
+          moneda?: string
+          notas?: string | null
+          numero_pedido?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal?: number
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      productos: {
+        Row: {
+          categoria: string | null
+          creado_en: string
+          descripcion: string | null
+          disponible: boolean
+          id: string
+          imagen_url: string | null
+          nombre: string
+          precio: number
+        }
+        Insert: {
+          categoria?: string | null
+          creado_en?: string
+          descripcion?: string | null
+          disponible?: boolean
+          id?: string
+          imagen_url?: string | null
+          nombre: string
+          precio: number
+        }
+        Update: {
+          categoria?: string | null
+          creado_en?: string
+          descripcion?: string | null
+          disponible?: boolean
+          id?: string
+          imagen_url?: string | null
+          nombre?: string
+          precio?: number
+        }
+        Relationships: []
+      }
+      suscripciones: {
+        Row: {
+          cliente_id: string
+          creado_en: string
+          estado: string
+          fecha_cancelacion: string | null
+          fecha_inicio: string
+          fecha_renovacion: string | null
+          id: string
+          moneda: string
+          plan: string
+          precio: number
+          stripe_subscription_id: string | null
+        }
+        Insert: {
+          cliente_id: string
+          creado_en?: string
+          estado?: string
+          fecha_cancelacion?: string | null
+          fecha_inicio?: string
+          fecha_renovacion?: string | null
+          id?: string
+          moneda?: string
+          plan?: string
+          precio?: number
+          stripe_subscription_id?: string | null
+        }
+        Update: {
+          cliente_id?: string
+          creado_en?: string
+          estado?: string
+          fecha_cancelacion?: string | null
+          fecha_inicio?: string
+          fecha_renovacion?: string | null
+          id?: string
+          moneda?: string
+          plan?: string
+          precio?: number
+          stripe_subscription_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suscripciones_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
