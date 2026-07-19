@@ -33,7 +33,7 @@ export const Route = createFileRoute('/api/public/hooks/notify-order')({
           return new Response('Server misconfigured', { status: 500 })
         }
 
-        const supabase = createClient<Database>(supabaseUrl, serviceKey, {
+        const supabase = createClient(supabaseUrl, serviceKey, {
           auth: { persistSession: false, autoRefreshToken: false },
         })
 
@@ -118,7 +118,7 @@ export const Route = createFileRoute('/api/public/hooks/notify-order')({
 })
 
 async function handleDeliveryCompleted(
-  supabase: SupabaseClient<Database>,
+  supabase: SupabaseClient,
   notificationId: string,
   payload: Record<string, unknown>,
 ) {
