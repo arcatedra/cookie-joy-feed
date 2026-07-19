@@ -30,8 +30,10 @@ function MiCuentaPage() {
   const [form, setForm] = useState({
     nombre_completo: "",
     telefono: "",
-    direccion: "",
+    direccion_linea1: "",
+    direccion_linea2: "",
     ciudad: "",
+    estado_provincia: "",
     codigo_postal: "",
     pais: "US",
   });
@@ -41,8 +43,10 @@ function MiCuentaPage() {
     setForm({
       nombre_completo: (cliente.nombre_completo as string) ?? "",
       telefono: (cliente.telefono as string) ?? "",
-      direccion: (cliente.direccion as string) ?? "",
+      direccion_linea1: (cliente.direccion_linea1 as string) ?? "",
+      direccion_linea2: (cliente.direccion_linea2 as string) ?? "",
       ciudad: (cliente.ciudad as string) ?? "",
+      estado_provincia: (cliente.estado_provincia as string) ?? "",
       codigo_postal: (cliente.codigo_postal as string) ?? "",
       pais: (cliente.pais as string) ?? "US",
     });
@@ -99,16 +103,22 @@ function MiCuentaPage() {
               onChange={(v) => setForm({ ...form, nombre_completo: v })} />
             <Field label="Teléfono" value={form.telefono}
               onChange={(v) => setForm({ ...form, telefono: v })} />
-            <Field label="Dirección" value={form.direccion}
-              onChange={(v) => setForm({ ...form, direccion: v })} />
+            <Field label="Dirección" value={form.direccion_linea1}
+              onChange={(v) => setForm({ ...form, direccion_linea1: v })} />
+            <Field label="Apto / Suite (opcional)" value={form.direccion_linea2}
+              onChange={(v) => setForm({ ...form, direccion_linea2: v })} />
             <div className="grid grid-cols-2 gap-3">
               <Field label="Ciudad" value={form.ciudad}
                 onChange={(v) => setForm({ ...form, ciudad: v })} />
+              <Field label="Estado" value={form.estado_provincia}
+                onChange={(v) => setForm({ ...form, estado_provincia: v })} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
               <Field label="Código postal" value={form.codigo_postal}
                 onChange={(v) => setForm({ ...form, codigo_postal: v })} />
+              <Field label="País" value={form.pais}
+                onChange={(v) => setForm({ ...form, pais: v.toUpperCase().slice(0, 2) })} />
             </div>
-            <Field label="País" value={form.pais}
-              onChange={(v) => setForm({ ...form, pais: v.toUpperCase().slice(0, 2) })} />
             <button
               type="submit"
               disabled={saving}
@@ -126,6 +136,7 @@ function MiCuentaPage() {
     </div>
   );
 }
+
 
 function Field({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
