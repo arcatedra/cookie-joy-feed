@@ -93,7 +93,7 @@ export function BatchSuggestionDialog({
                 </p>
               </div>
 
-              {q.data.candidates.map((c) => (
+              {q.data.candidates.map((c: any) => (
                 <div key={c.id} className="rounded-lg border border-[#c8862e]/30 p-3">
                   <p className="flex items-start gap-2 text-sm text-[#4a3525]">
                     <MapPin className="mt-0.5 size-4 shrink-0 text-[#c8862e]" />
