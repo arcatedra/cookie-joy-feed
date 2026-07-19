@@ -154,7 +154,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
           findString(payload, "kind");
 
-        // --- Cookie order (cart checkout) ---
+        // --- Cookie order (cart checkout) -> mark pedido as pagado ---
         if (
           metaKind === "cookie_order" &&
           eventType === "checkout.session.completed" &&
@@ -163,123 +163,54 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           const sessionId = objectId;
           const paymentIntentId =
             (dataObject?.payment_intent as string | undefined) ?? null;
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const pedidoId = meta.pedido_id;
           const amountTotalCents = Number(dataObject?.amount_total ?? 0);
-          const amountSubtotalCents = Number(dataObject?.amount_subtotal ?? 0);
           const totalDetails = (dataObject?.total_details as Record<string, unknown> | undefined) ?? {};
           const shippingCents = Number(totalDetails?.amount_shipping ?? 0);
           const taxCents = Number(totalDetails?.amount_tax ?? 0);
-          const customerDetails =
-            (dataObject?.customer_details as Record<string, unknown> | undefined) ?? {};
-          const shippingFromStripe =
-            (dataObject?.shipping_details as Record<string, unknown> | undefined) ??
-            (dataObject?.shipping as Record<string, unknown> | undefined) ??
-            null;
+
+          if (!pedidoId) {
+            console.warn("[payments-webhook] cookie_order without pedido_id metadata", { sessionId });
+            return Response.json({ ok: true, ignored: "no pedido_id" });
+          }
 
           const { data: existing } = await supabaseAdmin
-            .from("orders")
-            .select("id, status, email, items, total_usd, user_id")
-            .eq("stripe_session_id", sessionId)
+            .from("pedidos")
+            .select("id, estado, cliente_id, total")
+            .eq("id", pedidoId)
             .maybeSingle();
 
           if (!existing) {
-            console.warn("[payments-webhook] order not found", { sessionId });
-            return Response.json({ ok: true, ignored: "order not found" });
+            console.warn("[payments-webhook] pedido not found", { pedidoId });
+            return Response.json({ ok: true, ignored: "pedido not found" });
           }
-          if (existing.status === "paid") {
+          if (existing.estado === "pagado") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
 
           const update: Record<string, unknown> = {
-            status: "paid",
+            estado: "pagado",
             stripe_payment_intent_id: paymentIntentId,
-            paid_at: new Date().toISOString(),
+            stripe_checkout_session_id: sessionId,
           };
-          if (amountTotalCents > 0) update.total_usd = amountTotalCents / 100;
-          if (amountSubtotalCents > 0) update.subtotal_usd = amountSubtotalCents / 100;
-          if (shippingCents >= 0) update.shipping_usd = shippingCents / 100;
-          if (taxCents >= 0) update.tax_usd = taxCents / 100;
-          if (shippingFromStripe) update.shipping_address = shippingFromStripe;
-          const stripeEmail = (customerDetails?.email as string | undefined) ?? null;
-          if (stripeEmail) update.email = stripeEmail.toLowerCase();
+          if (amountTotalCents > 0) update.total = amountTotalCents / 100;
+          if (shippingCents > 0) update.costo_envio = shippingCents / 100;
+          if (taxCents > 0) update.impuestos = taxCents / 100;
 
           const { error: updateErr } = await supabaseAdmin
-            .from("orders")
+            .from("pedidos")
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .update(update as any)
             .eq("id", existing.id);
           if (updateErr) {
-            console.error("[payments-webhook] order update failed", updateErr);
-            return new Response("Order update failed", { status: 500 });
+            console.error("[payments-webhook] pedido update failed", updateErr);
+            return new Response("Pedido update failed", { status: 500 });
           }
 
-          // Render & enqueue confirmation email (idempotent via idempotency_key)
-          try {
-            const recipient = ((stripeEmail ?? existing.email) as string).toLowerCase();
-            const rawItems = Array.isArray(existing.items) ? existing.items : [];
-            const items = rawItems.map((raw) => {
-              const it = (raw ?? {}) as Record<string, unknown>;
-              const qty = Number(it.qty ?? 1);
-              const price = Number(it.price ?? 0);
-              return {
-                name: String(it.name ?? "Galleta"),
-                quantity: qty,
-                price: `$${(price * qty).toFixed(2)}`,
-              };
-            });
-            const orderNumber = String(existing.id).slice(0, 8).toUpperCase();
-            const totalFinal = amountTotalCents > 0
-              ? amountTotalCents / 100
-              : Number(existing.total_usd ?? 0);
-
-            const React = await import("react");
-            const { render } = await import("@react-email/components");
-            const { TEMPLATES } = await import("@/lib/email-templates/registry");
-            const tpl = TEMPLATES["order-confirmation"];
-            if (tpl) {
-              const templateData = {
-                customerName: recipient.split("@")[0],
-                orderNumber,
-                orderTotal: `$${totalFinal.toFixed(2)}`,
-                items,
-              };
-              const element = React.createElement(tpl.component, templateData);
-              const html = await render(element);
-              const text = await render(element, { plainText: true });
-              const subject =
-                typeof tpl.subject === "function" ? tpl.subject(templateData) : tpl.subject;
-              const messageId = `order-${sessionId}-${Date.now()}`;
-
-              await supabaseAdmin.from("email_send_log").insert({
-                message_id: messageId,
-                template_name: "order-confirmation",
-                recipient_email: recipient,
-                status: "pending",
-              });
-
-              const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
-                queue_name: "transactional_emails",
-                payload: {
-                  message_id: messageId,
-                  to: recipient,
-                  from: "HAZOREX <noreply@notify.hazorex.com>",
-                  sender_domain: "notify.hazorex.com",
-                  subject,
-                  html,
-                  text,
-                  purpose: "transactional",
-                  label: "order-confirmation",
-                  idempotency_key: `order:${sessionId}:customer`,
-                  queued_at: new Date().toISOString(),
-                },
-              });
-              if (enqErr) console.error("[payments-webhook] enqueue failed", enqErr);
-            }
-          } catch (e) {
-            console.error("[payments-webhook] email render/enqueue failed (non-fatal)", e);
-          }
-
-          return Response.json({ ok: true, order: existing.id });
+          return Response.json({ ok: true, pedido: existing.id });
         }
+
 
 
 
