@@ -116,7 +116,7 @@ export function BatchSuggestionDialog({
               className="h-12 w-full bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
               disabled={create.isPending}
               onClick={() =>
-                create.mutate([q.data!.base.id, ...q.data!.candidates.map((c) => c.id)])
+                create.mutate([q.data!.base.id, ...q.data!.candidates.map((c: any) => c.id)])
               }
             >
               {create.isPending ? (
