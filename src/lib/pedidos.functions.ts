@@ -19,7 +19,7 @@ export type Pedido = {
   impuestos: number;
   total: number;
   moneda: string;
-  direccion_envio: Record<string, unknown> | null;
+  direccion_envio: string | null;
   creado_en: string;
   items: PedidoItem[];
 };
