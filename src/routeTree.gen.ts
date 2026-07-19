@@ -48,6 +48,8 @@ import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
 import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authenticated/repartidor'
+import { Route as AuthenticatedMisPedidosRouteImport } from './routes/_authenticated/mis-pedidos'
+import { Route as AuthenticatedMiCuentaRouteImport } from './routes/_authenticated/mi-cuenta'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
@@ -287,6 +289,16 @@ const AuthenticatedSuggestionsRoute =
 const AuthenticatedRepartidorRoute = AuthenticatedRepartidorRouteImport.update({
   id: '/repartidor',
   path: '/repartidor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMisPedidosRoute = AuthenticatedMisPedidosRouteImport.update({
+  id: '/mis-pedidos',
+  path: '/mis-pedidos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMiCuentaRoute = AuthenticatedMiCuentaRouteImport.update({
+  id: '/mi-cuenta',
+  path: '/mi-cuenta',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
@@ -581,6 +593,8 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/mi-cuenta': typeof AuthenticatedMiCuentaRoute
+  '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -666,6 +680,8 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/mi-cuenta': typeof AuthenticatedMiCuentaRoute
+  '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
@@ -752,6 +768,8 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
+  '/_authenticated/mi-cuenta': typeof AuthenticatedMiCuentaRoute
+  '/_authenticated/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/_authenticated/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -839,6 +857,8 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/mi-cuenta'
+    | '/mis-pedidos'
     | '/repartidor'
     | '/suggestions'
     | '/admin/shipping'
@@ -924,6 +944,8 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
+    | '/mi-cuenta'
+    | '/mis-pedidos'
     | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
@@ -1009,6 +1031,8 @@ export interface FileRouteTypes {
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
+    | '/_authenticated/mi-cuenta'
+    | '/_authenticated/mis-pedidos'
     | '/_authenticated/repartidor'
     | '/_authenticated/suggestions'
     | '/admin/shipping'
@@ -1396,6 +1420,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mis-pedidos': {
+      id: '/_authenticated/mis-pedidos'
+      path: '/mis-pedidos'
+      fullPath: '/mis-pedidos'
+      preLoaderRoute: typeof AuthenticatedMisPedidosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mi-cuenta': {
+      id: '/_authenticated/mi-cuenta'
+      path: '/mi-cuenta'
+      fullPath: '/mi-cuenta'
+      preLoaderRoute: typeof AuthenticatedMiCuentaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/deliveries': {
       id: '/_authenticated/deliveries'
       path: '/deliveries'
@@ -1752,6 +1790,8 @@ const AuthenticatedRepartidorRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
+  AuthenticatedMiCuentaRoute: typeof AuthenticatedMiCuentaRoute
+  AuthenticatedMisPedidosRoute: typeof AuthenticatedMisPedidosRoute
   AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminCspViolationsRoute: typeof AuthenticatedAdminCspViolationsRoute
@@ -1776,6 +1816,8 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
+  AuthenticatedMiCuentaRoute: AuthenticatedMiCuentaRoute,
+  AuthenticatedMisPedidosRoute: AuthenticatedMisPedidosRoute,
   AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminCspViolationsRoute: AuthenticatedAdminCspViolationsRoute,

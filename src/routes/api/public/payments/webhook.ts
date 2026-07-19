@@ -65,7 +65,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        // --- Subscription lifecycle events ---
+        // --- Subscription lifecycle events (mirrored to public.suscripciones) ---
         if (
           eventType === "customer.subscription.created" ||
           eventType === "customer.subscription.updated" ||
@@ -78,55 +78,71 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return Response.json({ ok: true, ignored: "no subscription object" });
           }
           const metadata = (sub.metadata as Record<string, string> | undefined) ?? {};
-          const userId = metadata.userId ?? metadata.user_id;
-          if (!userId) {
-            console.warn("[payments-webhook] subscription event without userId metadata", sub.id);
-            return Response.json({ ok: true, ignored: "no userId" });
+          const clienteId =
+            metadata.cliente_id ?? metadata.userId ?? metadata.user_id ?? null;
+          if (!clienteId) {
+            console.warn("[payments-webhook] subscription without cliente_id metadata", sub.id);
+            return Response.json({ ok: true, ignored: "no cliente_id" });
           }
           const items =
             (sub.items as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
           const firstItem = items[0] as
             | {
-                price?: { id?: string; lookup_key?: string | null; product?: string };
+                price?: {
+                  id?: string;
+                  lookup_key?: string | null;
+                  nickname?: string | null;
+                  unit_amount?: number | null;
+                  currency?: string | null;
+                };
                 current_period_start?: number;
                 current_period_end?: number;
               }
             | undefined;
           const price = firstItem?.price;
-          const priceId =
-            price?.lookup_key || (metadata.plan_price_id as string | undefined) || price?.id || "";
-          const productId = price?.product ?? null;
-          const status =
-            eventType === "customer.subscription.deleted"
-              ? "canceled"
-              : ((sub.status as string) ?? "active");
+          const planLabel =
+            price?.lookup_key || price?.nickname || (metadata.plan as string | undefined) || "mensual";
+          const priceAmount =
+            typeof price?.unit_amount === "number" ? price.unit_amount / 100 : 0;
+          const stripeStatus = (sub.status as string) ?? "active";
+          const estado =
+            eventType === "customer.subscription.deleted" || stripeStatus === "canceled"
+              ? "cancelada"
+              : stripeStatus === "paused"
+                ? "pausada"
+                : stripeStatus === "past_due" || stripeStatus === "unpaid"
+                  ? "vencida"
+                  : stripeStatus === "trialing" || stripeStatus === "active"
+                    ? "activa"
+                    : stripeStatus;
           const periodStart =
-            firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
+            firstItem?.current_period_start ?? (sub.start_date as number | undefined) ??
+            (sub.current_period_start as number | undefined);
           const periodEnd =
             firstItem?.current_period_end ?? (sub.current_period_end as number | undefined);
+          const canceledAt =
+            estado === "cancelada"
+              ? (sub.canceled_at as number | undefined) ?? Math.floor(Date.now() / 1000)
+              : null;
 
-          const { error: upsertErr } = await supabaseAdmin.from("subscriptions").upsert(
-            {
-              user_id: userId,
-              stripe_subscription_id: sub.id as string,
-              stripe_customer_id: sub.customer as string,
-              price_id: priceId,
-              product_id: productId,
-              status,
-              current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
-              current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-              cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-              environment,
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: "stripe_subscription_id" },
-          );
-          if (upsertErr) {
-            console.error("[payments-webhook] subscription upsert failed", upsertErr);
+          const { error: rpcErr } = await supabaseAdmin.rpc("upsert_suscripcion_stripe", {
+            p_cliente_id: clienteId,
+            p_stripe_sub_id: sub.id as string,
+            p_plan: planLabel,
+            p_precio: priceAmount,
+            p_moneda: (price?.currency ?? "USD").toString().toUpperCase(),
+            p_estado: estado,
+            p_fecha_inicio: periodStart ? new Date(periodStart * 1000).toISOString() : new Date().toISOString(),
+            p_fecha_renovacion: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+            p_fecha_cancelacion: canceledAt ? new Date(canceledAt * 1000).toISOString() : null,
+          });
+          if (rpcErr) {
+            console.error("[payments-webhook] suscripciones upsert failed", rpcErr);
             return new Response("Upsert failed", { status: 500 });
           }
           return Response.json({ ok: true, subscription: sub.id });
         }
+
 
         // --- Stars purchase (HAZOREX prize-pool flow) ---
         const dataObject =
@@ -138,7 +154,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
           findString(payload, "kind");
 
-        // --- Cookie order (cart checkout) ---
+        // --- Cookie order (cart checkout) -> mark pedido as pagado ---
         if (
           metaKind === "cookie_order" &&
           eventType === "checkout.session.completed" &&
@@ -147,123 +163,54 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           const sessionId = objectId;
           const paymentIntentId =
             (dataObject?.payment_intent as string | undefined) ?? null;
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const pedidoId = meta.pedido_id;
           const amountTotalCents = Number(dataObject?.amount_total ?? 0);
-          const amountSubtotalCents = Number(dataObject?.amount_subtotal ?? 0);
           const totalDetails = (dataObject?.total_details as Record<string, unknown> | undefined) ?? {};
           const shippingCents = Number(totalDetails?.amount_shipping ?? 0);
           const taxCents = Number(totalDetails?.amount_tax ?? 0);
-          const customerDetails =
-            (dataObject?.customer_details as Record<string, unknown> | undefined) ?? {};
-          const shippingFromStripe =
-            (dataObject?.shipping_details as Record<string, unknown> | undefined) ??
-            (dataObject?.shipping as Record<string, unknown> | undefined) ??
-            null;
+
+          if (!pedidoId) {
+            console.warn("[payments-webhook] cookie_order without pedido_id metadata", { sessionId });
+            return Response.json({ ok: true, ignored: "no pedido_id" });
+          }
 
           const { data: existing } = await supabaseAdmin
-            .from("orders")
-            .select("id, status, email, items, total_usd, user_id")
-            .eq("stripe_session_id", sessionId)
+            .from("pedidos")
+            .select("id, estado, cliente_id, total")
+            .eq("id", pedidoId)
             .maybeSingle();
 
           if (!existing) {
-            console.warn("[payments-webhook] order not found", { sessionId });
-            return Response.json({ ok: true, ignored: "order not found" });
+            console.warn("[payments-webhook] pedido not found", { pedidoId });
+            return Response.json({ ok: true, ignored: "pedido not found" });
           }
-          if (existing.status === "paid") {
+          if (existing.estado === "pagado") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
 
           const update: Record<string, unknown> = {
-            status: "paid",
+            estado: "pagado",
             stripe_payment_intent_id: paymentIntentId,
-            paid_at: new Date().toISOString(),
+            stripe_checkout_session_id: sessionId,
           };
-          if (amountTotalCents > 0) update.total_usd = amountTotalCents / 100;
-          if (amountSubtotalCents > 0) update.subtotal_usd = amountSubtotalCents / 100;
-          if (shippingCents >= 0) update.shipping_usd = shippingCents / 100;
-          if (taxCents >= 0) update.tax_usd = taxCents / 100;
-          if (shippingFromStripe) update.shipping_address = shippingFromStripe;
-          const stripeEmail = (customerDetails?.email as string | undefined) ?? null;
-          if (stripeEmail) update.email = stripeEmail.toLowerCase();
+          if (amountTotalCents > 0) update.total = amountTotalCents / 100;
+          if (shippingCents > 0) update.costo_envio = shippingCents / 100;
+          if (taxCents > 0) update.impuestos = taxCents / 100;
 
           const { error: updateErr } = await supabaseAdmin
-            .from("orders")
+            .from("pedidos")
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .update(update as any)
             .eq("id", existing.id);
           if (updateErr) {
-            console.error("[payments-webhook] order update failed", updateErr);
-            return new Response("Order update failed", { status: 500 });
+            console.error("[payments-webhook] pedido update failed", updateErr);
+            return new Response("Pedido update failed", { status: 500 });
           }
 
-          // Render & enqueue confirmation email (idempotent via idempotency_key)
-          try {
-            const recipient = ((stripeEmail ?? existing.email) as string).toLowerCase();
-            const rawItems = Array.isArray(existing.items) ? existing.items : [];
-            const items = rawItems.map((raw) => {
-              const it = (raw ?? {}) as Record<string, unknown>;
-              const qty = Number(it.qty ?? 1);
-              const price = Number(it.price ?? 0);
-              return {
-                name: String(it.name ?? "Galleta"),
-                quantity: qty,
-                price: `$${(price * qty).toFixed(2)}`,
-              };
-            });
-            const orderNumber = String(existing.id).slice(0, 8).toUpperCase();
-            const totalFinal = amountTotalCents > 0
-              ? amountTotalCents / 100
-              : Number(existing.total_usd ?? 0);
-
-            const React = await import("react");
-            const { render } = await import("@react-email/components");
-            const { TEMPLATES } = await import("@/lib/email-templates/registry");
-            const tpl = TEMPLATES["order-confirmation"];
-            if (tpl) {
-              const templateData = {
-                customerName: recipient.split("@")[0],
-                orderNumber,
-                orderTotal: `$${totalFinal.toFixed(2)}`,
-                items,
-              };
-              const element = React.createElement(tpl.component, templateData);
-              const html = await render(element);
-              const text = await render(element, { plainText: true });
-              const subject =
-                typeof tpl.subject === "function" ? tpl.subject(templateData) : tpl.subject;
-              const messageId = `order-${sessionId}-${Date.now()}`;
-
-              await supabaseAdmin.from("email_send_log").insert({
-                message_id: messageId,
-                template_name: "order-confirmation",
-                recipient_email: recipient,
-                status: "pending",
-              });
-
-              const { error: enqErr } = await supabaseAdmin.rpc("enqueue_email", {
-                queue_name: "transactional_emails",
-                payload: {
-                  message_id: messageId,
-                  to: recipient,
-                  from: "HAZOREX <noreply@notify.hazorex.com>",
-                  sender_domain: "notify.hazorex.com",
-                  subject,
-                  html,
-                  text,
-                  purpose: "transactional",
-                  label: "order-confirmation",
-                  idempotency_key: `order:${sessionId}:customer`,
-                  queued_at: new Date().toISOString(),
-                },
-              });
-              if (enqErr) console.error("[payments-webhook] enqueue failed", enqErr);
-            }
-          } catch (e) {
-            console.error("[payments-webhook] email render/enqueue failed (non-fatal)", e);
-          }
-
-          return Response.json({ ok: true, order: existing.id });
+          return Response.json({ ok: true, pedido: existing.id });
         }
+
 
 
 
