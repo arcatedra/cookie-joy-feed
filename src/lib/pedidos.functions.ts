@@ -50,7 +50,7 @@ export const listMyPedidos = createServerFn({ method: "GET" })
       impuestos: Number(p.impuestos),
       total: Number(p.total),
       moneda: p.moneda,
-      direccion_envio: p.direccion_envio ?? null,
+      direccion_envio: p.direccion_envio ? JSON.stringify(p.direccion_envio) : null,
       creado_en: p.creado_en,
       items: (p.pedido_items ?? []).map((it) => ({
         id: it.id,
