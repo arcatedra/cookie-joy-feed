@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 interface StripeSession {
   id: string;
@@ -28,7 +29,6 @@ const addressSchema = z.object({
 
 const schema = z.object({
   items: z.array(itemSchema).min(1).max(40),
-  email: z.string().trim().email().max(255),
   address: addressSchema,
   shipping: z.enum(["standard", "express"]).default("standard"),
 });
@@ -38,37 +38,28 @@ const SHIPPING_RATES = {
   express: { label: "Envío exprés (1-2 días)", amount: 499 },
 } as const;
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const createCartCheckout = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
-  .handler(async ({ data }) => {
-    // Resolve user (bearer) — guest checkout allowed.
-    const { getRequest } = await import("@tanstack/react-start/server");
-    let userId: string | null = null;
-    let email = data.email.trim().toLowerCase();
-    try {
-      const req = getRequest();
-      const auth = req?.headers.get("authorization");
-      if (auth?.startsWith("Bearer ")) {
-        const token = auth.slice(7);
-        const { createClient } = await import("@supabase/supabase-js");
-        const sb = createClient(
-          process.env.SUPABASE_URL!,
-          process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-        );
-        const { data: claims } = await sb.auth.getClaims(token);
-        if (claims?.claims?.sub) {
-          userId = claims.claims.sub as string;
-          email = (claims.claims.email as string | undefined)?.toLowerCase() ?? email;
-        }
-      }
-    } catch {
-      /* guest */
-    }
+  .handler(async ({ data, context }) => {
+    const { supabase, userId, claims } = context as {
+      supabase: import("@supabase/supabase-js").SupabaseClient;
+      userId: string;
+      claims?: { email?: string };
+    };
+    const email = ((claims?.email as string | undefined) ?? "").toLowerCase();
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { stripePost, paymentsEnvironmentForHost } = await import("./stripe.server");
+    // Ensure the cliente row exists (auto-heal for pre-trigger users).
+    await supabase
+      .from("clientes")
+      .upsert(
+        { id: userId, email: email || `${userId}@hazorex.local`, nombre_completo: email.split("@")[0] || "Cliente" },
+        { onConflict: "id", ignoreDuplicates: true },
+      );
 
+    const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
     const host = getRequestHost();
     const env = paymentsEnvironmentForHost(host);
     const proto = host?.startsWith("localhost") ? "http" : "https";
@@ -79,6 +70,44 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       (s, it) => s + Math.round(it.price * 100) * it.qty,
       0,
     );
+    const totalCents = subtotalCents + shippingRate.amount;
+
+    // Insert the pedido row in "pendiente" state under RLS (auth.uid() = cliente_id).
+    const { data: pedidoRow, error: pedErr } = await supabase
+      .from("pedidos")
+      .insert({
+        cliente_id: userId,
+        estado: "pendiente",
+        subtotal: subtotalCents / 100,
+        costo_envio: shippingRate.amount / 100,
+        impuestos: 0,
+        total: totalCents / 100,
+        moneda: "USD",
+        direccion_envio: data.address,
+        metodo_pago: "stripe",
+      })
+      .select("id, numero_pedido")
+      .single();
+    if (pedErr || !pedidoRow) {
+      console.error("[cart-checkout] failed to create pedido", pedErr);
+      throw new Error("No se pudo crear el pedido. Inténtalo de nuevo.");
+    }
+
+    // Snapshot each item's name and price at purchase time.
+    const itemsInsert = data.items.map((it) => ({
+      pedido_id: pedidoRow.id,
+      producto_id: UUID_RE.test(it.id) ? it.id : null,
+      nombre_producto: it.name.slice(0, 200),
+      precio_unitario: it.price,
+      cantidad: it.qty,
+      subtotal_item: Math.round(it.price * 100 * it.qty) / 100,
+    }));
+    const { error: itemsErr } = await supabase.from("pedido_items").insert(itemsInsert);
+    if (itemsErr) {
+      console.error("[cart-checkout] failed to insert pedido_items", itemsErr);
+      await supabase.from("pedidos").delete().eq("id", pedidoRow.id);
+      throw new Error("No se pudo guardar el detalle del pedido. Inténtalo de nuevo.");
+    }
 
     const lineItems = data.items.map((it) => ({
       quantity: it.qty,
@@ -100,7 +129,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           mode: "payment",
           ui_mode: "embedded",
           return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          customer_email: email,
+          customer_email: email || undefined,
           line_items: lineItems,
           shipping_options: [
             {
@@ -116,118 +145,74 @@ export const createCartCheckout = createServerFn({ method: "POST" })
             },
           ],
           payment_intent_data: {
-            description: `HAZOREX — Pedido (${data.items.reduce((s, it) => s + it.qty, 0)} galletas)`,
+            description: `HAZOREX ${pedidoRow.numero_pedido}`,
             metadata: {
               kind: "cookie_order",
-              subject_email: email,
-              subject_user_id: userId ?? "",
+              pedido_id: pedidoRow.id,
+              cliente_id: userId,
             },
           },
           metadata: {
             kind: "cookie_order",
-            subject_email: email,
-            subject_user_id: userId ?? "",
+            pedido_id: pedidoRow.id,
+            cliente_id: userId,
           },
         },
         env,
       );
     } catch (e) {
       console.error("[cart-checkout] stripe error", e);
+      await supabase.from("pedido_items").delete().eq("pedido_id", pedidoRow.id);
+      await supabase.from("pedidos").delete().eq("id", pedidoRow.id);
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
-    // Snapshot the pending order.
-    const { error: insertErr } = await supabaseAdmin.from("orders").insert({
-      stripe_session_id: session.id,
-      user_id: userId,
-      email,
-      items: data.items,
-      subtotal_usd: subtotalCents / 100,
-      shipping_usd: shippingRate.amount / 100,
-      tax_usd: 0,
-      total_usd: (subtotalCents + shippingRate.amount) / 100,
-      currency: "usd",
-      shipping_address: data.address,
-      status: "pending",
-      environment: env,
-    });
-    if (insertErr) {
-      console.error("[cart-checkout] order insert failed", insertErr);
-      throw new Error("No se pudo guardar el pedido. Inténtalo de nuevo.");
-    }
+    // Persist the Stripe session id on the pedido for the webhook lookup.
+    await supabase
+      .from("pedidos")
+      .update({ stripe_checkout_session_id: session.id })
+      .eq("id", pedidoRow.id);
 
-    if (!session.client_secret) {
-      throw new Error("Stripe no devolvió client_secret");
-    }
-    return { clientSecret: session.client_secret, sessionId: session.id };
+    if (!session.client_secret) throw new Error("Stripe no devolvió client_secret");
+    return {
+      clientSecret: session.client_secret,
+      sessionId: session.id,
+      pedidoId: pedidoRow.id,
+      numeroPedido: pedidoRow.numero_pedido,
+    };
   });
 
 const getOrderSchema = z.object({ sessionId: z.string().min(8).max(200) });
 
 export const getOrderBySession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => getOrderSchema.parse(d))
-  .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    // Optional caller identity (used to gate sensitive fields if needed later).
-    let callerEmail: string | null = null;
-    let callerUserId: string | null = null;
-    try {
-      const { getRequest } = await import("@tanstack/react-start/server");
-      const req = getRequest();
-      const auth = req?.headers.get("authorization");
-      if (auth?.startsWith("Bearer ")) {
-        const token = auth.slice(7);
-        const { createClient } = await import("@supabase/supabase-js");
-        const sb = createClient(
-          process.env.SUPABASE_URL!,
-          process.env.SUPABASE_PUBLISHABLE_KEY!,
-          { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-        );
-        const { data: claims } = await sb.auth.getClaims(token);
-        callerEmail = ((claims?.claims?.email as string | undefined) ?? "").toLowerCase() || null;
-        callerUserId = (claims?.claims?.sub as string | undefined) ?? null;
-      }
-    } catch {
-      /* anonymous viewer is fine — they only see safe fields */
-    }
-
-    const { data: order } = await supabaseAdmin
-      .from("orders")
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context as {
+      supabase: import("@supabase/supabase-js").SupabaseClient;
+      userId: string;
+    };
+    const { data: pedido } = await supabase
+      .from("pedidos")
       .select(
-        "id, stripe_session_id, status, email, items, subtotal_usd, shipping_usd, tax_usd, total_usd, currency, paid_at, created_at, user_id",
+        "id, numero_pedido, estado, subtotal, costo_envio, impuestos, total, moneda, creado_en, stripe_checkout_session_id, cliente_id",
       )
-      .eq("stripe_session_id", data.sessionId)
+      .eq("stripe_checkout_session_id", data.sessionId)
+      .eq("cliente_id", userId)
       .maybeSingle();
-
-    if (!order) return { found: false as const };
-
-    const ownsByUser = callerUserId && order.user_id === callerUserId;
-    const ownsByEmail = callerEmail && order.email.toLowerCase() === callerEmail;
-    const canSeeEmail = Boolean(ownsByUser || ownsByEmail);
-
+    if (!pedido) return { found: false as const };
     return {
       found: true as const,
       order: {
-        id: order.id,
-        status: order.status as string,
-        items: order.items,
-        subtotal_usd: Number(order.subtotal_usd),
-        shipping_usd: Number(order.shipping_usd),
-        tax_usd: Number(order.tax_usd),
-        total_usd: Number(order.total_usd),
-        currency: order.currency,
-        paid_at: order.paid_at,
-        created_at: order.created_at,
-        // Mask the email unless caller is the owner.
-        email: canSeeEmail ? order.email : maskEmail(order.email),
+        id: pedido.id,
+        numeroPedido: pedido.numero_pedido,
+        status: pedido.estado,
+        subtotal: Number(pedido.subtotal),
+        shipping: Number(pedido.costo_envio),
+        tax: Number(pedido.impuestos),
+        total: Number(pedido.total),
+        currency: pedido.moneda,
+        createdAt: pedido.creado_en,
       },
     };
   });
-
-function maskEmail(e: string): string {
-  const [user, domain] = e.split("@");
-  if (!user || !domain) return "***";
-  const visible = user.slice(0, 2);
-  return `${visible}${"*".repeat(Math.max(1, user.length - 2))}@${domain}`;
-}
