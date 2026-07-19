@@ -65,7 +65,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        // --- Subscription lifecycle events ---
+        // --- Subscription lifecycle events (mirrored to public.suscripciones) ---
         if (
           eventType === "customer.subscription.created" ||
           eventType === "customer.subscription.updated" ||
@@ -78,55 +78,71 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return Response.json({ ok: true, ignored: "no subscription object" });
           }
           const metadata = (sub.metadata as Record<string, string> | undefined) ?? {};
-          const userId = metadata.userId ?? metadata.user_id;
-          if (!userId) {
-            console.warn("[payments-webhook] subscription event without userId metadata", sub.id);
-            return Response.json({ ok: true, ignored: "no userId" });
+          const clienteId =
+            metadata.cliente_id ?? metadata.userId ?? metadata.user_id ?? null;
+          if (!clienteId) {
+            console.warn("[payments-webhook] subscription without cliente_id metadata", sub.id);
+            return Response.json({ ok: true, ignored: "no cliente_id" });
           }
           const items =
             (sub.items as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
           const firstItem = items[0] as
             | {
-                price?: { id?: string; lookup_key?: string | null; product?: string };
+                price?: {
+                  id?: string;
+                  lookup_key?: string | null;
+                  nickname?: string | null;
+                  unit_amount?: number | null;
+                  currency?: string | null;
+                };
                 current_period_start?: number;
                 current_period_end?: number;
               }
             | undefined;
           const price = firstItem?.price;
-          const priceId =
-            price?.lookup_key || (metadata.plan_price_id as string | undefined) || price?.id || "";
-          const productId = price?.product ?? null;
-          const status =
-            eventType === "customer.subscription.deleted"
-              ? "canceled"
-              : ((sub.status as string) ?? "active");
+          const planLabel =
+            price?.lookup_key || price?.nickname || (metadata.plan as string | undefined) || "mensual";
+          const priceAmount =
+            typeof price?.unit_amount === "number" ? price.unit_amount / 100 : 0;
+          const stripeStatus = (sub.status as string) ?? "active";
+          const estado =
+            eventType === "customer.subscription.deleted" || stripeStatus === "canceled"
+              ? "cancelada"
+              : stripeStatus === "paused"
+                ? "pausada"
+                : stripeStatus === "past_due" || stripeStatus === "unpaid"
+                  ? "vencida"
+                  : stripeStatus === "trialing" || stripeStatus === "active"
+                    ? "activa"
+                    : stripeStatus;
           const periodStart =
-            firstItem?.current_period_start ?? (sub.current_period_start as number | undefined);
+            firstItem?.current_period_start ?? (sub.start_date as number | undefined) ??
+            (sub.current_period_start as number | undefined);
           const periodEnd =
             firstItem?.current_period_end ?? (sub.current_period_end as number | undefined);
+          const canceledAt =
+            estado === "cancelada"
+              ? (sub.canceled_at as number | undefined) ?? Math.floor(Date.now() / 1000)
+              : null;
 
-          const { error: upsertErr } = await supabaseAdmin.from("subscriptions").upsert(
-            {
-              user_id: userId,
-              stripe_subscription_id: sub.id as string,
-              stripe_customer_id: sub.customer as string,
-              price_id: priceId,
-              product_id: productId,
-              status,
-              current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
-              current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
-              cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-              environment,
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: "stripe_subscription_id" },
-          );
-          if (upsertErr) {
-            console.error("[payments-webhook] subscription upsert failed", upsertErr);
+          const { error: rpcErr } = await supabaseAdmin.rpc("upsert_suscripcion_stripe", {
+            p_cliente_id: clienteId,
+            p_stripe_sub_id: sub.id as string,
+            p_plan: planLabel,
+            p_precio: priceAmount,
+            p_moneda: (price?.currency ?? "USD").toString().toUpperCase(),
+            p_estado: estado,
+            p_fecha_inicio: periodStart ? new Date(periodStart * 1000).toISOString() : new Date().toISOString(),
+            p_fecha_renovacion: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+            p_fecha_cancelacion: canceledAt ? new Date(canceledAt * 1000).toISOString() : null,
+          });
+          if (rpcErr) {
+            console.error("[payments-webhook] suscripciones upsert failed", rpcErr);
             return new Response("Upsert failed", { status: 500 });
           }
           return Response.json({ ok: true, subscription: sub.id });
         }
+
 
         // --- Stars purchase (HAZOREX prize-pool flow) ---
         const dataObject =
