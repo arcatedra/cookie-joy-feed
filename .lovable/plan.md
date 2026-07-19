@@ -1,81 +1,69 @@
-# Migrar de Lovable Cloud a tu propio proyecto Supabase
+# Conectar tu propio Supabase — pasos según la respuesta de soporte
 
-## Contexto: qué es "Cloud" aquí
+Soporte confirmó que **tú mismo** puedes hacer el swap desde el editor de Lovable, sin ticket adicional. La ruta es:
 
-Lovable Cloud **ES Supabase por debajo** — no es una tecnología distinta. Lo que ves como "Cloud" es un proyecto de Supabase administrado por Lovable donde:
+## 1. Preparar tu proyecto Supabase (antes de tocar Lovable)
 
-- La base de datos, auth, storage y edge son 100% Supabase estándar (Postgres + GoTrue + Storage + PostgREST).
-- Lovable te oculta el dashboard de supabase.com y gestiona la `SERVICE_ROLE_KEY` y el password de DB por ti.
-- Todo el código de la app (`createServerFn`, RLS, `supabaseAdmin`, migraciones) ya usa las APIs oficiales de Supabase — **no hay código propietario de Lovable que reemplazar**.
+Sigue lo que ya está documentado en `MIGRATION-BYO-SUPABASE.md`:
 
-Por eso migrar es viable: es mover un proyecto Supabase administrado → a un proyecto Supabase tuyo.
+- Crear proyecto en supabase.com (plan Pro recomendado por `pg_cron` + `pg_net` + Storage).
+- Habilitar extensiones: `pg_cron`, `pg_net`, `pgmq`, `pgcrypto`, `pg_trgm`.
+- Activar providers de Auth (Email + Google), HIBP y política de contraseña fuerte.
+- Tener a mano: `SUPABASE_URL`, project ref, anon key, service_role key, DB password.
 
-## Es posible, pero tiene un camino específico
+## 2. Exportar datos actuales desde Lovable Cloud
 
-Lovable **no permite "desconectar" Cloud** de un proyecto ya creado con Cloud (una vez activo, no hay botón de disconnect para este proyecto — solo se puede desactivar Cloud para proyectos *futuros*). La ruta soportada oficialmente es **BYO Supabase (Bring Your Own)** vía soporte de Lovable.
+En el editor: **Cloud → Advanced settings → Export data**. Guarda el dump `.sql` y espera confirmación por email.
+Descarga también manualmente los archivos de los 5 buckets de Storage (`backups`, `delivery-proofs`, `driver-documents`, `reels`, `winner-documents`).
 
-### Camino recomendado (soportado, sin romper nada)
+## 3. Remover Lovable Cloud del proyecto
 
-1. **Crear tu proyecto Supabase propio** en supabase.com (plan Free o Pro según necesidad).
-2. **Exportar el estado actual desde Cloud**:
-   - Datos: `Cloud → Advanced → Export data` (genera dump).
-   - Esquema: ya está versionado en `supabase/migrations/*.sql` dentro del repo.
-   - Storage: buckets (`backups`, avatares, etc.) requieren descarga + re-upload.
-   - Secrets: lista actual (Stripe, LOVABLE_API_KEY, webhooks, etc.) para recrearlos.
-3. **Contactar a support@lovable.dev** pidiendo el swap a BYO Supabase con:
-   - Ref de tu nuevo proyecto Supabase.
-   - Anon key + service role key nuevas.
-   - Confirmación de que aceptas perder la administración automática de Cloud.
-4. **Soporte hace el swap**: apunta la app a tu Supabase, regenera `src/integrations/supabase/client.ts` y `types.ts`, y actualiza las env vars (`VITE_SUPABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, etc.).
-5. **Tú aplicas las migraciones** del repo contra tu proyecto (`supabase db push` o corriendo los SQL de `supabase/migrations/` en orden).
-6. **Restaurar datos y storage** desde el export.
-7. **Reconfigurar en tu dashboard de Supabase**:
-   - Auth providers (Google, Email, HIBP, contraseña strong).
-   - `pg_cron` + `pg_net` (sorteo diario 20:00 ET, backup CSV, prune).
-   - Webhooks de Stripe apuntando a tu nueva URL.
-   - Todos los secrets (STRIPE_*, LOVABLE_API_KEY, etc.) como Edge Function Secrets.
+En el editor: **Cloud → Advanced settings → Remove Lovable Cloud**.
 
-## Qué ganas y qué pierdes
+Esto desconecta la DB administrada. La app quedará sin backend hasta el paso 4 — hazlo en ventana de mantenimiento.
 
-**Ganas**
-- Acceso directo al dashboard supabase.com (SQL editor, logs, políticas, storage UI).
-- Control total de `SERVICE_ROLE_KEY` y password de DB.
-- Facturación directa con Supabase (no vía créditos Lovable).
-- Portabilidad total: puedes salir de Lovable en cualquier momento.
+## 4. Conectar tu propio Supabase
 
-**Pierdes**
-- Herramientas Cloud del editor Lovable: el tool `supabase--migration` en el chat, el panel de "Backend", los tools de secrets integrados, el linter automático, y la vista de Jobs/Analytics dentro de Lovable.
-- Auto-provisioning de Stripe/webhooks que Cloud maneja.
-- Import protection y auto-regeneración de `types.ts` puede requerir pasos manuales (`supabase gen types`).
-- Cambios de esquema desde el chat serán menos automáticos — deberás correr SQL tú mismo o pedirme que genere archivos que luego apliques.
+En el editor: **Cloud (pestaña arriba a la izquierda) → link "Already have a Supabase project? Connect it here"** → autorizar Lovable en tu cuenta de Supabase → seleccionar el proyecto nuevo.
 
-## Riesgos y cómo evitarlos
+Lovable regenera automáticamente `src/integrations/supabase/client.ts`, `types.ts`, y las env vars `VITE_SUPABASE_*` / `SUPABASE_*` apuntando a tu proyecto.
+
+## 5. Aplicar esquema, datos, secrets y cron
+
+En tu Supabase nuevo (ya conectado):
+
+- Aplicar las 118 migraciones de `supabase/migrations/` (con `supabase db push` o SQL editor en orden).
+- Restaurar el dump de datos exportado en paso 2.
+- Re-uploadear archivos a los 5 buckets.
+- Crear los 21 secrets (Stripe, Google, Turnstile, VAPID, webhooks internos) — lista completa en `MIGRATION-BYO-SUPABASE.md`.
+- Actualizar `public.internal_hook_config` con los nuevos valores de secrets y URLs.
+- Recrear los 10 `pg_cron` jobs (SQL listo en el mismo doc).
+- Reapuntar webhooks de Stripe (sandbox + live + Connect) a `https://<tu-host>/api/public/...`.
+
+## 6. Verificación post-swap (lo hago yo cuando avises)
+
+Cuando termines los pasos 1–5, dime "verifica la conexión" y confirmo:
+- `.env` apunta a tu URL y anon key.
+- Login (email + Google) funciona contra tu GoTrue.
+- Un `createServerFn` protegido responde OK (RLS activa como el usuario).
+- `supabaseAdmin` funciona en un webhook (service_role OK).
+- `pg_cron` tiene los 10 jobs registrados.
+- `security--run_security_scan` pasa sin regresiones de RLS.
+
+## Riesgos clave
 
 | Riesgo | Mitigación |
 |---|---|
-| Pérdida de datos en el export/import | Hacer el swap en horario de bajo tráfico; mantener Cloud como backup 30 días |
-| URLs de webhook Stripe cambian | Actualizar endpoints en Stripe **antes** de cortar Cloud |
-| `pg_cron` no arranca en el nuevo proyecto | Recrear jobs manualmente con los SQL del repo |
-| RLS mal migrado → filtración | Correr `security--run_security_scan` post-migración |
-| Secrets no disponibles en runtime | Recrear todos vía Supabase Edge Function Secrets antes del cutover |
-| Usuarios pierden sesión | Esperado — hay que re-loguear (los JWTs cambian de issuer) |
+| Al remover Cloud, la app queda sin backend hasta conectar el tuyo | Hacer paso 3 y 4 back-to-back en ventana de bajo tráfico |
+| Webhooks Stripe llegan durante el corte | Reapuntar Stripe **antes** de remover Cloud, o pausar temporalmente |
+| Usuarios pierden sesión | Esperado — el JWT issuer cambia; comunicar re-login |
+| Cron no arranca día 1 | Ejecutar SQL del paso 5 inmediatamente tras conectar y verificar en `cron.job_run_details` |
+| `types.ts` desactualizado tras regenerar | Correr `supabase gen types typescript --project-id <ref> > src/integrations/supabase/types.ts` si Lovable no lo hace |
 
-## Alternativa: quedarte en Cloud
+## Qué NO cambia
 
-Si el motivo principal es "quiero ver mis tablas y correr SQL", te recuerdo que puedes hacer casi todo eso desde el panel **Backend** de Lovable (SQL, tablas, RLS, storage, logs, secrets, users). La única diferencia real es no tener acceso a supabase.com directamente.
+El código de la app (`createServerFn`, `requireSupabaseAuth`, `supabaseAdmin`, RLS, migraciones) es 100% Supabase estándar y sigue funcionando idéntico contra tu proyecto BYO. No hay refactor de código requerido.
 
-## Detalles técnicos
+## Siguiente acción sugerida
 
-- La migración no requiere reescribir código de app: `@supabase/supabase-js`, `createServerFn`, `requireSupabaseAuth`, `supabaseAdmin` y todas las RLS funcionan idénticamente contra un proyecto BYO.
-- Los archivos autogenerados (`src/integrations/supabase/client.ts`, `types.ts`, `.env` con `VITE_SUPABASE_*`) los regenera el flujo BYO.
-- Migraciones actuales están en `supabase/migrations/` y son portables tal cual.
-- Edge Functions existentes en `supabase/functions/` (si las hay) se despliegan con `supabase functions deploy`.
-
-## Recomendación
-
-Como es un proceso **irreversible** que involucra soporte humano de Lovable, te sugiero:
-
-1. Confirmar **por qué** quieres migrar (¿acceso al dashboard? ¿facturación? ¿portabilidad?) — hay soluciones intermedias.
-2. Si aún así quieres migrar, escribir a **support@lovable.dev** con el ref del proyecto (`d99974e1-204d-46a0-816a-e2595eaf444a`) pidiendo el swap a BYO Supabase, y ellos coordinan el corte.
-
-¿Quieres que prepare el paquete de migración (checklist de secrets, lista de cron jobs, lista de buckets, y el bundle SQL consolidado) para tener todo listo antes de contactar a soporte?
+Confírmame cuándo hayas creado el proyecto Supabase y tengas exportados los datos, y coordinamos el momento del swap para minimizar downtime.
