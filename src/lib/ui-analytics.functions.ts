@@ -3,7 +3,7 @@ import { z } from "zod";
 
 const inputSchema = z.object({
   eventName: z.string().min(1).max(120),
-  eventData: z.record(z.unknown()).optional(),
+  eventData: z.record(z.string(), z.unknown()).optional(),
   sessionId: z.string().min(1).max(120).optional(),
 });
 
