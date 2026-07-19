@@ -14,21 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      HAZOREXX: {
-        Row: {
-          created_at: string
-          PRECIO: number
-        }
-        Insert: {
-          created_at?: string
-          PRECIO: number
-        }
-        Update: {
-          created_at?: string
-          PRECIO?: number
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
