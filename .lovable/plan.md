@@ -1,45 +1,42 @@
-## Estado actual verificado
 
-- Conector de plataforma (Lovable): **ya apunta a tu proyecto nuevo** — ref `oyvbxkluvkrljvewrgue`. Solo contiene la tabla `HAZOREXX` que creaste manualmente.
-- `.env` / runtime de la app: **sigue apuntando al proyecto viejo de Cloud** (`dmoqrcagdhsuqlbmlckt`). Los usuarios que abran el sitio ahora mismo siguen escribiendo en el Supabase antiguo.
-- Tu Supabase nuevo NO tiene: las 118 migraciones, roles/RLS, auth users, storage buckets, cron jobs, ni secrets.
+## Cómo aplicar el schema a tu Supabase nuevo (paso a paso, sin experiencia técnica)
 
-Es decir, el swap **no está completo**. Si actualizamos solo el `.env` ahora, la app se rompe (no hay tablas, no hay auth, no hay funciones RPC).
+Vas a copiar y pegar un archivo SQL grande en tu Supabase. Tarda 5 minutos. No puedes "romper" nada porque tu proyecto está vacío.
 
-## Plan para dejarlo funcionando
+### Paso 1 — Abre el SQL Editor de tu Supabase
+1. Ve a este link (ya tiene tu proyecto): https://supabase.com/dashboard/project/oyvbxkluvkrljvewrgue/sql/new
+2. Inicia sesión con la misma cuenta con la que creaste el proyecto.
+3. Vas a ver una pantalla con un editor grande de texto (parecido a Word pero para SQL).
 
-### 1. Confirmar con soporte qué hicieron exactamente
-Antes de tocar nada más, responder al correo de soporte preguntando:
-- ¿Ya ejecutaron el swap de backend, o solo vincularon la referencia del proyecto?
-- ¿Migraron datos y schema desde `dmoqrcagdhsuqlbmlckt` a `oyvbxkluvkrljvewrgue`, o el proyecto nuevo se queda vacío y nosotros aplicamos las migraciones?
-- ¿Quién actualiza `.env` con las nuevas `SUPABASE_URL` / `SUPABASE_PUBLISHABLE_KEY` — ellos o nosotros desde el editor?
+### Paso 2 — Descarga el archivo `hazorex-schema-bundle.sql`
+En el chat de Lovable, en el mensaje anterior mío te dejé un archivo llamado **`hazorex-schema-bundle.sql`**. Búscalo en el chat (aparece como una tarjeta que puedes descargar) y guárdalo en tu computadora.
 
-### 2. Preparar el proyecto nuevo (según respuesta)
-Si soporte NO migra datos automáticamente, del lado tuyo en supabase.com hay que:
-- Aplicar las 118 migraciones de `supabase/migrations/` (en orden).
-- Recrear los 5 storage buckets (`backups`, `delivery-proofs`, `driver-documents`, `reels`, `winner-documents`) con sus policies.
-- Cargar los 21 secrets (Stripe, Google Maps, Turnstile, VAPID, DRAW/WINNER/BACKUP secrets, etc.).
-- Recrear los 10 cron jobs (sorteo diario 20:00 ET, backups, notificaciones).
-- Exportar/importar los datos que quieras conservar (`auth.users`, `orders`, `subscriptions`, `daily_draws`, etc.) vía `pg_dump` / CSV.
+Si no lo ves, dime "no encuentro el archivo" y te lo vuelvo a generar.
 
-Todo esto ya está listado paso a paso en `MIGRATION-BYO-SUPABASE.md`.
+### Paso 3 — Copia todo el contenido del archivo
+1. Abre el archivo `hazorex-schema-bundle.sql` con el Bloc de notas (Windows) o TextEdit (Mac).
+2. Selecciona TODO el texto: `Ctrl+A` en Windows, `Cmd+A` en Mac.
+3. Cópialo: `Ctrl+C` / `Cmd+C`.
 
-### 3. Actualizar la app para apuntar a tu Supabase
-Solo cuando el proyecto nuevo tenga schema + datos + secrets:
-- Actualizar `.env`, `.env.development`, `.env.production` con `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_PROJECT_ID` (y las variantes `VITE_*`) del proyecto `oyvbxkluvkrljvewrgue`.
-- Actualizar `supabase/config.toml` (`project_id`).
-- Regenerar `src/integrations/supabase/types.ts` contra el nuevo proyecto.
+### Paso 4 — Pégalo en el SQL Editor de Supabase
+1. Vuelve a la pestaña del navegador con el SQL Editor de Supabase.
+2. Haz clic dentro del editor grande.
+3. Pega: `Ctrl+V` / `Cmd+V`.
+4. Haz clic en el botón verde **"Run"** (abajo a la derecha), o presiona `Ctrl+Enter` / `Cmd+Enter`.
 
-### 4. Verificar
-- Login/signup contra el nuevo Auth.
-- Un CRUD con RLS (favoritos, historial).
-- Un server function protegido (`getMyPosts` o similar) para confirmar que el bearer llega y `has_role` funciona.
-- Stripe webhook apuntando a la URL correcta.
-- Cron del sorteo diario ejecutándose a las 20:00 ET.
+### Paso 5 — Espera y avísame
+- Tarda entre 30 segundos y 2 minutos.
+- Abajo va a aparecer un mensaje: verde "Success" o rojo con un error.
+- **Copia lo que salga y pégalo aquí en el chat** — sea éxito o error.
 
-## Qué necesito de ti para avanzar
+### Qué sigue después (yo me encargo)
+Cuando confirmes que el schema se aplicó:
+1. Creo los 5 buckets de storage.
+2. Te doy el SQL de los 10 cron jobs (otro copy-paste corto).
+3. Actualizo el archivo `.env` de la app para apuntar a tu Supabase nuevo.
+4. Verifico que login, carrito y sorteo funcionen.
 
-Dime cuál de estos casos es el tuyo:
-- **(A)** Soporte ya migró todo el schema/datos y solo falta actualizar `.env` → paso directo al punto 3-4.
-- **(B)** Soporte solo vinculó el proyecto vacío y nosotros aplicamos migraciones/secrets → ejecutamos 2, 3, 4.
-- **(C)** No estoy seguro → responde a soporte con las 3 preguntas del punto 1 y me pasas lo que digan.
+### Si algo te preocupa
+- **No borres nada** en tu Supabase, solo pega y ejecuta.
+- Si sale un error largo, no te preocupes — pégalo aquí y lo arreglo.
+- La tabla `HAZOREXX` que creaste antes NO se borra; el bundle no la toca.
