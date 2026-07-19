@@ -134,7 +134,7 @@ export const suggestBatch = createServerFn({ method: "POST" })
     }
 
     // 3) Traer stops (destinos) de todos los pedidos involucrados
-    const allIds = [base.id, ...candidates.map((c) => c.id as string)];
+    const allIds = [base.id, ...candidates.map((c: any) => c.id as string)];
     const { data: stops, error: stopsErr } = await supabase
       .from("courier_order_stops")
       .select("order_id, sequence_number, delivery_lat, delivery_lng")
@@ -205,7 +205,7 @@ export const suggestBatch = createServerFn({ method: "POST" })
 
     const estimatedEarnings =
       Number(base.estimated_earnings) +
-      candidates.reduce((sum, c) => sum + Number(c.estimated_earnings ?? 0), 0);
+      candidates.reduce((sum: number, c: any) => sum + Number(c.estimated_earnings ?? 0), 0);
 
     return {
       base: {
@@ -213,7 +213,7 @@ export const suggestBatch = createServerFn({ method: "POST" })
         pickup_address: base.pickup_address,
         estimated_earnings: Number(base.estimated_earnings),
       },
-      candidates: candidates.map((c) => ({
+      candidates: candidates.map((c: any) => ({
         id: c.id as string,
         pickup_address: c.pickup_address as string,
         estimated_earnings: Number(c.estimated_earnings ?? 0),
