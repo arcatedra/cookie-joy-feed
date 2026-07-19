@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 
 // Lightweight admin probe kept in its own module so the sweepstakes bundle
 // never pulls the admin-draw actions (triggerTestDraw, smoke tests, etc.).
@@ -11,7 +10,7 @@ export const checkIsAdmin = createServerFn({ method: "GET" }).handler(async () =
   const token = authHeader?.replace(/^Bearer\s+/i, "");
   if (!token) return { isAdmin: false };
 
-  const supabase = createClient<Database>(
+  const supabase = createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_PUBLISHABLE_KEY!,
     {

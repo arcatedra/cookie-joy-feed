@@ -40,7 +40,7 @@ function AdminLive() {
           </p>
         )}
         {q.data?.map((o) => {
-          const d = o.drivers as {
+          const d = o.drivers as unknown as {
             full_name: string | null;
             phone: string | null;
             last_lat: number | null;

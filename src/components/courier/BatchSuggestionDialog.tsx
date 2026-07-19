@@ -93,7 +93,7 @@ export function BatchSuggestionDialog({
                 </p>
               </div>
 
-              {q.data.candidates.map((c) => (
+              {q.data.candidates.map((c: any) => (
                 <div key={c.id} className="rounded-lg border border-[#c8862e]/30 p-3">
                   <p className="flex items-start gap-2 text-sm text-[#4a3525]">
                     <MapPin className="mt-0.5 size-4 shrink-0 text-[#c8862e]" />
@@ -116,7 +116,7 @@ export function BatchSuggestionDialog({
               className="h-12 w-full bg-[#1e3a5f] text-white hover:bg-[#0f2338]"
               disabled={create.isPending}
               onClick={() =>
-                create.mutate([q.data!.base.id, ...q.data!.candidates.map((c) => c.id)])
+                create.mutate([q.data!.base.id, ...q.data!.candidates.map((c: any) => c.id)])
               }
             >
               {create.isPending ? (

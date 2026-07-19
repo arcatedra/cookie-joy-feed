@@ -102,7 +102,7 @@ function RatingsPage() {
                 )}
                 {r.tags && r.tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
-                    {r.tags.map((t) => (
+                    {(r.tags as string[]).map((t: string) => (
                       <span
                         key={t}
                         className="rounded-full bg-[#E6C35C]/20 px-2 py-0.5 text-[10px] font-medium text-[#1e3a5f]"
