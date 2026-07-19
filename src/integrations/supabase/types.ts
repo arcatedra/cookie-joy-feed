@@ -275,7 +275,38 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      crear_pedido_con_items: {
+        Args: {
+          p_cliente_id: string
+          p_direccion: Json
+          p_envio: number
+          p_impuestos: number
+          p_items: Json
+          p_moneda: string
+          p_stripe_pi: string
+          p_stripe_session: string
+          p_subtotal: number
+          p_total: number
+        }
+        Returns: {
+          numero_pedido: string
+          pedido_id: string
+        }[]
+      }
+      upsert_suscripcion_stripe: {
+        Args: {
+          p_cliente_id: string
+          p_estado: string
+          p_fecha_cancelacion: string
+          p_fecha_inicio: string
+          p_fecha_renovacion: string
+          p_moneda: string
+          p_plan: string
+          p_precio: number
+          p_stripe_sub_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
