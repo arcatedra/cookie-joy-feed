@@ -10,14 +10,16 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // Once the migrations run and types.ts is regenerated, restore the typed
 // `createClient<Database>` signature.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isBrowser = typeof window !== "undefined";
 export const supabase: SupabaseClient<any, "public", any> = createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY,
   {
     auth: {
-      storage: typeof window !== "undefined" ? window.localStorage : undefined,
-      persistSession: true,
-      autoRefreshToken: true,
+      storage: isBrowser ? window.localStorage : undefined,
+      persistSession: isBrowser,
+      autoRefreshToken: isBrowser,
+      detectSessionInUrl: isBrowser,
     },
   },
 );
