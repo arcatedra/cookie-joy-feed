@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { getMyCliente, upsertMyCliente } from "@/lib/clientes.functions";
 import { getMySuscripcion } from "@/lib/pedidos.functions";
+import { createBillingPortalSession } from "@/lib/subscriptions.functions";
 
 export const Route = createFileRoute("/_authenticated/mi-cuenta")({
   head: () => ({
@@ -17,12 +18,13 @@ function MiCuentaPage() {
   const fetchCliente = useServerFn(getMyCliente);
   const saveCliente = useServerFn(upsertMyCliente);
   const fetchSub = useServerFn(getMySuscripcion);
+  const openPortal = useServerFn(createBillingPortalSession);
 
   const { data: cliente, refetch, isLoading } = useQuery({
     queryKey: ["cliente", "me"],
     queryFn: () => fetchCliente(),
   });
-  const { data: sub } = useQuery({
+  const { data: sub, refetch: refetchSub } = useQuery({
     queryKey: ["suscripcion", "me"],
     queryFn: () => fetchSub(),
   });
