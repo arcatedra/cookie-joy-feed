@@ -2,20 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft, Plus, ShoppingCart, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import i18n, { formatPrice, formatNumber } from "@/i18n";
+import i18n, { formatPrice } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
-import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
-import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
-import imgSugar from "@/assets/ins-sugar.jpg";
-import imgDoubleChoc from "@/assets/ins-double-choc.jpg";
-import imgOatmeal from "@/assets/ins-oatmeal.jpg";
-import imgWhiteMac from "@/assets/ins-white-mac.jpg";
-import imgMM from "@/assets/ins-mm.jpg";
-import imgPB from "@/assets/ins-pb.jpg";
-import imgVeganChoc from "@/assets/ins-vegan-choc.jpg";
-import imgMint from "@/assets/ins-mint.jpg";
+import { listProductos, type Producto } from "@/lib/productos.functions";
+
+const productosQueryOptions = queryOptions({
+  queryKey: ["productos", "shop"],
+  queryFn: () => listProductos(),
+});
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -26,26 +23,16 @@ export const Route = createFileRoute("/shop")({
       { property: "og:description", content: i18n.t("shopPage.metaDesc") },
     ],
   }),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(productosQueryOptions),
   component: ShopPage,
 });
-
-const products = [
-  { id: "shop-c1", key: "c1", price: 3.75, rating: 5, reviews: 272, image: imgChocChunk },
-  { id: "shop-c2", key: "c2", price: 3.75, rating: 5, reviews: 125, image: imgSnicker },
-  { id: "shop-c3", key: "c3", price: 3.75, rating: 5, reviews: 134, image: imgSugar },
-  { id: "shop-c4", key: "c4", price: 3.75, rating: 5, reviews: 197, image: imgDoubleChoc },
-  { id: "shop-c5", key: "c5", price: 3.75, rating: 5, reviews: 98, image: imgOatmeal },
-  { id: "shop-c6", key: "c6", price: 3.75, rating: 5, reviews: 95, image: imgWhiteMac },
-  { id: "shop-c7", key: "c7", price: 3.75, rating: 5, reviews: 79, image: imgMM },
-  { id: "shop-c8", key: "c8", price: 3.75, rating: 5, reviews: 56, image: imgPB },
-  { id: "shop-c9", key: "c9", price: 3.75, rating: 5, reviews: 37, image: imgVeganChoc },
-  { id: "shop-c10", key: "c10", price: 3.75, rating: 5, reviews: 23, image: imgMint },
-];
 
 function ShopPage() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
   const gate = useSubscriptionGate();
+  const { data: products } = useSuspenseQuery(productosQueryOptions);
 
   return (
     <main className="min-h-screen bg-background pb-24">
@@ -84,50 +71,49 @@ function ShopPage() {
 
       <section className="mt-6 px-5">
         <div className="grid grid-cols-2 gap-4">
-          {products.map((p) => {
-            const name = t(`cookies.${p.key}.name`);
+          {products.map((p: Producto) => {
+            const price = Number(p.precio);
             return (
               <article
                 key={p.id}
                 className="relative overflow-hidden rounded-2xl bg-card p-3 shadow-sm ring-1 ring-border"
               >
                 <div className="aspect-square overflow-hidden rounded-xl bg-cream">
-                  <img
-                    src={p.image}
-                    alt={name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    width={512}
-                    height={512}
-                  />
+                  {p.imagen_url ? (
+                    <img
+                      src={p.imagen_url}
+                      alt={p.nombre}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      width={512}
+                      height={512}
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-muted" />
+                  )}
                 </div>
                 <div className="mt-3">
                   <h3 className="text-sm font-bold leading-tight text-foreground">
-                    {name}
+                    {p.nombre}
                   </h3>
-                  <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
-                    {t(`cookies.${p.key}.caption`)}
-                  </p>
+                  {p.descripcion && (
+                    <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
+                      {p.descripcion}
+                    </p>
+                  )}
                   <div className="mt-1 flex items-center gap-1">
                     <div className="flex">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
-                          className={`h-3 w-3 ${
-                            i < p.rating
-                              ? "fill-amber-400 text-amber-400"
-                              : "fill-muted text-muted"
-                          }`}
+                          className="h-3 w-3 fill-amber-400 text-amber-400"
                         />
                       ))}
                     </div>
-                    <span className="text-[10px] text-muted-foreground">
-                      ({formatNumber(p.reviews, i18n.language)})
-                    </span>
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <span className="text-sm font-bold text-primary">
-                      {formatPrice(p.price, i18n.language)}
+                      {formatPrice(price, i18n.language)}
                     </span>
                   </div>
                 </div>
@@ -137,16 +123,23 @@ function ShopPage() {
                     gate.guard(() => {
                       cart.add({
                         id: p.id,
-                        name,
-                        nameKey: `cookies.${p.key}.name`,
-                        price: p.price,
-                        image: p.image,
+                        name: p.nombre,
+                        price,
+                        image: p.imagen_url ?? "",
                       });
-                      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
+                      toast.success(
+                        t("reels.addedToCart", {
+                          name: p.nombre,
+                          defaultValue: "{{name}} added to cart",
+                        }),
+                      );
                     });
                   }}
                   className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-orange text-white shadow-md transition active:scale-90"
-                  aria-label={t("cartFloating.addAria", { name, defaultValue: "Add {{name}}" })}
+                  aria-label={t("cartFloating.addAria", {
+                    name: p.nombre,
+                    defaultValue: "Add {{name}}",
+                  })}
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -161,7 +154,10 @@ function ShopPage() {
               {t(cart.count === 1 ? "cartFloating.one" : "cartFloating.other", {
                 count: cart.count,
                 total: cart.total.toFixed(2),
-                defaultValue: cart.count === 1 ? "{{count}} item · ${{total}}" : "{{count}} items · ${{total}}",
+                defaultValue:
+                  cart.count === 1
+                    ? "{{count}} item · ${{total}}"
+                    : "{{count}} items · ${{total}}",
               })}
             </span>
             <Link
