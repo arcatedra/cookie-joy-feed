@@ -9,7 +9,7 @@ import { useCart } from "@/lib/cart";
 import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { listProductos, type Producto } from "@/lib/productos.functions";
 
-const productosQueryOptions = queryOptions({
+export const productosQueryOptions = queryOptions({
   queryKey: ["productos", "shop"],
   queryFn: () => listProductos(),
 });
