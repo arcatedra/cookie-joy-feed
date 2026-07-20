@@ -1114,6 +1114,7 @@ function ReelCard({
   productosById: Map<string, Producto>;
 }) {
   const { t } = useTranslation(); // subscribe so reel titles re-render on language change
+  const { user } = useAuth();
   const cart = useCart();
   const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
@@ -1648,6 +1649,19 @@ function ReelCard({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {!user ? (
+          <button
+            type="button"
+            aria-label={t("reels.thanksAria", "Dar las gracias")}
+            onClick={() => toast.error(t("reels.signInToThank", "Inicia sesión para enviar una propina"))}
+            className="flex flex-col items-center gap-0.5"
+          >
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.55)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
+              <HandHeart className="h-4 w-4 text-amber-950" strokeWidth={2.4} />
+            </span>
+            <span className="text-[10px] font-semibold text-white drop-shadow">{t("reels.thanks", "Gracias")}</span>
+          </button>
+        ) : (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -1693,6 +1707,7 @@ function ReelCard({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        )}
       </div>}
 
       {/* Ad badge — visible whenever the reel is marked as a sponsored ad */}
@@ -1782,6 +1797,7 @@ function ExpandedReelModal({
   onOpenComments: (reelId: string) => void;
 }) {
   const { t } = useTranslation(); // re-render reel labels on language change
+  const { user } = useAuth();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: "y",
     loop: reels.length > 1,
@@ -2206,6 +2222,19 @@ function ExpandedReelModal({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {!user ? (
+          <button
+            type="button"
+            aria-label={t("reels.thanksAria", "Dar las gracias")}
+            onClick={() => toast.error(t("reels.signInToThank", "Inicia sesión para enviar una propina"))}
+            className="flex flex-col items-center gap-0.5"
+          >
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-[0_4px_14px_-2px_rgba(245,158,11,0.6)] ring-1 ring-amber-300/60 transition hover:from-amber-200 hover:to-amber-400">
+              <HandHeart className="h-5 w-5 text-amber-950" strokeWidth={2.4} />
+            </span>
+            <span className="text-[11px] font-semibold text-white drop-shadow">{t("reels.thanks", "Gracias")}</span>
+          </button>
+        ) : (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button type="button" aria-label={t("reels.thanksAria", "Dar las gracias")} className="flex flex-col items-center gap-0.5">
@@ -2245,6 +2274,7 @@ function ExpandedReelModal({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        )}
       </div>
       </div>
     </div>
