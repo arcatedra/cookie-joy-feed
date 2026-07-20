@@ -1114,6 +1114,7 @@ function ReelCard({
   productosById: Map<string, Producto>;
 }) {
   const { t } = useTranslation(); // subscribe so reel titles re-render on language change
+  const { user } = useAuth();
   const cart = useCart();
   const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
