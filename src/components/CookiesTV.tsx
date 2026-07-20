@@ -768,14 +768,16 @@ export function CookiesTV() {
         .order("created_at", { ascending: false });
       if (cancelled) return;
       if (error) {
-        toast.error("No se pudieron cargar los reels");
+        // `reels` table not available in this environment — fall back to
+        // the original local reels so the carousel keeps working.
+        setReels(LOCAL_FALLBACK_REELS);
         setLoading(false);
         return;
       }
       const signedRows = await signStoredReelVideos((data ?? []) as DbReel[]);
       if (cancelled) return;
       const playable = signedRows.filter(hasPlayableSource);
-      setReels(playable);
+      setReels(playable.length ? playable : LOCAL_FALLBACK_REELS);
       setLoading(false);
       const ids = playable.map((r) => r.id);
       if (ids.length) {
