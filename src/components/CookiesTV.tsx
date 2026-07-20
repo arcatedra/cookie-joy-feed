@@ -1783,6 +1783,7 @@ function ExpandedReelModal({
   onOpenComments: (reelId: string) => void;
 }) {
   const { t } = useTranslation(); // re-render reel labels on language change
+  const { user } = useAuth();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: "y",
     loop: reels.length > 1,
