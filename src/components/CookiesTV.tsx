@@ -247,7 +247,9 @@ const LOCAL_FALLBACK_REELS: DbReel[] = [
   { id: "local-mm", slug: "reel-mm", title: "reels.items.mm.title", video_url: reelMM.url, thumb_url: null, product_name: "reels.items.mm.product", product_price: 4.5, product_image: imgMM, product_slug: "p-mm", author_id: null, created_at: "2025-01-01T00:00:00Z" },
 ];
 
-const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
+const REELS_STORAGE_BUCKET = "reels-media";
+const REELS_STORAGE_MARKER = `/storage/v1/object/public/${REELS_STORAGE_BUCKET}/`;
+const REELS_STORAGE_LEGACY_MARKER = "/storage/v1/object/public/reels/";
 
 function normalizePotentialVideoUrl(raw: string | null | undefined): string | null {
   if (!raw) return null;
