@@ -1,0 +1,2 @@
+CREATE POLICY "Temp seed insert reels-media" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'reels-media');
+CREATE POLICY "Temp seed update reels-media" ON storage.objects FOR UPDATE TO anon, authenticated USING (bucket_id = 'reels-media') WITH CHECK (bucket_id = 'reels-media');
