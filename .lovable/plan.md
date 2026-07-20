@@ -1,72 +1,68 @@
-# Plan: HAZOREX conectado a Supabase real
 
-## Estado que encontré
-- Las 5 tablas ya existen con las columnas correctas y RLS bien puesta (cada cliente solo ve/edita lo suyo; productos es lectura pública). No las voy a tocar.
-- `pedidos.numero_pedido` ya se autogenera con el formato `HZX-XXXXXXXX`.
-- `productos` está vacía — hay que cargarla.
-- No hay trigger que cree la fila en `clientes` al registrarse un usuario.
-- El catálogo actual (galletas + reels) está hardcodeado en el código.
+## Objetivo
 
-## Lo que voy a hacer
+Migrar los 10 reels locales (`LOCAL_FALLBACK_REELS` en `src/components/CookiesTV.tsx`) a una tabla real `public.reels` en Supabase, manteniendo el fallback local intacto para que el carrusel se vea y funcione **exactamente igual** que ahora. Cero cambios visuales.
 
-### 1. Migración de base de datos (1 sola migración)
-- Trigger en `auth.users` que, al confirmarse un usuario nuevo, inserta su fila en `clientes` con el mismo `id`, su `email`, y `nombre_completo` desde `raw_user_meta_data.name` (o el email como fallback).
-- Backfill: crear la fila de `clientes` para cualquier usuario que ya exista y no la tenga.
-- Semilla de la tabla `productos` con el catálogo actual (galletas del menú) usando UUIDs estables para que los pedidos históricos siempre encuentren el producto.
-- Función `crear_pedido_con_items(p_items jsonb, p_direccion jsonb, p_subtotal, p_envio, p_impuestos, p_total, p_stripe_pi text)` con `SECURITY DEFINER` que valida `auth.uid()`, inserta el `pedido` + todos los `pedido_items` en una sola transacción y devuelve el número de pedido. Esto evita pedidos parciales si falla a la mitad.
-- Ampliar `suscripciones.estado` para aceptar los estados que manda Stripe (activa/cancelada/pausada/vencida) y agregar índice por `stripe_subscription_id`.
+## Garantías de seguridad ("sin dañar nada")
 
-### 2. Auto-alta y perfil del cliente
-- Nuevo server-fn `getMyCliente` / `upsertMyCliente` (con `requireSupabaseAuth`) para leer y actualizar el perfil.
-- Nueva ruta protegida `/mi-cuenta` con formulario para: nombre completo, teléfono, dirección línea 1/2, ciudad, estado, código postal, país. Solo el dueño lo ve.
-- Enlace a "Mi cuenta" desde el menú de usuario en `TopNav`.
+- El fallback local `LOCAL_FALLBACK_REELS` **no se elimina**. Si la tabla falla, está vacía, o Supabase no responde, el carrusel sigue mostrando los mismos 10 reels que hoy.
+- Los `id`, `slug`, `product_slug`, precios e imágenes sembrados en la tabla son idénticos a los del array local, así que `REEL_TEXT_KEY_MAP` y `REEL_SLUG_TO_PRODUCTO_ID` siguen funcionando sin cambios.
+- Los assets de video (`reel1.url`, `reelPista.url`, etc.) se siguen sirviendo desde el bundle local — la tabla solo guarda la referencia (URL construida en el cliente) para no depender del Storage de Supabase todavía.
+- Solo lectura pública (`SELECT` para `anon`), sin `INSERT/UPDATE/DELETE` públicos → nadie externo puede alterar los reels.
 
-### 3. Catálogo unificado
-- Server-fn público `listProductos()` que lee `productos` con `disponible=true`.
-- `/shop`, `/menu`, `/best-sellers`, `/build-pack`, `/search` y el carrusel de Reels leen de esa fuente. Se elimina la lista hardcodeada y se sustituye por hooks/consultas.
-- El mapa i18n de nombres se mantiene: cada producto en la tabla lleva su `nombre` en español (base) y el frontend sigue traduciendo por `id → clave i18n` como ya funciona, así no rompe idiomas.
+## Pasos
 
-### 4. Checkout → pedido real
-- En el webhook de Stripe (`/api/public/payments/webhook`), al evento `checkout.session.completed` en modo `payment`:
-  - Leer los items desde `session.metadata` (los guardo al crear la sesión: `cliente_id`, JSON con `[{producto_id, nombre, precio, cantidad}]`, dirección de envío, subtotal, envío, impuestos, total).
-  - Llamar a `crear_pedido_con_items(...)` con `SECURITY DEFINER` usando el `service_role` (RLS del cliente no aplica, pero la función valida el `cliente_id` contra la metadata firmada por Stripe).
-  - Guardar `stripe_payment_intent_id`.
-- En `cart-checkout.functions.ts`: al crear la Checkout Session incluyo esos metadatos y la dirección.
+### 1. Migración de esquema
+Crear `public.reels` con las columnas que ya espera `DbReel` en `CookiesTV.tsx`:
+`id, slug, title, video_url, thumb_url, product_name, product_price, product_image, product_slug, author_id, created_at`.
 
-### 5. "Mis Pedidos"
-- Nueva ruta `/mis-pedidos` (protegida) que lee `pedidos` + `pedido_items` por RLS del propio usuario.
-- Lista ordenada por `creado_en desc`: número de pedido, fecha, estado con badge de color, total.
-- Al expandir: items con nombre, cantidad, precio unitario y subtotal, más la dirección de envío guardada en `direccion_envio` (jsonb).
-- Diseño limpio con las clases y tokens ya definidos en `styles.css`, sin cambiar el look global.
+Aplicar el bloque estándar: `CREATE TABLE` → `GRANT SELECT` a `anon` y `authenticated` + `GRANT ALL` a `service_role` → `ENABLE ROW LEVEL SECURITY` → política `SELECT` pública (los reels son contenido público de portada).
 
-### 6. Suscripción conectada
-- Refactor del webhook para eventos `customer.subscription.created/updated/deleted`:
-  - Traducir el `status` de Stripe → `estado` de tu tabla (`active/trialing → activa`, `canceled → cancelada`, `paused → pausada`, `past_due/unpaid → vencida`).
-  - Upsert por `stripe_subscription_id`, escribiendo `cliente_id`, `plan`, `precio`, `fecha_inicio`, `fecha_renovacion`, y `fecha_cancelacion` cuando aplique.
-- En `/mi-cuenta`: bloque "Mi suscripción" mostrando estado actual y desde cuándo, con botón para abrir el Stripe Billing Portal (cancelar/actualizar tarjeta).
+### 2. Semilla con los 10 reels actuales
+Insertar exactamente las mismas filas que hoy están en `LOCAL_FALLBACK_REELS`, usando los mismos `slug` y `product_slug`. `video_url` queda `NULL` (o una cadena marcadora) — el cliente ya sabe caer al asset local por `slug` cuando no hay URL remota reproducible.
 
-### 7. i18n
-- Agrego las claves nuevas (`myAccount.*`, `myOrders.*`) a los 9 idiomas usando el script `scripts/translate-new-keys.ts` que ya existe.
-- Ningún texto en JSX queda hardcodeado.
+### 3. Cambio mínimo en el cliente (opcional, no rompe nada)
+En `src/components/CookiesTV.tsx`, después del `select("*")`:
+- Si Supabase devuelve filas, fusionarlas por `slug` con `LOCAL_FALLBACK_REELS` para **rellenar** `video_url` desde el asset local cuando falte.
+- Si no devuelve filas o hay error, seguir usando `LOCAL_FALLBACK_REELS` tal como hoy.
 
-### 8. Pruebas
-- Playwright headless local: registro de usuario nuevo → confirmar que aparece la fila en `clientes` → guardar dirección en `/mi-cuenta` → agregar producto al carrito → checkout con la tarjeta de prueba `4242 4242 4242 4242` (te aviso si necesito que actives Stripe payments; ya usás gateway sandbox) → confirmar que llega el pedido a `/mis-pedidos` con sus items.
-- Verificación SQL directa de que las filas quedan bien y RLS bloquea a otros usuarios.
+Resultado: mismos 10 reels, mismo orden, mismos textos, mismos videos.
 
-## Fuera de alcance (no lo toco)
-- Diseño visual global, i18n de páginas ya funcionando, políticas RLS existentes, panel admin, sorteo diario, referrals, ruleta.
+### 4. Verificación
+- `supabase--read_query` para confirmar las 10 filas.
+- Cargar `/` y confirmar visualmente que el carrusel se ve idéntico.
+- Probar "Comprar" desde un reel → sigue mapeando al `producto` correcto vía `REEL_SLUG_TO_PRODUCTO_ID`.
 
-## Nota sobre Stripe
-El proyecto ya tiene la integración de pagos configurada en sandbox (`STRIPE_SANDBOX_API_KEY`, `PAYMENTS_SANDBOX_WEBHOOK_SECRET`). Uso esa. Si al probar detecto que falta la clave live o algo, te aviso — no toco nada de credenciales sin confirmarte.
+## Lo que NO se toca
 
-## Orden de ejecución
-1. Migración (trigger + backfill + semilla productos + función `crear_pedido_con_items`).
-2. Server functions (`clientes`, `productos`, `pedidos`, `suscripciones`).
-3. Refactor de catálogo (`/shop`, `/menu`, reels).
-4. Nueva página `/mi-cuenta`.
-5. Nueva página `/mis-pedidos`.
-6. Webhook de Stripe (pedidos + suscripciones).
-7. i18n en 9 idiomas.
-8. Pruebas end-to-end.
+- `/shop`, `/cart`, `/subscribe`, checkout, suscripciones, sorteo.
+- Traducciones ni claves i18n.
+- Assets de video locales (siguen en el bundle).
+- El fallback local — se mantiene como red de seguridad permanente.
 
-¿Le doy?
+## Detalles técnicos
+
+```sql
+CREATE TABLE public.reels (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug text UNIQUE NOT NULL,
+  title text,
+  video_url text,
+  thumb_url text,
+  product_name text,
+  product_price numeric(10,2),
+  product_image text,
+  product_slug text,
+  author_id uuid,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+GRANT SELECT ON public.reels TO anon, authenticated;
+GRANT ALL   ON public.reels TO service_role;
+ALTER TABLE public.reels ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Reels are publicly readable"
+  ON public.reels FOR SELECT TO anon, authenticated USING (true);
+```
+
+Seed: 10 filas con los `slug` `demo-nutella`, `demo-cookies-cream`, `demo-pb`, `reel-pista`, `reel-triple`, `reel-snicker`, `reel-oatmeal`, `reel-cchunk`, `reel-mint`, `reel-mm`.
+
+¿Procedo?
