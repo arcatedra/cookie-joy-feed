@@ -247,7 +247,9 @@ const LOCAL_FALLBACK_REELS: DbReel[] = [
   { id: "local-mm", slug: "reel-mm", title: "reels.items.mm.title", video_url: reelMM.url, thumb_url: null, product_name: "reels.items.mm.product", product_price: 4.5, product_image: imgMM, product_slug: "p-mm", author_id: null, created_at: "2025-01-01T00:00:00Z" },
 ];
 
-const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
+const REELS_STORAGE_BUCKET = "reels-media";
+const REELS_STORAGE_MARKER = `/storage/v1/object/public/${REELS_STORAGE_BUCKET}/`;
+const REELS_STORAGE_LEGACY_MARKER = "/storage/v1/object/public/reels/";
 
 function normalizePotentialVideoUrl(raw: string | null | undefined): string | null {
   if (!raw) return null;
@@ -289,11 +291,16 @@ function normalizePotentialVideoUrl(raw: string | null | undefined): string | nu
   return /^https?:\/\//i.test(text) ? text : null;
 }
 
-function getReelStoragePath(videoUrl: string | null | undefined) {
-  if (!videoUrl) return null;
-  const markerIndex = videoUrl.indexOf(REELS_STORAGE_MARKER);
+function getReelStoragePath(url: string | null | undefined) {
+  if (!url) return null;
+  let markerIndex = url.indexOf(REELS_STORAGE_MARKER);
+  let markerLen = REELS_STORAGE_MARKER.length;
+  if (markerIndex === -1) {
+    markerIndex = url.indexOf(REELS_STORAGE_LEGACY_MARKER);
+    markerLen = REELS_STORAGE_LEGACY_MARKER.length;
+  }
   if (markerIndex === -1) return null;
-  const encodedPath = videoUrl.slice(markerIndex + REELS_STORAGE_MARKER.length).split("?")[0];
+  const encodedPath = url.slice(markerIndex + markerLen).split("?")[0];
   try {
     return decodeURIComponent(encodedPath);
   } catch {
@@ -303,11 +310,16 @@ function getReelStoragePath(videoUrl: string | null | undefined) {
 
 async function signStoredReelVideos(rows: DbReel[]) {
   const paths = Array.from(
-    new Set(rows.map((r) => getReelStoragePath(r.video_url)).filter(Boolean) as string[]),
+    new Set(
+      rows.flatMap((r) => [getReelStoragePath(r.video_url), getReelStoragePath(r.thumb_url)])
+        .filter(Boolean) as string[],
+    ),
   );
   if (!paths.length) return rows;
 
-  const { data, error } = await supabase.storage.from("reels").createSignedUrls(paths, 60 * 60 * 24);
+  const { data, error } = await supabase.storage
+    .from(REELS_STORAGE_BUCKET)
+    .createSignedUrls(paths, 60 * 60 * 24);
   if (error || !data) return rows;
 
   const signedByPath = new Map<string, string>();
@@ -316,10 +328,17 @@ async function signStoredReelVideos(rows: DbReel[]) {
   });
 
   return rows.map((row) => {
-    const path = getReelStoragePath(row.video_url);
-    return path && signedByPath.has(path) ? { ...row, video_url: signedByPath.get(path)! } : row;
+    const videoPath = getReelStoragePath(row.video_url);
+    const thumbPath = getReelStoragePath(row.thumb_url);
+    return {
+      ...row,
+      video_url: videoPath && signedByPath.has(videoPath) ? signedByPath.get(videoPath)! : row.video_url,
+      thumb_url: thumbPath && signedByPath.has(thumbPath) ? signedByPath.get(thumbPath)! : row.thumb_url,
+    };
   });
 }
+
+
 
 function hasPlayableSource(reel: DbReel) {
   const url = reel.video_url?.trim();
@@ -2477,7 +2496,7 @@ function AdminModal({
         setUploadPct(20);
         const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
         const { error: upErr } = await supabase.storage
-          .from("reels")
+          .from("reels-media")
           .upload(path, file, { contentType: safeContentType, upsert: false });
         setUploadPct(100);
         if (upErr) {
@@ -2485,16 +2504,16 @@ function AdminModal({
           setSubmitting(false);
           return;
         }
-        const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
+        const { data: pub } = supabase.storage.from("reels-media").getPublicUrl(path);
         if (pub?.publicUrl) videoUrl = pub.publicUrl;
         const thumbBlob = await createVideoThumbnailBlob(file);
         if (thumbBlob) {
           const thumbPath = `${user.id}/${uploadId}.jpg`;
           const { error: thumbErr } = await supabase.storage
-            .from("reels")
+            .from("reels-media")
             .upload(thumbPath, thumbBlob, { contentType: "image/jpeg", upsert: false });
           if (!thumbErr) {
-            const { data: thumbPub } = supabase.storage.from("reels").getPublicUrl(thumbPath);
+            const { data: thumbPub } = supabase.storage.from("reels-media").getPublicUrl(thumbPath);
             thumbUrl = thumbPub?.publicUrl ?? null;
           }
         }
