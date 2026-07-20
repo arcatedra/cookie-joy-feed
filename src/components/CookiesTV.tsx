@@ -774,11 +774,36 @@ export function CookiesTV() {
         setLoading(false);
         return;
       }
-      const signedRows = await signStoredReelVideos((data ?? []) as DbReel[]);
+      // Merge DB rows with local reels by slug so bundled video/thumb/image
+      // assets fill in any columns that were seeded as NULL. Rows the DB
+      // doesn't know about still show up via the local fallback.
+      const localBySlug = new Map(LOCAL_FALLBACK_REELS.map((r) => [r.slug, r]));
+      const dbRows = (data ?? []) as DbReel[];
+      const merged: DbReel[] = dbRows.map((row) => {
+        const local = row.slug ? localBySlug.get(row.slug) : undefined;
+        if (!local) return row;
+        return {
+          ...row,
+          video_url: row.video_url ?? local.video_url,
+          thumb_url: row.thumb_url ?? local.thumb_url,
+          product_image: row.product_image ?? local.product_image,
+          product_name: row.product_name ?? local.product_name,
+          product_price: row.product_price ?? local.product_price,
+          product_slug: row.product_slug ?? local.product_slug,
+          title: row.title ?? local.title,
+        };
+      });
+      // Append any local reels not represented in the DB (defensive).
+      const seenSlugs = new Set(merged.map((r) => r.slug));
+      for (const local of LOCAL_FALLBACK_REELS) {
+        if (!seenSlugs.has(local.slug)) merged.push(local);
+      }
+      const signedRows = await signStoredReelVideos(merged);
       if (cancelled) return;
       const playable = signedRows.filter(hasPlayableSource);
       setReels(playable.length ? playable : LOCAL_FALLBACK_REELS);
       setLoading(false);
+
       const ids = playable.map((r) => r.id);
       if (ids.length) {
         const [{ data: likeRows }, { data: commentRows }, { data: myLikeRows }] = await Promise.all([
