@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { getMyCliente, upsertMyCliente } from "@/lib/clientes.functions";
 import { getMySuscripcion } from "@/lib/pedidos.functions";
+import { createBillingPortalSession } from "@/lib/subscriptions.functions";
 
 export const Route = createFileRoute("/_authenticated/mi-cuenta")({
   head: () => ({
@@ -17,12 +18,13 @@ function MiCuentaPage() {
   const fetchCliente = useServerFn(getMyCliente);
   const saveCliente = useServerFn(upsertMyCliente);
   const fetchSub = useServerFn(getMySuscripcion);
+  const openPortal = useServerFn(createBillingPortalSession);
 
   const { data: cliente, refetch, isLoading } = useQuery({
     queryKey: ["cliente", "me"],
     queryFn: () => fetchCliente(),
   });
-  const { data: sub } = useQuery({
+  const { data: sub, refetch: refetchSub } = useQuery({
     queryKey: ["suscripcion", "me"],
     queryFn: () => fetchSub(),
   });
@@ -79,11 +81,43 @@ function MiCuentaPage() {
         {sub ? (
           <div className="text-sm space-y-1">
             <div>Plan: <strong>{sub.plan}</strong></div>
-            <div>Estado: <strong>{sub.estado}</strong></div>
+            <div>
+              Estado:{" "}
+              <strong className={estadoClass(sub.estado)}>{estadoLabel(sub.estado)}</strong>
+            </div>
             <div>Precio: ${Number(sub.precio).toFixed(2)} {sub.moneda}</div>
-            {sub.fecha_renovacion && (
-              <div>Renueva: {new Date(sub.fecha_renovacion).toLocaleDateString()}</div>
+            {sub.fecha_inicio && (
+              <div>
+                Activa desde:{" "}
+                <strong>{new Date(sub.fecha_inicio).toLocaleDateString()}</strong>
+              </div>
             )}
+            {sub.fecha_renovacion && sub.estado !== "cancelada" && (
+              <div>Próxima renovación: {new Date(sub.fecha_renovacion).toLocaleDateString()}</div>
+            )}
+            {sub.fecha_cancelacion && (
+              <div>Cancelada el: {new Date(sub.fecha_cancelacion).toLocaleDateString()}</div>
+            )}
+            {sub.estado === "activa" || sub.estado === "pausada" ? (
+              <div className="pt-3">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const res = await openPortal();
+                      window.open(res.url, "_blank", "noopener");
+                      toast.info("Se abrió el portal de Stripe. Vuelve aquí y refresca cuando termines.");
+                      setTimeout(() => { refetchSub(); }, 4000);
+                    } catch (err) {
+                      toast.error((err as Error).message || "No se pudo abrir el portal");
+                    }
+                  }}
+                  className="rounded border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/5"
+                >
+                  Cancelar o gestionar suscripción
+                </button>
+              </div>
+            ) : null}
           </div>
         ) : (
           <div className="text-sm">
@@ -149,4 +183,24 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
       />
     </label>
   );
+}
+
+function estadoLabel(estado: string): string {
+  switch (estado) {
+    case "activa": return "Activa";
+    case "pausada": return "Pausada";
+    case "cancelada": return "Cancelada";
+    case "vencida": return "Vencida (pago pendiente)";
+    default: return estado || "Sin suscripción";
+  }
+}
+
+function estadoClass(estado: string): string {
+  switch (estado) {
+    case "activa": return "text-emerald-600";
+    case "pausada": return "text-amber-600";
+    case "cancelada": return "text-muted-foreground";
+    case "vencida": return "text-red-600";
+    default: return "";
+  }
 }

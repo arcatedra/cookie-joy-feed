@@ -100,8 +100,14 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
               }
             | undefined;
           const price = firstItem?.price;
-          const planLabel =
-            price?.lookup_key || price?.nickname || (metadata.plan as string | undefined) || "mensual";
+          // Normalize the plan label so `public.suscripciones.plan` uses the
+          // canonical Spanish cadence ("mensual"/"anual") that /mi-cuenta
+          // displays, instead of Stripe's lookup_key (e.g. "plan_starter_monthly").
+          const rawLookup =
+            (price?.lookup_key || price?.nickname || (metadata.plan as string | undefined) || "").toLowerCase();
+          const planLabel = rawLookup.includes("year") || rawLookup.includes("annual") || rawLookup.includes("anual")
+            ? "anual"
+            : "mensual";
           const priceAmount =
             typeof price?.unit_amount === "number" ? price.unit_amount / 100 : 0;
           const stripeStatus = (sub.status as string) ?? "active";
