@@ -782,7 +782,7 @@ export function CookiesTV() {
     let cancelled = false;
     (async () => {
       const { data, error } = await supabase
-        .from("reels-media")
+        .from("reels")
         .select("*")
         .order("created_at", { ascending: false });
       if (cancelled) return;
@@ -956,7 +956,7 @@ export function CookiesTV() {
 
     const timer = setTimeout(() => {
       if (!reelId.startsWith("local-")) {
-        void supabase.from("reels-media").delete().eq("id", reelId).then(({ error }) => {
+        void supabase.from("reels").delete().eq("id", reelId).then(({ error }) => {
           if (error) toast.error("No se pudo eliminar el reel");
         });
       }
@@ -2558,7 +2558,7 @@ function AdminModal({
       };
       if (!editing.id.startsWith("local-")) {
         const { error } = await supabase
-          .from("reels-media")
+          .from("reels")
           .update({
             title: updatedReel.title,
             video_url: finalVideoUrl,
@@ -2586,7 +2586,7 @@ function AdminModal({
 
     const slug = `r-${Date.now()}`;
     const { data: savedReel, error } = await supabase
-      .from("reels-media")
+      .from("reels")
       .insert({
         slug,
         title: title.trim(),
