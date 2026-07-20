@@ -782,7 +782,7 @@ export function CookiesTV() {
     let cancelled = false;
     (async () => {
       const { data, error } = await supabase
-        .from("reels")
+        .from("reels-media")
         .select("*")
         .order("created_at", { ascending: false });
       if (cancelled) return;
@@ -956,7 +956,7 @@ export function CookiesTV() {
 
     const timer = setTimeout(() => {
       if (!reelId.startsWith("local-")) {
-        void supabase.from("reels").delete().eq("id", reelId).then(({ error }) => {
+        void supabase.from("reels-media").delete().eq("id", reelId).then(({ error }) => {
           if (error) toast.error("No se pudo eliminar el reel");
         });
       }
@@ -2496,7 +2496,7 @@ function AdminModal({
         setUploadPct(20);
         const safeContentType = ALLOWED_MIME.includes(file.type) ? file.type : "video/mp4";
         const { error: upErr } = await supabase.storage
-          .from("reels")
+          .from("reels-media")
           .upload(path, file, { contentType: safeContentType, upsert: false });
         setUploadPct(100);
         if (upErr) {
@@ -2504,16 +2504,16 @@ function AdminModal({
           setSubmitting(false);
           return;
         }
-        const { data: pub } = supabase.storage.from("reels").getPublicUrl(path);
+        const { data: pub } = supabase.storage.from("reels-media").getPublicUrl(path);
         if (pub?.publicUrl) videoUrl = pub.publicUrl;
         const thumbBlob = await createVideoThumbnailBlob(file);
         if (thumbBlob) {
           const thumbPath = `${user.id}/${uploadId}.jpg`;
           const { error: thumbErr } = await supabase.storage
-            .from("reels")
+            .from("reels-media")
             .upload(thumbPath, thumbBlob, { contentType: "image/jpeg", upsert: false });
           if (!thumbErr) {
-            const { data: thumbPub } = supabase.storage.from("reels").getPublicUrl(thumbPath);
+            const { data: thumbPub } = supabase.storage.from("reels-media").getPublicUrl(thumbPath);
             thumbUrl = thumbPub?.publicUrl ?? null;
           }
         }
@@ -2558,7 +2558,7 @@ function AdminModal({
       };
       if (!editing.id.startsWith("local-")) {
         const { error } = await supabase
-          .from("reels")
+          .from("reels-media")
           .update({
             title: updatedReel.title,
             video_url: finalVideoUrl,
@@ -2586,7 +2586,7 @@ function AdminModal({
 
     const slug = `r-${Date.now()}`;
     const { data: savedReel, error } = await supabase
-      .from("reels")
+      .from("reels-media")
       .insert({
         slug,
         title: title.trim(),
