@@ -39,6 +39,8 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { syncReelPlayback } from "@/lib/reel-playback";
+import { useQuery } from "@tanstack/react-query";
+import { listProductos, type Producto } from "@/lib/productos.functions";
 import reel1 from "@/assets/reel-cookie-1.mp4.asset.json";
 import reel2 from "@/assets/reel-cookie-2.mp4.asset.json";
 import reel3 from "@/assets/reel-cookie-3.mp4.asset.json";
@@ -126,6 +128,32 @@ export function reelProductKeyFromSlug(slug: string | null | undefined): string 
   if (!slug) return undefined;
   const k = SLUG_TO_PRODUCT_KEY[slug];
   return k && i18n.exists(k) ? k : undefined;
+}
+
+// Maps each reel's stable product_slug to the canonical productos.id (UUID)
+// seeded in the Supabase `productos` table. This keeps Reels and /shop in
+// sync: buying from a Reel adds the same product row (id, name, price)
+// that /shop reads directly from the database.
+const REEL_SLUG_TO_PRODUCTO_ID: Record<string, string> = {
+  "p-cchunk":     "a1111111-0000-0000-0000-000000000001", // Chocolate Chunk
+  "p-snicker":    "a1111111-0000-0000-0000-000000000002", // Snickerdoodle
+  "p-oatmeal":    "a1111111-0000-0000-0000-000000000003", // Oatmeal Raisin
+  "p-mint":       "a1111111-0000-0000-0000-000000000004", // Mint Chocolate
+  "p-pista":      "a1111111-0000-0000-0000-000000000005", // Pistachio
+  "p-triple":     "a1111111-0000-0000-0000-000000000006", // Triple Chocolate
+  "p-doublechoc": "a1111111-0000-0000-0000-000000000006", // Triple Chocolate (same image line)
+  "p-mm":         "a1111111-0000-0000-0000-000000000007", // M&M Festivo
+  "p-cc":         "a1111111-0000-0000-0000-000000000008", // Snicker (closest fallback for cookies&cream)
+  "p-pb":         "a1111111-0000-0000-0000-000000000009", // Mantequilla de Maní Crujiente
+};
+export function resolveProductoForReel(
+  slug: string | null | undefined,
+  productosById: Map<string, Producto> | null | undefined,
+): Producto | null {
+  if (!slug || !productosById) return null;
+  const id = REEL_SLUG_TO_PRODUCTO_ID[slug];
+  if (!id) return null;
+  return productosById.get(id) ?? null;
 }
 function translateReelKey(
   value: string | null | undefined,
@@ -673,6 +701,21 @@ export function CookiesTV() {
   const [globalMuted, setGlobalMuted] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  // Canonical catalog from Supabase `productos` — Reels resolve their
+  // linked product against this map so name, price and id in the cart
+  // match /shop exactly.
+  const { data: productos } = useQuery({
+    queryKey: ["productos"],
+    queryFn: () => listProductos(),
+    staleTime: 60_000,
+  });
+  const productosById = useMemo(() => {
+    const m = new Map<string, Producto>();
+    (productos ?? []).forEach((p) => m.set(p.id, p));
+    return m;
+  }, [productos]);
+
+
 
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
@@ -921,6 +964,7 @@ export function CookiesTV() {
                 canEdit={canManageAllReels}
                 onEdit={() => setEditingReel(r)}
                 onExpand={() => setExpandedIndex(index)}
+                productosById={productosById}
               />
             ))}
 
@@ -989,6 +1033,7 @@ function ReelCard({
   onEdit,
   isFirst,
   onExpand,
+  productosById,
 }: {
   reel: DbReel;
   likes: number;
@@ -1004,6 +1049,7 @@ function ReelCard({
   onEdit: () => void;
   isFirst?: boolean;
   onExpand: () => void;
+  productosById: Map<string, Producto>;
 }) {
   const { t } = useTranslation(); // subscribe so reel titles re-render on language change
   const cart = useCart();
@@ -1016,7 +1062,12 @@ function ReelCard({
 
   const fallbackCookieVideo = FALLBACK_VIDEO[reel.slug] || FALLBACK_VIDEO["reel-1"] || "";
   const videoSrc = reel.video_url || fallbackCookieVideo || "";
+  // Canonical productos row for this reel (source of truth for id/name/price/image
+  // shown on the "Comprar" tile and added to the cart). Falls back to legacy
+  // reel.product_* fields only when no matching row exists yet.
+  const producto = resolveProductoForReel(reel.product_slug, productosById);
   const productImg =
+    producto?.imagen_url ||
     reel.product_image ||
     (reel.product_slug ? FALLBACK_PRODUCT_IMG[reel.product_slug] : "") ||
     "";
@@ -1083,6 +1134,24 @@ function ReelCard({
   };
 
   const buy = () => {
+    // Prefer the canonical `productos` row so the cart holds the same UUID,
+    // name and price as /shop. Fallback to the reel's own fields for legacy
+    // rows whose product_slug has no matching seeded product.
+    if (producto) {
+      const nameKey = translateReelKey(reel.product_name, reel.product_slug);
+      const displayName = nameKey && i18n.exists(nameKey) ? i18n.t(nameKey) : producto.nombre;
+      gate.guard(() => {
+        cart.add({
+          id: producto.id,
+          name: displayName,
+          nameKey,
+          price: Number(producto.precio),
+          image: producto.imagen_url || productImg,
+        });
+        toast.success(t("reels.addedToCart", { name: displayName, defaultValue: "{{name}} added to cart" }));
+      });
+      return;
+    }
     const name = translateReelText(reel.product_name, reel.product_slug);
     const price = reel.product_price;
     if (!name || price == null) return;
@@ -1607,10 +1676,15 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {translateReelText(reel.product_name, reel.product_slug)}
+                {producto
+                  ? (() => {
+                      const k = translateReelKey(reel.product_name, reel.product_slug);
+                      return k && i18n.exists(k) ? t(k) : producto.nombre;
+                    })()
+                  : translateReelText(reel.product_name, reel.product_slug)}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
-                ${Number(reel.product_price ?? 0).toFixed(2)}
+                ${Number(producto?.precio ?? reel.product_price ?? 0).toFixed(2)}
               </span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold ring-1 ring-white/40">
