@@ -81,11 +81,43 @@ function MiCuentaPage() {
         {sub ? (
           <div className="text-sm space-y-1">
             <div>Plan: <strong>{sub.plan}</strong></div>
-            <div>Estado: <strong>{sub.estado}</strong></div>
+            <div>
+              Estado:{" "}
+              <strong className={estadoClass(sub.estado)}>{estadoLabel(sub.estado)}</strong>
+            </div>
             <div>Precio: ${Number(sub.precio).toFixed(2)} {sub.moneda}</div>
-            {sub.fecha_renovacion && (
-              <div>Renueva: {new Date(sub.fecha_renovacion).toLocaleDateString()}</div>
+            {sub.fecha_inicio && (
+              <div>
+                Activa desde:{" "}
+                <strong>{new Date(sub.fecha_inicio).toLocaleDateString()}</strong>
+              </div>
             )}
+            {sub.fecha_renovacion && sub.estado !== "cancelada" && (
+              <div>Próxima renovación: {new Date(sub.fecha_renovacion).toLocaleDateString()}</div>
+            )}
+            {sub.fecha_cancelacion && (
+              <div>Cancelada el: {new Date(sub.fecha_cancelacion).toLocaleDateString()}</div>
+            )}
+            {sub.estado === "activa" || sub.estado === "pausada" ? (
+              <div className="pt-3">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const res = await openPortal();
+                      window.open(res.url, "_blank", "noopener");
+                      toast.info("Se abrió el portal de Stripe. Vuelve aquí y refresca cuando termines.");
+                      setTimeout(() => { refetchSub(); }, 4000);
+                    } catch (err) {
+                      toast.error((err as Error).message || "No se pudo abrir el portal");
+                    }
+                  }}
+                  className="rounded border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/5"
+                >
+                  Cancelar o gestionar suscripción
+                </button>
+              </div>
+            ) : null}
           </div>
         ) : (
           <div className="text-sm">
