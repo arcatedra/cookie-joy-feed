@@ -231,6 +231,22 @@ const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-mm": imgMM,
 };
 
+// Original, pre-Supabase Reels source. Used whenever the `reels` table is
+// unavailable or empty so the carousel always renders with its original
+// content (same names, prices, images and IDs as before the DB unification).
+const LOCAL_FALLBACK_REELS: DbReel[] = [
+  { id: "local-nutella", slug: "demo-nutella", title: "reels.items.nutella.title", video_url: reel1.url, thumb_url: null, product_name: "reels.items.nutella.product", product_price: 4.95, product_image: imgDoubleChoc, product_slug: "p-doublechoc", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-cookiescream", slug: "demo-cookies-cream", title: "reels.items.cookiescream.title", video_url: reel2.url, thumb_url: null, product_name: "reels.items.cookiescream.product", product_price: 4.25, product_image: imgCookiesCream, product_slug: "p-cc", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-pb", slug: "demo-pb", title: "reels.items.pb.title", video_url: reel3.url, thumb_url: null, product_name: "reels.items.pb.product", product_price: 3.75, product_image: imgPB, product_slug: "p-pb", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-pista", slug: "reel-pista", title: "reels.items.pista.title", video_url: reelPista.url, thumb_url: null, product_name: "reels.items.pista.product", product_price: 4.5, product_image: imgWhiteMac, product_slug: "p-pista", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-triple", slug: "reel-triple", title: "reels.items.triple.title", video_url: reelTriple.url, thumb_url: null, product_name: "reels.items.triple.product", product_price: 4.75, product_image: imgDoubleChoc, product_slug: "p-triple", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-snicker", slug: "reel-snicker", title: "reels.items.snicker.title", video_url: reelSnicker.url, thumb_url: null, product_name: "reels.items.snicker.product", product_price: 3.95, product_image: imgSnicker, product_slug: "p-snicker", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-oatmeal", slug: "reel-oatmeal", title: "reels.items.oatmeal.title", video_url: reelOatmeal.url, thumb_url: null, product_name: "reels.items.oatmeal.product", product_price: 3.75, product_image: imgOatmeal, product_slug: "p-oatmeal", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-cchunk", slug: "reel-cchunk", title: "reels.items.cchunk.title", video_url: reelCchunk.url, thumb_url: null, product_name: "reels.items.cchunk.product", product_price: 3.95, product_image: imgChocChunk, product_slug: "p-cchunk", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-mint", slug: "reel-mint", title: "reels.items.mint.title", video_url: reelMint.url, thumb_url: null, product_name: "reels.items.mint.product", product_price: 4.5, product_image: imgMint, product_slug: "p-mint", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+  { id: "local-mm", slug: "reel-mm", title: "reels.items.mm.title", video_url: reelMM.url, thumb_url: null, product_name: "reels.items.mm.product", product_price: 4.5, product_image: imgMM, product_slug: "p-mm", author_id: null, created_at: "2025-01-01T00:00:00Z" },
+];
+
 const REELS_STORAGE_MARKER = "/storage/v1/object/public/reels/";
 
 function normalizePotentialVideoUrl(raw: string | null | undefined): string | null {
@@ -752,14 +768,16 @@ export function CookiesTV() {
         .order("created_at", { ascending: false });
       if (cancelled) return;
       if (error) {
-        toast.error("No se pudieron cargar los reels");
+        // `reels` table not available in this environment — fall back to
+        // the original local reels so the carousel keeps working.
+        setReels(LOCAL_FALLBACK_REELS);
         setLoading(false);
         return;
       }
       const signedRows = await signStoredReelVideos((data ?? []) as DbReel[]);
       if (cancelled) return;
       const playable = signedRows.filter(hasPlayableSource);
-      setReels(playable);
+      setReels(playable.length ? playable : LOCAL_FALLBACK_REELS);
       setLoading(false);
       const ids = playable.map((r) => r.id);
       if (ids.length) {
