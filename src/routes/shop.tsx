@@ -125,7 +125,7 @@ function ShopPage() {
                         id: p.id,
                         name: p.nombre,
                         price,
-                        image: p.imagen_url ?? undefined,
+                        image: p.imagen_url ?? "",
                       });
                       toast.success(
                         t("reels.addedToCart", {
