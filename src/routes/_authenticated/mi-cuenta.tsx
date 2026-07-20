@@ -184,3 +184,23 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
     </label>
   );
 }
+
+function estadoLabel(estado: string): string {
+  switch (estado) {
+    case "activa": return "Activa";
+    case "pausada": return "Pausada";
+    case "cancelada": return "Cancelada";
+    case "vencida": return "Vencida (pago pendiente)";
+    default: return estado || "Sin suscripción";
+  }
+}
+
+function estadoClass(estado: string): string {
+  switch (estado) {
+    case "activa": return "text-emerald-600";
+    case "pausada": return "text-amber-600";
+    case "cancelada": return "text-muted-foreground";
+    case "vencida": return "text-red-600";
+    default: return "";
+  }
+}
