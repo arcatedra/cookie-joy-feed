@@ -220,6 +220,64 @@ export type Database = {
         }
         Relationships: []
       }
+      reel_comments: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          reel_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          reel_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          reel_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reel_comments_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "reels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reel_likes: {
+        Row: {
+          created_at: string
+          reel_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          reel_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          reel_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reel_likes_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "reels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reels: {
         Row: {
           author_id: string | null
@@ -333,6 +391,27 @@ export type Database = {
         Returns: {
           numero_pedido: string
           pedido_id: string
+        }[]
+      }
+      get_public_profiles: {
+        Args: { ids: string[] }
+        Returns: {
+          display_name: string
+          id: string
+        }[]
+      }
+      reel_comment_counts: {
+        Args: { reel_ids: string[] }
+        Returns: {
+          count: number
+          reel_id: string
+        }[]
+      }
+      reel_like_counts: {
+        Args: { reel_ids: string[] }
+        Returns: {
+          count: number
+          reel_id: string
         }[]
       }
       upsert_suscripcion_stripe: {
