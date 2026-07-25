@@ -1,23 +1,29 @@
-## Qué está pasando
+## Situación
 
-En la página `/auth`, al montar el formulario se llama al server function `preflightLogin` (en `src/lib/login-security.functions.ts`). Ese function carga `supabaseAdmin` desde `src/integrations/supabase/client.server.ts`, que exige leer `process.env.SUPABASE_SERVICE_ROLE_KEY` en el runtime del servidor (Cloudflare Worker).
+Conectaste Supabase en Cloud (UI muestra "Connected" con proyecto HAZOREX). Sin embargo, `fetch_secrets` en el runtime del server **no muestra** `SUPABASE_URL` ni `SUPABASE_SERVICE_ROLE_KEY`. `src/integrations/supabase/client.server.ts` lee `process.env.SUPABASE_URL` y `process.env.SUPABASE_SERVICE_ROLE_KEY`, así que sigue lanzando el toast en `/auth` porque el runtime del Worker no los tiene.
 
-Ese valor **no está disponible en el runtime del servidor de la app** — por eso el toast dice:
-> Missing Supabase environment variable(s): SUPABASE_SERVICE_ROLE_KEY. Connect Supabase in Lovable Cloud.
-
-Aunque la lista de secrets muestra `SUPABASE_SERVICE_ROLE_KEY`, ese registro pertenece al proyecto Supabase (Edge Functions). Tras la migración a BYO Supabase (`oyvbxkluvkrljvewrgue`), el secret que necesita el server runtime de la app (TanStack Start / Cloudflare Worker) no quedó configurado con la service role key del nuevo proyecto.
-
-Nota: el login en sí no depende de la service role key — solo la usan el rate-limit y el registro de intentos. El error se muestra como toast pero no impide el flujo si Supabase Auth responde. Aun así hay que resolverlo para que el rate-limit anti-brute-force funcione.
+Es decir: el conector marca "Connected" pero **no inyectó los env vars del server** (solo los `VITE_*` del cliente, que ya están en `.env`).
 
 ## Plan
 
-1. Añadir/actualizar el secret `SUPABASE_SERVICE_ROLE_KEY` en el runtime de la app usando `add_secret`, apuntando al `service_role` del proyecto Supabase actual (`oyvbxkluvkrljvewrgue`). Se obtiene en:
-   `https://supabase.com/dashboard/project/oyvbxkluvkrljvewrgue/settings/api` → "Project API keys" → `service_role`.
-2. Confirmar también que `SUPABASE_URL` en el runtime apunte a `https://oyvbxkluvkrljvewrgue.supabase.co` (ya está en `.env`, pero verificar el secret del server).
-3. Recargar `/auth` y comprobar que el toast desaparece y el preflight responde correctamente.
+1. **Verificar en preview** si el error persiste ahora que reconectaste. A veces la reconexión requiere que el server rebootee para recoger los nuevos env vars. Abrir `/auth` y revisar consola/toast + logs de server con `server-function-logs` sobre `preflightLogin` / `getLoginSecurityConfig`.
+
+2. **Si el error ya desapareció** → cerrado, no hace falta código.
+
+3. **Si el error persiste** (probable, dado que los secrets del server no aparecen listados): aplicar el workaround de código, ya que las herramientas de secrets no pueden crear/editar variables reservadas por el conector:
+   - Añadir dos secrets no reservados vía `add_secret` para que tú los pegues por formulario seguro:
+     - `APP_SUPABASE_URL` → `https://oyvbxkluvkrljvewrgue.supabase.co`
+     - `APP_SUPABASE_SERVICE_ROLE_KEY` → service_role del dashboard Supabase (Settings → API).
+   - Modificar `src/integrations/supabase/client.server.ts` para leer con fallback:
+     `process.env.SUPABASE_URL ?? process.env.APP_SUPABASE_URL` y
+     `process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.APP_SUPABASE_SERVICE_ROLE_KEY`.
+   - Sin cambios en otros llamadores; el resto del código sigue usando `supabaseAdmin`.
+
+4. **Verificar**: abrir `/auth` en preview, confirmar que no aparece el toast "Missing Supabase environment variable(s)" y que el preflight (rate-limit) responde 200 en `server-function-logs`.
 
 ## Detalles técnicos
 
-- Archivo relevante: `src/integrations/supabase/client.server.ts` lanza el error cuando faltan `SUPABASE_URL` o `SUPABASE_SERVICE_ROLE_KEY`.
-- Callers en `/auth`: `getLoginSecurityConfig`, `preflightLogin`, `finalizeLoginAttempt` (`src/lib/login-security.functions.ts`).
-- No hace falta cambiar código; es un problema de configuración de secrets del runtime.
+- No se toca la tabla `secrets` de Supabase ni el conector.
+- Los secrets `APP_*` son de usuario (no *managed*), por lo que `add_secret` puede pedirlos por formulario seguro sin conflicto con la gestión del conector.
+- El fallback preserva la ruta ideal: si en el futuro el conector empieza a inyectar `SUPABASE_SERVICE_ROLE_KEY` en el runtime, se usará esa automáticamente; los `APP_*` quedan como respaldo.
+- No hay cambios en el cliente browser (`src/integrations/supabase/client.ts`) — ya funciona con los `VITE_*`.
