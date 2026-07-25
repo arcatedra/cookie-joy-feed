@@ -255,6 +255,18 @@ function AuthPage() {
       return;
     }
     setBusy(true);
+    try {
+      const check = await checkAuthProviderEnabled({ data: { provider: "google" } });
+      if (!check.ok || !check.enabled) {
+        toast.error(check.message);
+        setBusy(false);
+        return;
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "No se pudo verificar el proveedor Google.");
+      setBusy(false);
+      return;
+    }
     // BYO Supabase: use the project's own Google provider directly. The Lovable
     // broker (`lovable.auth.signInWithOAuth`) only works for Cloud-managed
     // projects and returns "provider google is not supported" for BYO projects.
