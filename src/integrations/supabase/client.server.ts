@@ -7,9 +7,30 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AdminClient = SupabaseClient<any, "public", any>;
 
+function mask(value: string | undefined | null): string {
+  if (!value) return "<missing>";
+  if (value.length <= 8) return `<len=${value.length}>`;
+  return `${value.slice(0, 4)}…${value.slice(-4)} (len=${value.length})`;
+}
+
+function envDiagnostic() {
+  const keys = [
+    "SUPABASE_URL",
+    "APP_SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "APP_SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_PUBLISHABLE_KEY",
+  ] as const;
+  const summary: Record<string, string> = {};
+  for (const k of keys) summary[k] = mask(process.env[k]);
+  return summary;
+}
+
 function createSupabaseAdminClient(): AdminClient {
   // Prefer connector-managed env vars, fall back to user-managed APP_* secrets
   // when the Lovable Cloud connector hasn't injected the server-side vars yet.
+  const SUPABASE_URL_SRC = process.env.SUPABASE_URL ? "SUPABASE_URL" : (process.env.APP_SUPABASE_URL ? "APP_SUPABASE_URL" : null);
+  const SUPABASE_KEY_SRC = process.env.SUPABASE_SERVICE_ROLE_KEY ? "SUPABASE_SERVICE_ROLE_KEY" : (process.env.APP_SUPABASE_SERVICE_ROLE_KEY ? "APP_SUPABASE_SERVICE_ROLE_KEY" : null);
   const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.APP_SUPABASE_URL;
   const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.APP_SUPABASE_SERVICE_ROLE_KEY;
@@ -19,10 +40,22 @@ function createSupabaseAdminClient(): AdminClient {
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
       ...(!SUPABASE_SERVICE_ROLE_KEY ? ['SUPABASE_SERVICE_ROLE_KEY'] : []),
     ];
+    const diag = envDiagnostic();
     const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
+    console.error(`[Supabase][client.server] ${message}`, {
+      missing,
+      env_summary: diag,
+      hint: "Ensure Lovable Cloud connector injected server-side vars, or APP_SUPABASE_URL/APP_SUPABASE_SERVICE_ROLE_KEY are set.",
+    });
     throw new Error(message);
   }
+
+  console.info("[Supabase][client.server] Initializing admin client", {
+    url_source: SUPABASE_URL_SRC,
+    key_source: SUPABASE_KEY_SRC,
+    url: SUPABASE_URL,
+    key: mask(SUPABASE_SERVICE_ROLE_KEY),
+  });
 
   return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: {
@@ -37,7 +70,16 @@ let _supabaseAdmin: AdminClient | undefined;
 
 export const supabaseAdmin = new Proxy({} as AdminClient, {
   get(_, prop, receiver) {
-    if (!_supabaseAdmin) _supabaseAdmin = createSupabaseAdminClient();
+    if (!_supabaseAdmin) {
+      try {
+        _supabaseAdmin = createSupabaseAdminClient();
+      } catch (err) {
+        console.error("[Supabase][client.server] Failed to initialize admin client", {
+          error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+        });
+        throw err;
+      }
+    }
     return Reflect.get(_supabaseAdmin, prop, receiver);
   },
 });
