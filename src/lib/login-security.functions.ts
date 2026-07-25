@@ -66,37 +66,55 @@ export const preflightLogin = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const ip = clientIp();
     const emailHash = hashEmail(data.email);
+    const t0 = Date.now();
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: rl, error } = await supabaseAdmin.rpc("check_login_rate_limit", {
-      _email_hash: emailHash,
-      _ip: ip,
-    });
-    if (error) {
-      // Fail open on rate-limit read errors, but never on captcha.
-      return { ok: true, requireCaptcha: false, blocked: false, retryAfterSec: 0, failCount: 0 };
-    }
-    const row = Array.isArray(rl) ? rl[0] : rl;
-    const failCount: number = row?.fail_count ?? 0;
-    const blocked: boolean = row?.blocked ?? false;
-    const retryAfterSec: number = row?.retry_after_sec ?? 0;
-
-    if (blocked) {
-      return { ok: false, blocked: true, requireCaptcha: false, retryAfterSec, failCount };
-    }
-
-    const requireCaptcha = failCount >= 2;
-    if (requireCaptcha) {
-      if (!data.captchaToken) {
-        return { ok: false, blocked: false, requireCaptcha: true, retryAfterSec: 0, failCount };
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: rl, error } = await supabaseAdmin.rpc("check_login_rate_limit", {
+        _email_hash: emailHash,
+        _ip: ip,
+      });
+      if (error) {
+        console.error("[preflightLogin] check_login_rate_limit RPC error", {
+          ip,
+          email_hash_prefix: emailHash.slice(0, 8),
+          error: { message: error.message, code: error.code, details: error.details, hint: error.hint },
+          duration_ms: Date.now() - t0,
+        });
+        // Fail open on rate-limit read errors, but never on captcha.
+        return { ok: true, requireCaptcha: false, blocked: false, retryAfterSec: 0, failCount: 0 };
       }
-      const valid = await verifyTurnstile(data.captchaToken, ip);
-      if (!valid) {
-        return { ok: false, blocked: false, requireCaptcha: true, retryAfterSec: 0, failCount };
-      }
-    }
+      const row = Array.isArray(rl) ? rl[0] : rl;
+      const failCount: number = row?.fail_count ?? 0;
+      const blocked: boolean = row?.blocked ?? false;
+      const retryAfterSec: number = row?.retry_after_sec ?? 0;
 
-    return { ok: true, blocked: false, requireCaptcha, retryAfterSec: 0, failCount };
+      if (blocked) {
+        return { ok: false, blocked: true, requireCaptcha: false, retryAfterSec, failCount };
+      }
+
+      const requireCaptcha = failCount >= 2;
+      if (requireCaptcha) {
+        if (!data.captchaToken) {
+          return { ok: false, blocked: false, requireCaptcha: true, retryAfterSec: 0, failCount };
+        }
+        const valid = await verifyTurnstile(data.captchaToken, ip);
+        if (!valid) {
+          console.warn("[preflightLogin] Turnstile verification failed", { ip, failCount });
+          return { ok: false, blocked: false, requireCaptcha: true, retryAfterSec: 0, failCount };
+        }
+      }
+
+      return { ok: true, blocked: false, requireCaptcha, retryAfterSec: 0, failCount };
+    } catch (err) {
+      console.error("[preflightLogin] Unhandled exception", {
+        ip,
+        email_hash_prefix: emailHash.slice(0, 8),
+        error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+        duration_ms: Date.now() - t0,
+      });
+      throw err;
+    }
   });
 
 /**
