@@ -8,8 +8,11 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 type AdminClient = SupabaseClient<any, "public", any>;
 
 function createSupabaseAdminClient(): AdminClient {
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Prefer connector-managed env vars, fall back to user-managed APP_* secrets
+  // when the Lovable Cloud connector hasn't injected the server-side vars yet.
+  const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.APP_SUPABASE_URL;
+  const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.APP_SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     const missing = [
