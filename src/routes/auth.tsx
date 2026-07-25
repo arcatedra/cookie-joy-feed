@@ -14,6 +14,7 @@ import {
   preflightLogin,
   finalizeLoginAttempt,
 } from "@/lib/login-security.functions";
+import { checkAuthProviderEnabled } from "@/lib/auth-providers.functions";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string; ref?: string } => ({
