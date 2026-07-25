@@ -254,19 +254,21 @@ function AuthPage() {
       return;
     }
     setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + redirectTarget,
-      extraParams: {
-        prompt: "select_account",
+    // BYO Supabase: use the project's own Google provider directly. The Lovable
+    // broker (`lovable.auth.signInWithOAuth`) only works for Cloud-managed
+    // projects and returns "provider google is not supported" for BYO projects.
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + redirectTarget,
+        queryParams: { prompt: "select_account" },
       },
     });
-    if (result.error) {
-      toast.error(result.error.message ?? "Google sign-in failed");
+    if (error) {
+      toast.error(error.message ?? "Google sign-in failed");
       setBusy(false);
-      return;
     }
-    if (result.redirected) return;
-    navigate({ to: redirectTarget });
+    // signInWithOAuth performs a full-page redirect on success.
   };
 
   return (
