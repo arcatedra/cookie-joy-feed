@@ -1,68 +1,23 @@
+## Qué está pasando
 
-## Objetivo
+En la página `/auth`, al montar el formulario se llama al server function `preflightLogin` (en `src/lib/login-security.functions.ts`). Ese function carga `supabaseAdmin` desde `src/integrations/supabase/client.server.ts`, que exige leer `process.env.SUPABASE_SERVICE_ROLE_KEY` en el runtime del servidor (Cloudflare Worker).
 
-Migrar los 10 reels locales (`LOCAL_FALLBACK_REELS` en `src/components/CookiesTV.tsx`) a una tabla real `public.reels` en Supabase, manteniendo el fallback local intacto para que el carrusel se vea y funcione **exactamente igual** que ahora. Cero cambios visuales.
+Ese valor **no está disponible en el runtime del servidor de la app** — por eso el toast dice:
+> Missing Supabase environment variable(s): SUPABASE_SERVICE_ROLE_KEY. Connect Supabase in Lovable Cloud.
 
-## Garantías de seguridad ("sin dañar nada")
+Aunque la lista de secrets muestra `SUPABASE_SERVICE_ROLE_KEY`, ese registro pertenece al proyecto Supabase (Edge Functions). Tras la migración a BYO Supabase (`oyvbxkluvkrljvewrgue`), el secret que necesita el server runtime de la app (TanStack Start / Cloudflare Worker) no quedó configurado con la service role key del nuevo proyecto.
 
-- El fallback local `LOCAL_FALLBACK_REELS` **no se elimina**. Si la tabla falla, está vacía, o Supabase no responde, el carrusel sigue mostrando los mismos 10 reels que hoy.
-- Los `id`, `slug`, `product_slug`, precios e imágenes sembrados en la tabla son idénticos a los del array local, así que `REEL_TEXT_KEY_MAP` y `REEL_SLUG_TO_PRODUCTO_ID` siguen funcionando sin cambios.
-- Los assets de video (`reel1.url`, `reelPista.url`, etc.) se siguen sirviendo desde el bundle local — la tabla solo guarda la referencia (URL construida en el cliente) para no depender del Storage de Supabase todavía.
-- Solo lectura pública (`SELECT` para `anon`), sin `INSERT/UPDATE/DELETE` públicos → nadie externo puede alterar los reels.
+Nota: el login en sí no depende de la service role key — solo la usan el rate-limit y el registro de intentos. El error se muestra como toast pero no impide el flujo si Supabase Auth responde. Aun así hay que resolverlo para que el rate-limit anti-brute-force funcione.
 
-## Pasos
+## Plan
 
-### 1. Migración de esquema
-Crear `public.reels` con las columnas que ya espera `DbReel` en `CookiesTV.tsx`:
-`id, slug, title, video_url, thumb_url, product_name, product_price, product_image, product_slug, author_id, created_at`.
-
-Aplicar el bloque estándar: `CREATE TABLE` → `GRANT SELECT` a `anon` y `authenticated` + `GRANT ALL` a `service_role` → `ENABLE ROW LEVEL SECURITY` → política `SELECT` pública (los reels son contenido público de portada).
-
-### 2. Semilla con los 10 reels actuales
-Insertar exactamente las mismas filas que hoy están en `LOCAL_FALLBACK_REELS`, usando los mismos `slug` y `product_slug`. `video_url` queda `NULL` (o una cadena marcadora) — el cliente ya sabe caer al asset local por `slug` cuando no hay URL remota reproducible.
-
-### 3. Cambio mínimo en el cliente (opcional, no rompe nada)
-En `src/components/CookiesTV.tsx`, después del `select("*")`:
-- Si Supabase devuelve filas, fusionarlas por `slug` con `LOCAL_FALLBACK_REELS` para **rellenar** `video_url` desde el asset local cuando falte.
-- Si no devuelve filas o hay error, seguir usando `LOCAL_FALLBACK_REELS` tal como hoy.
-
-Resultado: mismos 10 reels, mismo orden, mismos textos, mismos videos.
-
-### 4. Verificación
-- `supabase--read_query` para confirmar las 10 filas.
-- Cargar `/` y confirmar visualmente que el carrusel se ve idéntico.
-- Probar "Comprar" desde un reel → sigue mapeando al `producto` correcto vía `REEL_SLUG_TO_PRODUCTO_ID`.
-
-## Lo que NO se toca
-
-- `/shop`, `/cart`, `/subscribe`, checkout, suscripciones, sorteo.
-- Traducciones ni claves i18n.
-- Assets de video locales (siguen en el bundle).
-- El fallback local — se mantiene como red de seguridad permanente.
+1. Añadir/actualizar el secret `SUPABASE_SERVICE_ROLE_KEY` en el runtime de la app usando `add_secret`, apuntando al `service_role` del proyecto Supabase actual (`oyvbxkluvkrljvewrgue`). Se obtiene en:
+   `https://supabase.com/dashboard/project/oyvbxkluvkrljvewrgue/settings/api` → "Project API keys" → `service_role`.
+2. Confirmar también que `SUPABASE_URL` en el runtime apunte a `https://oyvbxkluvkrljvewrgue.supabase.co` (ya está en `.env`, pero verificar el secret del server).
+3. Recargar `/auth` y comprobar que el toast desaparece y el preflight responde correctamente.
 
 ## Detalles técnicos
 
-```sql
-CREATE TABLE public.reels (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  slug text UNIQUE NOT NULL,
-  title text,
-  video_url text,
-  thumb_url text,
-  product_name text,
-  product_price numeric(10,2),
-  product_image text,
-  product_slug text,
-  author_id uuid,
-  created_at timestamptz NOT NULL DEFAULT now()
-);
-GRANT SELECT ON public.reels TO anon, authenticated;
-GRANT ALL   ON public.reels TO service_role;
-ALTER TABLE public.reels ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Reels are publicly readable"
-  ON public.reels FOR SELECT TO anon, authenticated USING (true);
-```
-
-Seed: 10 filas con los `slug` `demo-nutella`, `demo-cookies-cream`, `demo-pb`, `reel-pista`, `reel-triple`, `reel-snicker`, `reel-oatmeal`, `reel-cchunk`, `reel-mint`, `reel-mm`.
-
-¿Procedo?
+- Archivo relevante: `src/integrations/supabase/client.server.ts` lanza el error cuando faltan `SUPABASE_URL` o `SUPABASE_SERVICE_ROLE_KEY`.
+- Callers en `/auth`: `getLoginSecurityConfig`, `preflightLogin`, `finalizeLoginAttempt` (`src/lib/login-security.functions.ts`).
+- No hace falta cambiar código; es un problema de configuración de secrets del runtime.
