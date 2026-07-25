@@ -125,11 +125,28 @@ export const finalizeLoginAttempt = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const ip = clientIp();
     const emailHash = hashEmail(data.email);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.rpc("record_login_attempt", {
-      _email_hash: emailHash,
-      _ip: ip,
-      _success: data.success,
-    });
-    return { ok: true };
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin.rpc("record_login_attempt", {
+        _email_hash: emailHash,
+        _ip: ip,
+        _success: data.success,
+      });
+      if (error) {
+        console.error("[finalizeLoginAttempt] record_login_attempt RPC error", {
+          ip,
+          email_hash_prefix: emailHash.slice(0, 8),
+          success: data.success,
+          error: { message: error.message, code: error.code, details: error.details, hint: error.hint },
+        });
+      }
+      return { ok: true };
+    } catch (err) {
+      console.error("[finalizeLoginAttempt] Unhandled exception", {
+        ip,
+        email_hash_prefix: emailHash.slice(0, 8),
+        error: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+      });
+      throw err;
+    }
   });
