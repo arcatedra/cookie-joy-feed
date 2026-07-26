@@ -62,6 +62,39 @@ export type Database = {
         }
         Relationships: []
       }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          product_handle: string
+          product_image_url: string | null
+          product_price_amount: number | null
+          product_price_currency: string | null
+          product_title: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_handle: string
+          product_image_url?: string | null
+          product_price_amount?: number | null
+          product_price_currency?: string | null
+          product_title?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_handle?: string
+          product_image_url?: string | null
+          product_price_amount?: number | null
+          product_price_currency?: string | null
+          product_title?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       HAZOREX: {
         Row: {
           created_at: string
@@ -220,6 +253,45 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          donation_tier: string | null
+          id: string
+          name: string | null
+          referral_code: string | null
+          referred_by: string | null
+          region: string | null
+          terms_accepted: boolean
+          terms_accepted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          donation_tier?: string | null
+          id: string
+          name?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          region?: string | null
+          terms_accepted?: boolean
+          terms_accepted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          donation_tier?: string | null
+          id?: string
+          name?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          region?: string | null
+          terms_accepted?: boolean
+          terms_accepted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reel_comments: {
         Row: {
           body: string
@@ -320,6 +392,75 @@ export type Database = {
         }
         Relationships: []
       }
+      referrals: {
+        Row: {
+          id: string
+          invited_at: string
+          referee_id: string
+          referrer_id: string
+          reward_granted: boolean
+          rewarded_at: string | null
+        }
+        Insert: {
+          id?: string
+          invited_at?: string
+          referee_id: string
+          referrer_id: string
+          reward_granted?: boolean
+          rewarded_at?: string | null
+        }
+        Update: {
+          id?: string
+          invited_at?: string
+          referee_id?: string
+          referrer_id?: string
+          reward_granted?: boolean
+          rewarded_at?: string | null
+        }
+        Relationships: []
+      }
+      star_purchases: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          id: string
+          package_id: string
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          subject_email: string | null
+          subject_user_id: string | null
+          tokens: number
+          updated_at: string
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string
+          id?: string
+          package_id: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens: number
+          updated_at?: string
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          id?: string
+          package_id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          subject_email?: string | null
+          subject_user_id?: string | null
+          tokens?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       suscripciones: {
         Row: {
           cliente_id: string
@@ -370,6 +511,30 @@ export type Database = {
           },
         ]
       }
+      user_eligibility: {
+        Row: {
+          created_at: string
+          dob: string
+          state: string
+          user_id: string
+          verified_age: number
+        }
+        Insert: {
+          created_at?: string
+          dob: string
+          state: string
+          user_id: string
+          verified_age: number
+        }
+        Update: {
+          created_at?: string
+          dob?: string
+          state?: string
+          user_id?: string
+          verified_age?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -412,6 +577,24 @@ export type Database = {
         Returns: {
           numero_pedido: string
           pedido_id: string
+        }[]
+      }
+      generate_referral_code: { Args: never; Returns: string }
+      get_my_referral_profile: {
+        Args: never
+        Returns: {
+          invited_count: number
+          referral_code: string
+          stars_count: number
+        }[]
+      }
+      get_my_referrals: {
+        Args: never
+        Returns: {
+          invited_at: string
+          referee_display_name: string
+          reward_granted: boolean
+          rewarded_at: string
         }[]
       }
       get_public_profiles: {
