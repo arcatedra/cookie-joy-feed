@@ -112,7 +112,8 @@
       "brace-expansion": "^2.0.2",
       "fast-uri": "^3.1.2",
       "ws": "^8.20.1",
-      "esbuild": "^0.25.10"
+      "esbuild": "^0.25.10",
+      "@hono/node-server": "^1.19.5"
     }
   },
   "overrides": {
@@ -120,13 +121,15 @@
     "brace-expansion": "^2.0.2",
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
-    "esbuild": "^0.25.10"
+    "esbuild": "^0.25.10",
+    "@hono/node-server": "^1.19.5"
   },
   "resolutions": {
     "js-yaml": "^4.1.1",
     "brace-expansion": "^2.0.2",
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
-    "esbuild": "^0.25.10"
+    "esbuild": "^0.25.10",
+    "@hono/node-server": "^1.19.5"
   }
 }
