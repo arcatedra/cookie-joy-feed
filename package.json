@@ -16,7 +16,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@lovable.dev/cloud-auth-js": "^1.1.2",
     "@lovable.dev/email-js": "^0.0.4",
-    "@lovable.dev/mcp-js": "^0.23.0",
+    "@lovable.dev/mcp-js": "0.24.0",
     "@lovable.dev/webhooks-js": "^0.0.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -112,7 +112,8 @@
       "brace-expansion": "^2.0.2",
       "fast-uri": "^3.1.2",
       "ws": "^8.20.1",
-      "esbuild": "^0.25.10"
+      "esbuild": "^0.25.10",
+      "@hono/node-server": "^1.19.15"
     }
   },
   "overrides": {
@@ -120,13 +121,15 @@
     "brace-expansion": "^2.0.2",
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
-    "esbuild": "^0.25.10"
+    "esbuild": "^0.25.10",
+    "@hono/node-server": "^1.19.15"
   },
   "resolutions": {
     "js-yaml": "^4.1.1",
     "brace-expansion": "^2.0.2",
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
-    "esbuild": "^0.25.10"
+    "esbuild": "^0.25.10",
+    "@hono/node-server": "^1.19.15"
   }
 }
