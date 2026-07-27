@@ -647,6 +647,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_withdrawals: {
+        Args: never
+        Returns: {
+          affiliate_email: string
+          affiliate_name: string
+          amount_usd: number
+          created_at: string
+          id: string
+          notes: string
+          profile_id: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      admin_process_withdrawal: {
+        Args: { p_action: string; p_notes?: string; p_withdrawal_id: string }
+        Returns: undefined
+      }
       crear_pedido_con_items: {
         Args: {
           p_cliente_id: string
@@ -697,6 +715,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      promote_available_commissions: { Args: never; Returns: number }
       reel_comment_counts: {
         Args: { reel_ids: string[] }
         Returns: {

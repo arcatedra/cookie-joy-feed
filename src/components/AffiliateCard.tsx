@@ -105,10 +105,11 @@ export function AffiliateCard() {
   const available = useMemo(
     () =>
       commissions
-        .filter((c) => c.status === "pending" || c.status === "available")
+        .filter((c) => c.status === "available")
         .reduce((sum, c) => sum + Number(c.amount_usd || 0), 0),
     [commissions],
   );
+
 
   const totalEarned = useMemo(
     () => commissions.reduce((sum, c) => sum + Number(c.amount_usd || 0), 0),

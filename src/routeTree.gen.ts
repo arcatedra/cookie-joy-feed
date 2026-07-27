@@ -43,6 +43,7 @@ import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
+import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as JoinCodeRouteImport } from './routes/join.$code'
@@ -264,6 +265,11 @@ const AdminShippingRoute = AdminShippingRouteImport.update({
 const AdminSweepstakesRoute = AdminSweepstakesRouteImport.update({
   id: '/admin/sweepstakes',
   path: '/admin/sweepstakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
+  id: '/admin/withdrawals',
+  path: '/admin/withdrawals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
@@ -599,6 +605,7 @@ export interface FileRoutesByFullPath {
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/join/$code': typeof JoinCodeRoute
@@ -685,6 +692,7 @@ export interface FileRoutesByTo {
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/join/$code': typeof JoinCodeRoute
@@ -774,6 +782,7 @@ export interface FileRoutesById {
   '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/join/$code': typeof JoinCodeRoute
@@ -863,6 +872,7 @@ export interface FileRouteTypes {
     | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/admin/withdrawals'
     | '/checkout/success'
     | '/email/unsubscribe'
     | '/join/$code'
@@ -949,6 +959,7 @@ export interface FileRouteTypes {
     | '/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/admin/withdrawals'
     | '/checkout/success'
     | '/email/unsubscribe'
     | '/join/$code'
@@ -1037,6 +1048,7 @@ export interface FileRouteTypes {
     | '/_authenticated/suggestions'
     | '/admin/shipping'
     | '/admin/sweepstakes'
+    | '/admin/withdrawals'
     | '/checkout/success'
     | '/email/unsubscribe'
     | '/join/$code'
@@ -1121,6 +1133,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminShippingRoute: typeof AdminShippingRoute
   AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
+  AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   NegociosRegistroRoute: typeof NegociosRegistroRoute
@@ -1383,6 +1396,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/sweepstakes'
       fullPath: '/admin/sweepstakes'
       preLoaderRoute: typeof AdminSweepstakesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/withdrawals': {
+      id: '/admin/withdrawals'
+      path: '/admin/withdrawals'
+      fullPath: '/admin/withdrawals'
+      preLoaderRoute: typeof AdminWithdrawalsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout/success': {
@@ -1905,6 +1925,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   AdminShippingRoute: AdminShippingRoute,
   AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
+  AdminWithdrawalsRoute: AdminWithdrawalsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   NegociosRegistroRoute: NegociosRegistroRoute,
