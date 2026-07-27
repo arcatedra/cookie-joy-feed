@@ -220,7 +220,7 @@ function ProfilePage() {
             }
             if (item.key === "security") {
               return (
-                <Link key={item.key} to="/profile/security" className={className}>
+                <Link key={item.key} to="/profile/security" search={{ enforce: undefined }} className={className}>
                   {inner}
                 </Link>
               );
