@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/sheet";
 import { FavoritesList } from "@/components/FavoritesList";
 import { AffiliateCard } from "@/components/AffiliateCard";
+import { InviteCodeCard } from "@/components/InviteCodeCard";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/profile")({
@@ -191,6 +192,9 @@ function ProfilePage() {
 
       {/* Recent Orders */}
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
+
+      {/* Invite code + QR (identifica al afiliado) */}
+      <InviteCodeCard />
 
       {/* Affiliate Program */}
       <AffiliateCard />
