@@ -612,6 +612,36 @@ export type Database = {
         }
         Relationships: []
       }
+      withdrawal_requests: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          id: string
+          notes: string | null
+          profile_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          profile_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          profile_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -679,6 +709,14 @@ export type Database = {
         Returns: {
           count: number
           reel_id: string
+        }[]
+      }
+      request_affiliate_withdrawal: {
+        Args: never
+        Returns: {
+          amount_usd: number
+          commissions_count: number
+          withdrawal_id: string
         }[]
       }
       upsert_suscripcion_stripe: {

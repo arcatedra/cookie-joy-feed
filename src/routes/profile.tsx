@@ -39,6 +39,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { FavoritesList } from "@/components/FavoritesList";
+import { AffiliateCard } from "@/components/AffiliateCard";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/profile")({
@@ -190,6 +191,11 @@ function ProfilePage() {
 
       {/* Recent Orders */}
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
+
+      {/* Affiliate Program */}
+      <AffiliateCard />
+
+
 
 
       {/* Account Navigation */}
