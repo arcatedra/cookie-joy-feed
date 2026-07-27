@@ -178,9 +178,13 @@ export const createSubscriptionIntent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => checkoutSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { userId, claims } = context;
+    const { userId, claims, supabase } = context;
     const email = (claims.email as string | undefined) ?? null;
     const { stripePost, stripeGet, paymentsEnvironmentForHost } = await import("./stripe.server");
+    const { attachReferralIfPending } = await import("./referrals-attach.server");
+    try { await attachReferralIfPending({ supabase, userId }); } catch (e) {
+      console.warn("[subscriptions] referral attach skipped", e);
+    }
 
     const host = getRequestHost();
     const env = paymentsEnvironmentForHost(host);
