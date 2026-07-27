@@ -193,6 +193,9 @@ function ProfilePage() {
       {/* Recent Orders */}
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
 
+      {/* Invite code + QR (identifica al afiliado) */}
+      <InviteCodeCard />
+
       {/* Affiliate Program */}
       <AffiliateCard />
 
