@@ -146,7 +146,51 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             console.error("[payments-webhook] suscripciones upsert failed", rpcErr);
             return new Response("Upsert failed", { status: 500 });
           }
+
+          // --- Affiliate commission ($5, once per referred customer) ---
+          // Only credit on the first successful payment of a new subscription.
+          if (
+            (eventType === "customer.subscription.created" ||
+              eventType === "customer.subscription.updated") &&
+            (stripeStatus === "active" || stripeStatus === "trialing")
+          ) {
+            try {
+              const { data: cliente } = await supabaseAdmin
+                .from("clientes")
+                .select("id, email, referred_by_profile_id")
+                .eq("id", clienteId)
+                .maybeSingle();
+
+              if (cliente?.referred_by_profile_id) {
+                const { data: existingCommission } = await supabaseAdmin
+                  .from("affiliate_commissions")
+                  .select("id")
+                  .eq("cliente_id", clienteId)
+                  .limit(1)
+                  .maybeSingle();
+
+                if (!existingCommission) {
+                  const { error: commErr } = await supabaseAdmin
+                    .from("affiliate_commissions")
+                    .insert({
+                      affiliate_profile_id: cliente.referred_by_profile_id,
+                      cliente_id: clienteId,
+                      cliente_email: cliente.email,
+                      amount_usd: 5,
+                      status: "pending",
+                    });
+                  if (commErr) {
+                    console.error("[payments-webhook] affiliate commission insert failed", commErr);
+                  }
+                }
+              }
+            } catch (e) {
+              console.error("[payments-webhook] affiliate commission flow error", e);
+            }
+          }
+
           return Response.json({ ok: true, subscription: sub.id });
+
         }
 
 
