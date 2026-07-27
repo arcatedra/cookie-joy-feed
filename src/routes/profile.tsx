@@ -16,14 +16,14 @@ import {
   Inbox,
 } from "lucide-react";
 import { adminUnreadCount } from "@/lib/suggestions.functions";
-import { ReferralHistory } from "@/components/ReferralHistory";
+
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { formatDate, formatNumber } from "@/i18n";
 import { useAuth } from "@/lib/auth";
-import { ReferralCard } from "@/components/ReferralCard";
+
 import { TierBadge } from "@/components/TierBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -109,10 +109,6 @@ function ProfilePage() {
 
   return (
     <main className="profile-page min-h-screen bg-background pb-24">
-      {/* Referral QR — visible immediately, no scroll required */}
-      <div className="pt-4">
-        <ReferralCard userId={user?.id ?? null} />
-      </div>
 
       {/* Top blue banner */}
       <header className="relative bg-primary px-5 pt-12 pb-20">
@@ -158,7 +154,6 @@ function ProfilePage() {
         </div>
       </section>
 
-      <ReferralHistory userId={user?.id ?? null} />
 
 
       {/* Subscription promo (hidden when active) */}
