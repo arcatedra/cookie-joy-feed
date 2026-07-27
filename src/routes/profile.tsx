@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/sheet";
 import { FavoritesList } from "@/components/FavoritesList";
 import { AffiliateCard } from "@/components/AffiliateCard";
+import { InviteCodeCard } from "@/components/InviteCodeCard";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/profile")({
