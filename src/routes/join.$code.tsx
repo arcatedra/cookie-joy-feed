@@ -9,7 +9,8 @@ export const Route = createFileRoute("/join/$code")({
 
     if (typeof window === "undefined") {
       try {
-        const { setReferralCookie } = await import("@/lib/join-cookie.server");
+        const mod = "@/lib/join-cookie.server";
+        const { setReferralCookie } = await import(/* @vite-ignore */ mod);
         setReferralCookie(ref);
       } catch {
         // Non-fatal: client fallback below still runs on hydration.
