@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_commissions: {
+        Row: {
+          affiliate_profile_id: string
+          amount_usd: number
+          cliente_email: string | null
+          cliente_id: string | null
+          created_at: string
+          id: string
+          status: string
+        }
+        Insert: {
+          affiliate_profile_id: string
+          amount_usd?: number
+          cliente_email?: string | null
+          cliente_id?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+        }
+        Update: {
+          affiliate_profile_id?: string
+          amount_usd?: number
+          cliente_email?: string | null
+          cliente_id?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_commissions_affiliate_profile_id_fkey"
+            columns: ["affiliate_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_commissions_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clientes: {
         Row: {
           actualizado_en: string
@@ -27,6 +72,7 @@ export type Database = {
           id: string
           nombre_completo: string
           pais: string | null
+          referred_by_profile_id: string | null
           stripe_customer_id: string | null
           telefono: string | null
         }
@@ -42,6 +88,7 @@ export type Database = {
           id: string
           nombre_completo: string
           pais?: string | null
+          referred_by_profile_id?: string | null
           stripe_customer_id?: string | null
           telefono?: string | null
         }
@@ -57,10 +104,19 @@ export type Database = {
           id?: string
           nombre_completo?: string
           pais?: string | null
+          referred_by_profile_id?: string | null
           stripe_customer_id?: string | null
           telefono?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "clientes_referred_by_profile_id_fkey"
+            columns: ["referred_by_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       favorites: {
         Row: {
