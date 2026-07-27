@@ -192,6 +192,11 @@ function ProfilePage() {
       {/* Recent Orders */}
       <RecentOrders userId={user?.id ?? null} lang={i18n.language} t={t} />
 
+      {/* Affiliate Program */}
+      <AffiliateCard />
+
+
+
 
       {/* Account Navigation */}
       <section className="mt-6 px-5">
