@@ -131,7 +131,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     }
 
     // Snapshot each item's name and price at purchase time.
-    const itemsInsert = data.items.map((it) => ({
+    const itemsInsert = pricedItems.map((it) => ({
       pedido_id: pedidoRow.id,
       producto_id: UUID_RE.test(it.id) ? it.id : null,
       nombre_producto: it.name.slice(0, 200),
@@ -146,7 +146,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo guardar el detalle del pedido. Inténtalo de nuevo.");
     }
 
-    const lineItems = data.items.map((it) => ({
+    const lineItems = pricedItems.map((it) => ({
+
       quantity: it.qty,
       price_data: {
         currency: "usd",
