@@ -60,17 +60,54 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       );
 
     const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
+    const { resolveStaticPrice } = await import("./catalog-prices.server");
     const host = getRequestHost();
     const env = paymentsEnvironmentForHost(host);
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
+    // ---- Trusted pricing -------------------------------------------------
+    // Never charge the price sent by the browser. Real products are priced from
+    // the `productos` table; static catalog items from a server-side allowlist.
+    const productIds = [...new Set(data.items.filter((it) => UUID_RE.test(it.id)).map((it) => it.id))];
+    const productMap = new Map<string, { precio: number; nombre: string }>();
+    if (productIds.length > 0) {
+      const { data: rows, error: prodErr } = await supabase
+        .from("productos")
+        .select("id, nombre, precio, disponible")
+        .in("id", productIds);
+      if (prodErr) {
+        console.error("[cart-checkout] failed to load productos", prodErr);
+        throw new Error("No se pudieron verificar los precios. Inténtalo de nuevo.");
+      }
+      for (const r of rows ?? []) {
+        if (r.disponible === false) continue;
+        productMap.set(r.id as string, { precio: Number(r.precio), nombre: String(r.nombre) });
+      }
+    }
+
+    const pricedItems = data.items.map((it) => {
+      if (UUID_RE.test(it.id)) {
+        const p = productMap.get(it.id);
+        if (!p || !Number.isFinite(p.precio) || p.precio <= 0) {
+          throw new Error("Uno de los productos de tu carrito ya no está disponible.");
+        }
+        return { id: it.id, name: p.nombre, price: p.precio, qty: it.qty, image: it.image };
+      }
+      const price = resolveStaticPrice(it.id, it.price);
+      if (price === null) {
+        throw new Error("Uno de los productos de tu carrito ya no está disponible.");
+      }
+      return { id: it.id, name: it.name, price, qty: it.qty, image: it.image };
+    });
+
     const shippingRate = SHIPPING_RATES[data.shipping];
-    const subtotalCents = data.items.reduce(
+    const subtotalCents = pricedItems.reduce(
       (s, it) => s + Math.round(it.price * 100) * it.qty,
       0,
     );
     const totalCents = subtotalCents + shippingRate.amount;
+
 
     // Insert the pedido row in "pendiente" state under RLS (auth.uid() = cliente_id).
     const { data: pedidoRow, error: pedErr } = await supabase
@@ -94,7 +131,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     }
 
     // Snapshot each item's name and price at purchase time.
-    const itemsInsert = data.items.map((it) => ({
+    const itemsInsert = pricedItems.map((it) => ({
       pedido_id: pedidoRow.id,
       producto_id: UUID_RE.test(it.id) ? it.id : null,
       nombre_producto: it.name.slice(0, 200),
@@ -109,7 +146,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo guardar el detalle del pedido. Inténtalo de nuevo.");
     }
 
-    const lineItems = data.items.map((it) => ({
+    const lineItems = pricedItems.map((it) => ({
+
       quantity: it.qty,
       price_data: {
         currency: "usd",
