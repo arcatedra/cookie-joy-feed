@@ -311,8 +311,11 @@ function getReelStoragePath(url: string | null | undefined) {
 async function signStoredReelVideos(rows: DbReel[]) {
   const paths = Array.from(
     new Set(
-      rows.flatMap((r) => [getReelStoragePath(r.video_url), getReelStoragePath(r.thumb_url)])
-        .filter(Boolean) as string[],
+      rows.flatMap((r) => [
+        getReelStoragePath(r.video_url),
+        getReelStoragePath(r.thumb_url),
+        getReelStoragePath(r.product_image),
+      ]).filter(Boolean) as string[],
     ),
   );
   if (!paths.length) return rows;
@@ -330,13 +333,16 @@ async function signStoredReelVideos(rows: DbReel[]) {
   return rows.map((row) => {
     const videoPath = getReelStoragePath(row.video_url);
     const thumbPath = getReelStoragePath(row.thumb_url);
+    const imagePath = getReelStoragePath(row.product_image);
     return {
       ...row,
       video_url: videoPath && signedByPath.has(videoPath) ? signedByPath.get(videoPath)! : row.video_url,
       thumb_url: thumbPath && signedByPath.has(thumbPath) ? signedByPath.get(thumbPath)! : row.thumb_url,
+      product_image: imagePath && signedByPath.has(imagePath) ? signedByPath.get(imagePath)! : row.product_image,
     };
   });
 }
+
 
 
 
