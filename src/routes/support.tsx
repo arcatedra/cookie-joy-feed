@@ -8,7 +8,15 @@ export const Route = createFileRoute("/support")({
   head: () => ({
     meta: [
       { title: i18n.t("supportPage.metaTitle") },
-      { name: "description", content: i18n.t("supportPage.metaDesc") },
+      {
+        name: "description",
+        content: sweepstakesEnabled
+          ? i18n.t("supportPage.metaDesc")
+          : i18n.t(
+              "supportPage.metaDescNoSweepstakes",
+              "Contacta con el equipo de soporte de HAZOREX. Correo y preguntas frecuentes sobre pedidos, entregas y suscripciones.",
+            ),
+      },
       { property: "og:title", content: i18n.t("supportPage.metaTitle") },
       { property: "og:description", content: i18n.t("supportPage.metaOg") },
     ],
@@ -36,7 +44,12 @@ function SupportPage() {
       <section className="bg-primary px-5 pt-12 pb-16 text-primary-foreground">
         <h1 className="text-3xl font-bold tracking-tight">{t("supportPage.heroTitle")}</h1>
         <p className="mt-2 max-w-xl text-sm text-primary-foreground/80">
-          {t("supportPage.heroSubtitle")}
+          {sweepstakesEnabled
+            ? t("supportPage.heroSubtitle")
+            : t(
+                "supportPage.heroSubtitleNoSweepstakes",
+                "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos, entregas o suscripción.",
+              )}
         </p>
       </section>
 

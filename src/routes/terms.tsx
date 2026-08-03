@@ -7,7 +7,13 @@ export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { title: i18n.t("terms.metaTitle") },
-      { name: "description", content: i18n.t("terms.metaDesc") },
+      {
+        name: "description",
+        // Con sweepstakesEnabled=false evitamos mencionar el sorteo en el SEO.
+        content: sweepstakesEnabled
+          ? i18n.t("terms.metaDesc")
+          : i18n.t("terms.metaDescNoSweepstakes", "Términos y Condiciones de uso de HAZOREX."),
+      },
     ],
   }),
   component: TermsPage,
