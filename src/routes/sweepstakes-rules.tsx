@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { sweepstakesEnabled, comingSoonMeta } from "@/lib/feature-flags";
 import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -9,10 +9,12 @@ import i18n, { getLocale } from "@/i18n";
 
 export const Route = createFileRoute("/sweepstakes-rules")({
   head: () => ({
-    meta: [
-      { title: i18n.t("sweepstakesRules.metaTitle") },
-      { name: "description", content: i18n.t("sweepstakesRules.metaDesc") },
-    ],
+    meta: sweepstakesEnabled
+      ? [
+          { title: i18n.t("sweepstakesRules.metaTitle") },
+          { name: "description", content: i18n.t("sweepstakesRules.metaDesc") },
+        ]
+      : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <RulesPage /> : <SweepstakesComingSoon />),
 });

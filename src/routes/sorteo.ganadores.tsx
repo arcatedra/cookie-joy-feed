@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { sweepstakesEnabled, comingSoonMeta } from "@/lib/feature-flags";
 import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -11,19 +11,22 @@ import { getLocale } from "@/i18n";
 
 export const Route = createFileRoute("/sorteo/ganadores")({
   head: () => ({
-    meta: [
-      { title: "Ganadores del Sorteo Diario — HAZOREX" },
-      {
-        name: "description",
-        content:
-          "Registro público y verificable de los ganadores del Sorteo Diario de HAZOREX. Cada resultado incluye su seed hash de verificación.",
-      },
-      { property: "og:title", content: "Ganadores del Sorteo Diario — HAZOREX" },
-      {
-        property: "og:description",
-        content: "Ganadores anteriores del Sorteo Diario de HAZOREX con verificación por seed hash.",
-      },
-    ],
+    meta: sweepstakesEnabled
+      ? [
+          { title: "Ganadores del Sorteo Diario — HAZOREX" },
+          {
+            name: "description",
+            content:
+              "Registro público y verificable de los ganadores del Sorteo Diario de HAZOREX. Cada resultado incluye su seed hash de verificación.",
+          },
+          { property: "og:title", content: "Ganadores del Sorteo Diario — HAZOREX" },
+          {
+            property: "og:description",
+            content:
+              "Ganadores anteriores del Sorteo Diario de HAZOREX con verificación por seed hash.",
+          },
+        ]
+      : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <WinnersPage /> : <SweepstakesComingSoon />),
 });

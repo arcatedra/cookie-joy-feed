@@ -1,27 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { sweepstakesEnabled, comingSoonMeta } from "@/lib/feature-flags";
 import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 
 export const Route = createFileRoute("/amoe")({
   head: () => ({
-    meta: [
-      { title: "Entrada Gratuita (AMOE) por Correo Postal — HAZOREX" },
-      {
-        name: "description",
-        content:
-          "Método Alternativo de Entrada Gratuita (AMOE) al sorteo diario de HAZOREX por correo postal físico (USPS). No se requiere compra.",
-      },
-      { name: "robots", content: "noindex,follow" },
-      {
-        property: "og:title",
-        content: "Entrada Gratuita (AMOE) por Correo Postal — HAZOREX",
-      },
-      {
-        property: "og:description",
-        content:
-          "Participa gratis en el sorteo diario enviando una tarjeta postal manuscrita según las reglas oficiales.",
-      },
-    ],
+    meta: sweepstakesEnabled
+      ? [
+          { title: "Entrada Gratuita (AMOE) por Correo Postal — HAZOREX" },
+          {
+            name: "description",
+            content:
+              "Método Alternativo de Entrada Gratuita (AMOE) al sorteo diario de HAZOREX por correo postal físico (USPS). No se requiere compra.",
+          },
+          { name: "robots", content: "noindex,follow" },
+          {
+            property: "og:title",
+            content: "Entrada Gratuita (AMOE) por Correo Postal — HAZOREX",
+          },
+          {
+            property: "og:description",
+            content:
+              "Participa gratis en el sorteo diario enviando una tarjeta postal manuscrita según las reglas oficiales.",
+          },
+        ]
+      : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <AmoePage /> : <SweepstakesComingSoon />),
 });
