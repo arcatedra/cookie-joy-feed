@@ -45,6 +45,7 @@ import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PreDrawCountdownBanner } from "@/components/PreDrawCountdownBanner";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { PushNotificationOptIn } from "@/components/PushNotificationOptIn";
 import { Toaster } from "sonner";
 
@@ -176,13 +177,13 @@ function RootComponent() {
         <SubscriptionGateProvider>
           <CartProvider>
             <div className="min-h-screen bg-background">
-              {!isDriverZone && <PreDrawCountdownBanner />}
+              {sweepstakesEnabled && !isDriverZone && <PreDrawCountdownBanner />}
               {!isDriverZone && <TopNav />}
               {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
               <Outlet />
               {!isDriverZone && <SiteFooter />}
             </div>
-            {!isDriverZone && <PushNotificationOptIn />}
+            {sweepstakesEnabled && !isDriverZone && <PushNotificationOptIn />}
             {/* Sonner injects a runtime <style> block — passing `nonce` lets it pass CSP. */}
             <Toaster position="top-center" richColors {...(nonce ? { nonce } : {})} />
           </CartProvider>

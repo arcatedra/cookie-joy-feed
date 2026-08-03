@@ -19,12 +19,12 @@ import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.ass
 const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 import { NotificationBell } from "@/components/NotificationBell";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
 const quickLinkKeys = [
   { key: "shop", to: "/shop", highlighted: true },
-  { key: "roulette", to: "/ruleta", highlighted: true },
   { key: "drivers", to: "/repartidores", highlighted: true },
   { key: "businesses", to: "/negocios/registro", highlighted: true },
   { key: "deals", to: "/explore" },

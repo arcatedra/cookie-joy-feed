@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 
 export const Route = createFileRoute("/amoe")({
   head: () => ({
@@ -21,7 +23,7 @@ export const Route = createFileRoute("/amoe")({
       },
     ],
   }),
-  component: AmoePage,
+  component: () => (sweepstakesEnabled ? <AmoePage /> : <SweepstakesComingSoon />),
 });
 
 function AmoePage() {
