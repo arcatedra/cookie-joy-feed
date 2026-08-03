@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { useServerFn } from "@tanstack/react-start";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Suspense } from "react";
@@ -28,7 +30,7 @@ export const Route = createFileRoute("/historial")({
       { property: "og:description", content: i18n.t("historial.ogDesc") },
     ],
   }),
-  component: HistoryPage,
+  component: () => (sweepstakesEnabled ? <HistoryPage /> : <SweepstakesComingSoon />),
   errorComponent: ({ error }) => <ErrorBlock message={error.message} />,
   notFoundComponent: () => <NotFoundBlock />,
 });

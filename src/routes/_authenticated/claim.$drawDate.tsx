@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -12,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/claim/$drawDate")({
   head: () => ({
     meta: [{ title: i18n.t("claim.metaTitle") }],
   }),
-  component: ClaimPage,
+  component: () => (sweepstakesEnabled ? <ClaimPage /> : <SweepstakesComingSoon />),
 });
 
 const BLUE = "#1e3a5f";

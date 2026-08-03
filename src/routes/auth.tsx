@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft } from "lucide-react";
@@ -420,7 +421,9 @@ function AuthPage() {
                 <Link to="/terms" className="font-semibold underline">
                   Términos y Condiciones
                 </Link>{" "}
-                y confirmo que la participación en este sorteo es legal en mi lugar de residencia.
+                {sweepstakesEnabled
+                  ? " y confirmo que la participación en este sorteo es legal en mi lugar de residencia."
+                  : " de HAZOREX."}
               </span>
             </label>
           )}

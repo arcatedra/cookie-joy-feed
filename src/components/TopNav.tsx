@@ -19,10 +19,11 @@ import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.ass
 const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 import { NotificationBell } from "@/components/NotificationBell";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
-const quickLinkKeys = [
+const allQuickLinkKeys = [
   { key: "shop", to: "/shop", highlighted: true },
   { key: "roulette", to: "/ruleta", highlighted: true },
   { key: "drivers", to: "/repartidores", highlighted: true },
@@ -34,6 +35,11 @@ const quickLinkKeys = [
   { key: "support", to: "/support" },
   { key: "subscriptions", to: "/subscribe" },
 ] as const;
+
+// Con sweepstakesEnabled=false se oculta el acceso a la Ruleta (no se borra).
+const quickLinkKeys = allQuickLinkKeys.filter(
+  (l) => sweepstakesEnabled || l.key !== "roulette",
+);
 
 
 export function TopNav() {

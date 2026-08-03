@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { useTranslation } from "react-i18next";
 import i18n, { getLocale } from "@/i18n";
 
@@ -33,35 +34,49 @@ function TermsPage() {
         color: BLUE,
       }}
     >
-      <Link to="/ruleta" style={{ color: BLUE }}>
-        {t("terms.backToRoulette")}
-      </Link>
+      {sweepstakesEnabled ? (
+        <Link to="/ruleta" style={{ color: BLUE }}>
+          {t("terms.backToRoulette")}
+        </Link>
+      ) : (
+        <Link to="/" style={{ color: BLUE }}>
+          ← Volver al inicio
+        </Link>
+      )}
       <h1 style={{ fontSize: 36, fontWeight: 900, marginTop: 16 }}>{t("terms.title")}</h1>
       <p style={{ color: "#666", fontSize: 13 }}>
         {t("terms.lastUpdated")} {lastUpdated}
       </p>
 
       <section style={{ marginTop: 24 }}>
-        <h3>{t("terms.s1Title")}</h3>
-        <p>
-          {t("terms.s1BodyPre")}
-          <Link to="/sweepstakes-rules" style={{ color: BLUE }}>
-            {t("terms.s1Link")}
-          </Link>
-          {t("terms.s1BodyPost")}
-        </p>
-        <h3>{t("terms.s2Title")}</h3>
-        <p>{t("terms.s2Body")}</p>
+        {sweepstakesEnabled && (
+          <>
+            <h3>{t("terms.s1Title")}</h3>
+            <p>
+              {t("terms.s1BodyPre")}
+              <Link to="/sweepstakes-rules" style={{ color: BLUE }}>
+                {t("terms.s1Link")}
+              </Link>
+              {t("terms.s1BodyPost")}
+            </p>
+            <h3>{t("terms.s2Title")}</h3>
+            <p>{t("terms.s2Body")}</p>
+          </>
+        )}
         <h3>{t("terms.s3Title")}</h3>
         <p>{t("terms.s3Body")}</p>
-        <h3>{t("terms.s4Title")}</h3>
-        <p>
-          {t("terms.s4BodyPre")}
-          <Link to="/sweepstakes-rules" style={{ color: BLUE }}>
-            {t("terms.s4Link")}
-          </Link>
-          {t("terms.s4BodyPost")}
-        </p>
+        {sweepstakesEnabled && (
+          <>
+            <h3>{t("terms.s4Title")}</h3>
+            <p>
+              {t("terms.s4BodyPre")}
+              <Link to="/sweepstakes-rules" style={{ color: BLUE }}>
+                {t("terms.s4Link")}
+              </Link>
+              {t("terms.s4BodyPost")}
+            </p>
+          </>
+        )}
         <h3>{t("terms.s5Title")}</h3>
         <p>{t("terms.s5Body")}</p>
         <h3>{t("terms.s6Title")}</h3>
