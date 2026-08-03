@@ -113,7 +113,7 @@
       "fast-uri": "^3.1.2",
       "ws": "^8.20.1",
       "esbuild": "^0.25.10",
-      "@hono/node-server": "^1.19.15"
+      "@hono/node-server": "^1.19.17"
     }
   },
   "overrides": {
@@ -122,7 +122,7 @@
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
     "esbuild": "^0.25.10",
-    "@hono/node-server": "^1.19.15"
+    "@hono/node-server": "^1.19.17"
   },
   "resolutions": {
     "js-yaml": "^4.1.1",
@@ -130,6 +130,6 @@
     "fast-uri": "^3.1.2",
     "ws": "^8.20.1",
     "esbuild": "^0.25.10",
-    "@hono/node-server": "^1.19.15"
+    "@hono/node-server": "^1.19.17"
   }
 }
