@@ -15,6 +15,11 @@ export const Route = createFileRoute("/terms")({
 
 const BLUE = "#1e3a5f";
 
+/** Reemplaza el prefijo "N." de un título traducido por el número indicado. */
+function renumber(title: string, n: number): string {
+  return title.replace(/^\s*\d+\.\s*/, `${n}. `);
+}
+
 function TermsPage() {
   const { t } = useTranslation();
   const lastUpdated = new Date().toLocaleDateString(getLocale(), {
