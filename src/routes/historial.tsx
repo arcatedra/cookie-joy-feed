@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { sweepstakesEnabled, comingSoonMeta } from "@/lib/feature-flags";
 import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { useServerFn } from "@tanstack/react-start";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -23,12 +23,14 @@ const historyQO = (fn: () => Promise<Winner[]>) =>
 
 export const Route = createFileRoute("/historial")({
   head: () => ({
-    meta: [
-      { title: i18n.t("historial.metaTitle") },
-      { name: "description", content: i18n.t("historial.metaDesc") },
-      { property: "og:title", content: i18n.t("historial.ogTitle") },
-      { property: "og:description", content: i18n.t("historial.ogDesc") },
-    ],
+    meta: sweepstakesEnabled
+      ? [
+          { title: i18n.t("historial.metaTitle") },
+          { name: "description", content: i18n.t("historial.metaDesc") },
+          { property: "og:title", content: i18n.t("historial.ogTitle") },
+          { property: "og:description", content: i18n.t("historial.ogDesc") },
+        ]
+      : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <HistoryPage /> : <SweepstakesComingSoon />),
   errorComponent: ({ error }) => <ErrorBlock message={error.message} />,

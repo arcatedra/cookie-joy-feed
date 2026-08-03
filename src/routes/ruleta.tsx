@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { sweepstakesEnabled, comingSoonMeta } from "@/lib/feature-flags";
 import { SweepstakesComingSoon } from "@/components/SweepstakesComingSoon";
 import { NoncedStyle } from "@/components/NoncedStyle";
 import { useAuth } from "@/lib/auth";
@@ -37,12 +37,14 @@ import {
 
 export const Route = createFileRoute("/ruleta")({
   head: () => ({
-    meta: [
-      { title: i18n.t("ruleta.metaTitle") },
-      { name: "description", content: i18n.t("ruleta.metaDesc") },
-      { property: "og:title", content: i18n.t("ruleta.metaTitle") },
-      { property: "og:description", content: i18n.t("ruleta.metaDesc") },
-    ],
+    meta: sweepstakesEnabled
+      ? [
+          { title: i18n.t("ruleta.metaTitle") },
+          { name: "description", content: i18n.t("ruleta.metaDesc") },
+          { property: "og:title", content: i18n.t("ruleta.metaTitle") },
+          { property: "og:description", content: i18n.t("ruleta.metaDesc") },
+        ]
+      : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <RuletaPage /> : <SweepstakesComingSoon />),
 });
