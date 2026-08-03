@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
@@ -27,10 +28,15 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="mt-3 max-w-sm font-serif text-sm leading-relaxed text-white/75">
-              {t(
-                "footer.tagline",
-                "Galletas premium con sorteos diarios 100% verificables. Cada compra te da acceso al sorteo del día.",
-              )}
+              {sweepstakesEnabled
+                ? t(
+                    "footer.tagline",
+                    "Galletas premium con sorteos diarios 100% verificables. Cada compra te da acceso al sorteo del día.",
+                  )
+                : t(
+                    "footer.taglineNoSweepstakes",
+                    "Galletas premium artesanales, horneadas cada día y entregadas en 24 horas.",
+                  )}
             </p>
           </div>
 
@@ -41,7 +47,7 @@ export function SiteFooter() {
             </h3>
             <ul className="mt-3 space-y-2 font-serif text-sm">
               <li><Link to="/subscribe" className="text-white/80 hover:text-[#E6C35C]">{t("footer.allCookies", "Galletas")}</Link></li>
-              <li><Link to="/ruleta" className="text-white/80 hover:text-[#E6C35C]">{t("footer.roulette", "Ruleta del día")}</Link></li>
+              {sweepstakesEnabled && <li><Link to="/ruleta" className="text-white/80 hover:text-[#E6C35C]">{t("footer.roulette", "Ruleta del día")}</Link></li>}
               <li><Link to="/subscribe" className="text-white/80 hover:text-[#E6C35C]">{t("footer.subscribe", "Suscripción")}</Link></li>
               <li><Link to="/shop" className="text-white/80 hover:text-[#E6C35C]">{t("footer.explore", "Explorar")}</Link></li>
             </ul>
@@ -54,7 +60,7 @@ export function SiteFooter() {
             </h3>
             <ul className="mt-3 space-y-2 font-serif text-sm">
               <li><Link to="/profile" className="text-white/80 hover:text-[#E6C35C]">{t("footer.profile", "Mi perfil")}</Link></li>
-              <li><Link to="/historial" className="text-white/80 hover:text-[#E6C35C]">{t("footer.history", "Historial")}</Link></li>
+              {sweepstakesEnabled && <li><Link to="/historial" className="text-white/80 hover:text-[#E6C35C]">{t("footer.history", "Historial")}</Link></li>}
               <li><Link to="/deliveries" className="text-white/80 hover:text-[#E6C35C]">{t("footer.deliveries", "Entregas")}</Link></li>
               <li><Link to="/repartidores" className="text-white/80 hover:text-[#E6C35C]">{t("footer.becomeDriver", "Sé repartidor")}</Link></li>
               <li><Link to="/auth" className="text-white/80 hover:text-[#E6C35C]">{t("footer.signIn", "Iniciar sesión")}</Link></li>
@@ -69,8 +75,8 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 font-serif text-sm">
               <li><Link to="/terms" className="text-white/80 hover:text-[#E6C35C]">{t("footer.terms", "Términos")}</Link></li>
               <li><Link to="/privacidad" className="text-white/80 hover:text-[#E6C35C]">{t("footer.privacy", "Privacidad")}</Link></li>
-              <li><Link to="/sweepstakes-rules" className="text-white/80 hover:text-[#E6C35C]">{t("footer.rules", "Reglas del sorteo")}</Link></li>
-              <li><Link to="/sorteo/ganadores" className="text-white/80 hover:text-[#E6C35C]">{t("footer.winners", "Ganadores")}</Link></li>
+              {sweepstakesEnabled && <li><Link to="/sweepstakes-rules" className="text-white/80 hover:text-[#E6C35C]">{t("footer.rules", "Reglas del sorteo")}</Link></li>}
+              {sweepstakesEnabled && <li><Link to="/sorteo/ganadores" className="text-white/80 hover:text-[#E6C35C]">{t("footer.winners", "Ganadores")}</Link></li>}
               <li><Link to="/trust" className="text-white/80 hover:text-[#E6C35C]">{t("footer.trust", "Confianza")}</Link></li>
             </ul>
           </div>

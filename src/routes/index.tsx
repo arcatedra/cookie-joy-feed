@@ -7,6 +7,7 @@ import { useCart } from "@/lib/cart";
 import { SubscribePromoBanner, useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
 import { DailyWinnerBanner } from "@/components/DailyWinnerBanner";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 import imgPack6 from "@/assets/pack-6.jpg";
 import imgPack9 from "@/assets/pack-9.jpg";
 import imgPack12 from "@/assets/pack-12.jpg";
@@ -95,9 +96,11 @@ function Home() {
     <main className="min-h-screen bg-[#7A8BA3]">
 
       {/* Daily winner announcement (auto-publishes after 8 PM ET draw) */}
-      <div className="mx-auto max-w-[1500px] pt-3">
-        <DailyWinnerBanner />
-      </div>
+      {sweepstakesEnabled && (
+        <div className="mx-auto max-w-[1500px] pt-3">
+          <DailyWinnerBanner />
+        </div>
+      )}
 
       {/* Reels stories bar (Instagram-style) */}
       <CookiesTV />
@@ -109,11 +112,26 @@ function Home() {
             {t("hero.eyebrow", "HAZOREX")}
           </p>
           <h1 className="mt-1 text-xl font-black leading-tight md:text-3xl">
-            {t("hero.titlePart1", "Premium cookies with")}{" "}
-            <span className="text-[#E6C35C]">{t("hero.titlePart2", "real daily sweepstakes")}</span>
+            {sweepstakesEnabled ? (
+              <>
+                {t("hero.titlePart1", "Premium cookies with")}{" "}
+                <span className="text-[#E6C35C]">
+                  {t("hero.titlePart2", "real daily sweepstakes")}
+                </span>
+              </>
+            ) : (
+              <>
+                {t("hero.titleNoSweepstakesPart1", "Galletas premium")}{" "}
+                <span className="text-[#E6C35C]">
+                  {t("hero.titleNoSweepstakesPart2", "horneadas cada día")}
+                </span>
+              </>
+            )}
           </h1>
           <p className="mx-auto mt-2 max-w-xl font-serif text-xs text-white/85 md:text-sm">
-            {t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")}
+            {sweepstakesEnabled
+              ? t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")
+              : t("hero.subtitleNoSweepstakes", "Ingredientes seleccionados, recetas artesanales y entrega en 24 horas.")}
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
@@ -122,15 +140,19 @@ function Home() {
             >
               {t("hero.ctaShop", "Shop cookies")}
             </Link>
-            <Link
-              to="/ruleta"
-              className="rounded-full border border-[#E6C35C]/60 bg-white/5 px-5 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/10"
-            >
-              {t("hero.ctaHow", "How the draw works")}
-            </Link>
+            {sweepstakesEnabled && (
+              <Link
+                to="/ruleta"
+                className="rounded-full border border-[#E6C35C]/60 bg-white/5 px-5 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/10"
+              >
+                {t("hero.ctaHow", "How the draw works")}
+              </Link>
+            )}
           </div>
           <p className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-[#E6C35C]/80">
-            {t("hero.trust", "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies")}
+            {sweepstakesEnabled
+              ? t("hero.trust", "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies")
+              : t("hero.trustNoSweepstakes", "✓ Envío en 24h · ✓ Galletas artesanales · ✓ Pago seguro")}
           </p>
         </div>
       </section>

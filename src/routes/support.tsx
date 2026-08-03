@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Mail, MessageCircle, HelpCircle, ShoppingBag, Truck, RotateCcw, Trophy, Phone, Clock } from "lucide-react";
 import i18n from "@/i18n";
+import { sweepstakesEnabled } from "@/lib/feature-flags";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -17,12 +18,15 @@ export const Route = createFileRoute("/support")({
 
 const SUPPORT_EMAIL = "soporte@hazorex.com";
 
-const FAQ_KEYS = [
+const ALL_FAQ_KEYS = [
   { Icon: ShoppingBag, id: "order" },
   { Icon: Truck, id: "delivery" },
   { Icon: RotateCcw, id: "cancel" },
   { Icon: Trophy, id: "sweepstakes" },
 ] as const;
+
+// Con sweepstakesEnabled=false ocultamos la FAQ del sorteo (no se borra).
+const FAQ_KEYS = ALL_FAQ_KEYS.filter((f) => sweepstakesEnabled || f.id !== "sweepstakes");
 
 function SupportPage() {
   const { t } = useTranslation();
