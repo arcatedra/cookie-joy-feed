@@ -14,12 +14,12 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch (_) {
-    data = { title: "Sorteo en 5 minutos", body: event.data ? event.data.text() : "" };
+    data = { title: "HAZOREX", body: event.data ? event.data.text() : "" };
   }
 
-  const title = data.title || "🎰 El sorteo gira en 5 minutos";
+  const title = data.title || "HAZOREX";
   const options = {
-    body: data.body || "Entra ahora para ver el giro en vivo.",
+    body: data.body || "Tienes una novedad en HAZOREX.",
     icon: data.icon || "/favicon.ico",
     badge: data.badge || "/favicon.ico",
     tag: data.tag || "pre-draw-5min",

@@ -7,13 +7,24 @@ export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { title: i18n.t("terms.metaTitle") },
-      { name: "description", content: i18n.t("terms.metaDesc") },
+      {
+        name: "description",
+        // Con sweepstakesEnabled=false evitamos mencionar el sorteo en el SEO.
+        content: sweepstakesEnabled
+          ? i18n.t("terms.metaDesc")
+          : i18n.t("terms.metaDescNoSweepstakes", "Términos y Condiciones de uso de HAZOREX."),
+      },
     ],
   }),
   component: TermsPage,
 });
 
 const BLUE = "#1e3a5f";
+
+/** Reemplaza el prefijo "N." de un título traducido por el número indicado. */
+function renumber(title: string, n: number): string {
+  return title.replace(/^\s*\d+\.\s*/, `${n}. `);
+}
 
 function TermsPage() {
   const { t } = useTranslation();
@@ -49,7 +60,14 @@ function TermsPage() {
       </p>
 
       <section style={{ marginTop: 24 }}>
-        {sweepstakesEnabled && (
+        {/*
+          Con sweepstakesEnabled=false ocultamos las secciones ligadas al sorteo
+          (1 Aceptación con enlace a reglas, 2 Elegibilidad, 3 Estrellas y Compras,
+          4 AMOE y 5 Premios). Nada se borra: al poner el flag en true vuelven
+          todas y con su numeración original. Mientras tanto renumeramos con
+          `num()` para que no queden saltos (2 → 4).
+        */}
+        {sweepstakesEnabled ? (
           <>
             <h3>{t("terms.s1Title")}</h3>
             <p>
@@ -61,12 +79,8 @@ function TermsPage() {
             </p>
             <h3>{t("terms.s2Title")}</h3>
             <p>{t("terms.s2Body")}</p>
-          </>
-        )}
-        <h3>{t("terms.s3Title")}</h3>
-        <p>{t("terms.s3Body")}</p>
-        {sweepstakesEnabled && (
-          <>
+            <h3>{t("terms.s3Title")}</h3>
+            <p>{t("terms.s3Body")}</p>
             <h3>{t("terms.s4Title")}</h3>
             <p>
               {t("terms.s4BodyPre")}
@@ -75,14 +89,21 @@ function TermsPage() {
               </Link>
               {t("terms.s4BodyPost")}
             </p>
+            <h3>{t("terms.s5Title")}</h3>
+            <p>{t("terms.s5Body")}</p>
+            <h3>{t("terms.s6Title")}</h3>
+            <p>{t("terms.s6Body")}</p>
+            <h3>{t("terms.s7Title")}</h3>
+            <p>{t("terms.s7Body")}</p>
+          </>
+        ) : (
+          <>
+            <h3>{renumber(t("terms.s6Title"), 1)}</h3>
+            <p>{t("terms.s6Body")}</p>
+            <h3>{renumber(t("terms.s7Title"), 2)}</h3>
+            <p>{t("terms.s7Body")}</p>
           </>
         )}
-        <h3>{t("terms.s5Title")}</h3>
-        <p>{t("terms.s5Body")}</p>
-        <h3>{t("terms.s6Title")}</h3>
-        <p>{t("terms.s6Body")}</p>
-        <h3>{t("terms.s7Title")}</h3>
-        <p>{t("terms.s7Body")}</p>
       </section>
     </main>
   );
