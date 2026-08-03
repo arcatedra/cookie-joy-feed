@@ -21,6 +21,9 @@ export const Route = createFileRoute("/terms")({
 
 const BLUE = "#1e3a5f";
 
+/** Fecha de última actualización de los Términos (fija, no calculada). */
+const LAST_UPDATED_ISO = "2026-08-03T00:00:00.000Z";
+
 /** Reemplaza el prefijo "N." de un título traducido por el número indicado. */
 function renumber(title: string, n: number): string {
   return title.replace(/^\s*\d+\.\s*/, `${n}. `);
@@ -28,10 +31,15 @@ function renumber(title: string, n: number): string {
 
 function TermsPage() {
   const { t } = useTranslation();
-  const lastUpdated = new Date().toLocaleDateString(getLocale(), {
+  // Fecha fija (no `new Date()`): usar la fecha actual provocaba un hydration
+  // mismatch — el servidor renderiza en UTC y el cliente en la zona horaria
+  // local, así que el día podía diferir en cada carga. `timeZone: "UTC"` la
+  // deja determinista en ambos lados.
+  const lastUpdated = new Date(LAST_UPDATED_ISO).toLocaleDateString(getLocale(), {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   return (
@@ -55,7 +63,9 @@ function TermsPage() {
         </Link>
       )}
       <h1 style={{ fontSize: 36, fontWeight: 900, marginTop: 16 }}>{t("terms.title")}</h1>
-      <p style={{ color: "#666", fontSize: 13 }}>
+      {/* suppressHydrationWarning: el idioma detectado en cliente puede diferir
+          del render de servidor y cambiar el formato de la fecha. */}
+      <p style={{ color: "#666", fontSize: 13 }} suppressHydrationWarning>
         {t("terms.lastUpdated")} {lastUpdated}
       </p>
 
