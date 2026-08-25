@@ -4,6 +4,7 @@ import { Bell, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAuth } from "@/lib/auth";
+import { registerPwaServiceWorker } from "@/lib/pwa-register";
 import { savePushSubscription, deletePushSubscription } from "@/lib/push.functions";
 
 // Public VAPID key — safe to ship to the browser.
@@ -73,7 +74,11 @@ export function PushNotificationOptIn() {
 
   async function ensureSubscribed() {
     try {
-      const reg = await navigator.serviceWorker.register("/sw.js");
+      // Register the (guarded) PWA service worker. In preview/dev this is a
+      // no-op and no registration will exist, so we bail before subscribing.
+      await registerPwaServiceWorker();
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return;
       await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {

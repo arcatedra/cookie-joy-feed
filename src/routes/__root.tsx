@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
 import faviconAsset from "@/assets/hazorex-favicon.png.asset.json";
-import appleTouchAsset from "@/assets/hazorex-apple-touch.png.asset.json";
+import { registerPwaServiceWorker } from "@/lib/pwa-register";
 import logoAsset from "@/assets/hazorex-logo-original.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { syncClientLanguage } from "@/i18n";
@@ -112,6 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0f766e" },
       { title: "Hazorex" },
       { name: "description", content: "Hazorex — la plataforma para descubrir, comprar y participar en experiencias premium." },
       { name: "author", content: "Hazorex" },
@@ -124,7 +125,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: faviconAsset.url },
-      { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchAsset.url },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/icons/apple-touch-icon-180.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -168,6 +169,12 @@ function RootComponent() {
     // Defer past hydration commit to avoid SSR/CSR text mismatch.
     const id = window.setTimeout(() => syncClientLanguage(), 0);
     return () => window.clearTimeout(id);
+  }, []);
+
+  // Register the PWA service worker (installable + offline). Guarded so it
+  // only runs on the published site, never in the Lovable editor preview.
+  useEffect(() => {
+    void registerPwaServiceWorker();
   }, []);
 
 
