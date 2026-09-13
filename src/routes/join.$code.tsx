@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Gift, Share2, UserPlus } from "lucide-react";
 import { HazorexLogo } from "@/components/HazorexLogo";
 import { Button } from "@/components/ui/button";
@@ -91,6 +91,12 @@ function ReferralLandingPage() {
   const validCode = /^[A-HJ-NP-Z2-9]{8}$/.test(code);
   const [language, setLanguage] = useState<LandingLanguage>("en");
   const text = copy[language];
+
+  useEffect(() => {
+    if (!validCode) return;
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${REF_COOKIE}=${code}; path=/; max-age=${NINETY_DAYS}; SameSite=Lax${secure}`;
+  }, [code, validCode]);
 
   return (
     <main lang={language} className="relative min-h-screen overflow-hidden bg-secondary text-secondary-foreground">
