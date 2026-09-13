@@ -164,6 +164,8 @@ function RootComponent() {
   // /repartidor and /repartidor/* use their own DriverLayout. /repartidores (marketing) keeps store chrome.
   const isDriverZone =
     pathname === "/repartidor" || pathname.startsWith("/repartidor/");
+  const isReferralLanding = pathname.startsWith("/join/");
+  const hideSiteChrome = isDriverZone || isReferralLanding;
 
   useEffect(() => {
     // Defer past hydration commit to avoid SSR/CSR text mismatch.
@@ -184,13 +186,13 @@ function RootComponent() {
         <SubscriptionGateProvider>
           <CartProvider>
             <div className="min-h-screen bg-background">
-              {sweepstakesEnabled && !isDriverZone && <PreDrawCountdownBanner />}
-              {!isDriverZone && <TopNav />}
+              {sweepstakesEnabled && !hideSiteChrome && <PreDrawCountdownBanner />}
+              {!hideSiteChrome && <TopNav />}
               {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
               <Outlet />
-              {!isDriverZone && <SiteFooter />}
+              {!hideSiteChrome && <SiteFooter />}
             </div>
-            {sweepstakesEnabled && !isDriverZone && <PushNotificationOptIn />}
+            {sweepstakesEnabled && !hideSiteChrome && <PushNotificationOptIn />}
             {/* Sonner injects a runtime <style> block — passing `nonce` lets it pass CSP. */}
             <Toaster position="top-center" richColors {...(nonce ? { nonce } : {})} />
           </CartProvider>
