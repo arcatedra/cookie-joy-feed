@@ -1,29 +1,27 @@
-## Situación
+# Página de destino para referidos
 
-Conectaste Supabase en Cloud (UI muestra "Connected" con proyecto HAZOREX). Sin embargo, `fetch_secrets` en el runtime del server **no muestra** `SUPABASE_URL` ni `SUPABASE_SERVICE_ROLE_KEY`. `src/integrations/supabase/client.server.ts` lee `process.env.SUPABASE_URL` y `process.env.SUPABASE_SERVICE_ROLE_KEY`, así que sigue lanzando el toast en `/auth` porque el runtime del Worker no los tiene.
+## Objetivo
+Convertir `/join/:code` de una redirección inmediata en una página bilingüe para el amigo invitado, con inglés como idioma inicial y el código de referido conservado durante todo el registro.
 
-Es decir: el conector marca "Connected" pero **no inyectó los env vars del server** (solo los `VITE_*` del cliente, que ya están en `.env`).
+## Cambios
+- Crear una pantalla móvil y adaptable con identidad visual de HAZOREX, contenido principal, subtítulo y los tres pasos indicados.
+- Añadir en la esquina superior derecha un selector minimalista de texto `EN / ES`; esta página siempre iniciará en inglés, independientemente del idioma guardado para el resto del sitio.
+- Mostrar las versiones exactas en inglés y español al alternar el selector, incluyendo títulos, explicación y estados del botón.
+- Reemplazar la redirección automática actual por un CTA principal para que el amigo continúe al registro del club.
+- Mantener el código recibido en la URL, guardarlo en la cookie de referido de 90 días y pasarlo al registro; nunca se sustituirá por otro código.
+- Si el código falta o no es válido, mostrar una salida segura hacia el registro normal sin atribuir el referido.
+- Añadir metadatos propios en inglés para esta página pública.
 
-## Plan
+## Comportamiento del CTA
+- El visitante que escanea es el amigo invitado, así que el CTA continuará al registro con el código ya aplicado.
+- La acción de copiar o compartir el código personal seguirá disponible para el usuario que invita desde su perfil, donde el sistema ya obtiene su código autenticado.
+- El botón principal tendrá texto contextual de registro en vez de generar un código nuevo para el visitante, evitando atribuciones incorrectas.
 
-1. **Verificar en preview** si el error persiste ahora que reconectaste. A veces la reconexión requiere que el server rebootee para recoger los nuevos env vars. Abrir `/auth` y revisar consola/toast + logs de server con `server-function-logs` sobre `preflightLogin` / `getLoginSecurityConfig`.
-
-2. **Si el error ya desapareció** → cerrado, no hace falta código.
-
-3. **Si el error persiste** (probable, dado que los secrets del server no aparecen listados): aplicar el workaround de código, ya que las herramientas de secrets no pueden crear/editar variables reservadas por el conector:
-   - Añadir dos secrets no reservados vía `add_secret` para que tú los pegues por formulario seguro:
-     - `APP_SUPABASE_URL` → `https://oyvbxkluvkrljvewrgue.supabase.co`
-     - `APP_SUPABASE_SERVICE_ROLE_KEY` → service_role del dashboard Supabase (Settings → API).
-   - Modificar `src/integrations/supabase/client.server.ts` para leer con fallback:
-     `process.env.SUPABASE_URL ?? process.env.APP_SUPABASE_URL` y
-     `process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.APP_SUPABASE_SERVICE_ROLE_KEY`.
-   - Sin cambios en otros llamadores; el resto del código sigue usando `supabaseAdmin`.
-
-4. **Verificar**: abrir `/auth` en preview, confirmar que no aparece el toast "Missing Supabase environment variable(s)" y que el preflight (rate-limit) responde 200 en `server-function-logs`.
+## Verificación
+- Probar `/join/CODIGO` sin sesión en móvil: abre en inglés, alterna a español y conserva el código al entrar al registro.
+- Confirmar que la cookie mantiene el código por 90 días y que el registro recibe el mismo referido.
+- Revisar que el diseño no se desborde en teléfono y escritorio, y que la página tenga un solo título principal accesible.
 
 ## Detalles técnicos
-
-- No se toca la tabla `secrets` de Supabase ni el conector.
-- Los secrets `APP_*` son de usuario (no *managed*), por lo que `add_secret` puede pedirlos por formulario seguro sin conflicto con la gestión del conector.
-- El fallback preserva la ruta ideal: si en el futuro el conector empieza a inyectar `SUPABASE_SERVICE_ROLE_KEY` en el runtime, se usará esa automáticamente; los `APP_*` quedan como respaldo.
-- No hay cambios en el cliente browser (`src/integrations/supabase/client.ts`) — ya funciona con los `VITE_*`.
+- La página gestionará EN/ES localmente para no cambiar el idioma global guardado del usuario.
+- Se conservará el flujo existente de atribución mediante `hazorex_ref` y el parámetro `ref` de la pantalla de acceso.
