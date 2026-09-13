@@ -164,8 +164,7 @@ function RootComponent() {
   // /repartidor and /repartidor/* use their own DriverLayout. /repartidores (marketing) keeps store chrome.
   const isDriverZone =
     pathname === "/repartidor" || pathname.startsWith("/repartidor/");
-  const isReferralLanding = pathname.startsWith("/join/");
-  const hideSiteChrome = isDriverZone || isReferralLanding;
+  const hideSiteChrome = isDriverZone;
 
   useEffect(() => {
     // Defer past hydration commit to avoid SSR/CSR text mismatch.
