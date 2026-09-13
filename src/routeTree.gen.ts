@@ -46,6 +46,7 @@ import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as JoinIndexRouteImport } from './routes/join.index'
 import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as NegociosRegistroRouteImport } from './routes/negocios.registro'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
@@ -281,6 +282,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
+} as any)
+const JoinIndexRoute = JoinIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => JoinRoute,
 } as any)
 const JoinCodeRoute = JoinCodeRouteImport.update({
   id: '/$code',
@@ -614,6 +620,7 @@ export interface FileRoutesByFullPath {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/join/': typeof JoinIndexRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -670,7 +677,6 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
   '/historial': typeof HistorialRoute
-  '/join': typeof JoinRouteWithChildren
   '/menu': typeof MenuRoute
   '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRouteWithChildren
@@ -701,6 +707,7 @@ export interface FileRoutesByTo {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/join': typeof JoinIndexRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -791,6 +798,7 @@ export interface FileRoutesById {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/join/': typeof JoinIndexRoute
   '/_authenticated/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -881,6 +889,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/join/'
     | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
@@ -937,7 +946,6 @@ export interface FileRouteTypes {
     | '/donate'
     | '/explore'
     | '/historial'
-    | '/join'
     | '/menu'
     | '/privacidad'
     | '/profile'
@@ -968,6 +976,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/join'
     | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
@@ -1057,6 +1066,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/join/'
     | '/_authenticated/admin/csp-violations'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/finanzas'
@@ -1418,6 +1428,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/email/unsubscribe'
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/join/': {
+      id: '/join/'
+      path: '/'
+      fullPath: '/join/'
+      preLoaderRoute: typeof JoinIndexRouteImport
+      parentRoute: typeof JoinRoute
     }
     '/join/$code': {
       id: '/join/$code'
@@ -1865,10 +1882,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface JoinRouteChildren {
   JoinCodeRoute: typeof JoinCodeRoute
+  JoinIndexRoute: typeof JoinIndexRoute
 }
 
 const JoinRouteChildren: JoinRouteChildren = {
   JoinCodeRoute: JoinCodeRoute,
+  JoinIndexRoute: JoinIndexRoute,
 }
 
 const JoinRouteWithChildren = JoinRoute._addFileChildren(JoinRouteChildren)
