@@ -33,11 +33,18 @@ const STEPS: { key: string; label: string }[] = [
 
 function OrderTracking() {
   const { id } = Route.useParams();
+  const { t, i18n } = useTranslation();
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ["order-tracking", id],
     queryFn: () => getOrderTracking({ data: { orderId: id } }),
     refetchInterval: 15000,
+  });
+
+  const etaQ = useQuery({
+    queryKey: ["stop-eta", id],
+    queryFn: () => getMyStopEta({ data: { orderId: id } }),
+    refetchInterval: 60000,
   });
 
   // Realtime updates on this order
