@@ -113,6 +113,25 @@ function OrderTracking() {
       {/* Bottom info */}
       <div className="border-t border-[#c8862e]/30 bg-white shadow-2xl">
         <div className="mx-auto max-w-md space-y-3 p-4">
+          {/* Comprobante de entrega */}
+          {proofQ.data?.deliveredAt && (
+            <ProofOfDeliveryView
+              title={t("tracking.proofTitle")}
+              deliveredAtLabel={t("tracking.proofDeliveredAt", {
+                datetime: new Date(proofQ.data.deliveredAt).toLocaleString(i18n.language, {
+                  day: "numeric",
+                  month: "long",
+                  hour: "numeric",
+                  minute: "2-digit",
+                }),
+              })}
+              photoUrl={proofQ.data.photoUrl}
+              note={proofQ.data.note}
+              noteLabel={t("tracking.proofNoteLabel")}
+              photoAlt={t("tracking.proofPhotoAlt")}
+            />
+          )}
+
           {/* ETA */}
           {etaQ.data && (
             <div className="rounded-xl border border-[#c8862e]/30 bg-[#f4f1ea] p-3 text-center">
