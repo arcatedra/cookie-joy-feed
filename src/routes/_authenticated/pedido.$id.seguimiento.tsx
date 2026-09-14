@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader2, MapPin, Phone, Star, Bike, Package, Clock } from "lucide-react";
+import { Loader2, MapPin, Phone, Star, Bike, Package, Clock, LifeBuoy } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,8 @@ import { getOrderTracking } from "@/lib/tracking.functions";
 import { getMyStopEta } from "@/lib/eta.functions";
 import { haversineKm } from "@/lib/gps-deeplinks";
 import { GoogleMapView } from "@/components/courier/GoogleMapView";
+import { ReportIssueSheet } from "@/components/ReportIssueSheet";
+import { SupportChatSheet } from "@/components/SupportChatSheet";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id/seguimiento")({
   component: OrderTracking,
@@ -35,6 +37,9 @@ function OrderTracking() {
   const { id } = Route.useParams();
   const { t, i18n } = useTranslation();
   const qc = useQueryClient();
+  const [reportOpen, setReportOpen] = useState(false);
+  const [issueId, setIssueId] = useState<string | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
   const q = useQuery({
     queryKey: ["order-tracking", id],
     queryFn: () => getOrderTracking({ data: { orderId: id } }),
@@ -212,6 +217,26 @@ function OrderTracking() {
               <Package className="size-3" /> {stops.length} entrega{stops.length === 1 ? "" : "s"} · <Clock className="size-3" /> {order.accepted_at ? new Date(order.accepted_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—"}
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setReportOpen(true)}
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-xl border-2 border-[#c8862e] bg-[#f4f1ea] text-base font-bold text-[#1e3a5f] hover:bg-[#c8862e]/10"
+          >
+            <LifeBuoy className="size-5 text-[#c8862e]" />
+            {t("issue.reportButton", { defaultValue: "Reportar un problema" })}
+          </button>
+
+          <ReportIssueSheet
+            orderId={id}
+            open={reportOpen}
+            onOpenChange={setReportOpen}
+            onCreated={(newId) => {
+              setIssueId(newId);
+              setChatOpen(true);
+            }}
+          />
+          <SupportChatSheet issueId={issueId} open={chatOpen} onOpenChange={setChatOpen} />
 
           {order.status === "completado" && (
             <Link
