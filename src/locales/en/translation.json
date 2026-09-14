@@ -1539,5 +1539,12 @@
     "subtitle": "Buy by the piece · Secure checkout with Stripe",
     "metaTitle": "Shop — HAZOREX",
     "metaDesc": "Buy HAZOREX handcrafted cookies by the piece. Secure Stripe checkout."
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

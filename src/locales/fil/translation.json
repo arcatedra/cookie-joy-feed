@@ -1542,5 +1542,12 @@
     "subtitle": "Bilhin bawat piraso · Ligtas na checkout via Stripe",
     "metaTitle": "Tindahan — HAZOREX",
     "metaDesc": "Bilhin ang HAZOREX handcrafted cookies bawat piraso. Ligtas via Stripe."
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

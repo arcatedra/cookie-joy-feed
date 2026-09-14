@@ -1539,5 +1539,12 @@
     "subtitle": "按件购买 · Stripe 安全支付",
     "metaTitle": "商店 — HAZOREX",
     "metaDesc": "按件购买 HAZOREX 手工饼干。Stripe 安全支付。"
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

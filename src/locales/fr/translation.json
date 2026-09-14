@@ -1539,5 +1539,12 @@
     "subtitle": "Achat à l'unité · Paiement sécurisé avec Stripe",
     "metaTitle": "Boutique — HAZOREX",
     "metaDesc": "Achetez des cookies artisanaux HAZOREX à l'unité. Paiement sécurisé avec Stripe."
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

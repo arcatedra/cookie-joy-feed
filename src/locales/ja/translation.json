@@ -1544,5 +1544,12 @@
     "subtitle": "1個から購入・Stripeで安全決済",
     "metaTitle": "ショップ — HAZOREX",
     "metaDesc": "HAZOREXの手作りクッキーを1個から。Stripeで安全決済。"
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }
