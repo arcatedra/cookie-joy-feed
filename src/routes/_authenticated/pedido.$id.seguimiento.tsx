@@ -101,6 +101,32 @@ function OrderTracking() {
       {/* Bottom info */}
       <div className="border-t border-[#c8862e]/30 bg-white shadow-2xl">
         <div className="mx-auto max-w-md space-y-3 p-4">
+          {/* ETA */}
+          {etaQ.data && (
+            <div className="rounded-xl border border-[#c8862e]/30 bg-[#f4f1ea] p-3 text-center">
+              <p className="text-2xl font-extrabold text-[#1e3a5f]">
+                {etaQ.data.status === "entregado"
+                  ? t("tracking.delivered")
+                  : etaQ.data.status === "fallido"
+                    ? t("tracking.failed")
+                    : etaQ.data.eta
+                      ? t("tracking.etaTitle", {
+                          time: new Date(etaQ.data.eta).toLocaleTimeString(i18n.language, {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          }),
+                        })
+                      : t("tracking.etaPending")}
+              </p>
+              <p className="mt-1 text-sm text-[#4a3525]">
+                {t("tracking.stopPosition", {
+                  position: etaQ.data.sequenceNumber,
+                  total: etaQ.data.totalStops,
+                })}
+              </p>
+            </div>
+          )}
+
           {/* Progress */}
           <div className="flex items-center justify-between">
             {STEPS.map((s, i) => (
