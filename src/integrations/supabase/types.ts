@@ -374,6 +374,7 @@ export type Database = {
           created_at: string
           donation_tier: string | null
           id: string
+          locale: string | null
           name: string | null
           referral_code: string | null
           referred_by: string | null
@@ -386,6 +387,7 @@ export type Database = {
           created_at?: string
           donation_tier?: string | null
           id: string
+          locale?: string | null
           name?: string | null
           referral_code?: string | null
           referred_by?: string | null
@@ -398,6 +400,7 @@ export type Database = {
           created_at?: string
           donation_tier?: string | null
           id?: string
+          locale?: string | null
           name?: string | null
           referral_code?: string | null
           referred_by?: string | null

@@ -1,6 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import {
+  QUICK_MESSAGE_KEYS,
+  PUSH_TITLE,
+  normalizeLocale,
+  quickMessageText,
+  type QuickMessageKey,
+} from "@/lib/driver-quick-messages";
 
 const uuid = z.string().uuid();
 
@@ -20,10 +27,14 @@ export const listOrderMessages = createServerFn({ method: "GET" })
 
 export const sendOrderMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { orderId: string; body: string; isQuickReply?: boolean }) => ({
+  .inputValidator((d: { orderId: string; body: string; isQuickReply?: boolean; quickKey?: string }) => ({
     orderId: uuid.parse(d.orderId),
     body: z.string().trim().min(1).max(1000).parse(d.body),
     isQuickReply: Boolean(d.isQuickReply),
+    quickKey: z
+      .enum(QUICK_MESSAGE_KEYS as unknown as [string, ...string[]])
+      .optional()
+      .parse(d.quickKey),
   }))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -31,12 +42,13 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
     // Determine role by checking if user is the driver of the order
     const { data: order, error: oErr } = await supabase
       .from("courier_orders")
-      .select("driver_id")
+      .select("*")
       .eq("id", data.orderId)
       .maybeSingle();
     if (oErr) throw new Error(oErr.message);
     if (!order) throw new Error("Pedido no encontrado");
-    const role: "driver" | "customer" = order.driver_id === userId ? "driver" : "customer";
+    const o = order as Record<string, unknown>;
+    const role: "driver" | "customer" = o["driver_id"] === userId ? "driver" : "customer";
 
     const { error } = await supabase.from("order_messages").insert({
       order_id: data.orderId,
@@ -46,8 +58,91 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
       is_quick_reply: data.isQuickReply,
     });
     if (error) throw new Error(error.message);
+
+    // Mensaje rápido del repartidor: avisamos al cliente en su idioma.
+    if (role === "driver" && data.quickKey) {
+      const customerId =
+        (o["customer_id"] as string | undefined) ??
+        (o["cliente_id"] as string | undefined) ??
+        (o["user_id"] as string | undefined) ??
+        null;
+      if (customerId) {
+        await notifyCustomerQuickMessage(customerId, data.quickKey as QuickMessageKey);
+      }
+    }
+
     return { ok: true };
   });
+
+/** Envía el aviso (push) del mensaje rápido al cliente, en su idioma. */
+async function notifyCustomerQuickMessage(customerId: string, key: QuickMessageKey) {
+  try {
+    const vapidPublic = process.env["VAPID_PUBLIC_KEY"];
+    const vapidPrivate = process.env["VAPID_PRIVATE_KEY"];
+    if (!vapidPublic || !vapidPrivate) return;
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("locale")
+      .eq("id", customerId)
+      .maybeSingle();
+    const locale = normalizeLocale((profile as { locale?: string | null } | null)?.locale ?? null);
+
+    const { data: subs } = await supabaseAdmin
+      .from("push_subscriptions")
+      .select("id, endpoint, p256dh, auth")
+      .eq("user_id", customerId);
+    if (!subs || subs.length === 0) return;
+
+    const { buildPushPayload } = await import("@block65/webcrypto-web-push");
+    const vapid = {
+      subject: process.env["VAPID_SUBJECT"] ?? "mailto:noreply@origen.management",
+      publicKey: vapidPublic,
+      privateKey: vapidPrivate,
+    };
+
+    await Promise.all(
+      (subs as Array<Record<string, string>>).map(async (s) => {
+        try {
+          const payload = await buildPushPayload(
+            {
+              data: {
+                title: PUSH_TITLE[locale] ?? PUSH_TITLE["es"]!,
+                body: quickMessageText(key, locale),
+                url: "https://www.hazorex.com/mis-pedidos",
+                tag: "driver-message",
+              },
+              options: { ttl: 1800, urgency: "high" as const, topic: "driver-msg" },
+            },
+            {
+              endpoint: s["endpoint"] as string,
+              expirationTime: null,
+              keys: { p256dh: s["p256dh"] as string, auth: s["auth"] as string },
+            },
+            vapid,
+          );
+          const resp = await fetch(s["endpoint"] as string, {
+            method: payload.method,
+            headers: payload.headers,
+            body: payload.body.buffer.slice(
+              payload.body.byteOffset,
+              payload.body.byteOffset + payload.body.byteLength,
+            ) as ArrayBuffer,
+          });
+          if (resp.status === 404 || resp.status === 410) {
+            await supabaseAdmin.from("push_subscriptions").delete().eq("id", s["id"] as string);
+          }
+        } catch (err) {
+          console.warn("driver quick message push error", err);
+        }
+      }),
+    );
+  } catch (err) {
+    console.error("notifyCustomerQuickMessage error", err);
+  }
+}
 
 export const markMessagesRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
