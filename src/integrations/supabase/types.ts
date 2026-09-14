@@ -118,6 +118,66 @@ export type Database = {
           },
         ]
       }
+      delivery_routes: {
+        Row: {
+          accepted_at: string | null
+          completed_at: string | null
+          created_at: string
+          dispatch_date: string
+          driver_id: string | null
+          id: string
+          route_name: string
+          status: Database["public"]["Enums"]["route_status"]
+          total_stops: number
+          updated_at: string
+          warehouse_checkin_at: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          dispatch_date?: string
+          driver_id?: string | null
+          id?: string
+          route_name: string
+          status?: Database["public"]["Enums"]["route_status"]
+          total_stops?: number
+          updated_at?: string
+          warehouse_checkin_at?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          dispatch_date?: string
+          driver_id?: string | null
+          id?: string
+          route_name?: string
+          status?: Database["public"]["Enums"]["route_status"]
+          total_stops?: number
+          updated_at?: string
+          warehouse_checkin_at?: string | null
+        }
+        Relationships: []
+      }
+      delivery_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value_int: number
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value_int: number
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value_int?: number
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -475,6 +535,69 @@ export type Database = {
         }
         Relationships: []
       }
+      route_stops: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          delivery_address: string | null
+          delivery_photo_url: string | null
+          eta: string | null
+          failure_reason: string | null
+          id: string
+          order_id: string
+          recipient_name: string | null
+          route_id: string
+          sequence_number: number
+          status: Database["public"]["Enums"]["stop_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_address?: string | null
+          delivery_photo_url?: string | null
+          eta?: string | null
+          failure_reason?: string | null
+          id?: string
+          order_id: string
+          recipient_name?: string | null
+          route_id: string
+          sequence_number: number
+          status?: Database["public"]["Enums"]["stop_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          delivery_address?: string | null
+          delivery_photo_url?: string | null
+          eta?: string | null
+          failure_reason?: string | null
+          id?: string
+          order_id?: string
+          recipient_name?: string | null
+          route_id?: string
+          sequence_number?: number
+          status?: Database["public"]["Enums"]["stop_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_stops_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       star_purchases: {
         Row: {
           amount_usd: number
@@ -701,6 +824,15 @@ export type Database = {
           rewarded_at: string
         }[]
       }
+      get_my_stop_eta: {
+        Args: { p_order_id: string }
+        Returns: {
+          eta: string
+          sequence_number: number
+          status: string
+          total_stops: number
+        }[]
+      }
       get_public_profiles: {
         Args: { ids: string[] }
         Returns: {
@@ -715,7 +847,12 @@ export type Database = {
         }
         Returns: boolean
       }
+      minutes_per_stop: { Args: never; Returns: number }
       promote_available_commissions: { Args: never; Returns: number }
+      recalculate_route_etas: {
+        Args: { p_route_id: string }
+        Returns: undefined
+      }
       reel_comment_counts: {
         Args: { reel_ids: string[] }
         Returns: {
@@ -755,6 +892,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      route_status:
+        | "disponible"
+        | "asignada"
+        | "en_transito"
+        | "completada"
+        | "cancelada"
+      stop_status: "pendiente" | "en_camino" | "entregado" | "fallido"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -883,6 +1027,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      route_status: [
+        "disponible",
+        "asignada",
+        "en_transito",
+        "completada",
+        "cancelada",
+      ],
+      stop_status: ["pendiente", "en_camino", "entregado", "fallido"],
     },
   },
 } as const
