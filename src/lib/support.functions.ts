@@ -48,7 +48,7 @@ export const getConversationByIssue = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { data: issue, error: e1 } = await supabase
-      .from("order_item_issues")
+      .from("support_issues")
       .select("*")
       .eq("id", data.issueId)
       .maybeSingle();
@@ -95,7 +95,7 @@ async function resolveIssue(
 ) {
   const supabase = supabaseAny;
   const { data: issue, error } = await supabase
-    .from("order_item_issues")
+    .from("support_issues")
     .select("*")
     .eq("id", issueId)
     .maybeSingle();
@@ -151,7 +151,7 @@ async function resolveIssue(
   if (eu) throw new Error(eu.message);
 
   const { error: ei } = await supabase
-    .from("order_item_issues")
+    .from("support_issues")
     .update({
       status: action === "accept_replacement" ? "replaced" : "cancelled",
       resolved_at: new Date().toISOString(),
@@ -197,3 +197,50 @@ export const cancelIssueItem = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) =>
     resolveIssue(context.supabase as any, context.userId, data.issueId, "cancel_item"),
   );
+
+export const ISSUE_REASONS = ["falta_articulo", "danado", "no_llego", "otro"] as const;
+export type IssueReason = (typeof ISSUE_REASONS)[number];
+
+const REASON_TEXT: Record<IssueReason, string> = {
+  falta_articulo: "Falta un artículo de mi pedido.",
+  danado: "Mi pedido llegó dañado.",
+  no_llego: "No me llegó el pedido.",
+  otro: "Tengo otro problema con mi pedido.",
+};
+
+/** Creates a support ticket for an order with the chosen reason and opens its chat. */
+export const createOrderIssue = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { orderId: string; reason: IssueReason }) => {
+    if (!ISSUE_REASONS.includes(d.reason)) throw new Error("Motivo no válido");
+    return d;
+  })
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+
+    const { data: issue, error: e1 } = await supabase
+      .from("support_issues")
+      .insert({ user_id: userId, order_id: data.orderId, reason: data.reason, status: "pending" })
+      .select("id")
+      .single();
+    if (e1) throw new Error(e1.message);
+
+    const { data: conv, error: e2 } = await supabase
+      .from("support_conversations")
+      .insert({ issue_id: issue.id, status: "open" })
+      .select("id")
+      .single();
+    if (e2) throw new Error(e2.message);
+
+    const { error: e3 } = await supabase.from("support_messages").insert([
+      { conversation_id: conv.id, sender: "customer", body: REASON_TEXT[data.reason], action: data.reason },
+      {
+        conversation_id: conv.id,
+        sender: "system",
+        body: "Recibimos tu reporte. Un agente de Soporte Hazorex te responderá en unos minutos.",
+      },
+    ]);
+    if (e3) throw new Error(e3.message);
+
+    return { issueId: issue.id as string };
+  });
