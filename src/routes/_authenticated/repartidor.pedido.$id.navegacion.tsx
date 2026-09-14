@@ -252,6 +252,14 @@ function NavegacionPedido() {
             {target.kind === "pickup" ? "Llegué al punto de recolección" : "Llegué a la dirección"}
           </Button>
 
+          <Button
+            variant="outline"
+            className="h-14 w-full border-2 border-amber-500 bg-amber-50 text-base font-bold text-amber-900 hover:bg-amber-100"
+            onClick={() => setDelayOpen(true)}
+          >
+            <Clock className="mr-2 size-5" /> Voy retrasado
+          </Button>
+
           <div className="flex items-center justify-between pt-1">
             <button
               className="flex items-center gap-1 text-xs text-[#4a3525]/70 underline-offset-4 hover:underline"
