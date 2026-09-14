@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { getOrderTracking } from "@/lib/tracking.functions";
-import { getMyStopEta } from "@/lib/eta.functions";
+import { getMyStopEta, getMyDeliveryProof } from "@/lib/eta.functions";
+import { ProofOfDeliveryView } from "@/components/ProofOfDelivery";
 import { haversineKm } from "@/lib/gps-deeplinks";
 import { GoogleMapView } from "@/components/courier/GoogleMapView";
 import { ReportIssueSheet } from "@/components/ReportIssueSheet";
@@ -50,6 +51,12 @@ function OrderTracking() {
     queryKey: ["stop-eta", id],
     queryFn: () => getMyStopEta({ data: { orderId: id } }),
     refetchInterval: 60000,
+  });
+
+  const proofQ = useQuery({
+    queryKey: ["delivery-proof", id],
+    queryFn: () => getMyDeliveryProof({ data: { orderId: id } }),
+    staleTime: 30 * 60 * 1000,
   });
 
   // Realtime updates on this order
