@@ -136,3 +136,68 @@ export function ProofOfDelivery({ nombreCliente = "el cliente", onSubmit, disabl
 }
 
 export default ProofOfDelivery;
+
+/** Vista de solo lectura del comprobante de entrega (lado del cliente). */
+export function ProofOfDeliveryView({
+  deliveredAtLabel,
+  photoUrl,
+  note,
+  title,
+  noteLabel,
+  photoAlt,
+}: {
+  deliveredAtLabel: string;
+  photoUrl?: string | null;
+  note?: string | null;
+  title: string;
+  noteLabel: string;
+  photoAlt: string;
+}) {
+  const [zoom, setZoom] = useState(false);
+
+  return (
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+      <div className="flex items-center gap-2">
+        <CheckCircle2 size={18} className="text-emerald-600" />
+        <p className="text-sm font-semibold text-emerald-800">{title}</p>
+      </div>
+      <p className="mt-0.5 text-sm text-emerald-700">{deliveredAtLabel}</p>
+
+      {photoUrl && (
+        <button
+          type="button"
+          onClick={() => setZoom(true)}
+          className="mt-3 block h-40 w-full overflow-hidden rounded-lg border border-emerald-200"
+        >
+          <img src={photoUrl} alt={photoAlt} loading="lazy" className="h-full w-full object-cover" />
+        </button>
+      )}
+
+      {note && (
+        <div className="mt-3">
+          <p className="text-xs font-medium text-emerald-700">{noteLabel}</p>
+          <p className="mt-0.5 text-sm text-emerald-900">{note}</p>
+        </div>
+      )}
+
+      {zoom && photoUrl && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setZoom(false)}
+          className="fixed inset-0 z-[100] grid place-items-center bg-black/90 p-4"
+        >
+          <button
+            type="button"
+            onClick={() => setZoom(false)}
+            aria-label="Cerrar"
+            className="absolute right-4 top-4 rounded-full bg-white/15 p-2 text-white"
+          >
+            <X size={20} />
+          </button>
+          <img src={photoUrl} alt={photoAlt} className="max-h-full max-w-full object-contain" />
+        </div>
+      )}
+    </div>
+  );
+}
