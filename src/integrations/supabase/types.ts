@@ -806,6 +806,14 @@ export type Database = {
           pedido_id: string
         }[]
       }
+      delay_route_stops: {
+        Args: { p_minutes: number }
+        Returns: {
+          cliente_id: string
+          new_eta: string
+          order_id: string
+        }[]
+      }
       generate_referral_code: { Args: never; Returns: string }
       get_my_referral_profile: {
         Args: never
