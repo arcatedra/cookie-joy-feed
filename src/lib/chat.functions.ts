@@ -1,6 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import {
+  QUICK_MESSAGE_KEYS,
+  PUSH_TITLE,
+  normalizeLocale,
+  quickMessageText,
+  type QuickMessageKey,
+} from "@/lib/driver-quick-messages";
 
 const uuid = z.string().uuid();
 
