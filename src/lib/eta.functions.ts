@@ -156,3 +156,50 @@ export const reportRouteDelay = createServerFn({ method: "POST" })
 
     return { stops: stops.length, notified, nextEta };
   });
+
+export type DeliveryProof = {
+  deliveredAt: string | null;
+  photoUrl: string | null;
+  note: string | null;
+  recipientName: string | null;
+} | null;
+
+/**
+ * Comprobante de entrega del pedido del cliente autenticado:
+ * foto, hora exacta y nota del lugar donde se dejó.
+ * La foto se firma en cada consulta, así sigue visible semanas después.
+ */
+export const getMyDeliveryProof = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { orderId: string }) => ({ orderId: uuid.parse(d.orderId) }))
+  .handler(async ({ context, data }): Promise<DeliveryProof> => {
+    const { data: rows, error } = await context.supabase.rpc("get_my_delivery_proof" as never, {
+      p_order_id: data.orderId,
+    } as never);
+    if (error) return null;
+
+    const row = Array.isArray(rows) ? rows[0] : rows;
+    if (!row) return null;
+
+    const r = row as {
+      delivered_at: string | null;
+      delivery_photo_url: string | null;
+      delivery_note: string | null;
+      recipient_name: string | null;
+    };
+
+    let photoUrl = r.delivery_photo_url;
+    if (photoUrl && !/^https?:\/\//i.test(photoUrl)) {
+      const { data: signed } = await context.supabase.storage
+        .from("delivery-proofs")
+        .createSignedUrl(photoUrl, 60 * 60);
+      photoUrl = signed?.signedUrl ?? null;
+    }
+
+    return {
+      deliveredAt: r.delivered_at,
+      photoUrl,
+      note: r.delivery_note,
+      recipientName: r.recipient_name,
+    };
+  });
