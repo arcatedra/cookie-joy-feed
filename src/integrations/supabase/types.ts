@@ -540,6 +540,7 @@ export type Database = {
           created_at: string
           delivered_at: string | null
           delivery_address: string | null
+          delivery_note: string | null
           delivery_photo_url: string | null
           eta: string | null
           failure_reason: string | null
@@ -555,6 +556,7 @@ export type Database = {
           created_at?: string
           delivered_at?: string | null
           delivery_address?: string | null
+          delivery_note?: string | null
           delivery_photo_url?: string | null
           eta?: string | null
           failure_reason?: string | null
@@ -570,6 +572,7 @@ export type Database = {
           created_at?: string
           delivered_at?: string | null
           delivery_address?: string | null
+          delivery_note?: string | null
           delivery_photo_url?: string | null
           eta?: string | null
           failure_reason?: string | null
@@ -918,6 +921,16 @@ export type Database = {
         }[]
       }
       generate_referral_code: { Args: never; Returns: string }
+      get_my_delivery_proof: {
+        Args: { p_order_id: string }
+        Returns: {
+          delivered_at: string
+          delivery_note: string
+          delivery_photo_url: string
+          recipient_name: string
+          status: string
+        }[]
+      }
       get_my_referral_profile: {
         Args: never
         Returns: {
