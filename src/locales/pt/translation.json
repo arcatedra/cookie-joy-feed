@@ -1542,5 +1542,12 @@
     "subtitle": "Compre por unidade · Pagamento seguro com Stripe",
     "metaTitle": "Loja — HAZOREX",
     "metaDesc": "Compre biscoitos artesanais HAZOREX por unidade. Pagamento seguro com Stripe."
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

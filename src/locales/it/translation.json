@@ -1539,5 +1539,12 @@
     "subtitle": "Acquisto a pezzo · Pagamento sicuro con Stripe",
     "metaTitle": "Negozio — HAZOREX",
     "metaDesc": "Acquista biscotti artigianali HAZOREX a pezzo. Pagamento sicuro con Stripe."
+  },
+  "tracking": {
+    "etaTitle": "Arrives approx. {{time}}",
+    "etaPending": "Calculating arrival time…",
+    "stopPosition": "You are stop {{position}} of {{total}}",
+    "delivered": "Delivered",
+    "failed": "Delivery attempt failed"
   }
 }

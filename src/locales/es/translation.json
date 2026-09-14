@@ -1552,5 +1552,12 @@
     "subtitle": "Compra por unidad · Pago seguro con Stripe",
     "metaTitle": "Tienda — HAZOREX",
     "metaDesc": "Compra galletas artesanales HAZOREX por unidad. Pago seguro con Stripe."
+  },
+  "tracking": {
+    "etaTitle": "Llega aprox. {{time}}",
+    "etaPending": "Calculando la hora de llegada…",
+    "stopPosition": "Eres la parada {{position}} de {{total}}",
+    "delivered": "Entregado",
+    "failed": "No se pudo entregar"
   }
 }
