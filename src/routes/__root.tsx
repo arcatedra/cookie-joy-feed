@@ -168,7 +168,11 @@ function RootComponent() {
 
   useEffect(() => {
     // Defer past hydration commit to avoid SSR/CSR text mismatch.
-    const id = window.setTimeout(() => syncClientLanguage(), 0);
+    const id = window.setTimeout(() => {
+      syncClientLanguage();
+      // Guarda el idioma en el perfil para enviar avisos en su idioma.
+      void import("@/lib/profile-locale").then((m) => m.syncProfileLocale());
+    }, 0);
     return () => window.clearTimeout(id);
   }, []);
 
