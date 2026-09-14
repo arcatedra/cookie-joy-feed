@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { getOrderTracking } from "@/lib/tracking.functions";
-import { getMyStopEta } from "@/lib/eta.functions";
+import { getMyStopEta, getMyDeliveryProof } from "@/lib/eta.functions";
+import { ProofOfDeliveryView } from "@/components/ProofOfDelivery";
 import { haversineKm } from "@/lib/gps-deeplinks";
 import { GoogleMapView } from "@/components/courier/GoogleMapView";
 import { ReportIssueSheet } from "@/components/ReportIssueSheet";
@@ -50,6 +51,12 @@ function OrderTracking() {
     queryKey: ["stop-eta", id],
     queryFn: () => getMyStopEta({ data: { orderId: id } }),
     refetchInterval: 60000,
+  });
+
+  const proofQ = useQuery({
+    queryKey: ["delivery-proof", id],
+    queryFn: () => getMyDeliveryProof({ data: { orderId: id } }),
+    staleTime: 30 * 60 * 1000,
   });
 
   // Realtime updates on this order
@@ -106,6 +113,25 @@ function OrderTracking() {
       {/* Bottom info */}
       <div className="border-t border-[#c8862e]/30 bg-white shadow-2xl">
         <div className="mx-auto max-w-md space-y-3 p-4">
+          {/* Comprobante de entrega */}
+          {proofQ.data?.deliveredAt && (
+            <ProofOfDeliveryView
+              title={t("tracking.proofTitle")}
+              deliveredAtLabel={t("tracking.proofDeliveredAt", {
+                datetime: new Date(proofQ.data.deliveredAt).toLocaleString(i18n.language, {
+                  day: "numeric",
+                  month: "long",
+                  hour: "numeric",
+                  minute: "2-digit",
+                }),
+              })}
+              photoUrl={proofQ.data.photoUrl}
+              note={proofQ.data.note}
+              noteLabel={t("tracking.proofNoteLabel")}
+              photoAlt={t("tracking.proofPhotoAlt")}
+            />
+          )}
+
           {/* ETA */}
           {etaQ.data && (
             <div className="rounded-xl border border-[#c8862e]/30 bg-[#f4f1ea] p-3 text-center">

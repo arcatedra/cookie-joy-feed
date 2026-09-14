@@ -1558,6 +1558,10 @@
     "etaPending": "Calculando la hora de llegada…",
     "stopPosition": "Eres la parada {{position}} de {{total}}",
     "delivered": "Entregado",
-    "failed": "No se pudo entregar"
+    "failed": "No se pudo entregar",
+    "proofTitle": "Entregado",
+    "proofDeliveredAt": "Entregado el {{datetime}}",
+    "proofNoteLabel": "Dónde se dejó",
+    "proofPhotoAlt": "Foto de la entrega"
   }
 }

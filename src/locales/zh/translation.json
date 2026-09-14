@@ -1545,6 +1545,10 @@
     "etaPending": "Calculating arrival time…",
     "stopPosition": "You are stop {{position}} of {{total}}",
     "delivered": "Delivered",
-    "failed": "Delivery attempt failed"
+    "failed": "Delivery attempt failed",
+    "proofTitle": "Delivered",
+    "proofDeliveredAt": "Delivered on {{datetime}}",
+    "proofNoteLabel": "Where it was left",
+    "proofPhotoAlt": "Delivery photo"
   }
 }
