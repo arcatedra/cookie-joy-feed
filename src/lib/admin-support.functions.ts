@@ -28,7 +28,7 @@ export const adminListIssues = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { data, error } = await (context.supabase as any)
-      .from("order_item_issues")
+      .from("support_issues")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(100);
@@ -84,7 +84,7 @@ export const adminMarkProductUnavailable = createServerFn({ method: "POST" })
     if (!item) throw new Error("Item inválido");
 
     const { data: issue, error } = await supabase
-      .from("order_item_issues")
+      .from("support_issues")
       .insert({
         order_id: order.id,
         user_id: order.user_id,

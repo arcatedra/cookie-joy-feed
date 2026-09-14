@@ -20,14 +20,22 @@ interface Message {
 }
 interface Issue {
   id: string;
-  order_id: string;
+  order_id: string | null;
   status: string;
-  product_name: string;
-  original_price: number;
-  replacement_name: string | null;
-  replacement_price: number | null;
-  replacement_image: string | null;
+  reason?: string | null;
+  product_name?: string | null;
+  original_price?: number | null;
+  replacement_name?: string | null;
+  replacement_price?: number | null;
+  replacement_image?: string | null;
 }
+
+const REASON_LABEL: Record<string, string> = {
+  falta_articulo: "Falta un artículo",
+  danado: "Llegó dañado",
+  no_llego: "No me llegó",
+  otro: "Otro",
+};
 interface Conversation {
   id: string;
   status: string;
@@ -182,8 +190,21 @@ export function SupportChatSheet({
         {/* Order banner */}
         {issue && (
           <div className="border-b border-gray-200 bg-amber-50 px-4 py-2 text-xs text-[#1a0f0a]">
-            Pedido <span className="font-mono font-bold">#{orderShort}</span> · Producto:{" "}
-            <span className="font-semibold">{issue.product_name}</span>
+            Pedido <span className="font-mono font-bold">#{orderShort}</span>
+            {issue.reason && (
+              <>
+                {" · Motivo: "}
+                <span className="font-semibold">
+                  {REASON_LABEL[issue.reason] ?? issue.reason}
+                </span>
+              </>
+            )}
+            {issue.product_name && (
+              <>
+                {" · Producto: "}
+                <span className="font-semibold">{issue.product_name}</span>
+              </>
+            )}
           </div>
         )}
 
