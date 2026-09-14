@@ -18,6 +18,7 @@ import {
   ChevronRight,
   Package,
   Store,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,6 +46,7 @@ import {
   setStoredGpsPref,
   type GpsApp,
 } from "@/lib/gps-deeplinks";
+import { reportRouteDelay } from "@/lib/eta.functions";
 import { ChatDrawer } from "@/components/courier/ChatDrawer";
 import { GoogleMapView } from "@/components/courier/GoogleMapView";
 
@@ -160,6 +162,7 @@ function NavegacionPedido() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [problemOpen, setProblemOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [delayOpen, setDelayOpen] = useState(false);
 
   if (detail.isLoading) {
     return (
@@ -307,8 +310,65 @@ function NavegacionPedido() {
           qc.invalidateQueries({ queryKey: ["courier", "order", id] });
         }}
       />
+      <DelaySheet open={delayOpen} onClose={() => setDelayOpen(false)} />
       <ChatDrawer orderId={id} role="driver" open={chatOpen} onOpenChange={setChatOpen} />
     </div>
+  );
+}
+
+function DelaySheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const delayFn = useServerFn(reportRouteDelay);
+  const [pending, setPending] = useState<number | null>(null);
+
+  const apply = async (minutes: 15 | 30 | 60) => {
+    setPending(minutes);
+    try {
+      const res = await delayFn({ data: { minutes } });
+      const hora = res.nextEta
+        ? new Intl.DateTimeFormat("es-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: "America/New_York",
+          }).format(new Date(res.nextEta))
+        : null;
+      toast.success(
+        `Listo. Avisamos a ${res.notified} cliente(s).` +
+          (hora ? ` Nueva hora estimada de tu próxima parada: ${hora}.` : ""),
+      );
+      onClose();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "No se pudo aplicar el retraso");
+    } finally {
+      setPending(null);
+    }
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+      <SheetContent side="bottom" className="rounded-t-2xl">
+        <SheetHeader>
+          <SheetTitle>¿Cuánto retraso llevas?</SheetTitle>
+        </SheetHeader>
+        <p className="pt-1 text-sm text-[#4a3525]">
+          Avisaremos a los clientes de tus paradas pendientes con la nueva hora estimada.
+        </p>
+        <div className="space-y-3 py-4">
+          {([15, 30, 60] as const).map((m) => (
+            <Button
+              key={m}
+              variant="outline"
+              className="h-16 w-full border-2 border-amber-500 bg-amber-50 text-lg font-bold text-amber-900 hover:bg-amber-100"
+              disabled={pending !== null}
+              onClick={() => apply(m)}
+            >
+              {pending === m ? <Loader2 className="mr-2 size-5 animate-spin" /> : <Clock className="mr-2 size-5" />}
+              {m === 60 ? "+1 hora" : `+${m} min`}
+            </Button>
+          ))}
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 
