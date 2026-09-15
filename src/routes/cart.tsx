@@ -295,7 +295,14 @@ function CartPage() {
               ${total.toFixed(2)}
             </span>
           </div>
+          <p className="mt-2 rounded-md bg-muted/60 p-2 text-xs text-muted-foreground">
+            {t("cartPage.authHoldNote", {
+              defaultValue:
+                "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque.",
+            })}
+          </p>
         </section>
+
 
 
         {!clientSecret && (
