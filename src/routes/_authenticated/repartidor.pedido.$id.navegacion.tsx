@@ -60,7 +60,6 @@ type Target = {
   lng: number;
   address: string;
   contactName: string | null;
-  contactPhone: string | null;
   notes: string | null;
   label: string; // "Recolección" o "Entrega 1 de 3"
   stopId?: string;
