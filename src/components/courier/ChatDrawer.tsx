@@ -37,6 +37,7 @@ export function ChatDrawer({
   const markFn = useServerFn(markMessagesRead);
   const [text, setText] = useState("");
   const [freeTextOpen, setFreeTextOpen] = useState(role === "customer");
+  const [blocked, setBlocked] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
