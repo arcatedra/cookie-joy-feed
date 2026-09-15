@@ -241,6 +241,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           ],
           payment_intent_data: {
             description: `HAZOREX ${pedidoRow.numero_pedido}`,
+            // Reserva el dinero; el cobro real ocurre al terminar el empaque.
+            capture_method: "manual",
             metadata: {
               kind: "cookie_order",
               pedido_id: pedidoRow.id,
