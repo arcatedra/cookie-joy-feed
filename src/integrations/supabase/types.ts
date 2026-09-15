@@ -179,55 +179,76 @@ export type Database = {
       }
       businesses: {
         Row: {
+          activo: boolean
           address: string
           approved_at: string | null
           approved_by: string | null
+          banner_url: string | null
           business_name: string
           business_type: string
           city: string | null
+          comision_porcentaje: number
           created_at: string
+          descripcion: string | null
           email: string
+          horario: Json
           id: string
           logo_url: string | null
           owner_user_id: string
           phone: string
           rejection_reason: string | null
+          slug: string | null
           status: string
           updated_at: string
+          zonas_que_atiende: string[]
         }
         Insert: {
+          activo?: boolean
           address: string
           approved_at?: string | null
           approved_by?: string | null
+          banner_url?: string | null
           business_name: string
           business_type: string
           city?: string | null
+          comision_porcentaje?: number
           created_at?: string
+          descripcion?: string | null
           email: string
+          horario?: Json
           id?: string
           logo_url?: string | null
           owner_user_id: string
           phone: string
           rejection_reason?: string | null
+          slug?: string | null
           status?: string
           updated_at?: string
+          zonas_que_atiende?: string[]
         }
         Update: {
+          activo?: boolean
           address?: string
           approved_at?: string | null
           approved_by?: string | null
+          banner_url?: string | null
           business_name?: string
           business_type?: string
           city?: string | null
+          comision_porcentaje?: number
           created_at?: string
+          descripcion?: string | null
           email?: string
+          horario?: Json
           id?: string
           logo_url?: string | null
           owner_user_id?: string
           phone?: string
           rejection_reason?: string | null
+          slug?: string | null
           status?: string
           updated_at?: string
+          zonas_que_atiende?: string[]
         }
         Relationships: []
       }
@@ -923,6 +944,115 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      store_categories: {
+        Row: {
+          business_id: string
+          created_at: string
+          id: string
+          nombre: string
+          orden: number
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          id?: string
+          nombre: string
+          orden?: number
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          id?: string
+          nombre?: string
+          orden?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_categories_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "approved_businesses_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_categories_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_products: {
+        Row: {
+          business_id: string
+          category_id: string | null
+          created_at: string
+          descripcion: string | null
+          disponible: boolean
+          id: string
+          imagen_url: string | null
+          nombre: string
+          orden: number
+          precio: number
+          unidad: string
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          category_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          disponible?: boolean
+          id?: string
+          imagen_url?: string | null
+          nombre: string
+          orden?: number
+          precio?: number
+          unidad?: string
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          category_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          disponible?: boolean
+          id?: string
+          imagen_url?: string | null
+          nombre?: string
+          orden?: number
+          precio?: number
+          unidad?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_products_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "approved_businesses_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_products_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "store_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       support_conversations: {
         Row: {
