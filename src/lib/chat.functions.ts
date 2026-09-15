@@ -106,7 +106,7 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
       }
     }
 
-    return { ok: true };
+    return { ok: true as const, blocked: false as const, message: null };
   });
 
 /** Envía el aviso (push) del mensaje rápido al cliente, en su idioma. */
