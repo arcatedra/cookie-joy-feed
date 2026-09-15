@@ -1516,7 +1516,8 @@
     "increase": "増やす",
     "remove": "削除",
     "back": "戻る",
-    "checkoutError": "支払いを開始できませんでした"
+    "checkoutError": "支払いを開始できませんでした",
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",

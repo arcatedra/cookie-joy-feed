@@ -1511,7 +1511,8 @@
     "increase": "增加",
     "remove": "删除",
     "back": "返回",
-    "checkoutError": "无法启动付款"
+    "checkoutError": "无法启动付款",
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",

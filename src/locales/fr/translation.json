@@ -1511,7 +1511,8 @@
     "increase": "augmenter",
     "remove": "supprimer",
     "back": "retour",
-    "checkoutError": "Impossible de démarrer le paiement"
+    "checkoutError": "Impossible de démarrer le paiement",
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",

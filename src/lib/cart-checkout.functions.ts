@@ -126,6 +126,27 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     );
     const totalCents = subtotalCents + shippingRate.amount;
 
+    // ---- Margen de autorización -----------------------------------------
+    // Se reserva (autoriza) el estimado + un margen, y al terminar el empaque
+    // se captura solo el monto real. Ver /admin/empaque.
+    let bufferPct = 15;
+    let bufferMinCents = 500;
+    {
+      const { data: cfg } = await supabase.rpc("auth_buffer_settings" as never);
+      const row = (Array.isArray(cfg) ? cfg[0] : cfg) as
+        | { pct?: number; min_cents?: number }
+        | null
+        | undefined;
+      if (row?.pct != null) bufferPct = Number(row.pct);
+      if (row?.min_cents != null) bufferMinCents = Number(row.min_cents);
+    }
+    const bufferCents = Math.max(
+      Math.round((subtotalCents * bufferPct) / 100),
+      bufferMinCents,
+    );
+    const authorizedCents = totalCents + bufferCents;
+
+
 
     // Insert the pedido row in "pendiente" state under RLS (auth.uid() = cliente_id).
     const { data: pedidoRow, error: pedErr } = await supabase
@@ -140,6 +161,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         moneda: "USD",
         direccion_envio: data.address,
         metodo_pago: "stripe",
+        flujo_pago: "autorizacion_diferida",
+        monto_autorizado: authorizedCents / 100,
       })
       .select("id, numero_pedido")
       .single();
@@ -180,6 +203,19 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       },
     }));
 
+    // Margen reservado: no es un cargo, solo amplía la autorización para
+    // cubrir diferencias de peso o sustituciones más caras.
+    lineItems.push({
+      quantity: 1,
+      price_data: {
+        currency: "usd",
+        unit_amount: bufferCents,
+        product_data: {
+          name: "Margen para ajustes de peso y sustituciones (se cobra solo lo real)",
+        },
+      },
+    });
+
     let session: StripeSession;
     try {
       session = await stripePost<StripeSession>(
@@ -205,6 +241,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           ],
           payment_intent_data: {
             description: `HAZOREX ${pedidoRow.numero_pedido}`,
+            // Reserva el dinero; el cobro real ocurre al terminar el empaque.
+            capture_method: "manual",
             metadata: {
               kind: "cookie_order",
               pedido_id: pedidoRow.id,

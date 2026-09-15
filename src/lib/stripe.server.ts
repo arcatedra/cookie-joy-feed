@@ -80,6 +80,40 @@ export async function stripePost<T = unknown>(
   return JSON.parse(text) as T;
 }
 
+/**
+ * Captura (cobra) un monto ya autorizado.
+ *
+ * `idempotencyKey` es obligatoria: si la red falla y se reintenta, Stripe
+ * devuelve el mismo resultado en vez de cobrar dos veces.
+ */
+export async function stripeCapturePaymentIntent<T = unknown>(
+  paymentIntentId: string,
+  amountToCaptureCents: number,
+  idempotencyKey: string,
+  env: StripeEnv = "sandbox",
+): Promise<T> {
+  return stripePost<T>(
+    `/v1/payment_intents/${paymentIntentId}/capture`,
+    { amount_to_capture: amountToCaptureCents },
+    env,
+    { "Idempotency-Key": idempotencyKey },
+  );
+}
+
+/** Libera por completo una autorización sin cobrar nada. */
+export async function stripeCancelPaymentIntent<T = unknown>(
+  paymentIntentId: string,
+  idempotencyKey: string,
+  env: StripeEnv = "sandbox",
+): Promise<T> {
+  return stripePost<T>(
+    `/v1/payment_intents/${paymentIntentId}/cancel`,
+    { cancellation_reason: "abandoned" },
+    env,
+    { "Idempotency-Key": idempotencyKey },
+  );
+}
+
 export async function stripeGet<T = unknown>(
   path: string,
   env: StripeEnv = "sandbox",

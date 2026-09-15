@@ -169,11 +169,16 @@ function SuccessPage() {
                   )}
                 </div>
                 <div className="mt-3 flex items-baseline justify-between border-t border-gray-200 pt-3">
-                  <span className="text-base font-bold text-[#1a0f0a]">Total</span>
+                  <span className="text-base font-bold text-[#1a0f0a]">Total estimado</span>
                   <span className="text-2xl font-extrabold text-red-700">
                     ${order.total_usd.toFixed(2)}
                   </span>
                 </div>
+                <p className="mt-2 rounded-md bg-amber-50 p-2 text-xs text-[#5b4636]">
+                  Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o
+                  sustituciones. Al terminar de preparar tu pedido se cobra <strong>solo lo
+                  real</strong> y el resto se libera solo.
+                </p>
               </div>
 
               <div className="mt-7 grid grid-cols-1 gap-2 sm:grid-cols-2">

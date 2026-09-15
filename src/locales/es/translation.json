@@ -1511,7 +1511,8 @@
     "increase": "aumentar",
     "remove": "eliminar",
     "back": "volver",
-    "checkoutError": "No se pudo iniciar el pago"
+    "checkoutError": "No se pudo iniciar el pago",
+    "authHoldNote": "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque."
   },
   "favorites": {
     "add": "Guardar en favoritos",

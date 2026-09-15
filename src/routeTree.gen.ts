@@ -41,6 +41,7 @@ import { Route as AuthenticatedMiCuentaRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMisPedidosRouteImport } from './routes/_authenticated/mis-pedidos'
 import { Route as AuthenticatedRepartidorRouteImport } from './routes/_authenticated/repartidor'
 import { Route as AuthenticatedSuggestionsRouteImport } from './routes/_authenticated/suggestions'
+import { Route as AdminEmpaqueRouteImport } from './routes/admin.empaque'
 import { Route as AdminShippingRouteImport } from './routes/admin.shipping'
 import { Route as AdminSweepstakesRouteImport } from './routes/admin.sweepstakes'
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
@@ -260,6 +261,11 @@ const AuthenticatedSuggestionsRoute =
     path: '/suggestions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AdminEmpaqueRoute = AdminEmpaqueRouteImport.update({
+  id: '/admin/empaque',
+  path: '/admin/empaque',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminShippingRoute = AdminShippingRouteImport.update({
   id: '/admin/shipping',
   path: '/admin/shipping',
@@ -623,6 +629,7 @@ export interface FileRoutesByFullPath {
   '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/suggestions': typeof AuthenticatedSuggestionsRoute
+  '/admin/empaque': typeof AdminEmpaqueRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
@@ -712,6 +719,7 @@ export interface FileRoutesByTo {
   '/mi-cuenta': typeof AuthenticatedMiCuentaRoute
   '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/suggestions': typeof AuthenticatedSuggestionsRoute
+  '/admin/empaque': typeof AdminEmpaqueRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
@@ -805,6 +813,7 @@ export interface FileRoutesById {
   '/_authenticated/mis-pedidos': typeof AuthenticatedMisPedidosRoute
   '/_authenticated/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
+  '/admin/empaque': typeof AdminEmpaqueRoute
   '/admin/shipping': typeof AdminShippingRoute
   '/admin/sweepstakes': typeof AdminSweepstakesRouteWithChildren
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
@@ -898,6 +907,7 @@ export interface FileRouteTypes {
     | '/mis-pedidos'
     | '/repartidor'
     | '/suggestions'
+    | '/admin/empaque'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/admin/withdrawals'
@@ -987,6 +997,7 @@ export interface FileRouteTypes {
     | '/mi-cuenta'
     | '/mis-pedidos'
     | '/suggestions'
+    | '/admin/empaque'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/admin/withdrawals'
@@ -1079,6 +1090,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mis-pedidos'
     | '/_authenticated/repartidor'
     | '/_authenticated/suggestions'
+    | '/admin/empaque'
     | '/admin/shipping'
     | '/admin/sweepstakes'
     | '/admin/withdrawals'
@@ -1167,6 +1179,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
+  AdminEmpaqueRoute: typeof AdminEmpaqueRoute
   AdminShippingRoute: typeof AdminShippingRoute
   AdminSweepstakesRoute: typeof AdminSweepstakesRouteWithChildren
   AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
@@ -1420,6 +1433,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/suggestions'
       preLoaderRoute: typeof AuthenticatedSuggestionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/admin/empaque': {
+      id: '/admin/empaque'
+      path: '/admin/empaque'
+      fullPath: '/admin/empaque'
+      preLoaderRoute: typeof AdminEmpaqueRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/shipping': {
       id: '/admin/shipping'
@@ -1985,6 +2005,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
+  AdminEmpaqueRoute: AdminEmpaqueRoute,
   AdminShippingRoute: AdminShippingRoute,
   AdminSweepstakesRoute: AdminSweepstakesRouteWithChildren,
   AdminWithdrawalsRoute: AdminWithdrawalsRoute,
