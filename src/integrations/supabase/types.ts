@@ -987,6 +987,162 @@ export type Database = {
           },
         ]
       }
+      store_order_items: {
+        Row: {
+          cantidad: number
+          cantidad_real: number | null
+          created_at: string
+          id: string
+          nombre_producto: string
+          order_id: string
+          precio_unitario: number
+          product_id: string | null
+          subtotal_item: number
+          unidad: string
+          updated_at: string
+        }
+        Insert: {
+          cantidad: number
+          cantidad_real?: number | null
+          created_at?: string
+          id?: string
+          nombre_producto: string
+          order_id: string
+          precio_unitario: number
+          product_id?: string | null
+          subtotal_item: number
+          unidad?: string
+          updated_at?: string
+        }
+        Update: {
+          cantidad?: number
+          cantidad_real?: number | null
+          created_at?: string
+          id?: string
+          nombre_producto?: string
+          order_id?: string
+          precio_unitario?: number
+          product_id?: string | null
+          subtotal_item?: number
+          unidad?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "store_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_orders: {
+        Row: {
+          ajuste_pendiente: number
+          autorizado_en: string | null
+          business_id: string
+          captura_error: string | null
+          captura_intentos: number
+          capturado_en: string | null
+          cliente_id: string
+          comision_estimada: number
+          comision_final: number | null
+          comision_porcentaje: number
+          costo_envio: number
+          created_at: string
+          direccion_envio: Json
+          estado: string
+          id: string
+          moneda: string
+          monto_autorizado: number | null
+          monto_capturado: number | null
+          notas: string | null
+          numero_pedido: string
+          stripe_checkout_session_id: string | null
+          stripe_payment_intent_id: string | null
+          subtotal: number
+          total_estimado: number
+          updated_at: string
+        }
+        Insert: {
+          ajuste_pendiente?: number
+          autorizado_en?: string | null
+          business_id: string
+          captura_error?: string | null
+          captura_intentos?: number
+          capturado_en?: string | null
+          cliente_id: string
+          comision_estimada?: number
+          comision_final?: number | null
+          comision_porcentaje?: number
+          costo_envio?: number
+          created_at?: string
+          direccion_envio?: Json
+          estado?: string
+          id?: string
+          moneda?: string
+          monto_autorizado?: number | null
+          monto_capturado?: number | null
+          notas?: string | null
+          numero_pedido?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal?: number
+          total_estimado?: number
+          updated_at?: string
+        }
+        Update: {
+          ajuste_pendiente?: number
+          autorizado_en?: string | null
+          business_id?: string
+          captura_error?: string | null
+          captura_intentos?: number
+          capturado_en?: string | null
+          cliente_id?: string
+          comision_estimada?: number
+          comision_final?: number | null
+          comision_porcentaje?: number
+          costo_envio?: number
+          created_at?: string
+          direccion_envio?: Json
+          estado?: string
+          id?: string
+          moneda?: string
+          monto_autorizado?: number | null
+          monto_capturado?: number | null
+          notas?: string | null
+          numero_pedido?: string
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subtotal?: number
+          total_estimado?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_orders_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "approved_businesses_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_orders_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       store_products: {
         Row: {
           business_id: string
