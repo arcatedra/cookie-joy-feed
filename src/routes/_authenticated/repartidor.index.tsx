@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -37,11 +37,16 @@ function RepartidorHome() {
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
     queryFn: () => getDriverStatus(),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const active = useQuery({
     queryKey: ["courier", "active-order"],
     queryFn: () => getActiveOrder(),
+    staleTime: 30_000,
+    gcTime: 10 * 60_000,
   });
 
   // Redirect onboarding-incomplete users
@@ -64,6 +69,9 @@ function RepartidorHome() {
     queryFn: () => listAvailableOrders(),
     enabled: !active.data && isOnline,
     refetchInterval: isOnline ? 15000 : false,
+    staleTime: 10_000,
+    gcTime: 10 * 60_000,
+    placeholderData: keepPreviousData,
   });
 
   const acceptFn = useServerFn(acceptOrder);
@@ -115,9 +123,23 @@ function RepartidorHome() {
       }
       return;
     }
+    // Throttle: at most one ping every 10s, or sooner if we moved >25 m.
+    let lastSent = 0;
+    let lastPos: { lat: number; lng: number } | null = null;
+    const movedMeters = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+      const dLat = (b.lat - a.lat) * 111_320;
+      const dLng = (b.lng - a.lng) * 111_320 * Math.cos((a.lat * Math.PI) / 180);
+      return Math.sqrt(dLat * dLat + dLng * dLng);
+    };
     watchIdRef.current = navigator.geolocation.watchPosition(
       (p) => {
-        pingFn({ data: { lat: p.coords.latitude, lng: p.coords.longitude } }).catch(() => {});
+        const next = { lat: p.coords.latitude, lng: p.coords.longitude };
+        const now = Date.now();
+        const farEnough = lastPos ? movedMeters(lastPos, next) > 25 : true;
+        if (now - lastSent < 10_000 && !farEnough) return;
+        lastSent = now;
+        lastPos = next;
+        pingFn({ data: next }).catch(() => {});
       },
       () => {},
       { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 }

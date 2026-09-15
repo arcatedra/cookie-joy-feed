@@ -29,6 +29,9 @@ export function DriverLayout({ children }: { children: React.ReactNode }) {
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
     queryFn: () => getDriverStatus(),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const toggleOnline = useMutation({
@@ -69,6 +72,7 @@ export function DriverLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={it.to}
                 to={it.to}
+                preload="intent"
                 className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium transition ${
                   isActive(it.to, "exact" in it && it.exact)
                     ? "bg-white/20 text-white"
@@ -128,6 +132,7 @@ export function DriverLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={it.to}
                 to={it.to}
+                preload="intent"
                 onClick={() => setMenuOpen(false)}
                 className={`flex items-center gap-2 rounded px-3 py-2 text-sm ${
                   isActive(it.to, "exact" in it && it.exact)

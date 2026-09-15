@@ -12,6 +12,9 @@ function RatingsPage() {
   const q = useQuery({
     queryKey: ["driver-ratings"],
     queryFn: () => getMyDriverRatings(),
+    staleTime: 5 * 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   if (q.isLoading) {

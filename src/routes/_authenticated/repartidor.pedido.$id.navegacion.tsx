@@ -79,8 +79,12 @@ function NavegacionPedido() {
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   useEffect(() => {
     if (typeof navigator === "undefined" || !navigator.geolocation) return;
+    const round = (n: number) => Math.round(n * 1e5) / 1e5; // ~1 m
     const w = navigator.geolocation.watchPosition(
-      (p) => setPos({ lat: p.coords.latitude, lng: p.coords.longitude }),
+      (p) => {
+        const next = { lat: round(p.coords.latitude), lng: round(p.coords.longitude) };
+        setPos((prev) => (prev && prev.lat === next.lat && prev.lng === next.lng ? prev : next));
+      },
       () => {},
       { enableHighAccuracy: true, maximumAge: 10_000, timeout: 15_000 },
     );
@@ -369,10 +373,14 @@ function MapPreview({
   driver: { lat: number; lng: number } | null;
   target: { lat: number; lng: number };
 }) {
-  const markers = [
-    ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
-    { position: target, color: "target" as const, title: "Destino" },
-  ];
+  // Memoized so GPS ticks don't force the map to rebuild its markers.
+  const markers = useMemo(
+    () => [
+      ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
+      { position: target, color: "target" as const, title: "Destino" },
+    ],
+    [driver?.lat, driver?.lng, target.lat, target.lng],
+  );
   return (
     <div className="relative h-full w-full bg-[#0f2338]">
       <GoogleMapView markers={markers} className="h-full w-full" />

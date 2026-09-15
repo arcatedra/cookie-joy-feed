@@ -1,5 +1,5 @@
 /// <reference types="google.maps" />
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMapsBrowserKey } from "@/lib/maps-config.functions";
 
 type LatLng = { lat: number; lng: number };
@@ -71,8 +71,10 @@ export function GoogleMapView({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const markerObjsRef = useRef<google.maps.Marker[]>([]);
+  const markerObjsRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const polylineObjRef = useRef<google.maps.Polyline | null>(null);
+  const fitSigRef = useRef<string | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -91,6 +93,7 @@ export function GoogleMapView({
             { featureType: "transit", stylers: [{ visibility: "off" }] },
           ],
         });
+        setReady(true);
       })
       .catch(() => {});
     return () => {
@@ -99,14 +102,12 @@ export function GoogleMapView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update markers
+  // Update markers (reuse existing marker objects; only refit when the
+  // non-driver targets change, so GPS ticks don't re-render the whole map)
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !window.google?.maps) return;
     const g = window.google;
-
-    markerObjsRef.current.forEach((m) => m.setMap(null));
-    markerObjsRef.current = [];
 
     const colorFor = (c?: MapMarker["color"]) => {
       switch (c) {
@@ -121,34 +122,60 @@ export function GoogleMapView({
       }
     };
 
+    const seen = new Set<string>();
     const bounds = new g.maps.LatLngBounds();
+
     markers.forEach((m, i) => {
-      const marker = new g.maps.Marker({
-        position: m.position,
-        map,
-        title: m.title,
-        label: m.label ? { text: m.label, color: "#fff", fontWeight: "bold", fontSize: "12px" } : undefined,
-        icon: {
-          path: g.maps.SymbolPath.CIRCLE,
-          scale: 12,
-          fillColor: colorFor(m.color),
-          fillOpacity: 1,
-          strokeColor: "#fff",
-          strokeWeight: 2,
-        },
-        zIndex: 100 + i,
-      });
-      markerObjsRef.current.push(marker);
+      const key = `${m.color ?? "target"}|${m.title ?? ""}|${m.label ?? ""}|${i}`;
+      seen.add(key);
+      const existing = markerObjsRef.current.get(key);
+      if (existing) {
+        existing.setPosition(m.position);
+      } else {
+        markerObjsRef.current.set(
+          key,
+          new g.maps.Marker({
+            position: m.position,
+            map,
+            title: m.title,
+            label: m.label ? { text: m.label, color: "#fff", fontWeight: "bold", fontSize: "12px" } : undefined,
+            icon: {
+              path: g.maps.SymbolPath.CIRCLE,
+              scale: 12,
+              fillColor: colorFor(m.color),
+              fillOpacity: 1,
+              strokeColor: "#fff",
+              strokeWeight: 2,
+            },
+            zIndex: 100 + i,
+          }),
+        );
+      }
       bounds.extend(m.position);
     });
 
-    if (markers.length > 1) {
-      map.fitBounds(bounds, 48);
-    } else if (markers.length === 1) {
-      map.setCenter(markers[0].position);
-      map.setZoom(15);
+    markerObjsRef.current.forEach((marker, key) => {
+      if (!seen.has(key)) {
+        marker.setMap(null);
+        markerObjsRef.current.delete(key);
+      }
+    });
+
+    // Only refit the viewport when the fixed targets change, not on every GPS tick.
+    const fitSig = markers
+      .filter((m) => m.color !== "driver")
+      .map((m) => `${m.position.lat.toFixed(5)},${m.position.lng.toFixed(5)}`)
+      .join("|");
+    if (fitSig !== fitSigRef.current) {
+      fitSigRef.current = fitSig;
+      if (markers.length > 1) {
+        map.fitBounds(bounds, 48);
+      } else if (markers.length === 1) {
+        map.setCenter(markers[0].position);
+        map.setZoom(15);
+      }
     }
-  }, [markers]);
+  }, [markers, ready]);
 
   // Update polyline
   useEffect(() => {
@@ -173,7 +200,7 @@ export function GoogleMapView({
       strokeOpacity: 0.9,
       strokeWeight: 5,
     });
-  }, [polyline]);
+  }, [polyline, ready]);
 
   return <div ref={ref} className={className ?? "h-full w-full"} />;
 }

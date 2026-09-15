@@ -49,6 +49,9 @@ function DriverInvoicesPage() {
   const q = useQuery({
     queryKey: ["driver-invoices"],
     queryFn: () => listFn(),
+    staleTime: 5 * 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const handlePDF = async (month: string) => {

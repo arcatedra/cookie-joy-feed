@@ -59,6 +59,9 @@ function EarningsPage() {
   const walletQ = useQuery({
     queryKey: ["route-wallet"],
     queryFn: () => getRouteWallet(),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const onboardFn = useServerFn(createStripeConnectOnboarding);
