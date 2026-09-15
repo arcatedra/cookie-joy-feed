@@ -50,6 +50,18 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
     const o = order as Record<string, unknown>;
     const role: "driver" | "customer" = o["driver_id"] === userId ? "driver" : "customer";
 
+    // Seguridad: no se permite compartir números, correos ni apps de contacto.
+    const check = checkMessageForContacts(data.body);
+    if (!check.ok) {
+      await logPolicyViolation({
+        orderId: data.orderId,
+        userId,
+        role,
+        text: data.body,
+      });
+      return { ok: false as const, blocked: true as const, message: CONTACT_BLOCK_MESSAGE };
+    }
+
     const { error } = await supabase.from("order_messages").insert({
       order_id: data.orderId,
       sender_id: userId,
