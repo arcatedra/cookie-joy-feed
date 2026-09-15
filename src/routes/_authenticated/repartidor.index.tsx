@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -71,7 +71,7 @@ function RepartidorHome() {
     refetchInterval: isOnline ? 15000 : false,
     staleTime: 10_000,
     gcTime: 10 * 60_000,
-    placeholderData: (prev: unknown) => prev,
+    placeholderData: keepPreviousData,
   });
 
   const acceptFn = useServerFn(acceptOrder);
