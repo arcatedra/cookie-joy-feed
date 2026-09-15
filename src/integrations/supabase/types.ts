@@ -336,6 +336,33 @@ export type Database = {
           },
         ]
       }
+      policy_violations: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string | null
+          role: string
+          texto_intentado: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          role: string
+          texto_intentado: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          role?: string
+          texto_intentado?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       productos: {
         Row: {
           categoria: string | null
