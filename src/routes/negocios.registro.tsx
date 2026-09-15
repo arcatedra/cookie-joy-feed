@@ -145,6 +145,14 @@ function BusinessRegistrationPage() {
     );
   }
 
+  if (bootError) {
+    return (
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={bootError} onRetry={() => void loadBoot()} />
+      </div>
+    );
+  }
+
   if (submitted) {
     return (
       <div className="min-h-screen bg-[#f4f1ea]">
