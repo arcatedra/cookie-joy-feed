@@ -12,6 +12,8 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
+import { SubstitutionPicker } from "@/components/SubstitutionPicker";
+import { DEFAULT_SUBSTITUTION_MODE } from "@/lib/substitutions";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/cart")({
