@@ -123,9 +123,23 @@ function RepartidorHome() {
       }
       return;
     }
+    // Throttle: at most one ping every 10s, or sooner if we moved >25 m.
+    let lastSent = 0;
+    let lastPos: { lat: number; lng: number } | null = null;
+    const movedMeters = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+      const dLat = (b.lat - a.lat) * 111_320;
+      const dLng = (b.lng - a.lng) * 111_320 * Math.cos((a.lat * Math.PI) / 180);
+      return Math.sqrt(dLat * dLat + dLng * dLng);
+    };
     watchIdRef.current = navigator.geolocation.watchPosition(
       (p) => {
-        pingFn({ data: { lat: p.coords.latitude, lng: p.coords.longitude } }).catch(() => {});
+        const next = { lat: p.coords.latitude, lng: p.coords.longitude };
+        const now = Date.now();
+        const farEnough = lastPos ? movedMeters(lastPos, next) > 25 : true;
+        if (now - lastSent < 10_000 && !farEnough) return;
+        lastSent = now;
+        lastPos = next;
+        pingFn({ data: next }).catch(() => {});
       },
       () => {},
       { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 }
