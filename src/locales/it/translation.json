@@ -1511,7 +1511,8 @@
     "increase": "aumenta",
     "remove": "rimuovi",
     "back": "indietro",
-    "checkoutError": "Impossibile avviare il pagamento"
+    "checkoutError": "Impossibile avviare il pagamento",
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
