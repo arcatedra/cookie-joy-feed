@@ -93,6 +93,7 @@ function RepartidoresLanding() {
             {t("repartidoresPage.hero.titlePart1")}{" "}
             <span className="text-[#E6C35C]">{t("repartidoresPage.hero.titleHighlight")}</span>
             <br className="hidden md:block" />
+            <span className="md:hidden">{" "}</span>
             {t("repartidoresPage.hero.titlePart2")}
           </h1>
 
