@@ -203,6 +203,19 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       },
     }));
 
+    // Margen reservado: no es un cargo, solo amplía la autorización para
+    // cubrir diferencias de peso o sustituciones más caras.
+    lineItems.push({
+      quantity: 1,
+      price_data: {
+        currency: "usd",
+        unit_amount: bufferCents,
+        product_data: {
+          name: "Margen para ajustes de peso y sustituciones (se cobra solo lo real)",
+        },
+      },
+    });
+
     let session: StripeSession;
     try {
       session = await stripePost<StripeSession>(
