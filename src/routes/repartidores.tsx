@@ -903,7 +903,7 @@ function ApplicationForm({
             <div className="grid grid-cols-2 gap-3">
               {(["moto", "auto"] as const).map((v) => {
                 const active = s2.vehicleType === v;
-                const Icon = v === "moto" ? Bike : Car;
+                const Icon = v === "moto" ? Scooter : Car;
                 return (
                   <button
                     key={v}
