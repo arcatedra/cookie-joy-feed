@@ -12,6 +12,8 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
+import { SubstitutionPicker } from "@/components/SubstitutionPicker";
+import { DEFAULT_SUBSTITUTION_MODE } from "@/lib/substitutions";
 import i18n from "@/i18n";
 
 export const Route = createFileRoute("/cart")({
@@ -95,6 +97,8 @@ function CartPage() {
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
+            substitutionMode: it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE,
+            substituteIds: it.substituteIds ?? [],
           })),
           email,
           address,
@@ -185,6 +189,12 @@ function CartPage() {
                     <Plus className="h-3 w-3" />
                   </button>
                 </div>
+                <SubstitutionPicker
+                  itemId={it.id}
+                  mode={it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE}
+                  substituteIds={it.substituteIds ?? []}
+                  onChange={(mode, ids) => cart.setSubstitution(it.id, mode, ids)}
+                />
               </div>
               <div className="flex flex-col items-end gap-2">
                 <span className="text-sm font-bold text-foreground">

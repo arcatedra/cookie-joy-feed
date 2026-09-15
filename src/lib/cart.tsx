@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
+import type { SubstitutionMode } from "@/lib/substitutions";
+
 export interface CartItem {
   id: string;
   name: string;
@@ -7,6 +9,10 @@ export interface CartItem {
   price: number;
   image: string;
   qty: number;
+  /** Qué hacer si el artículo no está disponible al preparar el pedido. */
+  substitutionMode?: SubstitutionMode;
+  /** Alternativas elegidas por el cliente (hasta 3), en orden de preferencia. */
+  substituteIds?: string[];
 }
 
 interface CartContextValue {
@@ -17,6 +23,11 @@ interface CartContextValue {
   add: (item: Omit<CartItem, "qty">, qty?: number) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
+  setSubstitution: (
+    id: string,
+    mode: SubstitutionMode,
+    substituteIds: string[],
+  ) => void;
   clear: () => void;
 }
 
@@ -162,6 +173,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
           if (qty <= 0) return prev.filter((p) => p.id !== id);
           return prev.map((p) => (p.id === id ? { ...p, qty } : p));
         }),
+      setSubstitution: (id, mode, substituteIds) =>
+        setItems((prev) =>
+          prev.map((p) =>
+            p.id === id
+              ? {
+                  ...p,
+                  substitutionMode: mode,
+                  substituteIds: mode === "specific" ? substituteIds.slice(0, 3) : [],
+                }
+              : p,
+          ),
+        ),
       clear: () => setItems([]),
     };
   }, [items, hydrated]);

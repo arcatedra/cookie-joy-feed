@@ -13,6 +13,11 @@ import { haversineKm } from "@/lib/gps-deeplinks";
 import { GoogleMapView } from "@/components/courier/GoogleMapView";
 import { ReportIssueSheet } from "@/components/ReportIssueSheet";
 import { SupportChatSheet } from "@/components/SupportChatSheet";
+import { SubstitutionPrompt } from "@/components/SubstitutionPrompt";
+import {
+  getMyPendingSubstitutions,
+  respondSubstitution,
+} from "@/lib/substitutions.functions";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id/seguimiento")({
   component: OrderTracking,
@@ -57,6 +62,27 @@ function OrderTracking() {
     queryKey: ["delivery-proof", id],
     queryFn: () => getMyDeliveryProof({ data: { orderId: id } }),
     staleTime: 30 * 60 * 1000,
+  });
+
+  // Respuesta llegada desde los botones del aviso del teléfono.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const itemId = params.get("subs");
+    const resp = params.get("resp");
+    if (!itemId || (resp !== "accept" && resp !== "refund")) return;
+    respondSubstitution({ data: { itemId, response: resp } })
+      .catch(() => undefined)
+      .finally(() => {
+        qc.invalidateQueries({ queryKey: ["pending-substitutions", id] });
+        window.history.replaceState({}, "", window.location.pathname);
+      });
+  }, [id, qc]);
+
+  const subsQ = useQuery({
+    queryKey: ["pending-substitutions", id],
+    queryFn: () => getMyPendingSubstitutions({ data: { orderId: id } }),
+    refetchInterval: 30000,
   });
 
   // Realtime updates on this order
@@ -113,6 +139,22 @@ function OrderTracking() {
       {/* Bottom info */}
       <div className="border-t border-[#c8862e]/30 bg-white shadow-2xl">
         <div className="mx-auto max-w-md space-y-3 p-4">
+          {/* Artículos agotados esperando respuesta */}
+          {(subsQ.data ?? []).map((item) => (
+            <SubstitutionPrompt
+              key={item.itemId}
+              itemId={item.itemId}
+              name={item.name}
+              qty={item.qty}
+              notifiedAt={item.notifiedAt}
+              mode={item.mode}
+              onResolved={() =>
+                qc.invalidateQueries({ queryKey: ["pending-substitutions", id] })
+              }
+              onSeeOptions={() => setReportOpen(true)}
+            />
+          ))}
+
           {/* Comprobante de entrega */}
           {proofQ.data?.deliveredAt && (
             <ProofOfDeliveryView

@@ -1566,5 +1566,21 @@
   },
   "chat": {
     "contactBlocked": "Por seguridad, no se pueden compartir números ni contactos."
+  },
+  "subs": {
+    "ifMissing": "Si no está disponible",
+    "modeBestMatch": "La mejor opción similar",
+    "modeSpecific": "Estas alternativas, en orden",
+    "modeRefund": "No sustituir, devuélveme el dinero",
+    "pickUpTo": "Elige hasta {{max}} alternativas",
+    "noCatalog": "No hay alternativas disponibles.",
+    "outOfStockTitle": "{{name}} está agotado",
+    "outOfStockBody": "Cantidad: {{qty}}. Si no respondes en {{time}}, aplicamos tu opción por defecto y seguimos con tu pedido.",
+    "actionAccept": "Sí, llévalo",
+    "actionRefund": "Devuélveme el dinero",
+    "actionOptions": "Ver otras opciones",
+    "defaultRefund": "Por defecto: te devolvemos el dinero.",
+    "defaultBestMatch": "Por defecto: llevamos la mejor opción similar.",
+    "error": "No pudimos guardar tu respuesta."
   }
 }

@@ -89,7 +89,28 @@ scope.addEventListener("push", (eventObj: unknown) => {
     tag: data.tag || "hazorex",
     renotify: true,
     requireInteraction: false,
-    data: { url: data.url || "/" },
+    // Botones del aviso (p. ej. artículo agotado): cada uno lleva a una URL.
+    ...(data.actions
+      ? (() => {
+          try {
+            const acts = JSON.parse(data.actions) as Array<{
+              action: string;
+              title: string;
+              url: string;
+            }>;
+            return {
+              actions: acts.map((a) => ({ action: a.action, title: a.title })),
+              requireInteraction: true,
+              data: {
+                url: data.url || "/",
+                actionUrls: Object.fromEntries(acts.map((a) => [a.action, a.url])),
+              },
+            };
+          } catch {
+            return { data: { url: data.url || "/" } };
+          }
+        })()
+      : { data: { url: data.url || "/" } }),
   };
 
   event.waitUntil(
@@ -103,9 +124,13 @@ scope.addEventListener("push", (eventObj: unknown) => {
 scope.addEventListener("notificationclick", (eventObj: unknown) => {
   const event = eventObj as NotificationEvent;
   event.notification.close();
+  const nData = (event.notification.data ?? {}) as {
+    url?: string;
+    actionUrls?: Record<string, string>;
+  };
+  const clicked = (event as unknown as { action?: string }).action;
   const targetUrl =
-    (event.notification.data && (event.notification.data as { url?: string }).url) ||
-    "/";
+    (clicked && nData.actionUrls?.[clicked]) || nData.url || "/";
 
   event.waitUntil(
     (async () => {

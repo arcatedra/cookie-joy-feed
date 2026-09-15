@@ -229,29 +229,50 @@ export type Database = {
       pedido_items: {
         Row: {
           cantidad: number
+          customer_response: string | null
           id: string
           nombre_producto: string
+          notified_at: string | null
           pedido_id: string
           precio_unitario: number
           producto_id: string | null
+          responded_at: string | null
+          status: string
+          substitute_ids: string[]
+          substituted_with_id: string | null
+          substitution_mode: string
           subtotal_item: number
         }
         Insert: {
           cantidad: number
+          customer_response?: string | null
           id?: string
           nombre_producto: string
+          notified_at?: string | null
           pedido_id: string
           precio_unitario: number
           producto_id?: string | null
+          responded_at?: string | null
+          status?: string
+          substitute_ids?: string[]
+          substituted_with_id?: string | null
+          substitution_mode?: string
           subtotal_item: number
         }
         Update: {
           cantidad?: number
+          customer_response?: string | null
           id?: string
           nombre_producto?: string
+          notified_at?: string | null
           pedido_id?: string
           precio_unitario?: number
           producto_id?: string | null
+          responded_at?: string | null
+          status?: string
+          substitute_ids?: string[]
+          substituted_with_id?: string | null
+          substitution_mode?: string
           subtotal_item?: number
         }
         Relationships: [
@@ -265,6 +286,13 @@ export type Database = {
           {
             foreignKeyName: "pedido_items_producto_id_fkey"
             columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pedido_items_substituted_with_id_fkey"
+            columns: ["substituted_with_id"]
             isOneToOne: false
             referencedRelation: "productos"
             referencedColumns: ["id"]
@@ -924,6 +952,7 @@ export type Database = {
         Args: { p_action: string; p_notes?: string; p_withdrawal_id: string }
         Returns: undefined
       }
+      apply_substitution_timeouts: { Args: never; Returns: number }
       crear_pedido_con_items: {
         Args: {
           p_cliente_id: string
@@ -959,6 +988,16 @@ export type Database = {
           delivery_photo_url: string
           recipient_name: string
           status: string
+        }[]
+      }
+      get_my_pending_substitutions: {
+        Args: { p_order_id: string }
+        Returns: {
+          cantidad: number
+          item_id: string
+          nombre_producto: string
+          notified_at: string
+          substitution_mode: string
         }[]
       }
       get_my_referral_profile: {
@@ -1028,6 +1067,10 @@ export type Database = {
           commissions_count: number
           withdrawal_id: string
         }[]
+      }
+      respond_substitution: {
+        Args: { p_item_id: string; p_response: string }
+        Returns: undefined
       }
       upsert_suscripcion_stripe: {
         Args: {

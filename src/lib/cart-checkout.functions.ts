@@ -15,6 +15,8 @@ const itemSchema = z.object({
   price: z.number().positive().max(10000),
   qty: z.number().int().min(1).max(99),
   image: z.string().max(2000).optional(),
+  substitutionMode: z.enum(["best_match", "specific", "refund"]).default("best_match"),
+  substituteIds: z.array(z.string().uuid()).max(3).default([]),
 });
 
 const addressSchema = z.object({
@@ -92,13 +94,29 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         if (!p || !Number.isFinite(p.precio) || p.precio <= 0) {
           throw new Error("Uno de los productos de tu carrito ya no está disponible.");
         }
-        return { id: it.id, name: p.nombre, price: p.precio, qty: it.qty, image: it.image };
+        return {
+        id: it.id,
+        name: p.nombre,
+        price: p.precio,
+        qty: it.qty,
+        image: it.image,
+        substitutionMode: it.substitutionMode,
+        substituteIds: it.substituteIds,
+      };
       }
       const price = resolveStaticPrice(it.id, it.price);
       if (price === null) {
         throw new Error("Uno de los productos de tu carrito ya no está disponible.");
       }
-      return { id: it.id, name: it.name, price, qty: it.qty, image: it.image };
+      return {
+        id: it.id,
+        name: it.name,
+        price,
+        qty: it.qty,
+        image: it.image,
+        substitutionMode: it.substitutionMode,
+        substituteIds: it.substituteIds,
+      };
     });
 
     const shippingRate = SHIPPING_RATES[data.shipping];
@@ -138,6 +156,9 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       precio_unitario: it.price,
       cantidad: it.qty,
       subtotal_item: Math.round(it.price * 100 * it.qty) / 100,
+      substitution_mode: it.substitutionMode ?? "best_match",
+      substitute_ids: it.substituteIds ?? [],
+      status: "pendiente",
     }));
     const { error: itemsErr } = await supabase.from("pedido_items").insert(itemsInsert);
     if (itemsErr) {

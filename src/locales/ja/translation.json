@@ -1558,5 +1558,21 @@
   },
   "chat": {
     "contactBlocked": "For your safety, phone numbers and contact details can't be shared."
+  },
+  "subs": {
+    "ifMissing": "If unavailable",
+    "modeBestMatch": "Best similar option",
+    "modeSpecific": "These alternatives, in order",
+    "modeRefund": "Don't substitute, refund me",
+    "pickUpTo": "Pick up to {{max}} alternatives",
+    "noCatalog": "No alternatives available.",
+    "outOfStockTitle": "{{name}} is out of stock",
+    "outOfStockBody": "Quantity: {{qty}}. If you don't reply within {{time}}, we apply your default option and keep your order moving.",
+    "actionAccept": "Yes, take it",
+    "actionRefund": "Refund me",
+    "actionOptions": "See other options",
+    "defaultRefund": "Default: we refund you.",
+    "defaultBestMatch": "Default: we bring the best similar option.",
+    "error": "We couldn't save your answer."
   }
 }
