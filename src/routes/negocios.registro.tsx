@@ -56,6 +56,7 @@ function BusinessRegistrationPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [bootLoading, setBootLoading] = useState(true);
+  const [bootError, setBootError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
