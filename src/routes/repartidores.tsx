@@ -596,7 +596,14 @@ function ApplicationForm({
   const [files, setFiles] = useState<Partial<Record<DocKey, File>>>({});
   const [accept, setAccept] = useState(false);
 
-  const docLabel = (k: DocKey) => t(`repartidoresPage.docs.${k}.label`);
+  const docLabel = (k: DocKey) => {
+    if (k === "licencia_conducir") {
+      return s2.vehicleType === "moto"
+        ? t("repartidoresPage.vehicles.moto.perk1")
+        : t("repartidoresPage.vehicles.auto.perk1");
+    }
+    return t(`repartidoresPage.docs.${k}.label`);
+  };
   const docHint = (k: DocKey) => t(`repartidoresPage.docs.${k}.hint`);
 
   const validateFile = (f: File): string | null => {

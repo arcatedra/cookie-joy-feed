@@ -110,9 +110,13 @@ function OnboardingPage() {
           onOpen={() => setOpenStep(openStep === "agreement" ? null : "agreement")}
         >
           <div className="max-h-40 overflow-y-auto rounded-md bg-[#f4f1ea] p-3 text-xs text-[#4a3525]">
-            <p className="mb-2 font-semibold">{t("repartidoresPage.onboarding.agreementTitle")}</p>
+            <p className="mb-2 font-semibold">Acuerdo de repartidor independiente</p>
             <p>
-              {t("repartidoresPage.onboarding.agreementBody")}
+              {t("repartidoresPage.onboarding.licenseRequirements")}
+              {" "}Te comprometes a cumplir con las normas de tránsito, trato respetuoso a comercios y
+              clientes, y las políticas de calidad de Hazorex (puntualidad, foto/firma de entrega, no
+              manipulación de pedidos). Hazorex retiene una comisión sobre cada entrega según la tarifa
+              vigente y realiza pagos semanales.
             </p>
           </div>
           <Button
