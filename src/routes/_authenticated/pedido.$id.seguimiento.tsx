@@ -14,7 +14,10 @@ import { GoogleMapView } from "@/components/courier/GoogleMapView";
 import { ReportIssueSheet } from "@/components/ReportIssueSheet";
 import { SupportChatSheet } from "@/components/SupportChatSheet";
 import { SubstitutionPrompt } from "@/components/SubstitutionPrompt";
-import { getMyPendingSubstitutions } from "@/lib/substitutions.functions";
+import {
+  getMyPendingSubstitutions,
+  respondSubstitution,
+} from "@/lib/substitutions.functions";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id/seguimiento")({
   component: OrderTracking,
@@ -60,6 +63,21 @@ function OrderTracking() {
     queryFn: () => getMyDeliveryProof({ data: { orderId: id } }),
     staleTime: 30 * 60 * 1000,
   });
+
+  // Respuesta llegada desde los botones del aviso del teléfono.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const itemId = params.get("subs");
+    const resp = params.get("resp");
+    if (!itemId || (resp !== "accept" && resp !== "refund")) return;
+    respondSubstitution({ data: { itemId, response: resp } })
+      .catch(() => undefined)
+      .finally(() => {
+        qc.invalidateQueries({ queryKey: ["pending-substitutions", id] });
+        window.history.replaceState({}, "", window.location.pathname);
+      });
+  }, [id, qc]);
 
   const subsQ = useQuery({
     queryKey: ["pending-substitutions", id],
