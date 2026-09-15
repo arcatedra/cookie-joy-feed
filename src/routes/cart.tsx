@@ -189,6 +189,12 @@ function CartPage() {
                     <Plus className="h-3 w-3" />
                   </button>
                 </div>
+                <SubstitutionPicker
+                  itemId={it.id}
+                  mode={it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE}
+                  substituteIds={it.substituteIds ?? []}
+                  onChange={(mode, ids) => cart.setSubstitution(it.id, mode, ids)}
+                />
               </div>
               <div className="flex flex-col items-end gap-2">
                 <span className="text-sm font-bold text-foreground">
