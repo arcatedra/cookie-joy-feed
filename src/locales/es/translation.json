@@ -144,7 +144,8 @@
       "yourAccount": "Tu cuenta",
       "ordersReturns": "Devoluciones y pedidos",
       "cart": "Tu carrito",
-      "signIn": "Iniciar sesión"
+      "signIn": "Iniciar sesión",
+      "stores": "Tiendas"
     },
     "links": {
       "deals": "Ofertas del Día",
@@ -155,7 +156,8 @@
       "shop": "🛍️ Tienda",
       "roulette": "🎰 Sorteo",
       "drivers": "🛵 Sé repartidor",
-      "businesses": "🏪 Postula tu negocio"
+      "businesses": "🏪 Postula tu negocio",
+      "stores": "Tiendas"
     }
   },
   "ratings": {
@@ -1598,5 +1600,70 @@
     "defaultRefund": "Por defecto: te devolvemos el dinero.",
     "defaultBestMatch": "Por defecto: llevamos la mejor opción similar.",
     "error": "No pudimos guardar tu respuesta."
+  },
+  "stores": {
+    "title": "Tiendas cerca de ti",
+    "subtitle": "Supermercados, tiendas y más que entregan en tu zona.",
+    "searchPlaceholder": "Buscar tienda...",
+    "allZones": "Todas las zonas",
+    "allTypes": "Todos los tipos",
+    "empty": "Todavía no hay tiendas con productos publicados."
+  },
+  "storePage": {
+    "closedNotice": "Esta tienda está cerrada ahora. Puedes ver su catálogo.",
+    "searchPlaceholder": "Buscar en esta tienda...",
+    "soldOut": "Agotado",
+    "noProducts": "Esta tienda aún no tiene productos.",
+    "otherCategory": "Otros"
+  },
+  "storePanel": {
+    "noBusinessTitle": "Aún no tienes un negocio",
+    "noBusinessBody": "Registra tu negocio para abrir tu tienda en Hazorex.",
+    "registerCta": "Registrar mi negocio",
+    "pendingTitle": "Tu solicitud está en revisión",
+    "pendingBody": "Te avisaremos por correo en cuanto la aprobemos. Entonces podrás subir tu catálogo.",
+    "blockedTitle": "Tu tienda no está activa",
+    "blockedBody": "Escríbenos a soporte si crees que es un error.",
+    "tabStore": "Mi tienda",
+    "tabCategories": "Categorías",
+    "tabProducts": "Productos",
+    "logo": "Logo",
+    "banner": "Banner",
+    "slug": "Dirección web",
+    "description": "Descripción",
+    "zones": "Zonas que atiende",
+    "hours": "Horario",
+    "closed": "Cerrado",
+    "save": "Guardar",
+    "saved": "Guardado",
+    "error": "Ocurrió un error",
+    "uploaded": "Imagen subida",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "available": "Disponible",
+    "newCategory": "Nueva categoría",
+    "noCategories": "Aún no tienes categorías.",
+    "newProduct": "Nuevo producto",
+    "editProduct": "Editar producto",
+    "productName": "Nombre del producto",
+    "price": "Precio",
+    "photo": "Foto",
+    "productDescription": "Descripción (opcional)",
+    "noCategory": "Sin categoría",
+    "noProducts": "Aún no tienes productos.",
+    "productInvalid": "Revisa el nombre y el precio.",
+    "publishedCount": "{{count}} productos publicados",
+    "viewPublic": "Ver mi tienda",
+    "days": {
+      "mon": "Lunes",
+      "tue": "Martes",
+      "wed": "Miércoles",
+      "thu": "Jueves",
+      "fri": "Viernes",
+      "sat": "Sábado",
+      "sun": "Domingo"
+    }
   }
 }

@@ -16,6 +16,7 @@ import {
   type Business,
   type BusinessStatus,
 } from "@/lib/businesses";
+import { sendTransactionalEmail } from "@/lib/email/send";
 
 export const Route = createFileRoute("/_authenticated/admin/negocios")({
   head: () => ({
@@ -58,6 +59,22 @@ function AdminBusinessesPage() {
     setBusy(id);
     try {
       await approve({ data: { id } });
+      const biz = ((data ?? []) as Business[]).find((b) => b.id === id);
+      if (biz?.email) {
+        try {
+          await sendTransactionalEmail({
+            templateName: "business-approved",
+            recipientEmail: biz.email,
+            idempotencyKey: `business-approved-${id}`,
+            templateData: {
+              businessName: biz.business_name,
+              panelUrl: `${window.location.origin}/negocios/panel`,
+            },
+          });
+        } catch {
+          toast.message("Aprobado, pero no se pudo enviar el correo de aviso.");
+        }
+      }
       toast.success("Aprobado");
       qc.invalidateQueries({ queryKey: ["admin", "businesses"] });
     } catch (err: any) {
