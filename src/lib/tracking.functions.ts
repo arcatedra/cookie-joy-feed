@@ -25,7 +25,6 @@ export const getOrderTracking = createServerFn({ method: "GET" })
 
     let driver: {
       full_name: string | null;
-      phone: string | null;
       profile_photo_url: string | null;
       rating: number | null;
       last_lat: number | null;
