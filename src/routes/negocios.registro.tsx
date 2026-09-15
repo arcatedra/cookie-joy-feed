@@ -64,17 +64,27 @@ function BusinessRegistrationPage() {
   const [existing, setExisting] = useState(false);
   const [formData, setFormData] = useState<FormState>(INITIAL);
 
-  useEffect(() => {
-    (async () => {
+  const loadBoot = async () => {
+    setBootLoading(true);
+    setBootError(null);
+    try {
       const { data } = await supabase.auth.getUser();
       setHasAccount(!!data.user);
       if (data.user) {
         setFormData((f) => ({ ...f, email: data.user!.email ?? "" }));
         const mine = await fetchMyBusiness();
-        if (mine) setExisting(true);
+        setExisting(!!mine);
       }
+    } catch (err: any) {
+      setBootError(err?.message ?? t("negociosRegistro.errors.generic"));
+    } finally {
       setBootLoading(false);
-    })();
+    }
+  };
+
+  useEffect(() => {
+    void loadBoot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (
