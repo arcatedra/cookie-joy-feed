@@ -89,6 +89,7 @@ import { Route as ApiPublicHooksNotifyPreDrawRouteImport } from './routes/api/pu
 import { Route as ApiPublicHooksNotifyWinnerRouteImport } from './routes/api/public/hooks/notify-winner'
 import { Route as ApiPublicHooksRunDailyDrawRouteImport } from './routes/api/public/hooks/run-daily-draw'
 import { Route as ApiPublicHooksSecurityAlertRouteImport } from './routes/api/public/hooks/security-alert'
+import { Route as ApiPublicHooksSubstitutionTimeoutsRouteImport } from './routes/api/public/hooks/substitution-timeouts'
 import { Route as ApiPublicHooksTestDrawTickRouteImport } from './routes/api/public/hooks/test-draw-tick'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicStripeConnectWebhookRouteImport } from './routes/api/public/stripe/connect-webhook'
@@ -529,6 +530,12 @@ const ApiPublicHooksSecurityAlertRoute =
     path: '/api/public/hooks/security-alert',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSubstitutionTimeoutsRoute =
+  ApiPublicHooksSubstitutionTimeoutsRouteImport.update({
+    id: '/api/public/hooks/substitution-timeouts',
+    path: '/api/public/hooks/substitution-timeouts',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksTestDrawTickRoute =
   ApiPublicHooksTestDrawTickRouteImport.update({
     id: '/api/public/hooks/test-draw-tick',
@@ -664,6 +671,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
+  '/api/public/hooks/substitution-timeouts': typeof ApiPublicHooksSubstitutionTimeoutsRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
@@ -752,6 +760,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
+  '/api/public/hooks/substitution-timeouts': typeof ApiPublicHooksSubstitutionTimeoutsRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
@@ -844,6 +853,7 @@ export interface FileRoutesById {
   '/api/public/hooks/notify-winner': typeof ApiPublicHooksNotifyWinnerRoute
   '/api/public/hooks/run-daily-draw': typeof ApiPublicHooksRunDailyDrawRoute
   '/api/public/hooks/security-alert': typeof ApiPublicHooksSecurityAlertRoute
+  '/api/public/hooks/substitution-timeouts': typeof ApiPublicHooksSubstitutionTimeoutsRoute
   '/api/public/hooks/test-draw-tick': typeof ApiPublicHooksTestDrawTickRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/stripe/connect-webhook': typeof ApiPublicStripeConnectWebhookRoute
@@ -936,6 +946,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
+    | '/api/public/hooks/substitution-timeouts'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/api/public/stripe/connect-webhook'
@@ -1024,6 +1035,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
+    | '/api/public/hooks/substitution-timeouts'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/api/public/stripe/connect-webhook'
@@ -1115,6 +1127,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/notify-winner'
     | '/api/public/hooks/run-daily-draw'
     | '/api/public/hooks/security-alert'
+    | '/api/public/hooks/substitution-timeouts'
     | '/api/public/hooks/test-draw-tick'
     | '/api/public/payments/webhook'
     | '/api/public/stripe/connect-webhook'
@@ -1173,6 +1186,7 @@ export interface RootRouteChildren {
   ApiPublicHooksNotifyWinnerRoute: typeof ApiPublicHooksNotifyWinnerRoute
   ApiPublicHooksRunDailyDrawRoute: typeof ApiPublicHooksRunDailyDrawRoute
   ApiPublicHooksSecurityAlertRoute: typeof ApiPublicHooksSecurityAlertRoute
+  ApiPublicHooksSubstitutionTimeoutsRoute: typeof ApiPublicHooksSubstitutionTimeoutsRoute
   ApiPublicHooksTestDrawTickRoute: typeof ApiPublicHooksTestDrawTickRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicStripeConnectWebhookRoute: typeof ApiPublicStripeConnectWebhookRoute
@@ -1743,6 +1757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSecurityAlertRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/substitution-timeouts': {
+      id: '/api/public/hooks/substitution-timeouts'
+      path: '/api/public/hooks/substitution-timeouts'
+      fullPath: '/api/public/hooks/substitution-timeouts'
+      preLoaderRoute: typeof ApiPublicHooksSubstitutionTimeoutsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/test-draw-tick': {
       id: '/api/public/hooks/test-draw-tick'
       path: '/api/public/hooks/test-draw-tick'
@@ -1983,6 +2004,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksNotifyWinnerRoute: ApiPublicHooksNotifyWinnerRoute,
   ApiPublicHooksRunDailyDrawRoute: ApiPublicHooksRunDailyDrawRoute,
   ApiPublicHooksSecurityAlertRoute: ApiPublicHooksSecurityAlertRoute,
+  ApiPublicHooksSubstitutionTimeoutsRoute:
+    ApiPublicHooksSubstitutionTimeoutsRoute,
   ApiPublicHooksTestDrawTickRoute: ApiPublicHooksTestDrawTickRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicStripeConnectWebhookRoute: ApiPublicStripeConnectWebhookRoute,
