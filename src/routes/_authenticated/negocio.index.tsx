@@ -56,7 +56,7 @@ const STATUS_COLOR: Record<BusinessStatus, string> = {
 };
 
 function MyBusinessPage() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["my-business"],
     queryFn: fetchMyBusiness,
   });

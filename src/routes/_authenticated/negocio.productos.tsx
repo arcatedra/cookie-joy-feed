@@ -28,7 +28,12 @@ export const Route = createFileRoute("/_authenticated/negocio/productos")({
 
 function ProductsPage() {
   const qc = useQueryClient();
-  const { data: business, isLoading: loadingBiz } = useQuery({
+  const {
+    data: business,
+    isLoading: loadingBiz,
+    error: bizError,
+    refetch: refetchBiz,
+  } = useQuery({
     queryKey: ["my-business"],
     queryFn: fetchMyBusiness,
   });
