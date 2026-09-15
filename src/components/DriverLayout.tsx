@@ -29,6 +29,9 @@ export function DriverLayout({ children }: { children: React.ReactNode }) {
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
     queryFn: () => getDriverStatus(),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const toggleOnline = useMutation({
