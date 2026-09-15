@@ -227,7 +227,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
           const { data: existing } = await supabaseAdmin
             .from("pedidos")
-            .select("id, estado, cliente_id, total")
+            .select("id, estado, cliente_id, total, flujo_pago")
             .eq("id", pedidoId)
             .maybeSingle();
 
@@ -235,16 +235,27 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             console.warn("[payments-webhook] pedido not found", { pedidoId });
             return Response.json({ ok: true, ignored: "pedido not found" });
           }
-          if (existing.estado === "pagado") {
+          if (existing.estado === "pagado" || existing.estado === "autorizado") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
 
+          // Pedidos nuevos: el dinero queda RESERVADO (autorizado), no cobrado.
+          // El cobro real ocurre al terminar el empaque (/admin/empaque).
+          // Pedidos antiguos (flujo_pago = 'captura_inmediata') siguen igual.
+          const deferred =
+            (existing as { flujo_pago?: string | null }).flujo_pago === "autorizacion_diferida";
+
           const update: Record<string, unknown> = {
-            estado: "pagado",
+            estado: deferred ? "autorizado" : "pagado",
             stripe_payment_intent_id: paymentIntentId,
             stripe_checkout_session_id: sessionId,
           };
-          if (amountTotalCents > 0) update.total = amountTotalCents / 100;
+          if (deferred) {
+            update.autorizado_en = new Date().toISOString();
+            if (amountTotalCents > 0) update.monto_autorizado = amountTotalCents / 100;
+          } else if (amountTotalCents > 0) {
+            update.total = amountTotalCents / 100;
+          }
           if (shippingCents > 0) update.costo_envio = shippingCents / 100;
           if (taxCents > 0) update.impuestos = taxCents / 100;
 
