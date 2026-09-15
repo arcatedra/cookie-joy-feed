@@ -1563,5 +1563,8 @@
     "proofDeliveredAt": "Entregado el {{datetime}}",
     "proofNoteLabel": "Dónde se dejó",
     "proofPhotoAlt": "Foto de la entrega"
+  },
+  "chat": {
+    "contactBlocked": "Por seguridad, no se pueden compartir números ni contactos."
   }
 }

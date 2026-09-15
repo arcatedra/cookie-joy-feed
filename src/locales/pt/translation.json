@@ -1553,5 +1553,8 @@
     "proofDeliveredAt": "Delivered on {{datetime}}",
     "proofNoteLabel": "Where it was left",
     "proofPhotoAlt": "Delivery photo"
+  },
+  "chat": {
+    "contactBlocked": "For your safety, phone numbers and contact details can't be shared."
   }
 }
