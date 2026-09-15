@@ -9,6 +9,7 @@ import {
   type BusinessType,
 } from "@/lib/businesses";
 import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+import { LoadErrorState } from "@/components/LoadErrorState";
 import { supabase } from "@/integrations/supabase/client";
 import i18n from "@/i18n";
 
