@@ -12,6 +12,7 @@ import {
   quickMessageText,
   type QuickMessageKey,
 } from "@/lib/driver-quick-messages";
+import { CONTACT_BLOCK_MESSAGE } from "@/lib/contact-filter";
 
 const CUSTOMER_QUICK = [
   "Toca el timbre por favor.",
