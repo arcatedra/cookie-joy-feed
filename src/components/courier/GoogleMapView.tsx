@@ -200,7 +200,7 @@ export function GoogleMapView({
       strokeOpacity: 0.9,
       strokeWeight: 5,
     });
-  }, [polyline]);
+  }, [polyline, ready]);
 
   return <div ref={ref} className={className ?? "h-full w-full"} />;
 }
