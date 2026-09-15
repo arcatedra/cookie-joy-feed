@@ -13,6 +13,7 @@ import {
   type QuickMessageKey,
 } from "@/lib/driver-quick-messages";
 import { CONTACT_BLOCK_MESSAGE } from "@/lib/contact-filter";
+import { useTranslation } from "react-i18next";
 
 const CUSTOMER_QUICK = [
   "Toca el timbre por favor.",
