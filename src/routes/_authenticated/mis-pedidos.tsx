@@ -12,6 +12,9 @@ export const Route = createFileRoute("/_authenticated/mis-pedidos")({
 
 const ESTADO_LABEL: Record<string, string> = {
   pendiente: "Pendiente",
+  autorizado: "Reservado (se cobra lo real)",
+  autorizacion_fallida: "Pago pendiente",
+  autorizacion_vencida: "Reserva vencida",
   pagado: "Pagado",
   preparando: "Preparando",
   enviado: "Enviado",
