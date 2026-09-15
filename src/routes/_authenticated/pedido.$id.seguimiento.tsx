@@ -203,14 +203,6 @@ function OrderTracking() {
                     {driver.is_online && <span className="text-emerald-600">● En línea</span>}
                   </div>
                 </div>
-                {driver.phone && (
-                  <a
-                    href={`tel:${driver.phone}`}
-                    className="grid size-10 place-items-center rounded-full bg-[#1e3a5f] text-white"
-                  >
-                    <Phone className="size-4" />
-                  </a>
-                )}
               </CardContent>
             </Card>
           ) : (
