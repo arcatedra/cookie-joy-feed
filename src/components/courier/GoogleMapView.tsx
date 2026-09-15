@@ -1,5 +1,5 @@
 /// <reference types="google.maps" />
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMapsBrowserKey } from "@/lib/maps-config.functions";
 
 type LatLng = { lat: number; lng: number };
