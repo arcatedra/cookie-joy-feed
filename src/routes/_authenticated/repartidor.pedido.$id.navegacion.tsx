@@ -7,7 +7,6 @@ import {
   Loader2,
   MapPin,
   Navigation2,
-  Phone,
   MessageSquare,
   AlertTriangle,
   Check,
