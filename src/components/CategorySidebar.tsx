@@ -19,6 +19,7 @@ const groups = [
   {
     key: "shop",
     items: [
+      { label: "stores", to: "/tiendas" },
       { label: "allCookies", to: "/menu" },
       { label: "filled", to: "/menu" },
       { label: "healthy", to: "/menu" },

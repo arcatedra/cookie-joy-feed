@@ -34,6 +34,7 @@ import { Route as SupportRouteImport } from './routes/support'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TiendasRouteImport } from './routes/tiendas'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
@@ -54,6 +55,7 @@ import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
+import { Route as TiendaSlugRouteImport } from './routes/tienda.$slug'
 import { Route as AuthenticatedAdminCspViolationsRouteImport } from './routes/_authenticated/admin.csp-violations'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as AuthenticatedAdminFinanzasRouteImport } from './routes/_authenticated/admin.finanzas'
@@ -70,6 +72,7 @@ import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authen
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
+import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authenticated/negocios.panel'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
@@ -225,6 +228,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TiendasRoute = TiendasRouteImport.update({
+  id: '/tiendas',
+  path: '/tiendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
@@ -326,6 +334,11 @@ const SorteoGanadoresRoute = SorteoGanadoresRouteImport.update({
   path: '/sorteo/ganadores',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TiendaSlugRoute = TiendaSlugRouteImport.update({
+  id: '/tienda/$slug',
+  path: '/tienda/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminCspViolationsRoute =
   AuthenticatedAdminCspViolationsRouteImport.update({
     id: '/admin/csp-violations',
@@ -419,6 +432,12 @@ const AuthenticatedNegocioProductosRoute =
   AuthenticatedNegocioProductosRouteImport.update({
     id: '/negocio/productos',
     path: '/negocio/productos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedNegociosPanelRoute =
+  AuthenticatedNegociosPanelRouteImport.update({
+    id: '/negocios/panel',
+    path: '/negocios/panel',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedRepartidorIndexRoute =
@@ -622,6 +641,7 @@ export interface FileRoutesByFullPath {
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
+  '/tiendas': typeof TiendasRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -641,6 +661,7 @@ export interface FileRoutesByFullPath {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
   '/join/': typeof JoinIndexRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -657,6 +678,7 @@ export interface FileRoutesByFullPath {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -713,6 +735,7 @@ export interface FileRoutesByTo {
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
+  '/tiendas': typeof TiendasRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -731,6 +754,7 @@ export interface FileRoutesByTo {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
   '/join': typeof JoinIndexRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -747,6 +771,7 @@ export interface FileRoutesByTo {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -806,6 +831,7 @@ export interface FileRoutesById {
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
   '/terms': typeof TermsRoute
+  '/tiendas': typeof TiendasRoute
   '/trust': typeof TrustRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
@@ -825,6 +851,7 @@ export interface FileRoutesById {
   '/profile/security': typeof ProfileSecurityRoute
   '/reel/$reelId': typeof ReelReelIdRoute
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
+  '/tienda/$slug': typeof TiendaSlugRoute
   '/join/': typeof JoinIndexRoute
   '/_authenticated/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
@@ -841,6 +868,7 @@ export interface FileRoutesById {
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -900,6 +928,7 @@ export interface FileRouteTypes {
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
+    | '/tiendas'
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
@@ -919,6 +948,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/tienda/$slug'
     | '/join/'
     | '/admin/csp-violations'
     | '/admin/deliveries'
@@ -935,6 +965,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
+    | '/negocios/panel'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -991,6 +1022,7 @@ export interface FileRouteTypes {
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
+    | '/tiendas'
     | '/trust'
     | '/unsubscribe'
     | '/deliveries'
@@ -1009,6 +1041,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/tienda/$slug'
     | '/join'
     | '/admin/csp-violations'
     | '/admin/deliveries'
@@ -1025,6 +1058,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
+    | '/negocios/panel'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -1083,6 +1117,7 @@ export interface FileRouteTypes {
     | '/sweepstakes-rules'
     | '/terminos'
     | '/terms'
+    | '/tiendas'
     | '/trust'
     | '/unsubscribe'
     | '/_authenticated/deliveries'
@@ -1102,6 +1137,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/reel/$reelId'
     | '/sorteo/ganadores'
+    | '/tienda/$slug'
     | '/join/'
     | '/_authenticated/admin/csp-violations'
     | '/_authenticated/admin/deliveries'
@@ -1118,6 +1154,7 @@ export interface FileRouteTypes {
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
+    | '/_authenticated/negocios/panel'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/ganancias'
@@ -1177,6 +1214,7 @@ export interface RootRouteChildren {
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
   TerminosRoute: typeof TerminosRoute
   TermsRoute: typeof TermsRoute
+  TiendasRoute: typeof TiendasRoute
   TrustRoute: typeof TrustRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AdminEmpaqueRoute: typeof AdminEmpaqueRoute
@@ -1189,6 +1227,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   ReelReelIdRoute: typeof ReelReelIdRoute
   SorteoGanadoresRoute: typeof SorteoGanadoresRoute
+  TiendaSlugRoute: typeof TiendaSlugRoute
   ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
@@ -1385,6 +1424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tiendas': {
+      id: '/tiendas'
+      path: '/tiendas'
+      fullPath: '/tiendas'
+      preLoaderRoute: typeof TiendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trust': {
       id: '/trust'
       path: '/trust'
@@ -1525,6 +1571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SorteoGanadoresRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tienda/$slug': {
+      id: '/tienda/$slug'
+      path: '/tienda/$slug'
+      fullPath: '/tienda/$slug'
+      preLoaderRoute: typeof TiendaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/csp-violations': {
       id: '/_authenticated/admin/csp-violations'
       path: '/admin/csp-violations'
@@ -1635,6 +1688,13 @@ declare module '@tanstack/react-router' {
       path: '/negocio/productos'
       fullPath: '/negocio/productos'
       preLoaderRoute: typeof AuthenticatedNegocioProductosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/negocios/panel': {
+      id: '/_authenticated/negocios/panel'
+      path: '/negocios/panel'
+      fullPath: '/negocios/panel'
+      preLoaderRoute: typeof AuthenticatedNegociosPanelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/repartidor/': {
@@ -1907,6 +1967,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
+  AuthenticatedNegociosPanelRoute: typeof AuthenticatedNegociosPanelRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedAdminRutasPublicarRoute: typeof AuthenticatedAdminRutasPublicarRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
@@ -1934,6 +1995,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
+  AuthenticatedNegociosPanelRoute: AuthenticatedNegociosPanelRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedAdminRutasPublicarRoute: AuthenticatedAdminRutasPublicarRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
@@ -2003,6 +2065,7 @@ const rootRouteChildren: RootRouteChildren = {
   SweepstakesRulesRoute: SweepstakesRulesRoute,
   TerminosRoute: TerminosRoute,
   TermsRoute: TermsRoute,
+  TiendasRoute: TiendasRoute,
   TrustRoute: TrustRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AdminEmpaqueRoute: AdminEmpaqueRoute,
@@ -2015,6 +2078,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   ReelReelIdRoute: ReelReelIdRoute,
   SorteoGanadoresRoute: SorteoGanadoresRoute,
+  TiendaSlugRoute: TiendaSlugRoute,
   ApiPublicCspReportRoute: ApiPublicCspReportRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
