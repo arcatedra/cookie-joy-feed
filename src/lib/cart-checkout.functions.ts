@@ -161,6 +161,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         moneda: "USD",
         direccion_envio: data.address,
         metodo_pago: "stripe",
+        flujo_pago: "autorizacion_diferida",
+        monto_autorizado: authorizedCents / 100,
       })
       .select("id, numero_pedido")
       .single();
