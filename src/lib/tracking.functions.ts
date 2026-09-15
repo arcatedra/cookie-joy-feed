@@ -25,7 +25,6 @@ export const getOrderTracking = createServerFn({ method: "GET" })
 
     let driver: {
       full_name: string | null;
-      phone: string | null;
       profile_photo_url: string | null;
       rating: number | null;
       last_lat: number | null;
@@ -36,7 +35,7 @@ export const getOrderTracking = createServerFn({ method: "GET" })
     if (order.driver_id) {
       const { data: d } = await supabase
         .from("drivers")
-        .select("full_name, phone, profile_photo_url, rating, last_lat, last_lng, last_seen_at, is_online")
+        .select("full_name, profile_photo_url, rating, last_lat, last_lng, last_seen_at, is_online")
         .eq("id", order.driver_id)
         .maybeSingle();
       driver = d ?? null;

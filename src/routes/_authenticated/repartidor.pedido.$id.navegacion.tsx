@@ -7,7 +7,6 @@ import {
   Loader2,
   MapPin,
   Navigation2,
-  Phone,
   MessageSquare,
   AlertTriangle,
   Check,
@@ -60,7 +59,6 @@ type Target = {
   lng: number;
   address: string;
   contactName: string | null;
-  contactPhone: string | null;
   notes: string | null;
   label: string; // "Recolección" o "Entrega 1 de 3"
   stopId?: string;
@@ -100,7 +98,6 @@ function NavegacionPedido() {
         lng: Number(order.pickup_lng),
         address: order.pickup_address,
         contactName: order.pickup_contact_name,
-        contactPhone: null,
         notes: order.pickup_notes,
         label: "Recolección",
       };
@@ -115,7 +112,6 @@ function NavegacionPedido() {
         lng: Number(next.delivery_lng),
         address: next.delivery_address,
         contactName: next.recipient_name,
-        contactPhone: next.recipient_phone,
         notes: null,
         label: `Entrega ${idx} de ${totalStops}`,
         stopId: next.id,
@@ -231,13 +227,6 @@ function NavegacionPedido() {
           </Button>
 
           <div className="flex gap-2">
-            {target.contactPhone && (
-              <Button asChild variant="outline" className="h-11 flex-1 border-[#c8862e]/40">
-                <a href={`tel:${target.contactPhone}`}>
-                  <Phone className="mr-2 size-4" /> Llamar
-                </a>
-              </Button>
-            )}
             <Button
               variant="outline"
               className="h-11 flex-1 border-[#c8862e]/40"

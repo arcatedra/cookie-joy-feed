@@ -62,7 +62,19 @@ export const getOrderDetail = createServerFn({ method: "GET" })
       .order("sequence_number", { ascending: true });
     if (sErr) throw new Error(sErr.message);
 
-    return { order, stops: stops ?? [] };
+    // Privacidad: los teléfonos nunca salen hacia el navegador.
+    const safeOrder = { ...(order as Record<string, unknown>) };
+    delete safeOrder["pickup_contact_phone"];
+    const safeStops = (stops ?? []).map((s) => {
+      const copy = { ...(s as Record<string, unknown>) };
+      delete copy["recipient_phone"];
+      return copy;
+    });
+
+    return {
+      order: safeOrder as typeof order,
+      stops: safeStops as unknown as NonNullable<typeof stops>,
+    };
   });
 
 export const acceptOrder = createServerFn({ method: "POST" })
