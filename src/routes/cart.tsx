@@ -97,6 +97,8 @@ function CartPage() {
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
+            substitutionMode: it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE,
+            substituteIds: it.substituteIds ?? [],
           })),
           email,
           address,
