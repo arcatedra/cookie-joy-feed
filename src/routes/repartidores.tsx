@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import {
   Bike,
+  Scooter,
   Car,
   DollarSign,
   Clock,
@@ -221,13 +222,14 @@ function RepartidoresLanding() {
         <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
           {[
             {
-              icon: Bike,
+              icon: Scooter,
               label: t("repartidoresPage.vehicles.moto.label"),
               desc: t("repartidoresPage.vehicles.moto.desc"),
               perks: [
                 t("repartidoresPage.vehicles.moto.perk1"),
                 t("repartidoresPage.vehicles.moto.perk2"),
                 t("repartidoresPage.vehicles.moto.perk3"),
+                t("repartidoresPage.vehicles.moto.perk4"),
               ],
             },
             {
@@ -266,6 +268,9 @@ function RepartidoresLanding() {
             </Card>
           ))}
         </div>
+        <p className="mx-auto mt-4 max-w-3xl text-center text-xs text-[#4a3525]/70">
+          {t("repartidoresPage.vehicles.ageNotice")}
+        </p>
       </section>
 
       {/* HOW IT WORKS */}
@@ -935,6 +940,12 @@ function ApplicationForm({
                 className="min-h-11"
               />
             </Field>
+            <p className="text-xs text-[#4a3525]/70">
+              {s2.vehicleType === "moto"
+                ? t("repartidoresPage.vehicles.moto.perk1")
+                : t("repartidoresPage.vehicles.auto.perk1")}
+              {" · "}{t("repartidoresPage.vehicles.ageNotice")}
+            </p>
             <Field
               label={t("repartidoresPage.form.insurer")}
               htmlFor="insurer"
