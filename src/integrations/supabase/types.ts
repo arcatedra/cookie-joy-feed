@@ -302,15 +302,22 @@ export type Database = {
       pedidos: {
         Row: {
           actualizado_en: string
+          autorizado_en: string | null
+          captura_error: string | null
+          captura_intentos: number
+          capturado_en: string | null
           cliente_id: string
           costo_envio: number
           creado_en: string
           direccion_envio: Json
           estado: string
+          flujo_pago: string
           id: string
           impuestos: number
           metodo_pago: string | null
           moneda: string
+          monto_autorizado: number | null
+          monto_capturado: number | null
           notas: string | null
           numero_pedido: string
           stripe_checkout_session_id: string | null
@@ -320,15 +327,22 @@ export type Database = {
         }
         Insert: {
           actualizado_en?: string
+          autorizado_en?: string | null
+          captura_error?: string | null
+          captura_intentos?: number
+          capturado_en?: string | null
           cliente_id: string
           costo_envio?: number
           creado_en?: string
           direccion_envio: Json
           estado?: string
+          flujo_pago?: string
           id?: string
           impuestos?: number
           metodo_pago?: string | null
           moneda?: string
+          monto_autorizado?: number | null
+          monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
           stripe_checkout_session_id?: string | null
@@ -338,15 +352,22 @@ export type Database = {
         }
         Update: {
           actualizado_en?: string
+          autorizado_en?: string | null
+          captura_error?: string | null
+          captura_intentos?: number
+          capturado_en?: string | null
           cliente_id?: string
           costo_envio?: number
           creado_en?: string
           direccion_envio?: Json
           estado?: string
+          flujo_pago?: string
           id?: string
           impuestos?: number
           metodo_pago?: string | null
           moneda?: string
+          monto_autorizado?: number | null
+          monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
           stripe_checkout_session_id?: string | null
@@ -953,6 +974,13 @@ export type Database = {
         Returns: undefined
       }
       apply_substitution_timeouts: { Args: never; Returns: number }
+      auth_buffer_settings: {
+        Args: never
+        Returns: {
+          min_cents: number
+          pct: number
+        }[]
+      }
       crear_pedido_con_items: {
         Args: {
           p_cliente_id: string
