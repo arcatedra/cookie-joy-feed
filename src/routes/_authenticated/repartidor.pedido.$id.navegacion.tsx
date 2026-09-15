@@ -100,7 +100,6 @@ function NavegacionPedido() {
         lng: Number(order.pickup_lng),
         address: order.pickup_address,
         contactName: order.pickup_contact_name,
-        contactPhone: null,
         notes: order.pickup_notes,
         label: "Recolección",
       };
@@ -115,7 +114,6 @@ function NavegacionPedido() {
         lng: Number(next.delivery_lng),
         address: next.delivery_address,
         contactName: next.recipient_name,
-        contactPhone: next.recipient_phone,
         notes: null,
         label: `Entrega ${idx} de ${totalStops}`,
         stopId: next.id,

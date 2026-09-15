@@ -35,7 +35,6 @@ export interface RouteStop {
   delivery_lat: number | null;
   delivery_lng: number | null;
   recipient_name: string;
-  recipient_phone: string | null;
   delivery_instruction: string;
   status: StopStatus;
   scanned_at: string | null;
