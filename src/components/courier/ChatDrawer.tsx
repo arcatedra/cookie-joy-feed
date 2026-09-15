@@ -39,6 +39,7 @@ export function ChatDrawer({
   const [text, setText] = useState("");
   const [freeTextOpen, setFreeTextOpen] = useState(role === "customer");
   const [blocked, setBlocked] = useState<string | null>(null);
+  const { t } = useTranslation();
   const endRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
