@@ -37,11 +37,16 @@ function RepartidorHome() {
   const status = useQuery({
     queryKey: ["courier", "driver-status"],
     queryFn: () => getDriverStatus(),
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const active = useQuery({
     queryKey: ["courier", "active-order"],
     queryFn: () => getActiveOrder(),
+    staleTime: 30_000,
+    gcTime: 10 * 60_000,
   });
 
   // Redirect onboarding-incomplete users
@@ -64,6 +69,9 @@ function RepartidorHome() {
     queryFn: () => listAvailableOrders(),
     enabled: !active.data && isOnline,
     refetchInterval: isOnline ? 15000 : false,
+    staleTime: 10_000,
+    gcTime: 10 * 60_000,
+    placeholderData: (prev: unknown) => prev,
   });
 
   const acceptFn = useServerFn(acceptOrder);

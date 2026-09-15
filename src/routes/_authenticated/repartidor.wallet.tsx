@@ -73,21 +73,26 @@ function WalletPage() {
   const [cashoutOpen, setCashoutOpen] = useState(false);
   const [addMethodOpen, setAddMethodOpen] = useState(false);
 
+  const cache = { staleTime: 60_000, gcTime: 10 * 60_000, refetchOnWindowFocus: false } as const;
   const summary = useQuery({
     queryKey: ["wallet", "summary"],
     queryFn: () => getWalletSummary(),
+    ...cache,
   });
   const earnings = useQuery({
     queryKey: ["wallet", "earnings"],
     queryFn: () => listOrderEarnings(),
+    ...cache,
   });
   const methods = useQuery({
     queryKey: ["wallet", "methods"],
     queryFn: () => listPayoutMethods(),
+    ...cache,
   });
   const payouts = useQuery({
     queryKey: ["wallet", "payouts"],
     queryFn: () => listInstantPayouts(),
+    ...cache,
   });
 
   const s = summary.data;
