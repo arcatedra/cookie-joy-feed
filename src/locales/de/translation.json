@@ -1088,8 +1088,8 @@
       "titleHighlight": "ab $22 pro Stunde",
       "titlePart2": "als Fahrer für Hazorex",
       "subtitlePart1": "Du bestimmst deine Zeit, wir die Bestellungen. Du brauchst nur ein",
-      "subtitleHighlight": "Motorrad oder Auto",
-      "subtitlePart2": ", einen gültigen Führerschein und Lust zu fahren.",
+      "subtitleHighlight": "wähle dein fahrzeug",
+      "subtitlePart2": "",
       "viewRequirements": "Anforderungen ansehen →",
       "perks": {
         "flexible": "Flexible Arbeitszeiten",
@@ -1114,27 +1114,32 @@
     },
     "vehicles": {
       "badge": "Akzeptierte Fahrzeuge",
-      "title": "Wir akzeptieren nur Motorräder oder Autos",
-      "bodyPart1": "Um schnelle Lieferungen und eine vollständige Abdeckung zu gewährleisten, akzeptieren wir bei Hazorex",
-      "bodyStrong": "nur Fahrer mit Motorrad oder Auto",
-      "bodyPart2": ". Wir akzeptieren keine Lieferungen zu Fuß oder mit dem Fahrrad.",
+      "title": "Wähle dein Fahrzeug",
       "hint": "Wähle unten dein Fahrzeug aus und wir fordern nur die entsprechenden Dokumente an.",
       "moto": {
         "label": "Motorrad",
         "desc": "Ideal für dichten Verkehr. Schnellere Lieferungen.",
         "perk1": "Gültiger NY-Führerschein Klasse M oder DM",
-        "perk2": "Gültige NY-Zulassung und aktuelle Inspektion",
+        "perk2": "Aktuelle Zulassung und Inspektion",
         "perk3": "Gültige Fahrzeugversicherung",
-        "perk4": "Helm (nach NY-Recht vorgeschrieben)"
+        "perk4": "Helm"
       },
       "auto": {
         "label": "Auto",
         "desc": "Perfekt für große Bestellungen und wechselhaftes Wetter.",
         "perk1": "Gültiger NY-Führerschein Klasse D (oder E)",
-        "perk2": "Gültige NY-Zulassung und aktuelle Inspektion",
+        "perk2": "Aktuelle Zulassung und Inspektion",
         "perk3": "Gültige Fahrzeugversicherung"
       },
-      "ageNotice": "Du musst mindestens 18 Jahre alt sein. Junior-Führerscheine (Klasse DJ oder MJ) werden nicht akzeptiert."
+      "ageNotice": "Du musst mindestens 18 Jahre alt sein. Junior-Führerscheine (Klasse DJ oder MJ) werden nicht akzeptiert.",
+      "bicicleta": {
+        "label": "Fahrrad / E-Bike",
+        "desc": "Ideal für dicht besiedelte Gebiete. Kein Führerschein und keine Versicherung erforderlich.",
+        "perk1": "Mindestens 18 Jahre alt",
+        "perk2": "Lichtbildausweis",
+        "perk3": "Eigenes Fahrrad oder E-Bike",
+        "perk4": "Helm"
+      }
     },
     "how": {
       "title": "So funktioniert's",
@@ -1153,18 +1158,18 @@
     },
     "requirements": {
       "title": "Anforderungen",
-      "r1": "Mindestalter 18 Jahre",
-      "r2": "Eigenes Motorrad oder Auto (wir akzeptieren keine Fußgänger oder Radfahrer)",
-      "r3": "Gültiger NY-Führerschein: Klasse M oder DM für Motorräder; Klasse D oder E für Autos",
-      "r4": "Gültige Fahrzeugversicherung",
-      "r5": "Gültiger amtlicher Ausweis",
+      "r1": "Mindestens 18 Jahre alt",
+      "r2": "Eigenes Fahrrad oder E-Bike",
+      "r3": "Ideal für dicht besiedelte Gebiete. Kein Führerschein und keine Versicherung erforderlich.",
+      "r4": "SSN or ITIN",
+      "r5": "Gültiger NY-Führerschein Klasse M oder DM / Gültiger NY-Führerschein Klasse D (oder E)",
       "r6": "Klares Profilfoto (Selfie)"
     },
     "faq": {
       "title": "Häufig gestellte Fragen",
       "q1": {
         "q": "Brauche ich ein eigenes Fahrzeug?",
-        "a": "Ja. Bei Hazorex akzeptieren wir nur Fahrer mit Motorrad oder Auto, um Lieferzeiten und Gebietsabdeckung zu gewährleisten. Wir akzeptieren keine Lieferungen zu Fuß oder mit dem Fahrrad."
+        "a": "Ideal für dicht besiedelte Gebiete. Kein Führerschein und keine Versicherung erforderlich. Ideal für dichten Verkehr. Schnellere Lieferungen. Perfekt für große Bestellungen und wechselhaftes Wetter."
       },
       "q2": {
         "q": "Wie lange dauert die Genehmigung?",
@@ -1247,7 +1252,7 @@
       },
       "step2": {
         "title": "Fahrzeug",
-        "subtitle": "Wir akzeptieren nur Motorräder oder Autos."
+        "subtitle": "Wähle Fahrrad/E-Bike, Motorrad oder Auto."
       },
       "step3": {
         "title": "Dokumente",
@@ -1261,7 +1266,7 @@
       "email": "E-Mail-Adresse",
       "phone": "Telefon",
       "dob": "Geburtsdatum (18+)",
-      "zone": "Liefergebiet",
+      "zone": "Bevorzugtes Arbeitsgebiet",
       "address": "Adresse",
       "licenseNumber": "Führerscheinnummer",
       "insurer": "Versicherungsgesellschaft",
@@ -1303,10 +1308,14 @@
         "err_dob_underage": "Du musst mindestens 18 Jahre alt sein",
         "err_zone": "Wähle dein Liefergebiet",
         "err_address": "Gib deine Adresse ein",
-        "err_vehicle": "Wähle Motorrad oder Auto",
+        "err_vehicle": "Wähle Fahrrad/E-Bike, Motorrad oder Auto",
         "err_license": "Gib deine Führerscheinnummer ein",
-        "err_insurer": "Gib deine Versicherungsgesellschaft ein"
-      }
+        "err_insurer": "Gib deine Versicherungsgesellschaft ein",
+        "err_taxId": "Gib eine gültige 9-stellige SSN oder ITIN ein"
+      },
+      "taxIdType": "Steuer-ID-Typ",
+      "taxId": "SSN oder ITIN",
+      "taxIdPrivacy": "Deine vollständige Nummer wird vor dem Speichern verschlüsselt und nicht erneut angezeigt."
     },
     "summary": {
       "name": "Name",
@@ -1319,7 +1328,8 @@
       "license": "Führerschein",
       "insurer": "Versicherung",
       "plate": "Kennzeichen",
-      "edit": "Bearbeiten"
+      "edit": "Bearbeiten",
+      "taxId": "SSN oder ITIN"
     },
     "success": {
       "title": "Bewerbung erhalten!",
@@ -1332,7 +1342,7 @@
       "tip": "Bewahre diese Nummer auf. Sie hilft dir, falls du uns kontaktieren musst."
     },
     "onboarding": {
-      "licenseRequirements": "Mit der Annahme bestätigst du, dass du mindestens 18 Jahre alt bist, als unabhängiger Auftragnehmer tätig bist und einen gültigen NY-Führerschein für dein Fahrzeug besitzt (Klasse M oder DM für Motorräder; Klasse D oder E für Autos), mit aktueller Zulassung, Inspektion und Versicherung. Junior-Führerscheine der Klasse DJ oder MJ werden nicht akzeptiert."
+      "licenseRequirements": "Mit der Annahme bestätigst du, dass du mindestens 18 Jahre alt bist, als unabhängiger Auftragnehmer tätig bist und einen gültigen NY-Führerschein für dein Fahrzeug besitzt (Fahrrad/E-Bike ohne Führerschein; Klasse M oder DM für Motorräder; Klasse D oder E für Autos), mit aktueller Zulassung, Inspektion und Versicherung. Junior-Führerscheine der Klasse DJ oder MJ werden nicht akzeptiert."
     }
   },
   "negociosRegistro": {

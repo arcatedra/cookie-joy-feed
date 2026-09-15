@@ -1085,8 +1085,8 @@
       "titleHighlight": "a partire da $22 l’ora",
       "titlePart2": "consegnando con Hazorex",
       "subtitlePart1": "Tu gestisci il tuo tempo, noi gli ordini. Hai solo bisogno di",
-      "subtitleHighlight": "moto o auto",
-      "subtitlePart2": ", patente valida e voglia di guidare.",
+      "subtitleHighlight": "scegli il tuo veicolo",
+      "subtitlePart2": "",
       "viewRequirements": "Vedi requisiti →",
       "perks": {
         "flexible": "Orari flessibili",
@@ -1111,27 +1111,32 @@
     },
     "vehicles": {
       "badge": "Veicoli accettati",
-      "title": "Accettiamo solo moto o auto",
-      "bodyPart1": "Per garantire consegne rapide e una copertura completa, in Hazorex",
-      "bodyStrong": "accettiamo solo rider in moto o in auto",
-      "bodyPart2": ". Non accettiamo consegne a piedi o in bicicletta.",
+      "title": "Scegli il tuo veicolo",
       "hint": "Scegli il tuo veicolo qui sotto e ti chiederemo solo i documenti corrispondenti.",
       "moto": {
         "label": "Moto",
-        "desc": "Ideale per il traffico intenso. Consegne più veloci.",
-        "perk1": "Patente NY valida di classe M o DM",
-        "perk2": "Registrazione e revisione NY aggiornate",
+        "desc": "Ideale nel traffico intenso. Consegne più rapide.",
+        "perk1": "Patente NY Classe M o DM valida",
+        "perk2": "Registrazione e revisione aggiornate",
         "perk3": "Assicurazione del veicolo valida",
-        "perk4": "Casco (obbligatorio per legge a NY)"
+        "perk4": "Casco"
       },
       "auto": {
         "label": "Auto",
-        "desc": "Perfetta per ordini grandi e condizioni meteorologiche variabili.",
-        "perk1": "Patente NY valida di classe D (o E)",
-        "perk2": "Registrazione e revisione NY aggiornate",
+        "desc": "Perfetta per ordini grandi e clima variabile.",
+        "perk1": "Patente NY Classe D (o E) valida",
+        "perk2": "Registrazione e revisione aggiornate",
         "perk3": "Assicurazione del veicolo valida"
       },
-      "ageNotice": "Devi avere almeno 18 anni. Le patenti junior (classe DJ o MJ) non sono accettate."
+      "ageNotice": "Devi avere almeno 18 anni. Le patenti junior (classe DJ o MJ) non sono accettate.",
+      "bicicleta": {
+        "label": "Bicicletta / E-bike",
+        "desc": "Ideale per zone dense. Nessuna patente o assicurazione richiesta.",
+        "perk1": "Almeno 18 anni",
+        "perk2": "Documento d’identità con foto",
+        "perk3": "Bicicletta o e-bike propria",
+        "perk4": "Casco"
+      }
     },
     "how": {
       "title": "Come funziona",
@@ -1150,18 +1155,18 @@
     },
     "requirements": {
       "title": "Requisiti",
-      "r1": "Avere più di 18 anni",
-      "r2": "Moto o auto di proprietà (non accettiamo a piedi o in bicicletta)",
-      "r3": "Patente NY valida: classe M o DM per moto; classe D o E per auto",
-      "r4": "Assicurazione del veicolo valida",
-      "r5": "Documento d'identità ufficiale valido",
+      "r1": "Almeno 18 anni",
+      "r2": "Bicicletta o e-bike propria",
+      "r3": "Ideale per zone dense. Nessuna patente o assicurazione richiesta.",
+      "r4": "SSN or ITIN",
+      "r5": "Patente NY Classe M o DM valida / Patente NY Classe D (o E) valida",
       "r6": "Foto del profilo chiara (selfie)"
     },
     "faq": {
       "title": "Domande frequenti",
       "q1": {
         "q": "Devo avere un veicolo di proprietà?",
-        "a": "Sì. In Hazorex accettiamo solo rider in moto o in auto per garantire i tempi di consegna e la copertura della zona. Non accettiamo consegne a piedi o in bicicletta."
+        "a": "Ideale per zone dense. Nessuna patente o assicurazione richiesta. Ideale nel traffico intenso. Consegne più rapide. Perfetta per ordini grandi e clima variabile."
       },
       "q2": {
         "q": "Quanto tempo ci vuole per l'approvazione?",
@@ -1244,7 +1249,7 @@
       },
       "step2": {
         "title": "Veicolo",
-        "subtitle": "Accettiamo solo moto o auto."
+        "subtitle": "Scegli bicicletta/e-bike, moto o auto."
       },
       "step3": {
         "title": "Documenti",
@@ -1258,7 +1263,7 @@
       "email": "Indirizzo email",
       "phone": "Telefono",
       "dob": "Data di nascita (18+)",
-      "zone": "Zona di consegna",
+      "zone": "Zona di lavoro preferita",
       "address": "Indirizzo",
       "licenseNumber": "Numero di patente di guida",
       "insurer": "Compagnia assicurativa",
@@ -1300,10 +1305,14 @@
         "err_dob_underage": "Devi avere più di 18 anni",
         "err_zone": "Seleziona la tua zona di consegna",
         "err_address": "Inserisci il tuo indirizzo",
-        "err_vehicle": "Seleziona moto o auto",
+        "err_vehicle": "Scegli bicicletta/e-bike, moto o auto",
         "err_license": "Inserisci il numero della tua patente",
-        "err_insurer": "Inserisci la tua compagnia assicurativa"
-      }
+        "err_insurer": "Inserisci la tua compagnia assicurativa",
+        "err_taxId": "Inserisci un SSN o ITIN valido di 9 cifre"
+      },
+      "taxIdType": "Tipo di identificativo fiscale",
+      "taxId": "SSN o ITIN",
+      "taxIdPrivacy": "Il numero completo viene cifrato prima del salvataggio e non sarà mostrato di nuovo."
     },
     "summary": {
       "name": "Nome",
@@ -1316,7 +1325,8 @@
       "license": "Patente",
       "insurer": "Compagnia assicurativa",
       "plate": "Targa",
-      "edit": "Modifica"
+      "edit": "Modifica",
+      "taxId": "SSN o ITIN"
     },
     "success": {
       "title": "Candidatura ricevuta!",

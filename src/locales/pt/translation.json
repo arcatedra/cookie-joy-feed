@@ -1088,8 +1088,8 @@
       "titleHighlight": "a partir de $22 por hora",
       "titlePart2": "fazendo entregas com a Hazorex",
       "subtitlePart1": "Você gerencia seu tempo, nós os pedidos. Você só precisa de",
-      "subtitleHighlight": "moto ou carro",
-      "subtitlePart2": ", carteira de motorista válida e vontade de rodar.",
+      "subtitleHighlight": "escolha seu veículo",
+      "subtitlePart2": "",
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horários flexíveis",
@@ -1114,27 +1114,32 @@
     },
     "vehicles": {
       "badge": "Veículos aceitos",
-      "title": "Aceitamos apenas moto ou carro",
-      "bodyPart1": "Para garantir entregas rápidas e com cobertura completa, na Hazorex",
-      "bodyStrong": "só aceitamos entregadores de moto ou carro",
-      "bodyPart2": ". Não aceitamos entregas a pé nem de bicicleta.",
+      "title": "Escolha seu veículo",
       "hint": "Escolha o seu abaixo e pediremos apenas os documentos correspondentes.",
       "moto": {
         "label": "Moto",
         "desc": "Ideal para trânsito intenso. Entregas mais rápidas.",
-        "perk1": "Carteira válida de NY Classe M ou DM",
-        "perk2": "Registro e inspeção de NY em dia",
+        "perk1": "Licença NY Classe M ou DM válida",
+        "perk2": "Registro e inspeção em dia",
         "perk3": "Seguro do veículo válido",
-        "perk4": "Capacete (obrigatório por lei em NY)"
+        "perk4": "Capacete"
       },
       "auto": {
         "label": "Carro",
         "desc": "Perfeito para pedidos grandes e clima variável.",
-        "perk1": "Carteira válida de NY Classe D (ou E)",
-        "perk2": "Registro e inspeção de NY em dia",
+        "perk1": "Licença NY Classe D (ou E) válida",
+        "perk2": "Registro e inspeção em dia",
         "perk3": "Seguro do veículo válido"
       },
-      "ageNotice": "Você deve ter 18 anos ou mais. Licenças junior (Classe DJ ou MJ) não são aceitas."
+      "ageNotice": "Você deve ter 18 anos ou mais. Licenças junior (Classe DJ ou MJ) não são aceitas.",
+      "bicicleta": {
+        "label": "Bicicleta / E-bike",
+        "desc": "Ideal para áreas densas. Não precisa de habilitação nem seguro.",
+        "perk1": "18 anos ou mais",
+        "perk2": "Documento de identidade com foto",
+        "perk3": "Bicicleta ou e-bike própria",
+        "perk4": "Capacete"
+      }
     },
     "how": {
       "title": "Como funciona",
@@ -1153,18 +1158,18 @@
     },
     "requirements": {
       "title": "Requisitos",
-      "r1": "Ser maior de 18 anos",
-      "r2": "Ter moto ou carro próprio (não aceitamos a pé ou de bicicleta)",
-      "r3": "Carteira válida de NY: Classe M ou DM para moto; Classe D ou E para carro",
-      "r4": "Seguro do veículo válido",
-      "r5": "Documento de identidade oficial válido",
+      "r1": "18 anos ou mais",
+      "r2": "Bicicleta ou e-bike própria",
+      "r3": "Ideal para áreas densas. Não precisa de habilitação nem seguro.",
+      "r4": "SSN or ITIN",
+      "r5": "Licença NY Classe M ou DM válida / Licença NY Classe D (ou E) válida",
       "r6": "Foto de perfil nítida (selfie)"
     },
     "faq": {
       "title": "Perguntas frequentes",
       "q1": {
         "q": "Preciso ter um veículo próprio?",
-        "a": "Sim. Na Hazorex, só aceitamos entregadores de moto ou carro para garantir os tempos de entrega e a cobertura da área. Não aceitamos entregas a pé nem de bicicleta."
+        "a": "Ideal para áreas densas. Não precisa de habilitação nem seguro. Ideal para trânsito intenso. Entregas mais rápidas. Perfeito para pedidos grandes e clima variável."
       },
       "q2": {
         "q": "Quanto tempo leva a aprovação?",
@@ -1247,7 +1252,7 @@
       },
       "step2": {
         "title": "Veículo",
-        "subtitle": "Aceitamos apenas moto ou carro."
+        "subtitle": "Escolha bicicleta/e-bike, moto ou carro."
       },
       "step3": {
         "title": "Documentos",
@@ -1261,7 +1266,7 @@
       "email": "E-mail",
       "phone": "Telefone",
       "dob": "Data de nascimento (18+)",
-      "zone": "Área de entrega",
+      "zone": "Zona onde deseja trabalhar",
       "address": "Endereço",
       "licenseNumber": "Número da carteira de motorista",
       "insurer": "Seguradora",
@@ -1303,10 +1308,14 @@
         "err_dob_underage": "Você deve ser maior de 18 anos",
         "err_zone": "Selecione sua área de entrega",
         "err_address": "Insira seu endereço",
-        "err_vehicle": "Selecione moto ou carro",
+        "err_vehicle": "Escolha bicicleta/e-bike, moto ou carro",
         "err_license": "Insira o número da sua carteira de motorista",
-        "err_insurer": "Insira sua seguradora"
-      }
+        "err_insurer": "Insira sua seguradora",
+        "err_taxId": "Digite um SSN ou ITIN válido de 9 dígitos"
+      },
+      "taxIdType": "Tipo de identificação fiscal",
+      "taxId": "SSN ou ITIN",
+      "taxIdPrivacy": "Seu número completo é criptografado antes de ser salvo e não será exibido novamente."
     },
     "summary": {
       "name": "Nome",
@@ -1319,7 +1328,8 @@
       "license": "Carteira de motorista",
       "insurer": "Seguradora",
       "plate": "Placa",
-      "edit": "Editar"
+      "edit": "Editar",
+      "taxId": "SSN ou ITIN"
     },
     "success": {
       "title": "Candidatura recebida!",
