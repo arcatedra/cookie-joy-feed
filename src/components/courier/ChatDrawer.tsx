@@ -73,7 +73,12 @@ export function ChatDrawer({
 
   const send = useMutation({
     mutationFn: (body: string) => sendFn({ data: { orderId, body, isQuickReply: false } }),
-    onSuccess: () => {
+    onSuccess: (res) => {
+      if (res && res.blocked) {
+        setBlocked(res.message ?? CONTACT_BLOCK_MESSAGE);
+        return;
+      }
+      setBlocked(null);
       setText("");
       qc.invalidateQueries({ queryKey: ["order-messages", orderId] });
     },
@@ -82,7 +87,14 @@ export function ChatDrawer({
   const quick = useMutation({
     mutationFn: ({ body, quickKey }: { body: string; quickKey?: QuickMessageKey }) =>
       sendFn({ data: { orderId, body, isQuickReply: true, ...(quickKey ? { quickKey } : {}) } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["order-messages", orderId] }),
+    onSuccess: (res) => {
+      if (res && res.blocked) {
+        setBlocked(res.message ?? CONTACT_BLOCK_MESSAGE);
+        return;
+      }
+      setBlocked(null);
+      qc.invalidateQueries({ queryKey: ["order-messages", orderId] });
+    },
   });
 
   return (
