@@ -144,7 +144,8 @@
       "yourAccount": "您的账户",
       "ordersReturns": "退货与订单",
       "cart": "您的购物车",
-      "signIn": "登录"
+      "signIn": "登录",
+      "stores": "商店"
     },
     "links": {
       "deals": "今日特价",
@@ -156,6 +157,9 @@
       "roulette": "🎰 抽奖",
       "drivers": "🛵 成为骑手",
       "businesses": "🏪 提交您的商家"
+    },
+    "quickLinks": {
+      "stores": "商店"
     }
   },
   "ratings": {
@@ -1585,5 +1589,70 @@
     "defaultRefund": "Default: we refund you.",
     "defaultBestMatch": "Default: we bring the best similar option.",
     "error": "We couldn't save your answer."
+  },
+  "stores": {
+    "title": "Stores near you",
+    "subtitle": "Supermarkets, shops and more delivering in your area.",
+    "searchPlaceholder": "Search store...",
+    "allZones": "All areas",
+    "allTypes": "All types",
+    "empty": "No stores with published products yet."
+  },
+  "storePage": {
+    "closedNotice": "This store is closed right now. You can still browse the catalog.",
+    "searchPlaceholder": "Search in this store...",
+    "soldOut": "Sold out",
+    "noProducts": "This store has no products yet.",
+    "otherCategory": "Other"
+  },
+  "storePanel": {
+    "noBusinessTitle": "You do not have a business yet",
+    "noBusinessBody": "Register your business to open your store on Hazorex.",
+    "registerCta": "Register my business",
+    "pendingTitle": "Your application is under review",
+    "pendingBody": "We will email you as soon as it is approved. Then you can upload your catalog.",
+    "blockedTitle": "Your store is not active",
+    "blockedBody": "Contact support if you think this is a mistake.",
+    "tabStore": "My store",
+    "tabCategories": "Categories",
+    "tabProducts": "Products",
+    "logo": "Logo",
+    "banner": "Banner",
+    "slug": "Web address",
+    "description": "Description",
+    "zones": "Areas served",
+    "hours": "Hours",
+    "closed": "Closed",
+    "save": "Save",
+    "saved": "Saved",
+    "error": "Something went wrong",
+    "uploaded": "Image uploaded",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "available": "Available",
+    "newCategory": "New category",
+    "noCategories": "No categories yet.",
+    "newProduct": "New product",
+    "editProduct": "Edit product",
+    "productName": "Product name",
+    "price": "Price",
+    "photo": "Photo",
+    "productDescription": "Description (optional)",
+    "noCategory": "No category",
+    "noProducts": "No products yet.",
+    "productInvalid": "Check the name and price.",
+    "publishedCount": "{{count}} published products",
+    "viewPublic": "View my store",
+    "days": {
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
+    }
   }
 }
