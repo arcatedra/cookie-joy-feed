@@ -1122,17 +1122,19 @@
       "moto": {
         "label": "Moto",
         "desc": "Ideal para trânsito intenso. Entregas mais rápidas.",
-        "perk1": "CNH categoria A válida",
-        "perk2": "Seguro do veículo válido",
-        "perk3": "Capacete"
+        "perk1": "Carteira válida de NY Classe M ou DM",
+        "perk2": "Registro e inspeção de NY em dia",
+        "perk3": "Seguro do veículo válido",
+        "perk4": "Capacete (obrigatório por lei em NY)"
       },
       "auto": {
         "label": "Carro",
         "desc": "Perfeito para pedidos grandes e clima variável.",
-        "perk1": "CNH categoria B válida",
-        "perk2": "Seguro do veículo válido",
-        "perk3": "Revisão em dia"
-      }
+        "perk1": "Carteira válida de NY Classe D (ou E)",
+        "perk2": "Registro e inspeção de NY em dia",
+        "perk3": "Seguro do veículo válido"
+      },
+      "ageNotice": "Você deve ter 18 anos ou mais. Licenças junior (Classe DJ ou MJ) não são aceitas."
     },
     "how": {
       "title": "Como funciona",
@@ -1153,7 +1155,7 @@
       "title": "Requisitos",
       "r1": "Ser maior de 18 anos",
       "r2": "Ter moto ou carro próprio (não aceitamos a pé ou de bicicleta)",
-      "r3": "Carteira de motorista (CNH) válida (categoria A para moto, categoria B para carro)",
+      "r3": "Carteira válida de NY: Classe M ou DM para moto; Classe D ou E para carro",
       "r4": "Seguro do veículo válido",
       "r5": "Documento de identidade oficial válido",
       "r6": "Foto de perfil nítida (selfie)"
@@ -1210,7 +1212,7 @@
         "hint": "Imagem ou PDF, máx. 5MB"
       },
       "licencia_conducir": {
-        "label": "Carteira de motorista válida (NY State)",
+        "label": "Carteira válida de NY correspondente à categoria do veículo",
         "hint": "Imagem ou PDF, máx. 5MB"
       },
       "seguro_vehiculo": {
@@ -1328,6 +1330,9 @@
       "copied": "Copiado",
       "copyAria": "Copiar número de referência",
       "tip": "Guarde este número. Ele ajudará se você precisar entrar em contato conosco."
+    },
+    "onboarding": {
+      "licenseRequirements": "Ao aceitar, você confirma que tem 18 anos ou mais, atua como prestador independente e possui carteira válida de NY para seu veículo (Classe M ou DM para moto; Classe D ou E para carro), com registro, inspeção e seguro em dia. Licenças junior Classe DJ ou MJ não são aceitas."
     }
   },
   "negociosRegistro": {

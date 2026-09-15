@@ -1122,17 +1122,19 @@
       "moto": {
         "label": "Motorrad",
         "desc": "Ideal für dichten Verkehr. Schnellere Lieferungen.",
-        "perk1": "Gültiger Führerschein Klasse A",
-        "perk2": "Gültige Fahrzeugversicherung",
-        "perk3": "Helm"
+        "perk1": "Gültiger NY-Führerschein Klasse M oder DM",
+        "perk2": "Gültige NY-Zulassung und aktuelle Inspektion",
+        "perk3": "Gültige Fahrzeugversicherung",
+        "perk4": "Helm (nach NY-Recht vorgeschrieben)"
       },
       "auto": {
         "label": "Auto",
         "desc": "Perfekt für große Bestellungen und wechselhaftes Wetter.",
-        "perk1": "Gültiger Führerschein Klasse B",
-        "perk2": "Gültige Fahrzeugversicherung",
-        "perk3": "Gültige Hauptuntersuchung"
-      }
+        "perk1": "Gültiger NY-Führerschein Klasse D (oder E)",
+        "perk2": "Gültige NY-Zulassung und aktuelle Inspektion",
+        "perk3": "Gültige Fahrzeugversicherung"
+      },
+      "ageNotice": "Du musst mindestens 18 Jahre alt sein. Junior-Führerscheine (Klasse DJ oder MJ) werden nicht akzeptiert."
     },
     "how": {
       "title": "So funktioniert's",
@@ -1153,7 +1155,7 @@
       "title": "Anforderungen",
       "r1": "Mindestalter 18 Jahre",
       "r2": "Eigenes Motorrad oder Auto (wir akzeptieren keine Fußgänger oder Radfahrer)",
-      "r3": "Gültiger Führerschein (Klasse A für Motorrad, Klasse B für Auto)",
+      "r3": "Gültiger NY-Führerschein: Klasse M oder DM für Motorräder; Klasse D oder E für Autos",
       "r4": "Gültige Fahrzeugversicherung",
       "r5": "Gültiger amtlicher Ausweis",
       "r6": "Klares Profilfoto (Selfie)"
@@ -1210,7 +1212,7 @@
         "hint": "Bild oder PDF, max. 5 MB"
       },
       "licencia_conducir": {
-        "label": "Gültiger Führerschein (NY State)",
+        "label": "Gültiger NY-Führerschein der passenden Fahrzeugklasse",
         "hint": "Bild oder PDF, max. 5 MB"
       },
       "seguro_vehiculo": {
@@ -1328,6 +1330,9 @@
       "copied": "Kopiert",
       "copyAria": "Referenznummer kopieren",
       "tip": "Bewahre diese Nummer auf. Sie hilft dir, falls du uns kontaktieren musst."
+    },
+    "onboarding": {
+      "licenseRequirements": "Mit der Annahme bestätigst du, dass du mindestens 18 Jahre alt bist, als unabhängiger Auftragnehmer tätig bist und einen gültigen NY-Führerschein für dein Fahrzeug besitzt (Klasse M oder DM für Motorräder; Klasse D oder E für Autos), mit aktueller Zulassung, Inspektion und Versicherung. Junior-Führerscheine der Klasse DJ oder MJ werden nicht akzeptiert."
     }
   },
   "negociosRegistro": {

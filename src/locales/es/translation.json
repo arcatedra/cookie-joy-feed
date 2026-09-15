@@ -1119,17 +1119,19 @@
       "moto": {
         "label": "Moto",
         "desc": "Ideal para tráfico denso. Entregas más rápidas.",
-        "perk1": "Licencia A vigente",
-        "perk2": "Seguro del vehículo vigente",
-        "perk3": "Casco"
+        "perk1": "Licencia Clase M o DM de NY, vigente",
+        "perk2": "Registración e inspección de NY al día",
+        "perk3": "Seguro del vehículo vigente",
+        "perk4": "Casco (obligatorio por ley en NY)"
       },
       "auto": {
         "label": "Auto",
         "desc": "Perfecto para pedidos grandes y clima variable.",
-        "perk1": "Licencia B vigente",
-        "perk2": "Seguro del vehículo vigente",
-        "perk3": "Revisión al día"
-      }
+        "perk1": "Licencia Clase D (o E) de NY, vigente",
+        "perk2": "Registración e inspección de NY al día",
+        "perk3": "Seguro del vehículo vigente"
+      },
+      "ageNotice": "Debes tener 18 años o más. No aceptamos licencias junior (Clase DJ o MJ)."
     },
     "how": {
       "title": "Cómo funciona",
@@ -1150,7 +1152,7 @@
       "title": "Requisitos",
       "r1": "Ser mayor de 18 años",
       "r2": "Moto o auto propio (no aceptamos a pie ni bicicleta)",
-      "r3": "Licencia de conducir vigente (tipo A para moto, tipo B para auto)",
+      "r3": "Licencia de NY vigente: Clase M o DM para moto; Clase D o E para auto",
       "r4": "Seguro del vehículo vigente",
       "r5": "Identificación oficial vigente",
       "r6": "Foto de perfil clara (selfie)"
@@ -1207,7 +1209,7 @@
         "hint": "Imagen o PDF, máx 5MB"
       },
       "licencia_conducir": {
-        "label": "Licencia de conducir vigente (NY State)",
+        "label": "Licencia de NY vigente de la clase correspondiente al vehículo",
         "hint": "Imagen o PDF, máx 5MB"
       },
       "seguro_vehiculo": {
@@ -1325,6 +1327,9 @@
       "copied": "Copiado",
       "copyAria": "Copiar número de referencia",
       "tip": "Guarda este número. Te ayudará si necesitas contactarnos."
+    },
+    "onboarding": {
+      "licenseRequirements": "Al aceptar, confirmas que tienes 18 años o más, operas como contratista independiente y cuentas con licencia de NY vigente de la clase correspondiente a tu vehículo (M o DM para moto; D o E para auto), registración, inspección y seguro al día. No se aceptan licencias junior Clase DJ o MJ."
     }
   },
   "negociosRegistro": {

@@ -1119,17 +1119,19 @@
       "moto": {
         "label": "Moto",
         "desc": "Idéal pour le trafic dense. Livraisons plus rapides.",
-        "perk1": "Permis A en cours de validité",
-        "perk2": "Assurance du véhicule en cours de validité",
-        "perk3": "Casque"
+        "perk1": "Permis NY valide de classe M ou DM",
+        "perk2": "Immatriculation et inspection de NY à jour",
+        "perk3": "Assurance du véhicule valide",
+        "perk4": "Casque (obligatoire selon la loi de NY)"
       },
       "auto": {
         "label": "Voiture",
         "desc": "Parfait pour les grosses commandes et les conditions météorologiques variables.",
-        "perk1": "Permis B en cours de validité",
-        "perk2": "Assurance du véhicule en cours de validité",
-        "perk3": "Contrôle technique à jour"
-      }
+        "perk1": "Permis NY valide de classe D (ou E)",
+        "perk2": "Immatriculation et inspection de NY à jour",
+        "perk3": "Assurance du véhicule valide"
+      },
+      "ageNotice": "Vous devez avoir au moins 18 ans. Les permis junior (classe DJ ou MJ) ne sont pas acceptés."
     },
     "how": {
       "title": "Comment ça marche",
@@ -1150,7 +1152,7 @@
       "title": "Exigences",
       "r1": "Avoir plus de 18 ans",
       "r2": "Posséder une moto ou une voiture (nous n'acceptons pas à pied ni à vélo)",
-      "r3": "Permis de conduire en cours de validité (type A pour moto, type B pour voiture)",
+      "r3": "Permis NY valide : classe M ou DM pour une moto ; classe D ou E pour une voiture",
       "r4": "Assurance du véhicule en cours de validité",
       "r5": "Pièce d'identité officielle en cours de validité",
       "r6": "Photo de profil claire (selfie)"
@@ -1207,7 +1209,7 @@
         "hint": "Image ou PDF, 5 Mo max"
       },
       "licencia_conducir": {
-        "label": "Permis de conduire en vigueur (État de NY)",
+        "label": "Permis NY valide correspondant à la catégorie du véhicule",
         "hint": "Image ou PDF, 5 Mo max"
       },
       "seguro_vehiculo": {
@@ -1325,6 +1327,9 @@
       "copied": "Copié",
       "copyAria": "Copier le numéro de référence",
       "tip": "Conservez ce numéro. Il vous sera utile si vous avez besoin de nous contacter."
+    },
+    "onboarding": {
+      "licenseRequirements": "En acceptant, vous confirmez avoir au moins 18 ans, exercer comme prestataire indépendant et posséder un permis NY valide pour votre véhicule (classe M ou DM pour une moto ; classe D ou E pour une voiture), avec immatriculation, inspection et assurance à jour. Les permis junior de classe DJ ou MJ ne sont pas acceptés."
     }
   },
   "negociosRegistro": {

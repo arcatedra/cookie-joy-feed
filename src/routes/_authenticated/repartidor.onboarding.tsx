@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { CheckCircle2, Circle, Loader2, ShieldCheck, PlayCircle, Navigation2, Bike } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/repartidor/onboarding")({
 type Step = "agreement" | "gps" | "tutorial";
 
 function OnboardingPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [openStep, setOpenStep] = useState<Step | null>(null);
@@ -110,11 +112,11 @@ function OnboardingPage() {
           <div className="max-h-40 overflow-y-auto rounded-md bg-[#f4f1ea] p-3 text-xs text-[#4a3525]">
             <p className="mb-2 font-semibold">Acuerdo de repartidor independiente</p>
             <p>
-              Al aceptar, confirmas que operas como contratista independiente, con licencia vigente,
-              vehículo asegurado y documentos al día. Te comprometes a cumplir con las normas de tránsito,
-              trato respetuoso a comercios y clientes, y las políticas de calidad de Hazorex (puntualidad,
-              foto/firma de entrega, no manipulación de pedidos). Hazorex retiene una comisión sobre cada
-              entrega según la tarifa vigente y realiza pagos semanales.
+              {t("repartidoresPage.onboarding.licenseRequirements")}
+              {" "}Te comprometes a cumplir con las normas de tránsito, trato respetuoso a comercios y
+              clientes, y las políticas de calidad de Hazorex (puntualidad, foto/firma de entrega, no
+              manipulación de pedidos). Hazorex retiene una comisión sobre cada entrega según la tarifa
+              vigente y realiza pagos semanales.
             </p>
           </div>
           <Button
