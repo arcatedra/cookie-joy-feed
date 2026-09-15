@@ -369,10 +369,14 @@ function MapPreview({
   driver: { lat: number; lng: number } | null;
   target: { lat: number; lng: number };
 }) {
-  const markers = [
-    ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
-    { position: target, color: "target" as const, title: "Destino" },
-  ];
+  // Memoized so GPS ticks don't force the map to rebuild its markers.
+  const markers = useMemo(
+    () => [
+      ...(driver ? [{ position: driver, color: "driver" as const, title: "Tú" }] : []),
+      { position: target, color: "target" as const, title: "Destino" },
+    ],
+    [driver?.lat, driver?.lng, target.lat, target.lng],
+  );
   return (
     <div className="relative h-full w-full bg-[#0f2338]">
       <GoogleMapView markers={markers} className="h-full w-full" />
