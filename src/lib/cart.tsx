@@ -23,6 +23,11 @@ interface CartContextValue {
   add: (item: Omit<CartItem, "qty">, qty?: number) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
+  setSubstitution: (
+    id: string,
+    mode: SubstitutionMode,
+    substituteIds: string[],
+  ) => void;
   clear: () => void;
 }
 
