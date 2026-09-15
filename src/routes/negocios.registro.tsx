@@ -9,6 +9,7 @@ import {
   type BusinessType,
 } from "@/lib/businesses";
 import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+import { LoadErrorState } from "@/components/LoadErrorState";
 import { supabase } from "@/integrations/supabase/client";
 import i18n from "@/i18n";
 
@@ -56,6 +57,7 @@ function BusinessRegistrationPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [bootLoading, setBootLoading] = useState(true);
+  const [bootError, setBootError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,17 +65,27 @@ function BusinessRegistrationPage() {
   const [existing, setExisting] = useState(false);
   const [formData, setFormData] = useState<FormState>(INITIAL);
 
-  useEffect(() => {
-    (async () => {
+  const loadBoot = async () => {
+    setBootLoading(true);
+    setBootError(null);
+    try {
       const { data } = await supabase.auth.getUser();
       setHasAccount(!!data.user);
       if (data.user) {
         setFormData((f) => ({ ...f, email: data.user!.email ?? "" }));
         const mine = await fetchMyBusiness();
-        if (mine) setExisting(true);
+        setExisting(!!mine);
       }
+    } catch (err: any) {
+      setBootError(err?.message ?? t("negociosRegistro.errors.generic"));
+    } finally {
       setBootLoading(false);
-    })();
+    }
+  };
+
+  useEffect(() => {
+    void loadBoot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (
@@ -130,6 +142,14 @@ function BusinessRegistrationPage() {
     return (
       <div className="grid min-h-[50vh] place-items-center">
         <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (bootError) {
+    return (
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={bootError} onRetry={() => void loadBoot()} />
       </div>
     );
   }

@@ -1,3 +1,4 @@
+import { LoadErrorState } from "@/components/LoadErrorState";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -28,7 +29,12 @@ export const Route = createFileRoute("/_authenticated/negocio/productos")({
 
 function ProductsPage() {
   const qc = useQueryClient();
-  const { data: business, isLoading: loadingBiz } = useQuery({
+  const {
+    data: business,
+    isLoading: loadingBiz,
+    error: bizError,
+    refetch: refetchBiz,
+  } = useQuery({
     queryKey: ["my-business"],
     queryFn: fetchMyBusiness,
   });
@@ -52,6 +58,14 @@ function ProductsPage() {
         <div className="grid min-h-[50vh] place-items-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
+      </div>
+    );
+  }
+
+  if (bizError) {
+    return (
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={(bizError as Error).message} onRetry={() => void refetchBiz()} />
       </div>
     );
   }
