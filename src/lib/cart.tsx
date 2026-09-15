@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
+import type { SubstitutionMode } from "@/lib/substitutions";
+
 export interface CartItem {
   id: string;
   name: string;
@@ -7,6 +9,10 @@ export interface CartItem {
   price: number;
   image: string;
   qty: number;
+  /** Qué hacer si el artículo no está disponible al preparar el pedido. */
+  substitutionMode?: SubstitutionMode;
+  /** Alternativas elegidas por el cliente (hasta 3), en orden de preferencia. */
+  substituteIds?: string[];
 }
 
 interface CartContextValue {
