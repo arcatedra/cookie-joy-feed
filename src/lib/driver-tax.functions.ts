@@ -27,13 +27,16 @@ export const saveDriverTaxId = createServerFn({ method: "POST" })
       new TextEncoder().encode(data.taxId),
     );
 
-    const { error } = await context.supabase.from("driver_tax_profiles").insert({
-      driver_id: context.userId,
-      tax_id_type: data.taxIdType,
-      tax_id_ciphertext: bytesToBase64(new Uint8Array(ciphertext)),
-      tax_id_iv: bytesToBase64(iv),
-      tax_id_last4: data.taxId.slice(-4),
-    });
+    const { error } = await context.supabase.from("driver_tax_profiles").upsert(
+      {
+        driver_id: context.userId,
+        tax_id_type: data.taxIdType,
+        tax_id_ciphertext: bytesToBase64(new Uint8Array(ciphertext)),
+        tax_id_iv: bytesToBase64(iv),
+        tax_id_last4: data.taxId.slice(-4),
+      },
+      { onConflict: "driver_id" },
+    );
     if (error) throw new Error("Could not securely save tax information");
 
     return { last4: data.taxId.slice(-4) };
