@@ -1122,17 +1122,19 @@
       "moto": {
         "label": "Motorsiklo",
         "desc": "Mainam para sa matinding trapiko. Mas mabilis na paghahatid.",
-        "perk1": "Validong lisensya A",
-        "perk2": "Validong insurance ng sasakyan",
-        "perk3": "Helmet"
+        "perk1": "Balidong NY Class M o DM na lisensya",
+        "perk2": "Kasalukuyang rehistrasyon at inspeksyon sa NY",
+        "perk3": "Balidong insurance ng sasakyan",
+        "perk4": "Helmet (kinakailangan ng batas ng NY)"
       },
       "auto": {
         "label": "Kotse",
         "desc": "Perpekto para sa malalaking order at paiba-ibang panahon.",
-        "perk1": "Validong lisensya B",
-        "perk2": "Validong insurance ng sasakyan",
-        "perk3": "Updated na rehistro"
-      }
+        "perk1": "Balidong NY Class D (o E) na lisensya",
+        "perk2": "Kasalukuyang rehistrasyon at inspeksyon sa NY",
+        "perk3": "Balidong insurance ng sasakyan"
+      },
+      "ageNotice": "Dapat 18 taong gulang o higit pa. Hindi tinatanggap ang junior license (Class DJ o MJ)."
     },
     "how": {
       "title": "Paano ito gumagana",
@@ -1153,7 +1155,7 @@
       "title": "Mga Kinakailangan",
       "r1": "Higit sa 18 taong gulang",
       "r2": "Sariling motorsiklo o kotse (hindi kami tumatanggap ng naglalakad o nagbibisikleta)",
-      "r3": "Validong lisensya sa pagmamaneho (uri A para sa motorsiklo, uri B para sa kotse)",
+      "r3": "Balidong lisensya sa NY: Class M o DM para sa motorsiklo; Class D o E para sa kotse",
       "r4": "Validong insurance ng sasakyan",
       "r5": "Validong opisyal na ID",
       "r6": "Malinaw na profile picture (selfie)"
@@ -1210,7 +1212,7 @@
         "hint": "Larawan o PDF, max 5MB"
       },
       "licencia_conducir": {
-        "label": "Validong lisensya sa pagmamaneho (NY State)",
+        "label": "Balidong lisensya sa NY para sa napiling uri ng sasakyan",
         "hint": "Larawan o PDF, max 5MB"
       },
       "seguro_vehiculo": {
@@ -1328,6 +1330,9 @@
       "copied": "Kinopya",
       "copyAria": "Kopyahin ang reference number",
       "tip": "Itabi ang numerong ito. Makakatulong ito kung kailangan mo kaming kontakin."
+    },
+    "onboarding": {
+      "licenseRequirements": "Sa pagtanggap, kinukumpirma mong ikaw ay 18 taong gulang o higit pa, nagtatrabaho bilang independent contractor, at may balidong lisensya sa NY para sa iyong sasakyan (Class M o DM para sa motorsiklo; Class D o E para sa kotse), kasama ang kasalukuyang rehistrasyon, inspeksyon, at insurance. Hindi tinatanggap ang junior license na Class DJ o MJ."
     }
   },
   "negociosRegistro": {
