@@ -12,6 +12,8 @@ import {
   quickMessageText,
   type QuickMessageKey,
 } from "@/lib/driver-quick-messages";
+import { CONTACT_BLOCK_MESSAGE } from "@/lib/contact-filter";
+import { useTranslation } from "react-i18next";
 
 const CUSTOMER_QUICK = [
   "Toca el timbre por favor.",
@@ -36,6 +38,8 @@ export function ChatDrawer({
   const markFn = useServerFn(markMessagesRead);
   const [text, setText] = useState("");
   const [freeTextOpen, setFreeTextOpen] = useState(role === "customer");
+  const [blocked, setBlocked] = useState<string | null>(null);
+  const { t } = useTranslation();
   const endRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
@@ -73,7 +77,12 @@ export function ChatDrawer({
 
   const send = useMutation({
     mutationFn: (body: string) => sendFn({ data: { orderId, body, isQuickReply: false } }),
-    onSuccess: () => {
+    onSuccess: (res) => {
+      if (res && res.blocked) {
+        setBlocked(res.message ?? CONTACT_BLOCK_MESSAGE);
+        return;
+      }
+      setBlocked(null);
       setText("");
       qc.invalidateQueries({ queryKey: ["order-messages", orderId] });
     },
@@ -82,7 +91,14 @@ export function ChatDrawer({
   const quick = useMutation({
     mutationFn: ({ body, quickKey }: { body: string; quickKey?: QuickMessageKey }) =>
       sendFn({ data: { orderId, body, isQuickReply: true, ...(quickKey ? { quickKey } : {}) } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["order-messages", orderId] }),
+    onSuccess: (res) => {
+      if (res && res.blocked) {
+        setBlocked(res.message ?? CONTACT_BLOCK_MESSAGE);
+        return;
+      }
+      setBlocked(null);
+      qc.invalidateQueries({ queryKey: ["order-messages", orderId] });
+    },
   });
 
   return (
@@ -124,6 +140,11 @@ export function ChatDrawer({
         </div>
 
         <div className="border-t bg-white p-3">
+          {blocked && (
+            <div className="mb-2 rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+              {t("chat.contactBlocked", { defaultValue: blocked })}
+            </div>
+          )}
           {role === "driver" ? (
             <>
               <div className="grid gap-2">

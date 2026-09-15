@@ -64,6 +64,7 @@ import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminTestingRouteImport } from './routes/_authenticated/admin.testing'
+import { Route as AuthenticatedAdminViolacionesRouteImport } from './routes/_authenticated/admin.violaciones'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
@@ -383,6 +384,12 @@ const AuthenticatedAdminTestingRoute =
     path: '/admin/testing',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminViolacionesRoute =
+  AuthenticatedAdminViolacionesRouteImport.update({
+    id: '/admin/violaciones',
+    path: '/admin/violaciones',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedClaimDrawDateRoute =
   AuthenticatedClaimDrawDateRouteImport.update({
     id: '/claim/$drawDate',
@@ -632,6 +639,7 @@ export interface FileRoutesByFullPath {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -719,6 +727,7 @@ export interface FileRoutesByTo {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -810,6 +819,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/_authenticated/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
@@ -901,6 +911,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/admin/testing'
+    | '/admin/violaciones'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
@@ -988,6 +999,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/admin/testing'
+    | '/admin/violaciones'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
@@ -1078,6 +1090,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/admin/testing'
+    | '/_authenticated/admin/violaciones'
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
@@ -1555,6 +1568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTestingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/violaciones': {
+      id: '/_authenticated/admin/violaciones'
+      path: '/admin/violaciones'
+      fullPath: '/admin/violaciones'
+      preLoaderRoute: typeof AuthenticatedAdminViolacionesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/claim/$drawDate': {
       id: '/_authenticated/claim/$drawDate'
       path: '/claim/$drawDate'
@@ -1842,6 +1862,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedAdminTestingRoute: typeof AuthenticatedAdminTestingRoute
+  AuthenticatedAdminViolacionesRoute: typeof AuthenticatedAdminViolacionesRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
@@ -1868,6 +1889,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedAdminTestingRoute: AuthenticatedAdminTestingRoute,
+  AuthenticatedAdminViolacionesRoute: AuthenticatedAdminViolacionesRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,

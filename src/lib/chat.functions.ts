@@ -8,6 +8,29 @@ import {
   quickMessageText,
   type QuickMessageKey,
 } from "@/lib/driver-quick-messages";
+import { checkMessageForContacts, CONTACT_BLOCK_MESSAGE } from "@/lib/contact-filter";
+
+/** Guarda el intento de compartir contactos (solo visible para el administrador). */
+async function logPolicyViolation(args: {
+  orderId: string;
+  userId: string;
+  role: string;
+  text: string;
+}) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin.from("policy_violations") as unknown as {
+      insert: (v: Record<string, unknown>) => Promise<unknown>;
+    }).insert({
+      order_id: args.orderId,
+      user_id: args.userId,
+      role: args.role,
+      texto_intentado: args.text.slice(0, 2000),
+    });
+  } catch (err) {
+    console.error("logPolicyViolation error", err);
+  }
+}
 
 const uuid = z.string().uuid();
 
@@ -50,6 +73,18 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
     const o = order as Record<string, unknown>;
     const role: "driver" | "customer" = o["driver_id"] === userId ? "driver" : "customer";
 
+    // Seguridad: no se permite compartir números, correos ni apps de contacto.
+    const check = checkMessageForContacts(data.body);
+    if (!check.ok) {
+      await logPolicyViolation({
+        orderId: data.orderId,
+        userId,
+        role,
+        text: data.body,
+      });
+      return { ok: false as const, blocked: true as const, message: CONTACT_BLOCK_MESSAGE };
+    }
+
     const { error } = await supabase.from("order_messages").insert({
       order_id: data.orderId,
       sender_id: userId,
@@ -71,7 +106,7 @@ export const sendOrderMessage = createServerFn({ method: "POST" })
       }
     }
 
-    return { ok: true };
+    return { ok: true as const, blocked: false as const, message: null };
   });
 
 /** Envía el aviso (push) del mensaje rápido al cliente, en su idioma. */
