@@ -8,6 +8,29 @@ import {
   quickMessageText,
   type QuickMessageKey,
 } from "@/lib/driver-quick-messages";
+import { checkMessageForContacts, CONTACT_BLOCK_MESSAGE } from "@/lib/contact-filter";
+
+/** Guarda el intento de compartir contactos (solo visible para el administrador). */
+async function logPolicyViolation(args: {
+  orderId: string;
+  userId: string;
+  role: string;
+  text: string;
+}) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin.from("policy_violations") as unknown as {
+      insert: (v: Record<string, unknown>) => Promise<unknown>;
+    }).insert({
+      order_id: args.orderId,
+      user_id: args.userId,
+      role: args.role,
+      texto_intentado: args.text.slice(0, 2000),
+    });
+  } catch (err) {
+    console.error("logPolicyViolation error", err);
+  }
+}
 
 const uuid = z.string().uuid();
 
