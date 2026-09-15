@@ -173,6 +173,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
           if (qty <= 0) return prev.filter((p) => p.id !== id);
           return prev.map((p) => (p.id === id ? { ...p, qty } : p));
         }),
+      setSubstitution: (id, mode, substituteIds) =>
+        setItems((prev) =>
+          prev.map((p) =>
+            p.id === id
+              ? {
+                  ...p,
+                  substitutionMode: mode,
+                  substituteIds: mode === "specific" ? substituteIds.slice(0, 3) : [],
+                }
+              : p,
+          ),
+        ),
       clear: () => setItems([]),
     };
   }, [items, hydrated]);
