@@ -1084,9 +1084,9 @@
       "titlePart1": "Gana",
       "titleHighlight": "desde $22 la hora",
       "titlePart2": "repartiendo con Hazorex",
-      "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Solo necesitas",
-      "subtitleHighlight": "moto o auto",
-      "subtitlePart2": ", licencia vigente y ganas de rodar.",
+      "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Elige",
+      "subtitleHighlight": "bicicleta, moto o auto",
+      "subtitlePart2": " y empieza a repartir en tu zona preferida.",
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horarios flexibles",
@@ -1102,7 +1102,7 @@
     },
     "readyGate": {
       "title": "Todo listo para tu postulación",
-      "body": "Tarda ~5 minutos. Ten a la mano tu identificación, licencia y seguro vigentes.",
+      "body": "Tarda ~5 minutos. Ten a mano tu identificación con foto y SSN o ITIN, además de licencia y seguro si tu vehículo los requiere.",
       "cta": "Empezar postulación"
     },
     "cta": {
@@ -1111,27 +1111,32 @@
     },
     "vehicles": {
       "badge": "Vehículos aceptados",
-      "title": "Solo aceptamos moto o auto",
-      "bodyPart1": "Para garantizar entregas rápidas y con cobertura completa, en Hazorex",
-      "bodyStrong": "solo aceptamos repartidores en moto o auto",
-      "bodyPart2": ". No aceptamos entregas a pie ni en bicicleta.",
+      "title": "Elige tu vehículo",
       "hint": "Elige el tuyo abajo y te pediremos solo los documentos correspondientes.",
       "moto": {
         "label": "Moto",
         "desc": "Ideal para tráfico denso. Entregas más rápidas.",
         "perk1": "Licencia Clase M o DM de NY, vigente",
-        "perk2": "Registración e inspección de NY al día",
+        "perk2": "Registración e inspección al día",
         "perk3": "Seguro del vehículo vigente",
-        "perk4": "Casco (obligatorio por ley en NY)"
+        "perk4": "Casco"
       },
       "auto": {
         "label": "Auto",
         "desc": "Perfecto para pedidos grandes y clima variable.",
         "perk1": "Licencia Clase D (o E) de NY, vigente",
-        "perk2": "Registración e inspección de NY al día",
+        "perk2": "Registración e inspección al día",
         "perk3": "Seguro del vehículo vigente"
       },
-      "ageNotice": "Debes tener 18 años o más. No aceptamos licencias junior (Clase DJ o MJ)."
+      "ageNotice": "Debes tener 18 años o más. No aceptamos licencias junior (Clase DJ o MJ).",
+      "bicicleta": {
+        "label": "Bicicleta / E-bike",
+        "desc": "Ideal para zonas densas. Sin licencia ni seguro.",
+        "perk1": "18 años o más",
+        "perk2": "Identificación válida",
+        "perk3": "Bicicleta o e-bike propia",
+        "perk4": "Casco"
+      }
     },
     "how": {
       "title": "Cómo funciona",
@@ -1150,18 +1155,18 @@
     },
     "requirements": {
       "title": "Requisitos",
-      "r1": "Ser mayor de 18 años",
-      "r2": "Moto o auto propio (no aceptamos a pie ni bicicleta)",
-      "r3": "Licencia de NY vigente: Clase M o DM para moto; Clase D o E para auto",
-      "r4": "Seguro del vehículo vigente",
-      "r5": "Identificación oficial vigente",
+      "r1": "18 años o más",
+      "r2": "Bicicleta, e-bike, moto o auto propio",
+      "r3": "Identificación con foto",
+      "r4": "SSN o ITIN",
+      "r5": "Licencia y seguro cuando correspondan al vehículo",
       "r6": "Foto de perfil clara (selfie)"
     },
     "faq": {
       "title": "Preguntas frecuentes",
       "q1": {
         "q": "¿Necesito tener un vehículo propio?",
-        "a": "Sí. En Hazorex solo aceptamos repartidores en moto o auto para garantizar tiempos de entrega y cobertura de zona. No aceptamos entregas a pie ni en bicicleta."
+        "a": "Sí. Puedes repartir con bicicleta, e-bike, moto o auto propio. Los documentos requeridos dependen del vehículo que elijas."
       },
       "q2": {
         "q": "¿Cuánto tarda la aprobación?",
@@ -1244,11 +1249,11 @@
       },
       "step2": {
         "title": "Vehículo",
-        "subtitle": "Solo aceptamos moto o auto."
+        "subtitle": "Elige bicicleta/e-bike, moto o auto."
       },
       "step3": {
         "title": "Documentos",
-        "subtitle": "Todos los documentos siguientes son obligatorios para completar tu postulación (imagen o PDF, máx. 5MB)."
+        "subtitle": "Sube solo los documentos requeridos para el vehículo elegido (imagen o PDF, máx. 5MB)."
       },
       "step4": {
         "title": "Confirmación",
@@ -1258,7 +1263,7 @@
       "email": "Correo electrónico",
       "phone": "Teléfono",
       "dob": "Fecha de nacimiento (18+)",
-      "zone": "Zona de reparto",
+      "zone": "Zona donde quieres trabajar",
       "address": "Dirección",
       "licenseNumber": "Número de licencia de conducir",
       "insurer": "Aseguradora",
@@ -1300,10 +1305,14 @@
         "err_dob_underage": "Debes ser mayor de 18 años",
         "err_zone": "Selecciona tu zona de reparto",
         "err_address": "Ingresa tu dirección",
-        "err_vehicle": "Selecciona moto o auto",
+        "err_vehicle": "Selecciona bicicleta/e-bike, moto o auto",
         "err_license": "Ingresa tu número de licencia",
-        "err_insurer": "Ingresa tu aseguradora"
-      }
+        "err_insurer": "Ingresa tu aseguradora",
+        "err_taxId": "Ingresa un SSN o ITIN válido de 9 dígitos"
+      },
+      "taxIdType": "Tipo de identificación fiscal",
+      "taxId": "SSN o ITIN",
+      "taxIdPrivacy": "Tu número completo se cifra antes de guardarse y no volverá a mostrarse."
     },
     "summary": {
       "name": "Nombre",
@@ -1316,7 +1325,8 @@
       "license": "Licencia",
       "insurer": "Aseguradora",
       "plate": "Placa",
-      "edit": "Editar"
+      "edit": "Editar",
+      "taxId": "SSN o ITIN"
     },
     "success": {
       "title": "¡Postulación recibida!",
@@ -1329,7 +1339,7 @@
       "tip": "Guarda este número. Te ayudará si necesitas contactarnos."
     },
     "onboarding": {
-      "licenseRequirements": "Al aceptar, confirmas que tienes 18 años o más, operas como contratista independiente y cuentas con licencia de NY vigente de la clase correspondiente a tu vehículo (M o DM para moto; D o E para auto), registración, inspección y seguro al día. No se aceptan licencias junior Clase DJ o MJ."
+      "licenseRequirements": "Al aceptar, confirmas que tienes 18 años o más y operas como contratista independiente. Para bicicleta o e-bike debes usar vehículo propio y casco. Para moto necesitas licencia de NY Clase M o DM; para auto, Clase D o E, con registración, inspección y seguro al día. No se aceptan licencias junior Clase DJ o MJ."
     }
   },
   "negociosRegistro": {

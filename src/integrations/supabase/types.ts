@@ -178,6 +178,36 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_tax_profiles: {
+        Row: {
+          created_at: string
+          driver_id: string
+          tax_id_ciphertext: string
+          tax_id_iv: string
+          tax_id_last4: string
+          tax_id_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          tax_id_ciphertext: string
+          tax_id_iv: string
+          tax_id_last4: string
+          tax_id_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          tax_id_ciphertext?: string
+          tax_id_iv?: string
+          tax_id_last4?: string
+          tax_id_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string

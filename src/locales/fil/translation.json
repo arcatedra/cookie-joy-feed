@@ -1088,8 +1088,8 @@
       "titleHighlight": "mula $22 kada oras",
       "titlePart2": "sa pagde-deliver gamit ang Hazorex",
       "subtitlePart1": "Ikaw ang bahala sa oras mo, kami sa mga order. Kailangan mo lang ng",
-      "subtitleHighlight": "motorsiklo o kotse",
-      "subtitlePart2": ", validong lisensya, at pagnanais na bumiyahe.",
+      "subtitleHighlight": "piliin ang iyong sasakyan",
+      "subtitlePart2": "",
       "viewRequirements": "Tingnan ang mga kinakailangan →",
       "perks": {
         "flexible": "Flexible na mga oras",
@@ -1114,27 +1114,32 @@
     },
     "vehicles": {
       "badge": "Mga tinatanggap na sasakyan",
-      "title": "Tumatanggap lamang kami ng motorsiklo o kotse",
-      "bodyPart1": "Upang matiyak ang mabilis na paghahatid at kumpletong saklaw, sa Hazorex",
-      "bodyStrong": "tumatanggap lamang kami ng mga delivery driver na may motorsiklo o kotse",
-      "bodyPart2": ". Hindi kami tumatanggap ng mga naghahatid na naglalakad o nagbibisikleta.",
+      "title": "Piliin ang iyong sasakyan",
       "hint": "Piliin ang sa iyo sa ibaba at hihingin lang namin ang mga kaukulang dokumento.",
       "moto": {
         "label": "Motorsiklo",
-        "desc": "Mainam para sa matinding trapiko. Mas mabilis na paghahatid.",
-        "perk1": "Balidong NY Class M o DM na lisensya",
-        "perk2": "Kasalukuyang rehistrasyon at inspeksyon sa NY",
-        "perk3": "Balidong insurance ng sasakyan",
-        "perk4": "Helmet (kinakailangan ng batas ng NY)"
+        "desc": "Mainam sa mabigat na trapiko. Mas mabilis na delivery.",
+        "perk1": "Valid NY Class M o DM license",
+        "perk2": "Kasalukuyang rehistro at inspeksyon",
+        "perk3": "Valid vehicle insurance",
+        "perk4": "Helmet"
       },
       "auto": {
         "label": "Kotse",
-        "desc": "Perpekto para sa malalaking order at paiba-ibang panahon.",
-        "perk1": "Balidong NY Class D (o E) na lisensya",
-        "perk2": "Kasalukuyang rehistrasyon at inspeksyon sa NY",
-        "perk3": "Balidong insurance ng sasakyan"
+        "desc": "Perpekto para sa malalaking order at pabago-bagong panahon.",
+        "perk1": "Valid NY Class D (o E) license",
+        "perk2": "Kasalukuyang rehistro at inspeksyon",
+        "perk3": "Valid vehicle insurance"
       },
-      "ageNotice": "Dapat 18 taong gulang o higit pa. Hindi tinatanggap ang junior license (Class DJ o MJ)."
+      "ageNotice": "Dapat 18 taong gulang o higit pa. Hindi tinatanggap ang junior license (Class DJ o MJ).",
+      "bicicleta": {
+        "label": "Bisikleta / E-bike",
+        "desc": "Mainam para sa masisikip na lugar. Hindi kailangan ng lisensya o insurance.",
+        "perk1": "18 taong gulang pataas",
+        "perk2": "Photo ID",
+        "perk3": "Sariling bisikleta o e-bike",
+        "perk4": "Helmet"
+      }
     },
     "how": {
       "title": "Paano ito gumagana",
@@ -1153,18 +1158,18 @@
     },
     "requirements": {
       "title": "Mga Kinakailangan",
-      "r1": "Higit sa 18 taong gulang",
-      "r2": "Sariling motorsiklo o kotse (hindi kami tumatanggap ng naglalakad o nagbibisikleta)",
-      "r3": "Balidong lisensya sa NY: Class M o DM para sa motorsiklo; Class D o E para sa kotse",
-      "r4": "Validong insurance ng sasakyan",
-      "r5": "Validong opisyal na ID",
+      "r1": "18 taong gulang pataas",
+      "r2": "Sariling bisikleta o e-bike",
+      "r3": "Mainam para sa masisikip na lugar. Hindi kailangan ng lisensya o insurance.",
+      "r4": "SSN or ITIN",
+      "r5": "Valid NY Class M o DM license / Valid NY Class D (o E) license",
       "r6": "Malinaw na profile picture (selfie)"
     },
     "faq": {
       "title": "Mga Madalas Itanong",
       "q1": {
         "q": "Kailangan ko ba ng sariling sasakyan?",
-        "a": "Oo. Sa Hazorex, tumatanggap lamang kami ng mga delivery driver na may motorsiklo o kotse upang matiyak ang mga oras ng paghahatid at saklaw ng lugar. Hindi kami tumatanggap ng mga naghahatid na naglalakad o nagbibisikleta."
+        "a": "Mainam para sa masisikip na lugar. Hindi kailangan ng lisensya o insurance. Mainam sa mabigat na trapiko. Mas mabilis na delivery. Perpekto para sa malalaking order at pabago-bagong panahon."
       },
       "q2": {
         "q": "Gaano katagal ang pag-apruba?",
@@ -1247,7 +1252,7 @@
       },
       "step2": {
         "title": "Sasakyan",
-        "subtitle": "Tumatanggap lamang kami ng motorsiklo o kotse."
+        "subtitle": "Pumili ng bisikleta/e-bike, motorsiklo, o kotse."
       },
       "step3": {
         "title": "Mga Dokumento",
@@ -1261,7 +1266,7 @@
       "email": "Email address",
       "phone": "Telepono",
       "dob": "Petsa ng kapanganakan (18+)",
-      "zone": "Lugar ng paghahatid",
+      "zone": "Gustong work zone",
       "address": "Address",
       "licenseNumber": "Numero ng lisensya sa pagmamaneho",
       "insurer": "Kumpanya ng insurance",
@@ -1303,10 +1308,14 @@
         "err_dob_underage": "Dapat ay higit sa 18 taong gulang",
         "err_zone": "Piliin ang iyong lugar ng paghahatid",
         "err_address": "Ilagay ang iyong address",
-        "err_vehicle": "Pumili ng motorsiklo o kotse",
+        "err_vehicle": "Pumili ng bisikleta/e-bike, motorsiklo, o kotse",
         "err_license": "Ilagay ang numero ng iyong lisensya",
-        "err_insurer": "Ilagay ang iyong kumpanya ng insurance"
-      }
+        "err_insurer": "Ilagay ang iyong kumpanya ng insurance",
+        "err_taxId": "Maglagay ng valid na 9-digit SSN o ITIN"
+      },
+      "taxIdType": "Uri ng tax ID",
+      "taxId": "SSN o ITIN",
+      "taxIdPrivacy": "Ie-encrypt ang buong numero bago i-save at hindi na ito muling ipapakita."
     },
     "summary": {
       "name": "Pangalan",
@@ -1319,7 +1328,8 @@
       "license": "Lisensya",
       "insurer": "Kumpanya ng insurance",
       "plate": "Plaka",
-      "edit": "I-edit"
+      "edit": "I-edit",
+      "taxId": "SSN o ITIN"
     },
     "success": {
       "title": "Natanggap na ang aplikasyon!",

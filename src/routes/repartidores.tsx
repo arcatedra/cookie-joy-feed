@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
@@ -33,6 +34,7 @@ import { Label } from "@/components/ui/label";
 import { SiteFooter } from "@/components/SiteFooter";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import i18n from "@/i18n";
+import { saveDriverTaxId } from "@/lib/driver-tax.functions";
 
 export const Route = createFileRoute("/repartidores")({
   head: () => ({
@@ -210,18 +212,24 @@ function RepartidoresLanding() {
           <h2 className="mb-3 font-serif text-3xl font-bold md:text-4xl">
             {t("repartidoresPage.vehicles.title")}
           </h2>
-          <p className="mb-2 text-[#4a3525]">
-            {t("repartidoresPage.vehicles.bodyPart1")}{" "}
-            <strong>{t("repartidoresPage.vehicles.bodyStrong")}</strong>
-            {t("repartidoresPage.vehicles.bodyPart2")}
-          </p>
           <p className="mb-10 text-sm text-[#4a3525]/70">
             {t("repartidoresPage.vehicles.hint")}
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-3">
           {[
+            {
+              icon: Bike,
+              label: t("repartidoresPage.vehicles.bicicleta.label"),
+              desc: t("repartidoresPage.vehicles.bicicleta.desc"),
+              perks: [
+                t("repartidoresPage.vehicles.bicicleta.perk1"),
+                t("repartidoresPage.vehicles.bicicleta.perk2"),
+                t("repartidoresPage.vehicles.bicicleta.perk3"),
+                t("repartidoresPage.vehicles.bicicleta.perk4"),
+              ],
+            },
             {
               icon: Scooter,
               label: t("repartidoresPage.vehicles.moto.label"),
@@ -246,9 +254,9 @@ function RepartidoresLanding() {
           ].map(({ icon: Icon, label, desc, perks }) => (
             <Card
               key={label}
-              className="group relative overflow-hidden border-[#c8862e]/30 bg-white transition hover:border-[#E6C35C] hover:shadow-lg"
+              className="group relative h-full overflow-hidden border-[#c8862e]/30 bg-white transition hover:border-[#E6C35C] hover:shadow-lg"
             >
-              <CardContent className="flex flex-col gap-4 p-6">
+              <CardContent className="flex h-full flex-col gap-4 p-6">
                 <div className="flex items-center gap-4">
                   <div className="grid size-14 place-items-center rounded-full bg-[#1e3a5f] text-[#E6C35C] transition group-hover:scale-105">
                     <Icon className="size-7" />
@@ -269,9 +277,6 @@ function RepartidoresLanding() {
             </Card>
           ))}
         </div>
-        <p className="mx-auto mt-4 max-w-3xl text-center text-xs text-[#4a3525]/70">
-          {t("repartidoresPage.vehicles.ageNotice")}
-        </p>
       </section>
 
       {/* HOW IT WORKS */}
@@ -548,12 +553,18 @@ const step1Schema = z.object({
 });
 
 const step2Schema = z.object({
-  vehicleType: z.enum(["moto", "auto"], {
+  vehicleType: z.enum(["bicicleta", "moto", "auto"], {
     error: () => "err_vehicle",
   }),
-  licenseNumber: z.string().trim().min(3, "err_license").max(50),
-  insurer: z.string().trim().min(2, "err_insurer").max(80),
+  licenseNumber: z.string().trim().max(50),
+  insurer: z.string().trim().max(80),
   plateNumber: z.string().trim().max(20).optional(),
+  taxIdType: z.enum(["ssn", "itin"]),
+  taxId: z.string().refine((value) => /^\d{9}$/.test(value.replace(/\D/g, "")), "err_taxId"),
+}).superRefine((value, ctx) => {
+  if (value.vehicleType === "bicicleta") return;
+  if (value.licenseNumber.length < 3) ctx.addIssue({ code: "custom", path: ["licenseNumber"], message: "err_license" });
+  if (value.insurer.length < 2) ctx.addIssue({ code: "custom", path: ["insurer"], message: "err_insurer" });
 });
 
 type Step1 = z.infer<typeof step1Schema>;
@@ -589,13 +600,16 @@ function ApplicationForm({
     address: "",
   });
   const [s2, setS2] = useState<Step2>({
-    vehicleType: "moto",
+    vehicleType: "bicicleta",
     licenseNumber: "",
     insurer: "",
     plateNumber: "",
+    taxIdType: "ssn",
+    taxId: "",
   });
   const [files, setFiles] = useState<Partial<Record<DocKey, File>>>({});
   const [accept, setAccept] = useState(false);
+  const saveTaxId = useServerFn(saveDriverTaxId);
 
   const docLabel = (k: DocKey) => {
     if (k === "licencia_conducir") {
@@ -635,6 +649,8 @@ function ApplicationForm({
         uploaded[key] = signed.signedUrl;
       }
 
+      await saveTaxId({ data: { taxIdType: s2.taxIdType, taxId: s2.taxId } });
+
       const profilePhotoUrl = uploaded.foto_perfil ?? null;
       const { error: drvErr } = await supabase.from("drivers").insert({
         id: userId,
@@ -651,7 +667,7 @@ function ApplicationForm({
       const { error: vehErr } = await supabase.from("driver_vehicles").insert({
         driver_id: userId,
         vehicle_type: s2.vehicleType,
-        plate_number: s2.plateNumber || null,
+        plate_number: s2.vehicleType === "bicicleta" ? null : s2.plateNumber || null,
       });
       if (vehErr) throw new Error(t("repartidoresPage.form.vehicleError", { msg: vehErr.message }));
 
@@ -692,7 +708,8 @@ function ApplicationForm({
   });
 
   const requiredDocs: DocKey[] = useMemo(() => {
-    const base: DocKey[] = ["identificacion", "licencia_conducir", "seguro_vehiculo", "foto_perfil"];
+    const base: DocKey[] = ["identificacion", "foto_perfil"];
+    if (s2.vehicleType !== "bicicleta") base.push("licencia_conducir", "seguro_vehiculo");
     if (s2.vehicleType === "moto") base.push("casco");
     return base;
   }, [s2.vehicleType]);
@@ -908,10 +925,10 @@ function ApplicationForm({
               title={t("repartidoresPage.form.step2.title")}
               subtitle={t("repartidoresPage.form.step2.subtitle")}
             />
-            <div className="grid grid-cols-2 gap-3">
-              {(["moto", "auto"] as const).map((v) => {
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {(["bicicleta", "moto", "auto"] as const).map((v) => {
                 const active = s2.vehicleType === v;
-                const Icon = v === "moto" ? Scooter : Car;
+                const Icon = v === "bicicleta" ? Bike : v === "moto" ? Scooter : Car;
                 return (
                   <button
                     key={v}
@@ -924,9 +941,7 @@ function ApplicationForm({
                     }`}
                   >
                     <Icon className="size-5" />
-                    {v === "moto"
-                      ? t("repartidoresPage.vehicles.moto.label")
-                      : t("repartidoresPage.vehicles.auto.label")}
+                    {t(`repartidoresPage.vehicles.${v}.label`)}
                   </button>
                 );
               })}
@@ -935,50 +950,36 @@ function ApplicationForm({
               <p className="text-xs text-red-600">{errors.vehicleType}</p>
             )}
 
-            <Field
-              label={t("repartidoresPage.form.licenseNumber")}
-              htmlFor="licenseNumber"
-              error={errors.licenseNumber}
-              required
-            >
-              <Input
-                id="licenseNumber"
-                value={s2.licenseNumber}
-                onChange={(e) => setS2({ ...s2, licenseNumber: e.target.value })}
-                className="min-h-11"
-              />
-            </Field>
-            <p className="text-xs text-[#4a3525]/70">
-              {s2.vehicleType === "moto"
-                ? t("repartidoresPage.vehicles.moto.perk1")
-                : t("repartidoresPage.vehicles.auto.perk1")}
-              {" · "}{t("repartidoresPage.vehicles.ageNotice")}
-            </p>
-            <Field
-              label={t("repartidoresPage.form.insurer")}
-              htmlFor="insurer"
-              error={errors.insurer}
-              required
-            >
-              <Input
-                id="insurer"
-                value={s2.insurer}
-                onChange={(e) => setS2({ ...s2, insurer: e.target.value })}
-                className="min-h-11"
-              />
-            </Field>
-            <Field
-              label={t("repartidoresPage.form.plate")}
-              htmlFor="plateNumber"
-              error={errors.plateNumber}
-            >
-              <Input
-                id="plateNumber"
-                value={s2.plateNumber}
-                onChange={(e) => setS2({ ...s2, plateNumber: e.target.value })}
-                className="min-h-11"
-              />
-            </Field>
+            {s2.vehicleType !== "bicicleta" && (
+              <>
+                <Field label={t("repartidoresPage.form.licenseNumber")} htmlFor="licenseNumber" error={errors.licenseNumber} required>
+                  <Input id="licenseNumber" value={s2.licenseNumber} onChange={(e) => setS2({ ...s2, licenseNumber: e.target.value })} className="min-h-11" />
+                </Field>
+                <p className="text-xs text-[#4a3525]/70">
+                  {t(`repartidoresPage.vehicles.${s2.vehicleType}.perk1`)}
+                  {" · "}{t("repartidoresPage.vehicles.ageNotice")}
+                </p>
+                <Field label={t("repartidoresPage.form.insurer")} htmlFor="insurer" error={errors.insurer} required>
+                  <Input id="insurer" value={s2.insurer} onChange={(e) => setS2({ ...s2, insurer: e.target.value })} className="min-h-11" />
+                </Field>
+                <Field label={t("repartidoresPage.form.plate")} htmlFor="plateNumber" error={errors.plateNumber}>
+                  <Input id="plateNumber" value={s2.plateNumber} onChange={(e) => setS2({ ...s2, plateNumber: e.target.value })} className="min-h-11" />
+                </Field>
+              </>
+            )}
+
+            <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
+              <Field label={t("repartidoresPage.form.taxIdType")} htmlFor="taxIdType" required>
+                <select id="taxIdType" value={s2.taxIdType} onChange={(e) => setS2({ ...s2, taxIdType: e.target.value as "ssn" | "itin" })} className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <option value="ssn">SSN</option>
+                  <option value="itin">ITIN</option>
+                </select>
+              </Field>
+              <Field label={t("repartidoresPage.form.taxId")} htmlFor="taxId" error={errors.taxId} required>
+                <Input id="taxId" type="password" inputMode="numeric" autoComplete="off" maxLength={11} placeholder="000-00-0000" value={s2.taxId} onChange={(e) => setS2({ ...s2, taxId: e.target.value })} className="min-h-11" />
+              </Field>
+            </div>
+            <p className="text-xs text-[#4a3525]/70">{t("repartidoresPage.form.taxIdPrivacy")}</p>
 
             <div className="flex justify-between pt-2">
               <Button
@@ -1094,13 +1095,14 @@ function ApplicationForm({
               rows={[
                 {
                   label: t("repartidoresPage.summary.type"),
-                  value: s2.vehicleType === "moto"
-                    ? t("repartidoresPage.vehicles.moto.label")
-                    : t("repartidoresPage.vehicles.auto.label"),
+                   value: t(`repartidoresPage.vehicles.${s2.vehicleType}.label`),
                 },
-                { label: t("repartidoresPage.summary.license"), value: s2.licenseNumber },
-                { label: t("repartidoresPage.summary.insurer"), value: s2.insurer },
-                { label: t("repartidoresPage.summary.plate"), value: s2.plateNumber || "—" },
+                ...(s2.vehicleType === "bicicleta" ? [] : [
+                  { label: t("repartidoresPage.summary.license"), value: s2.licenseNumber },
+                  { label: t("repartidoresPage.summary.insurer"), value: s2.insurer },
+                  { label: t("repartidoresPage.summary.plate"), value: s2.plateNumber || "—" },
+                ]),
+                { label: t("repartidoresPage.summary.taxId"), value: `${s2.taxIdType.toUpperCase()} •••• ${s2.taxId.replace(/\D/g, "").slice(-4)}` },
               ]}
             />
 

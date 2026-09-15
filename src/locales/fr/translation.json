@@ -1085,8 +1085,8 @@
       "titleHighlight": "à partir de $22 de l’heure",
       "titlePart2": "en livrant avec Hazorex",
       "subtitlePart1": "Vous gérez votre temps, nous nous occupons des commandes. Vous avez seulement besoin d'une",
-      "subtitleHighlight": "moto ou d'une voiture",
-      "subtitlePart2": ", d'un permis de conduire valide et de l'envie de rouler.",
+      "subtitleHighlight": "choisissez votre véhicule",
+      "subtitlePart2": "",
       "viewRequirements": "Voir les exigences →",
       "perks": {
         "flexible": "Horaires flexibles",
@@ -1111,27 +1111,32 @@
     },
     "vehicles": {
       "badge": "Véhicules acceptés",
-      "title": "Nous acceptons uniquement les motos ou les voitures",
-      "bodyPart1": "Pour garantir des livraisons rapides et une couverture complète, chez Hazorex",
-      "bodyStrong": "nous n'acceptons que les livreurs à moto ou en voiture",
-      "bodyPart2": ". Nous n'acceptons pas les livraisons à pied ou à vélo.",
+      "title": "Choisissez votre véhicule",
       "hint": "Choisissez le vôtre ci-dessous et nous ne vous demanderons que les documents correspondants.",
       "moto": {
         "label": "Moto",
-        "desc": "Idéal pour le trafic dense. Livraisons plus rapides.",
-        "perk1": "Permis NY valide de classe M ou DM",
-        "perk2": "Immatriculation et inspection de NY à jour",
-        "perk3": "Assurance du véhicule valide",
-        "perk4": "Casque (obligatoire selon la loi de NY)"
+        "desc": "Idéale pour la circulation dense. Livraisons plus rapides.",
+        "perk1": "Permis NY classe M ou DM valide",
+        "perk2": "Immatriculation et inspection à jour",
+        "perk3": "Assurance véhicule valide",
+        "perk4": "Casque"
       },
       "auto": {
         "label": "Voiture",
-        "desc": "Parfait pour les grosses commandes et les conditions météorologiques variables.",
-        "perk1": "Permis NY valide de classe D (ou E)",
-        "perk2": "Immatriculation et inspection de NY à jour",
-        "perk3": "Assurance du véhicule valide"
+        "desc": "Parfaite pour les grosses commandes et les conditions météo variables.",
+        "perk1": "Permis NY classe D (ou E) valide",
+        "perk2": "Immatriculation et inspection à jour",
+        "perk3": "Assurance véhicule valide"
       },
-      "ageNotice": "Vous devez avoir au moins 18 ans. Les permis junior (classe DJ ou MJ) ne sont pas acceptés."
+      "ageNotice": "Vous devez avoir au moins 18 ans. Les permis junior (classe DJ ou MJ) ne sont pas acceptés.",
+      "bicicleta": {
+        "label": "Vélo / Vélo électrique",
+        "desc": "Idéal pour les zones denses. Aucun permis ni assurance requis.",
+        "perk1": "18 ans ou plus",
+        "perk2": "Pièce d’identité avec photo",
+        "perk3": "Votre propre vélo ou vélo électrique",
+        "perk4": "Casque"
+      }
     },
     "how": {
       "title": "Comment ça marche",
@@ -1150,18 +1155,18 @@
     },
     "requirements": {
       "title": "Exigences",
-      "r1": "Avoir plus de 18 ans",
-      "r2": "Posséder une moto ou une voiture (nous n'acceptons pas à pied ni à vélo)",
-      "r3": "Permis NY valide : classe M ou DM pour une moto ; classe D ou E pour une voiture",
-      "r4": "Assurance du véhicule en cours de validité",
-      "r5": "Pièce d'identité officielle en cours de validité",
+      "r1": "18 ans ou plus",
+      "r2": "Votre propre vélo ou vélo électrique",
+      "r3": "Idéal pour les zones denses. Aucun permis ni assurance requis.",
+      "r4": "SSN or ITIN",
+      "r5": "Permis NY classe M ou DM valide / Permis NY classe D (ou E) valide",
       "r6": "Photo de profil claire (selfie)"
     },
     "faq": {
       "title": "Questions fréquentes",
       "q1": {
         "q": "Dois-je posséder mon propre véhicule ?",
-        "a": "Oui. Chez Hazorex, nous n'acceptons que les livreurs à moto ou en voiture pour garantir les délais de livraison et la couverture de la zone. Nous n'acceptons pas les livraisons à pied ou à vélo."
+        "a": "Idéal pour les zones denses. Aucun permis ni assurance requis. Idéale pour la circulation dense. Livraisons plus rapides. Parfaite pour les grosses commandes et les conditions météo variables."
       },
       "q2": {
         "q": "Combien de temps prend l'approbation ?",
@@ -1244,7 +1249,7 @@
       },
       "step2": {
         "title": "Véhicule",
-        "subtitle": "Nous acceptons uniquement les motos ou les voitures."
+        "subtitle": "Choisissez un vélo/vélo électrique, une moto ou une voiture."
       },
       "step3": {
         "title": "Documents",
@@ -1258,7 +1263,7 @@
       "email": "Adresse e-mail",
       "phone": "Téléphone",
       "dob": "Date de naissance (18+)",
-      "zone": "Zone de livraison",
+      "zone": "Zone de travail souhaitée",
       "address": "Adresse",
       "licenseNumber": "Numéro de permis de conduire",
       "insurer": "Assureur",
@@ -1300,10 +1305,14 @@
         "err_dob_underage": "Vous devez avoir plus de 18 ans",
         "err_zone": "Sélectionnez votre zone de livraison",
         "err_address": "Entrez votre adresse",
-        "err_vehicle": "Sélectionnez moto ou voiture",
+        "err_vehicle": "Choisissez vélo/vélo électrique, moto ou voiture",
         "err_license": "Entrez votre numéro de permis",
-        "err_insurer": "Entrez votre assureur"
-      }
+        "err_insurer": "Entrez votre assureur",
+        "err_taxId": "Saisissez un SSN ou ITIN valide à 9 chiffres"
+      },
+      "taxIdType": "Type d’identifiant fiscal",
+      "taxId": "SSN ou ITIN",
+      "taxIdPrivacy": "Votre numéro complet est chiffré avant stockage et ne sera plus affiché."
     },
     "summary": {
       "name": "Nom",
@@ -1316,7 +1325,8 @@
       "license": "Permis",
       "insurer": "Assureur",
       "plate": "Plaque d'immatriculation",
-      "edit": "Modifier"
+      "edit": "Modifier",
+      "taxId": "SSN ou ITIN"
     },
     "success": {
       "title": "Candidature reçue !",

@@ -1084,9 +1084,9 @@
       "titlePart1": "Earn",
       "titleHighlight": "from $22 an hour",
       "titlePart2": "delivering with Hazorex.",
-      "subtitlePart1": "You manage your time, we handle the orders. You just need a",
-      "subtitleHighlight": "motorcycle or car",
-      "subtitlePart2": ", a valid license, and the desire to hit the road.",
+      "subtitlePart1": "You manage your time, we handle the orders. Choose a",
+      "subtitleHighlight": "bike, motorcycle, or car",
+      "subtitlePart2": " and start delivering in your preferred zone.",
       "viewRequirements": "View requirements →",
       "perks": {
         "flexible": "Flexible hours",
@@ -1102,7 +1102,7 @@
     },
     "readyGate": {
       "title": "Everything's ready for your application",
-      "body": "It takes ~5 minutes. Have your valid ID, license, and insurance handy.",
+      "body": "It takes ~5 minutes. Have your photo ID and SSN or ITIN ready, plus a license and insurance if required for your vehicle.",
       "cta": "Start application"
     },
     "cta": {
@@ -1111,27 +1111,32 @@
     },
     "vehicles": {
       "badge": "Accepted vehicles",
-      "title": "We only accept motorcycles or cars",
-      "bodyPart1": "To ensure fast deliveries and full coverage, at Hazorex",
-      "bodyStrong": "we only accept drivers on motorcycles or cars",
-      "bodyPart2": ". We do not accept deliveries on foot or by bicycle.",
+      "title": "Choose your vehicle",
       "hint": "Choose yours below and we will only ask for the corresponding documents.",
       "moto": {
         "label": "Motorcycle",
-        "desc": "Ideal for heavy traffic. Faster deliveries.",
+        "desc": "Best for dense traffic. Faster deliveries.",
         "perk1": "Valid NY Class M or DM license",
-        "perk2": "NY registration and inspection current",
+        "perk2": "Registration and inspection current",
         "perk3": "Valid vehicle insurance",
-        "perk4": "Helmet (required by NY law)"
+        "perk4": "Helmet"
       },
       "auto": {
         "label": "Car",
         "desc": "Perfect for large orders and variable weather.",
         "perk1": "Valid NY Class D (or E) license",
-        "perk2": "NY registration and inspection current",
+        "perk2": "Registration and inspection current",
         "perk3": "Valid vehicle insurance"
       },
-      "ageNotice": "You must be 18+. Junior licenses (Class DJ or MJ) are not accepted."
+      "ageNotice": "You must be 18+. Junior licenses (Class DJ or MJ) are not accepted.",
+      "bicicleta": {
+        "label": "Bike / E-bike",
+        "desc": "Best for dense areas. No license or insurance needed.",
+        "perk1": "18 years or older",
+        "perk2": "Photo ID",
+        "perk3": "Your own bike or e-bike",
+        "perk4": "Helmet"
+      }
     },
     "how": {
       "title": "How it works",
@@ -1150,18 +1155,18 @@
     },
     "requirements": {
       "title": "Requirements",
-      "r1": "Be over 18 years old",
-      "r2": "Own motorcycle or car (we do not accept on foot or by bicycle)",
-      "r3": "Valid NY license: Class M or DM for motorcycles; Class D or E for cars",
-      "r4": "Valid vehicle insurance",
-      "r5": "Valid official identification",
+      "r1": "18 years or older",
+      "r2": "Your own bike, e-bike, motorcycle, or car",
+      "r3": "Photo ID",
+      "r4": "SSN or ITIN",
+      "r5": "License and insurance when required for your vehicle",
       "r6": "Clear profile photo (selfie)"
     },
     "faq": {
       "title": "Frequently asked questions",
       "q1": {
         "q": "Do I need to have my own vehicle?",
-        "a": "Yes. At Hazorex we only accept drivers on motorcycles or cars to ensure delivery times and zone coverage. We do not accept deliveries on foot or by bicycle."
+        "a": "Yes. You may deliver with your own bike, e-bike, motorcycle, or car. Required documents depend on the vehicle you choose."
       },
       "q2": {
         "q": "How long does approval take?",
@@ -1244,11 +1249,11 @@
       },
       "step2": {
         "title": "Vehicle",
-        "subtitle": "We only accept motorcycles or cars."
+        "subtitle": "Choose a bike/e-bike, motorcycle, or car."
       },
       "step3": {
         "title": "Documents",
-        "subtitle": "All of the following documents are mandatory to complete your application (image or PDF, max 5MB)."
+        "subtitle": "Upload only the documents required for your selected vehicle (image or PDF, max 5MB)."
       },
       "step4": {
         "title": "Confirmation",
@@ -1258,7 +1263,7 @@
       "email": "Email",
       "phone": "Phone",
       "dob": "Date of birth (18+)",
-      "zone": "Delivery zone",
+      "zone": "Preferred work zone",
       "address": "Address",
       "licenseNumber": "Driver's license number",
       "insurer": "Insurance provider",
@@ -1300,10 +1305,14 @@
         "err_dob_underage": "You must be over 18 years old",
         "err_zone": "Select your delivery zone",
         "err_address": "Enter your address",
-        "err_vehicle": "Select motorcycle or car",
+        "err_vehicle": "Select bike/e-bike, motorcycle, or car",
         "err_license": "Enter your license number",
-        "err_insurer": "Enter your insurance provider"
-      }
+        "err_insurer": "Enter your insurance provider",
+        "err_taxId": "Enter a valid 9-digit SSN or ITIN"
+      },
+      "taxIdType": "Tax ID type",
+      "taxId": "SSN or ITIN",
+      "taxIdPrivacy": "Your full number is encrypted before storage and will not be shown again."
     },
     "summary": {
       "name": "Name",
@@ -1316,7 +1325,8 @@
       "license": "License",
       "insurer": "Insurance provider",
       "plate": "License plate",
-      "edit": "Edit"
+      "edit": "Edit",
+      "taxId": "SSN or ITIN"
     },
     "success": {
       "title": "Application received!",
@@ -1329,7 +1339,7 @@
       "tip": "Save this number. It will help you if you need to contact us."
     },
     "onboarding": {
-      "licenseRequirements": "By accepting, you confirm that you are 18 or older, operate as an independent contractor, and hold a valid NY license for your vehicle (Class M or DM for motorcycles; Class D or E for cars), with current registration, inspection, and insurance. Junior licenses Class DJ or MJ are not accepted."
+      "licenseRequirements": "By accepting, you confirm that you are 18 or older and operate as an independent contractor. Bike and e-bike couriers must use their own vehicle and a helmet. Motorcycle drivers must have a valid NY Class M or DM license, and car drivers a valid NY Class D or E license, with current registration, inspection, and insurance. Junior licenses Class DJ or MJ are not accepted."
     }
   },
   "negociosRegistro": {

@@ -81,7 +81,7 @@ function OnboardingPage() {
       <header className="border-b border-[#c8862e]/30 bg-white">
         <div className="mx-auto max-w-2xl px-4 py-6">
           <div className="mb-2 flex items-center gap-2">
-            <Bike className="size-5 text-[#c8862e]" />
+            <Navigation2 className="size-5 text-[#c8862e]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#c8862e]">
               Bienvenido a Hazorex
             </span>
