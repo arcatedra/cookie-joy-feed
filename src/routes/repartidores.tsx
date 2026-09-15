@@ -66,13 +66,19 @@ function RepartidoresLanding() {
   const { data: driver, isLoading: driverLoading, refetch: refetchDriver } = useQuery({
     queryKey: ["driver-application", user?.id],
     enabled: !!user?.id,
+    // No retries: if the lookup fails we just treat it as "no application yet"
+    // instead of leaving the page spinning for several seconds.
+    retry: false,
+    staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
     queryFn: async (): Promise<DriverRow | null> => {
       const { data, error } = await supabase
         .from("drivers")
         .select("application_status, rejection_reason")
         .eq("id", user!.id)
         .maybeSingle();
-      if (error) throw error;
+      if (error) return null;
       return data as DriverRow | null;
     },
   });
