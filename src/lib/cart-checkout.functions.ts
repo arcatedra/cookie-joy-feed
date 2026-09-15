@@ -126,6 +126,27 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     );
     const totalCents = subtotalCents + shippingRate.amount;
 
+    // ---- Margen de autorización -----------------------------------------
+    // Se reserva (autoriza) el estimado + un margen, y al terminar el empaque
+    // se captura solo el monto real. Ver /admin/empaque.
+    let bufferPct = 15;
+    let bufferMinCents = 500;
+    {
+      const { data: cfg } = await supabase.rpc("auth_buffer_settings" as never);
+      const row = (Array.isArray(cfg) ? cfg[0] : cfg) as
+        | { pct?: number; min_cents?: number }
+        | null
+        | undefined;
+      if (row?.pct != null) bufferPct = Number(row.pct);
+      if (row?.min_cents != null) bufferMinCents = Number(row.min_cents);
+    }
+    const bufferCents = Math.max(
+      Math.round((subtotalCents * bufferPct) / 100),
+      bufferMinCents,
+    );
+    const authorizedCents = totalCents + bufferCents;
+
+
 
     // Insert the pedido row in "pendiente" state under RLS (auth.uid() = cliente_id).
     const { data: pedidoRow, error: pedErr } = await supabase
