@@ -71,8 +71,10 @@ export function GoogleMapView({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const markerObjsRef = useRef<google.maps.Marker[]>([]);
+  const markerObjsRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const polylineObjRef = useRef<google.maps.Polyline | null>(null);
+  const fitSigRef = useRef<string | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
