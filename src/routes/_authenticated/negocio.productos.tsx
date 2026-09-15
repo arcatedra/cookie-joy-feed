@@ -61,6 +61,14 @@ function ProductsPage() {
     );
   }
 
+  if (bizError) {
+    return (
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={(bizError as Error).message} onRetry={() => void refetchBiz()} />
+      </div>
+    );
+  }
+
   if (!business) {
     return (
       <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">

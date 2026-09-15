@@ -57,6 +57,14 @@ function OffersPage() {
   const [endsAt, setEndsAt] = useState("");
   const [saving, setSaving] = useState(false);
 
+  if (bizError) {
+    return (
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={(bizError as Error).message} onRetry={() => void refetchBiz()} />
+      </div>
+    );
+  }
+
   if (loadingBiz) {
     return (
       <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">

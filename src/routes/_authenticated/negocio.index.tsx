@@ -74,8 +74,8 @@ function MyBusinessPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f4f1ea] p-6 text-sm text-destructive">
-        {(error as Error).message}
+      <div className="min-h-screen bg-[#f4f1ea]">
+        <LoadErrorState message={(error as Error).message} onRetry={() => void refetch()} />
       </div>
     );
   }
