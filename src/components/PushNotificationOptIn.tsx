@@ -113,8 +113,12 @@ export function PushNotificationOptIn() {
         setShow(false);
         return;
       }
-      await ensureSubscribed();
-      toast.success("¡Listo! Te avisaremos 5 minutos antes del sorteo.");
+      const subscribed = await ensureSubscribed();
+      if (subscribed) {
+        toast.success("¡Listo! Te avisaremos 5 minutos antes del sorteo.");
+      } else {
+        toast.info("Los avisos solo funcionan en la app publicada, no en la vista previa.");
+      }
       setShow(false);
     } catch (err) {
       console.error(err);
