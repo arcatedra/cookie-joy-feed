@@ -348,7 +348,7 @@ function StoreCartBar({
     }
   }
 
-  const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
+  const pct = Math.min(100, Math.round((totalKg / Math.max(pricing.weightIncludedKg, 1)) * 100));
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-4 backdrop-blur">
@@ -356,7 +356,7 @@ function StoreCartBar({
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>
-              Tu pedido pesa {totalLb} lb de {pricing.weightIncludedLb} lb incluidas
+              Tu pedido pesa {totalKg} kg de {pricing.weightIncludedKg} kg incluidos
             </span>
             <span>{lines.length} productos</span>
           </div>
@@ -368,12 +368,7 @@ function StoreCartBar({
           </div>
           {overLimit ? (
             <p className="mt-1 text-xs font-semibold text-red-600">
-              Máximo {pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
-            </p>
-          ) : weightCents > 0 ? (
-            <p className="mt-1 text-xs text-amber-700">
-              Se agregará un cargo por peso de ${(weightCents / 100).toFixed(2)}, que se cobra
-              automáticamente al pagar.
+              Máximo {pricing.weightMaxKg} kg por pedido. Divide tu compra en 2 pedidos.
             </p>
           ) : null}
         </div>
