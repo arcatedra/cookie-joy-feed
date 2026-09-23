@@ -193,32 +193,46 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
-    const lineItems: Record<string, unknown>[] = priced.map((it) => ({
-      quantity: it.qty,
-      price_data: {
-        currency: "usd",
-        unit_amount: it.priceCents,
-        product_data: { name: it.name.slice(0, 250) },
-      },
-    }));
-    lineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "usd",
-        unit_amount: shippingCents,
-        product_data: { name: "Entrega" },
-      },
-    });
-    lineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "usd",
-        unit_amount: bufferCents,
-        product_data: {
-          name: "Margen para ajustes de peso y faltantes (se cobra solo lo real)",
+    const lineItems: Record<string, unknown>[] = [];
+    if (creditCents > 0) {
+      // Stripe no admite líneas negativas: se cobra un solo concepto ya con el saldo aplicado.
+      lineItems.push({
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: totalCents + bufferCents,
+          product_data: {
+            name: `Pedido ${order.numero_pedido} (saldo aplicado -$${(creditCents / 100).toFixed(2)})`,
+          },
         },
-      },
-    });
+      });
+    } else {
+      for (const it of priced) {
+        lineItems.push({
+          quantity: it.qty,
+          price_data: {
+            currency: "usd",
+            unit_amount: it.priceCents,
+            product_data: { name: it.name.slice(0, 250) },
+          },
+        });
+      }
+      const extras: Array<[string, number]> = [
+        ["Entrega", shippingCents],
+        ["Cargo de servicio", serviceCents],
+        ["Cargo por peso", weightCents],
+        ["Margen para ajustes de peso y faltantes (se cobra solo lo real)", bufferCents],
+      ];
+      for (const [name, amount] of extras) {
+        if (amount > 0) {
+          lineItems.push({
+            quantity: 1,
+            price_data: { currency: "usd", unit_amount: amount, product_data: { name } },
+          });
+        }
+      }
+    }
+
 
     const metadata = {
       kind: "store_order",
