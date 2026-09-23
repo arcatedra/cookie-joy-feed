@@ -485,6 +485,13 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
                   </option>
                 ))}
               </select>
+              <input
+                value={pForm.peso_lb}
+                onChange={(e) => setPForm({ ...pForm, peso_lb: e.target.value })}
+                inputMode="decimal"
+                placeholder="Peso (lb)"
+                className="rounded-lg border border-border px-3 py-2 text-sm"
+              />
               <select
                 value={pForm.category_id}
                 onChange={(e) => setPForm({ ...pForm, category_id: e.target.value })}
