@@ -223,6 +223,9 @@ export type Database = {
           rejection_reason: string | null
           slug: string | null
           status: string
+          stripe_account_id: string | null
+          stripe_onboarding_status: string
+          stripe_payouts_enabled: boolean
           updated_at: string
           zonas_que_atiende: string[]
         }
@@ -247,6 +250,9 @@ export type Database = {
           rejection_reason?: string | null
           slug?: string | null
           status?: string
+          stripe_account_id?: string | null
+          stripe_onboarding_status?: string
+          stripe_payouts_enabled?: boolean
           updated_at?: string
           zonas_que_atiende?: string[]
         }
@@ -271,6 +277,9 @@ export type Database = {
           rejection_reason?: string | null
           slug?: string | null
           status?: string
+          stripe_account_id?: string | null
+          stripe_onboarding_status?: string
+          stripe_payouts_enabled?: boolean
           updated_at?: string
           zonas_que_atiende?: string[]
         }
@@ -1149,6 +1158,7 @@ export type Database = {
           moneda: string
           monto_autorizado: number | null
           monto_capturado: number | null
+          monto_transferido_negocio: number | null
           notas: string | null
           numero_pedido: string
           peso_total_kg: number
@@ -1159,6 +1169,8 @@ export type Database = {
           subtotal: number
           total_estimado: number
           tramo: string
+          transfer_id: string | null
+          transferido_en: string | null
           updated_at: string
         }
         Insert: {
@@ -1187,6 +1199,7 @@ export type Database = {
           moneda?: string
           monto_autorizado?: number | null
           monto_capturado?: number | null
+          monto_transferido_negocio?: number | null
           notas?: string | null
           numero_pedido?: string
           peso_total_kg?: number
@@ -1197,6 +1210,8 @@ export type Database = {
           subtotal?: number
           total_estimado?: number
           tramo?: string
+          transfer_id?: string | null
+          transferido_en?: string | null
           updated_at?: string
         }
         Update: {
@@ -1225,6 +1240,7 @@ export type Database = {
           moneda?: string
           monto_autorizado?: number | null
           monto_capturado?: number | null
+          monto_transferido_negocio?: number | null
           notas?: string | null
           numero_pedido?: string
           peso_total_kg?: number
@@ -1235,6 +1251,8 @@ export type Database = {
           subtotal?: number
           total_estimado?: number
           tramo?: string
+          transfer_id?: string | null
+          transferido_en?: string | null
           updated_at?: string
         }
         Relationships: [
