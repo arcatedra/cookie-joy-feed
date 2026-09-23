@@ -97,8 +97,10 @@ export function PushNotificationOptIn() {
           userAgent: navigator.userAgent.slice(0, 500),
         },
       });
+      return true;
     } catch (err) {
       console.warn("ensureSubscribed failed", err);
+      return false;
     }
   }
 
