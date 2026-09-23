@@ -116,7 +116,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const totalLb = cartWeightLb(priced, pricing);
     if (totalLb > pricing.weightMaxLb) {
       throw new Error(
-        `Máximo ${pricing.weightMaxLb} kg por pedido. Divide tu compra en 2 pedidos.`,
+        `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
       );
     }
     if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing)) {

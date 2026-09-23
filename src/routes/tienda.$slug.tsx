@@ -356,7 +356,7 @@ function StoreCartBar({
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>
-              Tu pedido pesa {totalLb} kg de {pricing.weightIncludedLb} kg incluidos
+              Tu pedido pesa {totalLb} lb de {pricing.weightIncludedLb} lb incluidas
             </span>
             <span>{lines.length} productos</span>
           </div>
@@ -368,7 +368,7 @@ function StoreCartBar({
           </div>
           {overLimit ? (
             <p className="mt-1 text-xs font-semibold text-red-600">
-              Máximo {pricing.weightMaxLb} kg por pedido. Divide tu compra en 2 pedidos.
+              Máximo {pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
             </p>
           ) : null}
         </div>
