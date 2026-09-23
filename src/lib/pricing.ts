@@ -19,6 +19,22 @@ export interface PricingSettings {
   driverWeightSharePct: number;
   driverTipSharePct: number;
   referralBonusUsd: number;
+  /** Tramos de envío por monto del pedido. */
+  tierSmallMaxUsd: number;
+  tierMediumMaxUsd: number;
+  tierSmallFeeUsd: number;
+  tierSmallDriverUsd: number;
+  tierSmallCompanyUsd: number;
+  tierMediumFeeUsd: number;
+  tierMediumDriverUsd: number;
+  tierMediumCompanyUsd: number;
+  tierLargeFeeUsd: number;
+  tierLargeDriverUsd: number;
+  tierLargeCompanyUsd: number;
+  /** Hora límite de corte (0-23, hora de Nueva York) del día anterior. */
+  cutoffHourEt: number;
+  /** Días de entrega permitidos como máscara de bits (domingo = 1, lunes = 2, ...). */
+  deliveryDaysMask: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
