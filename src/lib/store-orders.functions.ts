@@ -262,13 +262,18 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const db = (context as any).supabase;
     const businessId = await myBusinessId(db, (context as any).userId);
-    const { error } = await db
+    const { data: updated, error } = await db
       .from("store_orders")
       .update({ estado: "entregado" })
       .eq("id", data.id)
       .eq("business_id", businessId)
-      .eq("estado", "listo");
+      .eq("estado", "listo")
+      .select("id");
     if (error) throw error;
+    if (!updated || updated.length === 0) {
+      throw new Error("Este pedido no está listo para marcarse como entregado.");
+    }
+
     // Bono de referido: primera compra entregada del invitado.
     const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
     await grantReferralRewardForOrder(data.id);
