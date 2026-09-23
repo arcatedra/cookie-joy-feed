@@ -68,6 +68,7 @@ import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminTestingRouteImport } from './routes/_authenticated/admin.testing'
+import { Route as AuthenticatedAdminTransferenciasRouteImport } from './routes/_authenticated/admin.transferencias'
 import { Route as AuthenticatedAdminViolacionesRouteImport } from './routes/_authenticated/admin.violaciones'
 import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authenticated/claim.$drawDate'
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
@@ -78,6 +79,7 @@ import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authen
 import { Route as AuthenticatedNegociosPedidosRouteImport } from './routes/_authenticated/negocios.pedidos'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
+import { Route as AuthenticatedRepartidorCobrosRouteImport } from './routes/_authenticated/repartidor.cobros'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
 import { Route as AuthenticatedRepartidorGananciasRouteImport } from './routes/_authenticated/repartidor.ganancias'
 import { Route as AuthenticatedRepartidorOnboardingRouteImport } from './routes/_authenticated/repartidor.onboarding'
@@ -415,6 +417,12 @@ const AuthenticatedAdminTestingRoute =
     path: '/admin/testing',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminTransferenciasRoute =
+  AuthenticatedAdminTransferenciasRouteImport.update({
+    id: '/admin/transferencias',
+    path: '/admin/transferencias',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminViolacionesRoute =
   AuthenticatedAdminViolacionesRouteImport.update({
     id: '/admin/violaciones',
@@ -473,6 +481,12 @@ const AuthenticatedRepartidorCalificacionesRoute =
   AuthenticatedRepartidorCalificacionesRouteImport.update({
     id: '/calificaciones',
     path: '/calificaciones',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
+  } as any)
+const AuthenticatedRepartidorCobrosRoute =
+  AuthenticatedRepartidorCobrosRouteImport.update({
+    id: '/cobros',
+    path: '/cobros',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
 const AuthenticatedRepartidorFacturasRoute =
@@ -709,6 +723,7 @@ export interface FileRoutesByFullPath {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/admin/transferencias': typeof AuthenticatedAdminTransferenciasRoute
   '/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
@@ -717,6 +732,7 @@ export interface FileRoutesByFullPath {
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -807,6 +823,7 @@ export interface FileRoutesByTo {
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/admin/transferencias': typeof AuthenticatedAdminTransferenciasRoute
   '/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
@@ -815,6 +832,7 @@ export interface FileRoutesByTo {
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -909,6 +927,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/admin/testing': typeof AuthenticatedAdminTestingRoute
+  '/_authenticated/admin/transferencias': typeof AuthenticatedAdminTransferenciasRoute
   '/_authenticated/admin/violaciones': typeof AuthenticatedAdminViolacionesRoute
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
@@ -917,6 +936,7 @@ export interface FileRoutesById {
   '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/_authenticated/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
+  '/_authenticated/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
   '/_authenticated/repartidor/onboarding': typeof AuthenticatedRepartidorOnboardingRoute
@@ -1011,6 +1031,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/admin/testing'
+    | '/admin/transferencias'
     | '/admin/violaciones'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
@@ -1019,6 +1040,7 @@ export interface FileRouteTypes {
     | '/negocios/panel'
     | '/negocios/pedidos'
     | '/repartidor/calificaciones'
+    | '/repartidor/cobros'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
     | '/repartidor/onboarding'
@@ -1109,6 +1131,7 @@ export interface FileRouteTypes {
     | '/admin/suggestions'
     | '/admin/support'
     | '/admin/testing'
+    | '/admin/transferencias'
     | '/admin/violaciones'
     | '/claim/$drawDate'
     | '/negocio/ofertas'
@@ -1117,6 +1140,7 @@ export interface FileRouteTypes {
     | '/negocios/panel'
     | '/negocios/pedidos'
     | '/repartidor/calificaciones'
+    | '/repartidor/cobros'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
     | '/repartidor/onboarding'
@@ -1210,6 +1234,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/suggestions'
     | '/_authenticated/admin/support'
     | '/_authenticated/admin/testing'
+    | '/_authenticated/admin/transferencias'
     | '/_authenticated/admin/violaciones'
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/negocio/ofertas'
@@ -1218,6 +1243,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocios/panel'
     | '/_authenticated/negocios/pedidos'
     | '/_authenticated/repartidor/calificaciones'
+    | '/_authenticated/repartidor/cobros'
     | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/ganancias'
     | '/_authenticated/repartidor/onboarding'
@@ -1727,6 +1753,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTestingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/transferencias': {
+      id: '/_authenticated/admin/transferencias'
+      path: '/admin/transferencias'
+      fullPath: '/admin/transferencias'
+      preLoaderRoute: typeof AuthenticatedAdminTransferenciasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/violaciones': {
       id: '/_authenticated/admin/violaciones'
       path: '/admin/violaciones'
@@ -1795,6 +1828,13 @@ declare module '@tanstack/react-router' {
       path: '/calificaciones'
       fullPath: '/repartidor/calificaciones'
       preLoaderRoute: typeof AuthenticatedRepartidorCalificacionesRouteImport
+      parentRoute: typeof AuthenticatedRepartidorRoute
+    }
+    '/_authenticated/repartidor/cobros': {
+      id: '/_authenticated/repartidor/cobros'
+      path: '/cobros'
+      fullPath: '/repartidor/cobros'
+      preLoaderRoute: typeof AuthenticatedRepartidorCobrosRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
     '/_authenticated/repartidor/facturas': {
@@ -2026,6 +2066,7 @@ const AuthenticatedMisPedidosRouteWithChildren =
 
 interface AuthenticatedRepartidorRouteChildren {
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
+  AuthenticatedRepartidorCobrosRoute: typeof AuthenticatedRepartidorCobrosRoute
   AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
   AuthenticatedRepartidorGananciasRoute: typeof AuthenticatedRepartidorGananciasRoute
   AuthenticatedRepartidorOnboardingRoute: typeof AuthenticatedRepartidorOnboardingRoute
@@ -2040,6 +2081,7 @@ const AuthenticatedRepartidorRouteChildren: AuthenticatedRepartidorRouteChildren
   {
     AuthenticatedRepartidorCalificacionesRoute:
       AuthenticatedRepartidorCalificacionesRoute,
+    AuthenticatedRepartidorCobrosRoute: AuthenticatedRepartidorCobrosRoute,
     AuthenticatedRepartidorFacturasRoute: AuthenticatedRepartidorFacturasRoute,
     AuthenticatedRepartidorGananciasRoute:
       AuthenticatedRepartidorGananciasRoute,
@@ -2078,6 +2120,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedAdminTestingRoute: typeof AuthenticatedAdminTestingRoute
+  AuthenticatedAdminTransferenciasRoute: typeof AuthenticatedAdminTransferenciasRoute
   AuthenticatedAdminViolacionesRoute: typeof AuthenticatedAdminViolacionesRoute
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
@@ -2109,6 +2152,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedAdminTestingRoute: AuthenticatedAdminTestingRoute,
+  AuthenticatedAdminTransferenciasRoute: AuthenticatedAdminTransferenciasRoute,
   AuthenticatedAdminViolacionesRoute: AuthenticatedAdminViolacionesRoute,
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,

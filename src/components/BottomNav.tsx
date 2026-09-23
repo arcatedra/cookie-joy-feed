@@ -1,12 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home as HomeIcon, Search, Package, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 const tabs = [
   { to: "/", key: "home", Icon: HomeIcon },
   { to: "/explore", key: "explore", Icon: Search },
-  { to: "/subscribe", key: "subscribe", Icon: Package },
+  { to: "/tiendas", key: "stores", Icon: Package },
   { to: "/profile", key: "profile", Icon: User },
 ] as const;
 
@@ -14,9 +13,6 @@ export function BottomNav() {
   const location = useLocation();
   const pathname = location.pathname;
   const { t } = useTranslation();
-  const { deliveryStatus: status } = useSubscriptionGate();
-
-  const remaining = status?.hasActiveSubscription ? status.remaining : null;
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
@@ -39,7 +35,6 @@ export function BottomNav() {
               </Link>
             );
           }
-          const isSubscribe = key === "subscribe";
           return (
             <Link
               key={to}
@@ -52,14 +47,6 @@ export function BottomNav() {
                   className="h-[22px] w-[22px] text-primary-foreground opacity-60 transition-opacity group-hover:opacity-100"
                   strokeWidth={1.5}
                 />
-                {isSubscribe && remaining !== null && remaining > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 grid h-4.5 min-w-[18px] place-items-center rounded-full bg-amber-400 px-1 text-[10px] font-bold text-[#1a0f0a]">
-                    {remaining}
-                  </span>
-                )}
-                {isSubscribe && remaining === 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-red-500" />
-                )}
               </div>
             </Link>
           );

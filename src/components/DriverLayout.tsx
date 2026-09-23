@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Bike, DollarSign, FileText, LogOut, Menu, User as UserIcon, X, Store } from "lucide-react";
+import { Banknote, Bike, DollarSign, FileText, LogOut, Menu, User as UserIcon, X, Store } from "lucide-react";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/lib/auth";
@@ -14,6 +14,7 @@ const TEAL_LIGHT = "#5eead4";
 const navItems = [
   { to: "/repartidor", label: "Dashboard", icon: Bike, exact: true },
   { to: "/repartidor/wallet", label: "Ganancias", icon: DollarSign },
+  { to: "/repartidor/cobros", label: "Cobros", icon: Banknote },
   { to: "/repartidor/facturas", label: "Facturas", icon: FileText },
   { to: "/repartidor/calificaciones", label: "Perfil", icon: UserIcon },
 ] as const;

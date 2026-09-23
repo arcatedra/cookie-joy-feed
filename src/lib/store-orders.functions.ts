@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { pricingFromRows, tierForSubtotal, weightFeeCents } from "./pricing";
+import { pricingFromRows, processingFeeCents, tierForSubtotal, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -172,13 +172,16 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
 
     const tier = tierForSubtotal(realSubtotalCents, pricing);
     const shippingCents = tier.feeCents;
-    const serviceCents = 0;
     const weightCents = weightFeeCents(realLb, pricing);
+    const serviceCents = processingFeeCents(
+      realSubtotalCents + shippingCents + weightCents,
+      pricing,
+    );
     const tipCents = Math.round(Number(order.propina ?? 0) * 100);
     const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
     const realTotalCents = Math.max(
       0,
-      realSubtotalCents + shippingCents + weightCents + tipCents - creditCents,
+      realSubtotalCents + shippingCents + weightCents + serviceCents + tipCents - creditCents,
     );
     const authorizedCents = Math.round(Number(order.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) throw new Error("La reserva del pago no es válida.");
@@ -269,6 +272,9 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
     // Bono de referido: primera compra entregada del invitado.
     const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
     await grantReferralRewardForOrder(data.id);
+    // Pago del repartidor: su parte del tramo + peso + 100% de la propina.
+    const { registerDriverPayoutForOrder } = await import("./driver-payouts.server");
+    await registerDriverPayoutForOrder(data.id);
     return { ok: true };
   });
 

@@ -211,7 +211,7 @@ function DeliveriesPage() {
                   {t("subscribeGate.noActive")}
                 </p>
                 <Button asChild>
-                  <Link to="/subscribe">{t("subscribeGate.bannerCta")}</Link>
+                  <Link to="/tiendas">{t("subscribeGate.bannerCta")}</Link>
                 </Button>
 
               </div>

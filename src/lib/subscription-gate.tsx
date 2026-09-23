@@ -227,7 +227,7 @@ function SubscribeRequiredDialog({
         </DialogHeader>
         <DialogFooter className="sm:flex-col sm:space-x-0 gap-2">
           <Button asChild className="w-full">
-            <Link to={signedIn ? "/subscribe" : "/auth"} onClick={() => onOpenChange(false)}>
+            <Link to={signedIn ? "/tiendas" : "/auth"} onClick={() => onOpenChange(false)}>
               {signedIn ? t("subscribeGate.viewPlans") : t("subscribeGate.signInAndSubscribe")}
             </Link>
           </Button>
