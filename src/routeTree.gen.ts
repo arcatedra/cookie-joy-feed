@@ -73,6 +73,7 @@ import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
 import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authenticated/negocios.panel'
+import { Route as AuthenticatedNegociosPedidosRouteImport } from './routes/_authenticated/negocios.pedidos'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
@@ -440,6 +441,12 @@ const AuthenticatedNegociosPanelRoute =
     path: '/negocios/panel',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedNegociosPedidosRoute =
+  AuthenticatedNegociosPedidosRouteImport.update({
+    id: '/negocios/pedidos',
+    path: '/negocios/pedidos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorIndexRoute =
   AuthenticatedRepartidorIndexRouteImport.update({
     id: '/',
@@ -679,6 +686,7 @@ export interface FileRoutesByFullPath {
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -772,6 +780,7 @@ export interface FileRoutesByTo {
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -869,6 +878,7 @@ export interface FileRoutesById {
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/_authenticated/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -966,6 +976,7 @@ export interface FileRouteTypes {
     | '/negocio/ofertas'
     | '/negocio/productos'
     | '/negocios/panel'
+    | '/negocios/pedidos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -1059,6 +1070,7 @@ export interface FileRouteTypes {
     | '/negocio/ofertas'
     | '/negocio/productos'
     | '/negocios/panel'
+    | '/negocios/pedidos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -1155,6 +1167,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
     | '/_authenticated/negocios/panel'
+    | '/_authenticated/negocios/pedidos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/ganancias'
@@ -1697,6 +1710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNegociosPanelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/negocios/pedidos': {
+      id: '/_authenticated/negocios/pedidos'
+      path: '/negocios/pedidos'
+      fullPath: '/negocios/pedidos'
+      preLoaderRoute: typeof AuthenticatedNegociosPedidosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/': {
       id: '/_authenticated/repartidor/'
       path: '/'
@@ -1968,6 +1988,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
   AuthenticatedNegociosPanelRoute: typeof AuthenticatedNegociosPanelRoute
+  AuthenticatedNegociosPedidosRoute: typeof AuthenticatedNegociosPedidosRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedAdminRutasPublicarRoute: typeof AuthenticatedAdminRutasPublicarRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
@@ -1996,6 +2017,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
   AuthenticatedNegociosPanelRoute: AuthenticatedNegociosPanelRoute,
+  AuthenticatedNegociosPedidosRoute: AuthenticatedNegociosPedidosRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedAdminRutasPublicarRoute: AuthenticatedAdminRutasPublicarRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
