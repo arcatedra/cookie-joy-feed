@@ -214,6 +214,7 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
     descripcion: "",
     precio: "",
     unidad: "unidad",
+    peso_lb: "1",
     category_id: "" as string,
     imagen_url: null as string | null,
     imagenPreview: null as string | null,
