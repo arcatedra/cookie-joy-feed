@@ -14,6 +14,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   cartWeightLb,
   isDeliveryDateAllowed,
+  daysForZip,
   pricingFromRows,
   processingFeeCents,
   tierForSubtotal,
@@ -120,7 +121,11 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
       );
     }
-    if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing)) {
+    const { data: dzRows } = await db
+      .from("delivery_zones")
+      .select("id, name, zip_codes, route_days, activo");
+    const zoneDays = daysForZip(dzRows ?? [], data.address.zip, pricing);
+    if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing, new Date(), zoneDays)) {
       throw new Error("Ese día de entrega ya no está disponible. Elige otro.");
     }
     const tier = tierForSubtotal(subtotalCents, pricing);
