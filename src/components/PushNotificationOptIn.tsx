@@ -72,13 +72,13 @@ export function PushNotificationOptIn() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  async function ensureSubscribed() {
+  async function ensureSubscribed(): Promise<boolean> {
     try {
       // Register the (guarded) PWA service worker. In preview/dev this is a
       // no-op and no registration will exist, so we bail before subscribing.
       await registerPwaServiceWorker();
       const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) return;
+      if (!reg) return false;
       await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {
