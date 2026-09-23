@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   listStoreOrders,
-  markOrderDelivered,
   markOrderReadyAndCapture,
   startPreparingOrder,
 } from "@/lib/store-orders.functions";
@@ -31,6 +30,13 @@ export const Route = createFileRoute("/_authenticated/negocios/pedidos")({
   component: StoreOrdersPage,
 });
 
+const ENTREGA: Record<string, string> = {
+  tomado: "Tomado",
+  recogido: "Recogido en tienda",
+  en_camino: "En camino",
+  entregado: "Entregado",
+};
+
 const ESTADO: Record<string, string> = {
   confirmado: "Reservado (pendiente de preparar)",
   preparando: "Preparando",
@@ -47,7 +53,6 @@ function StoreOrdersPage() {
   const fetchOrders = useServerFn(listStoreOrders);
   const prepare = useServerFn(startPreparingOrder);
   const ready = useServerFn(markOrderReadyAndCapture);
-  const deliver = useServerFn(markOrderDelivered);
 
   const [reales, setReales] = useState<Record<string, number>>({});
 
@@ -102,11 +107,6 @@ function StoreOrdersPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const deliverM = useMutation({
-    mutationFn: (id: string) => deliver({ data: { id } }),
-    onSuccess: refresh,
-    onError: (e: Error) => toast.error(e.message),
-  });
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-4">
@@ -237,9 +237,13 @@ function StoreOrdersPage() {
                   {readyM.isPending ? "Cobrando…" : "Listo para recoger (cobrar lo real)"}
                 </button>
               )}
-              {o.estado === "listo" && (
-                <button
-                  onClick={() => deliverM.mutate(o.id)}
+              {(o.estado === "listo" || o.estado === "entregado") && (
+                <p className="text-sm text-muted-foreground">
+                  {o.repartidor_nombre
+                    ? `Repartidor: ${o.repartidor_nombre} · ${ENTREGA[o.estado_entrega ?? ""] ?? "Asignado"}`
+                    : "Esperando que un repartidor lo tome"}
+                </p>
+              )}
                   className="rounded-lg border px-4 py-2 text-sm"
                 >
                   Marcar entregado

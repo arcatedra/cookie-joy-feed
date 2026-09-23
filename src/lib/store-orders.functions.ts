@@ -260,13 +260,17 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw) => z.object({ id: z.string().uuid() }).parse(raw))
   .handler(async ({ data, context }) => {
+    // Solo admin: normalmente el repartidor marca "Entregado" desde su panel.
     const db = (context as any).supabase;
-    const businessId = await myBusinessId(db, (context as any).userId);
+    const { data: isAdmin } = await db.rpc("has_role", {
+      _user_id: (context as any).userId,
+      _role: "admin",
+    });
+    if (isAdmin !== true) throw new Error("El repartidor marca la entrega desde su panel.");
     const { data: updated, error } = await db
       .from("store_orders")
-      .update({ estado: "entregado" })
+      .update({ estado: "entregado", estado_entrega: "entregado", entregado_en: new Date().toISOString() })
       .eq("id", data.id)
-      .eq("business_id", businessId)
       .eq("estado", "listo")
       .select("id");
     if (error) throw error;
