@@ -77,7 +77,7 @@ export const listTransfers = createServerFn({ method: "GET" })
         id: p.id,
         kind: "repartidor",
         nombre: (driverById.get(p.driver_id) as any)?.full_name ?? "Repartidor",
-        pedido: numById.get(p.order_id) ?? null,
+        pedido: (numById.get(p.order_id) as string | undefined) ?? null,
         montoUsd: Number(p.amount_usd ?? 0),
         estado: p.status === "pagado" ? "pagado" : p.status === "fallido" ? "fallido" : "pendiente",
         error: p.last_error ?? null,
