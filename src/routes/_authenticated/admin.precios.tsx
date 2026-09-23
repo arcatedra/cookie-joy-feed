@@ -52,6 +52,7 @@ const LABELS: Record<keyof PricingSettings, string> = {
   deliveryDaysMask: "Días de entrega (no editar aquí)",
   weightExtraPerLbUsd: "Precio por libra extra ($)",
   payoutFrequencyDays: "Pago a súpers: cada cuántos días",
+  processingFeePct: "Recargo de procesamiento (%)",
 };
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
@@ -72,6 +73,7 @@ const TIER_FIELDS: (keyof PricingSettings)[] = [
   "defaultProductWeightLb",
   "cutoffHourEt",
   "payoutFrequencyDays",
+  "processingFeePct",
 ];
 
 const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];

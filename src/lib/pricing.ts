@@ -39,6 +39,8 @@ export interface PricingSettings {
   weightExtraPerLbUsd: number;
   /** Cada cuántos días se transfiere su parte a los negocios. */
   payoutFrequencyDays: number;
+  /** Recargo (%) que cubre la comisión de Stripe. Va dentro del precio de entrega. */
+  processingFeePct: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
@@ -72,6 +74,7 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   deliveryDaysMask: "delivery_days_mask",
   weightExtraPerLbUsd: "weight_extra_per_lb_usd",
   payoutFrequencyDays: "payout_frequency_days",
+  processingFeePct: "processing_fee_pct",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
@@ -106,7 +109,18 @@ export const DEFAULT_PRICING: PricingSettings = {
   deliveryDaysMask: 42,
   weightExtraPerLbUsd: 0.7,
   payoutFrequencyDays: 1,
+  processingFeePct: 3,
 };
+
+/**
+ * Recargo que cubre la comisión de Stripe. Se calcula sobre el monto indicado
+ * y se suma dentro del precio de entrega (el cliente no ve el desglose).
+ * Es 100% para la empresa.
+ */
+export function processingFeeCents(baseCents: number, p: PricingSettings): number {
+  const pct = Number.isFinite(p.processingFeePct) ? p.processingFeePct : 0;
+  return Math.max(0, Math.round((baseCents * pct) / 100));
+}
 
 export type OrderTier = "chico" | "mediano" | "grande";
 

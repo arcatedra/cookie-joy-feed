@@ -15,6 +15,7 @@ import {
   cartWeightLb,
   isDeliveryDateAllowed,
   pricingFromRows,
+  processingFeeCents,
   tierForSubtotal,
   weightFeeCents,
 } from "./pricing";
@@ -123,11 +124,15 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       throw new Error("Ese día de entrega ya no está disponible. Elige otro.");
     }
     const tier = tierForSubtotal(subtotalCents, pricing);
-    const serviceCents = 0;
     const weightCents = weightFeeCents(totalLb, pricing);
     const shippingCents = tier.feeCents;
     const tipCents = Math.round((data.propina ?? 0) * 100);
-    const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
+    // Recargo que cubre la comisión de Stripe: va dentro del precio de entrega.
+    const serviceCents = processingFeeCents(
+      subtotalCents + shippingCents + weightCents,
+      pricing,
+    );
+    const grossCents = subtotalCents + shippingCents + weightCents + serviceCents + tipCents;
 
     // ---- Saldo de referidos ------------------------------------------------
     let creditCents = 0;
@@ -236,8 +241,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         });
       }
       const extras: Array<[string, number]> = [
-        [`Entrega (pedido ${tier.tier})`, shippingCents],
-        ["Cargo por peso", weightCents],
+        ["Entrega", shippingCents + weightCents + serviceCents],
         ["Propina para el repartidor", tipCents],
         ["Margen para ajustes de peso y faltantes (se cobra solo lo real)", bufferCents],
       ];
