@@ -137,24 +137,53 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
       .eq("order_id", order.id);
     if (iErr) throw iErr;
 
+    const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
+    const pricing = pricingFromRows(pricingRows);
+
+    // Pesos de los productos para recalcular el cargo por peso real
+    const productIds = (items ?? []).map((i: any) => i.product_id).filter(Boolean);
+    const weightById = new Map<string, number>();
+    if (productIds.length > 0) {
+      const { data: prods } = await db
+        .from("store_products")
+        .select("id, peso_lb")
+        .in("id", productIds);
+      for (const p of prods ?? []) {
+        weightById.set(p.id, Number(p.peso_lb ?? pricing.defaultProductWeightLb));
+      }
+    }
+
     const realById = new Map(data.items.map((i) => [i.itemId, i.cantidadReal]));
     let realSubtotalCents = 0;
+    let realLb = 0;
+    let realItemCount = 0;
     for (const it of items ?? []) {
       const real = realById.has(it.id) ? Number(realById.get(it.id)) : Number(it.cantidad);
       realSubtotalCents += Math.round(Number(it.precio_unitario) * 100) * real;
+      realItemCount += real;
+      realLb +=
+        (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
       if (realById.has(it.id) && real !== Number(it.cantidad_real)) {
         await db.from("store_order_items").update({ cantidad_real: real }).eq("id", it.id);
       }
     }
+    realLb = Math.round(realLb * 100) / 100;
 
     const shippingCents = Math.round(Number(order.costo_envio ?? 0) * 100);
-    const realTotalCents = realSubtotalCents + shippingCents;
+    const serviceCents = serviceFeeCents(realSubtotalCents, pricing);
+    const weightCents = weightFeeCents(realLb, pricing);
+    const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
+    const realTotalCents = Math.max(
+      0,
+      realSubtotalCents + shippingCents + serviceCents + weightCents - creditCents,
+    );
     const authorizedCents = Math.round(Number(order.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) throw new Error("La reserva del pago no es válida.");
 
     // 2) Tope: nunca se cobra más de lo reservado
     const captureCents = Math.min(realTotalCents, authorizedCents);
     const pendingAdjustmentCents = Math.max(realTotalCents - authorizedCents, 0);
+
 
     // 3) Cobro en Stripe (idempotente por pedido + monto)
     const { paymentsEnvironmentForHost, stripeCapturePaymentIntent } = await import(
