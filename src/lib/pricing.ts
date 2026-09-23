@@ -93,7 +93,7 @@ export const DEFAULT_PRICING: PricingSettings = {
   driverPerStopUsd: 5.5,
   driverPerItemUsd: 0.1,
   driverItemThreshold: 30,
-  driverWeightSharePct: 60,
+  driverWeightSharePct: 100,
   driverTipSharePct: 100,
   referralBonusUsd: 5,
   tierSmallMaxUsd: 50,
