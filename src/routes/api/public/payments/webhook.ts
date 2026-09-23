@@ -272,7 +272,58 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           return Response.json({ ok: true, pedido: existing.id });
         }
 
+        // --- Store order (marketplace) -> reserva confirmada ---
+        if (
+          metaKind === "store_order" &&
+          eventType === "checkout.session.completed" &&
+          objectId.startsWith("cs_")
+        ) {
+          const sessionId = objectId;
+          const paymentIntentId =
+            (dataObject?.payment_intent as string | undefined) ?? null;
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const storeOrderId = meta.store_order_id;
+          const amountTotalCents = Number(dataObject?.amount_total ?? 0);
 
+          if (!storeOrderId) {
+            console.warn("[payments-webhook] store_order sin store_order_id", { sessionId });
+            return Response.json({ ok: true, ignored: "no store_order_id" });
+          }
+
+          const { data: existing } = await supabaseAdmin
+            .from("store_orders")
+            .select("id, estado")
+            .eq("id", storeOrderId)
+            .maybeSingle();
+
+          if (!existing) {
+            console.warn("[payments-webhook] store order no encontrado", { storeOrderId });
+            return Response.json({ ok: true, ignored: "store order not found" });
+          }
+          if (existing.estado !== "pendiente_pago") {
+            return Response.json({ ok: true, alreadyProcessed: true });
+          }
+
+          const storeUpdate: Record<string, unknown> = {
+            estado: "confirmado",
+            stripe_payment_intent_id: paymentIntentId,
+            stripe_checkout_session_id: sessionId,
+            autorizado_en: new Date().toISOString(),
+          };
+          if (amountTotalCents > 0) storeUpdate.monto_autorizado = amountTotalCents / 100;
+
+          const { error: storeErr } = await supabaseAdmin
+            .from("store_orders")
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .update(storeUpdate as any)
+            .eq("id", existing.id);
+          if (storeErr) {
+            console.error("[payments-webhook] store order update failed", storeErr);
+            return new Response("Store order update failed", { status: 500 });
+          }
+
+          return Response.json({ ok: true, storeOrder: existing.id });
+        }
 
 
         if (
