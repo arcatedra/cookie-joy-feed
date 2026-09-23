@@ -11,7 +11,13 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { cartWeightLb, pricingFromRows, serviceFeeCents, weightFeeCents } from "./pricing";
+import {
+  cartWeightLb,
+  isDeliveryDateAllowed,
+  pricingFromRows,
+  tierForSubtotal,
+  weightFeeCents,
+} from "./pricing";
 
 interface StripeSession {
   id: string;
@@ -42,6 +48,8 @@ const schema = z.object({
   address: addressSchema,
   /** Día de entrega elegido por el cliente (YYYY-MM-DD). */
   fechaEntrega: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  /** Propina voluntaria para el repartidor (USD). */
+  propina: z.number().min(0).max(200).optional().default(0),
   /** Usar el saldo disponible del cliente. */
   usarSaldo: z.boolean().optional().default(true),
 });
@@ -111,10 +119,15 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
       );
     }
-    const serviceCents = serviceFeeCents(subtotalCents, pricing);
+    if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing)) {
+      throw new Error("Ese día de entrega ya no está disponible. Elige otro.");
+    }
+    const tier = tierForSubtotal(subtotalCents, pricing);
+    const serviceCents = 0;
     const weightCents = weightFeeCents(totalLb, pricing);
-    const shippingCents = STORE_DELIVERY_FEE_CENTS;
-    const grossCents = subtotalCents + shippingCents + serviceCents + weightCents;
+    const shippingCents = tier.feeCents;
+    const tipCents = Math.round((data.propina ?? 0) * 100);
+    const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
 
     // ---- Saldo de referidos ------------------------------------------------
     let creditCents = 0;
@@ -153,6 +166,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         subtotal: subtotalCents / 100,
         costo_envio: shippingCents / 100,
         cargo_servicio: serviceCents / 100,
+        tramo: tier.tier,
+        envio_repartidor: tier.driverCents / 100,
+        envio_empresa: tier.companyCents / 100,
+        propina: tipCents / 100,
         cargo_peso: weightCents / 100,
         peso_total_lb: totalLb,
         fecha_entrega: data.fechaEntrega ?? null,
@@ -218,9 +235,9 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         });
       }
       const extras: Array<[string, number]> = [
-        ["Entrega", shippingCents],
-        ["Cargo de servicio", serviceCents],
+        [`Entrega (pedido ${tier.tier})`, shippingCents],
         ["Cargo por peso", weightCents],
+        ["Propina para el repartidor", tipCents],
         ["Margen para ajustes de peso y faltantes (se cobra solo lo real)", bufferCents],
       ];
       for (const [name, amount] of extras) {
@@ -295,6 +312,9 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       totalEstimado: totalCents / 100,
       creditoAplicado: creditCents / 100,
       cargoServicio: serviceCents / 100,
+      costoEnvio: shippingCents / 100,
+      tramo: tier.tier,
+      propina: tipCents / 100,
       cargoPeso: weightCents / 100,
       pesoTotalLb: totalLb,
       montoReservado: authorizedCents / 100,
