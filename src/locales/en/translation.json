@@ -903,7 +903,54 @@
     "s6Title": "6. Limitation of Liability",
     "s6Body": "Service is provided \"as is\". No guarantee of uninterrupted availability or specific results.",
     "s7Title": "7. Contact",
-    "s7Body": "soporte@hazorex.com"
+    "s7Body": "soporte@hazorex.com",
+    "model": [
+      {
+        "title": "1. What Hazorex is",
+        "body": "Hazorex is an ordering and home-delivery platform. Your order is fulfilled by partner stores and supermarkets. <strong>We do not charge subscriptions or memberships:</strong> you only pay per order."
+      },
+      {
+        "title": "2. Product prices",
+        "body": "Prices shown in the app are set by each partner store and <strong>may differ from in-store prices</strong>. The valid price is the one displayed in the app when you place the order."
+      },
+      {
+        "title": "3. Delivery charge",
+        "body": "Every order pays a delivery charge based on the size of the order and its total weight. It is shown as a single final price before you confirm; there are no hidden fees beyond what is described in these terms."
+      },
+      {
+        "title": "4. How we charge: hold and final charge",
+        "body": "When you confirm your order we place a hold on your card for the estimated total plus roughly 15%. The hold <strong>is not a charge</strong>. When the store finishes preparing your order we charge only the real amount, based on the items actually picked and the real weight. If the real amount is lower, we charge less and the rest of the hold is released automatically; we never charge more than the amount held."
+      },
+      {
+        "title": "5. Missing items, substitutions and refunds",
+        "body": "If a product is unavailable, you can accept a replacement or ask for a refund of that item. Items not delivered are not charged. If something arrives damaged or missing, contact us within 48 hours of delivery and we will resolve it with a refund or account credit."
+      },
+      {
+        "title": "6. Tips",
+        "body": "Tips are voluntary and go <strong>100% to the driver</strong>. Hazorex keeps no part of the tip."
+      },
+      {
+        "title": "7. Delivery days and cut-off times",
+        "body": "Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
+      },
+      {
+        "title": "8. Drivers: independent contractors",
+        "body": "Drivers are <strong>independent contractors</strong>, not Hazorex employees. They use their own vehicles, choose when to work, and are responsible for their own taxes, licenses and insurance."
+      },
+      {
+        "title": "9. Referral program",
+        "body": "If you invite a new person with your code, you receive a $5 credit once that person receives their first order. The credit can only be used as a discount on your next purchases: it is not cash and cannot be withdrawn. You may not use your own code, and we void credits from duplicate accounts (same phone, card or address) or any fraud attempt."
+      },
+      {
+        "title": "10. Payouts to stores and drivers",
+        "body": "Payouts to partner stores and drivers are processed through Stripe Connect. Each store and driver opens their own Stripe account and provides bank details directly to Stripe; Hazorex never sees or stores that banking information. Using the platform as a store or driver also means accepting Stripe Connect's terms of service."
+      },
+      {
+        "title": "11. Card payments",
+        "body": "Customer payments are processed by Stripe. Hazorex does not store full card numbers."
+      }
+    ],
+    "metaDescNoSweepstakes": "Hazorex Terms and Conditions: per-order pricing, delivery, tips, refunds and referrals."
   },
   "sweepstakesRules": {
     "metaTitle": "Official Sweepstakes Rules — HAZOREX",
@@ -1457,19 +1504,22 @@
     "s2": {
       "title": "2. Data we collect",
       "bullets": [
-        "<strong>Account data:</strong> name, email address, and profile picture when you sign in (for example, with Google).",
-        "<strong>Usage data:</strong> pages visited, sweepstakes interactions, and notification preferences.",
-        "<strong>Technical data:</strong> IP address, browser type, and operating system, for security and diagnostic purposes."
+        "<strong>Account data:</strong> name, email, phone and profile picture.",
+        "<strong>Order data:</strong> products, delivery address, chosen day, tip and notes.",
+        "<strong>Payment data:</strong> the Stripe charge identifier (never your full card number).",
+        "<strong>Usage data:</strong> pages visited and notification preferences.",
+        "<strong>Technical data:</strong> IP address, browser and operating system, for security and diagnostics."
       ]
     },
     "s3": {
       "title": "3. How we use it",
       "bullets": [
         "Create and maintain your account.",
-        "Let you take part in the daily sweepstakes.",
-        "Send you notifications you have opted in to.",
+        "Process and deliver your orders.",
+        "Charge the real amount of each order and pay stores and drivers.",
+        "Send notifications you have authorized.",
         "Prevent fraud and abuse.",
-        "Comply with legal obligations."
+        "Meet legal and tax obligations."
       ]
     },
     "s4": {
@@ -1478,7 +1528,7 @@
     },
     "s5": {
       "title": "5. Sharing information",
-      "body": "We do not sell your data. We only share it with providers that help us operate the platform (hosting, email delivery, analytics) and when required by law."
+      "body": "We do not sell your data. We share it only with those needed to complete your order: the store preparing it, the assigned driver, Stripe for payment, and hosting, email and analytics providers. Also when required by law."
     },
     "s6": {
       "title": "6. Your rights",
@@ -1495,6 +1545,22 @@
     "s9": {
       "title": "9. Contact",
       "body": "For any privacy questions: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s10": {
+      "title": "10. Payments and financial data",
+      "body": "Payments are processed by Stripe. We do not store your full card number or your bank details. Partner stores and drivers are paid through Stripe Connect and provide their bank details directly to Stripe."
+    },
+    "s11": {
+      "title": "11. Driver and store data",
+      "body": "If you apply as a driver we collect your contact details, vehicle, documents and tax number (SSN or ITIN). The tax number is stored encrypted and used only for tax obligations; no one on the team sees it in full. Your documents are kept in private storage accessible only to you and the admin team."
+    },
+    "s12": {
+      "title": "12. Address and deliveries",
+      "body": "Your delivery address is shared only with the store preparing the order and the assigned driver, and only for the duration of the delivery. The driver may take a photo of the drop-off point as proof; that photo is private and shown only to you and the support team."
+    },
+    "s13": {
+      "title": "13. Referral program",
+      "body": "To prevent referral fraud we store a technical fingerprint (never the original value) of the phone, address and payment method so we can detect duplicate accounts."
     }
   },
   "cartPage": {

@@ -903,7 +903,54 @@
     "s6Title": "6. Limitación de Responsabilidad",
     "s6Body": "El servicio se proporciona \"tal cual\". No se garantiza la disponibilidad ininterrumpida ni resultados específicos.",
     "s7Title": "7. Contacto",
-    "s7Body": "soporte@hazorex.com"
+    "s7Body": "soporte@hazorex.com",
+    "model": [
+      {
+        "title": "1. Qué es Hazorex",
+        "body": "Hazorex es una plataforma de pedidos y entrega a domicilio. Recibes tu pedido de tiendas y supermercados aliados. <strong>No cobramos suscripciones ni membresías:</strong> solo pagas por cada pedido que haces."
+      },
+      {
+        "title": "2. Precios de los productos",
+        "body": "Los precios que ves en la aplicación los publica cada tienda aliada y <strong>pueden ser distintos a los precios de la tienda física</strong>. El precio válido es el que aparece en la aplicación al momento de hacer el pedido."
+      },
+      {
+        "title": "3. Costo de entrega",
+        "body": "Cada pedido paga un costo de entrega que depende del tamaño del pedido y del peso total. Ese costo se muestra como un único precio final antes de confirmar; no hay cargos ocultos ni cobros posteriores fuera de lo descrito en estos términos."
+      },
+      {
+        "title": "4. Cómo se cobra: reserva y cobro final",
+        "body": "Al confirmar tu pedido reservamos en tu tarjeta el total estimado más un margen de aproximadamente 15%. Esa reserva <strong>no es un cobro</strong>. Cuando la tienda termina de preparar tu pedido cobramos únicamente el monto real, según los productos que efectivamente se pudieron recoger y el peso real. Si el monto real es menor, se cobra menos y el resto de la reserva se libera solo; nunca cobramos más de lo reservado."
+      },
+      {
+        "title": "5. Faltantes, sustituciones y reembolsos",
+        "body": "Si un producto no está disponible, puedes aceptar un reemplazo o pedir que se te devuelva el dinero de ese artículo. Los artículos no entregados no se cobran. Si algo llega en mal estado o falta, escríbenos dentro de las 48 horas siguientes a la entrega y resolvemos con reembolso o crédito a tu cuenta."
+      },
+      {
+        "title": "6. Propinas",
+        "body": "La propina es voluntaria y va <strong>100% al repartidor</strong>. Hazorex no retiene ninguna parte de la propina."
+      },
+      {
+        "title": "7. Días y horarios de entrega",
+        "body": "Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
+      },
+      {
+        "title": "8. Repartidores: contratistas independientes",
+        "body": "Los repartidores son <strong>contratistas independientes</strong>, no empleados de Hazorex. Usan sus propios vehículos, deciden cuándo trabajar y son responsables de sus impuestos, licencias y seguros."
+      },
+      {
+        "title": "9. Programa de referidos",
+        "body": "Si invitas a una persona nueva con tu código, recibes un bono de $5 en tu saldo cuando esa persona recibe su primer pedido. El bono solo se usa como descuento en tus próximas compras: no es dinero en efectivo ni se puede retirar. No puedes usar tu propio código y anulamos bonos de cuentas duplicadas (mismo teléfono, tarjeta o dirección) o de cualquier intento de fraude."
+      },
+      {
+        "title": "10. Pagos a tiendas y repartidores",
+        "body": "Los pagos a las tiendas aliadas y a los repartidores se procesan mediante Stripe Connect. Cada tienda y cada repartidor abre su propia cuenta con Stripe y proporciona sus datos bancarios directamente a Stripe; Hazorex no ve ni almacena esa información bancaria. Al usar la plataforma como tienda o repartidor aceptas también los términos de servicio de Stripe Connect."
+      },
+      {
+        "title": "11. Pagos con tarjeta",
+        "body": "Los pagos de los clientes se procesan mediante Stripe. Hazorex no guarda los números completos de tu tarjeta."
+      }
+    ],
+    "metaDescNoSweepstakes": "Términos y Condiciones de Hazorex: cobro por pedido, entrega, propinas, reembolsos y referidos."
   },
   "sweepstakesRules": {
     "metaTitle": "Reglas Oficiales del Sorteo — HAZOREX",
@@ -1457,19 +1504,22 @@
     "s2": {
       "title": "2. Datos que recopilamos",
       "bullets": [
-        "<strong>Datos de cuenta:</strong> nombre, dirección de correo electrónico y foto de perfil cuando inicias sesión (por ejemplo, con Google).",
-        "<strong>Datos de uso:</strong> páginas visitadas, interacciones con el sorteo y preferencias de notificación.",
-        "<strong>Datos técnicos:</strong> dirección IP, tipo de navegador y sistema operativo, con fines de seguridad y diagnóstico."
+        "<strong>Datos de cuenta:</strong> nombre, correo electrónico, teléfono y foto de perfil.",
+        "<strong>Datos del pedido:</strong> productos, dirección de entrega, día elegido, propina y notas.",
+        "<strong>Datos de pago:</strong> el identificador del cobro en Stripe (nunca el número completo de la tarjeta).",
+        "<strong>Datos de uso:</strong> páginas visitadas y preferencias de notificación.",
+        "<strong>Datos técnicos:</strong> dirección IP, navegador y sistema operativo, con fines de seguridad y diagnóstico."
       ]
     },
     "s3": {
       "title": "3. Para qué los usamos",
       "bullets": [
         "Crear y mantener tu cuenta.",
-        "Permitirte participar en el sorteo diario.",
-        "Enviarte notificaciones que tú hayas autorizado.",
+        "Procesar y entregar tus pedidos.",
+        "Cobrar el monto real de cada pedido y pagar a tiendas y repartidores.",
+        "Enviarte notificaciones que hayas autorizado.",
         "Prevenir fraude y abuso.",
-        "Cumplir con obligaciones legales."
+        "Cumplir obligaciones legales y fiscales."
       ]
     },
     "s4": {
@@ -1478,7 +1528,7 @@
     },
     "s5": {
       "title": "5. Compartir información",
-      "body": "No vendemos tus datos. Solo los compartimos con proveedores que nos ayudan a operar la plataforma (hosting, envío de emails, analítica) y cuando la ley lo exige."
+      "body": "No vendemos tus datos. Los compartimos solo con quienes hacen falta para completar tu pedido: la tienda que lo prepara, el repartidor asignado, Stripe para el pago, y proveedores de hosting, correo y analítica. También cuando la ley lo exige."
     },
     "s6": {
       "title": "6. Tus derechos",
@@ -1495,6 +1545,22 @@
     "s9": {
       "title": "9. Contacto",
       "body": "Para cualquier duda sobre privacidad: <a href=\"mailto:{{email}}\" style=\"color:#1e3a5f\">{{email}}</a>."
+    },
+    "s10": {
+      "title": "10. Pagos y datos financieros",
+      "body": "Los pagos se procesan mediante Stripe. No guardamos el número completo de tu tarjeta ni tus datos bancarios. Las tiendas aliadas y los repartidores cobran a través de Stripe Connect y entregan sus datos bancarios directamente a Stripe."
+    },
+    "s11": {
+      "title": "11. Datos de repartidores y tiendas",
+      "body": "Si te postulas como repartidor recogemos tus datos de contacto, tu vehículo, tus documentos y tu número fiscal (SSN o ITIN). El número fiscal se guarda cifrado y solo se usa para cumplir obligaciones fiscales; nadie del equipo lo ve completo. Tus documentos se guardan en un almacenamiento privado al que solo tú y el equipo de administración tienen acceso."
+    },
+    "s12": {
+      "title": "12. Dirección y entregas",
+      "body": "Tu dirección de entrega se comparte únicamente con la tienda que prepara el pedido y con el repartidor asignado, y solo mientras dura la entrega. El repartidor puede tomar una foto del punto de entrega como comprobante; esa foto es privada y se muestra solo a ti y al equipo de soporte."
+    },
+    "s13": {
+      "title": "13. Programa de referidos",
+      "body": "Para evitar fraude en el bono de referidos guardamos una huella técnica (sin mostrar el dato original) del teléfono, la dirección y el método de pago, y así detectar cuentas duplicadas."
     }
   },
   "cartPage": {
