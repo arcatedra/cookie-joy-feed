@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/precios")({
 const LABELS: Record<keyof PricingSettings, string> = {
   serviceMinUsd: "Cargo de servicio mínimo ($)",
   servicePct: "Cargo de servicio (% del pedido)",
-  weightIncludedLb: "Libras incluidas",
+  weightIncludedLb: "Libras incluidas (sin cargo extra)",
   weightTier2MaxLb: "Tramo 2 hasta (lb)",
   weightTier2FeeUsd: "Cargo tramo 2 ($)",
   weightTier3MaxLb: "Tramo 3 hasta (lb)",
@@ -50,10 +50,7 @@ const LABELS: Record<keyof PricingSettings, string> = {
   tierLargeCompanyUsd: "Grande: para la empresa ($)",
   cutoffHourEt: "Hora límite de corte (0-23, hora de NY)",
   deliveryDaysMask: "Días de entrega (no editar aquí)",
-  weightIncludedLb: "Libras incluidas (sin cargo extra)",
   weightExtraPerLbUsd: "Precio por libra extra ($)",
-  weightMaxLb: "Peso máximo por pedido (lb)",
-  defaultProductWeightLb: "Peso por defecto de un producto (lb)",
 };
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
