@@ -37,7 +37,35 @@ const LABELS: Record<keyof PricingSettings, string> = {
   driverWeightSharePct: "Repartidor: % del cargo por peso",
   driverTipSharePct: "Repartidor: % de la propina",
   referralBonusUsd: "Bono por referido ($)",
+  tierSmallMaxUsd: "Tramo chico: hasta ($)",
+  tierMediumMaxUsd: "Tramo mediano: hasta ($)",
+  tierSmallFeeUsd: "Chico: envío total ($)",
+  tierSmallDriverUsd: "Chico: para el repartidor ($)",
+  tierSmallCompanyUsd: "Chico: para la empresa ($)",
+  tierMediumFeeUsd: "Mediano: envío total ($)",
+  tierMediumDriverUsd: "Mediano: para el repartidor ($)",
+  tierMediumCompanyUsd: "Mediano: para la empresa ($)",
+  tierLargeFeeUsd: "Grande: envío total ($)",
+  tierLargeDriverUsd: "Grande: para el repartidor ($)",
+  tierLargeCompanyUsd: "Grande: para la empresa ($)",
+  cutoffHourEt: "Hora límite de corte (0-23, hora de NY)",
+  deliveryDaysMask: "Días de entrega (no editar aquí)",
 };
+
+const TIER_FIELDS: (keyof PricingSettings)[] = [
+  "tierSmallMaxUsd",
+  "tierMediumMaxUsd",
+  "tierSmallFeeUsd",
+  "tierSmallDriverUsd",
+  "tierSmallCompanyUsd",
+  "tierMediumFeeUsd",
+  "tierMediumDriverUsd",
+  "tierMediumCompanyUsd",
+  "tierLargeFeeUsd",
+  "tierLargeDriverUsd",
+  "tierLargeCompanyUsd",
+  "cutoffHourEt",
+];
 
 const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
