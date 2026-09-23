@@ -275,7 +275,7 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
 
     const { data: order } = await db
       .from("store_orders")
-      .select("id, estado, cliente_id, business_id, stripe_payment_intent_id")
+      .select("id, estado, cliente_id, business_id, stripe_payment_intent_id, credito_aplicado")
       .eq("id", data.id)
       .maybeSingle();
     if (!order) throw new Error("Pedido no encontrado.");
@@ -311,5 +311,15 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
       .from("store_orders")
       .update({ estado: "cancelado" })
       .eq("id", order.id);
+
+    // Devuelve el saldo que se había aplicado al pedido.
+    if (Number(order.credito_aplicado ?? 0) > 0) {
+      await (supabaseAdmin as any).from("wallet_credits").insert({
+        user_id: order.cliente_id,
+        amount_usd: Number(order.credito_aplicado),
+        reason: "devolucion_saldo",
+        order_id: order.id,
+      });
+    }
     return { ok: true };
   });
