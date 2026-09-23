@@ -53,6 +53,16 @@ function StorePage() {
   const { t } = useTranslation();
   const { store, categories, products } = Route.useLoaderData() as any;
   const [q, setQ] = useState("");
+  const [cart, setCart] = useState<Record<string, number>>({});
+
+  const addToCart = (id: string, delta: number) =>
+    setCart((prev) => {
+      const next = Math.max(0, (prev[id] ?? 0) + delta);
+      const copy = { ...prev };
+      if (next === 0) delete copy[id];
+      else copy[id] = next;
+      return copy;
+    });
 
   const open = isStoreOpen(store.horario);
   const hours = todayHoursLabel(store.horario);
