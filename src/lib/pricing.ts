@@ -280,6 +280,29 @@ export function driverPayUsd(
   return Math.round((base + weightShare + tipShare) * 100) / 100;
 }
 
+/** Peso total del carrito en kilos. */
+export function cartWeightKg(
+  items: Array<{ pesoKg?: number | null; qty: number }>,
+  p: PricingSettings,
+): number {
+  const kg = items.reduce(
+    (s, i) =>
+      s +
+      (Number(i.pesoKg ?? p.defaultProductWeightKg) || p.defaultProductWeightKg) * i.qty,
+    0,
+  );
+  return Math.round(kg * 100) / 100;
+}
+
+/**
+ * Cargo extra por kilos: $1.50 (configurable) por cada kilo sobre los 20 kg
+ * incluidos. Va 100% al repartidor.
+ */
+export function weightFeeKgCents(totalKg: number, p: PricingSettings): number {
+  const extra = Math.max(0, totalKg - p.weightIncludedKg);
+  return Math.round(extra * p.weightExtraPerKgUsd * 100);
+}
+
 /** Peso total del carrito en libras. */
 export function cartWeightLb(
   items: Array<{ pesoLb?: number | null; qty: number }>,
