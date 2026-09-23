@@ -293,6 +293,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       clientSecret: session.client_secret ?? null,
       url: session.url ?? null,
       totalEstimado: totalCents / 100,
+      creditoAplicado: creditCents / 100,
+      cargoServicio: serviceCents / 100,
+      cargoPeso: weightCents / 100,
+      pesoTotalLb: totalLb,
       montoReservado: authorizedCents / 100,
     };
   });
