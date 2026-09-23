@@ -135,7 +135,7 @@ function Home() {
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
-              to="/subscribe"
+              to="/tiendas"
               className="rounded-full bg-[#E6C35C] px-5 py-2 text-xs font-bold text-[#1a0f0a] shadow transition hover:bg-[#f0d175]"
             >
               {t("hero.ctaShop", "Shop cookies")}
@@ -307,7 +307,6 @@ function CategoryCardGrid() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <BestSellersCard />
         <BuildPackCard />
-        <SubscriptionCard />
         <FeaturedCard />
       </div>
     </div>
@@ -399,38 +398,6 @@ function BuildPackCard() {
   );
 }
 
-function SubscriptionCard() {
-  const { t } = useTranslation();
-  return (
-    <CardShell
-      title={t("home.cards.subscriptionTitle")}
-      link={{ to: "/subscribe", label: t("home.cards.subscriptionLink") }}
-    >
-      <Link to="/subscribe" className="block">
-        <div className="aspect-[4/3] overflow-hidden rounded-sm bg-gradient-to-br from-[#3d2418] to-[#1a0f0a] p-3 text-white">
-          <div className="flex h-full flex-col justify-between">
-            <p className="text-[10px] font-bold tracking-[0.2em] text-amber-300">
-              {t("home.cards.subscriptionClub")}
-            </p>
-            <div>
-              <p className="text-xl font-extrabold leading-tight md:text-2xl">
-                {t("home.cards.subscriptionHeadline")}
-              </p>
-              <p className="mt-1 text-[11px] text-white/80">
-                {t("home.cards.subscriptionSubcopy")}
-              </p>
-            </div>
-            <div className="flex items-end justify-between">
-              <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#1a0f0a]">
-                {formatPrice(19.99)}{t("subscribe.perMonth")}
-              </span>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </CardShell>
-  );
-}
 
 // Honest featured card. Replaces the previous "Flash Deal" card, which showed
 // a hardcoded countdown ("Termina en HH:MM:SS") and a fake "% reclamado"
