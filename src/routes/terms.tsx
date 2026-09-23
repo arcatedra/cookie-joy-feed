@@ -41,6 +41,13 @@ function TermsPage() {
     day: "numeric",
     timeZone: "UTC",
   });
+  // Secciones del modelo actual (cobro por pedido, entrega, propinas, referidos).
+  const modelRaw = t("terms.model", { returnObjects: true, defaultValue: [] }) as unknown;
+  const model = (Array.isArray(modelRaw) ? modelRaw : []) as Array<{
+    title: string;
+    body: string;
+  }>;
+
 
   return (
     <main
