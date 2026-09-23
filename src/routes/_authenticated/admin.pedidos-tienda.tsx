@@ -78,6 +78,11 @@ function AdminStoreDeliveries() {
               <div className="min-w-0">
                 <p className="text-sm font-medium">
                   #{p.numero} · {p.tienda}
+                  {p.sinZona && (
+                    <span className="ml-2 rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-semibold text-destructive">
+                      Sin zona — asignar a mano
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {p.zona} {p.zip} · {p.pesoLb} lb · {p.articulos} art. · repartidor gana $
