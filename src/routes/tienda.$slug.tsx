@@ -16,6 +16,7 @@ import {
   availableDeliveryDates,
   tierForSubtotal,
   weightFeeCents,
+  processingFeeCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
