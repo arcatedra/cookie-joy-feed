@@ -298,15 +298,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       })
       .eq("id", order.id);
 
-    // Descuenta el saldo usado (movimiento negativo).
-    if (creditCents > 0) {
-      await (supabaseAdmin as any).from("wallet_credits").insert({
-        user_id: userId,
-        amount_usd: -creditCents / 100,
-        reason: "uso_en_pedido",
-        order_id: order.id,
-      });
-    }
+    // El saldo NO se descuenta aquí: si el cliente abandona el pago o la
+    // tarjeta falla, perdería su saldo. El descuento se registra cuando el
+    // pago queda confirmado (webhook de pagos).
+
 
 
     return {
