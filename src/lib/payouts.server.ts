@@ -78,7 +78,7 @@ export async function transferStoreOrder(orderId: string, db = adminDb()): Promi
         metadata: { store_order_id: o.id, business_id: o.business_id },
       },
       env,
-      { "Idempotency-Key": `store-payout-${o.id}-${cents}` },
+      { "Idempotency-Key": `store-payout-${o.id}` },
     );
     await db
       .from("store_orders")
@@ -140,7 +140,7 @@ export async function transferDriverPayout(
         metadata: { driver_payout_id: p.id, store_order_id: p.order_id },
       },
       env,
-      { "Idempotency-Key": `driver-payout-${p.id}-${cents}` },
+      { "Idempotency-Key": `driver-payout-${p.id}` },
     );
     await db
       .from("driver_payouts")
@@ -160,5 +160,42 @@ export async function transferDriverPayout(
       .update({ status: "fallido", last_error: msg.slice(0, 500) })
       .eq("id", p.id);
     return { ok: false, error: msg };
+  }
+}
+
+/** Envía todo lo pendiente o fallido de un negocio (máx. 50). */
+export async function flushBusinessPending(businessId: string, db = adminDb()) {
+  const { data } = await db
+    .from("store_orders")
+    .select("id")
+    .eq("business_id", businessId)
+    .is("transferido_en", null)
+    .not("capturado_en", "is", null)
+    .order("capturado_en", { ascending: true })
+    .limit(50);
+  for (const o of data ?? []) {
+    try {
+      await transferStoreOrder(o.id, db);
+    } catch (e) {
+      console.error("[payouts] flush negocio", o.id, e);
+    }
+  }
+}
+
+/** Envía todo lo pendiente o fallido de un repartidor (máx. 50). */
+export async function flushDriverPending(driverId: string, db = adminDb()) {
+  const { data } = await db
+    .from("driver_payouts")
+    .select("id")
+    .eq("driver_id", driverId)
+    .neq("status", "pagado")
+    .order("created_at", { ascending: true })
+    .limit(50);
+  for (const p of data ?? []) {
+    try {
+      await transferDriverPayout(p.id, db);
+    } catch (e) {
+      console.error("[payouts] flush repartidor", p.id, e);
+    }
   }
 }

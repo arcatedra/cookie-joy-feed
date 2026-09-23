@@ -246,6 +246,16 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
       .eq("id", order.id);
     if (upErr) console.error("[store-orders] no se pudo guardar el cobro", upErr);
 
+    // Pago inmediato a la tienda (y reintento de lo pendiente de esa tienda).
+    if (!upErr) {
+      try {
+        const { adminDb, flushBusinessPending } = await import("./payouts.server");
+        await flushBusinessPending(order.business_id, adminDb());
+      } catch (e) {
+        console.error("[store-orders] transferencia a la tienda falló", order.id, e);
+      }
+    }
+
     return {
       ok: true as const,
       cobrado: captureCents / 100,
