@@ -13,9 +13,6 @@ export function BottomNav() {
   const location = useLocation();
   const pathname = location.pathname;
   const { t } = useTranslation();
-  const { deliveryStatus: status } = useSubscriptionGate();
-
-  const remaining = status?.hasActiveSubscription ? status.remaining : null;
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
