@@ -84,7 +84,127 @@ export const DEFAULT_PRICING: PricingSettings = {
   driverWeightSharePct: 60,
   driverTipSharePct: 100,
   referralBonusUsd: 5,
+  tierSmallMaxUsd: 50,
+  tierMediumMaxUsd: 120,
+  tierSmallFeeUsd: 10,
+  tierSmallDriverUsd: 4,
+  tierSmallCompanyUsd: 6,
+  tierMediumFeeUsd: 18,
+  tierMediumDriverUsd: 6,
+  tierMediumCompanyUsd: 12,
+  tierLargeFeeUsd: 35,
+  tierLargeDriverUsd: 10,
+  tierLargeCompanyUsd: 25,
+  cutoffHourEt: 20,
+  // lunes (2) + miércoles (8) + viernes (32)
+  deliveryDaysMask: 42,
 };
+
+export type OrderTier = "chico" | "mediano" | "grande";
+
+export interface TierFee {
+  tier: OrderTier;
+  feeCents: number;
+  driverCents: number;
+  companyCents: number;
+}
+
+/** Clasifica el pedido por su subtotal y devuelve el cobro de entrega. */
+export function tierForSubtotal(subtotalCents: number, p: PricingSettings): TierFee {
+  const usd = subtotalCents / 100;
+  const c = (v: number) => Math.round(v * 100);
+  if (usd <= p.tierSmallMaxUsd) {
+    return {
+      tier: "chico",
+      feeCents: c(p.tierSmallFeeUsd),
+      driverCents: c(p.tierSmallDriverUsd),
+      companyCents: c(p.tierSmallCompanyUsd),
+    };
+  }
+  if (usd <= p.tierMediumMaxUsd) {
+    return {
+      tier: "mediano",
+      feeCents: c(p.tierMediumFeeUsd),
+      driverCents: c(p.tierMediumDriverUsd),
+      companyCents: c(p.tierMediumCompanyUsd),
+    };
+  }
+  return {
+    tier: "grande",
+    feeCents: c(p.tierLargeFeeUsd),
+    driverCents: c(p.tierLargeDriverUsd),
+    companyCents: c(p.tierLargeCompanyUsd),
+  };
+}
+
+/** Días de la semana permitidos (0 = domingo) según la máscara configurada. */
+export function allowedDeliveryDays(p: PricingSettings): number[] {
+  const mask = Number.isFinite(p.deliveryDaysMask) ? p.deliveryDaysMask : 42;
+  const days: number[] = [];
+  for (let d = 0; d <= 6; d++) if (mask & (1 << d)) days.push(d);
+  return days.length > 0 ? days : [1, 3, 5];
+}
+
+/** Fecha (YYYY-MM-DD) y hora actuales en Nueva York. */
+export function nowInEasternTime(from: Date = new Date()): { date: string; hour: number } {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hour12: false,
+  }).formatToParts(from);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "00";
+  return {
+    date: `${get("year")}-${get("month")}-${get("day")}`,
+    hour: Number(get("hour")) % 24,
+  };
+}
+
+function addDays(dateStr: string, n: number): string {
+  const d = new Date(`${dateStr}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+function weekdayOf(dateStr: string): number {
+  return new Date(`${dateStr}T12:00:00Z`).getUTCDay();
+}
+
+/**
+ * Próximas fechas de entrega: solo los días permitidos y respetando la hora
+ * límite de corte del día anterior (hora de Nueva York).
+ */
+export function availableDeliveryDates(
+  p: PricingSettings,
+  count = 4,
+  from: Date = new Date(),
+): string[] {
+  const days = allowedDeliveryDays(p);
+  const { date, hour } = nowInEasternTime(from);
+  // Si ya pasó la hora de corte, mañana deja de estar disponible.
+  const firstOffset = hour >= p.cutoffHourEt ? 2 : 1;
+  const out: string[] = [];
+  for (let i = firstOffset; i <= firstOffset + 21 && out.length < count; i++) {
+    const d = addDays(date, i);
+    if (days.includes(weekdayOf(d))) out.push(d);
+  }
+  return out;
+}
+
+/** ¿La fecha elegida sigue siendo válida en este momento? */
+export function isDeliveryDateAllowed(
+  dateStr: string,
+  p: PricingSettings,
+  from: Date = new Date(),
+): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
+  if (!allowedDeliveryDays(p).includes(weekdayOf(dateStr))) return false;
+  const { date, hour } = nowInEasternTime(from);
+  const earliest = addDays(date, hour >= p.cutoffHourEt ? 2 : 1);
+  return dateStr >= earliest;
+}
 
 /** Convierte las filas key/value de la base en un objeto de ajustes. */
 export function pricingFromRows(
