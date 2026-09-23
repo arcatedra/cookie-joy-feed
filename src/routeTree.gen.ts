@@ -73,6 +73,7 @@ import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
 import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authenticated/negocios.panel'
+import { Route as AuthenticatedNegociosPedidosRouteImport } from './routes/_authenticated/negocios.pedidos'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
@@ -84,6 +85,7 @@ import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedAdminRutasPublicarRouteImport } from './routes/_authenticated/admin.rutas.publicar'
+import { Route as AuthenticatedMisPedidosTiendaIdRouteImport } from './routes/_authenticated/mis-pedidos.tienda.$id'
 import { Route as AuthenticatedPedidoIdCalificarRouteImport } from './routes/_authenticated/pedido.$id.calificar'
 import { Route as AuthenticatedPedidoIdSeguimientoRouteImport } from './routes/_authenticated/pedido.$id.seguimiento'
 import { Route as ApiPublicHooksBackupCsvRouteImport } from './routes/api/public/hooks/backup-csv'
@@ -440,6 +442,12 @@ const AuthenticatedNegociosPanelRoute =
     path: '/negocios/panel',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedNegociosPedidosRoute =
+  AuthenticatedNegociosPedidosRouteImport.update({
+    id: '/negocios/pedidos',
+    path: '/negocios/pedidos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedRepartidorIndexRoute =
   AuthenticatedRepartidorIndexRouteImport.update({
     id: '/',
@@ -501,6 +509,12 @@ const AuthenticatedAdminRutasPublicarRoute =
     id: '/admin/rutas/publicar',
     path: '/admin/rutas/publicar',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMisPedidosTiendaIdRoute =
+  AuthenticatedMisPedidosTiendaIdRouteImport.update({
+    id: '/tienda/$id',
+    path: '/tienda/$id',
+    getParentRoute: () => AuthenticatedMisPedidosRoute,
   } as any)
 const AuthenticatedPedidoIdCalificarRoute =
   AuthenticatedPedidoIdCalificarRouteImport.update({
@@ -646,7 +660,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/mi-cuenta': typeof AuthenticatedMiCuentaRoute
-  '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
+  '/mis-pedidos': typeof AuthenticatedMisPedidosRouteWithChildren
   '/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/empaque': typeof AdminEmpaqueRoute
@@ -679,6 +693,7 @@ export interface FileRoutesByFullPath {
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -691,6 +706,7 @@ export interface FileRoutesByFullPath {
   '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
+  '/mis-pedidos/tienda/$id': typeof AuthenticatedMisPedidosTiendaIdRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -740,7 +756,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/mi-cuenta': typeof AuthenticatedMiCuentaRoute
-  '/mis-pedidos': typeof AuthenticatedMisPedidosRoute
+  '/mis-pedidos': typeof AuthenticatedMisPedidosRouteWithChildren
   '/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/empaque': typeof AdminEmpaqueRoute
   '/admin/shipping': typeof AdminShippingRoute
@@ -772,6 +788,7 @@ export interface FileRoutesByTo {
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -784,6 +801,7 @@ export interface FileRoutesByTo {
   '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
   '/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
+  '/mis-pedidos/tienda/$id': typeof AuthenticatedMisPedidosTiendaIdRoute
   '/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -836,7 +854,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/_authenticated/mi-cuenta': typeof AuthenticatedMiCuentaRoute
-  '/_authenticated/mis-pedidos': typeof AuthenticatedMisPedidosRoute
+  '/_authenticated/mis-pedidos': typeof AuthenticatedMisPedidosRouteWithChildren
   '/_authenticated/repartidor': typeof AuthenticatedRepartidorRouteWithChildren
   '/_authenticated/suggestions': typeof AuthenticatedSuggestionsRoute
   '/admin/empaque': typeof AdminEmpaqueRoute
@@ -869,6 +887,7 @@ export interface FileRoutesById {
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
   '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
+  '/_authenticated/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
   '/_authenticated/repartidor/ganancias': typeof AuthenticatedRepartidorGananciasRoute
@@ -881,6 +900,7 @@ export interface FileRoutesById {
   '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
   '/_authenticated/admin/rutas/publicar': typeof AuthenticatedAdminRutasPublicarRoute
+  '/_authenticated/mis-pedidos/tienda/$id': typeof AuthenticatedMisPedidosTiendaIdRoute
   '/_authenticated/pedido/$id/calificar': typeof AuthenticatedPedidoIdCalificarRoute
   '/_authenticated/pedido/$id/seguimiento': typeof AuthenticatedPedidoIdSeguimientoRoute
   '/api/public/hooks/backup-csv': typeof ApiPublicHooksBackupCsvRoute
@@ -966,6 +986,7 @@ export interface FileRouteTypes {
     | '/negocio/ofertas'
     | '/negocio/productos'
     | '/negocios/panel'
+    | '/negocios/pedidos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -978,6 +999,7 @@ export interface FileRouteTypes {
     | '/negocio/'
     | '/repartidor/'
     | '/admin/rutas/publicar'
+    | '/mis-pedidos/tienda/$id'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -1059,6 +1081,7 @@ export interface FileRouteTypes {
     | '/negocio/ofertas'
     | '/negocio/productos'
     | '/negocios/panel'
+    | '/negocios/pedidos'
     | '/repartidor/calificaciones'
     | '/repartidor/facturas'
     | '/repartidor/ganancias'
@@ -1071,6 +1094,7 @@ export interface FileRouteTypes {
     | '/negocio'
     | '/repartidor'
     | '/admin/rutas/publicar'
+    | '/mis-pedidos/tienda/$id'
     | '/pedido/$id/calificar'
     | '/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -1155,6 +1179,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
     | '/_authenticated/negocios/panel'
+    | '/_authenticated/negocios/pedidos'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/facturas'
     | '/_authenticated/repartidor/ganancias'
@@ -1167,6 +1192,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
     | '/_authenticated/admin/rutas/publicar'
+    | '/_authenticated/mis-pedidos/tienda/$id'
     | '/_authenticated/pedido/$id/calificar'
     | '/_authenticated/pedido/$id/seguimiento'
     | '/api/public/hooks/backup-csv'
@@ -1697,6 +1723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNegociosPanelRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/negocios/pedidos': {
+      id: '/_authenticated/negocios/pedidos'
+      path: '/negocios/pedidos'
+      fullPath: '/negocios/pedidos'
+      preLoaderRoute: typeof AuthenticatedNegociosPedidosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repartidor/': {
       id: '/_authenticated/repartidor/'
       path: '/'
@@ -1773,6 +1806,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/rutas/publicar'
       preLoaderRoute: typeof AuthenticatedAdminRutasPublicarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mis-pedidos/tienda/$id': {
+      id: '/_authenticated/mis-pedidos/tienda/$id'
+      path: '/tienda/$id'
+      fullPath: '/mis-pedidos/tienda/$id'
+      preLoaderRoute: typeof AuthenticatedMisPedidosTiendaIdRouteImport
+      parentRoute: typeof AuthenticatedMisPedidosRoute
     }
     '/_authenticated/pedido/$id/calificar': {
       id: '/_authenticated/pedido/$id/calificar'
@@ -1910,6 +1950,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedMisPedidosRouteChildren {
+  AuthenticatedMisPedidosTiendaIdRoute: typeof AuthenticatedMisPedidosTiendaIdRoute
+}
+
+const AuthenticatedMisPedidosRouteChildren: AuthenticatedMisPedidosRouteChildren =
+  {
+    AuthenticatedMisPedidosTiendaIdRoute: AuthenticatedMisPedidosTiendaIdRoute,
+  }
+
+const AuthenticatedMisPedidosRouteWithChildren =
+  AuthenticatedMisPedidosRoute._addFileChildren(
+    AuthenticatedMisPedidosRouteChildren,
+  )
+
 interface AuthenticatedRepartidorRouteChildren {
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
@@ -1949,7 +2003,7 @@ const AuthenticatedRepartidorRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedMiCuentaRoute: typeof AuthenticatedMiCuentaRoute
-  AuthenticatedMisPedidosRoute: typeof AuthenticatedMisPedidosRoute
+  AuthenticatedMisPedidosRoute: typeof AuthenticatedMisPedidosRouteWithChildren
   AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
   AuthenticatedAdminCspViolationsRoute: typeof AuthenticatedAdminCspViolationsRoute
@@ -1968,6 +2022,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
   AuthenticatedNegociosPanelRoute: typeof AuthenticatedNegociosPanelRoute
+  AuthenticatedNegociosPedidosRoute: typeof AuthenticatedNegociosPedidosRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
   AuthenticatedAdminRutasPublicarRoute: typeof AuthenticatedAdminRutasPublicarRoute
   AuthenticatedPedidoIdCalificarRoute: typeof AuthenticatedPedidoIdCalificarRoute
@@ -1977,7 +2032,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedMiCuentaRoute: AuthenticatedMiCuentaRoute,
-  AuthenticatedMisPedidosRoute: AuthenticatedMisPedidosRoute,
+  AuthenticatedMisPedidosRoute: AuthenticatedMisPedidosRouteWithChildren,
   AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
   AuthenticatedAdminCspViolationsRoute: AuthenticatedAdminCspViolationsRoute,
@@ -1996,6 +2051,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
   AuthenticatedNegociosPanelRoute: AuthenticatedNegociosPanelRoute,
+  AuthenticatedNegociosPedidosRoute: AuthenticatedNegociosPedidosRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
   AuthenticatedAdminRutasPublicarRoute: AuthenticatedAdminRutasPublicarRoute,
   AuthenticatedPedidoIdCalificarRoute: AuthenticatedPedidoIdCalificarRoute,
