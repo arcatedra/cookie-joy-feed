@@ -59,6 +59,25 @@ function StoreOrdersPage() {
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["store-orders"] });
 
+  /** Pedidos agrupados por código postal (o ciudad si no hay código). */
+  const grupos = useMemo(() => {
+    const map = new Map<string, any[]>();
+    for (const o of (data ?? []) as any[]) {
+      const dir = (o.direccion_envio ?? {}) as any;
+      const zona = String(dir.zip || dir.city || "Sin zona");
+      if (!map.has(zona)) map.set(zona, []);
+      map.get(zona)!.push(o);
+    }
+    return [...map.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([zona, orders]) => ({
+        zona,
+        orders: orders.sort(
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+        ),
+      }));
+  }, [data]);
+
   const prepareM = useMutation({
     mutationFn: (id: string) => prepare({ data: { id } }),
     onSuccess: refresh,
