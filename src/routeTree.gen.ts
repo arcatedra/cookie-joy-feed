@@ -73,6 +73,7 @@ import { Route as AuthenticatedClaimDrawDateRouteImport } from './routes/_authen
 import { Route as AuthenticatedNegocioIndexRouteImport } from './routes/_authenticated/negocio.index'
 import { Route as AuthenticatedNegocioOfertasRouteImport } from './routes/_authenticated/negocio.ofertas'
 import { Route as AuthenticatedNegocioProductosRouteImport } from './routes/_authenticated/negocio.productos'
+import { Route as AuthenticatedNegociosCobrosRouteImport } from './routes/_authenticated/negocios.cobros'
 import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authenticated/negocios.panel'
 import { Route as AuthenticatedNegociosPedidosRouteImport } from './routes/_authenticated/negocios.pedidos'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
@@ -84,6 +85,7 @@ import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_aut
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
+import { Route as ApiPublicPayoutRunRouteImport } from './routes/api/public/payout-run'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedAdminRutasPublicarRouteImport } from './routes/_authenticated/admin.rutas.publicar'
 import { Route as AuthenticatedMisPedidosTiendaIdRouteImport } from './routes/_authenticated/mis-pedidos.tienda.$id'
@@ -443,6 +445,12 @@ const AuthenticatedNegocioProductosRoute =
     path: '/negocio/productos',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedNegociosCobrosRoute =
+  AuthenticatedNegociosCobrosRouteImport.update({
+    id: '/negocios/cobros',
+    path: '/negocios/cobros',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedNegociosPanelRoute =
   AuthenticatedNegociosPanelRouteImport.update({
     id: '/negocios/panel',
@@ -504,6 +512,11 @@ const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
 const ApiPublicDomainCheckRoute = ApiPublicDomainCheckRouteImport.update({
   id: '/api/public/domain-check',
   path: '/api/public/domain-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPayoutRunRoute = ApiPublicPayoutRunRouteImport.update({
+  id: '/api/public/payout-run',
+  path: '/api/public/payout-run',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
@@ -700,6 +713,7 @@ export interface FileRoutesByFullPath {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
@@ -710,6 +724,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
@@ -796,6 +811,7 @@ export interface FileRoutesByTo {
   '/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
@@ -806,6 +822,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
@@ -896,6 +913,7 @@ export interface FileRoutesById {
   '/_authenticated/claim/$drawDate': typeof AuthenticatedClaimDrawDateRoute
   '/_authenticated/negocio/ofertas': typeof AuthenticatedNegocioOfertasRoute
   '/_authenticated/negocio/productos': typeof AuthenticatedNegocioProductosRoute
+  '/_authenticated/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/_authenticated/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
@@ -906,6 +924,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
@@ -996,6 +1015,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
+    | '/negocios/cobros'
     | '/negocios/panel'
     | '/negocios/pedidos'
     | '/repartidor/calificaciones'
@@ -1006,6 +1026,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/negocio/'
     | '/repartidor/'
@@ -1092,6 +1113,7 @@ export interface FileRouteTypes {
     | '/claim/$drawDate'
     | '/negocio/ofertas'
     | '/negocio/productos'
+    | '/negocios/cobros'
     | '/negocios/panel'
     | '/negocios/pedidos'
     | '/repartidor/calificaciones'
@@ -1102,6 +1124,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/negocio'
     | '/repartidor'
@@ -1191,6 +1214,7 @@ export interface FileRouteTypes {
     | '/_authenticated/claim/$drawDate'
     | '/_authenticated/negocio/ofertas'
     | '/_authenticated/negocio/productos'
+    | '/_authenticated/negocios/cobros'
     | '/_authenticated/negocios/panel'
     | '/_authenticated/negocios/pedidos'
     | '/_authenticated/repartidor/calificaciones'
@@ -1201,6 +1225,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
@@ -1269,6 +1294,7 @@ export interface RootRouteChildren {
   TiendaSlugRoute: typeof TiendaSlugRoute
   ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
+  ApiPublicPayoutRunRoute: typeof ApiPublicPayoutRunRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
   ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
@@ -1736,6 +1762,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNegocioProductosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/negocios/cobros': {
+      id: '/_authenticated/negocios/cobros'
+      path: '/negocios/cobros'
+      fullPath: '/negocios/cobros'
+      preLoaderRoute: typeof AuthenticatedNegociosCobrosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/negocios/panel': {
       id: '/_authenticated/negocios/panel'
       path: '/negocios/panel'
@@ -1811,6 +1844,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/domain-check'
       fullPath: '/api/public/domain-check'
       preLoaderRoute: typeof ApiPublicDomainCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payout-run': {
+      id: '/api/public/payout-run'
+      path: '/api/public/payout-run'
+      fullPath: '/api/public/payout-run'
+      preLoaderRoute: typeof ApiPublicPayoutRunRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/suppression': {
@@ -2042,6 +2082,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClaimDrawDateRoute: typeof AuthenticatedClaimDrawDateRoute
   AuthenticatedNegocioOfertasRoute: typeof AuthenticatedNegocioOfertasRoute
   AuthenticatedNegocioProductosRoute: typeof AuthenticatedNegocioProductosRoute
+  AuthenticatedNegociosCobrosRoute: typeof AuthenticatedNegociosCobrosRoute
   AuthenticatedNegociosPanelRoute: typeof AuthenticatedNegociosPanelRoute
   AuthenticatedNegociosPedidosRoute: typeof AuthenticatedNegociosPedidosRoute
   AuthenticatedNegocioIndexRoute: typeof AuthenticatedNegocioIndexRoute
@@ -2072,6 +2113,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClaimDrawDateRoute: AuthenticatedClaimDrawDateRoute,
   AuthenticatedNegocioOfertasRoute: AuthenticatedNegocioOfertasRoute,
   AuthenticatedNegocioProductosRoute: AuthenticatedNegocioProductosRoute,
+  AuthenticatedNegociosCobrosRoute: AuthenticatedNegociosCobrosRoute,
   AuthenticatedNegociosPanelRoute: AuthenticatedNegociosPanelRoute,
   AuthenticatedNegociosPedidosRoute: AuthenticatedNegociosPedidosRoute,
   AuthenticatedNegocioIndexRoute: AuthenticatedNegocioIndexRoute,
@@ -2159,6 +2201,7 @@ const rootRouteChildren: RootRouteChildren = {
   TiendaSlugRoute: TiendaSlugRoute,
   ApiPublicCspReportRoute: ApiPublicCspReportRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
+  ApiPublicPayoutRunRoute: ApiPublicPayoutRunRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
   ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,

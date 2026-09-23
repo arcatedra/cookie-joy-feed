@@ -37,6 +37,8 @@ export interface PricingSettings {
   deliveryDaysMask: number;
   /** Precio por libra adicional sobre las libras incluidas (100% al repartidor). */
   weightExtraPerLbUsd: number;
+  /** Cada cuántos días se transfiere su parte a los negocios. */
+  payoutFrequencyDays: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
@@ -69,6 +71,7 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   cutoffHourEt: "cutoff_hour_et",
   deliveryDaysMask: "delivery_days_mask",
   weightExtraPerLbUsd: "weight_extra_per_lb_usd",
+  payoutFrequencyDays: "payout_frequency_days",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
@@ -101,7 +104,8 @@ export const DEFAULT_PRICING: PricingSettings = {
   cutoffHourEt: 20,
   // lunes (2) + miércoles (8) + viernes (32)
   deliveryDaysMask: 42,
-  weightExtraPerLbUsd: 0.68,
+  weightExtraPerLbUsd: 0.7,
+  payoutFrequencyDays: 1,
 };
 
 export type OrderTier = "chico" | "mediano" | "grande";
