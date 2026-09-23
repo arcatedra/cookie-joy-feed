@@ -84,6 +84,7 @@ import { Route as AuthenticatedRepartidorWalletRouteImport } from './routes/_aut
 import { Route as AdminSweepstakesWinnersRouteImport } from './routes/admin.sweepstakes.winners'
 import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
 import { Route as ApiPublicDomainCheckRouteImport } from './routes/api/public/domain-check'
+import { Route as ApiPublicPayoutRunRouteImport } from './routes/api/public/payout-run'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AuthenticatedAdminRutasPublicarRouteImport } from './routes/_authenticated/admin.rutas.publicar'
 import { Route as AuthenticatedMisPedidosTiendaIdRouteImport } from './routes/_authenticated/mis-pedidos.tienda.$id'
@@ -506,6 +507,11 @@ const ApiPublicDomainCheckRoute = ApiPublicDomainCheckRouteImport.update({
   path: '/api/public/domain-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPayoutRunRoute = ApiPublicPayoutRunRouteImport.update({
+  id: '/api/public/payout-run',
+  path: '/api/public/payout-run',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -710,6 +716,7 @@ export interface FileRoutesByFullPath {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/repartidor/': typeof AuthenticatedRepartidorIndexRoute
@@ -806,6 +813,7 @@ export interface FileRoutesByTo {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/negocio': typeof AuthenticatedNegocioIndexRoute
   '/repartidor': typeof AuthenticatedRepartidorIndexRoute
@@ -906,6 +914,7 @@ export interface FileRoutesById {
   '/admin/sweepstakes/winners': typeof AdminSweepstakesWinnersRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/domain-check': typeof ApiPublicDomainCheckRoute
+  '/api/public/payout-run': typeof ApiPublicPayoutRunRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/_authenticated/negocio/': typeof AuthenticatedNegocioIndexRoute
   '/_authenticated/repartidor/': typeof AuthenticatedRepartidorIndexRoute
@@ -1006,6 +1015,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/negocio/'
     | '/repartidor/'
@@ -1102,6 +1112,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/negocio'
     | '/repartidor'
@@ -1201,6 +1212,7 @@ export interface FileRouteTypes {
     | '/admin/sweepstakes/winners'
     | '/api/public/csp-report'
     | '/api/public/domain-check'
+    | '/api/public/payout-run'
     | '/lovable/email/suppression'
     | '/_authenticated/negocio/'
     | '/_authenticated/repartidor/'
@@ -1269,6 +1281,7 @@ export interface RootRouteChildren {
   TiendaSlugRoute: typeof TiendaSlugRoute
   ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
   ApiPublicDomainCheckRoute: typeof ApiPublicDomainCheckRoute
+  ApiPublicPayoutRunRoute: typeof ApiPublicPayoutRunRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksBackupCsvRoute: typeof ApiPublicHooksBackupCsvRoute
   ApiPublicHooksBackupPruneRoute: typeof ApiPublicHooksBackupPruneRoute
@@ -1813,6 +1826,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDomainCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payout-run': {
+      id: '/api/public/payout-run'
+      path: '/api/public/payout-run'
+      fullPath: '/api/public/payout-run'
+      preLoaderRoute: typeof ApiPublicPayoutRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -2159,6 +2179,7 @@ const rootRouteChildren: RootRouteChildren = {
   TiendaSlugRoute: TiendaSlugRoute,
   ApiPublicCspReportRoute: ApiPublicCspReportRoute,
   ApiPublicDomainCheckRoute: ApiPublicDomainCheckRoute,
+  ApiPublicPayoutRunRoute: ApiPublicPayoutRunRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksBackupCsvRoute: ApiPublicHooksBackupCsvRoute,
   ApiPublicHooksBackupPruneRoute: ApiPublicHooksBackupPruneRoute,
