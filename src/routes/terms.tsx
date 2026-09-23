@@ -108,12 +108,19 @@ function TermsPage() {
           </>
         ) : (
           <>
-            <h3>{renumber(t("terms.s6Title"), 1)}</h3>
+            {model.map((s, i) => (
+              <div key={i}>
+                <h3>{s.title}</h3>
+                <p dangerouslySetInnerHTML={{ __html: s.body }} />
+              </div>
+            ))}
+            <h3>{renumber(t("terms.s6Title"), model.length + 1)}</h3>
             <p>{t("terms.s6Body")}</p>
-            <h3>{renumber(t("terms.s7Title"), 2)}</h3>
+            <h3>{renumber(t("terms.s7Title"), model.length + 2)}</h3>
             <p>{t("terms.s7Body")}</p>
           </>
         )}
+
       </section>
     </main>
   );
