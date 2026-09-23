@@ -35,14 +35,8 @@ export interface PricingSettings {
   cutoffHourEt: number;
   /** Días de entrega permitidos como máscara de bits (domingo = 1, lunes = 2, ...). */
   deliveryDaysMask: number;
-  /** Kilos incluidos en el envío antes del cargo extra. */
-  weightIncludedKg: number;
-  /** Precio por kilo adicional (100% para el repartidor). */
-  weightExtraPerKgUsd: number;
-  /** Peso máximo permitido por pedido (kg). */
-  weightMaxKg: number;
-  /** Peso por defecto de un producto (kg). */
-  defaultProductWeightKg: number;
+  /** Precio por libra adicional sobre las libras incluidas (100% al repartidor). */
+  weightExtraPerLbUsd: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
@@ -74,10 +68,7 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   tierLargeCompanyUsd: "tier_large_company_usd",
   cutoffHourEt: "cutoff_hour_et",
   deliveryDaysMask: "delivery_days_mask",
-  weightIncludedKg: "weight_included_kg",
-  weightExtraPerKgUsd: "weight_extra_per_kg_usd",
-  weightMaxKg: "weight_max_kg",
-  defaultProductWeightKg: "default_product_weight_kg",
+  weightExtraPerLbUsd: "weight_extra_per_lb_usd",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
@@ -110,10 +101,7 @@ export const DEFAULT_PRICING: PricingSettings = {
   cutoffHourEt: 20,
   // lunes (2) + miércoles (8) + viernes (32)
   deliveryDaysMask: 42,
-  weightIncludedKg: 20,
-  weightExtraPerKgUsd: 1.5,
-  weightMaxKg: 55,
-  defaultProductWeightKg: 0.5,
+  weightExtraPerLbUsd: 0.68,
 };
 
 export type OrderTier = "chico" | "mediano" | "grande";
@@ -242,11 +230,13 @@ export function serviceFeeCents(subtotalCents: number, p: PricingSettings): numb
 }
 
 /** Cargo extra por peso según los tramos configurados. */
+/**
+ * Cargo extra por peso: precio configurable por cada libra sobre las libras
+ * incluidas. Va 100% al repartidor.
+ */
 export function weightFeeCents(totalLb: number, p: PricingSettings): number {
-  if (totalLb <= p.weightIncludedLb) return 0;
-  if (totalLb <= p.weightTier2MaxLb) return Math.round(p.weightTier2FeeUsd * 100);
-  if (totalLb <= p.weightTier3MaxLb) return Math.round(p.weightTier3FeeUsd * 100);
-  return Math.round(p.weightTier3FeeUsd * 100);
+  const extra = Math.max(0, totalLb - p.weightIncludedLb);
+  return Math.round(extra * p.weightExtraPerLbUsd * 100);
 }
 
 export interface WeightStatus {
@@ -278,29 +268,6 @@ export function driverPayUsd(
   const weightShare = (input.weightFeeUsd * p.driverWeightSharePct) / 100;
   const tipShare = (input.tipUsd * p.driverTipSharePct) / 100;
   return Math.round((base + weightShare + tipShare) * 100) / 100;
-}
-
-/** Peso total del carrito en kilos. */
-export function cartWeightKg(
-  items: Array<{ pesoKg?: number | null; qty: number }>,
-  p: PricingSettings,
-): number {
-  const kg = items.reduce(
-    (s, i) =>
-      s +
-      (Number(i.pesoKg ?? p.defaultProductWeightKg) || p.defaultProductWeightKg) * i.qty,
-    0,
-  );
-  return Math.round(kg * 100) / 100;
-}
-
-/**
- * Cargo extra por kilos: $1.50 (configurable) por cada kilo sobre los 20 kg
- * incluidos. Va 100% al repartidor.
- */
-export function weightFeeKgCents(totalKg: number, p: PricingSettings): number {
-  const extra = Math.max(0, totalKg - p.weightIncludedKg);
-  return Math.round(extra * p.weightExtraPerKgUsd * 100);
 }
 
 /** Peso total del carrito en libras. */
