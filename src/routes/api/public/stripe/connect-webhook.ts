@@ -182,14 +182,28 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
                 onboardingStatus = "pendiente";
               }
 
-              await supabaseAdmin
+              const enabled = payoutsEnabled && chargesEnabled;
+              const appStatus = enabled ? "complete" : detailsSubmitted ? "pending" : "pending";
+              void onboardingStatus;
+              const admin = supabaseAdmin as any;
+              const { data: drvRows } = await admin
                 .from("drivers")
-                .update({
-                  stripe_payouts_enabled: payoutsEnabled && chargesEnabled,
-                  stripe_onboarding_status: onboardingStatus,
-                  stripe_updated_at: new Date().toISOString(),
-                })
-                .eq("stripe_account_id", acctId);
+                .update({ stripe_payouts_enabled: enabled, stripe_onboarding_status: appStatus })
+                .eq("stripe_account_id", acctId)
+                .select("id");
+              const { data: bizRows } = await admin
+                .from("businesses")
+                .update({ stripe_payouts_enabled: enabled, stripe_onboarding_status: appStatus })
+                .eq("stripe_account_id", acctId)
+                .select("id");
+              if (enabled) {
+                const { adminDb, flushDriverPending, flushBusinessPending } = await import(
+                  "@/lib/payouts.server"
+                );
+                const db = adminDb();
+                for (const d of drvRows ?? []) await flushDriverPending(d.id, db);
+                for (const b of bizRows ?? []) await flushBusinessPending(b.id, db);
+              }
               break;
             }
 

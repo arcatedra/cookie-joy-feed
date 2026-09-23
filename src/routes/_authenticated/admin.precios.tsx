@@ -51,7 +51,6 @@ const LABELS: Record<keyof PricingSettings, string> = {
   cutoffHourEt: "Hora límite de corte (0-23, hora de NY)",
   deliveryDaysMask: "Días de entrega (no editar aquí)",
   weightExtraPerLbUsd: "Precio por libra extra ($)",
-  payoutFrequencyDays: "Pago a súpers: cada cuántos días",
   processingFeePct: "Recargo de procesamiento (%)",
 };
 
@@ -72,7 +71,6 @@ const TIER_FIELDS: (keyof PricingSettings)[] = [
   "weightMaxLb",
   "defaultProductWeightLb",
   "cutoffHourEt",
-  "payoutFrequencyDays",
   "processingFeePct",
 ];
 

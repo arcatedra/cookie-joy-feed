@@ -173,10 +173,19 @@ async function finishDelivery(orderId: string) {
   const { registerDriverPayoutForOrder } = await import("./driver-payouts.server");
   await registerDriverPayoutForOrder(orderId);
   try {
-    const { adminDb, transferDriverPayout } = await import("./payouts.server");
+    const { adminDb, transferDriverPayout, flushDriverPending } = await import("./payouts.server");
     const db = adminDb();
-    const { data: p } = await db.from("driver_payouts").select("id").eq("order_id", orderId).maybeSingle();
-    if (p) return await transferDriverPayout(p.id, db);
+    const { data: p } = await db
+      .from("driver_payouts")
+      .select("id, driver_id")
+      .eq("order_id", orderId)
+      .maybeSingle();
+    if (p) {
+      const res = await transferDriverPayout(p.id, db);
+      // Reintenta también lo pendiente o fallido de este repartidor.
+      await flushDriverPending(p.driver_id, db);
+      return res;
+    }
   } catch (e) {
     console.error("[store-delivery] transferencia inmediata falló", orderId, e);
   }
