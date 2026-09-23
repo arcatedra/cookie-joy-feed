@@ -1,9 +1,24 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Search, Store } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { Clock, Loader2, Minus, Plus, Search, Store } from "lucide-react";
 import { getPublicStore } from "@/lib/store-public.functions";
 import { isStoreOpen, todayHoursLabel } from "@/lib/store";
+import { getPricingConfig } from "@/lib/pricing.functions";
+import { getMyCredit } from "@/lib/wallet-credits.functions";
+import { getMyCliente } from "@/lib/clientes.functions";
+import { createStoreCheckout } from "@/lib/store-checkout.functions";
+import {
+  cartWeightLb,
+  nextDatesForDays,
+  serviceFeeCents,
+  weightFeeCents,
+  DEFAULT_PRICING,
+} from "@/lib/pricing";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
