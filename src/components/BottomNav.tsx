@@ -39,7 +39,6 @@ export function BottomNav() {
               </Link>
             );
           }
-          const isSubscribe = key === "subscribe";
           return (
             <Link
               key={to}
