@@ -50,10 +50,10 @@ const LABELS: Record<keyof PricingSettings, string> = {
   tierLargeCompanyUsd: "Grande: para la empresa ($)",
   cutoffHourEt: "Hora límite de corte (0-23, hora de NY)",
   deliveryDaysMask: "Días de entrega (no editar aquí)",
-  weightIncludedKg: "Kilos incluidos (sin cargo extra)",
-  weightExtraPerKgUsd: "Precio por kilo extra ($)",
-  weightMaxKg: "Peso máximo por pedido (kg)",
-  defaultProductWeightKg: "Peso por defecto de un producto (kg)",
+  weightIncludedLb: "Kilos incluidos (sin cargo extra)",
+  weightExtraPerLbUsd: "Precio por kilo extra ($)",
+  weightMaxLb: "Peso máximo por pedido (kg)",
+  defaultProductWeightLb: "Peso por defecto de un producto (kg)",
 };
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
@@ -68,10 +68,10 @@ const TIER_FIELDS: (keyof PricingSettings)[] = [
   "tierLargeFeeUsd",
   "tierLargeDriverUsd",
   "tierLargeCompanyUsd",
-  "weightIncludedKg",
-  "weightExtraPerKgUsd",
-  "weightMaxKg",
-  "defaultProductWeightKg",
+  "weightIncludedLb",
+  "weightExtraPerLbUsd",
+  "weightMaxLb",
+  "defaultProductWeightLb",
   "cutoffHourEt",
 ];
 

@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { pricingFromRows, tierForSubtotal, weightFeeKgCents } from "./pricing";
+import { pricingFromRows, tierForSubtotal, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -147,33 +147,33 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     if (productIds.length > 0) {
       const { data: prods } = await db
         .from("store_products")
-        .select("id, peso_kg")
+        .select("id, peso_lb")
         .in("id", productIds);
       for (const p of prods ?? []) {
-        weightById.set(p.id, Number(p.peso_kg ?? pricing.defaultProductWeightKg));
+        weightById.set(p.id, Number(p.peso_lb ?? pricing.defaultProductWeightLb));
       }
     }
 
     const realById = new Map(data.items.map((i) => [i.itemId, i.cantidadReal]));
     let realSubtotalCents = 0;
-    let realKg = 0;
+    let realLb = 0;
     let realItemCount = 0;
     for (const it of items ?? []) {
       const real = realById.has(it.id) ? Number(realById.get(it.id)) : Number(it.cantidad);
       realSubtotalCents += Math.round(Number(it.precio_unitario) * 100) * real;
       realItemCount += real;
-      realKg +=
-        (weightById.get(it.product_id) ?? pricing.defaultProductWeightKg) * real;
+      realLb +=
+        (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
       if (realById.has(it.id) && real !== Number(it.cantidad_real)) {
         await db.from("store_order_items").update({ cantidad_real: real }).eq("id", it.id);
       }
     }
-    realKg = Math.round(realKg * 100) / 100;
+    realLb = Math.round(realLb * 100) / 100;
 
     const tier = tierForSubtotal(realSubtotalCents, pricing);
     const shippingCents = tier.feeCents;
     const serviceCents = 0;
-    const weightCents = weightFeeKgCents(realKg, pricing);
+    const weightCents = weightFeeCents(realLb, pricing);
     const tipCents = Math.round(Number(order.propina ?? 0) * 100);
     const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
     const realTotalCents = Math.max(
@@ -236,7 +236,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         envio_empresa: tier.companyCents / 100,
         cargo_peso: weightCents / 100,
         cargo_peso_repartidor: weightCents / 100,
-        peso_total_kg: realKg,
+        peso_total_lb: realLb,
         capturado_en: new Date().toISOString(),
         captura_error: null,
       })

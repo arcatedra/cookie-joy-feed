@@ -12,11 +12,11 @@ import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
-  cartWeightKg,
+  cartWeightLb,
   isDeliveryDateAllowed,
   pricingFromRows,
   tierForSubtotal,
-  weightFeeKgCents,
+  weightFeeCents,
 } from "./pricing";
 
 interface StripeSession {
@@ -85,7 +85,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const ids = [...new Set(data.items.map((i) => i.productId))];
     const { data: rows, error: prodErr } = await db
       .from("store_products")
-      .select("id, nombre, precio, unidad, disponible, business_id, peso_kg")
+      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb")
       .in("id", ids)
       .eq("business_id", data.businessId);
     if (prodErr) throw new Error("No se pudieron verificar los precios.");
@@ -105,7 +105,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         name: String(p.nombre),
         unit: String(p.unidad ?? "unidad"),
         priceCents: Math.round(Number(p.precio) * 100),
-        pesoKg: Number(p.peso_kg ?? pricing.defaultProductWeightKg),
+        pesoLb: Number(p.peso_lb ?? pricing.defaultProductWeightLb),
         qty: it.qty,
       };
     });
@@ -113,10 +113,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const subtotalCents = priced.reduce((s, it) => s + it.priceCents * it.qty, 0);
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
 
-    const totalKg = cartWeightKg(priced, pricing);
-    if (totalKg > pricing.weightMaxKg) {
+    const totalLb = cartWeightLb(priced, pricing);
+    if (totalLb > pricing.weightMaxLb) {
       throw new Error(
-        `Máximo ${pricing.weightMaxKg} kg por pedido. Divide tu compra en 2 pedidos.`,
+        `Máximo ${pricing.weightMaxLb} kg por pedido. Divide tu compra en 2 pedidos.`,
       );
     }
     if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing)) {
@@ -124,7 +124,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     }
     const tier = tierForSubtotal(subtotalCents, pricing);
     const serviceCents = 0;
-    const weightCents = weightFeeKgCents(totalKg, pricing);
+    const weightCents = weightFeeCents(totalLb, pricing);
     const shippingCents = tier.feeCents;
     const tipCents = Math.round((data.propina ?? 0) * 100);
     const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
@@ -172,7 +172,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         propina: tipCents / 100,
         cargo_peso: weightCents / 100,
         cargo_peso_repartidor: weightCents / 100,
-        peso_total_kg: totalKg,
+        peso_total_lb: totalLb,
         fecha_entrega: data.fechaEntrega ?? null,
         credito_aplicado: creditCents / 100,
         total_estimado: totalCents / 100,
@@ -317,7 +317,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       tramo: tier.tier,
       propina: tipCents / 100,
       cargoPeso: weightCents / 100,
-      pesoTotalKg: totalKg,
+      pesoTotalLb: totalLb,
       montoReservado: authorizedCents / 100,
     };
   });
