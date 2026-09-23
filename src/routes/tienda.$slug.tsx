@@ -269,6 +269,7 @@ function StoreCartBar({
   });
 
   const pricing = config?.pricing ?? DEFAULT_PRICING;
+  const deliveryZones = (config as any)?.deliveryZones as import("@/lib/pricing").DeliveryZone[] | undefined;
 
   const lines = useMemo(
     () =>
