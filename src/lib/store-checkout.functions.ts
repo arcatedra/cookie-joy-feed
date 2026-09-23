@@ -267,13 +267,25 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
-    await db
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any)
       .from("store_orders")
       .update({
         stripe_checkout_session_id: session.id,
         monto_autorizado: authorizedCents / 100,
       })
       .eq("id", order.id);
+
+    // Descuenta el saldo usado (movimiento negativo).
+    if (creditCents > 0) {
+      await (supabaseAdmin as any).from("wallet_credits").insert({
+        user_id: userId,
+        amount_usd: -creditCents / 100,
+        reason: "uso_en_pedido",
+        order_id: order.id,
+      });
+    }
+
 
     return {
       orderId: order.id as string,
