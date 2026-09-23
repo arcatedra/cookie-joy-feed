@@ -294,7 +294,7 @@ function StoreCartBar({
   const tier = tierForSubtotal(subtotalCents, pricing);
   const tipCents = Math.max(0, Math.round(propina * 100));
   const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
-  // El cliente ve un solo precio de entrega: tramo + kilos extra.
+  // El cliente ve un solo precio de entrega: tramo + libras extra.
   const shippingCents = tier.feeCents + weightCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + tipCents;
