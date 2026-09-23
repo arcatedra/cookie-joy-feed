@@ -12,10 +12,10 @@ import { getMyCredit } from "@/lib/wallet-credits.functions";
 import { getMyCliente } from "@/lib/clientes.functions";
 import { createStoreCheckout } from "@/lib/store-checkout.functions";
 import {
-  cartWeightLb,
+  cartWeightKg,
   availableDeliveryDates,
   tierForSubtotal,
-  weightFeeCents,
+  weightFeeKgCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
@@ -283,15 +283,19 @@ function StoreCartBar({
     (s, l) => s + Math.round(Number(l.p.precio) * 100) * l.qty,
     0,
   );
-  const totalLb = cartWeightLb(
-    lines.map((l) => ({ pesoLb: Number(l.p.peso_lb ?? pricing.defaultProductWeightLb), qty: l.qty })),
+  const totalKg = cartWeightKg(
+    lines.map((l) => ({
+      pesoKg: Number((l.p as any).peso_kg ?? pricing.defaultProductWeightKg),
+      qty: l.qty,
+    })),
     pricing,
   );
-  const overLimit = totalLb > pricing.weightMaxLb;
+  const overLimit = totalKg > pricing.weightMaxKg;
   const tier = tierForSubtotal(subtotalCents, pricing);
-  const shippingCents = tier.feeCents;
   const tipCents = Math.max(0, Math.round(propina * 100));
-  const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
+  const weightCents = overLimit ? 0 : weightFeeKgCents(totalKg, pricing);
+  // El cliente ve un solo precio de entrega: tramo + kilos extra.
+  const shippingCents = tier.feeCents + weightCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
   const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
