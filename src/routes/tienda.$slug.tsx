@@ -173,7 +173,41 @@ function StorePage() {
                     <div className="text-xs text-muted-foreground">
                       ${Number(p.precio).toFixed(2)} / {p.unidad}
                     </div>
+                    {p.disponible && (
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        {cart[p.id] ? (
+                          <div className="flex w-full items-center justify-between rounded-full bg-[#1e3a5f] px-2 py-1 text-white">
+                            <button
+                              type="button"
+                              aria-label="Quitar uno"
+                              onClick={() => addToCart(p.id, -1)}
+                              className="grid h-7 w-7 place-items-center"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </button>
+                            <span className="text-sm font-bold">{cart[p.id]}</span>
+                            <button
+                              type="button"
+                              aria-label="Agregar uno"
+                              onClick={() => addToCart(p.id, 1)}
+                              className="grid h-7 w-7 place-items-center"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => addToCart(p.id, 1)}
+                            className="w-full rounded-full bg-[#1e3a5f] py-1.5 text-xs font-semibold text-white"
+                          >
+                            Agregar
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </li>
+
                 ))}
               </ul>
             </section>
