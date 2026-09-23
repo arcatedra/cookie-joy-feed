@@ -272,6 +272,9 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
     // Bono de referido: primera compra entregada del invitado.
     const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
     await grantReferralRewardForOrder(data.id);
+    // Pago del repartidor: su parte del tramo + peso + 100% de la propina.
+    const { registerDriverPayoutForOrder } = await import("./driver-payouts.server");
+    await registerDriverPayoutForOrder(data.id);
     return { ok: true };
   });
 
