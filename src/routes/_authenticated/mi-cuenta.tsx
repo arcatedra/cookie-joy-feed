@@ -160,22 +160,16 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
   );
 }
 
-function estadoLabel(estado: string): string {
-  switch (estado) {
-    case "activa": return "Activa";
-    case "pausada": return "Pausada";
-    case "cancelada": return "Cancelada";
-    case "vencida": return "Vencida (pago pendiente)";
-    default: return estado || "Sin suscripción";
+function movimientoLabel(reason: string): string {
+  switch (reason) {
+    case "referido":
+      return "Bono por referido";
+    case "uso_en_pedido":
+      return "Usado en un pedido";
+    case "devolucion_saldo":
+      return "Saldo devuelto";
+    default:
+      return reason;
   }
 }
 
-function estadoClass(estado: string): string {
-  switch (estado) {
-    case "activa": return "text-emerald-600";
-    case "pausada": return "text-amber-600";
-    case "cancelada": return "text-muted-foreground";
-    case "vencida": return "text-red-600";
-    default: return "";
-  }
-}
