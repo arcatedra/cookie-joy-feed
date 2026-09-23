@@ -227,6 +227,9 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         monto_capturado: captureCents / 100,
         comision_final: commissionFinal,
         ajuste_pendiente: pendingAdjustmentCents / 100,
+        cargo_servicio: serviceCents / 100,
+        cargo_peso: weightCents / 100,
+        peso_total_lb: realLb,
         capturado_en: new Date().toISOString(),
         captura_error: null,
       })
