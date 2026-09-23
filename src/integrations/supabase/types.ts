@@ -1140,6 +1140,8 @@ export type Database = {
           created_at: string
           credito_aplicado: number
           direccion_envio: Json
+          envio_empresa: number
+          envio_repartidor: number
           estado: string
           fecha_entrega: string | null
           id: string
@@ -1149,10 +1151,12 @@ export type Database = {
           notas: string | null
           numero_pedido: string
           peso_total_lb: number
+          propina: number
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
           total_estimado: number
+          tramo: string
           updated_at: string
         }
         Insert: {
@@ -1172,6 +1176,8 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          envio_empresa?: number
+          envio_repartidor?: number
           estado?: string
           fecha_entrega?: string | null
           id?: string
@@ -1181,10 +1187,12 @@ export type Database = {
           notas?: string | null
           numero_pedido?: string
           peso_total_lb?: number
+          propina?: number
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           total_estimado?: number
+          tramo?: string
           updated_at?: string
         }
         Update: {
@@ -1204,6 +1212,8 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          envio_empresa?: number
+          envio_repartidor?: number
           estado?: string
           fecha_entrega?: string | null
           id?: string
@@ -1213,10 +1223,12 @@ export type Database = {
           notas?: string | null
           numero_pedido?: string
           peso_total_lb?: number
+          propina?: number
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           total_estimado?: number
+          tramo?: string
           updated_at?: string
         }
         Relationships: [
