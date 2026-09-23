@@ -279,7 +279,7 @@ function MyZones({ onSaved }: { onSaved: () => void }) {
                 key={z.id}
                 type="button"
                 aria-pressed={on}
-                onClick={() => setSel(on ? current.filter((x) => x !== z.id) : [...current, z.id])}
+                onClick={() => setSel(on ? current.filter((x: string) => x !== z.id) : [...current, z.id])}
                 className={`min-h-10 rounded-full border px-4 text-sm ${on ? "border-primary bg-primary text-primary-foreground" : "bg-background"}`}
               >
                 {z.name}
