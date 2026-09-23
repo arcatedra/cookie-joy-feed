@@ -183,7 +183,7 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
               }
 
               const enabled = payoutsEnabled && chargesEnabled;
-              const appStatus = enabled ? "complete" : detailsSubmitted ? "pending" : "pending";
+              const appStatus = enabled ? "complete" : "pending";
               void onboardingStatus;
               const admin = supabaseAdmin as any;
               const { data: drvRows } = await admin

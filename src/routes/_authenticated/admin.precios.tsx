@@ -190,9 +190,16 @@ function PreciosPage() {
           </div>
         </section>
 
+        <p className="mt-6 rounded-xl border border-border bg-card p-4 text-sm">
+          <span className="font-medium">Pago a súpers:</span> inmediato al cobrar el pedido.
+          Lo pendiente se envía solo cuando la tienda o el repartidor conecta su cuenta.
+        </p>
+
         <section className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
           {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[])
-            .filter((f) => f !== "deliveryDaysMask" && !TIER_FIELDS.includes(f))
+            .filter(
+              (f) => f !== "deliveryDaysMask" && f !== "payoutFrequencyDays" && !TIER_FIELDS.includes(f),
+            )
             .map((field) => (
             <label key={field} className="block text-sm">
               <span className="mb-1 block text-xs text-muted-foreground">{LABELS[field]}</span>
