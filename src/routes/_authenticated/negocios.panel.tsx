@@ -280,7 +280,14 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
             </Link>
           </p>
         </div>
+        <Link
+          to="/negocios/cobros"
+          className="rounded-lg border border-border px-4 py-2 text-sm font-bold"
+        >
+          {t("storePanel.payouts")}
+        </Link>
       </div>
+
 
       <div className="mb-6 flex gap-2 overflow-x-auto">
         {tabs.map((tb) => (
