@@ -262,13 +262,18 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const db = (context as any).supabase;
     const businessId = await myBusinessId(db, (context as any).userId);
-    const { error } = await db
+    const { data: updated, error } = await db
       .from("store_orders")
       .update({ estado: "entregado" })
       .eq("id", data.id)
       .eq("business_id", businessId)
-      .eq("estado", "listo");
+      .eq("estado", "listo")
+      .select("id");
     if (error) throw error;
+    if (!updated || updated.length === 0) {
+      throw new Error("Este pedido no está listo para marcarse como entregado.");
+    }
+
     // Bono de referido: primera compra entregada del invitado.
     const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
     await grantReferralRewardForOrder(data.id);
@@ -325,14 +330,32 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
       .update({ estado: "cancelado" })
       .eq("id", order.id);
 
-    // Devuelve el saldo que se había aplicado al pedido.
+    // Devuelve el saldo solo si realmente se llegó a descontar (pago confirmado)
+    // y si no se devolvió antes.
     if (Number(order.credito_aplicado ?? 0) > 0) {
-      await (supabaseAdmin as any).from("wallet_credits").insert({
-        user_id: order.cliente_id,
-        amount_usd: Number(order.credito_aplicado),
-        reason: "devolucion_saldo",
-        order_id: order.id,
-      });
+      const [{ data: used }, { data: returned }] = await Promise.all([
+        (supabaseAdmin as any)
+          .from("wallet_credits")
+          .select("id")
+          .eq("order_id", order.id)
+          .eq("reason", "uso_en_pedido")
+          .maybeSingle(),
+        (supabaseAdmin as any)
+          .from("wallet_credits")
+          .select("id")
+          .eq("order_id", order.id)
+          .eq("reason", "devolucion_saldo")
+          .maybeSingle(),
+      ]);
+      if (used && !returned) {
+        await (supabaseAdmin as any).from("wallet_credits").insert({
+          user_id: order.cliente_id,
+          amount_usd: Number(order.credito_aplicado),
+          reason: "devolucion_saldo",
+          order_id: order.id,
+        });
+      }
     }
+
     return { ok: true };
   });

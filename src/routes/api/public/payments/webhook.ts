@@ -292,7 +292,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
           const { data: existing } = await supabaseAdmin
             .from("store_orders")
-            .select("id, estado")
+            .select("id, estado, cliente_id, credito_aplicado")
             .eq("id", storeOrderId)
             .maybeSingle();
 
@@ -322,7 +322,29 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return new Response("Store order update failed", { status: 500 });
           }
 
+          // Recién ahora se descuenta el saldo usado (movimiento negativo):
+          // si el pago nunca se completa, el cliente conserva su saldo.
+          const creditUsed = Number(existing.credito_aplicado ?? 0);
+          if (creditUsed > 0) {
+            const { data: already } = await supabaseAdmin
+              .from("wallet_credits")
+              .select("id")
+              .eq("order_id", existing.id)
+              .eq("reason", "uso_en_pedido")
+              .maybeSingle();
+            if (!already) {
+              await supabaseAdmin.from("wallet_credits").insert({
+                user_id: existing.cliente_id,
+                amount_usd: -creditUsed,
+                reason: "uso_en_pedido",
+                order_id: existing.id,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } as any);
+            }
+          }
+
           return Response.json({ ok: true, storeOrder: existing.id });
+
         }
 
 
