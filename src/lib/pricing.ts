@@ -35,6 +35,14 @@ export interface PricingSettings {
   cutoffHourEt: number;
   /** Días de entrega permitidos como máscara de bits (domingo = 1, lunes = 2, ...). */
   deliveryDaysMask: number;
+  /** Kilos incluidos en el envío antes del cargo extra. */
+  weightIncludedKg: number;
+  /** Precio por kilo adicional (100% para el repartidor). */
+  weightExtraPerKgUsd: number;
+  /** Peso máximo permitido por pedido (kg). */
+  weightMaxKg: number;
+  /** Peso por defecto de un producto (kg). */
+  defaultProductWeightKg: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
@@ -66,6 +74,10 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   tierLargeCompanyUsd: "tier_large_company_usd",
   cutoffHourEt: "cutoff_hour_et",
   deliveryDaysMask: "delivery_days_mask",
+  weightIncludedKg: "weight_included_kg",
+  weightExtraPerKgUsd: "weight_extra_per_kg_usd",
+  weightMaxKg: "weight_max_kg",
+  defaultProductWeightKg: "default_product_weight_kg",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
@@ -98,6 +110,10 @@ export const DEFAULT_PRICING: PricingSettings = {
   cutoffHourEt: 20,
   // lunes (2) + miércoles (8) + viernes (32)
   deliveryDaysMask: 42,
+  weightIncludedKg: 20,
+  weightExtraPerKgUsd: 1.5,
+  weightMaxKg: 55,
+  defaultProductWeightKg: 0.5,
 };
 
 export type OrderTier = "chico" | "mediano" | "grande";
