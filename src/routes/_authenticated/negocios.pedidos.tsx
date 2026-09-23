@@ -230,6 +230,7 @@ function StoreOrdersPage() {
           </article>
         ))}
       </div>
+      ))}
     </div>
   );
 }
