@@ -244,11 +244,6 @@ function StoreOrdersPage() {
                     : "Esperando que un repartidor lo tome"}
                 </p>
               )}
-                  className="rounded-lg border px-4 py-2 text-sm"
-                >
-                  Marcar entregado
-                </button>
-              )}
             </div>
           </article>
         ))}
