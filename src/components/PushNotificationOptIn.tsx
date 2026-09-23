@@ -72,13 +72,13 @@ export function PushNotificationOptIn() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  async function ensureSubscribed() {
+  async function ensureSubscribed(): Promise<boolean> {
     try {
       // Register the (guarded) PWA service worker. In preview/dev this is a
       // no-op and no registration will exist, so we bail before subscribing.
       await registerPwaServiceWorker();
       const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) return;
+      if (!reg) return false;
       await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {
@@ -97,8 +97,10 @@ export function PushNotificationOptIn() {
           userAgent: navigator.userAgent.slice(0, 500),
         },
       });
+      return true;
     } catch (err) {
       console.warn("ensureSubscribed failed", err);
+      return false;
     }
   }
 
@@ -111,8 +113,12 @@ export function PushNotificationOptIn() {
         setShow(false);
         return;
       }
-      await ensureSubscribed();
-      toast.success("¡Listo! Te avisaremos 5 minutos antes del sorteo.");
+      const subscribed = await ensureSubscribed();
+      if (subscribed) {
+        toast.success("¡Listo! Te avisaremos 5 minutos antes del sorteo.");
+      } else {
+        toast.info("Los avisos solo funcionan en la app publicada, no en la vista previa.");
+      }
       setShow(false);
     } catch (err) {
       console.error(err);
