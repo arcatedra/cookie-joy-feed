@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   listStoreOrders,
@@ -59,6 +59,25 @@ function StoreOrdersPage() {
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["store-orders"] });
 
+  /** Pedidos agrupados por código postal (o ciudad si no hay código). */
+  const grupos = useMemo(() => {
+    const map = new Map<string, any[]>();
+    for (const o of (data ?? []) as any[]) {
+      const dir = (o.direccion_envio ?? {}) as any;
+      const zona = String(dir.zip || dir.city || "Sin zona");
+      if (!map.has(zona)) map.set(zona, []);
+      map.get(zona)!.push(o);
+    }
+    return [...map.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([zona, orders]) => ({
+        zona,
+        orders: orders.sort(
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+        ),
+      }));
+  }, [data]);
+
   const prepareM = useMutation({
     mutationFn: (id: string) => prepare({ data: { id } }),
     onSuccess: refresh,
@@ -113,8 +132,12 @@ function StoreOrdersPage() {
         </div>
       )}
 
-      <div className="space-y-3">
-        {(data ?? []).map((o: any) => (
+      {grupos.map((g) => (
+      <div key={g.zona} className="space-y-3">
+        <h2 className="mt-4 rounded-lg bg-muted px-3 py-2 text-sm font-bold">
+          Zona {g.zona} · {g.orders.length} {g.orders.length === 1 ? "pedido" : "pedidos"}
+        </h2>
+        {g.orders.map((o: any) => (
           <article key={o.id} className="border rounded-lg p-4 bg-card space-y-3">
             <header className="flex items-start justify-between gap-3">
               <div>
@@ -226,6 +249,7 @@ function StoreOrdersPage() {
           </article>
         ))}
       </div>
+      ))}
     </div>
   );
 }

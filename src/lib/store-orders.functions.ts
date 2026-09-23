@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { pricingFromRows, serviceFeeCents, weightFeeCents } from "./pricing";
+import { pricingFromRows, tierForSubtotal, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -170,13 +170,15 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     }
     realLb = Math.round(realLb * 100) / 100;
 
-    const shippingCents = Math.round(Number(order.costo_envio ?? 0) * 100);
-    const serviceCents = serviceFeeCents(realSubtotalCents, pricing);
+    const tier = tierForSubtotal(realSubtotalCents, pricing);
+    const shippingCents = tier.feeCents;
+    const serviceCents = 0;
     const weightCents = weightFeeCents(realLb, pricing);
+    const tipCents = Math.round(Number(order.propina ?? 0) * 100);
     const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
     const realTotalCents = Math.max(
       0,
-      realSubtotalCents + shippingCents + serviceCents + weightCents - creditCents,
+      realSubtotalCents + shippingCents + weightCents + tipCents - creditCents,
     );
     const authorizedCents = Math.round(Number(order.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) throw new Error("La reserva del pago no es válida.");
@@ -228,6 +230,10 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         comision_final: commissionFinal,
         ajuste_pendiente: pendingAdjustmentCents / 100,
         cargo_servicio: serviceCents / 100,
+        costo_envio: shippingCents / 100,
+        tramo: tier.tier,
+        envio_repartidor: tier.driverCents / 100,
+        envio_empresa: tier.companyCents / 100,
         cargo_peso: weightCents / 100,
         peso_total_lb: realLb,
         capturado_en: new Date().toISOString(),

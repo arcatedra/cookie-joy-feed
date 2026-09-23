@@ -13,8 +13,8 @@ import { getMyCliente } from "@/lib/clientes.functions";
 import { createStoreCheckout } from "@/lib/store-checkout.functions";
 import {
   cartWeightLb,
-  nextDatesForDays,
-  serviceFeeCents,
+  availableDeliveryDates,
+  tierForSubtotal,
   weightFeeCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
@@ -243,6 +243,8 @@ function StoreCartBar({
   const checkout = useServerFn(createStoreCheckout);
 
   const [fecha, setFecha] = useState<string>("");
+  const [propina, setPropina] = useState(0);
+  const [propinaOtro, setPropinaOtro] = useState("");
   const [usarSaldo, setUsarSaldo] = useState(true);
   const [busy, setBusy] = useState(false);
 
@@ -286,18 +288,19 @@ function StoreCartBar({
     pricing,
   );
   const overLimit = totalLb > pricing.weightMaxLb;
-  const serviceCents = serviceFeeCents(subtotalCents, pricing);
+  const tier = tierForSubtotal(subtotalCents, pricing);
+  const shippingCents = tier.feeCents;
+  const tipCents = Math.max(0, Math.round(propina * 100));
   const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
-  const grossCents = subtotalCents + 499 + serviceCents + weightCents;
+  const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
   const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
   const totalCents = Math.max(0, grossCents - creditCents);
 
-  const zoneDays =
-    config?.zones?.find((z) => z.zone && cliente?.ciudad && z.zone === cliente.ciudad)?.days ??
-    config?.zones?.[0]?.days ??
-    [1, 5];
-  const fechas = useMemo(() => nextDatesForDays(zoneDays, 4), [zoneDays.join(",")]);
+  const fechas = useMemo(
+    () => availableDeliveryDates(pricing, 4),
+    [pricing.deliveryDaysMask, pricing.cutoffHourEt],
+  );
 
   if (lines.length === 0) return null;
 
@@ -327,6 +330,7 @@ function StoreCartBar({
             country: String(cliente!.pais ?? "US").slice(0, 2),
           },
           fechaEntrega: fecha || fechas[0],
+          propina: tipCents / 100,
           usarSaldo,
         },
       });
@@ -396,8 +400,41 @@ function StoreCartBar({
             </label>
           )}
           <span className="text-muted-foreground">
-            Servicio ${(serviceCents / 100).toFixed(2)} · Entrega $4.99
+            Pedido {tier.tier} · Entrega ${(shippingCents / 100).toFixed(2)}
+            {tipCents > 0 ? ` · Propina $${(tipCents / 100).toFixed(2)}` : ""}
           </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="text-muted-foreground">Propina para el repartidor</span>
+          {[0, 2, 3, 5].map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => {
+                setPropina(v);
+                setPropinaOtro("");
+              }}
+              className={`rounded-full px-3 py-1 font-semibold ${
+                propina === v && propinaOtro === ""
+                  ? "bg-[#1e3a5f] text-white"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {v === 0 ? "Sin propina" : `$${v}`}
+            </button>
+          ))}
+          <input
+            value={propinaOtro}
+            onChange={(e) => {
+              const v = e.target.value.replace(/[^0-9.]/g, "");
+              setPropinaOtro(v);
+              setPropina(Number(v) || 0);
+            }}
+            inputMode="decimal"
+            placeholder="Otro monto"
+            className="w-24 rounded-lg border border-border bg-background px-2 py-1"
+          />
         </div>
 
         {!hasAddress && user && (

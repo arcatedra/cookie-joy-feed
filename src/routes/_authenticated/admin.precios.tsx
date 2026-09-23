@@ -37,7 +37,35 @@ const LABELS: Record<keyof PricingSettings, string> = {
   driverWeightSharePct: "Repartidor: % del cargo por peso",
   driverTipSharePct: "Repartidor: % de la propina",
   referralBonusUsd: "Bono por referido ($)",
+  tierSmallMaxUsd: "Tramo chico: hasta ($)",
+  tierMediumMaxUsd: "Tramo mediano: hasta ($)",
+  tierSmallFeeUsd: "Chico: envío total ($)",
+  tierSmallDriverUsd: "Chico: para el repartidor ($)",
+  tierSmallCompanyUsd: "Chico: para la empresa ($)",
+  tierMediumFeeUsd: "Mediano: envío total ($)",
+  tierMediumDriverUsd: "Mediano: para el repartidor ($)",
+  tierMediumCompanyUsd: "Mediano: para la empresa ($)",
+  tierLargeFeeUsd: "Grande: envío total ($)",
+  tierLargeDriverUsd: "Grande: para el repartidor ($)",
+  tierLargeCompanyUsd: "Grande: para la empresa ($)",
+  cutoffHourEt: "Hora límite de corte (0-23, hora de NY)",
+  deliveryDaysMask: "Días de entrega (no editar aquí)",
 };
+
+const TIER_FIELDS: (keyof PricingSettings)[] = [
+  "tierSmallMaxUsd",
+  "tierMediumMaxUsd",
+  "tierSmallFeeUsd",
+  "tierSmallDriverUsd",
+  "tierSmallCompanyUsd",
+  "tierMediumFeeUsd",
+  "tierMediumDriverUsd",
+  "tierMediumCompanyUsd",
+  "tierLargeFeeUsd",
+  "tierLargeDriverUsd",
+  "tierLargeCompanyUsd",
+  "cutoffHourEt",
+];
 
 const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -109,8 +137,56 @@ function PreciosPage() {
           Estos valores se aplican a todos los pedidos nuevos del marketplace.
         </p>
 
+        <section className="mt-6 rounded-xl border border-border bg-card p-5">
+          <h2 className="text-sm font-bold">Envío por tramos y horarios</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            El pedido se clasifica solo según su subtotal y se le cobra el envío del tramo.
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            {TIER_FIELDS.map((field) => (
+              <label key={field} className="block text-sm">
+                <span className="mb-1 block text-xs text-muted-foreground">{LABELS[field]}</span>
+                <input
+                  value={form[field] ?? ""}
+                  onChange={(e) => setForm({ ...form, [field]: e.target.value })}
+                  inputMode="decimal"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                />
+              </label>
+            ))}
+          </div>
+          <div className="mt-4">
+            <p className="text-xs text-muted-foreground">Días de entrega permitidos</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {DAY_NAMES.map((name, day) => {
+                const mask = Number(form.deliveryDaysMask ?? 42) || 0;
+                const on = (mask & (1 << day)) !== 0;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() =>
+                      setForm({
+                        ...form,
+                        deliveryDaysMask: String(on ? mask & ~(1 << day) : mask | (1 << day)),
+                      })
+                    }
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      on ? "bg-[#1e3a5f] text-white" : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <section className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
-          {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[]).map((field) => (
+          {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[])
+            .filter((f) => f !== "deliveryDaysMask" && !TIER_FIELDS.includes(f))
+            .map((field) => (
             <label key={field} className="block text-sm">
               <span className="mb-1 block text-xs text-muted-foreground">{LABELS[field]}</span>
               <input
