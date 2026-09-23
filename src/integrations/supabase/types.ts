@@ -404,6 +404,101 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          driver_id: string
+          file_url: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          document_type: string
+          driver_id: string
+          file_url: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          driver_id?: string
+          file_url?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_documents_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_payouts: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          driver_id: string
+          id: string
+          last_error: string | null
+          order_id: string
+          paid_at: string | null
+          status: string
+          tier_amount_usd: number
+          tip_amount_usd: number
+          transfer_id: string | null
+          updated_at: string
+          weight_amount_usd: number
+        }
+        Insert: {
+          amount_usd?: number
+          created_at?: string
+          driver_id: string
+          id?: string
+          last_error?: string | null
+          order_id: string
+          paid_at?: string | null
+          status?: string
+          tier_amount_usd?: number
+          tip_amount_usd?: number
+          transfer_id?: string | null
+          updated_at?: string
+          weight_amount_usd?: number
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          driver_id?: string
+          id?: string
+          last_error?: string | null
+          order_id?: string
+          paid_at?: string | null
+          status?: string
+          tier_amount_usd?: number
+          tip_amount_usd?: number
+          transfer_id?: string | null
+          updated_at?: string
+          weight_amount_usd?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_payouts_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "driver_payouts_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       driver_tax_profiles: {
         Row: {
           created_at: string
@@ -431,6 +526,104 @@ export type Database = {
           tax_id_last4?: string
           tax_id_type?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      driver_vehicles: {
+        Row: {
+          created_at: string
+          driver_id: string
+          id: string
+          insurer: string | null
+          license_number: string | null
+          plate_number: string | null
+          updated_at: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          id?: string
+          insurer?: string | null
+          license_number?: string | null
+          plate_number?: string | null
+          updated_at?: string
+          vehicle_type: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          id?: string
+          insurer?: string | null
+          license_number?: string | null
+          plate_number?: string | null
+          updated_at?: string
+          vehicle_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_vehicles_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drivers: {
+        Row: {
+          address: string | null
+          application_status: string
+          city: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          profile_photo_url: string | null
+          rejection_reason: string | null
+          stripe_account_id: string | null
+          stripe_onboarding_status: string
+          stripe_payouts_enabled: boolean
+          updated_at: string
+          work_zone: string | null
+        }
+        Insert: {
+          address?: string | null
+          application_status?: string
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email: string
+          full_name: string
+          id: string
+          phone?: string | null
+          profile_photo_url?: string | null
+          rejection_reason?: string | null
+          stripe_account_id?: string | null
+          stripe_onboarding_status?: string
+          stripe_payouts_enabled?: boolean
+          updated_at?: string
+          work_zone?: string | null
+        }
+        Update: {
+          address?: string | null
+          application_status?: string
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          profile_photo_url?: string | null
+          rejection_reason?: string | null
+          stripe_account_id?: string | null
+          stripe_onboarding_status?: string
+          stripe_payouts_enabled?: boolean
+          updated_at?: string
+          work_zone?: string | null
         }
         Relationships: []
       }
