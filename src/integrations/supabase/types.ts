@@ -1357,6 +1357,7 @@ export type Database = {
           peso_total_kg: number
           peso_total_lb: number
           propina: number
+          repartidor_id: string | null
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
@@ -1398,6 +1399,7 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
+          repartidor_id?: string | null
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
@@ -1439,6 +1441,7 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
+          repartidor_id?: string | null
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
