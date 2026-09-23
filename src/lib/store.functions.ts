@@ -142,7 +142,7 @@ const productInput = z.object({
   descripcion: z.string().max(600).nullable().optional(),
   precio: z.number().min(0).max(100000),
   unidad: z.string().min(1).max(20),
-  peso_lb: z.number().min(0).max(100).default(0.5),
+  peso_lb: z.number().min(0).max(200).default(1),
   imagen_url: z.string().max(500).nullable().optional(),
   disponible: z.boolean().default(true),
   orden: z.number().int().min(0).max(9999).default(0),
