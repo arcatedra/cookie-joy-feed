@@ -198,12 +198,23 @@ function weekdayOf(dateStr: string): number {
  * Próximas fechas de entrega: solo los días permitidos y respetando la hora
  * límite de corte del día anterior (hora de Nueva York).
  */
+export type DeliveryZone = { id: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
+
+/** Días de ruta de la zona del código postal; si no tiene zona, los días generales. */
+export function daysForZip(zones: DeliveryZone[] | undefined, zip: string | null | undefined, p: PricingSettings): number[] {
+  const z5 = String(zip ?? "").trim().slice(0, 5);
+  const zone = (zones ?? []).find((z) => z.activo !== false && (z.zip_codes ?? []).includes(z5));
+  if (zone && zone.route_days?.length) return zone.route_days;
+  return allowedDeliveryDays(p);
+}
+
 export function availableDeliveryDates(
   p: PricingSettings,
   count = 4,
   from: Date = new Date(),
+  zoneDays?: number[],
 ): string[] {
-  const days = allowedDeliveryDays(p);
+  const days = zoneDays ?? allowedDeliveryDays(p);
   const { date, hour } = nowInEasternTime(from);
   // Si ya pasó la hora de corte, mañana deja de estar disponible.
   const firstOffset = hour >= p.cutoffHourEt ? 2 : 1;
@@ -220,9 +231,10 @@ export function isDeliveryDateAllowed(
   dateStr: string,
   p: PricingSettings,
   from: Date = new Date(),
+  zoneDays?: number[],
 ): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
-  if (!allowedDeliveryDays(p).includes(weekdayOf(dateStr))) return false;
+  if (!(zoneDays ?? allowedDeliveryDays(p)).includes(weekdayOf(dateStr))) return false;
   const { date, hour } = nowInEasternTime(from);
   const earliest = addDays(date, hour >= p.cutoffHourEt ? 2 : 1);
   return dateStr >= earliest;
