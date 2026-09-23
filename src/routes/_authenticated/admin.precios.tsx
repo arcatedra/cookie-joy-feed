@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-import { getPricingConfig, updatePricingConfig } from "@/lib/pricing.functions";
+import { saveDeliveryZone, deleteDeliveryZone, getPricingConfig, updatePricingConfig } from "@/lib/pricing.functions";
 import { DEFAULT_PRICING, PRICING_KEYS, type PricingSettings } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/admin/precios")({
@@ -208,35 +208,6 @@ function PreciosPage() {
           ))}
         </section>
 
-        <section className="mt-6 rounded-xl border border-border bg-card p-5">
-          <h2 className="text-sm font-bold">Días de ruta por zona</h2>
-          {zones.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">Aún no hay zonas configuradas.</p>
-          ) : (
-            <ul className="mt-3 space-y-3">
-              {zones.map((z) => (
-                <li key={z.zone} className="flex flex-wrap items-center gap-2">
-                  <span className="w-40 text-sm font-semibold">{z.zone}</span>
-                  {DAY_NAMES.map((name, day) => (
-                    <button
-                      key={day}
-                      type="button"
-                      onClick={() => toggleDay(z.zone, day)}
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        z.days.includes(day)
-                          ? "bg-[#1e3a5f] text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
         <button
           onClick={handleSave}
           disabled={saving}
@@ -244,7 +215,152 @@ function PreciosPage() {
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar cambios"}
         </button>
+
+        <ZonesEditor zones={(data as any)?.deliveryZones ?? []} onChanged={() => refetch()} />
       </main>
     </div>
+  );
+}
+
+type ZoneRow = { id?: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
+
+function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => void }) {
+  const save = useServerFn(saveDeliveryZone);
+  const remove = useServerFn(deleteDeliveryZone);
+  const [editing, setEditing] = useState<{ id?: string; name: string; zips: string; days: number[] } | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function onSave() {
+    if (!editing) return;
+    const zips = [...new Set(editing.zips.split(/[\s,;]+/).map((z) => z.trim()).filter(Boolean))];
+    const bad = zips.find((z) => !/^\d{5}$/.test(z));
+    if (bad) return toast.error(`Código postal inválido: ${bad}`);
+    setBusy(true);
+    try {
+      await save({ data: { id: editing.id, name: editing.name, zip_codes: zips, route_days: editing.days, activo: true } });
+      toast.success("Zona guardada");
+      setEditing(null);
+      onChanged();
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onDelete(id: string) {
+    if (!confirm("¿Borrar esta zona? Los repartidores que la tenían dejarán de verla.")) return;
+    try {
+      await remove({ data: { id } });
+      onChanged();
+    } catch (e) {
+      toast.error((e as Error).message);
+    }
+  }
+
+  return (
+    <section id="zonas" className="mt-8 rounded-xl border border-border bg-card p-5">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-bold">Zonas de entrega (por código postal)</h2>
+        <button
+          type="button"
+          onClick={() => setEditing({ name: "", zips: "", days: [1, 3, 5] })}
+          className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
+        >
+          + Nueva zona
+        </button>
+      </div>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Los pedidos con un código postal fuera de todas las zonas solo los ve el admin para asignarlos a mano.
+      </p>
+
+      {zones.length === 0 && !editing && (
+        <p className="mt-3 text-sm text-muted-foreground">Aún no hay zonas.</p>
+      )}
+      <ul className="mt-3 space-y-2">
+        {zones.map((z) => (
+          <li key={z.id} className="rounded-lg border border-border p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-semibold">{z.name}</p>
+              <div className="flex gap-2 text-xs">
+                <button
+                  className="underline"
+                  onClick={() =>
+                    setEditing({ id: z.id, name: z.name, zips: z.zip_codes.join(", "), days: z.route_days })
+                  }
+                >
+                  Editar
+                </button>
+                <button className="text-destructive underline" onClick={() => onDelete(z.id!)}>
+                  Borrar
+                </button>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {z.route_days.map((d) => DAY_NAMES[d]).join(", ") || "Sin días"} · {z.zip_codes.length} códigos:{" "}
+              {z.zip_codes.slice(0, 12).join(", ")}
+              {z.zip_codes.length > 12 ? "…" : ""}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      {editing && (
+        <div className="mt-4 space-y-3 rounded-lg border border-border p-4">
+          <label className="block">
+            <span className="mb-1 block text-xs text-muted-foreground">Nombre de la zona</span>
+            <input
+              value={editing.name}
+              onChange={(e) => setEditing({ ...editing, name: e.target.value })}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs text-muted-foreground">
+              Códigos postales (separados por coma o espacio)
+            </span>
+            <textarea
+              value={editing.zips}
+              onChange={(e) => setEditing({ ...editing, zips: e.target.value })}
+              rows={3}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            />
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {DAY_NAMES.map((name, day) => (
+              <button
+                key={day}
+                type="button"
+                onClick={() =>
+                  setEditing({
+                    ...editing,
+                    days: editing.days.includes(day)
+                      ? editing.days.filter((d) => d !== day)
+                      : [...editing.days, day].sort(),
+                  })
+                }
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  editing.days.includes(day) ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={onSave}
+              disabled={busy || !editing.name.trim()}
+              className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+            >
+              {busy ? "Guardando…" : "Guardar zona"}
+            </button>
+            <button onClick={() => setEditing(null)} className="rounded-md border px-4 py-2 text-sm">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
