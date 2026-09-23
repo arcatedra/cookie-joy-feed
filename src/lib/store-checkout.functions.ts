@@ -76,10 +76,14 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const ids = [...new Set(data.items.map((i) => i.productId))];
     const { data: rows, error: prodErr } = await db
       .from("store_products")
-      .select("id, nombre, precio, unidad, disponible, business_id")
+      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb")
       .in("id", ids)
       .eq("business_id", data.businessId);
     if (prodErr) throw new Error("No se pudieron verificar los precios.");
+
+    // ---- Ajustes de precio (cargo de servicio, peso) ----------------------
+    const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
+    const pricing = pricingFromRows(pricingRows);
 
     const byId = new Map<string, any>((rows ?? []).map((r: any) => [r.id, r]));
     const priced = data.items.map((it) => {
@@ -92,14 +96,33 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         name: String(p.nombre),
         unit: String(p.unidad ?? "unidad"),
         priceCents: Math.round(Number(p.precio) * 100),
+        pesoLb: Number(p.peso_lb ?? pricing.defaultProductWeightLb),
         qty: it.qty,
       };
     });
 
     const subtotalCents = priced.reduce((s, it) => s + it.priceCents * it.qty, 0);
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
+
+    const totalLb = cartWeightLb(priced, pricing);
+    if (totalLb > pricing.weightMaxLb) {
+      throw new Error(
+        `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
+      );
+    }
+    const serviceCents = serviceFeeCents(subtotalCents, pricing);
+    const weightCents = weightFeeCents(totalLb, pricing);
     const shippingCents = STORE_DELIVERY_FEE_CENTS;
-    const totalCents = subtotalCents + shippingCents;
+    const grossCents = subtotalCents + shippingCents + serviceCents + weightCents;
+
+    // ---- Saldo de referidos ------------------------------------------------
+    let creditCents = 0;
+    if (data.usarSaldo !== false) {
+      const { data: bal } = await db.rpc("get_my_credit_balance");
+      const available = Math.max(0, Math.round(Number(bal ?? 0) * 100));
+      creditCents = Math.min(available, Math.max(grossCents - 100, 0));
+    }
+    const totalCents = grossCents - creditCents;
 
     // ---- Margen de reserva (mismo ajuste configurable de siempre) --------
     let bufferPct = 15;
@@ -128,6 +151,11 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         direccion_envio: data.address,
         subtotal: subtotalCents / 100,
         costo_envio: shippingCents / 100,
+        cargo_servicio: serviceCents / 100,
+        cargo_peso: weightCents / 100,
+        peso_total_lb: totalLb,
+        fecha_entrega: data.fechaEntrega ?? null,
+        credito_aplicado: creditCents / 100,
         total_estimado: totalCents / 100,
         comision_porcentaje: commissionPct,
         comision_estimada: commissionEstimated,
@@ -139,6 +167,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       console.error("[store-checkout] no se pudo crear el pedido", orderErr);
       throw new Error("No se pudo crear el pedido. Inténtalo de nuevo.");
     }
+
 
     const { error: itemsErr } = await db.from("store_order_items").insert(
       priced.map((it) => ({
