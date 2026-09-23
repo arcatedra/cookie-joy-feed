@@ -12,10 +12,10 @@ import { getMyCredit } from "@/lib/wallet-credits.functions";
 import { getMyCliente } from "@/lib/clientes.functions";
 import { createStoreCheckout } from "@/lib/store-checkout.functions";
 import {
-  cartWeightLb,
+  cartWeightKg,
   availableDeliveryDates,
   tierForSubtotal,
-  weightFeeCents,
+  weightFeeKgCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
@@ -283,17 +283,21 @@ function StoreCartBar({
     (s, l) => s + Math.round(Number(l.p.precio) * 100) * l.qty,
     0,
   );
-  const totalLb = cartWeightLb(
-    lines.map((l) => ({ pesoLb: Number(l.p.peso_lb ?? pricing.defaultProductWeightLb), qty: l.qty })),
+  const totalKg = cartWeightKg(
+    lines.map((l) => ({
+      pesoKg: Number((l.p as any).peso_kg ?? pricing.defaultProductWeightKg),
+      qty: l.qty,
+    })),
     pricing,
   );
-  const overLimit = totalLb > pricing.weightMaxLb;
+  const overLimit = totalKg > pricing.weightMaxKg;
   const tier = tierForSubtotal(subtotalCents, pricing);
-  const shippingCents = tier.feeCents;
   const tipCents = Math.max(0, Math.round(propina * 100));
-  const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
+  const weightCents = overLimit ? 0 : weightFeeKgCents(totalKg, pricing);
+  // El cliente ve un solo precio de entrega: tramo + kilos extra.
+  const shippingCents = tier.feeCents + weightCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
-  const grossCents = subtotalCents + shippingCents + weightCents + tipCents;
+  const grossCents = subtotalCents + shippingCents + tipCents;
   const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
   const totalCents = Math.max(0, grossCents - creditCents);
 
@@ -344,7 +348,7 @@ function StoreCartBar({
     }
   }
 
-  const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
+  const pct = Math.min(100, Math.round((totalKg / Math.max(pricing.weightIncludedKg, 1)) * 100));
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-4 backdrop-blur">
@@ -352,7 +356,7 @@ function StoreCartBar({
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>
-              Tu pedido pesa {totalLb} lb de {pricing.weightIncludedLb} lb incluidas
+              Tu pedido pesa {totalKg} kg de {pricing.weightIncludedKg} kg incluidos
             </span>
             <span>{lines.length} productos</span>
           </div>
@@ -364,12 +368,7 @@ function StoreCartBar({
           </div>
           {overLimit ? (
             <p className="mt-1 text-xs font-semibold text-red-600">
-              Máximo {pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
-            </p>
-          ) : weightCents > 0 ? (
-            <p className="mt-1 text-xs text-amber-700">
-              Se agregará un cargo por peso de ${(weightCents / 100).toFixed(2)}, que se cobra
-              automáticamente al pagar.
+              Máximo {pricing.weightMaxKg} kg por pedido. Divide tu compra en 2 pedidos.
             </p>
           ) : null}
         </div>

@@ -1131,6 +1131,7 @@ export type Database = {
           captura_intentos: number
           capturado_en: string | null
           cargo_peso: number
+          cargo_peso_repartidor: number
           cargo_servicio: number
           cliente_id: string
           comision_estimada: number
@@ -1150,6 +1151,7 @@ export type Database = {
           monto_capturado: number | null
           notas: string | null
           numero_pedido: string
+          peso_total_kg: number
           peso_total_lb: number
           propina: number
           stripe_checkout_session_id: string | null
@@ -1167,6 +1169,7 @@ export type Database = {
           captura_intentos?: number
           capturado_en?: string | null
           cargo_peso?: number
+          cargo_peso_repartidor?: number
           cargo_servicio?: number
           cliente_id: string
           comision_estimada?: number
@@ -1186,6 +1189,7 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
           stripe_checkout_session_id?: string | null
@@ -1203,6 +1207,7 @@ export type Database = {
           captura_intentos?: number
           capturado_en?: string | null
           cargo_peso?: number
+          cargo_peso_repartidor?: number
           cargo_servicio?: number
           cliente_id?: string
           comision_estimada?: number
@@ -1222,6 +1227,7 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
           stripe_checkout_session_id?: string | null
@@ -1259,6 +1265,7 @@ export type Database = {
           imagen_url: string | null
           nombre: string
           orden: number
+          peso_kg: number
           peso_lb: number
           precio: number
           unidad: string
@@ -1274,6 +1281,7 @@ export type Database = {
           imagen_url?: string | null
           nombre: string
           orden?: number
+          peso_kg?: number
           peso_lb?: number
           precio?: number
           unidad?: string
@@ -1289,6 +1297,7 @@ export type Database = {
           imagen_url?: string | null
           nombre?: string
           orden?: number
+          peso_kg?: number
           peso_lb?: number
           precio?: number
           unidad?: string

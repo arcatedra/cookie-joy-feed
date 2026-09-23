@@ -214,7 +214,7 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
     descripcion: "",
     precio: "",
     unidad: "unidad",
-    peso_lb: "1",
+    peso_kg: "0.5",
     category_id: "" as string,
     imagen_url: null as string | null,
     imagenPreview: null as string | null,
@@ -239,7 +239,7 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
           descripcion: pForm.descripcion || null,
           precio,
           unidad: pForm.unidad,
-          peso_lb: Math.max(0, Number(pForm.peso_lb) || 1),
+          peso_kg: Math.max(0, Number(pForm.peso_kg) || 0.5),
           category_id: pForm.category_id || null,
           imagen_url: pForm.imagen_url,
           disponible: pForm.disponible,
@@ -486,10 +486,10 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
                 ))}
               </select>
               <input
-                value={pForm.peso_lb}
-                onChange={(e) => setPForm({ ...pForm, peso_lb: e.target.value })}
+                value={pForm.peso_kg}
+                onChange={(e) => setPForm({ ...pForm, peso_kg: e.target.value })}
                 inputMode="decimal"
-                placeholder="Peso (lb)"
+                placeholder="Peso (kg)"
                 className="rounded-lg border border-border px-3 py-2 text-sm"
               />
               <select
@@ -580,7 +580,7 @@ function ApprovedPanel({ store, onStoreSaved }: { store: any; onStoreSaved: () =
                       descripcion: p.descripcion ?? "",
                       precio: String(p.precio),
                       unidad: p.unidad,
-                      peso_lb: String(p.peso_lb ?? 1),
+                      peso_kg: String(p.peso_kg ?? 0.5),
                       category_id: p.category_id ?? "",
                       imagen_url: p.imagen_url,
                       imagenPreview: p.imagenUrl,
