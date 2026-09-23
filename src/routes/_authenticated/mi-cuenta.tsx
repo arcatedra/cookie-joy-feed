@@ -77,55 +77,32 @@ function MiCuentaPage() {
       </p>
 
       <section className="border rounded-lg p-4 bg-card">
-        <h2 className="font-semibold mb-3">Suscripción</h2>
-        {sub ? (
-          <div className="text-sm space-y-1">
-            <div>Plan: <strong>{sub.plan}</strong></div>
-            <div>
-              Estado:{" "}
-              <strong className={estadoClass(sub.estado)}>{estadoLabel(sub.estado)}</strong>
-            </div>
-            <div>Precio: ${Number(sub.precio).toFixed(2)} {sub.moneda}</div>
-            {sub.fecha_inicio && (
-              <div>
-                Activa desde:{" "}
-                <strong>{new Date(sub.fecha_inicio).toLocaleDateString()}</strong>
-              </div>
-            )}
-            {sub.fecha_renovacion && sub.estado !== "cancelada" && (
-              <div>Próxima renovación: {new Date(sub.fecha_renovacion).toLocaleDateString()}</div>
-            )}
-            {sub.fecha_cancelacion && (
-              <div>Cancelada el: {new Date(sub.fecha_cancelacion).toLocaleDateString()}</div>
-            )}
-            {sub.estado === "activa" || sub.estado === "pausada" ? (
-              <div className="pt-3">
-                <button
-                  type="button"
-                  onClick={async () => {
-                    try {
-                      const res = await openPortal();
-                      window.open(res.url, "_blank", "noopener");
-                      toast.info("Se abrió el portal de Stripe. Vuelve aquí y refresca cuando termines.");
-                      setTimeout(() => { refetchSub(); }, 4000);
-                    } catch (err) {
-                      toast.error((err as Error).message || "No se pudo abrir el portal");
-                    }
-                  }}
-                  className="rounded border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/5"
-                >
-                  Cancelar o gestionar suscripción
-                </button>
-              </div>
-            ) : null}
-          </div>
+        <h2 className="font-semibold mb-3">Mi saldo</h2>
+        <div className="text-3xl font-black text-emerald-600">
+          ${Number(credit?.balance ?? 0).toFixed(2)}
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Ganas $5 por cada amigo que recibe su primer pedido. El saldo se descuenta solo en tu
+          próxima compra.
+        </p>
+        {credit?.movements?.length ? (
+          <ul className="mt-3 divide-y text-sm">
+            {credit.movements.map((m) => (
+              <li key={m.id} className="flex justify-between py-1.5">
+                <span className="text-muted-foreground">
+                  {movimientoLabel(m.reason)} · {new Date(m.created_at).toLocaleDateString()}
+                </span>
+                <span className={Number(m.amount_usd) < 0 ? "text-red-600" : "text-emerald-600"}>
+                  {Number(m.amount_usd) < 0 ? "-" : "+"}${Math.abs(Number(m.amount_usd)).toFixed(2)}
+                </span>
+              </li>
+            ))}
+          </ul>
         ) : (
-          <div className="text-sm">
-            No tienes suscripción activa.{" "}
-            <Link to="/subscribe" className="underline">Suscribirme</Link>
-          </div>
+          <p className="mt-3 text-sm text-muted-foreground">Aún no tienes movimientos.</p>
         )}
       </section>
+
 
       <form onSubmit={onSubmit} className="space-y-4 border rounded-lg p-4 bg-card">
         <h2 className="font-semibold">Datos de envío</h2>
