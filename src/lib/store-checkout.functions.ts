@@ -39,10 +39,15 @@ const schema = z.object({
     .min(1)
     .max(60),
   address: addressSchema,
+  /** Día de entrega elegido por el cliente (YYYY-MM-DD). */
+  fechaEntrega: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  /** Usar el saldo disponible del cliente. */
+  usarSaldo: z.boolean().optional().default(true),
 });
 
 /** Envío fijo del marketplace (no toca las tarifas de galletas). */
 export const STORE_DELIVERY_FEE_CENTS = 499;
+
 
 export const createStoreCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
