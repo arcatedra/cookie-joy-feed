@@ -168,7 +168,7 @@ function ProfilePage() {
       {deliveryStatus.hasActiveSubscription && deliveryStatus.planName ? (
         <section className="mt-6 px-5">
           <Link
-            to="/subscribe"
+            to="/mi-cuenta"
             className="flex items-center justify-between rounded-2xl bg-primary p-4 text-primary-foreground shadow-lg"
           >
             <div className="flex items-center gap-3">

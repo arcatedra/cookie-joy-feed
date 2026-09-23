@@ -146,7 +146,7 @@ function ReferralLandingPage() {
           <Button asChild size="lg" className="mt-10 h-12 w-full bg-accent px-8 text-base font-bold text-accent-foreground hover:bg-accent/90 sm:w-auto">
             <Link
               to="/auth"
-              search={validCode ? { ref: code, redirect: "/subscribe" } : { redirect: "/" }}
+              search={validCode ? { ref: code, redirect: "/tiendas" } : { redirect: "/" }}
             >
               {validCode ? text.cta : text.invalidCta}
             </Link>

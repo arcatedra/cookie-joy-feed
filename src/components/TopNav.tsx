@@ -34,7 +34,7 @@ const allQuickLinkKeys = [
   { key: "buildPack", to: "/build-pack" },
 
   { key: "support", to: "/support" },
-  { key: "subscriptions", to: "/subscribe" },
+  { key: "stores", to: "/tiendas" },
 ] as const;
 
 // Con sweepstakesEnabled=false se oculta el acceso a la Ruleta (no se borra).
@@ -243,8 +243,8 @@ export function TopNav() {
                 <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.ordersReturns")}
                 </Link>
-                <Link to="/subscribe" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
-                  {t("topnav.cats.subscriptions")}
+                <Link to="/tiendas" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
+                  {t("topnav.cats.stores", "Tiendas")}
                 </Link>
                 <div className="border-t border-border" />
                 {user ? (

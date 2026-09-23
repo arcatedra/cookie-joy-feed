@@ -22,7 +22,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/shop", changefreq: "weekly", priority: "0.8" },
           { path: "/menu", changefreq: "weekly", priority: "0.7" },
           { path: "/search", changefreq: "monthly", priority: "0.5" },
-          { path: "/subscribe", changefreq: "monthly", priority: "0.7" },
+          { path: "/tiendas", changefreq: "daily", priority: "0.8" },
           { path: "/donate", changefreq: "monthly", priority: "0.6" },
           { path: "/domains", changefreq: "monthly", priority: "0.6" },
           ...(sweepstakesEnabled ? ([{ path: "/historial", changefreq: "daily", priority: "0.7" }] as SitemapEntry[]) : []),

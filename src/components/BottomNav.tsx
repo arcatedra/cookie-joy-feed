@@ -6,7 +6,7 @@ import { useSubscriptionGate } from "@/lib/subscription-gate";
 const tabs = [
   { to: "/", key: "home", Icon: HomeIcon },
   { to: "/explore", key: "explore", Icon: Search },
-  { to: "/subscribe", key: "subscribe", Icon: Package },
+  { to: "/tiendas", key: "stores", Icon: Package },
   { to: "/profile", key: "profile", Icon: User },
 ] as const;
 

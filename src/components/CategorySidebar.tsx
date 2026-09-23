@@ -34,7 +34,7 @@ const groups = [
       { label: "bestSellers", to: "/explore" },
       { label: "deals", to: "/explore" },
       { label: "buildPack", to: "/menu" },
-      { label: "subscriptions", to: "/subscribe" },
+      { label: "stores", to: "/tiendas" },
     ],
   },
   {
