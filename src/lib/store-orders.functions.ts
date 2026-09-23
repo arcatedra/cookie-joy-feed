@@ -259,6 +259,9 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
       .eq("business_id", businessId)
       .eq("estado", "listo");
     if (error) throw error;
+    // Bono de referido: primera compra entregada del invitado.
+    const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+    await grantReferralRewardForOrder(data.id);
     return { ok: true };
   });
 
