@@ -11,6 +11,8 @@ import {
   advanceStoreDelivery,
   claimStoreOrder,
   listDriverStoreOrders,
+  getMyDriverZones,
+  setMyDriverZones,
   type DeliveryCard,
 } from "@/lib/store-delivery.functions";
 
@@ -144,6 +146,8 @@ function DriverStorePage() {
         </Button>
       </header>
 
+      <MyZones onSaved={() => refetch()} />
+
       {isLoading ? (
         <div className="flex justify-center p-10">
           <Loader2 className="h-5 w-5 animate-spin" />
@@ -232,5 +236,66 @@ function DriverStorePage() {
         </>
       )}
     </div>
+  );
+}
+
+function MyZones({ onSaved }: { onSaved: () => void }) {
+  const fetchZones = useServerFn(getMyDriverZones);
+  const save = useServerFn(setMyDriverZones);
+  const [sel, setSel] = useState<string[] | null>(null);
+  const [saving, setSaving] = useState(false);
+  const { data, refetch } = useQuery({ queryKey: ["my-driver-zones"], queryFn: () => fetchZones() });
+  if (!data) return null;
+  const current = sel ?? data.mias;
+  const dirty = sel !== null && [...sel].sort().join() !== [...data.mias].sort().join();
+  async function onSave() {
+    setSaving(true);
+    try {
+      await save({ data: { zoneIds: current } });
+      toast.success("Zonas guardadas");
+      setSel(null);
+      await refetch();
+      onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "No se pudo guardar");
+    } finally {
+      setSaving(false);
+    }
+  }
+  return (
+    <section className="rounded-2xl border p-4">
+      <p className="text-sm font-semibold">Mis zonas</p>
+      <p className="mb-3 text-xs text-muted-foreground">
+        Solo verás pedidos cuyo código postal esté en tus zonas.
+      </p>
+      {data.zonas.length === 0 ? (
+        <p className="text-xs text-muted-foreground">Todavía no hay zonas creadas.</p>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {data.zonas.map((z) => {
+            const on = current.includes(z.id);
+            return (
+              <button
+                key={z.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setSel(on ? current.filter((x) => x !== z.id) : [...current, z.id])}
+                className={`min-h-10 rounded-full border px-4 text-sm ${on ? "border-primary bg-primary text-primary-foreground" : "bg-background"}`}
+              >
+                {z.name}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {current.length === 0 && data.zonas.length > 0 && (
+        <p className="mt-2 text-xs text-destructive">Elige al menos una zona para ver pedidos.</p>
+      )}
+      {dirty && (
+        <Button size="sm" className="mt-3" disabled={saving} onClick={onSave}>
+          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Guardar zonas
+        </Button>
+      )}
+    </section>
   );
 }
