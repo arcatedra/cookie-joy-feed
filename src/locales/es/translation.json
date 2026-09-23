@@ -1361,7 +1361,8 @@
       },
       "taxIdType": "Tipo de identificación fiscal",
       "taxId": "SSN o ITIN",
-      "taxIdPrivacy": "Tu número completo se cifra antes de guardarse y no volverá a mostrarse."
+      "taxIdPrivacy": "Tu número completo se cifra antes de guardarse y no volverá a mostrarse.",
+      "noZones": "Todavía no hay zonas disponibles. Vuelve pronto."
     },
     "summary": {
       "name": "Nombre",

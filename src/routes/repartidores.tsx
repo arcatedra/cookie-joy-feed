@@ -56,8 +56,7 @@ type DriverRow = {
   rejection_reason: string | null;
 };
 
-import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
-const ZONES = NYC_DELIVERY_ZONES;
+type ZoneOpt = { id: string; name: string };
 
 function RepartidoresLanding() {
   const { t } = useTranslation();
@@ -614,6 +613,26 @@ function ApplicationForm({
     taxId: "",
   });
   const [files, setFiles] = useState<Partial<Record<DocKey, File>>>({});
+  const [zoneIds, setZoneIds] = useState<string[]>([]);
+  const { data: zoneOpts = [] } = useQuery({
+    queryKey: ["delivery-zones-public"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from("delivery_zones")
+        .select("id, name")
+        .eq("activo", true)
+        .order("name");
+      return (data ?? []) as ZoneOpt[];
+    },
+  });
+  const toggleZone = (z: ZoneOpt) => {
+    const next = zoneIds.includes(z.id) ? zoneIds.filter((x) => x !== z.id) : [...zoneIds, z.id];
+    setZoneIds(next);
+    setS1({
+      ...s1,
+      city: zoneOpts.filter((o) => next.includes(o.id)).map((o) => o.name).join(", "),
+    });
+  };
   const [accept, setAccept] = useState(false);
   const saveTaxId = useServerFn(saveDriverTaxId);
 
@@ -666,6 +685,7 @@ function ApplicationForm({
         date_of_birth: s1.dateOfBirth,
         address: s1.address,
         city: s1.city,
+        work_zone: s1.city,
         profile_photo_url: profilePhotoUrl,
       });
       if (drvErr) throw new Error(t("repartidoresPage.form.driverError", { msg: drvErr.message }));
@@ -676,6 +696,13 @@ function ApplicationForm({
         plate_number: s2.vehicleType === "bicicleta" ? null : s2.plateNumber || null,
       });
       if (vehErr) throw new Error(t("repartidoresPage.form.vehicleError", { msg: vehErr.message }));
+
+      if (zoneIds.length > 0) {
+        const { error: zErr } = await (supabase as any)
+          .from("driver_zones")
+          .insert(zoneIds.map((zone_id) => ({ driver_id: userId, zone_id })));
+        if (zErr) throw new Error(zErr.message);
+      }
 
       const docRows = (Object.entries(uploaded) as [DocKey, string][]).map(
         ([document_type, file_url]) => ({ driver_id: userId, document_type, file_url }),
@@ -881,19 +908,26 @@ function ApplicationForm({
                 error={errors.city}
                 required
               >
-                <select
-                  id="city"
-                  value={s1.city}
-                  onChange={(e) => setS1({ ...s1, city: e.target.value })}
-                  className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                >
-                  <option value="">{t("repartidoresPage.form.selectEllipsis")}</option>
-                  {ZONES.map((zone) => (
-                    <option key={zone} value={zone} translate="no">
-                      {zone}
-                    </option>
-                  ))}
-                </select>
+                <div id="city" className="flex flex-wrap gap-2">
+                  {zoneOpts.length === 0 && (
+                    <p className="text-xs text-muted-foreground">{t("repartidoresPage.form.noZones")}</p>
+                  )}
+                  {zoneOpts.map((z) => {
+                    const on = zoneIds.includes(z.id);
+                    return (
+                      <button
+                        key={z.id}
+                        type="button"
+                        onClick={() => toggleZone(z)}
+                        aria-pressed={on}
+                        translate="no"
+                        className={`min-h-11 rounded-full border px-4 text-sm ${on ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background"}`}
+                      >
+                        {z.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </Field>
             </div>
             <Field

@@ -16,6 +16,7 @@ import {
   Inbox,
 } from "lucide-react";
 import { adminUnreadCount } from "@/lib/suggestions.functions";
+import { adminPendingCounts } from "@/lib/store-delivery.functions";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -292,6 +293,7 @@ function ProfilePage() {
       </section>
 
       {user?.id ? <AdminSuggestionsLink userId={user.id} /> : null}
+      {user?.id ? <AdminStoreMenu userId={user.id} /> : null}
 
 
       <Sheet open={!!sheet} onOpenChange={(open) => !open && setSheet(null)}>
@@ -313,6 +315,55 @@ function ProfilePage() {
 
 
     </main>
+  );
+}
+
+function AdminStoreMenu({ userId }: { userId: string }) {
+  const fetchCounts = useServerFn(adminPendingCounts);
+  const { data } = useQuery({
+    queryKey: ["admin-pending-counts", userId],
+    queryFn: async () => {
+      try {
+        return await fetchCounts();
+      } catch {
+        return null;
+      }
+    },
+    refetchInterval: 60_000,
+  });
+  if (!data) return null;
+  const items = [
+    { to: "/admin/pedidos-tienda", label: "Pedidos de tienda", count: data.pedidos },
+    { to: "/admin/transferencias", label: "Transferencias", count: data.transferencias },
+    { to: "/admin/precios", label: "Precios y zonas", count: 0 },
+    { to: "/admin/negocios", label: "Negocios", count: data.negocios },
+    { to: "/admin/repartidores", label: "Repartidores (postulaciones)", count: data.repartidores },
+  ] as const;
+  return (
+    <section className="mt-3 px-5">
+      <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border">
+        <p className="px-4 pt-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          Admin · Tiendas y repartidores
+        </p>
+        <ul className="divide-y divide-border">
+          {items.map((it) => (
+            <li key={it.to}>
+              <Link
+                to={it.to}
+                className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-card-foreground hover:bg-accent"
+              >
+                <span>{it.label}</span>
+                {it.count > 0 && (
+                  <span className="rounded-full bg-destructive px-2 py-0.5 text-[11px] font-bold text-destructive-foreground">
+                    {it.count}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 

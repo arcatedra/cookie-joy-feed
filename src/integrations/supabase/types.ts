@@ -404,6 +404,36 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_zones: {
+        Row: {
+          activo: boolean
+          created_at: string
+          id: string
+          name: string
+          route_days: number[]
+          updated_at: string
+          zip_codes: string[]
+        }
+        Insert: {
+          activo?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          route_days?: number[]
+          updated_at?: string
+          zip_codes?: string[]
+        }
+        Update: {
+          activo?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          route_days?: number[]
+          updated_at?: string
+          zip_codes?: string[]
+        }
+        Relationships: []
+      }
       driver_documents: {
         Row: {
           created_at: string
@@ -566,6 +596,39 @@ export type Database = {
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_zones: {
+        Row: {
+          created_at: string
+          driver_id: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_zones_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "driver_zones_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
             referencedColumns: ["id"]
           },
         ]

@@ -14,6 +14,7 @@ import { createStoreCheckout } from "@/lib/store-checkout.functions";
 import {
   cartWeightLb,
   availableDeliveryDates,
+  daysForZip,
   tierForSubtotal,
   weightFeeCents,
   processingFeeCents,
@@ -268,6 +269,7 @@ function StoreCartBar({
   });
 
   const pricing = config?.pricing ?? DEFAULT_PRICING;
+  const deliveryZones = (config as any)?.deliveryZones as import("@/lib/pricing").DeliveryZone[] | undefined;
 
   const lines = useMemo(
     () =>
@@ -303,9 +305,10 @@ function StoreCartBar({
   const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
   const totalCents = Math.max(0, grossCents - creditCents);
 
+  const zoneDays = daysForZip(deliveryZones, cliente?.codigo_postal as string | undefined, pricing);
   const fechas = useMemo(
-    () => availableDeliveryDates(pricing, 4),
-    [pricing.deliveryDaysMask, pricing.cutoffHourEt],
+    () => availableDeliveryDates(pricing, 4, new Date(), zoneDays),
+    [pricing.deliveryDaysMask, pricing.cutoffHourEt, zoneDays.join()],
   );
 
   if (lines.length === 0) return null;

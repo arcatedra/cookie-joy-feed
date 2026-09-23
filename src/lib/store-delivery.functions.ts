@@ -28,7 +28,27 @@ async function myDriver(admin: any, userId: string) {
   ]);
   if (!d) throw new Error("No tienes una postulación de repartidor.");
   const hasCar = (v ?? []).some((x: any) => ["auto", "carro", "car"].includes(x.vehicle_type));
-  return { ...d, hasCar };
+  const { data: dz } = await admin
+    .from("driver_zones")
+    .select("zone_id, delivery_zones(zip_codes, activo)")
+    .eq("driver_id", userId);
+  const zips = new Set<string>();
+  for (const r of dz ?? []) {
+    const z: any = (r as any).delivery_zones;
+    if (z?.activo) for (const c of z.zip_codes ?? []) zips.add(String(c));
+  }
+  return { ...d, hasCar, zips };
+}
+
+function zipOf(o: any): string {
+  return String(o?.direccion_envio?.zip ?? "").trim().slice(0, 5);
+}
+
+async function allZoneZips(admin: any): Promise<Set<string>> {
+  const { data } = await admin.from("delivery_zones").select("zip_codes").eq("activo", true);
+  const s = new Set<string>();
+  for (const z of data ?? []) for (const c of z.zip_codes ?? []) s.add(String(c));
+  return s;
 }
 
 function earnings(o: any): number {
@@ -106,7 +126,7 @@ export const listDriverStoreOrders = createServerFn({ method: "GET" })
     const admin = supabaseAdmin as any;
     const d = await myDriver(admin, userId);
     if (d.application_status !== "aprobado") {
-      return { aprobado: false, disponibles: [], mios: [] };
+      return { aprobado: false, sinZonas: false, disponibles: [], mios: [] };
     }
     const today = todayET();
     const [{ data: avail }, { data: mine }] = await Promise.all([
@@ -125,14 +145,13 @@ export const listDriverStoreOrders = createServerFn({ method: "GET" })
         .eq("estado", "listo")
         .order("tomado_en", { ascending: true }),
     ]);
-    const zone = d.work_zone && d.work_zone !== "Otra zona" ? String(d.work_zone).toLowerCase() : null;
     const filtered = (avail ?? []).filter((o: any) => {
       if (Number(o.peso_total_lb ?? 0) > HEAVY_LB && !d.hasCar) return false;
-      if (zone && String(o.direccion_envio?.city ?? "").toLowerCase() !== zone) return false;
-      return true;
+      return d.zips.has(zipOf(o));
     });
     return {
       aprobado: true,
+      sinZonas: d.zips.size === 0,
       disponibles: await buildCards(admin, filtered, false),
       mios: await buildCards(admin, mine ?? [], true),
     };
@@ -233,11 +252,12 @@ export const adminListStoreDeliveries = createServerFn({ method: "GET" })
         .order("full_name"),
     ]);
     const cards = await buildCards(admin, orders ?? [], true);
+    const covered = await allZoneZips(admin);
     const byId = new Map((orders ?? []).map((o: any) => [o.id, o]));
     return {
       pedidos: cards.map((c) => {
         const o: any = byId.get(c.id);
-        return { ...c, estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
+        return { ...c, sinZona: !covered.has(zipOf(o)), estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
       }),
       repartidores: drivers ?? [],
     };
@@ -278,4 +298,67 @@ export const adminAssignStoreOrder = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!upd?.length) throw new Error("Solo se pueden asignar pedidos listos y no entregados.");
     return { ok: true };
+  });
+
+// ---------------- Zonas del repartidor ----------------
+
+export const getMyDriverZones = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = (context as any).supabase;
+    const userId = (context as any).userId as string;
+    const [{ data: zones }, { data: mine }] = await Promise.all([
+      db.from("delivery_zones").select("id, name").eq("activo", true).order("name"),
+      db.from("driver_zones").select("zone_id").eq("driver_id", userId),
+    ]);
+    return {
+      zonas: (zones ?? []) as { id: string; name: string }[],
+      mias: (mine ?? []).map((r: any) => r.zone_id as string),
+    };
+  });
+
+export const setMyDriverZones = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw) => z.object({ zoneIds: z.array(z.string().uuid()).max(50) }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = (context as any).supabase;
+    const userId = (context as any).userId as string;
+    const { error: delErr } = await db.from("driver_zones").delete().eq("driver_id", userId);
+    if (delErr) throw new Error(delErr.message);
+    if (data.zoneIds.length) {
+      const { error } = await db
+        .from("driver_zones")
+        .insert(data.zoneIds.map((zone_id) => ({ driver_id: userId, zone_id })));
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
+  });
+
+// ---------------- Contadores del menú admin ----------------
+
+export const adminPendingCounts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin((context as any).supabase, (context as any).userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const a = supabaseAdmin as any;
+    const head = { count: "exact" as const, head: true };
+    const [p, t1, t2, b, d] = await Promise.all([
+      a.from("store_orders").select("id", head).eq("estado", "listo").is("repartidor_id", null),
+      a.from("driver_payouts").select("id", head).neq("status", "pagado"),
+      a
+        .from("store_orders")
+        .select("id", head)
+        .is("transferido_en", null)
+        .not("capturado_en", "is", null)
+        .gt("monto_capturado", 0),
+      a.from("businesses").select("id", head).eq("status", "pendiente"),
+      a.from("drivers").select("id", head).eq("application_status", "pendiente"),
+    ]);
+    return {
+      pedidos: p.count ?? 0,
+      transferencias: (t1.count ?? 0) + (t2.count ?? 0),
+      negocios: b.count ?? 0,
+      repartidores: d.count ?? 0,
+    };
   });
