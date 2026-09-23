@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { getMyCliente, upsertMyCliente } from "@/lib/clientes.functions";
-import { getMySuscripcion } from "@/lib/pedidos.functions";
-import { createBillingPortalSession } from "@/lib/subscriptions.functions";
+import { getMyCredit } from "@/lib/wallet-credits.functions";
 
 export const Route = createFileRoute("/_authenticated/mi-cuenta")({
   head: () => ({
@@ -17,16 +16,15 @@ export const Route = createFileRoute("/_authenticated/mi-cuenta")({
 function MiCuentaPage() {
   const fetchCliente = useServerFn(getMyCliente);
   const saveCliente = useServerFn(upsertMyCliente);
-  const fetchSub = useServerFn(getMySuscripcion);
-  const openPortal = useServerFn(createBillingPortalSession);
+  const fetchCredit = useServerFn(getMyCredit);
 
   const { data: cliente, refetch, isLoading } = useQuery({
     queryKey: ["cliente", "me"],
     queryFn: () => fetchCliente(),
   });
-  const { data: sub, refetch: refetchSub } = useQuery({
-    queryKey: ["suscripcion", "me"],
-    queryFn: () => fetchSub(),
+  const { data: credit } = useQuery({
+    queryKey: ["my-credit"],
+    queryFn: () => fetchCredit(),
   });
 
   const [form, setForm] = useState({
