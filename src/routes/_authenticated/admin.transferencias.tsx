@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Loader2, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { listTransfers, retryTransfer } from "@/lib/admin-transfers.functions";
+import { listPayoutRuns, listTransfers, retryTransfer, runPayoutsNow } from "@/lib/admin-transfers.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/transferencias")({
   head: () => ({
@@ -34,6 +34,24 @@ function TransferenciasPage() {
     queryFn: () => fetchRows(),
   });
 
+  const fetchRuns = useServerFn(listPayoutRuns);
+  const runNow = useServerFn(runPayoutsNow);
+  const runs = useQuery({ queryKey: ["admin-payout-runs"], queryFn: () => fetchRuns() });
+  const [running, setRunning] = useState(false);
+  async function onRunNow() {
+    setRunning(true);
+    try {
+      const r: any = await runNow();
+      if (!r.ok) throw new Error(r.error ?? "Falló la ejecución");
+      toast.success(`${r.transfers} transferencias · $${Number(r.totalUsd).toFixed(2)}`);
+      await Promise.all([refetch(), runs.refetch()]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "No se pudo ejecutar");
+    } finally {
+      setRunning(false);
+    }
+  }
+
   const rows = (data ?? []).filter((r) => filter === "todos" || r.estado === filter);
 
   async function onRetry(id: string, kind: "repartidor" | "negocio") {
@@ -60,6 +78,42 @@ function TransferenciasPage() {
           <RefreshCw className="mr-2 h-4 w-4" /> Actualizar
         </Button>
       </header>
+
+      <section className="space-y-2 rounded-2xl border p-3">
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold">Historial de pagos automáticos</h2>
+          <Button size="sm" onClick={onRunNow} disabled={running}>
+            {running ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ejecutar ahora"}
+          </Button>
+        </div>
+        {(runs.data ?? []).length === 0 ? (
+          <p className="text-sm text-muted-foreground">Todavía no hay ejecuciones.</p>
+        ) : (
+          <ul className="divide-y text-sm">
+            {runs.data!.map((r) => (
+              <li key={r.id} className="py-2">
+                <div className="flex flex-wrap justify-between gap-2">
+                  <span>
+                    {new Date(r.ran_at).toLocaleString("es-US")}{" "}
+                    <span className="text-xs text-muted-foreground">
+                      ({r.source === "manual" ? "manual" : "automático"})
+                    </span>
+                  </span>
+                  <span>
+                    {r.transfers_ok} transferencias · ${Number(r.total_usd).toFixed(2)} · {r.pending} pendientes ·{" "}
+                    <span className={r.errors.length ? "text-destructive" : ""}>{r.errors.length} errores</span>
+                  </span>
+                </div>
+                {r.errors.slice(0, 3).map((e, i) => (
+                  <p key={i} className="text-xs text-destructive">
+                    {e.kind}: {e.error}
+                  </p>
+                ))}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (

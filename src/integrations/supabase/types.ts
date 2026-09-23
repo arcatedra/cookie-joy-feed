@@ -675,6 +675,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payout_runs: {
+        Row: {
+          errors: Json
+          id: string
+          pending: number
+          ran_at: string
+          source: string
+          total_usd: number
+          transfers_ok: number
+        }
+        Insert: {
+          errors?: Json
+          id?: string
+          pending?: number
+          ran_at?: string
+          source?: string
+          total_usd?: number
+          transfers_ok?: number
+        }
+        Update: {
+          errors?: Json
+          id?: string
+          pending?: number
+          ran_at?: string
+          source?: string
+          total_usd?: number
+          transfers_ok?: number
+        }
+        Relationships: []
+      }
       pedido_items: {
         Row: {
           cantidad: number
@@ -1343,10 +1373,14 @@ export type Database = {
           created_at: string
           credito_aplicado: number
           direccion_envio: Json
+          en_camino_en: string | null
+          entregado_en: string | null
           envio_empresa: number
           envio_repartidor: number
           estado: string
+          estado_entrega: string | null
           fecha_entrega: string | null
+          foto_entrega_url: string | null
           id: string
           moneda: string
           monto_autorizado: number | null
@@ -1357,10 +1391,13 @@ export type Database = {
           peso_total_kg: number
           peso_total_lb: number
           propina: number
+          recogido_en: string | null
           repartidor_id: string | null
+          repartidor_nombre: string | null
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
+          tomado_en: string | null
           total_estimado: number
           tramo: string
           transfer_id: string | null
@@ -1385,10 +1422,14 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          en_camino_en?: string | null
+          entregado_en?: string | null
           envio_empresa?: number
           envio_repartidor?: number
           estado?: string
+          estado_entrega?: string | null
           fecha_entrega?: string | null
+          foto_entrega_url?: string | null
           id?: string
           moneda?: string
           monto_autorizado?: number | null
@@ -1399,10 +1440,13 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
+          recogido_en?: string | null
           repartidor_id?: string | null
+          repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
+          tomado_en?: string | null
           total_estimado?: number
           tramo?: string
           transfer_id?: string | null
@@ -1427,10 +1471,14 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          en_camino_en?: string | null
+          entregado_en?: string | null
           envio_empresa?: number
           envio_repartidor?: number
           estado?: string
+          estado_entrega?: string | null
           fecha_entrega?: string | null
+          foto_entrega_url?: string | null
           id?: string
           moneda?: string
           monto_autorizado?: number | null
@@ -1441,10 +1489,13 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           propina?: number
+          recogido_en?: string | null
           repartidor_id?: string | null
+          repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
+          tomado_en?: string | null
           total_estimado?: number
           tramo?: string
           transfer_id?: string | null
@@ -1866,6 +1917,10 @@ export type Database = {
         Args: { p_action: string; p_notes?: string; p_withdrawal_id: string }
         Returns: undefined
       }
+      advance_store_delivery: {
+        Args: { p_order_id: string; p_photo?: string; p_step: string }
+        Returns: string
+      }
       apply_substitution_timeouts: { Args: never; Returns: number }
       auth_buffer_settings: {
         Args: never
@@ -1874,6 +1929,7 @@ export type Database = {
           pct: number
         }[]
       }
+      claim_store_order: { Args: { p_order_id: string }; Returns: string }
       crear_pedido_con_items: {
         Args: {
           p_cliente_id: string

@@ -119,3 +119,33 @@ export const retryTransfer = createServerFn({ method: "POST" })
     if (!res.ok) throw new Error(res.error ?? "No se pudo transferir.");
     return { ok: true, skipped: res.skipped ?? false };
   });
+
+export const listPayoutRuns = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = (context as any).supabase;
+    await assertAdmin(db, (context as any).userId);
+    const { data, error } = await db
+      .from("payout_runs")
+      .select("id, ran_at, source, transfers_ok, total_usd, pending, errors")
+      .order("ran_at", { ascending: false })
+      .limit(30);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as {
+      id: string;
+      ran_at: string;
+      source: string;
+      transfers_ok: number;
+      total_usd: number;
+      pending: number;
+      errors: { kind: string; id: string; error: string }[];
+    }[];
+  });
+
+export const runPayoutsNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin((context as any).supabase, (context as any).userId);
+    const { runPayouts } = await import("./payout-run.server");
+    return runPayouts("manual");
+  });
