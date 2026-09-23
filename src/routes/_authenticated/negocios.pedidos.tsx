@@ -113,8 +113,12 @@ function StoreOrdersPage() {
         </div>
       )}
 
-      <div className="space-y-3">
-        {(data ?? []).map((o: any) => (
+      {grupos.map((g) => (
+      <div key={g.zona} className="space-y-3">
+        <h2 className="mt-4 rounded-lg bg-muted px-3 py-2 text-sm font-bold">
+          Zona {g.zona} · {g.orders.length} {g.orders.length === 1 ? "pedido" : "pedidos"}
+        </h2>
+        {g.orders.map((o: any) => (
           <article key={o.id} className="border rounded-lg p-4 bg-card space-y-3">
             <header className="flex items-start justify-between gap-3">
               <div>
