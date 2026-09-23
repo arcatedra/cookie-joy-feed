@@ -79,7 +79,13 @@ export function checkMessageForContacts(rawBody: string): ContactCheck {
   if (EMAIL_RE.test(body)) return { ok: false, reason: "email" };
   if (hasBannedWord(body)) return { ok: false, reason: "banned_word" };
   if (hasLongDigitRun(body)) return { ok: false, reason: "digits" };
-  if (hasLongDigitRun(unleet(normalized))) return { ok: false, reason: "digits_disguised" };
+  // El "leet" (o→0, e→3, s→5…) solo se revisa cuando el texto ya trae varios
+  // dígitos reales; si no, frases normales como "ese es el pedido" se
+  // convertirían en un número y quedarían bloqueadas por error.
+  const realDigits = (body.match(/\d/g) ?? []).length;
+  if (realDigits >= 4 && hasLongDigitRun(unleet(normalized))) {
+    return { ok: false, reason: "digits_disguised" };
+  }
   if (hasSpelledNumberRun(body)) return { ok: false, reason: "spelled_numbers" };
 
   return { ok: true };
