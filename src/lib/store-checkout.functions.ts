@@ -317,7 +317,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       tramo: tier.tier,
       propina: tipCents / 100,
       cargoPeso: weightCents / 100,
-      pesoTotalLb: totalLb,
+      pesoTotalKg: totalKg,
       montoReservado: authorizedCents / 100,
     };
   });
