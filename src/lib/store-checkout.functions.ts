@@ -11,6 +11,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { cartWeightLb, pricingFromRows, serviceFeeCents, weightFeeCents } from "./pricing";
 
 interface StripeSession {
   id: string;
@@ -39,10 +40,15 @@ const schema = z.object({
     .min(1)
     .max(60),
   address: addressSchema,
+  /** Día de entrega elegido por el cliente (YYYY-MM-DD). */
+  fechaEntrega: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  /** Usar el saldo disponible del cliente. */
+  usarSaldo: z.boolean().optional().default(true),
 });
 
 /** Envío fijo del marketplace (no toca las tarifas de galletas). */
 export const STORE_DELIVERY_FEE_CENTS = 499;
+
 
 export const createStoreCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -71,10 +77,14 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const ids = [...new Set(data.items.map((i) => i.productId))];
     const { data: rows, error: prodErr } = await db
       .from("store_products")
-      .select("id, nombre, precio, unidad, disponible, business_id")
+      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb")
       .in("id", ids)
       .eq("business_id", data.businessId);
     if (prodErr) throw new Error("No se pudieron verificar los precios.");
+
+    // ---- Ajustes de precio (cargo de servicio, peso) ----------------------
+    const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
+    const pricing = pricingFromRows(pricingRows);
 
     const byId = new Map<string, any>((rows ?? []).map((r: any) => [r.id, r]));
     const priced = data.items.map((it) => {
@@ -87,14 +97,33 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         name: String(p.nombre),
         unit: String(p.unidad ?? "unidad"),
         priceCents: Math.round(Number(p.precio) * 100),
+        pesoLb: Number(p.peso_lb ?? pricing.defaultProductWeightLb),
         qty: it.qty,
       };
     });
 
     const subtotalCents = priced.reduce((s, it) => s + it.priceCents * it.qty, 0);
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
+
+    const totalLb = cartWeightLb(priced, pricing);
+    if (totalLb > pricing.weightMaxLb) {
+      throw new Error(
+        `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
+      );
+    }
+    const serviceCents = serviceFeeCents(subtotalCents, pricing);
+    const weightCents = weightFeeCents(totalLb, pricing);
     const shippingCents = STORE_DELIVERY_FEE_CENTS;
-    const totalCents = subtotalCents + shippingCents;
+    const grossCents = subtotalCents + shippingCents + serviceCents + weightCents;
+
+    // ---- Saldo de referidos ------------------------------------------------
+    let creditCents = 0;
+    if (data.usarSaldo !== false) {
+      const { data: bal } = await db.rpc("get_my_credit_balance");
+      const available = Math.max(0, Math.round(Number(bal ?? 0) * 100));
+      creditCents = Math.min(available, Math.max(grossCents - 100, 0));
+    }
+    const totalCents = grossCents - creditCents;
 
     // ---- Margen de reserva (mismo ajuste configurable de siempre) --------
     let bufferPct = 15;
@@ -123,6 +152,11 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         direccion_envio: data.address,
         subtotal: subtotalCents / 100,
         costo_envio: shippingCents / 100,
+        cargo_servicio: serviceCents / 100,
+        cargo_peso: weightCents / 100,
+        peso_total_lb: totalLb,
+        fecha_entrega: data.fechaEntrega ?? null,
+        credito_aplicado: creditCents / 100,
         total_estimado: totalCents / 100,
         comision_porcentaje: commissionPct,
         comision_estimada: commissionEstimated,
@@ -134,6 +168,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       console.error("[store-checkout] no se pudo crear el pedido", orderErr);
       throw new Error("No se pudo crear el pedido. Inténtalo de nuevo.");
     }
+
 
     const { error: itemsErr } = await db.from("store_order_items").insert(
       priced.map((it) => ({
@@ -158,32 +193,46 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
-    const lineItems: Record<string, unknown>[] = priced.map((it) => ({
-      quantity: it.qty,
-      price_data: {
-        currency: "usd",
-        unit_amount: it.priceCents,
-        product_data: { name: it.name.slice(0, 250) },
-      },
-    }));
-    lineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "usd",
-        unit_amount: shippingCents,
-        product_data: { name: "Entrega" },
-      },
-    });
-    lineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "usd",
-        unit_amount: bufferCents,
-        product_data: {
-          name: "Margen para ajustes de peso y faltantes (se cobra solo lo real)",
+    const lineItems: Record<string, unknown>[] = [];
+    if (creditCents > 0) {
+      // Stripe no admite líneas negativas: se cobra un solo concepto ya con el saldo aplicado.
+      lineItems.push({
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: totalCents + bufferCents,
+          product_data: {
+            name: `Pedido ${order.numero_pedido} (saldo aplicado -$${(creditCents / 100).toFixed(2)})`,
+          },
         },
-      },
-    });
+      });
+    } else {
+      for (const it of priced) {
+        lineItems.push({
+          quantity: it.qty,
+          price_data: {
+            currency: "usd",
+            unit_amount: it.priceCents,
+            product_data: { name: it.name.slice(0, 250) },
+          },
+        });
+      }
+      const extras: Array<[string, number]> = [
+        ["Entrega", shippingCents],
+        ["Cargo de servicio", serviceCents],
+        ["Cargo por peso", weightCents],
+        ["Margen para ajustes de peso y faltantes (se cobra solo lo real)", bufferCents],
+      ];
+      for (const [name, amount] of extras) {
+        if (amount > 0) {
+          lineItems.push({
+            quantity: 1,
+            price_data: { currency: "usd", unit_amount: amount, product_data: { name } },
+          });
+        }
+      }
+    }
+
 
     const metadata = {
       kind: "store_order",
@@ -218,7 +267,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
-    await db
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any)
       .from("store_orders")
       .update({
         stripe_checkout_session_id: session.id,
@@ -226,12 +276,27 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       })
       .eq("id", order.id);
 
+    // Descuenta el saldo usado (movimiento negativo).
+    if (creditCents > 0) {
+      await (supabaseAdmin as any).from("wallet_credits").insert({
+        user_id: userId,
+        amount_usd: -creditCents / 100,
+        reason: "uso_en_pedido",
+        order_id: order.id,
+      });
+    }
+
+
     return {
       orderId: order.id as string,
       numeroPedido: order.numero_pedido as string,
       clientSecret: session.client_secret ?? null,
       url: session.url ?? null,
       totalEstimado: totalCents / 100,
+      creditoAplicado: creditCents / 100,
+      cargoServicio: serviceCents / 100,
+      cargoPeso: weightCents / 100,
+      pesoTotalLb: totalLb,
       montoReservado: authorizedCents / 100,
     };
   });

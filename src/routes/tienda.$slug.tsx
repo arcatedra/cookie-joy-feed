@@ -1,9 +1,24 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Search, Store } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { Clock, Loader2, Minus, Plus, Search, Store } from "lucide-react";
 import { getPublicStore } from "@/lib/store-public.functions";
 import { isStoreOpen, todayHoursLabel } from "@/lib/store";
+import { getPricingConfig } from "@/lib/pricing.functions";
+import { getMyCredit } from "@/lib/wallet-credits.functions";
+import { getMyCliente } from "@/lib/clientes.functions";
+import { createStoreCheckout } from "@/lib/store-checkout.functions";
+import {
+  cartWeightLb,
+  nextDatesForDays,
+  serviceFeeCents,
+  weightFeeCents,
+  DEFAULT_PRICING,
+} from "@/lib/pricing";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
@@ -38,6 +53,16 @@ function StorePage() {
   const { t } = useTranslation();
   const { store, categories, products } = Route.useLoaderData() as any;
   const [q, setQ] = useState("");
+  const [cart, setCart] = useState<Record<string, number>>({});
+
+  const addToCart = (id: string, delta: number) =>
+    setCart((prev) => {
+      const next = Math.max(0, (prev[id] ?? 0) + delta);
+      const copy = { ...prev };
+      if (next === 0) delete copy[id];
+      else copy[id] = next;
+      return copy;
+    });
 
   const open = isStoreOpen(store.horario);
   const hours = todayHoursLabel(store.horario);
@@ -148,13 +173,254 @@ function StorePage() {
                     <div className="text-xs text-muted-foreground">
                       ${Number(p.precio).toFixed(2)} / {p.unidad}
                     </div>
+                    {p.disponible && (
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        {cart[p.id] ? (
+                          <div className="flex w-full items-center justify-between rounded-full bg-[#1e3a5f] px-2 py-1 text-white">
+                            <button
+                              type="button"
+                              aria-label="Quitar uno"
+                              onClick={() => addToCart(p.id, -1)}
+                              className="grid h-7 w-7 place-items-center"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </button>
+                            <span className="text-sm font-bold">{cart[p.id]}</span>
+                            <button
+                              type="button"
+                              aria-label="Agregar uno"
+                              onClick={() => addToCart(p.id, 1)}
+                              className="grid h-7 w-7 place-items-center"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => addToCart(p.id, 1)}
+                            className="w-full rounded-full bg-[#1e3a5f] py-1.5 text-xs font-semibold text-white"
+                          >
+                            Agregar
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </li>
+
                 ))}
               </ul>
             </section>
           ))
         )}
       </div>
+
+      <StoreCartBar
+        businessId={store.id}
+        products={products}
+        cart={cart}
+        onClear={() => setCart({})}
+      />
     </main>
   );
 }
+
+function StoreCartBar({
+  businessId,
+  products,
+  cart,
+  onClear,
+}: {
+  businessId: string;
+  products: any[];
+  cart: Record<string, number>;
+  onClear: () => void;
+}) {
+  const { user } = useAuth();
+  const fetchPricing = useServerFn(getPricingConfig);
+  const fetchCredit = useServerFn(getMyCredit);
+  const fetchCliente = useServerFn(getMyCliente);
+  const checkout = useServerFn(createStoreCheckout);
+
+  const [fecha, setFecha] = useState<string>("");
+  const [usarSaldo, setUsarSaldo] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  const { data: config } = useQuery({
+    queryKey: ["pricing-config"],
+    queryFn: () => fetchPricing(),
+    staleTime: 300_000,
+  });
+  const { data: credit } = useQuery({
+    queryKey: ["my-credit"],
+    queryFn: () => fetchCredit(),
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+  const { data: cliente } = useQuery({
+    queryKey: ["cliente", "me"],
+    queryFn: () => fetchCliente(),
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+
+  const pricing = config?.pricing ?? DEFAULT_PRICING;
+
+  const lines = useMemo(
+    () =>
+      Object.entries(cart)
+        .map(([id, qty]) => {
+          const p = products.find((x) => x.id === id);
+          return p ? { p, qty } : null;
+        })
+        .filter(Boolean) as Array<{ p: any; qty: number }>,
+    [cart, products],
+  );
+
+  const subtotalCents = lines.reduce(
+    (s, l) => s + Math.round(Number(l.p.precio) * 100) * l.qty,
+    0,
+  );
+  const totalLb = cartWeightLb(
+    lines.map((l) => ({ pesoLb: Number(l.p.peso_lb ?? pricing.defaultProductWeightLb), qty: l.qty })),
+    pricing,
+  );
+  const overLimit = totalLb > pricing.weightMaxLb;
+  const serviceCents = serviceFeeCents(subtotalCents, pricing);
+  const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
+  const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
+  const grossCents = subtotalCents + 499 + serviceCents + weightCents;
+  const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
+  const totalCents = Math.max(0, grossCents - creditCents);
+
+  const zoneDays =
+    config?.zones?.find((z) => z.zone && cliente?.ciudad && z.zone === cliente.ciudad)?.days ??
+    config?.zones?.[0]?.days ??
+    [1, 5];
+  const fechas = useMemo(() => nextDatesForDays(zoneDays, 4), [zoneDays.join(",")]);
+
+  if (lines.length === 0) return null;
+
+  const hasAddress = !!cliente?.direccion_linea1 && !!cliente?.ciudad && !!cliente?.codigo_postal;
+
+  async function handleCheckout() {
+    if (!user) {
+      toast.error("Inicia sesión para continuar.");
+      return;
+    }
+    if (!hasAddress) {
+      toast.error("Agrega tu dirección en Mi cuenta antes de pagar.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await checkout({
+        data: {
+          businessId,
+          items: lines.map((l) => ({ productId: l.p.id, qty: l.qty })),
+          address: {
+            name: String(cliente!.nombre_completo ?? ""),
+            street: String(cliente!.direccion_linea1 ?? ""),
+            apt: String(cliente!.direccion_linea2 ?? ""),
+            city: String(cliente!.ciudad ?? ""),
+            zip: String(cliente!.codigo_postal ?? ""),
+            country: String(cliente!.pais ?? "US").slice(0, 2),
+          },
+          fechaEntrega: fecha || fechas[0],
+          usarSaldo,
+        },
+      });
+      onClear();
+      if (res.url) window.location.href = res.url;
+      else toast.success(`Pedido ${res.numeroPedido} creado.`);
+    } catch (err) {
+      toast.error((err as Error).message || "No se pudo iniciar el pago.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-4 backdrop-blur">
+      <div className="mx-auto max-w-5xl space-y-3">
+        <div>
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>
+              Tu pedido pesa {totalLb} lb de {pricing.weightIncludedLb} lb incluidas
+            </span>
+            <span>{lines.length} productos</span>
+          </div>
+          <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className={`h-full ${overLimit ? "bg-red-500" : pct >= 100 ? "bg-amber-500" : "bg-emerald-500"}`}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          {overLimit ? (
+            <p className="mt-1 text-xs font-semibold text-red-600">
+              Máximo {pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
+            </p>
+          ) : weightCents > 0 ? (
+            <p className="mt-1 text-xs text-amber-700">
+              Se agregará un cargo por peso de ${(weightCents / 100).toFixed(2)}, que se cobra
+              automáticamente al pagar.
+            </p>
+          ) : null}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 text-xs">
+          <label className="flex items-center gap-2">
+            <span className="text-muted-foreground">Día de entrega</span>
+            <select
+              value={fecha || fechas[0] || ""}
+              onChange={(e) => setFecha(e.target.value)}
+              className="rounded-lg border border-border bg-background px-2 py-1"
+            >
+              {fechas.map((f) => (
+                <option key={f} value={f}>
+                  {new Date(`${f}T12:00:00`).toLocaleDateString()}
+                </option>
+              ))}
+            </select>
+          </label>
+          {balanceCents > 0 && (
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={usarSaldo}
+                onChange={(e) => setUsarSaldo(e.target.checked)}
+              />
+              <span>Usar mi saldo (${(balanceCents / 100).toFixed(2)})</span>
+            </label>
+          )}
+          <span className="text-muted-foreground">
+            Servicio ${(serviceCents / 100).toFixed(2)} · Entrega $4.99
+          </span>
+        </div>
+
+        {!hasAddress && user && (
+          <p className="text-xs text-amber-700">
+            Agrega tu dirección en{" "}
+            <Link to="/mi-cuenta" className="underline">
+              Mi cuenta
+            </Link>{" "}
+            para poder pagar.
+          </p>
+        )}
+
+        <button
+          type="button"
+          onClick={handleCheckout}
+          disabled={busy || overLimit}
+          className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-full bg-[#1e3a5f] px-6 text-sm font-bold text-white disabled:opacity-50"
+        >
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          Pagar ${(totalCents / 100).toFixed(2)}
+        </button>
+      </div>
+    </div>
+  );
+}
+

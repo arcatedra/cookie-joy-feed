@@ -98,7 +98,7 @@ export function InviteCodeCard() {
           <div>
             <h3 className="text-sm font-bold text-card-foreground">Tu código de invitación</h3>
             <p className="text-xs text-muted-foreground">
-              Comparte tu enlace y gana comisiones por cada suscriptor.
+              Gana $5 de saldo cuando tu invitado recibe su primer pedido.
             </p>
           </div>
         </div>

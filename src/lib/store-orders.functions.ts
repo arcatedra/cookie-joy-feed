@@ -10,6 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { pricingFromRows, serviceFeeCents, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -137,24 +138,53 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
       .eq("order_id", order.id);
     if (iErr) throw iErr;
 
+    const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
+    const pricing = pricingFromRows(pricingRows);
+
+    // Pesos de los productos para recalcular el cargo por peso real
+    const productIds = (items ?? []).map((i: any) => i.product_id).filter(Boolean);
+    const weightById = new Map<string, number>();
+    if (productIds.length > 0) {
+      const { data: prods } = await db
+        .from("store_products")
+        .select("id, peso_lb")
+        .in("id", productIds);
+      for (const p of prods ?? []) {
+        weightById.set(p.id, Number(p.peso_lb ?? pricing.defaultProductWeightLb));
+      }
+    }
+
     const realById = new Map(data.items.map((i) => [i.itemId, i.cantidadReal]));
     let realSubtotalCents = 0;
+    let realLb = 0;
+    let realItemCount = 0;
     for (const it of items ?? []) {
       const real = realById.has(it.id) ? Number(realById.get(it.id)) : Number(it.cantidad);
       realSubtotalCents += Math.round(Number(it.precio_unitario) * 100) * real;
+      realItemCount += real;
+      realLb +=
+        (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
       if (realById.has(it.id) && real !== Number(it.cantidad_real)) {
         await db.from("store_order_items").update({ cantidad_real: real }).eq("id", it.id);
       }
     }
+    realLb = Math.round(realLb * 100) / 100;
 
     const shippingCents = Math.round(Number(order.costo_envio ?? 0) * 100);
-    const realTotalCents = realSubtotalCents + shippingCents;
+    const serviceCents = serviceFeeCents(realSubtotalCents, pricing);
+    const weightCents = weightFeeCents(realLb, pricing);
+    const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
+    const realTotalCents = Math.max(
+      0,
+      realSubtotalCents + shippingCents + serviceCents + weightCents - creditCents,
+    );
     const authorizedCents = Math.round(Number(order.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) throw new Error("La reserva del pago no es válida.");
 
     // 2) Tope: nunca se cobra más de lo reservado
     const captureCents = Math.min(realTotalCents, authorizedCents);
     const pendingAdjustmentCents = Math.max(realTotalCents - authorizedCents, 0);
+
 
     // 3) Cobro en Stripe (idempotente por pedido + monto)
     const { paymentsEnvironmentForHost, stripeCapturePaymentIntent } = await import(
@@ -197,6 +227,9 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         monto_capturado: captureCents / 100,
         comision_final: commissionFinal,
         ajuste_pendiente: pendingAdjustmentCents / 100,
+        cargo_servicio: serviceCents / 100,
+        cargo_peso: weightCents / 100,
+        peso_total_lb: realLb,
         capturado_en: new Date().toISOString(),
         captura_error: null,
       })
@@ -226,6 +259,9 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
       .eq("business_id", businessId)
       .eq("estado", "listo");
     if (error) throw error;
+    // Bono de referido: primera compra entregada del invitado.
+    const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+    await grantReferralRewardForOrder(data.id);
     return { ok: true };
   });
 
@@ -239,7 +275,7 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
 
     const { data: order } = await db
       .from("store_orders")
-      .select("id, estado, cliente_id, business_id, stripe_payment_intent_id")
+      .select("id, estado, cliente_id, business_id, stripe_payment_intent_id, credito_aplicado")
       .eq("id", data.id)
       .maybeSingle();
     if (!order) throw new Error("Pedido no encontrado.");
@@ -275,5 +311,15 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
       .from("store_orders")
       .update({ estado: "cancelado" })
       .eq("id", order.id);
+
+    // Devuelve el saldo que se había aplicado al pedido.
+    if (Number(order.credito_aplicado ?? 0) > 0) {
+      await (supabaseAdmin as any).from("wallet_credits").insert({
+        user_id: order.cliente_id,
+        amount_usd: Number(order.credito_aplicado),
+        reason: "devolucion_saldo",
+        order_id: order.id,
+      });
+    }
     return { ok: true };
   });

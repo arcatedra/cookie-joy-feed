@@ -1,0 +1,165 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+import { getPricingConfig, updatePricingConfig } from "@/lib/pricing.functions";
+import { DEFAULT_PRICING, PRICING_KEYS, type PricingSettings } from "@/lib/pricing";
+
+export const Route = createFileRoute("/_authenticated/admin/precios")({
+  head: () => ({
+    meta: [
+      { title: "Precios y cargos — Admin Hazorex" },
+      { name: "description", content: "Edita los cargos por pedido, peso y pagos al repartidor." },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: PreciosPage,
+  errorComponent: ({ error }) => <div className="p-6 text-sm text-destructive">{error.message}</div>,
+  notFoundComponent: () => <div className="p-6 text-sm">No encontrado</div>,
+});
+
+const LABELS: Record<keyof PricingSettings, string> = {
+  serviceMinUsd: "Cargo de servicio mínimo ($)",
+  servicePct: "Cargo de servicio (% del pedido)",
+  weightIncludedLb: "Libras incluidas",
+  weightTier2MaxLb: "Tramo 2 hasta (lb)",
+  weightTier2FeeUsd: "Cargo tramo 2 ($)",
+  weightTier3MaxLb: "Tramo 3 hasta (lb)",
+  weightTier3FeeUsd: "Cargo tramo 3 ($)",
+  weightMaxLb: "Peso máximo por pedido (lb)",
+  defaultProductWeightLb: "Peso por defecto de un producto (lb)",
+  driverPerStopUsd: "Repartidor: pago por parada ($)",
+  driverPerItemUsd: "Repartidor: pago por artículo extra ($)",
+  driverItemThreshold: "Repartidor: artículos incluidos",
+  driverWeightSharePct: "Repartidor: % del cargo por peso",
+  driverTipSharePct: "Repartidor: % de la propina",
+  referralBonusUsd: "Bono por referido ($)",
+};
+
+const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+function PreciosPage() {
+  const fetchConfig = useServerFn(getPricingConfig);
+  const saveConfig = useServerFn(updatePricingConfig);
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["pricing-config"],
+    queryFn: () => fetchConfig(),
+  });
+
+  const [form, setForm] = useState<Record<string, string>>({});
+  const [zones, setZones] = useState<Array<{ zone: string; days: number[] }>>([]);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!data) return;
+    const p = data.pricing ?? DEFAULT_PRICING;
+    const next: Record<string, string> = {};
+    for (const field of Object.keys(PRICING_KEYS) as (keyof PricingSettings)[]) {
+      next[field] = String(p[field]);
+    }
+    setForm(next);
+    setZones(data.zones ?? []);
+  }, [data]);
+
+  function toggleDay(zone: string, day: number) {
+    setZones((prev) =>
+      prev.map((z) =>
+        z.zone === zone
+          ? { ...z, days: z.days.includes(day) ? z.days.filter((d) => d !== day) : [...z.days, day].sort() }
+          : z,
+      ),
+    );
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const pricing: Record<string, number> = {};
+      for (const [field, key] of Object.entries(PRICING_KEYS)) {
+        const v = Number(form[field]);
+        if (Number.isFinite(v)) pricing[key] = v;
+      }
+      await saveConfig({ data: { pricing, zones } });
+      toast.success("Precios guardados");
+      await refetch();
+    } catch (err) {
+      toast.error((err as Error).message || "No se pudo guardar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid min-h-[50vh] place-items-center">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
+      <main className="mx-auto max-w-3xl px-4 py-8">
+        <h1 className="font-serif text-2xl font-bold">Precios y cargos</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Estos valores se aplican a todos los pedidos nuevos del marketplace.
+        </p>
+
+        <section className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
+          {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[]).map((field) => (
+            <label key={field} className="block text-sm">
+              <span className="mb-1 block text-xs text-muted-foreground">{LABELS[field]}</span>
+              <input
+                value={form[field] ?? ""}
+                onChange={(e) => setForm({ ...form, [field]: e.target.value })}
+                inputMode="decimal"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              />
+            </label>
+          ))}
+        </section>
+
+        <section className="mt-6 rounded-xl border border-border bg-card p-5">
+          <h2 className="text-sm font-bold">Días de ruta por zona</h2>
+          {zones.length === 0 ? (
+            <p className="mt-2 text-sm text-muted-foreground">Aún no hay zonas configuradas.</p>
+          ) : (
+            <ul className="mt-3 space-y-3">
+              {zones.map((z) => (
+                <li key={z.zone} className="flex flex-wrap items-center gap-2">
+                  <span className="w-40 text-sm font-semibold">{z.zone}</span>
+                  {DAY_NAMES.map((name, day) => (
+                    <button
+                      key={day}
+                      type="button"
+                      onClick={() => toggleDay(z.zone, day)}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        z.days.includes(day)
+                          ? "bg-[#1e3a5f] text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md bg-[#1e3a5f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#16294a] disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar cambios"}
+        </button>
+      </main>
+    </div>
+  );
+}
