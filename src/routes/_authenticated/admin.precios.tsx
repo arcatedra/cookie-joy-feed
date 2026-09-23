@@ -52,6 +52,7 @@ const LABELS: Record<keyof PricingSettings, string> = {
   deliveryDaysMask: "Días de entrega (no editar aquí)",
   weightExtraPerLbUsd: "Precio por libra extra ($)",
   processingFeePct: "Recargo de procesamiento (%)",
+  payoutFrequencyDays: "Pago a súpers: inmediato",
 };
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
