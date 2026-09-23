@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_fingerprints: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          user_id: string
+          value_norm: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          user_id: string
+          value_norm: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          user_id?: string
+          value_norm?: string
+        }
+        Relationships: []
+      }
       affiliate_commissions: {
         Row: {
           affiliate_profile_id: string
@@ -635,6 +659,24 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: number
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: number
+        }
+        Relationships: []
+      }
       productos: {
         Row: {
           categoria: string | null
@@ -807,6 +849,42 @@ export type Database = {
           thumb_url?: string | null
           title?: string | null
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      referral_rewards: {
+        Row: {
+          amount_usd: number
+          block_reason: string | null
+          created_at: string
+          id: string
+          order_id: string | null
+          referee_id: string
+          referrer_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_usd?: number
+          block_reason?: string | null
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          referee_id: string
+          referrer_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_usd?: number
+          block_reason?: string | null
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          referee_id?: string
+          referrer_id?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1052,20 +1130,25 @@ export type Database = {
           captura_error: string | null
           captura_intentos: number
           capturado_en: string | null
+          cargo_peso: number
+          cargo_servicio: number
           cliente_id: string
           comision_estimada: number
           comision_final: number | null
           comision_porcentaje: number
           costo_envio: number
           created_at: string
+          credito_aplicado: number
           direccion_envio: Json
           estado: string
+          fecha_entrega: string | null
           id: string
           moneda: string
           monto_autorizado: number | null
           monto_capturado: number | null
           notas: string | null
           numero_pedido: string
+          peso_total_lb: number
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
@@ -1079,20 +1162,25 @@ export type Database = {
           captura_error?: string | null
           captura_intentos?: number
           capturado_en?: string | null
+          cargo_peso?: number
+          cargo_servicio?: number
           cliente_id: string
           comision_estimada?: number
           comision_final?: number | null
           comision_porcentaje?: number
           costo_envio?: number
           created_at?: string
+          credito_aplicado?: number
           direccion_envio?: Json
           estado?: string
+          fecha_entrega?: string | null
           id?: string
           moneda?: string
           monto_autorizado?: number | null
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          peso_total_lb?: number
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
@@ -1106,20 +1194,25 @@ export type Database = {
           captura_error?: string | null
           captura_intentos?: number
           capturado_en?: string | null
+          cargo_peso?: number
+          cargo_servicio?: number
           cliente_id?: string
           comision_estimada?: number
           comision_final?: number | null
           comision_porcentaje?: number
           costo_envio?: number
           created_at?: string
+          credito_aplicado?: number
           direccion_envio?: Json
           estado?: string
+          fecha_entrega?: string | null
           id?: string
           moneda?: string
           monto_autorizado?: number | null
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          peso_total_lb?: number
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
@@ -1154,6 +1247,7 @@ export type Database = {
           imagen_url: string | null
           nombre: string
           orden: number
+          peso_lb: number
           precio: number
           unidad: string
           updated_at: string
@@ -1168,6 +1262,7 @@ export type Database = {
           imagen_url?: string | null
           nombre: string
           orden?: number
+          peso_lb?: number
           precio?: number
           unidad?: string
           updated_at?: string
@@ -1182,6 +1277,7 @@ export type Database = {
           imagen_url?: string | null
           nombre?: string
           orden?: number
+          peso_lb?: number
           precio?: number
           unidad?: string
           updated_at?: string
@@ -1408,6 +1504,33 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_credits: {
+        Row: {
+          amount_usd: number
+          created_at: string
+          id: string
+          order_id: string | null
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          reason: string
+          user_id: string
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       withdrawal_requests: {
         Row: {
           amount_usd: number
@@ -1435,6 +1558,24 @@ export type Database = {
           profile_id?: string
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      zone_delivery_days: {
+        Row: {
+          days: number[]
+          updated_at: string
+          zone: string
+        }
+        Insert: {
+          days?: number[]
+          updated_at?: string
+          zone: string
+        }
+        Update: {
+          days?: number[]
+          updated_at?: string
+          zone?: string
         }
         Relationships: []
       }
@@ -1525,6 +1666,7 @@ export type Database = {
         }[]
       }
       generate_referral_code: { Args: never; Returns: string }
+      get_my_credit_balance: { Args: never; Returns: number }
       get_my_delivery_proof: {
         Args: { p_order_id: string }
         Returns: {
