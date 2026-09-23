@@ -400,7 +400,7 @@ function StoreCartBar({
             </label>
           )}
           <span className="text-muted-foreground">
-            Pedido {tier.tier} · Entrega ${(shippingCents / 100).toFixed(2)}
+            Entrega ${(shippingCents / 100).toFixed(2)}
             {tipCents > 0 ? ` · Propina $${(tipCents / 100).toFixed(2)}` : ""}
           </span>
         </div>
