@@ -53,6 +53,19 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   driverWeightSharePct: "driver_weight_share_pct",
   driverTipSharePct: "driver_tip_share_pct",
   referralBonusUsd: "referral_bonus_usd",
+  tierSmallMaxUsd: "tier_small_max_usd",
+  tierMediumMaxUsd: "tier_medium_max_usd",
+  tierSmallFeeUsd: "tier_small_fee_usd",
+  tierSmallDriverUsd: "tier_small_driver_usd",
+  tierSmallCompanyUsd: "tier_small_company_usd",
+  tierMediumFeeUsd: "tier_medium_fee_usd",
+  tierMediumDriverUsd: "tier_medium_driver_usd",
+  tierMediumCompanyUsd: "tier_medium_company_usd",
+  tierLargeFeeUsd: "tier_large_fee_usd",
+  tierLargeDriverUsd: "tier_large_driver_usd",
+  tierLargeCompanyUsd: "tier_large_company_usd",
+  cutoffHourEt: "cutoff_hour_et",
+  deliveryDaysMask: "delivery_days_mask",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
