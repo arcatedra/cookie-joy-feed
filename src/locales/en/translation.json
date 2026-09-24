@@ -1312,7 +1312,7 @@
       "email": "Email",
       "phone": "Phone",
       "dob": "Date of birth (18+)",
-      "zone": "Preferred work zone",
+      "zone": "Favorite zones (you'll see their orders first, but can take orders from any zone)",
       "address": "Address",
       "licenseNumber": "Driver's license number",
       "insurer": "Insurance provider",
