@@ -5,6 +5,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { zoneForZip, OTHER_AREAS } from "./pricing";
 
 const HEAVY_LB = 45;
 
@@ -30,25 +31,23 @@ async function myDriver(admin: any, userId: string) {
   const hasCar = (v ?? []).some((x: any) => ["auto", "carro", "car"].includes(x.vehicle_type));
   const { data: dz } = await admin
     .from("driver_zones")
-    .select("zone_id, delivery_zones(zip_codes, activo)")
+    .select("zone_id, delivery_zones(name, activo)")
     .eq("driver_id", userId);
-  const zips = new Set<string>();
+  const favoritas: string[] = [];
   for (const r of dz ?? []) {
     const z: any = (r as any).delivery_zones;
-    if (z?.activo) for (const c of z.zip_codes ?? []) zips.add(String(c));
+    if (z?.activo) favoritas.push(String(z.name));
   }
-  return { ...d, hasCar, zips };
+  return { ...d, hasCar, favoritas };
 }
 
 function zipOf(o: any): string {
   return String(o?.direccion_envio?.zip ?? "").trim().slice(0, 5);
 }
 
-async function allZoneZips(admin: any): Promise<Set<string>> {
-  const { data } = await admin.from("delivery_zones").select("zip_codes").eq("activo", true);
-  const s = new Set<string>();
-  for (const z of data ?? []) for (const c of z.zip_codes ?? []) s.add(String(c));
-  return s;
+async function loadZones(admin: any) {
+  const { data } = await admin.from("delivery_zones").select("name, zip_codes, activo").eq("activo", true);
+  return (data ?? []) as { name: string; zip_codes: string[]; activo: boolean }[];
 }
 
 function earnings(o: any): number {
@@ -87,6 +86,7 @@ async function buildCards(admin: any, orders: any[], showClientAddress: boolean)
       .select("order_id, cantidad, cantidad_real")
       .in("order_id", orders.map((o) => o.id)),
   ]);
+  const zones = await loadZones(admin);
   const bizById = new Map((bizs ?? []).map((b: any) => [b.id, b]));
   const count = new Map<string, number>();
   for (const it of items ?? []) {
@@ -100,8 +100,8 @@ async function buildCards(admin: any, orders: any[], showClientAddress: boolean)
       numero: o.numero_pedido,
       tienda: b.business_name ?? "Tienda",
       tiendaDireccion: [b.address, b.city].filter(Boolean).join(", "),
-      zona: a.city ?? "",
-      zip: a.zip ?? "",
+      zona: zoneForZip(zones, zipOf(o)),
+      zip: zipOf(o),
       pesoLb: Number(o.peso_total_lb ?? 0),
       articulos: count.get(o.id) ?? 0,
       gananciaUsd: earnings(o),
@@ -126,7 +126,7 @@ export const listDriverStoreOrders = createServerFn({ method: "GET" })
     const admin = supabaseAdmin as any;
     const d = await myDriver(admin, userId);
     if (d.application_status !== "aprobado") {
-      return { aprobado: false, sinZonas: false, disponibles: [], mios: [] };
+      return { aprobado: false, favoritas: [] as string[], disponibles: [] as DeliveryCard[], mios: [] as DeliveryCard[] };
     }
     const today = todayET();
     const [{ data: avail }, { data: mine }] = await Promise.all([
@@ -145,13 +145,12 @@ export const listDriverStoreOrders = createServerFn({ method: "GET" })
         .eq("estado", "listo")
         .order("tomado_en", { ascending: true }),
     ]);
-    const filtered = (avail ?? []).filter((o: any) => {
-      if (Number(o.peso_total_lb ?? 0) > HEAVY_LB && !d.hasCar) return false;
-      return d.zips.has(zipOf(o));
-    });
+    const filtered = (avail ?? []).filter(
+      (o: any) => !(Number(o.peso_total_lb ?? 0) > HEAVY_LB && !d.hasCar),
+    );
     return {
       aprobado: true,
-      sinZonas: d.zips.size === 0,
+      favoritas: d.favoritas,
       disponibles: await buildCards(admin, filtered, false),
       mios: await buildCards(admin, mine ?? [], true),
     };
@@ -165,6 +164,22 @@ export const claimStoreOrder = createServerFn({ method: "POST" })
     const { error } = await db.rpc("claim_store_order", { p_order_id: data.id });
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+/** Toma varios pedidos (p. ej. todo un código postal). Cada uno se toma de forma atómica. */
+export const claimStoreOrderGroup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw) => z.object({ ids: z.array(z.string().uuid()).min(1).max(50) }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = (context as any).supabase;
+    let tomados = 0;
+    const fallidos: string[] = [];
+    for (const id of data.ids) {
+      const { error } = await db.rpc("claim_store_order", { p_order_id: id });
+      if (error) fallidos.push(error.message);
+      else tomados++;
+    }
+    return { tomados, noTomados: fallidos.length, motivo: fallidos[0] ?? null };
   });
 
 async function finishDelivery(orderId: string) {
@@ -261,12 +276,11 @@ export const adminListStoreDeliveries = createServerFn({ method: "GET" })
         .order("full_name"),
     ]);
     const cards = await buildCards(admin, orders ?? [], true);
-    const covered = await allZoneZips(admin);
     const byId = new Map((orders ?? []).map((o: any) => [o.id, o]));
     return {
       pedidos: cards.map((c) => {
         const o: any = byId.get(c.id);
-        return { ...c, sinZona: !covered.has(zipOf(o)), estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
+        return { ...c, sinZona: c.zona === OTHER_AREAS, estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
       }),
       repartidores: drivers ?? [],
     };
