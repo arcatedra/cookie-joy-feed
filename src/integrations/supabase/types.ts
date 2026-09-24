@@ -407,6 +407,7 @@ export type Database = {
       delivery_zones: {
         Row: {
           activo: boolean
+          borough: string
           created_at: string
           id: string
           name: string
@@ -416,6 +417,7 @@ export type Database = {
         }
         Insert: {
           activo?: boolean
+          borough?: string
           created_at?: string
           id?: string
           name: string
@@ -425,6 +427,7 @@ export type Database = {
         }
         Update: {
           activo?: boolean
+          borough?: string
           created_at?: string
           id?: string
           name?: string
