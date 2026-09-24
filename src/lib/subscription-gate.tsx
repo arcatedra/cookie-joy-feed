@@ -28,7 +28,7 @@ const VALUE: GateValue = {
   canPurchase: true,
   loading: false,
   subscription: null,
-  deliveryStatus: emptyDeliveryStatus,
+  deliveryStatus: emptyDeliveryStatus(),
   guard: (action) => {
     action?.();
     return true;
