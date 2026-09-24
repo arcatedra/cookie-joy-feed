@@ -7,9 +7,11 @@ import { Loader2, RefreshCw, Store, MapPin, Package, Camera } from "lucide-react
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { groupByZoneZip } from "@/lib/pricing";
 import {
   advanceStoreDelivery,
   claimStoreOrder,
+  claimStoreOrderGroup,
   listDriverStoreOrders,
   getMyDriverZones,
   setMyDriverZones,
@@ -48,6 +50,7 @@ const STEP_LABEL: Record<string, string> = {
 function DriverStorePage() {
   const fetchList = useServerFn(listDriverStoreOrders);
   const claim = useServerFn(claimStoreOrder);
+  const claimGroup = useServerFn(claimStoreOrderGroup);
   const advance = useServerFn(advanceStoreDelivery);
   const [busy, setBusy] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -66,6 +69,20 @@ function DriverStorePage() {
       toast.success("Pedido tomado. Ve a la tienda a recogerlo.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "No se pudo tomar");
+    } finally {
+      setBusy(null);
+      refetch();
+    }
+  }
+
+  async function onClaimGroup(key: string, ids: string[]) {
+    setBusy(key);
+    try {
+      const r = await claimGroup({ data: { ids } });
+      if (r.tomados > 0) toast.success(`Tomaste ${r.tomados} ${r.tomados === 1 ? "pedido" : "pedidos"}.`);
+      if (r.noTomados > 0) toast.warning(`${r.noTomados} no se pudieron tomar: ${r.motivo ?? ""}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "No se pudieron tomar");
     } finally {
       setBusy(null);
       refetch();
@@ -120,11 +137,9 @@ function DriverStorePage() {
     }
   }
 
-  const groups = new Map<string, DeliveryCard[]>();
-  for (const c of data?.disponibles ?? []) {
-    const k = c.zip || c.zona || "Sin código postal";
-    groups.set(k, [...(groups.get(k) ?? []), c]);
-  }
+  const favoritas: string[] = (data as any)?.favoritas ?? [];
+  const groups = groupByZoneZip(data?.disponibles ?? [], (c) => c.zona, (c) => c.zip, favoritas);
+  const sum = (cs: DeliveryCard[], f: (c: DeliveryCard) => number) => cs.reduce((a, c) => a + f(c), 0);
 
   return (
     <div className="mx-auto max-w-3xl space-y-5 p-4">
@@ -204,33 +219,66 @@ function DriverStorePage() {
 
           <section className="space-y-4">
             <h2 className="font-semibold">Disponibles</h2>
-            {groups.size === 0 ? (
+            {groups.length === 0 ? (
               <p className="rounded-2xl border p-6 text-sm text-muted-foreground">
-                No hay pedidos disponibles en tu zona ahora mismo.
+                No hay pedidos disponibles ahora mismo.
               </p>
             ) : (
-              [...groups.entries()].map(([zip, cards]) => (
-                <div key={zip} className="space-y-2">
-                  <h3 className="text-sm font-medium text-muted-foreground">Código postal {zip}</h3>
-                  {cards.map((c) => (
-                    <article key={c.id} className="space-y-2 rounded-2xl border bg-card p-4">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold">{c.tienda}</span>
-                        <span className="text-lg font-bold">{money(c.gananciaUsd)}</span>
-                      </div>
-                      <p className="flex items-center gap-2 text-sm">
-                        <Store className="h-4 w-4" /> {c.tiendaDireccion || "Dirección de la tienda"}
-                      </p>
-                      <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Package className="h-4 w-4" /> {c.zona} · {c.pesoLb} lb · {c.articulos} artículos
-                      </p>
-                      <Button className="w-full" disabled={busy === c.id} onClick={() => onClaim(c.id)}>
-                        {busy === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Tomar pedido"}
-                      </Button>
-                    </article>
-                  ))}
-                </div>
-              ))
+              groups.map((g) => {
+                const all = g.zips.flatMap((z) => z.items);
+                return (
+                  <div key={g.zona} className="space-y-3">
+                    <h3 className="rounded-lg bg-muted px-3 py-2 text-sm font-bold">
+                      {g.zona}
+                      {favoritas.includes(g.zona) ? " ★" : ""} · {all.length} pedidos ·{" "}
+                      {sum(all, (c) => c.pesoLb).toFixed(1)} lb · ganas {money(sum(all, (c) => c.gananciaUsd))}
+                    </h3>
+                    {g.zips.map(({ zip, items: cards }) => {
+                      const key = `${g.zona}-${zip}`;
+                      return (
+                        <div key={zip} className="space-y-2 rounded-2xl border p-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="text-sm font-medium">
+                              Código postal {zip} · {cards.length} pedidos · {sum(cards, (c) => c.pesoLb).toFixed(1)} lb ·
+                              ganas {money(sum(cards, (c) => c.gananciaUsd))}
+                            </p>
+                            {cards.length > 1 && (
+                              <Button
+                                size="sm"
+                                disabled={busy === key}
+                                onClick={() => onClaimGroup(key, cards.map((c) => c.id))}
+                              >
+                                {busy === key ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  `Tomar los ${cards.length} pedidos de ${zip}`
+                                )}
+                              </Button>
+                            )}
+                          </div>
+                          {cards.map((c) => (
+                            <article key={c.id} className="space-y-2 rounded-xl border bg-card p-4">
+                              <div className="flex items-center justify-between">
+                                <span className="font-semibold">{c.tienda}</span>
+                                <span className="text-lg font-bold">{money(c.gananciaUsd)}</span>
+                              </div>
+                              <p className="flex items-center gap-2 text-sm">
+                                <Store className="h-4 w-4" /> {c.tiendaDireccion || "Dirección de la tienda"}
+                              </p>
+                              <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Package className="h-4 w-4" /> {c.pesoLb} lb · {c.articulos} artículos
+                              </p>
+                              <Button className="w-full" variant="outline" disabled={busy === c.id} onClick={() => onClaim(c.id)}>
+                                {busy === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Tomar pedido"}
+                              </Button>
+                            </article>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })
             )}
           </section>
         </>
@@ -264,9 +312,9 @@ function MyZones({ onSaved }: { onSaved: () => void }) {
   }
   return (
     <section className="rounded-2xl border p-4">
-      <p className="text-sm font-semibold">Mis zonas</p>
+      <p className="text-sm font-semibold">Mis zonas favoritas</p>
       <p className="mb-3 text-xs text-muted-foreground">
-        Solo verás pedidos cuyo código postal esté en tus zonas.
+        Se muestran primero. Igual puedes ver y tomar pedidos de cualquier zona.
       </p>
       {data.zonas.length === 0 ? (
         <p className="text-xs text-muted-foreground">Todavía no hay zonas creadas.</p>
@@ -287,9 +335,6 @@ function MyZones({ onSaved }: { onSaved: () => void }) {
             );
           })}
         </div>
-      )}
-      {current.length === 0 && data.zonas.length > 0 && (
-        <p className="mt-2 text-xs text-destructive">Elige al menos una zona para ver pedidos.</p>
       )}
       {dirty && (
         <Button size="sm" className="mt-3" disabled={saving} onClick={onSave}>
