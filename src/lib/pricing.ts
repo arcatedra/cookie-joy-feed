@@ -200,12 +200,52 @@ function weekdayOf(dateStr: string): number {
  */
 export type DeliveryZone = { id: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
 
-/** Días de ruta de la zona del código postal; si no tiene zona, los días generales. */
-export function daysForZip(zones: DeliveryZone[] | undefined, zip: string | null | undefined, p: PricingSettings): number[] {
-  const z5 = String(zip ?? "").trim().slice(0, 5);
-  const zone = (zones ?? []).find((z) => z.activo !== false && (z.zip_codes ?? []).includes(z5));
-  if (zone && zone.route_days?.length) return zone.route_days;
+/** Días de entrega: siempre los días generales (iguales para todas las zonas). */
+export function daysForZip(_zones: DeliveryZone[] | undefined, _zip: string | null | undefined, p: PricingSettings): number[] {
   return allowedDeliveryDays(p);
+}
+
+export const OTHER_AREAS = "Otras áreas";
+
+/** Zona de un código postal: coincidencia exacta gana sobre prefijo más largo. */
+export function zoneForZip(
+  zones: { name: string; zip_codes: string[]; activo?: boolean }[] | undefined,
+  zip: string | null | undefined,
+): string {
+  const z5 = String(zip ?? "").trim().slice(0, 5);
+  if (!z5) return OTHER_AREAS;
+  let best: { name: string; len: number } | null = null;
+  for (const z of zones ?? []) {
+    if (z.activo === false) continue;
+    for (const c of z.zip_codes ?? []) {
+      if (z5.startsWith(c) && (!best || c.length > best.len)) best = { name: z.name, len: c.length };
+    }
+  }
+  return best?.name ?? OTHER_AREAS;
+}
+
+/** Agrupa elementos por zona y luego por código postal; "Otras áreas" al final. */
+export function groupByZoneZip<T>(
+  items: T[],
+  zoneOf: (t: T) => string,
+  zipOf: (t: T) => string,
+  firstZones: string[] = [],
+): { zona: string; zips: { zip: string; items: T[] }[] }[] {
+  const m = new Map<string, Map<string, T[]>>();
+  for (const it of items) {
+    const zn = zoneOf(it);
+    const zp = zipOf(it) || "Sin código postal";
+    if (!m.has(zn)) m.set(zn, new Map());
+    const inner = m.get(zn)!;
+    inner.set(zp, [...(inner.get(zp) ?? []), it]);
+  }
+  const rank = (z: string) => (firstZones.includes(z) ? 0 : z === OTHER_AREAS ? 2 : 1);
+  return [...m.entries()]
+    .sort((a, b) => rank(a[0]) - rank(b[0]) || a[0].localeCompare(b[0]))
+    .map(([zona, inner]) => ({
+      zona,
+      zips: [...inner.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([zip, items]) => ({ zip, items })),
+    }));
 }
 
 export function availableDeliveryDates(

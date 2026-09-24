@@ -239,11 +239,11 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
   async function onSave() {
     if (!editing) return;
     const zips = [...new Set(editing.zips.split(/[\s,;]+/).map((z) => z.trim()).filter(Boolean))];
-    const bad = zips.find((z) => !/^\d{5}$/.test(z));
-    if (bad) return toast.error(`Código postal inválido: ${bad}`);
+    const bad = zips.find((z) => !/^\d{3,5}$/.test(z));
+    if (bad) return toast.error(`Código inválido: ${bad} (usa 3 a 5 dígitos)`);
     setBusy(true);
     try {
-      await save({ data: { id: editing.id, name: editing.name, zip_codes: zips, route_days: editing.days, activo: true } });
+      await save({ data: { id: editing.id, name: editing.name, zip_codes: zips, route_days: [], activo: true } });
       toast.success("Zona guardada");
       setEditing(null);
       onChanged();
@@ -277,7 +277,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
         </button>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Los pedidos con un código postal fuera de todas las zonas solo los ve el admin para asignarlos a mano.
+        Las zonas solo agrupan pedidos cercanos. Los días de entrega son iguales para todas (arriba). Un código fuera de todas las zonas aparece en "Otras áreas".
       </p>
 
       {zones.length === 0 && !editing && (
@@ -303,7 +303,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              {z.route_days.map((d) => DAY_NAMES[d]).join(", ") || "Sin días"} · {z.zip_codes.length} códigos:{" "}
+              {z.zip_codes.length} códigos o prefijos:{" "}
               {z.zip_codes.slice(0, 12).join(", ")}
               {z.zip_codes.length > 12 ? "…" : ""}
             </p>
@@ -323,7 +323,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
           </label>
           <label className="block">
             <span className="mb-1 block text-xs text-muted-foreground">
-              Códigos postales (separados por coma o espacio)
+              Códigos postales de 5 dígitos o prefijos de 3 (ej. 112 = todo lo que empieza con 112), separados por coma
             </span>
             <textarea
               value={editing.zips}
@@ -332,27 +332,6 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
             />
           </label>
-          <div className="flex flex-wrap gap-2">
-            {DAY_NAMES.map((name, day) => (
-              <button
-                key={day}
-                type="button"
-                onClick={() =>
-                  setEditing({
-                    ...editing,
-                    days: editing.days.includes(day)
-                      ? editing.days.filter((d) => d !== day)
-                      : [...editing.days, day].sort(),
-                  })
-                }
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  editing.days.includes(day) ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {name}
-              </button>
-            ))}
-          </div>
           <div className="flex gap-2">
             <button
               onClick={onSave}

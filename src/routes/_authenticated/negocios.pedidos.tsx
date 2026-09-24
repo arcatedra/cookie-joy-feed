@@ -8,6 +8,8 @@ import {
   markOrderReadyAndCapture,
   startPreparingOrder,
 } from "@/lib/store-orders.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { groupByZoneZip, zoneForZip } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/negocios/pedidos")({
   head: () => ({
@@ -64,24 +66,25 @@ function StoreOrdersPage() {
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["store-orders"] });
 
-  /** Pedidos agrupados por código postal (o ciudad si no hay código). */
+  const { data: zonas } = useQuery({
+    queryKey: ["delivery-zones-public"],
+    queryFn: async () => {
+      const { data } = await supabase.from("delivery_zones").select("name, zip_codes, activo");
+      return data ?? [];
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  /** Pedidos agrupados por zona y luego por código postal. */
   const grupos = useMemo(() => {
-    const map = new Map<string, any[]>();
-    for (const o of (data ?? []) as any[]) {
-      const dir = (o.direccion_envio ?? {}) as any;
-      const zona = String(dir.zip || dir.city || "Sin zona");
-      if (!map.has(zona)) map.set(zona, []);
-      map.get(zona)!.push(o);
-    }
-    return [...map.entries()]
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([zona, orders]) => ({
-        zona,
-        orders: orders.sort(
-          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-        ),
-      }));
-  }, [data]);
+    const zipOf = (o: any) => String(o.direccion_envio?.zip ?? "").trim().slice(0, 5);
+    const sorted = [...((data ?? []) as any[])].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+    return groupByZoneZip(sorted, (o) => zoneForZip(zonas as any, zipOf(o)), zipOf).flatMap((g) =>
+      g.zips.map((z) => ({ zona: `${g.zona} · ${z.zip}`, orders: z.items })),
+    );
+  }, [data, zonas]);
 
   const prepareM = useMutation({
     mutationFn: (id: string) => prepare({ data: { id } }),
@@ -135,7 +138,7 @@ function StoreOrdersPage() {
       {grupos.map((g) => (
       <div key={g.zona} className="space-y-3">
         <h2 className="mt-4 rounded-lg bg-muted px-3 py-2 text-sm font-bold">
-          Zona {g.zona} · {g.orders.length} {g.orders.length === 1 ? "pedido" : "pedidos"}
+          {g.zona} · {g.orders.length} {g.orders.length === 1 ? "pedido" : "pedidos"}
         </h2>
         {g.orders.map((o: any) => (
           <article key={o.id} className="border rounded-lg p-4 bg-card space-y-3">
