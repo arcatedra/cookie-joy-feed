@@ -1,5 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { loadStripe, type Stripe } from "@stripe/stripe-js";
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -51,11 +54,38 @@ export const Route = createFileRoute("/tienda/$slug")({
   ),
 });
 
+let _stripePromise: Promise<Stripe | null> | null = null;
+function getStripe() {
+  if (!_stripePromise) {
+    const pk = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
+    _stripePromise = pk ? loadStripe(pk) : Promise.resolve(null);
+  }
+  return _stripePromise;
+}
+
+/** Clave del carrito guardado de una tienda (se vacía solo cuando el pago queda autorizado). */
+export const storeCartKey = (businessId: string) => `hz-store-cart:${businessId}`;
+
 function StorePage() {
   const { t } = useTranslation();
   const { store, categories, products } = Route.useLoaderData() as any;
   const [q, setQ] = useState("");
   const [cart, setCart] = useState<Record<string, number>>({});
+  const [cartLoaded, setCartLoaded] = useState(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storeCartKey(store.id));
+      if (raw) setCart(JSON.parse(raw));
+    } catch {}
+    setCartLoaded(true);
+  }, [store.id]);
+  useEffect(() => {
+    if (!cartLoaded) return;
+    try {
+      if (Object.keys(cart).length) localStorage.setItem(storeCartKey(store.id), JSON.stringify(cart));
+      else localStorage.removeItem(storeCartKey(store.id));
+    } catch {}
+  }, [cart, cartLoaded, store.id]);
 
   const addToCart = (id: string, delta: number) =>
     setCart((prev) => {
@@ -249,6 +279,7 @@ function StoreCartBar({
   const [propinaOtro, setPropinaOtro] = useState("");
   const [usarSaldo, setUsarSaldo] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const { data: config } = useQuery({
     queryKey: ["pricing-config"],
@@ -343,9 +374,9 @@ function StoreCartBar({
           usarSaldo,
         },
       });
-      onClear();
-      if (res.url) window.location.href = res.url;
-      else toast.success(`Pedido ${res.numeroPedido} creado.`);
+      // El carrito NO se vacía aquí: solo cuando Stripe autoriza el pago.
+      if (!res.clientSecret) throw new Error("No se pudo abrir la pantalla de pago.");
+      setClientSecret(res.clientSecret);
     } catch (err) {
       toast.error((err as Error).message || "No se pudo iniciar el pago.");
     } finally {
@@ -461,6 +492,21 @@ function StoreCartBar({
           Pagar ${(totalCents / 100).toFixed(2)}
         </button>
       </div>
+      <Dialog open={!!clientSecret} onOpenChange={(o) => !o && setClientSecret(null)}>
+        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Pago seguro</DialogTitle>
+          </DialogHeader>
+          <p className="text-xs text-muted-foreground">
+            Reservamos un poco más en tu tarjeta por si cambia el peso. Al final solo se cobra lo real.
+          </p>
+          {clientSecret && (
+            <EmbeddedCheckoutProvider key={clientSecret} stripe={getStripe()} options={{ clientSecret }}>
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

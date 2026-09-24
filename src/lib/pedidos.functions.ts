@@ -63,22 +63,7 @@ export const listMyPedidos = createServerFn({ method: "GET" })
     })) as Pedido[];
   });
 
+/** Hazorex ya no usa suscripciones: se mantiene por compatibilidad y no consulta nada. */
 export const getMySuscripcion = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { supabase, userId } = context as {
-      supabase: import("@supabase/supabase-js").SupabaseClient;
-      userId: string;
-    };
-    const { data, error } = await supabase
-      .from("suscripciones")
-      .select(
-        "id,plan,precio,moneda,estado,stripe_subscription_id,fecha_inicio,fecha_renovacion,fecha_cancelacion,creado_en",
-      )
-      .eq("cliente_id", userId)
-      .order("creado_en", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    return data;
-  });
+  .handler(async () => null as null | Record<string, any>);

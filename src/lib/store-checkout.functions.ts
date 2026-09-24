@@ -165,6 +165,22 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const commissionPct = Number(business.comision_porcentaje ?? 15);
     const commissionEstimated = Math.round((subtotalCents * commissionPct) / 100) / 100;
 
+    // Limpia pedidos propios abandonados (sin pago) de esta tienda.
+    {
+      const { data: stale } = await db
+        .from("store_orders")
+        .select("id")
+        .eq("cliente_id", userId)
+        .eq("business_id", data.businessId)
+        .eq("estado", "pendiente_pago")
+        .is("stripe_payment_intent_id", null);
+      const ids = (stale ?? []).map((r: any) => r.id);
+      if (ids.length) {
+        await db.from("store_order_items").delete().in("order_id", ids);
+        await db.from("store_orders").delete().in("id", ids);
+      }
+    }
+
     // ---- Pedido en 'pendiente_pago' --------------------------------------
     const { data: order, error: orderErr } = await db
       .from("store_orders")
@@ -274,8 +290,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         "/v1/checkout/sessions",
         {
           mode: "payment",
-          ui_mode: "embedded",
-          return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          ui_mode: "embedded_page",
+          return_url: `${origin}/mis-pedidos/tienda/${order.id}?pago=1`,
           customer_email: email || undefined,
           line_items: lineItems,
           payment_intent_data: {
