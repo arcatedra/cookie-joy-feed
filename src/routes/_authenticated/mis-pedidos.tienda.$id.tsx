@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -62,7 +63,19 @@ function StoreOrderDetailPage() {
     queryKey: ["store-order", id],
     queryFn: () => fetchOrder({ data: { id } }),
     staleTime: 15_000,
+    // Recién pagado: el aviso de Stripe puede tardar unos segundos.
+    refetchInterval: (q) => ((q.state.data as any)?.order?.estado === "pendiente_pago" ? 2000 : false),
   });
+
+  // Vacía el carrito de esa tienda solo cuando el pago quedó autorizado.
+  const estadoPedido = (data as any)?.order?.estado as string | undefined;
+  const bizId = (data as any)?.order?.business_id as string | undefined;
+  useEffect(() => {
+    if (!bizId || !estadoPedido || estadoPedido === "pendiente_pago") return;
+    try {
+      localStorage.removeItem(`hz-store-cart:${bizId}`);
+    } catch {}
+  }, [bizId, estadoPedido]);
 
   if (isLoading) {
     return <div className="max-w-2xl mx-auto p-6 text-sm text-muted-foreground">Cargando…</div>;
