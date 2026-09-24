@@ -64,7 +64,7 @@ function StoreOrderDetailPage() {
     queryFn: () => fetchOrder({ data: { id } }),
     staleTime: 15_000,
     // Recién pagado: el aviso de Stripe puede tardar unos segundos.
-    refetchInterval: (q) => ((q.state.data as any)?.order?.estado === "pendiente_pago" ? 2000 : false),
+    refetchInterval: (q) => ((q.state.data as any)?.order?.estado === "pendiente_pago" && q.state.dataUpdateCount < 30 ? 2000 : false),
   });
 
   // Vacía el carrito de esa tienda solo cuando el pago quedó autorizado.
