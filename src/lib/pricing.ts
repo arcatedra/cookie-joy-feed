@@ -198,7 +198,7 @@ function weekdayOf(dateStr: string): number {
  * Próximas fechas de entrega: solo los días permitidos y respetando la hora
  * límite de corte del día anterior (hora de Nueva York).
  */
-export type DeliveryZone = { id: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
+export type DeliveryZone = { id: string; name: string; borough?: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
 
 /** Días de entrega: siempre los días generales (iguales para todas las zonas). */
 export function daysForZip(_zones: DeliveryZone[] | undefined, _zip: string | null | undefined, p: PricingSettings): number[] {

@@ -619,10 +619,11 @@ function ApplicationForm({
     queryFn: async () => {
       const { data } = await (supabase as any)
         .from("delivery_zones")
-        .select("id, name")
+        .select("id, name, borough")
         .eq("activo", true)
+        .order("borough")
         .order("name");
-      return (data ?? []) as ZoneOpt[];
+      return ((data ?? []) as any[]).map((z) => ({ ...z, name: z.borough ? `${z.borough} · ${z.name}` : z.name })) as ZoneOpt[];
     },
   });
   const toggleZone = (z: ZoneOpt) => {
