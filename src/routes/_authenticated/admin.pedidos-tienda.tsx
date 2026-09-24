@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Loader2, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { groupByZoneZip } from "@/lib/pricing";
 import { adminAssignStoreOrder, adminListStoreDeliveries } from "@/lib/store-delivery.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/pedidos-tienda")({
@@ -72,20 +73,22 @@ function AdminStoreDeliveries() {
       ) : (data?.pedidos ?? []).length === 0 ? (
         <p className="p-6 text-sm text-muted-foreground">No hay pedidos listos ni entregados.</p>
       ) : (
+        <div className="space-y-5">
+        {groupByZoneZip(data!.pedidos, (p) => p.zona, (p) => p.zip).map((g) => (
+        <section key={g.zona} className="space-y-2">
+          <h2 className="rounded-lg bg-muted px-3 py-2 text-sm font-bold">{g.zona}</h2>
+          {g.zips.map((zg) => (
+        <div key={zg.zip} className="space-y-1">
+        <h3 className="text-xs font-medium text-muted-foreground">Código postal {zg.zip} · {zg.items.length} pedidos</h3>
         <ul className="divide-y rounded-2xl border">
-          {data!.pedidos.map((p) => (
+          {zg.items.map((p) => (
             <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 p-3">
               <div className="min-w-0">
                 <p className="text-sm font-medium">
                   #{p.numero} · {p.tienda}
-                  {p.sinZona && (
-                    <span className="ml-2 rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-semibold text-destructive">
-                      Sin zona — asignar a mano
-                    </span>
-                  )}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {p.zona} {p.zip} · {p.pesoLb} lb · {p.articulos} art. · repartidor gana $
+                  {p.pesoLb} lb · {p.articulos} art. · repartidor gana $
                   {p.gananciaUsd.toFixed(2)}
                 </p>
                 <p className="text-xs">
@@ -115,6 +118,11 @@ function AdminStoreDeliveries() {
             </li>
           ))}
         </ul>
+        </div>
+          ))}
+        </section>
+        ))}
+        </div>
       )}
     </div>
   );
