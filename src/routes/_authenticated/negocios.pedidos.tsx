@@ -69,7 +69,7 @@ function StoreOrdersPage() {
   const { data: zonas } = useQuery({
     queryKey: ["delivery-zones-public"],
     queryFn: async () => {
-      const { data } = await supabase.from("delivery_zones").select("name, zip_codes, activo");
+      const { data } = await supabase.from("delivery_zones").select("name, borough, zip_codes, activo");
       return data ?? [];
     },
     staleTime: 5 * 60_000,
