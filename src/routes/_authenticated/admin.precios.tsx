@@ -228,22 +228,22 @@ function PreciosPage() {
   );
 }
 
-type ZoneRow = { id?: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
+type ZoneRow = { id?: string; name: string; borough?: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
 
 function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => void }) {
   const save = useServerFn(saveDeliveryZone);
   const remove = useServerFn(deleteDeliveryZone);
-  const [editing, setEditing] = useState<{ id?: string; name: string; zips: string; days: number[] } | null>(null);
+  const [editing, setEditing] = useState<{ id?: string; name: string; borough: string; zips: string; days: number[] } | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function onSave() {
     if (!editing) return;
     const zips = [...new Set(editing.zips.split(/[\s,;]+/).map((z) => z.trim()).filter(Boolean))];
-    const bad = zips.find((z) => !/^\d{3,5}$/.test(z));
-    if (bad) return toast.error(`Código inválido: ${bad} (usa 3 a 5 dígitos)`);
+    const bad = zips.find((z) => !/^\d{5}$/.test(z));
+    if (bad) return toast.error(`Código inválido: ${bad} (usa 5 dígitos)`);
     setBusy(true);
     try {
-      await save({ data: { id: editing.id, name: editing.name, zip_codes: zips, route_days: [], activo: true } });
+      await save({ data: { id: editing.id, name: editing.name, borough: editing.borough.trim(), zip_codes: zips, route_days: [], activo: true } });
       toast.success("Zona guardada");
       setEditing(null);
       onChanged();
@@ -270,7 +270,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
         <h2 className="text-sm font-bold">Zonas de entrega (por código postal)</h2>
         <button
           type="button"
-          onClick={() => setEditing({ name: "", zips: "", days: [1, 3, 5] })}
+          onClick={() => setEditing({ name: "", borough: "", zips: "", days: [1, 3, 5] })}
           className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
         >
           + Nueva zona
@@ -284,15 +284,18 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
         <p className="mt-3 text-sm text-muted-foreground">Aún no hay zonas.</p>
       )}
       <ul className="mt-3 space-y-2">
-        {zones.map((z) => (
+        {zones.map((z, i) => (
           <li key={z.id} className="rounded-lg border border-border p-3">
+            {(i === 0 || zones[i - 1].borough !== z.borough) && (
+              <p className="mb-1 text-[11px] font-bold uppercase tracking-wide text-muted-foreground">{z.borough || "Sin condado"}</p>
+            )}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-semibold">{z.name}</p>
               <div className="flex gap-2 text-xs">
                 <button
                   className="underline"
                   onClick={() =>
-                    setEditing({ id: z.id, name: z.name, zips: z.zip_codes.join(", "), days: z.route_days })
+                    setEditing({ id: z.id, name: z.name, borough: z.borough ?? "", zips: z.zip_codes.join(", "), days: z.route_days })
                   }
                 >
                   Editar
@@ -303,7 +306,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              {z.zip_codes.length} códigos o prefijos:{" "}
+              {z.zip_codes.length} códigos postales:{" "}
               {z.zip_codes.slice(0, 12).join(", ")}
               {z.zip_codes.length > 12 ? "…" : ""}
             </p>
@@ -314,6 +317,18 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
       {editing && (
         <div className="mt-4 space-y-3 rounded-lg border border-border p-4">
           <label className="block">
+            <span className="mb-1 block text-xs text-muted-foreground">Condado / borough</span>
+            <input
+              list="boroughs"
+              value={editing.borough}
+              onChange={(e) => setEditing({ ...editing, borough: e.target.value })}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            />
+            <datalist id="boroughs">
+              {["Queens", "Brooklyn", "Manhattan", "Bronx", "Staten Island"].map((b) => <option key={b} value={b} />)}
+            </datalist>
+          </label>
+          <label className="block">
             <span className="mb-1 block text-xs text-muted-foreground">Nombre de la zona</span>
             <input
               value={editing.name}
@@ -323,7 +338,7 @@ function ZonesEditor({ zones, onChanged }: { zones: ZoneRow[]; onChanged: () => 
           </label>
           <label className="block">
             <span className="mb-1 block text-xs text-muted-foreground">
-              Códigos postales de 5 dígitos o prefijos de 3 (ej. 112 = todo lo que empieza con 112), separados por coma
+              Códigos postales de 5 dígitos, separados por coma
             </span>
             <textarea
               value={editing.zips}

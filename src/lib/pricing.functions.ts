@@ -19,7 +19,7 @@ export const getPricingConfig = createServerFn({ method: "GET" }).handler(async 
   const [{ data: rows }, { data: zones }, { data: dz }] = await Promise.all([
     db.from("pricing_settings").select("key, value"),
     db.from("zone_delivery_days").select("zone, days"),
-    db.from("delivery_zones").select("id, name, zip_codes, route_days, activo").order("name"),
+    db.from("delivery_zones").select("id, name, borough, zip_codes, route_days, activo").order("borough").order("name"),
   ]);
   return {
     pricing: pricingFromRows(rows),
@@ -66,8 +66,9 @@ export type { PricingSettings };
 
 const zoneSchema = z.object({
   id: z.string().uuid().optional(),
-  name: z.string().trim().min(1).max(80),
-  zip_codes: z.array(z.string().trim().regex(/^\d{3,5}$/)).max(500),
+  name: z.string().trim().min(1).max(120),
+  borough: z.string().trim().max(60).default(""),
+  zip_codes: z.array(z.string().trim().regex(/^\d{5}$/)).max(500),
   route_days: z.array(z.number().int().min(0).max(6)).max(7),
   activo: z.boolean().default(true),
 });
@@ -84,7 +85,7 @@ export const saveDeliveryZone = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => zoneSchema.parse(raw))
   .handler(async ({ data, context }) => {
     const db = await requireAdmin(context);
-    const row = { name: data.name, zip_codes: data.zip_codes, route_days: data.route_days, activo: data.activo };
+    const row = { name: data.name, borough: data.borough, zip_codes: data.zip_codes, route_days: data.route_days, activo: data.activo };
     const q = data.id
       ? db.from("delivery_zones").update(row).eq("id", data.id)
       : db.from("delivery_zones").insert(row);

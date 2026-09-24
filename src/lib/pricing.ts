@@ -198,7 +198,7 @@ function weekdayOf(dateStr: string): number {
  * Próximas fechas de entrega: solo los días permitidos y respetando la hora
  * límite de corte del día anterior (hora de Nueva York).
  */
-export type DeliveryZone = { id: string; name: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
+export type DeliveryZone = { id: string; name: string; borough?: string; zip_codes: string[]; route_days: number[]; activo?: boolean };
 
 /** Días de entrega: siempre los días generales (iguales para todas las zonas). */
 export function daysForZip(_zones: DeliveryZone[] | undefined, _zip: string | null | undefined, p: PricingSettings): number[] {
@@ -208,20 +208,22 @@ export function daysForZip(_zones: DeliveryZone[] | undefined, _zip: string | nu
 export const OTHER_AREAS = "Otras áreas";
 
 /** Zona de un código postal: coincidencia exacta gana sobre prefijo más largo. */
+/** Etiqueta visible de una zona: "Borough · Zona". */
+export function zoneLabel(z: { name: string; borough?: string | null }): string {
+  return z.borough ? `${z.borough} · ${z.name}` : z.name;
+}
+
 export function zoneForZip(
-  zones: { name: string; zip_codes: string[]; activo?: boolean }[] | undefined,
+  zones: { name: string; borough?: string | null; zip_codes: string[]; activo?: boolean }[] | undefined,
   zip: string | null | undefined,
 ): string {
   const z5 = String(zip ?? "").trim().slice(0, 5);
-  if (!z5) return OTHER_AREAS;
-  let best: { name: string; len: number } | null = null;
+  if (!/^\d{5}$/.test(z5)) return OTHER_AREAS;
   for (const z of zones ?? []) {
     if (z.activo === false) continue;
-    for (const c of z.zip_codes ?? []) {
-      if (z5.startsWith(c) && (!best || c.length > best.len)) best = { name: z.name, len: c.length };
-    }
+    if ((z.zip_codes ?? []).includes(z5)) return zoneLabel(z);
   }
-  return best?.name ?? OTHER_AREAS;
+  return OTHER_AREAS;
 }
 
 /** Agrupa elementos por zona y luego por código postal; "Otras áreas" al final. */

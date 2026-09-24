@@ -5,7 +5,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { zoneForZip, OTHER_AREAS } from "./pricing";
+import { zoneForZip, zoneLabel, OTHER_AREAS } from "./pricing";
 
 const HEAVY_LB = 45;
 
@@ -31,12 +31,12 @@ async function myDriver(admin: any, userId: string) {
   const hasCar = (v ?? []).some((x: any) => ["auto", "carro", "car"].includes(x.vehicle_type));
   const { data: dz } = await admin
     .from("driver_zones")
-    .select("zone_id, delivery_zones(name, activo)")
+    .select("zone_id, delivery_zones(name, borough, activo)")
     .eq("driver_id", userId);
   const favoritas: string[] = [];
   for (const r of dz ?? []) {
     const z: any = (r as any).delivery_zones;
-    if (z?.activo) favoritas.push(String(z.name));
+    if (z?.activo) favoritas.push(zoneLabel(z));
   }
   return { ...d, hasCar, favoritas };
 }
@@ -46,8 +46,8 @@ function zipOf(o: any): string {
 }
 
 async function loadZones(admin: any) {
-  const { data } = await admin.from("delivery_zones").select("name, zip_codes, activo").eq("activo", true);
-  return (data ?? []) as { name: string; zip_codes: string[]; activo: boolean }[];
+  const { data } = await admin.from("delivery_zones").select("name, borough, zip_codes, activo").eq("activo", true);
+  return (data ?? []) as { name: string; borough: string; zip_codes: string[]; activo: boolean }[];
 }
 
 function earnings(o: any): number {
@@ -331,11 +331,11 @@ export const getMyDriverZones = createServerFn({ method: "GET" })
     const db = (context as any).supabase;
     const userId = (context as any).userId as string;
     const [{ data: zones }, { data: mine }] = await Promise.all([
-      db.from("delivery_zones").select("id, name").eq("activo", true).order("name"),
+      db.from("delivery_zones").select("id, name, borough").eq("activo", true).order("borough").order("name"),
       db.from("driver_zones").select("zone_id").eq("driver_id", userId),
     ]);
     return {
-      zonas: (zones ?? []) as { id: string; name: string }[],
+      zonas: ((zones ?? []) as any[]).map((z) => ({ id: z.id as string, name: zoneLabel(z) })),
       mias: (mine ?? []).map((r: any) => r.zone_id as string),
     };
   });
