@@ -25,12 +25,17 @@ export const Route = createFileRoute("/api/public/stripe/connect-webhook")({
         const body = await request.text();
         const signature = request.headers.get("stripe-signature");
 
-        const secret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET;
-        if (!secret) {
-          console.error("[stripe-connect-webhook] Missing STRIPE_CONNECT_WEBHOOK_SECRET");
+        // Prueba y real tienen claves de firma distintas: se acepta cualquiera.
+        const secrets = [
+          process.env.STRIPE_CONNECT_WEBHOOK_SECRET_SANDBOX,
+          process.env.STRIPE_CONNECT_WEBHOOK_SECRET_LIVE,
+          process.env.STRIPE_CONNECT_WEBHOOK_SECRET,
+        ].filter((s): s is string => Boolean(s));
+        if (secrets.length === 0) {
+          console.error("[stripe-connect-webhook] Missing STRIPE_CONNECT_WEBHOOK_SECRET_*");
           return new Response("Server misconfigured", { status: 500 });
         }
-        if (!signature || !verifyStripeSignature(body, signature, secret)) {
+        if (!signature || !secrets.some((s) => verifyStripeSignature(body, signature, s))) {
           console.warn("[stripe-connect-webhook] Signature verification failed");
           return new Response("Invalid signature", { status: 401 });
         }
