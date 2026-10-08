@@ -1390,6 +1390,16 @@
     },
     "onboarding": {
       "licenseRequirements": "By accepting, you confirm that you are 18 or older and operate as an independent contractor. Bike and e-bike couriers must use their own vehicle and a helmet. Motorcycle drivers must have a valid NY Class M or DM license, and car drivers a valid NY Class D or E license, with current registration, inspection, and insurance. Junior licenses Class DJ or MJ are not accepted."
+    },
+    "backgroundCheck": {
+      "title": "Background check",
+      "body": "Checkr, our background check provider, will ask for your SSN and authorization. Hazorex never sees or stores your SSN. Use the same name and email as your application.",
+      "cta": "Complete background check",
+      "status": {
+        "pendiente": "Pending",
+        "aprobado": "Approved",
+        "rechazado": "Rejected"
+      }
     }
   },
   "negociosRegistro": {
