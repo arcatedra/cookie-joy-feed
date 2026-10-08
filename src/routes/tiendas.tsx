@@ -56,7 +56,6 @@ function StoresPage() {
       if (term && !String(s.business_name).toLowerCase().includes(term)) return false;
       if (type && s.business_type !== type) return false;
       if (zone) {
-        const zones: string[] = s.zonas_que_atiende ?? [];
         if (s.city !== zone) return false;
       }
       if (neighborhood && s.neighborhood !== neighborhood) return false;
@@ -94,7 +93,7 @@ function StoresPage() {
           </select>
           <select aria-label={t("stores.neighborhood")} value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} className="max-w-full rounded-lg border border-border px-3 py-2 text-sm">
             <option value="">{t("stores.allZones")}</option>
-            {[...new Set((data ?? []).filter((s: any) => !zone || s.city === zone).map((s: any) => s.neighborhood).filter(Boolean))].map((name) => <option key={String(name)} value={String(name)}>{name === "Otras áreas" ? t("stores.otherAreas") : String(name)}</option>)}
+            {[...new Set((data ?? []).filter((s: any) => !zone || s.city === zone).map((s: any) => s.neighborhood).filter((name) => name && name !== "Otras áreas"))].map((name) => <option key={String(name)} value={String(name)}>{String(name)}</option>)}
             <option value="Otras áreas">{t("stores.otherAreas")}</option>
           </select>
           <select

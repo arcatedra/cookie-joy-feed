@@ -1,0 +1,4 @@
+REVOKE INSERT, UPDATE ON public.driver_tax_profiles FROM authenticated, anon;
+CREATE OR REPLACE FUNCTION public.reject_local_sensitive_payment_data() RETURNS trigger LANGUAGE plpgsql SET search_path = public AS $$ BEGIN RAISE EXCEPTION 'Los datos fiscales y bancarios se proporcionan únicamente en Stripe.'; END; $$;
+CREATE TRIGGER reject_new_local_tax_data BEFORE INSERT OR UPDATE ON public.driver_tax_profiles FOR EACH ROW EXECUTE FUNCTION public.reject_local_sensitive_payment_data();
+DO $$ BEGIN IF to_regclass('public.driver_payout_methods') IS NOT NULL THEN EXECUTE 'CREATE TRIGGER reject_new_local_bank_data BEFORE INSERT OR UPDATE OF account_details ON public.driver_payout_methods FOR EACH ROW EXECUTE FUNCTION public.reject_local_sensitive_payment_data()'; END IF; END; $$;
