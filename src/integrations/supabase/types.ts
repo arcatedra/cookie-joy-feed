@@ -2044,6 +2044,10 @@ export type Database = {
       }
     }
     Functions: {
+      adjust_order_credit: {
+        Args: { p_kind: string; p_limit: number; p_order: string }
+        Returns: number
+      }
       admin_list_withdrawals: {
         Args: never
         Returns: {
