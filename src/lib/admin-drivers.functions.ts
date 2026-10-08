@@ -21,7 +21,7 @@ export const listDriversForReview = createServerFn({ method: "GET" })
     await assertAdmin(context);
     let query = context.supabase
       .from("drivers")
-      .select("id, full_name, email, phone, city, application_status, is_active, is_online, rating, created_at, approved_at, rejected_at, rejection_reason")
+      .select("id, full_name, email, phone, city, application_status, background_check_status, is_active, is_online, rating, created_at, approved_at, rejected_at, rejection_reason")
       .order("created_at", { ascending: false });
     if (data.status !== "all") query = query.eq("application_status", data.status);
     const { data: rows, error } = await query;
@@ -55,6 +55,15 @@ export const approveDriver = createServerFn({ method: "POST" })
   .inputValidator((d: { driverId: string }) => ({ driverId: uuid.parse(d.driverId) }))
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
+    const { data: current, error: readErr } = await context.supabase
+      .from("drivers")
+      .select("background_check_status")
+      .eq("id", data.driverId)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (current?.background_check_status !== "aprobado") {
+      throw new Error("No puedes aprobar a este repartidor: la revisión de antecedentes de Checkr debe estar en Aprobado.");
+    }
     const { error } = await context.supabase
       .from("drivers")
       .update({
@@ -135,4 +144,20 @@ export const listLiveActiveOrders = createServerFn({ method: "GET" })
       .order("accepted_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
+  });
+
+export const setBackgroundCheckStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { driverId: string; status: "pendiente" | "aprobado" | "rechazado" }) => ({
+    driverId: uuid.parse(d.driverId),
+    status: z.enum(["pendiente", "aprobado", "rechazado"]).parse(d.status),
+  }))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase
+      .from("drivers")
+      .update({ background_check_status: data.status })
+      .eq("id", data.driverId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

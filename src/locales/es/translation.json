@@ -1390,6 +1390,16 @@
     },
     "onboarding": {
       "licenseRequirements": "Al aceptar, confirmas que tienes 18 años o más y operas como contratista independiente. Para bicicleta o e-bike debes usar vehículo propio y casco. Para moto necesitas licencia de NY Clase M o DM; para auto, Clase D o E, con registración, inspección y seguro al día. No se aceptan licencias junior Clase DJ o MJ."
+    },
+    "backgroundCheck": {
+      "title": "Revisión de antecedentes",
+      "body": "Checkr, nuestro proveedor de antecedentes, te pedirá tu SSN y tu autorización. Hazorex no ve ni guarda tu SSN. Usa el mismo nombre y correo de tu postulación.",
+      "cta": "Completar revisión de antecedentes",
+      "status": {
+        "pendiente": "Pendiente",
+        "aprobado": "Aprobado",
+        "rechazado": "Rechazado"
+      }
     }
   },
   "negociosRegistro": {

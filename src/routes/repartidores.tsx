@@ -1,3 +1,4 @@
+import { BackgroundCheckStep } from "@/components/BackgroundCheckStep";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -55,6 +56,7 @@ export const Route = createFileRoute("/repartidores")({
 type DriverRow = {
   application_status: "pendiente" | "en_revision" | "aprobado" | "rechazado" | "suspendido";
   rejection_reason: string | null;
+  background_check_status?: "pendiente" | "aprobado" | "rechazado" | null;
 };
 
 type ZoneOpt = { id: string; name: string };
@@ -75,7 +77,7 @@ function RepartidoresLanding() {
     queryFn: async (): Promise<DriverRow | null> => {
       const { data, error } = await supabase
         .from("drivers")
-        .select("application_status, rejection_reason")
+        .select("application_status, rejection_reason, background_check_status")
         .eq("id", user?.id ?? "")
         .maybeSingle();
       if (error) return null;
@@ -521,6 +523,9 @@ function ApplicationStatusCard({ driver }: { driver: DriverRow }) {
         {cur.icon}
         <h2 className="font-serif text-2xl font-bold text-[#1e3a5f]">{cur.title}</h2>
         <p className="mt-2 text-[#4a3525]">{cur.body}</p>
+        {(status === "pendiente" || status === "en_revision") && (
+          <BackgroundCheckStep status={driver.background_check_status} />
+        )}
       </CardContent>
     </Card>
   );
@@ -789,6 +794,7 @@ function ApplicationForm({
           <p className="mt-4 text-xs text-[#4a3525]/70">
             {t("repartidoresPage.success.tip")}
           </p>
+          <BackgroundCheckStep status="pendiente" />
         </CardContent>
       </Card>
     );

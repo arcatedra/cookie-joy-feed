@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   listDriversForReview,
@@ -17,6 +18,7 @@ import {
   approveDriver,
   rejectDriver,
   reviewDocument,
+  setBackgroundCheckStatus,
 } from "@/lib/admin-drivers.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/repartidores")({
@@ -69,6 +71,7 @@ function AdminRepartidores() {
                       )}
                     </div>
                     <p className="truncate text-xs text-[#4a3525]/70">{d.email} · {d.phone}</p>
+                    <div className="mt-1"><BgBadge status={d.background_check_status} /></div>
                     <div className="mt-1 flex items-center gap-3 text-xs text-[#4a3525]">
                       {d.city && <span className="flex items-center gap-1"><MapPin className="size-3" /> {d.city}</span>}
                       {d.rating != null && d.rating > 0 && (
@@ -145,6 +148,16 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
     },
     onError: (e: Error) => toast.error(e.message),
   });
+  const bgFn = useServerFn(setBackgroundCheckStatus);
+  const setBg = useMutation({
+    mutationFn: (status: "pendiente" | "aprobado" | "rechazado") => bgFn({ data: { driverId, status } }),
+    onSuccess: () => {
+      toast.success("Estado de antecedentes actualizado");
+      qc.invalidateQueries({ queryKey: ["admin-driver", driverId] });
+      qc.invalidateQueries({ queryKey: ["admin-drivers"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
   const reviewDoc = useMutation({
     mutationFn: (args: { documentId: string; action: "aprobar" | "rechazar"; reason?: string }) =>
       reviewDocFn({ data: args }),
@@ -173,6 +186,26 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
                 {detail.data.driver.city && <p className="flex items-center gap-2"><MapPin className="size-3.5" /> {detail.data.driver.city}, {detail.data.driver.address}</p>}
                 <p>Nacimiento: {detail.data.driver.date_of_birth}</p>
               </div>
+            </div>
+
+            <div className="rounded-lg border border-[#c8862e]/30 bg-white p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="font-semibold text-[#1e3a5f]">Antecedentes (Checkr)</h3>
+                <BgBadge status={detail.data.driver.background_check_status} />
+              </div>
+              <p className="mt-1 text-xs text-[#4a3525]/70">Revisa el resultado en Checkr y márcalo aquí.</p>
+              <Select
+                value={detail.data.driver.background_check_status ?? "pendiente"}
+                onValueChange={(v) => setBg.mutate(v as "pendiente" | "aprobado" | "rechazado")}
+                disabled={setBg.isPending}
+              >
+                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pendiente">Pendiente</SelectItem>
+                  <SelectItem value="aprobado">Aprobado</SelectItem>
+                  <SelectItem value="rechazado">Rechazado</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -260,7 +293,13 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
             </div>
 
             {detail.data.driver.application_status === "pendiente" && (
-              <div className="sticky bottom-0 flex gap-2 border-t bg-white pt-3">
+              <div className="sticky bottom-0 border-t bg-white pt-3">
+              {detail.data.driver.background_check_status !== "aprobado" && (
+                <p className="mb-2 rounded-md bg-amber-50 p-2 text-xs text-amber-800">
+                  No puedes aprobar a este repartidor: la revisión de antecedentes de Checkr debe estar en Aprobado.
+                </p>
+              )}
+              <div className="flex gap-2">
                 <Button
                   variant="outline"
                   className="flex-1 border-red-500 text-red-700 hover:bg-red-50"
@@ -270,12 +309,13 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
                 </Button>
                 <Button
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700"
-                  disabled={approve.isPending}
+                  disabled={approve.isPending || detail.data.driver.background_check_status !== "aprobado"}
                   onClick={() => approve.mutate()}
                 >
                   {approve.isPending ? <Loader2 className="mr-2 size-4 animate-spin" /> : <CheckCircle2 className="mr-2 size-4" />}
                   Aprobar repartidor
                 </Button>
+              </div>
               </div>
             )}
 
@@ -304,4 +344,11 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
       </DialogContent>
     </Dialog>
   );
+}
+
+function BgBadge({ status }: { status?: string | null }) {
+  const s = status ?? "pendiente";
+  const cls = s === "aprobado" ? "bg-emerald-500 text-white" : s === "rechazado" ? "bg-red-500 text-white" : "bg-[#E6C35C] text-[#1e3a5f]";
+  const label = s === "aprobado" ? "Aprobado" : s === "rechazado" ? "Rechazado" : "Pendiente";
+  return <Badge className={cls}>Antecedentes: {label}</Badge>;
 }
