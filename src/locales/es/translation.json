@@ -931,7 +931,7 @@
       },
       {
         "title": "7. Días y horarios de entrega",
-        "body": "Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
+        "body": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes. Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
       },
       {
         "title": "8. Repartidores: contratistas independientes",
@@ -1483,7 +1483,7 @@
       },
       "delivery": {
         "q": "¿Cuánto tarda la entrega?",
-        "a": "Los tiempos de entrega dependen de tu zona. Recibirás actualizaciones por correo con el estado de tu envío en cada etapa."
+        "a": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       },
       "cancel": {
         "q": "¿Cómo cancelo mi suscripción?",
@@ -1771,6 +1771,7 @@
     "devolucion_saldo": "Saldo devuelto",
     "retiro_pendiente": "Apartado para retiro",
     "retiro_devuelto": "Retiro devuelto",
-    "error": "No se pudo consultar tu saldo."
+    "error": "No se pudo consultar tu saldo.",
+    "credited": "Abonado al saldo"
   }
 }
