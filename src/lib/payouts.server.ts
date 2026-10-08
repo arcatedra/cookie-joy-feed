@@ -133,7 +133,7 @@ export async function transferDriverPayout(
 
   const { data: p } = await db
     .from("driver_payouts")
-    .select("id, driver_id, order_id, amount_usd, status")
+    .select("id, driver_id, order_id, cookie_order_id, amount_usd, status")
     .eq("id", payoutId)
     .maybeSingle();
   if (!p) return { ok: false, error: "Pago no encontrado" };
@@ -158,9 +158,22 @@ export async function transferDriverPayout(
   }
 
   try {
-    const env = await environmentForStoreOrder(p.order_id, db);
+    let env: import("./stripe.server").StripeEnv;
+    let charge: string | null;
+    if (p.cookie_order_id) {
+      const { data: cookie } = await db.from("pedidos").select("stripe_environment,stripe_payment_intent_id,monto_capturado").eq("id", p.cookie_order_id).maybeSingle();
+      if (!cookie || (cookie.stripe_environment !== "sandbox" && cookie.stripe_environment !== "live") || money(cookie.monto_capturado) <= 0) return { ok: false, error: "Falta el cobro verificado de galletas" };
+      const { data: delivered } = await db.from("route_stops").select("id,delivery_routes!inner(driver_id)").eq("order_id", p.cookie_order_id).eq("status", "entregado").eq("delivery_routes.driver_id", p.driver_id).limit(1);
+      if (!delivered?.length) return { ok: false, error: "Falta confirmar la entrega del repartidor asignado" };
+      env = cookie.stripe_environment;
+      const { stripeGet } = await import("./stripe.server");
+      const intent = await stripeGet<any>(`/v1/payment_intents/${cookie.stripe_payment_intent_id}`, env);
+      charge = typeof intent.latest_charge === "string" ? intent.latest_charge : intent.latest_charge?.id ?? null;
+    } else {
+      env = await environmentForStoreOrder(p.order_id, db);
+      charge = p.order_id ? await chargeIdForStoreOrder(p.order_id, db) : null;
+    }
     if (drv.stripe_environment !== env) return { ok: false, error: "La cuenta y el pedido pertenecen a ambientes distintos" };
-    const charge = p.order_id ? await chargeIdForStoreOrder(p.order_id, db) : null;
     if (!charge) return { ok: false, skipped: true, error: "El pedido aún no tiene cobro" };
     const tr = await stripePost<any>(
       "/v1/transfers",
@@ -169,7 +182,7 @@ export async function transferDriverPayout(
         currency: "usd",
         destination: drv.stripe_account_id,
         source_transaction: charge,
-        metadata: { driver_payout_id: p.id, store_order_id: p.order_id },
+        metadata: { driver_payout_id: p.id, store_order_id: p.order_id ?? undefined, cookie_order_id: p.cookie_order_id ?? undefined },
       },
       env,
       { "Idempotency-Key": `driver-payout-${p.id}` },
