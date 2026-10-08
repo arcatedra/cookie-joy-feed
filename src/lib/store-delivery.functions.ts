@@ -183,8 +183,6 @@ export const claimStoreOrderGroup = createServerFn({ method: "POST" })
   });
 
 async function finishDelivery(orderId: string) {
-  const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
-  await grantReferralRewardForOrder(orderId);
   const { registerDriverPayoutForOrder } = await import("./driver-payouts.server");
   await registerDriverPayoutForOrder(orderId);
   try {

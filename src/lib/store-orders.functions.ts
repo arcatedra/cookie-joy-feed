@@ -119,6 +119,8 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     if (oErr) throw oErr;
     if (!order) throw new Error("Pedido no encontrado.");
     if (order.estado === "listo" || order.estado === "entregado") {
+      const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+      await grantReferralRewardForOrder(order.id);
       return { ok: true, alreadyDone: true as const };
     }
     if (!["confirmado", "preparando", "cobro_fallido"].includes(order.estado)) {
@@ -293,9 +295,6 @@ export const markOrderDelivered = createServerFn({ method: "POST" })
       throw new Error("Este pedido no está listo para marcarse como entregado.");
     }
 
-    // Bono de referido: primera compra entregada del invitado.
-    const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
-    await grantReferralRewardForOrder(data.id);
     // Pago del repartidor: su parte del tramo + peso + 100% de la propina.
     const { registerDriverPayoutForOrder } = await import("./driver-payouts.server");
     await registerDriverPayoutForOrder(data.id);

@@ -11,27 +11,27 @@ const CODE_PATTERN = /^[A-HJ-NP-Z2-9]{8}$/;
 
 const copy = {
   en: {
-    eyebrow: "HAZOREX SUBSCRIPTION CLUB",
+    eyebrow: "HAZOREX REFERRALS",
     title: "Share the Experience. Multiply the Flavor.",
     subtitle:
-      "Join the HAZOREX monthly subscription club with your friend's invitation and start enjoying every delivery.",
+      "Create your HAZOREX account with this invitation. Your friend earns $5 after your first paid store or cookie purchase.",
     invitation: "Your invitation code",
     stepsTitle: "Your next favorite delivery is three steps away",
-    steps: ["Use your friend's unique code.", "Join the monthly club.", "Enjoy the HAZOREX experience."],
-    cta: "Join the club",
+    steps: ["Use your friend's unique code.", "Create your account.", "Enjoy the HAZOREX experience."],
+    cta: "Create my account",
     invalidTitle: "This invitation is no longer available",
     invalidBody: "You can still create your HAZOREX account and explore the club.",
     invalidCta: "Create my account",
   },
   es: {
-    eyebrow: "CLUB DE SUSCRIPCIÓN HAZOREX",
+    eyebrow: "REFERIDOS HAZOREX",
     title: "Comparte la Experiencia. Multiplica el Sabor.",
     subtitle:
-      "Únete al club de suscripción mensual HAZOREX con la invitación de tu amigo y comienza a disfrutar cada entrega.",
+      "Crea tu cuenta HAZOREX con esta invitación. Quien te invitó recibe $5 después del cobro de tu primera compra de tienda o galletas.",
     invitation: "Tu código de invitación",
     stepsTitle: "Tu próxima entrega favorita está a tres pasos",
-    steps: ["Usa el código único de tu amigo.", "Únete al club mensual.", "Disfruta la experiencia HAZOREX."],
-    cta: "Unirme al club",
+    steps: ["Usa el código único de tu amigo.", "Crea tu cuenta.", "Disfruta la experiencia HAZOREX."],
+    cta: "Crear mi cuenta",
     invalidTitle: "Esta invitación ya no está disponible",
     invalidBody: "Todavía puedes crear tu cuenta HAZOREX y conocer el club.",
     invalidCta: "Crear mi cuenta",
@@ -43,15 +43,15 @@ const stepIcons = [Share2, UserPlus, Gift];
 export const Route = createFileRoute("/join/$code")({
   head: () => ({
     meta: [
-      { title: "Join the HAZOREX Club" },
+      { title: "Invitación — HAZOREX" },
       {
         name: "description",
-        content: "Accept your HAZOREX invitation and join the monthly subscription club.",
+        content: "Accept your HAZOREX invitation. Your friend earns $5 on your first paid purchase.",
       },
-      { property: "og:title", content: "Join the HAZOREX Club" },
+      { property: "og:title", content: "Invitación — HAZOREX" },
       {
         property: "og:description",
-        content: "Accept your HAZOREX invitation and join the monthly subscription club.",
+        content: "Accept your HAZOREX invitation. Your friend earns $5 on your first paid purchase.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

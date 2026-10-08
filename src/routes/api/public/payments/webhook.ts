@@ -244,7 +244,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           const captured = Number(dataObject?.amount_received ?? 0);
           if (id && captured > 0) {
             const table = kind === "store" ? "store_orders" : "pedidos";
-            const { data: saved, error } = await supabaseAdmin.from(table).update({ monto_capturado: captured / 100, capturado_en: new Date().toISOString() }).eq("id", id).eq("stripe_environment", environment).is("capturado_en", null).select("id");
+            const { data: order, error: orderError } = await supabaseAdmin.from(table).select("id,stripe_payment_intent_id,stripe_environment").eq("id", id).maybeSingle();
+            if (orderError) return new Response("Order lookup failed", { status: 500 });
+            if (!order || order.stripe_environment !== environment || order.stripe_payment_intent_id !== objectId) return Response.json({ ok: true, ignored: "payment reference mismatch" });
+            const { error } = await supabaseAdmin.from(table).update({ monto_capturado: captured / 100, capturado_en: new Date().toISOString() }).eq("id", id).eq("stripe_environment", environment).is("capturado_en", null);
             if (error) return new Response("Capture reconciliation failed", { status: 500 });
             const { grantReferralRewardForOrder } = await import("@/lib/referral-rewards.server");
             await grantReferralRewardForOrder(id, kind);

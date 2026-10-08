@@ -311,13 +311,19 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
-    await (supabaseAdmin as any)
+    const { error: sessionSaveError } = await supabaseAdmin
       .from("store_orders")
       .update({
         stripe_checkout_session_id: session.id,
         monto_autorizado: authorizedCents / 100,
       })
       .eq("id", order.id);
+    if (sessionSaveError || !session.client_secret) {
+      await stripePost(`/v1/checkout/sessions/${session.id}/expire`, {}, env, { "Idempotency-Key": `expire-store-${order.id}` });
+      await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
+      throw new Error("No se pudo abrir el pago. Tu carrito se conserva.");
+    }
 
     // El saldo queda apartado de forma atómica; cancelación y vencimiento lo devuelven.
 

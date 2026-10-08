@@ -1,0 +1,5 @@
+CREATE OR REPLACE FUNCTION public.return_cancelled_order_credit() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN IF NEW.estado='cancelado' AND COALESCE(NEW.monto_capturado,0)=0 THEN PERFORM public.release_order_credit(CASE WHEN TG_TABLE_NAME='store_orders' THEN 'store' ELSE 'cookie' END,NEW.id); END IF; RETURN NEW; END $$;
+REVOKE ALL ON FUNCTION public.return_cancelled_order_credit() FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.return_cancelled_order_credit() TO service_role;
+CREATE TRIGGER return_store_cancelled_credit AFTER UPDATE OF estado ON public.store_orders FOR EACH ROW EXECUTE FUNCTION public.return_cancelled_order_credit();
+CREATE TRIGGER return_cookie_cancelled_credit AFTER UPDATE OF estado ON public.pedidos FOR EACH ROW EXECUTE FUNCTION public.return_cancelled_order_credit();

@@ -276,12 +276,17 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     }
 
     // Persist the Stripe session id on the pedido for the webhook lookup.
-    await supabaseAdmin
+    const { error: sessionSaveError } = await supabaseAdmin
       .from("pedidos")
       .update({ stripe_checkout_session_id: session.id })
       .eq("id", pedidoRow.id);
 
-    if (!session.client_secret) throw new Error("Stripe no devolvió client_secret");
+    if (sessionSaveError || !session.client_secret) {
+      await stripePost(`/v1/checkout/sessions/${session.id}/expire`, {}, env, { "Idempotency-Key": `expire-cookie-${pedidoRow.id}` });
+      await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
+      await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
+      throw new Error("No se pudo abrir el pago. Tu carrito se conserva.");
+    }
     return {
       clientSecret: session.client_secret,
       sessionId: session.id,
