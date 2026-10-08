@@ -4,7 +4,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getRequestHost } from "@tanstack/react-start/server";
-import { z } from "zod";
+import { withdrawalRequestSchema } from "./withdrawal-destination";
 
 export const getMyCredit = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -21,7 +21,7 @@ export const getMyCredit = createServerFn({ method: "GET" })
         .eq("stripe_environment", environment)
         .order("created_at", { ascending: false })
         .limit(100),
-      db.from("withdrawal_requests").select("id, amount_usd, status, created_at, updated_at").eq("profile_id", context.userId).eq("source", "referral").eq("stripe_environment", environment).order("created_at", { ascending: false }).limit(100),
+      db.from("withdrawal_requests").select("id, amount_usd, status, created_at, updated_at, payout_method, payout_identifier").eq("profile_id", context.userId).eq("source", "referral").eq("stripe_environment", environment).order("created_at", { ascending: false }).limit(100),
       db.from("referral_rewards").select("id, amount_usd, status, created_at").eq("referrer_id", context.userId).eq("stripe_environment", environment).order("created_at", { ascending: false }).limit(100),
     ]);
     if (balanceError || movementsError || withdrawalsError || rewardsError) throw new Error("No se pudo consultar tu saldo.");
@@ -41,12 +41,12 @@ export const getMyCredit = createServerFn({ method: "GET" })
 
 export const requestCreditWithdrawal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => z.object({ amount: z.number().finite().positive().max(100000).multipleOf(0.01) }).parse(raw))
+  .inputValidator((raw: unknown) => withdrawalRequestSchema.parse(raw))
   .handler(async ({ data, context }) => {
     const { paymentsEnvironmentForHost } = await import("./stripe.server");
     const environment = paymentsEnvironmentForHost(getRequestHost());
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: id, error } = await supabaseAdmin.rpc("request_wallet_withdrawal_for_user", { p_user: context.userId, p_amount: data.amount, p_environment: environment });
+    const { data: id, error } = await supabaseAdmin.rpc("request_wallet_withdrawal_to_destination", { p_user: context.userId, p_amount: data.amount, p_environment: environment, p_method: data.payoutMethod, p_identifier: data.payoutIdentifier });
     if (error) throw new Error("No se pudo solicitar el retiro. Comprueba tu saldo e inténtalo de nuevo.");
     return { id, environment };
   });
