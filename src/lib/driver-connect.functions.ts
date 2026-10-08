@@ -13,6 +13,7 @@ type Driver = {
   email: string;
   application_status: string;
   stripe_account_id: string | null;
+  stripe_environment: "sandbox" | "live" | null;
   stripe_onboarding_status: string;
   stripe_payouts_enabled: boolean;
 };
@@ -21,7 +22,7 @@ async function myDriver(db: any, userId: string): Promise<Driver> {
   const { data, error } = await db
     .from("drivers")
     .select(
-      "id, full_name, email, application_status, stripe_account_id, stripe_onboarding_status, stripe_payouts_enabled",
+      "id, full_name, email, application_status, stripe_account_id, stripe_environment, stripe_onboarding_status, stripe_payouts_enabled",
     )
     .eq("id", userId)
     .maybeSingle();
@@ -44,6 +45,7 @@ export const getDriverConnectStatus = createServerFn({ method: "GET" })
     if (drv.stripe_account_id) {
       const { paymentsEnvironmentForHost, getRecipientStatus } = await import("./stripe.server");
       const env = paymentsEnvironmentForHost(getRequestHost());
+    if (drv.stripe_account_id && drv.stripe_environment !== env) throw new Error("Esta cuenta pertenece a otro ambiente o requiere verificar su ambiente antes de continuar.");
       try {
         const st = await getRecipientStatus(drv.stripe_account_id, env);
         payoutsEnabled = st.transfersActive;
@@ -108,6 +110,7 @@ export const createDriverAccountLink = createServerFn({ method: "POST" })
     const { paymentsEnvironmentForHost, createRecipientAccount, createRecipientOnboardingLink } =
       await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
+    if (drv.stripe_account_id && drv.stripe_environment !== env) throw new Error("Esta cuenta pertenece a otro ambiente o requiere verificar su ambiente antes de continuar.");
     const host = getRequestHost() ?? "hazorex.com";
     const origin = host.includes("localhost") ? `http://${host}` : `https://${host}`;
     const backTo = `${origin}${data.returnPath ?? "/repartidor/cobros"}`;
@@ -128,7 +131,7 @@ export const createDriverAccountLink = createServerFn({ method: "POST" })
       );
       await (supabaseAdmin as any)
         .from("drivers")
-        .update({ stripe_account_id: accountId, stripe_onboarding_status: "pending" })
+        .update({ stripe_account_id: accountId, stripe_environment: env, stripe_onboarding_status: "pending" })
         .eq("id", drv.id);
     }
 

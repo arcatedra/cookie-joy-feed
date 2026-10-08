@@ -14,6 +14,7 @@ type Business = {
   business_name: string;
   email: string;
   stripe_account_id: string | null;
+  stripe_environment: "sandbox" | "live" | null;
   stripe_onboarding_status: string;
   stripe_payouts_enabled: boolean;
 };
@@ -22,7 +23,7 @@ async function myBusiness(db: any, userId: string): Promise<Business> {
   const { data, error } = await db
     .from("businesses")
     .select(
-      "id, business_name, email, stripe_account_id, stripe_onboarding_status, stripe_payouts_enabled",
+      "id, business_name, email, stripe_account_id, stripe_environment, stripe_onboarding_status, stripe_payouts_enabled",
     )
     .eq("owner_user_id", userId)
     .maybeSingle();
@@ -49,6 +50,7 @@ export const getConnectStatus = createServerFn({ method: "GET" })
 
     const { paymentsEnvironmentForHost, getRecipientStatus } = await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
+    if (biz.stripe_account_id && biz.stripe_environment !== env) throw new Error("Esta cuenta pertenece a otro ambiente o requiere verificar su ambiente antes de continuar.");
     let payoutsEnabled = biz.stripe_payouts_enabled;
     let detailsSubmitted = biz.stripe_onboarding_status === "complete";
     try {
@@ -93,6 +95,7 @@ export const createExpressAccountLink = createServerFn({ method: "POST" })
     const { paymentsEnvironmentForHost, createRecipientAccount, createRecipientOnboardingLink } =
       await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
+    if (biz.stripe_account_id && biz.stripe_environment !== env) throw new Error("Esta cuenta pertenece a otro ambiente o requiere verificar su ambiente antes de continuar.");
     const host = getRequestHost() ?? "hazorex.com";
     const origin = host.includes("localhost") ? `http://${host}` : `https://${host}`;
     const backTo = `${origin}${data.returnPath ?? "/negocios/cobros"}`;
@@ -113,7 +116,7 @@ export const createExpressAccountLink = createServerFn({ method: "POST" })
       );
       await (supabaseAdmin as any)
         .from("businesses")
-        .update({ stripe_account_id: accountId, stripe_onboarding_status: "pending" })
+        .update({ stripe_account_id: accountId, stripe_environment: env, stripe_onboarding_status: "pending" })
         .eq("id", biz.id);
     }
 

@@ -69,19 +69,24 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       userId: string;
       claims?: { email?: string };
     };
+    const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
+    const host = getRequestHost();
+    const env = paymentsEnvironmentForHost(host);
     const email = ((claims?.email as string | undefined) ?? "").toLowerCase();
     const db = supabase as any;
 
     // ---- Tienda: debe estar aprobada y activa ---------------------------
     const { data: business, error: bizErr } = await db
       .from("businesses")
-      .select("id, business_name, status, activo, comision_porcentaje")
+      .select("id, business_name, status, activo, comision_porcentaje, stripe_environment")
       .eq("id", data.businessId)
       .maybeSingle();
     if (bizErr) throw new Error("No se pudo verificar la tienda.");
     if (!business || business.status !== "aprobado" || business.activo === false) {
       throw new Error("Esta tienda no está disponible en este momento.");
     }
+
+    if (business.stripe_environment && business.stripe_environment !== env) throw new Error("Esta tienda pertenece a otro ambiente de pago.");
 
     // ---- Precios de confianza: siempre desde la base ---------------------
     const ids = [...new Set(data.items.map((i) => i.productId))];
@@ -186,6 +191,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       .from("store_orders")
       .insert({
         business_id: data.businessId,
+        stripe_environment: env,
         cliente_id: userId,
         estado: "pendiente_pago",
         direccion_envio: data.address,
@@ -231,9 +237,6 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     }
 
     // ---- Pago con reserva -------------------------------------------------
-    const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
-    const host = getRequestHost();
-    const env = paymentsEnvironmentForHost(host);
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 

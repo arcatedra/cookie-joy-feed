@@ -195,7 +195,9 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const { paymentsEnvironmentForHost, stripeCapturePaymentIntent } = await import(
       "./stripe.server"
     );
-    const env = paymentsEnvironmentForHost(getRequestHost());
+    const { environmentForStoreOrder } = await import("./payouts.server");
+    const env = await environmentForStoreOrder(order.id, db);
+    if (env !== paymentsEnvironmentForHost(getRequestHost())) throw new Error("Este pedido pertenece a otro ambiente de pago.");
 
     try {
       await stripeCapturePaymentIntent(
@@ -331,7 +333,7 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
         await stripeCancelPaymentIntent(
           order.stripe_payment_intent_id,
           `store-cancel-${order.id}`,
-          paymentsEnvironmentForHost(getRequestHost()),
+          await (await import("./payouts.server")).environmentForStoreOrder(order.id, db),
         );
       } catch (e) {
         console.error("[store-orders] no se pudo liberar la reserva", e);
