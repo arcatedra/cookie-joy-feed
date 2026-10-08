@@ -32,7 +32,7 @@
 
 ## Límites
 
-- [ ] Comprobar en pruebas aisladas que los bloqueos nuevos permiten compras de tienda/galletas, conservan la invitación del registro y bloquean solo el bono de familias con dirección compartida.
+- [x] Comprobar en pruebas aisladas que los bloqueos nuevos permiten compras de tienda/galletas, conservan la invitación del registro y bloquean solo el bono de familias con dirección compartida: seis casos nuevos y 36 pruebas totales pasan; Stripe simulado, sin cambios en producción.
 
 - No publicar ni efectuar cobros reales.
 - No modificar ni borrar usuarios o clientes reales.
