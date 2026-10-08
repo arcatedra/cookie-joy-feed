@@ -1947,31 +1947,58 @@ export type Database = {
     Views: {
       approved_businesses_public: {
         Row: {
+          activo: boolean | null
+          address: string | null
+          banner_url: string | null
           business_name: string | null
           business_type: string | null
           city: string | null
           created_at: string | null
+          descripcion: string | null
+          horario: Json | null
           id: string | null
           logo_url: string | null
+          postal_code: string | null
+          slug: string | null
           status: string | null
+          stripe_environment: string | null
+          zonas_que_atiende: string[] | null
         }
         Insert: {
+          activo?: boolean | null
+          address?: string | null
+          banner_url?: string | null
           business_name?: string | null
           business_type?: string | null
           city?: string | null
           created_at?: string | null
+          descripcion?: string | null
+          horario?: Json | null
           id?: string | null
           logo_url?: string | null
+          postal_code?: string | null
+          slug?: string | null
           status?: string | null
+          stripe_environment?: string | null
+          zonas_que_atiende?: string[] | null
         }
         Update: {
+          activo?: boolean | null
+          address?: string | null
+          banner_url?: string | null
           business_name?: string | null
           business_type?: string | null
           city?: string | null
           created_at?: string | null
+          descripcion?: string | null
+          horario?: Json | null
           id?: string | null
           logo_url?: string | null
+          postal_code?: string | null
+          slug?: string | null
           status?: string | null
+          stripe_environment?: string | null
+          zonas_que_atiende?: string[] | null
         }
         Relationships: []
       }

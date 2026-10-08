@@ -14,9 +14,9 @@
 
 ## Revisión de los avisos de seguridad
 
-- [ ] Revisar los 22 avisos actuales y distinguir riesgos reales de accesos públicos necesarios.
-- [ ] Mostrar y aprobar el plan antes de aplicar cualquier cambio de permisos en la base de datos.
-- [ ] Corregir riesgos críticos y altos confirmados, sin cambiar datos de usuarios/clientes ni lógica de cobros salvo seguridad.
+- [x] Revisar los 22 avisos actuales y distinguir riesgos reales de accesos públicos necesarios.
+- [x] Mostrar y aprobar el plan antes de aplicar cualquier cambio de permisos en la base de datos.
+- [x] Corregir riesgos críticos y altos confirmados, sin cambiar datos de usuarios/clientes ni lógica de cobros salvo seguridad.
 - [ ] Verificar permisos resultantes y entregar tabla de resultados e instrucciones para contraseñas filtradas.
 
 - No publicar ni efectuar cobros reales.
