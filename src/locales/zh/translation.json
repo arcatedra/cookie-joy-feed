@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "订阅计划 — HAZOREX",
-    "metaDesc": "选择您的 HAZOREX 曲奇订阅计划。仅限周一和周五配送。",
+    "metaDesc": "星期一、星期三和星期五",
     "title": "订阅计划",
-    "deliveryBadge": "仅限周一和周五配送",
+    "deliveryBadge": "星期一、星期三和星期五",
     "activePlan": "当前计划",
     "remaining": "剩余",
     "scheduledCount": "本月已安排 {{used}} / {{total}} 次配送",
@@ -352,33 +352,33 @@
     "mostPopular": "最受欢迎",
     "perMonth": "/ 月",
     "schedule": "安排配送",
-    "scheduleHint": "仅可选择周一和周五。",
+    "scheduleHint": "星期一、星期三和星期五",
     "prevMonth": "上个月",
     "nextMonth": "下个月",
     "yourDeliveries": "您的配送安排",
     "usedAll": "您已用完此计划的全部 {{count}} 次配送。升级以添加更多。",
-    "footnote": "*仅在周一和周五提供",
+    "footnote": "星期一、星期三和星期五",
     "removeDate": "移除 {{date}}",
     "tiers": {
       "starter": {
         "title": "入门计划",
         "cadence": "每月 2 次配送",
-        "desc": "适合日常必需品。每月包含 2 次配送（周一或周五）。每次额外配送仅需 10 美元。"
+        "desc": "每月 2 次配送 · 星期一、星期三和星期五"
       },
       "essential": {
         "title": "基础计划",
         "cadence": "每月 4 次配送",
-        "desc": "我们最受欢迎的选择。每月享受多达 4 次配送。灵活安排：每周、每两周，或按您的日程安排。"
+        "desc": "每月 4 次配送 · 星期一、星期三和星期五"
       },
       "intermediate": {
         "title": "中级计划",
         "cadence": "每月 6 次配送",
-        "desc": "为活跃家庭提供额外灵活性。每月最多可在周一或周五安排 6 次配送。"
+        "desc": "每月 6 次配送 · 星期一、星期三和星期五"
       },
       "premium": {
         "title": "高级计划",
         "cadence": "每月 8 次配送",
-        "desc": "全月覆盖。每月最多 8 次配送（每周一和周五各一次），提供最大便利。"
+        "desc": "每月 8 次配送 · 星期一、星期三和星期五"
       }
     },
     "yourPlan": "你的 Hazorex 方案"
@@ -1052,7 +1052,9 @@
     "subtitle": "每次购买自动进入当日抽奖。使用加密种子，结果100%可验证——无中间方。",
     "ctaShop": "查看饼干",
     "ctaHow": "抽奖如何运作",
-    "trust": "✓ 可验证抽奖 · ✓ 24小时发货 · ✓ 手工饼干"
+    "trust": "✓ 星期一、星期三和星期五 · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — 手工优质饼干 · 星期一、星期三和星期五",
+    "trustNoSweepstakes": "✓ 星期一、星期三和星期五 · HAZOREX"
   },
   "footer": {
     "tagline": "高级饼干配100%可验证每日抽奖。每次购买都可进入当日抽奖。",
@@ -1075,16 +1077,17 @@
     "becomeDriver": "成为配送员",
     "winners": "获奖者",
     "followUs": "关注我们",
-    "socialComingSoon": "即将推出"
+    "socialComingSoon": "即将推出",
+    "taglineNoSweepstakes": "HAZOREX — 手工优质饼干 · 星期一、星期三和星期五"
   },
   "repartidoresPage": {
     "metaTitle": "成为配送员 · Hazorex",
     "metaDesc": "加入 Hazorex 配送员团队。几分钟内即可申请，选择您的工作时间，在您的城市配送订单赚钱。",
-    "metaOg": "申请成为 Hazorex 配送员。灵活的工作时间，每周付款，以及透明的审批流程。",
+    "metaOg": "加入 Hazorex 配送员团队。几分钟内即可申请，选择您的工作时间，在您的城市配送订单赚钱。 每单送达后收款",
     "hero": {
       "badge": "5分钟内申请",
       "titlePart1": "赚取",
-      "titleHighlight": "每小时 $22 起",
+      "titleHighlight": "按订单",
       "titlePart2": "，为 Hazorex 配送",
       "subtitlePart1": "您管理您的时间，我们处理订单。您只需要",
       "subtitleHighlight": "选择您的车辆",
@@ -1092,10 +1095,11 @@
       "viewRequirements": "查看要求 →",
       "perks": {
         "flexible": "灵活工作时间",
-        "weekly": "每周付款",
+        "weekly": "每单送达后收款",
         "noFee": "无初始费用",
         "reply48": "48小时内回复"
-      }
+      },
+      "example": "示例：$60、50 lb订单，配送 ${{base}} + 重量 ${{weight}} + 小费 ${{tip}} = ${{total}}。不保证时薪。"
     },
     "signInGate": {
       "title": "开始您的申请",
@@ -1160,7 +1164,7 @@
       "r1": "年满18岁",
       "r2": "自有自行车或电动自行车",
       "r3": "适合人口密集区域。无需驾照或保险。",
-      "r4": "SSN or ITIN",
+      "r4": "税务和银行信息仅在Stripe填写。",
       "r5": "有效的纽约州M或DM类驾照 / 有效的纽约州D类（或E类）驾照",
       "r6": "清晰的个人资料照片（自拍）"
     },
@@ -1176,7 +1180,7 @@
       },
       "q3": {
         "q": "我什么时候能收到报酬？",
-        "a": "付款每周处理一次，按完成的配送总额计算。"
+        "a": "每单报酬包含配送分成、重量附加费及100%小费。送达后开始转账，银行到账时间取决于Stripe和银行。"
       },
       "q4": {
         "q": "我可以选择自己的工作时间吗？",
@@ -1309,12 +1313,9 @@
         "err_address": "请输入您的地址",
         "err_vehicle": "请选择自行车/电动自行车、摩托车或汽车",
         "err_license": "请输入您的驾照号码",
-        "err_insurer": "请输入您的保险公司",
-        "err_taxId": "请输入有效的9位SSN或ITIN"
+        "err_insurer": "请输入您的保险公司"
       },
-      "taxIdType": "税务识别号类型",
-      "taxId": "SSN 或 ITIN",
-      "taxIdPrivacy": "完整号码会在保存前加密，之后不会再次显示。"
+      "stripePrivacy": "税务和银行信息仅在Stripe填写。"
     },
     "summary": {
       "name": "姓名",
@@ -1327,8 +1328,7 @@
       "license": "驾照",
       "insurer": "保险公司",
       "plate": "车牌号",
-      "edit": "编辑",
-      "taxId": "SSN 或 ITIN"
+      "edit": "编辑"
     },
     "success": {
       "title": "申请已收到！",
@@ -1367,10 +1367,12 @@
       "phone": "电话 *",
       "address": "企业地址 *",
       "addressPlaceholder": "街道，门牌号，社区",
-      "city": "城市 *",
-      "selectZone": "选择一个区域",
+      "city": "行政区 *",
+      "selectZone": "选择行政区",
       "required": "* 必填字段。您的信息受到保护且安全。",
-      "otherZone": "其他区域"
+      "otherZone": "其他地区",
+      "postalCode": "邮政编码 *",
+      "neighborhood": "街区"
     },
     "types": {
       "supermercado": "超市",
@@ -1395,7 +1397,9 @@
       "cityRequired": "城市是必填项",
       "mustSignIn": "您必须登录才能注册企业",
       "alreadyRegistered": "您已经注册了一项业务",
-      "generic": "注册企业时出错"
+      "generic": "注册企业时出错",
+      "postalCode": "邮政编码必须为5位数字。",
+      "boroughMismatch": "此邮政编码属于其他行政区。"
     },
     "success": {
       "title": "申请已发送！",
@@ -1541,7 +1545,7 @@
     "metaTitle": "HAZOREX — 手工优质饼干",
     "metaDesc": "在 HAZOREX 探索美味饼干、定制套装和月度订阅。",
     "sliderHeading": "灵感来自你的渴望",
-    "sliderSub": "今日新鲜烘焙 · 24小时配送",
+    "sliderSub": "星期一、星期三和星期五",
     "seeMore": "查看更多",
     "addToCart": "加入购物车"
   },
@@ -1594,7 +1598,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "其他地区",
+    "neighborhood": "街区",
+    "allBoroughs": "选择行政区"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1645,13 +1652,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "星期一",
+      "tue": "星期二",
+      "wed": "星期三",
+      "thu": "星期四",
+      "fri": "星期五",
+      "sat": "星期六",
+      "sun": "星期日"
     }
   }
 }

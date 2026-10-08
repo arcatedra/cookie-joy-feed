@@ -5,6 +5,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { getRequestHost } from "@tanstack/react-start/server";
+import { zoneForPostalCode } from "@/lib/nyc-zones";
 import { normalizeSchedule } from "@/lib/store";
 
 const BUCKET = "store-media";
@@ -38,12 +40,15 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(async 
   const sb = publicClient() as any;
   const { data: stores, error } = await sb
     .from("businesses")
-    .select("id, slug, business_name, business_type, city, logo_url, zonas_que_atiende")
+    .select("id, slug, business_name, business_type, city, postal_code, stripe_environment, logo_url, zonas_que_atiende")
     .eq("status", "aprobado")
     .eq("activo", true)
     .order("business_name");
   if (error) throw error;
-  const list = (stores ?? []) as any[];
+  const { data: zones } = await sb.from("delivery_zones").select("name, borough, zip_codes, activo");
+  const { paymentsEnvironmentForHost } = await import("./stripe.server");
+  const env = paymentsEnvironmentForHost(getRequestHost());
+  const list = ((stores ?? []) as any[]).filter((store) => !store.stripe_environment || store.stripe_environment === env);
   if (list.length === 0) return [];
 
   const { data: prods, error: pErr } = await sb
@@ -59,6 +64,7 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(async 
       .filter((s) => withProducts.has(s.id))
       .map(async (s) => ({
         ...s,
+        neighborhood: s.postal_code ? (zoneForPostalCode(zones ?? [], s.postal_code)?.name ?? "Otras áreas") : null,
         zonas_que_atiende: s.zonas_que_atiende ?? [],
         logoUrl: await sign(sb, s.logo_url),
       })),

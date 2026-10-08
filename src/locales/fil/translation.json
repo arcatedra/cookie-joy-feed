@@ -345,9 +345,9 @@
   },
   "subscribe": {
     "metaTitle": "Mga Subscription Plan — HAZOREX",
-    "metaDesc": "Pumili ng HAZOREX cookie subscription plan. Padala tuwing Lunes at Biyernes lamang.",
+    "metaDesc": "Lunes, Miyerkules at Biyernes",
     "title": "Mga Subscription Plan",
-    "deliveryBadge": "Padala tuwing Lunes at Biyernes lamang",
+    "deliveryBadge": "Lunes, Miyerkules at Biyernes",
     "activePlan": "Aktibong Plan",
     "remaining": "Natitira",
     "scheduledCount": "{{used}} sa {{total}} padala naka-schedule ngayong buwan",
@@ -355,33 +355,33 @@
     "mostPopular": "Pinakasikat",
     "perMonth": "/ buwan",
     "schedule": "I-schedule ang mga Padala",
-    "scheduleHint": "Lunes at Biyernes lamang ang maaaring piliin.",
+    "scheduleHint": "Lunes, Miyerkules at Biyernes",
     "prevMonth": "Nakaraang buwan",
     "nextMonth": "Susunod na buwan",
     "yourDeliveries": "Iyong mga Padala",
     "usedAll": "Nagamit mo na lahat ng {{count}} padala sa plan na ito. Mag-upgrade para magdagdag.",
-    "footnote": "*Available tuwing LUNES at BIYERNES lamang",
+    "footnote": "Lunes, Miyerkules at Biyernes",
     "removeDate": "Alisin ang {{date}}",
     "tiers": {
       "starter": {
         "title": "Starter Plan",
         "cadence": "2 PADALA / BUWAN",
-        "desc": "Perpekto para sa mga pangunahing pangangailangan. May 2 padala kada buwan tuwing Lunes o Biyernes. Magdagdag ng ekstrang padala sa $10 kada isa."
+        "desc": "2 PADALA / BUWAN · Lunes, Miyerkules at Biyernes"
       },
       "essential": {
         "title": "Essential Plan",
         "cadence": "4 PADALA / BUWAN",
-        "desc": "Pinakasikat: hanggang 4 padala bawat buwan, flexible schedule."
+        "desc": "4 PADALA / BUWAN · Lunes, Miyerkules at Biyernes"
       },
       "intermediate": {
         "title": "Intermediate Plan",
         "cadence": "6 PADALA / BUWAN",
-        "desc": "Mas flexible para sa aktibong tahanan: hanggang 6 padala bawat buwan."
+        "desc": "6 PADALA / BUWAN · Lunes, Miyerkules at Biyernes"
       },
       "premium": {
         "title": "Premium Plan",
         "cadence": "8 PADALA / BUWAN",
-        "desc": "Buong buwang serbisyo: hanggang 8 padala (dalawang beses sa isang linggo, Lunes at Biyernes)."
+        "desc": "8 PADALA / BUWAN · Lunes, Miyerkules at Biyernes"
       }
     },
     "yourPlan": "Ang iyong Hazorex Plan"
@@ -1055,7 +1055,9 @@
     "subtitle": "Bawat bili ay awtomatikong sumasali sa araw na palabunutan. 100% verifiable na resulta gamit ang cryptographic seed — walang tagapamagitan.",
     "ctaShop": "Tingnan ang cookies",
     "ctaHow": "Paano gumagana ang palabunutan",
-    "trust": "✓ Verifiable na bunutan · ✓ 24h shipping · ✓ Handcrafted cookies"
+    "trust": "✓ Lunes, Miyerkules at Biyernes · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Lunes, Miyerkules at Biyernes",
+    "trustNoSweepstakes": "✓ Lunes, Miyerkules at Biyernes · HAZOREX"
   },
   "footer": {
     "tagline": "Premium na cookies na may 100% verifiable na pang-araw-araw na palabunutan. Bawat bili ay sumasali sa araw na bunutan.",
@@ -1078,16 +1080,17 @@
     "becomeDriver": "Maging delivery driver",
     "winners": "Mga Panalo",
     "followUs": "Sundan kami",
-    "socialComingSoon": "Malapit na"
+    "socialComingSoon": "Malapit na",
+    "taglineNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Lunes, Miyerkules at Biyernes"
   },
   "repartidoresPage": {
     "metaTitle": "Maging isang delivery driver · Hazorex",
     "metaDesc": "Sumali sa team ng mga delivery driver ng Hazorex. Mag-apply sa loob ng ilang minuto, piliin ang iyong mga oras, at kumita ng pera sa paghahatid ng mga order sa iyong lungsod.",
-    "metaOg": "Mag-apply bilang delivery driver ng Hazorex. Mga flexible na oras, lingguhang pagbabayad, at malinaw na proseso ng pag-apruba.",
+    "metaOg": "Sumali sa team ng mga delivery driver ng Hazorex. Mag-apply sa loob ng ilang minuto, piliin ang iyong mga oras, at kumita ng pera sa paghahatid ng mga order sa iyong lungsod. Bayad pagkatapos ng bawat paghahatid",
     "hero": {
       "badge": "Mag-apply sa loob ng 5 minuto",
       "titlePart1": "Kumita",
-      "titleHighlight": "mula $22 kada oras",
+      "titleHighlight": "bawat order",
       "titlePart2": "sa pagde-deliver gamit ang Hazorex",
       "subtitlePart1": "Ikaw ang bahala sa oras mo, kami sa mga order. Kailangan mo lang ng",
       "subtitleHighlight": "piliin ang iyong sasakyan",
@@ -1095,10 +1098,11 @@
       "viewRequirements": "Tingnan ang mga kinakailangan →",
       "perks": {
         "flexible": "Flexible na mga oras",
-        "weekly": "Lingguhang bayad",
+        "weekly": "Bayad pagkatapos ng bawat paghahatid",
         "noFee": "Walang paunang bayad",
         "reply48": "Sagot sa loob ng 48 oras"
-      }
+      },
+      "example": "Halimbawa para sa $60 at 50 lb na order: delivery ${{base}} + timbang ${{weight}} + tip ${{tip}} = ${{total}}. Hindi ito pangako kada oras."
     },
     "signInGate": {
       "title": "Simulan ang iyong aplikasyon",
@@ -1163,7 +1167,7 @@
       "r1": "18 taong gulang pataas",
       "r2": "Sariling bisikleta o e-bike",
       "r3": "Mainam para sa masisikip na lugar. Hindi kailangan ng lisensya o insurance.",
-      "r4": "SSN or ITIN",
+      "r4": "Ibigay ang tax at bank details sa Stripe lamang.",
       "r5": "Valid NY Class M o DM license / Valid NY Class D (o E) license",
       "r6": "Malinaw na profile picture (selfie)"
     },
@@ -1179,7 +1183,7 @@
       },
       "q3": {
         "q": "Kailan ako sasahod?",
-        "a": "Ang mga bayad ay pinoproseso linggu-linggo para sa kabuuan ng mga natapos na paghahatid."
+        "a": "Bawat order: bahagi mo sa delivery, dagdag sa timbang at 100% ng tip. Magsisimula ang transfer sa paghahatid; depende sa Stripe at bangko ang deposito."
       },
       "q4": {
         "q": "Maaari ko bang piliin ang aking mga oras?",
@@ -1312,12 +1316,9 @@
         "err_address": "Ilagay ang iyong address",
         "err_vehicle": "Pumili ng bisikleta/e-bike, motorsiklo, o kotse",
         "err_license": "Ilagay ang numero ng iyong lisensya",
-        "err_insurer": "Ilagay ang iyong kumpanya ng insurance",
-        "err_taxId": "Maglagay ng valid na 9-digit SSN o ITIN"
+        "err_insurer": "Ilagay ang iyong kumpanya ng insurance"
       },
-      "taxIdType": "Uri ng tax ID",
-      "taxId": "SSN o ITIN",
-      "taxIdPrivacy": "Ie-encrypt ang buong numero bago i-save at hindi na ito muling ipapakita."
+      "stripePrivacy": "Ibigay ang tax at bank details sa Stripe lamang."
     },
     "summary": {
       "name": "Pangalan",
@@ -1330,8 +1331,7 @@
       "license": "Lisensya",
       "insurer": "Kumpanya ng insurance",
       "plate": "Plaka",
-      "edit": "I-edit",
-      "taxId": "SSN o ITIN"
+      "edit": "I-edit"
     },
     "success": {
       "title": "Natanggap na ang aplikasyon!",
@@ -1370,10 +1370,12 @@
       "phone": "Telepono *",
       "address": "Address ng negosyo *",
       "addressPlaceholder": "Kalye, numero, barangay",
-      "city": "Lungsod *",
-      "selectZone": "Pumili ng lugar",
+      "city": "Borough *",
+      "selectZone": "Pumili ng borough",
       "required": "* Mga kinakailangang field. Ang iyong impormasyon ay protektado at ligtas.",
-      "otherZone": "Ibang sona"
+      "otherZone": "Iba pang lugar",
+      "postalCode": "ZIP code *",
+      "neighborhood": "Kapitbahayan"
     },
     "types": {
       "supermercado": "Supermarket",
@@ -1398,7 +1400,9 @@
       "cityRequired": "Kinakailangan ang lungsod",
       "mustSignIn": "Kailangang mag-login para magrehistro ng negosyo",
       "alreadyRegistered": "Mayroon ka nang nakarehistrong negosyo",
-      "generic": "Error sa pagrehistro ng negosyo"
+      "generic": "Error sa pagrehistro ng negosyo",
+      "postalCode": "Dapat 5 digit ang ZIP code.",
+      "boroughMismatch": "Ang ZIP code ay nasa ibang borough."
     },
     "success": {
       "title": "Naipadala na ang aplikasyon!",
@@ -1544,7 +1548,7 @@
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
     "metaDesc": "Tuklasin ang gourmet cookies, custom packs at monthly subscriptions sa HAZOREX.",
     "sliderHeading": "Inspirado sa iyong crave",
-    "sliderSub": "Baked ngayong araw · 24h shipping",
+    "sliderSub": "Lunes, Miyerkules at Biyernes",
     "seeMore": "Tingnan pa",
     "addToCart": "Idagdag sa cart"
   },
@@ -1597,7 +1601,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Iba pang lugar",
+    "neighborhood": "Kapitbahayan",
+    "allBoroughs": "Pumili ng borough"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1648,13 +1655,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "Lunes",
+      "tue": "Martes",
+      "wed": "Miyerkules",
+      "thu": "Huwebes",
+      "fri": "Biyernes",
+      "sat": "Sabado",
+      "sun": "Linggo"
     }
   }
 }

@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Subscription Plans — HAZOREX",
-    "metaDesc": "Choose your HAZOREX cookie subscription plan. Delivered Mondays and Fridays only.",
+    "metaDesc": "Monday, Wednesday and Friday",
     "title": "Subscription Plans",
-    "deliveryBadge": "Monday & Friday Delivery Only",
+    "deliveryBadge": "Monday, Wednesday and Friday",
     "activePlan": "Active Plan",
     "remaining": "Remaining",
     "scheduledCount": "{{used}} of {{total}} deliveries scheduled this month",
@@ -352,33 +352,33 @@
     "mostPopular": "Most Popular",
     "perMonth": "/ mo.",
     "schedule": "Schedule Deliveries",
-    "scheduleHint": "Only Mondays and Fridays are selectable.",
+    "scheduleHint": "Monday, Wednesday and Friday",
     "prevMonth": "Previous month",
     "nextMonth": "Next month",
     "yourDeliveries": "Your Deliveries",
     "usedAll": "You've used all {{count}} deliveries on this plan. Upgrade to add more.",
-    "footnote": "*Available Only on MONDAYS & FRIDAYS",
+    "footnote": "Monday, Wednesday and Friday",
     "removeDate": "Remove {{date}}",
     "tiers": {
       "starter": {
         "title": "Starter Plan",
         "cadence": "2 DELIVERIES / MONTH",
-        "desc": "Perfect for essentials. Includes 2 deliveries per month on your choice of Mondays or Fridays. Add extra deliveries anytime for $10 each."
+        "desc": "2 DELIVERIES / MONTH · Monday, Wednesday and Friday"
       },
       "essential": {
         "title": "Essential Plan",
         "cadence": "4 DELIVERIES / MONTH",
-        "desc": "Our most popular choice. Enjoy up to 4 deliveries per month. Flexible scheduling: use them weekly, bi-weekly, or however fits your routine."
+        "desc": "4 DELIVERIES / MONTH · Monday, Wednesday and Friday"
       },
       "intermediate": {
         "title": "Intermediate Plan",
         "cadence": "6 DELIVERIES / MONTH",
-        "desc": "Extra flexibility for active households. Get up to 6 deliveries per month scheduled on Mondays or Fridays."
+        "desc": "6 DELIVERIES / MONTH · Monday, Wednesday and Friday"
       },
       "premium": {
         "title": "Premium Plan",
         "cadence": "8 DELIVERIES / MONTH",
-        "desc": "Full monthly coverage. Maximum convenience with up to 8 deliveries per month (twice a week on Mondays and Fridays)."
+        "desc": "8 DELIVERIES / MONTH · Monday, Wednesday and Friday"
       }
     },
     "yourPlan": "Your Hazorex Plan"
@@ -1099,7 +1099,9 @@
     "subtitle": "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.",
     "ctaShop": "Shop cookies",
     "ctaHow": "How the draw works",
-    "trust": "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies"
+    "trust": "✓ Monday, Wednesday and Friday · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Monday, Wednesday and Friday",
+    "trustNoSweepstakes": "✓ Monday, Wednesday and Friday · HAZOREX"
   },
   "footer": {
     "tagline": "Premium cookies with 100% verifiable daily sweepstakes. Every purchase grants entry to that day's draw.",
@@ -1122,16 +1124,17 @@
     "becomeDriver": "Become a driver",
     "winners": "Winners",
     "followUs": "Follow us",
-    "socialComingSoon": "Coming soon"
+    "socialComingSoon": "Coming soon",
+    "taglineNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Monday, Wednesday and Friday"
   },
   "repartidoresPage": {
     "metaTitle": "Become a driver · Hazorex",
     "metaDesc": "Join the Hazorex driver team. Apply in minutes, choose your hours, and earn money delivering orders in your city.",
-    "metaOg": "Apply as a Hazorex driver. Flexible hours, weekly payments, and a transparent approval process.",
+    "metaOg": "Join the Hazorex driver team. Apply in minutes, choose your hours, and earn money delivering orders in your city. Get paid after delivering each order",
     "hero": {
       "badge": "Apply in 5 minutes",
       "titlePart1": "Earn",
-      "titleHighlight": "from $22 an hour",
+      "titleHighlight": "per order",
       "titlePart2": "delivering with Hazorex.",
       "subtitlePart1": "You manage your time, we handle the orders. Choose a",
       "subtitleHighlight": "bike, motorcycle, or car",
@@ -1139,10 +1142,11 @@
       "viewRequirements": "View requirements →",
       "perks": {
         "flexible": "Flexible hours",
-        "weekly": "Weekly payments",
+        "weekly": "Get paid after delivering each order",
         "noFee": "No initial fee",
         "reply48": "Response in 48h"
-      }
+      },
+      "example": "Example for a $60, 50 lb order: delivery ${{base}} + weight ${{weight}} + tip ${{tip}} = ${{total}}. This is not an hourly promise."
     },
     "signInGate": {
       "title": "Start your application",
@@ -1207,7 +1211,7 @@
       "r1": "18 years or older",
       "r2": "Your own bike, e-bike, motorcycle, or car",
       "r3": "Photo ID",
-      "r4": "SSN or ITIN",
+      "r4": "Provide tax and bank details only in Stripe when connecting your payout account.",
       "r5": "License and insurance when required for your vehicle",
       "r6": "Clear profile photo (selfie)"
     },
@@ -1223,7 +1227,7 @@
       },
       "q3": {
         "q": "When do I get paid?",
-        "a": "Payments are processed weekly for the total of completed deliveries."
+        "a": "Your pay per order includes your share of delivery, weight fees and 100% of tips. The transfer starts after delivery; bank deposits depend on Stripe and your bank."
       },
       "q4": {
         "q": "Can I choose my hours?",
@@ -1356,13 +1360,10 @@
         "err_address": "Enter your address",
         "err_vehicle": "Select bike/e-bike, motorcycle, or car",
         "err_license": "Enter your license number",
-        "err_insurer": "Enter your insurance provider",
-        "err_taxId": "Enter a valid 9-digit SSN or ITIN"
+        "err_insurer": "Enter your insurance provider"
       },
-      "taxIdType": "Tax ID type",
-      "taxId": "SSN or ITIN",
-      "taxIdPrivacy": "Your full number is encrypted before storage and will not be shown again.",
-      "noZones": "No zones available yet. Check back soon."
+      "noZones": "No zones available yet. Check back soon.",
+      "stripePrivacy": "Provide tax and bank details only in Stripe when connecting your payout account."
     },
     "summary": {
       "name": "Name",
@@ -1375,8 +1376,7 @@
       "license": "License",
       "insurer": "Insurance provider",
       "plate": "License plate",
-      "edit": "Edit",
-      "taxId": "SSN or ITIN"
+      "edit": "Edit"
     },
     "success": {
       "title": "Application received!",
@@ -1415,10 +1415,12 @@
       "phone": "Phone *",
       "address": "Business address *",
       "addressPlaceholder": "Street, number, neighborhood",
-      "city": "City *",
-      "selectZone": "Select a zone",
+      "city": "Borough *",
+      "selectZone": "Select a borough",
       "required": "* Required fields. Your information is protected and secure.",
-      "otherZone": "Other zone"
+      "otherZone": "Other areas",
+      "postalCode": "ZIP code *",
+      "neighborhood": "Neighborhood"
     },
     "types": {
       "supermercado": "Supermarket",
@@ -1443,7 +1445,9 @@
       "cityRequired": "City is required",
       "mustSignIn": "You must be logged in to register a business",
       "alreadyRegistered": "You already have a registered business",
-      "generic": "Error registering business"
+      "generic": "Error registering business",
+      "postalCode": "ZIP code must contain 5 digits.",
+      "boroughMismatch": "This ZIP code belongs to another borough."
     },
     "success": {
       "title": "Application submitted!",
@@ -1608,7 +1612,7 @@
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
     "metaDesc": "Discover gourmet cookies, custom packs and monthly subscriptions at HAZOREX.",
     "sliderHeading": "Inspired by your cravings",
-    "sliderSub": "Baked today · 24h shipping",
+    "sliderSub": "Monday, Wednesday and Friday",
     "seeMore": "See more",
     "addToCart": "Add to cart"
   },
@@ -1661,7 +1665,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Other areas",
+    "neighborhood": "Neighborhood",
+    "allBoroughs": "Select a borough"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",

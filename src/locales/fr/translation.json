@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Plans d'Abonnement — HAZOREX",
-    "metaDesc": "Choisissez votre plan d'abonnement aux cookies HAZOREX. Livré les lundis et vendredis uniquement.",
+    "metaDesc": "lundi, mercredi et vendredi",
     "title": "Plans d'Abonnement",
-    "deliveryBadge": "Livraison les lundis et vendredis uniquement",
+    "deliveryBadge": "lundi, mercredi et vendredi",
     "activePlan": "Plan Actif",
     "remaining": "Restant",
     "scheduledCount": "{{used}} sur {{total}} livraisons prévues ce mois-ci",
@@ -352,33 +352,33 @@
     "mostPopular": "Le Plus Populaire",
     "perMonth": "/ mois",
     "schedule": "Planifier les Livraisons",
-    "scheduleHint": "Seuls les lundis et vendredis sont sélectionnables.",
+    "scheduleHint": "lundi, mercredi et vendredi",
     "prevMonth": "Mois précédent",
     "nextMonth": "Mois suivant",
     "yourDeliveries": "Vos Livraisons",
     "usedAll": "Vous avez utilisé toutes les {{count}} livraisons de ce plan. Passez à un plan supérieur pour en ajouter davantage.",
-    "footnote": "*Disponible uniquement les LUNDIS & VENDREDIS",
+    "footnote": "lundi, mercredi et vendredi",
     "removeDate": "Supprimer le {{date}}",
     "tiers": {
       "starter": {
         "title": "Plan Démarrage",
         "cadence": "2 LIVRAISONS / MOIS",
-        "desc": "Parfait pour l'essentiel. Inclut 2 livraisons par mois, lundis ou vendredis. Ajoutez des livraisons supplémentaires pour 10 $ chacune."
+        "desc": "2 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
       },
       "essential": {
         "title": "Plan Essentiel",
         "cadence": "4 LIVRAISONS / MOIS",
-        "desc": "Notre choix le plus populaire. Profitez de jusqu'à 4 livraisons par mois. Planification flexible : utilisez-les chaque semaine, toutes les deux semaines, ou comme cela convient à votre routine."
+        "desc": "4 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
       },
       "intermediate": {
         "cadence": "6 LIVRAISONS / MOIS",
-        "desc": "Flexibilité supplémentaire pour les foyers actifs. Obtenez jusqu'à 6 livraisons par mois, planifiées les lundis ou les vendredis.",
+        "desc": "6 LIVRAISONS / MOIS · lundi, mercredi et vendredi",
         "title": "Plan Intermédiaire"
       },
       "premium": {
         "title": "Plan Premium",
         "cadence": "8 LIVRAISONS / MOIS",
-        "desc": "Couverture mensuelle complète. Commodité maximale avec jusqu'à 8 livraisons par mois (deux fois par semaine les lundis et vendredis)."
+        "desc": "8 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
       }
     },
     "yourPlan": "Votre Plan Hazorex"
@@ -1052,7 +1052,9 @@
     "subtitle": "Chaque achat participe automatiquement au tirage du jour. Résultat 100% vérifiable avec graine cryptographique — sans intermédiaires.",
     "ctaShop": "Voir les cookies",
     "ctaHow": "Comment fonctionne le tirage",
-    "trust": "✓ Tirage vérifiable · ✓ Livraison 24h · ✓ Cookies artisanaux"
+    "trust": "✓ lundi, mercredi et vendredi · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Cookies Artisanaux Premium · lundi, mercredi et vendredi",
+    "trustNoSweepstakes": "✓ lundi, mercredi et vendredi · HAZOREX"
   },
   "footer": {
     "tagline": "Cookies premium avec tirages quotidiens 100% vérifiables. Chaque achat donne accès au tirage du jour.",
@@ -1075,16 +1077,17 @@
     "becomeDriver": "Devenir livreur",
     "winners": "Gagnants",
     "followUs": "Suivez-nous",
-    "socialComingSoon": "Bientôt disponible"
+    "socialComingSoon": "Bientôt disponible",
+    "taglineNoSweepstakes": "HAZOREX — Cookies Artisanaux Premium · lundi, mercredi et vendredi"
   },
   "repartidoresPage": {
     "metaTitle": "Devenir livreur · Hazorex",
     "metaDesc": "Rejoignez l'équipe des livreurs Hazorex. Postulez en quelques minutes, choisissez vos horaires et gagnez de l'argent en livrant des commandes dans votre ville.",
-    "metaOg": "Postulez comme livreur Hazorex. Horaires flexibles, paiements hebdomadaires et processus d'approbation transparent.",
+    "metaOg": "Rejoignez l'équipe des livreurs Hazorex. Postulez en quelques minutes, choisissez vos horaires et gagnez de l'argent en livrant des commandes dans votre ville. Paiement après chaque livraison",
     "hero": {
       "badge": "Postulez en 5 minutes",
       "titlePart1": "Gagnez",
-      "titleHighlight": "à partir de $22 de l’heure",
+      "titleHighlight": "par commande",
       "titlePart2": "en livrant avec Hazorex",
       "subtitlePart1": "Vous gérez votre temps, nous nous occupons des commandes. Vous avez seulement besoin d'une",
       "subtitleHighlight": "choisissez votre véhicule",
@@ -1092,10 +1095,11 @@
       "viewRequirements": "Voir les exigences →",
       "perks": {
         "flexible": "Horaires flexibles",
-        "weekly": "Paiements hebdomadaires",
+        "weekly": "Paiement après chaque livraison",
         "noFee": "Sans frais initiaux",
         "reply48": "Réponse en 48 h"
-      }
+      },
+      "example": "Exemple pour une commande de $60 et 50 lb : livraison ${{base}} + poids ${{weight}} + pourboire ${{tip}} = ${{total}}. Aucune promesse horaire."
     },
     "signInGate": {
       "title": "Commencez votre candidature",
@@ -1160,7 +1164,7 @@
       "r1": "18 ans ou plus",
       "r2": "Votre propre vélo ou vélo électrique",
       "r3": "Idéal pour les zones denses. Aucun permis ni assurance requis.",
-      "r4": "SSN or ITIN",
+      "r4": "Les données fiscales et bancaires sont fournies uniquement à Stripe.",
       "r5": "Permis NY classe M ou DM valide / Permis NY classe D (ou E) valide",
       "r6": "Photo de profil claire (selfie)"
     },
@@ -1176,7 +1180,7 @@
       },
       "q3": {
         "q": "Quand suis-je payé ?",
-        "a": "Les paiements sont traités chaque semaine pour le total des livraisons effectuées."
+        "a": "Par commande : votre part de livraison, supplément de poids et 100% des pourboires. Le transfert commence après livraison ; le dépôt dépend de Stripe et de votre banque."
       },
       "q4": {
         "q": "Puis-je choisir mes horaires ?",
@@ -1309,12 +1313,9 @@
         "err_address": "Entrez votre adresse",
         "err_vehicle": "Choisissez vélo/vélo électrique, moto ou voiture",
         "err_license": "Entrez votre numéro de permis",
-        "err_insurer": "Entrez votre assureur",
-        "err_taxId": "Saisissez un SSN ou ITIN valide à 9 chiffres"
+        "err_insurer": "Entrez votre assureur"
       },
-      "taxIdType": "Type d’identifiant fiscal",
-      "taxId": "SSN ou ITIN",
-      "taxIdPrivacy": "Votre numéro complet est chiffré avant stockage et ne sera plus affiché."
+      "stripePrivacy": "Les données fiscales et bancaires sont fournies uniquement à Stripe."
     },
     "summary": {
       "name": "Nom",
@@ -1327,8 +1328,7 @@
       "license": "Permis",
       "insurer": "Assureur",
       "plate": "Plaque d'immatriculation",
-      "edit": "Modifier",
-      "taxId": "SSN ou ITIN"
+      "edit": "Modifier"
     },
     "success": {
       "title": "Candidature reçue !",
@@ -1367,10 +1367,12 @@
       "phone": "Téléphone *",
       "address": "Adresse du commerce *",
       "addressPlaceholder": "Rue, numéro, quartier",
-      "city": "Ville *",
-      "selectZone": "Sélectionnez une zone",
+      "city": "Arrondissement *",
+      "selectZone": "Choisir un arrondissement",
       "required": "* Champs obligatoires. Vos informations sont protégées et sécurisées.",
-      "otherZone": "Autre zone"
+      "otherZone": "Autres zones",
+      "postalCode": "Code postal *",
+      "neighborhood": "Quartier"
     },
     "types": {
       "supermercado": "Supermarché",
@@ -1395,7 +1397,9 @@
       "cityRequired": "La ville est obligatoire",
       "mustSignIn": "Vous devez vous connecter pour enregistrer un commerce",
       "alreadyRegistered": "Vous avez déjà un commerce enregistré",
-      "generic": "Erreur lors de l'enregistrement du commerce"
+      "generic": "Erreur lors de l'enregistrement du commerce",
+      "postalCode": "Le code postal doit comporter 5 chiffres.",
+      "boroughMismatch": "Ce code postal appartient à un autre arrondissement."
     },
     "success": {
       "title": "Demande envoyée !",
@@ -1541,7 +1545,7 @@
     "metaTitle": "HAZOREX — Cookies Artisanaux Premium",
     "metaDesc": "Découvrez des cookies gourmets, des packs personnalisés et des abonnements mensuels chez HAZOREX.",
     "sliderHeading": "Inspiré par vos envies",
-    "sliderSub": "Cuits aujourd'hui · Livraison 24h",
+    "sliderSub": "lundi, mercredi et vendredi",
     "seeMore": "Voir plus",
     "addToCart": "Ajouter au panier"
   },
@@ -1594,7 +1598,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Autres zones",
+    "neighborhood": "Quartier",
+    "allBoroughs": "Choisir un arrondissement"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1645,13 +1652,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "Lundi",
+      "tue": "Mardi",
+      "wed": "Mercredi",
+      "thu": "Jeudi",
+      "fri": "Vendredi",
+      "sat": "Samedi",
+      "sun": "Dimanche"
     }
   }
 }
