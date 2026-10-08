@@ -9,7 +9,7 @@ interface Props {
 
 const DriverApproved = ({
   driverName = 'Repartidor/a',
-  dashboardUrl = 'https://www.hazorex.com/repartidor/dashboard',
+  dashboardUrl = 'https://www.hazorex.com/repartidor/cobros',
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
@@ -46,7 +46,7 @@ export const template = {
   displayName: 'Driver Approved',
   previewData: {
     driverName: 'María',
-    dashboardUrl: 'https://www.hazorex.com/repartidor/dashboard',
+     dashboardUrl: 'https://www.hazorex.com/repartidor/cobros',
   },
 } satisfies TemplateEntry
 

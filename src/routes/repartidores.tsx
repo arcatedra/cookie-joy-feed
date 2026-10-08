@@ -1133,7 +1133,6 @@ function ApplicationForm({
                   { label: t("repartidoresPage.summary.insurer"), value: s2.insurer },
                   { label: t("repartidoresPage.summary.plate"), value: s2.plateNumber || "—" },
                 ]),
-                { label: t("repartidoresPage.summary.taxId"), value: `${s2.taxIdType.toUpperCase()} •••• ${s2.taxId.replace(/\D/g, "").slice(-4)}` },
               ]}
             />
 
