@@ -39,7 +39,7 @@ async function sign(sb: any, path: string | null): Promise<string | null> {
 export const listPublicStores = createServerFn({ method: "GET" }).handler(async () => {
   const sb = publicClient() as any;
   const { data: stores, error } = await sb
-    .from("businesses")
+    .from("approved_businesses_public")
     .select("id, slug, business_name, business_type, city, postal_code, stripe_environment, logo_url, zonas_que_atiende")
     .eq("status", "aprobado")
     .eq("activo", true)
@@ -76,7 +76,7 @@ export const getPublicStore = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const sb = publicClient() as any;
     const { data: store, error } = await sb
-      .from("businesses")
+      .from("approved_businesses_public")
       .select(
         "id, slug, business_name, business_type, city, postal_code, stripe_environment, address, descripcion, logo_url, banner_url, horario, zonas_que_atiende",
       )
