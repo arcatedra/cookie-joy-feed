@@ -2212,6 +2212,10 @@ export type Database = {
         Args: { p_amount: number; p_environment: string }
         Returns: string
       }
+      request_wallet_withdrawal_for_user: {
+        Args: { p_amount: number; p_environment: string; p_user: string }
+        Returns: string
+      }
       reserve_order_credit: {
         Args: {
           p_environment: string

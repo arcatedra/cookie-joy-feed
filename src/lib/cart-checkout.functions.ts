@@ -33,11 +33,14 @@ const schema = z.object({
   items: z.array(itemSchema).min(1).max(40),
   address: addressSchema,
   shipping: z.enum(["standard", "express"]).default("standard"),
+  propina: z.number().finite().min(0).max(200).default(0),
+  usarSaldo: z.boolean().default(true),
+  locale: z.enum(["es", "en"]).default("es"),
 });
 
 const SHIPPING_RATES = {
-  standard: { label: "Envío estándar (3-5 días)", amount: 0 },
-  express: { label: "Envío exprés (1-2 días)", amount: 499 },
+  standard: { label: "Envío estándar", amount: 0 },
+  express: { label: "Envío exprés", amount: 499 },
 } as const;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -53,14 +56,11 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     };
     const email = ((claims?.email as string | undefined) ?? "").toLowerCase();
 
-    // Ensure the cliente row exists (auto-heal for pre-trigger users).
-    await supabase
-      .from("clientes")
-      .upsert(
-        { id: userId, email: email || `${userId}@hazorex.local`, nombre_completo: email.split("@")[0] || "Cliente" },
-        { onConflict: "id", ignoreDuplicates: true },
-      );
-
+    // Existing customers are read only; never auto-create or overwrite customer data here.
+    const { data: customer } = await supabase.from("clientes").select("id").eq("id", userId).maybeSingle();
+    if (!customer) throw new Error("Tu cuenta todavía no está lista para comprar.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { reserveOrderCredit, releaseOrderCredit } = await import("./order-credit.server");
     const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
     const { resolveStaticPrice } = await import("./catalog-prices.server");
     const host = getRequestHost();
@@ -124,7 +124,10 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       (s, it) => s + Math.round(it.price * 100) * it.qty,
       0,
     );
-    const totalCents = subtotalCents + shippingRate.amount;
+    const tipCents = Math.round(data.propina * 100);
+    const grossCents = subtotalCents + shippingRate.amount + tipCents;
+    let creditCents = 0;
+    let totalCents = grossCents;
 
     // ---- Margen de autorización -----------------------------------------
     // Se reserva (autoriza) el estimado + un margen, y al terminar el empaque
@@ -140,19 +143,21 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       if (row?.pct != null) bufferPct = Number(row.pct);
       if (row?.min_cents != null) bufferMinCents = Number(row.min_cents);
     }
-    const bufferCents = Math.max(
+    let bufferCents = Math.max(
       Math.round((subtotalCents * bufferPct) / 100),
       bufferMinCents,
     );
-    const authorizedCents = totalCents + bufferCents;
+    let authorizedCents = totalCents + bufferCents;
 
 
 
     // Insert the pedido row in "pendiente" state under RLS (auth.uid() = cliente_id).
-    const { data: pedidoRow, error: pedErr } = await supabase
+    const { data: pedidoRow, error: pedErr } = await supabaseAdmin
       .from("pedidos")
       .insert({
         cliente_id: userId,
+        stripe_environment: env,
+        propina: tipCents / 100,
         estado: "pendiente",
         subtotal: subtotalCents / 100,
         costo_envio: shippingRate.amount / 100,
@@ -171,6 +176,16 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo crear el pedido. Inténtalo de nuevo.");
     }
 
+    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "cookie", pedidoRow.id, Math.max(grossCents - 100, 0), env);
+    totalCents = grossCents - creditCents;
+    bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
+    authorizedCents = totalCents + bufferCents;
+    const { error: totalsError } = await supabaseAdmin.from("pedidos").update({ credito_aplicado: creditCents / 100, total: totalCents / 100, monto_autorizado: authorizedCents / 100 }).eq("id", pedidoRow.id);
+    if (totalsError) {
+      await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
+      await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
+      throw new Error("No se pudo guardar el saldo aplicado.");
+    }
     // Snapshot each item's name and price at purchase time.
     const itemsInsert = pricedItems.map((it) => ({
       pedido_id: pedidoRow.id,
@@ -186,11 +201,12 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     const { error: itemsErr } = await supabase.from("pedido_items").insert(itemsInsert);
     if (itemsErr) {
       console.error("[cart-checkout] failed to insert pedido_items", itemsErr);
-      await supabase.from("pedidos").delete().eq("id", pedidoRow.id);
+      await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
+      await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
       throw new Error("No se pudo guardar el detalle del pedido. Inténtalo de nuevo.");
     }
 
-    const lineItems = pricedItems.map((it) => ({
+    const lineItems: Record<string, unknown>[] = pricedItems.map((it) => ({
 
       quantity: it.qty,
       price_data: {
@@ -203,18 +219,20 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       },
     }));
 
-    // Margen reservado: no es un cargo, solo amplía la autorización para
-    // cubrir diferencias de peso o sustituciones más caras.
-    lineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "usd",
-        unit_amount: bufferCents,
-        product_data: {
-          name: "Margen para ajustes de peso y sustituciones (se cobra solo lo real)",
-        },
-      },
-    });
+    if (creditCents > 0) {
+      lineItems.splice(0, lineItems.length, {
+        quantity: 1,
+        price_data: { currency: "usd", unit_amount: totalCents + bufferCents, product_data: { name: `HAZOREX ${pedidoRow.numero_pedido} (${data.locale === "en" ? "credit applied" : "saldo aplicado"}: -$${(creditCents / 100).toFixed(2)})` } },
+      });
+    } else {
+      for (const [name, cents] of [
+        [data.locale === "en" ? "Delivery" : "Entrega", shippingRate.amount],
+        [data.locale === "en" ? "Driver tip (100%)" : "Propina para el repartidor (100%)", tipCents],
+        [data.locale === "en" ? "Adjustment hold (only the actual amount is charged)" : "Margen para ajustes (se cobra solo lo real)", bufferCents],
+      ] as Array<[string, number]>) {
+        if (cents > 0) lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: cents, product_data: { name } } });
+      }
+    }
 
     let session: StripeSession;
     try {
@@ -226,19 +244,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
           customer_email: email || undefined,
           line_items: lineItems,
-          shipping_options: [
-            {
-              shipping_rate_data: {
-                type: "fixed_amount",
-                display_name: shippingRate.label,
-                fixed_amount: { amount: shippingRate.amount, currency: "usd" },
-                delivery_estimate: {
-                  minimum: { unit: "business_day", value: data.shipping === "express" ? 1 : 3 },
-                  maximum: { unit: "business_day", value: data.shipping === "express" ? 2 : 5 },
-                },
-              },
-            },
-          ],
+          locale: data.locale,
+          custom_text: { after_submit: { message: data.locale === "en" ? "Order the day before, get it in 24 hours: Monday, Wednesday and Friday" : "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes" } },
           payment_intent_data: {
             description: `HAZOREX ${pedidoRow.numero_pedido}`,
             // Reserva el dinero; el cobro real ocurre al terminar el empaque.
@@ -259,13 +266,14 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       );
     } catch (e) {
       console.error("[cart-checkout] stripe error", e);
-      await supabase.from("pedido_items").delete().eq("pedido_id", pedidoRow.id);
-      await supabase.from("pedidos").delete().eq("id", pedidoRow.id);
+
+      await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
+      await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
     // Persist the Stripe session id on the pedido for the webhook lookup.
-    await supabase
+    await supabaseAdmin
       .from("pedidos")
       .update({ stripe_checkout_session_id: session.id })
       .eq("id", pedidoRow.id);
@@ -276,6 +284,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       sessionId: session.id,
       pedidoId: pedidoRow.id,
       numeroPedido: pedidoRow.numero_pedido,
+      creditoAplicado: creditCents / 100,
+      totalEstimado: totalCents / 100,
     };
   });
 
