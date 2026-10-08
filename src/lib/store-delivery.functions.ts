@@ -385,3 +385,22 @@ export const adminPendingCounts = createServerFn({ method: "GET" })
       repartidores: d.count ?? 0,
     };
   });
+
+/** Pedidos con la reserva de tarjeta vencida (más de 7 días sin cobrar). */
+export const adminListExpiredReservations = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin((context as any).supabase, (context as any).userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { AUTHORIZATION_VALID_DAYS } = await import("./pricing");
+    const limit = new Date(Date.now() - AUTHORIZATION_VALID_DAYS * 86400000).toISOString();
+    const { data } = await (supabaseAdmin as any)
+      .from("store_orders")
+      .select("id, estado, autorizado_en, monto_autorizado, fecha_entrega, business_id")
+      .eq("estado", "confirmado")
+      .is("capturado_en", null)
+      .lt("autorizado_en", limit)
+      .order("autorizado_en", { ascending: true })
+      .limit(100);
+    return { pedidos: (data ?? []) as Array<{ id: string; autorizado_en: string; monto_autorizado: number | null; fecha_entrega: string | null }> };
+  });
