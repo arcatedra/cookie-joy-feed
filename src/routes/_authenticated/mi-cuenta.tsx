@@ -7,6 +7,8 @@ import { getMyCliente, upsertMyCliente } from "@/lib/clientes.functions";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { getMyCredit, requestCreditWithdrawal } from "@/lib/wallet-credits.functions";
+import { withdrawalRequestSchema, payoutMethodSchema, type PayoutMethod } from "@/lib/withdrawal-destination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/mi-cuenta")({
   head: () => ({
@@ -16,9 +18,13 @@ export const Route = createFileRoute("/_authenticated/mi-cuenta")({
 });
 
 function MiCuentaPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const english = i18n.language.startsWith("en");
   const withdraw = useServerFn(requestCreditWithdrawal);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [payoutMethod, setPayoutMethod] = useState<PayoutMethod>("zelle");
+  const [payoutIdentifier, setPayoutIdentifier] = useState("");
+  const destinationValid = withdrawalRequestSchema.safeParse({ amount: Number(withdrawAmount), payoutMethod, payoutIdentifier }).success;
   const [withdrawing, setWithdrawing] = useState(false);
   const fetchCliente = useServerFn(getMyCliente);
   const saveCliente = useServerFn(upsertMyCliente);
@@ -109,15 +115,28 @@ function MiCuentaPage() {
         <div className="mt-5 space-y-3 border-t border-border pt-4">
           <p className="text-xs text-muted-foreground">{t("credit.manual")}</p>
           <label className="block text-sm">{t("credit.amount")}<input aria-label={t("credit.amount")} type="number" min="0.01" max={credit?.balance ?? 0} step="0.01" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} className="mt-1 block w-40 rounded-md border border-input bg-background px-3 py-2" /></label>
-          <Button disabled={withdrawing || !credit || Number(withdrawAmount) <= 0 || Number(withdrawAmount) > credit.balance} onClick={async () => {
+          <div className="space-y-1">
+            <label htmlFor="payout-method" className="text-sm">{english ? "Receive with" : "Recibir por"}</label>
+            <Select value={payoutMethod} onValueChange={(value) => { const method = payoutMethodSchema.safeParse(value); if (method.success) setPayoutMethod(method.data); }}>
+              <SelectTrigger id="payout-method" className="w-full"><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="zelle">Zelle</SelectItem><SelectItem value="cash_app">Cash App</SelectItem></SelectContent>
+            </Select>
+          </div>
+          <label className="block text-sm" htmlFor="payout-identifier">{payoutMethod === "zelle" ? (english ? "Email or US phone" : "Correo o teléfono de EE. UU.") : (english ? "Email, US phone or $cashtag" : "Correo, teléfono de EE. UU. o $cashtag")}</label>
+          <input id="payout-identifier" type="text" maxLength={254} autoComplete="off" value={payoutIdentifier} onChange={(e) => setPayoutIdentifier(e.target.value)} placeholder={payoutMethod === "zelle" ? "correo@ejemplo.com / +1 212 555 0123" : "$TuCashtag / correo@ejemplo.com"} aria-describedby="payout-help" className="block w-full rounded-md border border-input bg-background px-3 py-2" />
+          <p id="payout-help" className="text-xs text-muted-foreground">{english ? "Never enter bank account numbers. Check the destination before requesting; it cannot be changed afterward." : "Nunca escribas números de cuenta. Revisa el destino antes de solicitar; después no puede cambiarse."}</p>
+          {payoutIdentifier && !withdrawalRequestSchema.safeParse({ amount: 1, payoutMethod, payoutIdentifier }).success && <p role="alert" className="text-sm text-destructive">{english ? "Enter a valid email, US phone or Cash App $cashtag." : "Indica un correo, teléfono válido de EE. UU. o $cashtag de Cash App."}</p>}
+          <Button disabled={withdrawing || !credit || !destinationValid || Number(withdrawAmount) > credit.balance} onClick={async () => {
+            const parsed = withdrawalRequestSchema.safeParse({ amount: Number(withdrawAmount), payoutMethod, payoutIdentifier });
+            if (!parsed.success) { toast.error(english ? "Check the amount and destination." : "Revisa el importe y el destino."); return; }
             setWithdrawing(true);
-            try { await withdraw({ data: { amount: Math.round(Number(withdrawAmount) * 100) / 100 } }); setWithdrawAmount(""); await refetchCredit(); toast.success(t("credit.requested")); }
+            try { await withdraw({ data: parsed.data }); setWithdrawAmount(""); setPayoutIdentifier(""); await refetchCredit(); toast.success(t("credit.requested")); }
             catch (error) { toast.error(error instanceof Error ? error.message : t("credit.error")); }
             finally { setWithdrawing(false); }
           }}>{t("credit.request")}</Button>
         </div>
         <h3 className="mt-5 font-semibold">{t("credit.history")}</h3>
-        <ul className="mt-2 divide-y divide-border text-sm">{credit?.withdrawals.map((w) => <li key={w.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(w.created_at).toLocaleDateString()} · {t(`credit.${w.status}`, { defaultValue: w.status })}</span><span>${Number(w.amount_usd).toFixed(2)}</span></li>)}</ul>
+        <ul className="mt-2 divide-y divide-border text-sm">{credit?.withdrawals.map((w) => <li key={w.id} className="flex flex-wrap justify-between gap-2 py-2"><div className="min-w-0"><span>{new Date(w.created_at).toLocaleDateString()} · {t(`credit.${w.status}`, { defaultValue: w.status })}</span><p className="break-all text-muted-foreground">{w.payout_identifier ? `${w.payout_method === "zelle" ? "Zelle" : "Cash App"}: ${w.payout_identifier}` : (english ? "Destination not provided (older request)" : "Destino no indicado (solicitud anterior)")}</p></div><span>${Number(w.amount_usd).toFixed(2)}</span></li>)}</ul>
         <h3 className="mt-5 font-semibold">{t("credit.bonuses")}</h3>
         <ul className="mt-2 divide-y divide-border text-sm">{credit?.rewards.map((r) => <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(r.created_at).toLocaleDateString()} · {t(r.status === "pagado" ? "credit.credited" : "credit.blocked")}</span><span>${Number(r.amount_usd).toFixed(2)}</span></li>)}</ul>
       </section>
