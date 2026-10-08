@@ -220,10 +220,12 @@ export type Database = {
           logo_url: string | null
           owner_user_id: string
           phone: string
+          postal_code: string | null
           rejection_reason: string | null
           slug: string | null
           status: string
           stripe_account_id: string | null
+          stripe_environment: string | null
           stripe_onboarding_status: string
           stripe_payouts_enabled: boolean
           updated_at: string
@@ -247,10 +249,12 @@ export type Database = {
           logo_url?: string | null
           owner_user_id: string
           phone: string
+          postal_code?: string | null
           rejection_reason?: string | null
           slug?: string | null
           status?: string
           stripe_account_id?: string | null
+          stripe_environment?: string | null
           stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
           updated_at?: string
@@ -274,10 +278,12 @@ export type Database = {
           logo_url?: string | null
           owner_user_id?: string
           phone?: string
+          postal_code?: string | null
           rejection_reason?: string | null
           slug?: string | null
           status?: string
           stripe_account_id?: string | null
+          stripe_environment?: string | null
           stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
           updated_at?: string
@@ -650,6 +656,7 @@ export type Database = {
           profile_photo_url: string | null
           rejection_reason: string | null
           stripe_account_id: string | null
+          stripe_environment: string | null
           stripe_onboarding_status: string
           stripe_payouts_enabled: boolean
           updated_at: string
@@ -668,6 +675,7 @@ export type Database = {
           profile_photo_url?: string | null
           rejection_reason?: string | null
           stripe_account_id?: string | null
+          stripe_environment?: string | null
           stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
           updated_at?: string
@@ -686,6 +694,7 @@ export type Database = {
           profile_photo_url?: string | null
           rejection_reason?: string | null
           stripe_account_id?: string | null
+          stripe_environment?: string | null
           stripe_onboarding_status?: string
           stripe_payouts_enabled?: boolean
           updated_at?: string
@@ -1461,6 +1470,7 @@ export type Database = {
           repartidor_id: string | null
           repartidor_nombre: string | null
           stripe_checkout_session_id: string | null
+          stripe_environment: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
           tomado_en: string | null
@@ -1510,6 +1520,7 @@ export type Database = {
           repartidor_id?: string | null
           repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
+          stripe_environment?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           tomado_en?: string | null
@@ -1559,6 +1570,7 @@ export type Database = {
           repartidor_id?: string | null
           repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
+          stripe_environment?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           tomado_en?: string | null
