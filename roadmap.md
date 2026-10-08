@@ -12,6 +12,13 @@
 
 ## Límites
 
+## Revisión de los avisos de seguridad
+
+- [ ] Revisar los 22 avisos actuales y distinguir riesgos reales de accesos públicos necesarios.
+- [ ] Mostrar y aprobar el plan antes de aplicar cualquier cambio de permisos en la base de datos.
+- [ ] Corregir riesgos críticos y altos confirmados, sin cambiar datos de usuarios/clientes ni lógica de cobros salvo seguridad.
+- [ ] Verificar permisos resultantes y entregar tabla de resultados e instrucciones para contraseñas filtradas.
+
 - No publicar ni efectuar cobros reales.
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
