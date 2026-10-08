@@ -6,6 +6,7 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { transferDeliveredCookieTip } from './cookie-delivery.functions';
 
 export type RouteStatus = 'disponible' | 'asignada' | 'en_transito' | 'completada' | 'cancelada';
 export type StopStatus = 'pendiente' | 'en_camino' | 'entregado' | 'fallido';
@@ -99,6 +100,12 @@ export async function scanPackage(
     p_package_code: packageCode,
   });
   if (error) throw new Error(error.message);
+  try {
+    await transferDeliveredCookieTip({ data: { stopId } });
+  } catch (e) {
+    // Delivery is recorded; the pending tip is retried from the driver's payments panel.
+    console.error('[cookie-tip] transferencia pendiente', e);
+  }
   return data as RouteStop;
 }
 
