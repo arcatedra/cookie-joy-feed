@@ -42,12 +42,12 @@ export const getDriverConnectStatus = createServerFn({ method: "GET" })
     let detailsSubmitted = drv.stripe_onboarding_status === "complete";
 
     if (drv.stripe_account_id) {
-      const { paymentsEnvironmentForHost, stripeGet } = await import("./stripe.server");
+      const { paymentsEnvironmentForHost, getRecipientStatus } = await import("./stripe.server");
       const env = paymentsEnvironmentForHost(getRequestHost());
       try {
-        const acct = await stripeGet<any>(`/v1/accounts/${drv.stripe_account_id}`, env);
-        payoutsEnabled = Boolean(acct?.payouts_enabled);
-        detailsSubmitted = Boolean(acct?.details_submitted);
+        const st = await getRecipientStatus(drv.stripe_account_id, env);
+        payoutsEnabled = st.transfersActive;
+        detailsSubmitted = st.transfersActive && st.payoutsActive;
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         await (supabaseAdmin as any)
           .from("drivers")
@@ -56,6 +56,11 @@ export const getDriverConnectStatus = createServerFn({ method: "GET" })
             stripe_payouts_enabled: payoutsEnabled,
           })
           .eq("id", drv.id);
+        // Al quedar lista, se envía todo lo pendiente (respaldo del webhook).
+        if (payoutsEnabled && !drv.stripe_payouts_enabled) {
+          const { flushDriverPending } = await import("./payouts.server");
+          await flushDriverPending(drv.id);
+        }
       } catch (e) {
         console.error("[driver-connect] no se pudo leer la cuenta", e);
       }
@@ -100,7 +105,8 @@ export const createDriverAccountLink = createServerFn({ method: "POST" })
       throw new Error("Tu postulación todavía no está aprobada.");
     }
 
-    const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
+    const { paymentsEnvironmentForHost, createRecipientAccount, createRecipientOnboardingLink } =
+      await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
     const host = getRequestHost() ?? "hazorex.com";
     const origin = host.includes("localhost") ? `http://${host}` : `https://${host}`;
@@ -110,31 +116,22 @@ export const createDriverAccountLink = createServerFn({ method: "POST" })
     let accountId = drv.stripe_account_id;
 
     if (!accountId) {
-      const acct = await stripePost<any>(
-        "/v1/accounts",
+      accountId = await createRecipientAccount(
         {
-          type: "express",
           email: drv.email,
-          business_type: "individual",
-          capabilities: { transfers: { requested: true } },
+          displayName: drv.full_name,
+          entityType: "individual",
           metadata: { driver_id: drv.id },
         },
         env,
-        { "Idempotency-Key": `driver-account-${drv.id}` },
+        `driver-v2-account-${drv.id}`,
       );
-      accountId = acct?.id as string;
-      if (!accountId) throw new Error("No se pudo crear la cuenta de cobro.");
       await (supabaseAdmin as any)
         .from("drivers")
         .update({ stripe_account_id: accountId, stripe_onboarding_status: "pending" })
         .eq("id", drv.id);
     }
 
-    const link = await stripePost<any>(
-      "/v1/account_links",
-      { account: accountId, refresh_url: backTo, return_url: backTo, type: "account_onboarding" },
-      env,
-    );
-    if (!link?.url) throw new Error("No se pudo generar el enlace de registro.");
-    return { url: link.url as string };
+    const url = await createRecipientOnboardingLink(accountId, backTo, env);
+    return { url };
   });
