@@ -159,7 +159,11 @@ export const captureOrder = createServerFn({ method: "POST" })
       return { ok: false, error: "Este pedido se cobró al hacerlo; no hay nada que capturar." };
     }
     if (p.estado === "pagado") {
-      return { ok: false, error: "Este pedido ya fue cobrado." };
+      const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+      await grantReferralRewardForOrder(data.pedidoId, "cookie");
+      const { flushCookieOrderTip } = await import("./driver-payouts.server");
+      await flushCookieOrderTip(data.pedidoId);
+      return { ok: true, alreadyDone: true as const };
     }
     if (p.estado !== "autorizado" && p.estado !== "autorizacion_fallida") {
       return { ok: false, error: "Este pedido no tiene dinero reservado." };
