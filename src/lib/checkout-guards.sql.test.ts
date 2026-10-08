@@ -29,9 +29,9 @@ function client(role: string) {
   return {
     rpc: async () => ({ data: [{ pct: 15, min_cents: 500 }], error: null }),
     from(table: string) {
-      let op = "select"; let values: any; const filters: Array<[string, unknown]> = [];
+      let op = "select"; let values: any; let returning = false; const filters: Array<[string, unknown]> = [];
       const query: any = {
-        select: () => query, eq: (key: string, value: unknown) => { filters.push([key, value]); return query; },
+        select: () => { returning = true; return query; }, eq: (key: string, value: unknown) => { filters.push([key, value]); return query; },
         in: () => query, insert: (v: unknown) => { op = "insert"; values = v; return query; },
         update: (v: unknown) => { op = "update"; values = v; return query; },
         maybeSingle: () => run(true), single: () => run(true), then: (yes: any, no: any) => run(false).then(yes, no),
@@ -48,14 +48,14 @@ function client(role: string) {
           return { data: single ? fixtures[table]?.[0] : fixtures[table], error: null };
         }
         state.writes.push(`${role}:${table}:${op}`);
-        await state.db.exec(`SET ROLE ${role}; SELECT set_config('request.jwt.claim.role','${role}',false);`);
+        await state.db.exec(`SET ROLE ${role}; SELECT set_config('request.jwt.claim.role','${role}',false); SELECT set_config('request.jwt.claim.sub','${uid(2)}',false);`);
         try {
           let rows: unknown[] = [];
           for (const row of Array.isArray(values) ? values : [values]) {
             const keys = Object.keys(row); const params = Object.values(row);
             const sql = op === "insert"
-              ? `INSERT INTO ${table} (${keys.join(",")}) VALUES (${keys.map((_, i) => `$${i + 1}`).join(",")}) RETURNING *`
-              : `UPDATE ${table} SET ${keys.map((k, i) => `${k}=$${i + 1}`).join(",")} WHERE ${filters.map(([k], i) => `${k}=$${keys.length + i + 1}`).join(" AND ")} RETURNING *`;
+              ? `INSERT INTO ${table} (${keys.join(",")}) VALUES (${keys.map((_, i) => `$${i + 1}`).join(",")})${returning ? " RETURNING *" : ""}`
+              : `UPDATE ${table} SET ${keys.map((k, i) => `${k}=$${i + 1}`).join(",")} WHERE ${filters.map(([k], i) => `${k}=$${keys.length + i + 1}`).join(" AND ")}${returning ? " RETURNING *" : ""}`;
             rows = (await state.db.query(sql, [...params.map(v => typeof v === "object" && v !== null ? JSON.stringify(v) : v), ...filters.map(([, v]) => v)])).rows;
           }
           return { data: single ? rows[0] : rows, error: null };
@@ -95,21 +95,34 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       GRANT ALL ON ALL TABLES IN SCHEMA public TO service_role;
       GRANT SELECT,INSERT,UPDATE ON pedidos,store_orders,profiles TO authenticated;
       GRANT INSERT ON pedido_items,store_order_items TO authenticated;
+      ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
+      CREATE POLICY own_read ON pedidos FOR SELECT TO authenticated USING(auth.uid()=cliente_id);
+      CREATE POLICY own_insert ON pedidos FOR INSERT TO authenticated WITH CHECK(auth.uid()=cliente_id);
+      ALTER TABLE store_orders ENABLE ROW LEVEL SECURITY;
+      CREATE POLICY own_read ON store_orders FOR SELECT TO authenticated USING(auth.uid()=cliente_id);
+      CREATE POLICY own_insert ON store_orders FOR INSERT TO authenticated WITH CHECK(auth.uid()=cliente_id AND estado='pendiente_pago');
+      ALTER TABLE pedido_items ENABLE ROW LEVEL SECURITY;
+      CREATE POLICY own_items ON pedido_items FOR INSERT TO authenticated WITH CHECK(EXISTS(SELECT 1 FROM pedidos WHERE id=pedido_id AND cliente_id=auth.uid()));
+      ALTER TABLE store_order_items ENABLE ROW LEVEL SECURITY;
+      CREATE POLICY own_items ON store_order_items FOR INSERT TO authenticated WITH CHECK(EXISTS(SELECT 1 FROM store_orders WHERE id=order_id AND cliente_id=auth.uid() AND estado='pendiente_pago'));
       CREATE TABLE fake_signup(id uuid,raw_user_meta_data jsonb);
       CREATE FUNCTION generate_referral_code() RETURNS text LANGUAGE sql AS $$ SELECT gen_random_uuid()::text $$;
     `);
     const guards = migration("20261008164510_444b3156-ddae-411c-9353-4de16055d5b1.sql");
     for (const name of ["protect_cookie_money", "protect_referrer_link", "grant_captured_referral"]) await state.db.exec(functionSql(guards, name));
     await state.db.exec(migration("20261008165355_d54d7eed-6c58-4ee2-ab61-5b5c8ea72f3d.sql"));
-    await state.db.exec(migration("20260923052734_1ce6862f-e43e-469f-af0b-2ea7de8ba546.sql").split("CREATE TABLE IF NOT EXISTS public.account_fingerprints")[1] ? "CREATE TABLE IF NOT EXISTS public.account_fingerprints" + migration("20260923052734_1ce6862f-e43e-469f-af0b-2ea7de8ba546.sql").split("CREATE TABLE IF NOT EXISTS public.account_fingerprints")[1] : "");
+    const fingerprintSql = migration("20260923052734_1ce6862f-e43e-469f-af0b-2ea7de8ba546.sql");
+    const fingerprintStart = fingerprintSql.indexOf("CREATE TABLE IF NOT EXISTS public.account_fingerprints");
+    if (fingerprintStart < 0) throw new Error("Missing fingerprint schema");
+    await state.db.exec(fingerprintSql.slice(fingerprintStart));
     await state.db.exec(functionSql(migration("20260726054259_7838b067-fd20-4560-b3ca-19208a428e8f.sql"), "handle_new_user_profile"));
     await state.db.exec(`
       CREATE TRIGGER protect_cookie BEFORE INSERT OR UPDATE ON pedidos FOR EACH ROW EXECUTE FUNCTION protect_cookie_money();
       CREATE TRIGGER protect_referrer BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION protect_referrer_link();
       CREATE TRIGGER signup AFTER INSERT ON fake_signup FOR EACH ROW EXECUTE FUNCTION handle_new_user_profile();
-      INSERT INTO profiles(id,referral_code) VALUES ('${uid(1)}','PRUEBACODE');
+      INSERT INTO profiles(id,referral_code) VALUES ('${uid(1)}','ABCD2345');
       INSERT INTO clientes(id,telefono) VALUES ('${uid(2)}','2125550123'),('${uid(3)}','2125550124');
-      INSERT INTO fake_signup VALUES ('${uid(2)}','{"name":"PRUEBA Invitado","referral_code":"pruebacode","terms_accepted":true}'),('${uid(3)}','{"name":"PRUEBA Familia","referral_code":"PRUEBACODE"}');
+      INSERT INTO fake_signup VALUES ('${uid(2)}','{"name":"PRUEBA Invitado","referral_code":"abcd2345","terms_accepted":true}'),('${uid(3)}','{"name":"PRUEBA Familia","referral_code":"ABCD2345"}');
     `);
   }, 30000);
   afterAll(async () => { await state.db?.close(); });
@@ -117,7 +130,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
   it("el registro conserva el código de invitación con protect_referrer_link activo", async () => {
     expect((await state.db?.query("SELECT referred_by FROM profiles WHERE id=$1", [uid(2)]))?.rows).toEqual([{ referred_by: uid(1) }]);
     expect((await state.db?.query("SELECT referrer_id FROM referrals WHERE referee_id=$1", [uid(2)]))?.rows).toEqual([{ referrer_id: uid(1) }]);
-    await state.db?.exec("SET ROLE authenticated; SELECT set_config('request.jwt.claim.role','authenticated',false)");
+    await state.db?.exec(`SET ROLE authenticated; SELECT set_config('request.jwt.claim.role','authenticated',false); SELECT set_config('request.jwt.claim.sub','${uid(2)}',false)`);
     await expect(state.db?.query("UPDATE profiles SET referred_by=NULL WHERE id=$1", [uid(2)])).rejects.toThrow("no puede cambiarse");
     await expect(state.db?.query("UPDATE profiles SET name='PRUEBA Nombre' WHERE id=$1", [uid(2)])).resolves.toBeDefined();
     await state.db?.exec("RESET ROLE");
