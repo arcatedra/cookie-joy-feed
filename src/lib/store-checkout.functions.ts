@@ -204,7 +204,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     }
 
 
-    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "store", order.id, Math.max(grossCents - 100, 0), env);
+    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "store", order.id, Math.max(0, Math.min(grossCents - 100, serviceCents + tier.companyCents)), env);
     totalCents = grossCents - creditCents;
     bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
     authorizedCents = totalCents + bufferCents;

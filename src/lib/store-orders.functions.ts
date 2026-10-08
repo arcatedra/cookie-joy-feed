@@ -180,7 +180,11 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
       pricing,
     );
     const tipCents = Math.round(Number(order.propina ?? 0) * 100);
-    const creditCents = Math.round(Number(order.credito_aplicado ?? 0) * 100);
+    const { supabaseAdmin: creditDb } = await import("@/integrations/supabase/client.server");
+    const realGrossCents = realSubtotalCents + shippingCents + weightCents + serviceCents + tipCents;
+    const { data: adjustedCredit, error: creditError } = await creditDb.rpc("adjust_order_credit", { p_kind: "store", p_order: order.id, p_limit: Math.max(0, Math.min(realGrossCents - 100, serviceCents + tier.companyCents)) / 100 });
+    if (creditError) throw new Error("No se pudo ajustar el saldo del pedido.");
+    const creditCents = Math.round(Number(adjustedCredit ?? 0) * 100);
     const realTotalCents = Math.max(
       0,
       realSubtotalCents + shippingCents + weightCents + serviceCents + tipCents - creditCents,

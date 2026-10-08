@@ -179,7 +179,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       throw new Error("No se pudo crear el pedido. Inténtalo de nuevo.");
     }
 
-    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "cookie", pedidoRow.id, Math.max(grossCents - 100, 0), env);
+    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "cookie", pedidoRow.id, Math.max(0, Math.min(grossCents - 100, subtotalCents + shippingRate.amount)), env);
     totalCents = grossCents - creditCents;
     bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
     authorizedCents = totalCents + bufferCents;

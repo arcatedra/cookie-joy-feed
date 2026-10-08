@@ -90,7 +90,7 @@ function CartPage() {
   const shippingCost = shipping === "express" ? 4.99 : 0;
   const subtotal = cart.total;
   const gross = subtotal + shippingCost + propina;
-  const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0)) : 0;
+  const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
   const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
 
   const canCheckout =
