@@ -1935,6 +1935,8 @@ export type Database = {
           created_at: string
           id: string
           notes: string | null
+          payout_identifier: string | null
+          payout_method: string | null
           profile_id: string
           source: string
           status: string
@@ -1946,6 +1948,8 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          payout_identifier?: string | null
+          payout_method?: string | null
           profile_id: string
           source?: string
           status?: string
@@ -1957,6 +1961,8 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          payout_identifier?: string | null
+          payout_method?: string | null
           profile_id?: string
           source?: string
           status?: string
@@ -2220,6 +2226,16 @@ export type Database = {
         Args: { p_amount: number; p_environment: string; p_user: string }
         Returns: string
       }
+      request_wallet_withdrawal_to_destination: {
+        Args: {
+          p_amount: number
+          p_environment: string
+          p_identifier: string
+          p_method: string
+          p_user: string
+        }
+        Returns: string
+      }
       reserve_order_credit: {
         Args: {
           p_environment: string
@@ -2246,6 +2262,10 @@ export type Database = {
           p_stripe_sub_id: string
         }
         Returns: string
+      }
+      valid_manual_payout_destination: {
+        Args: { p_identifier: string; p_method: string }
+        Returns: boolean
       }
     }
     Enums: {

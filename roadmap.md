@@ -8,8 +8,8 @@
 - [x] Propina opcional en tienda y galletas con valores solicitados y destino íntegro al repartidor.
 - [x] Bono único de $5 por primera compra cobrada, compartido entre tienda y galletas.
 - [x] Saldo para descuentos en ambas compras y retiros seguros con historial.
-- [ ] Añadir Zelle o Cash App y destino (correo, teléfono o $cashtag) al retiro y mostrarlo en Retiros del administrador; plan aprobado.
-- [ ] Guardar método y destino en el mismo INSERT y comprobar automáticamente que el retiro funciona y su destino no puede cambiarse.
+- [x] Añadir Zelle o Cash App y destino (correo, teléfono o $cashtag) al retiro y mostrarlo en Retiros del administrador; plan aprobado.
+- [x] Guardar método y destino en el mismo INSERT y comprobar automáticamente en PostgreSQL desechable que el retiro funciona y su destino no puede cambiarse: 30 pruebas pasan.
 - [x] Verificar permisos, pruebas automáticas y botones públicos sin cobros reales, sin modificar usuarios/clientes ni publicar.
 - [ ] Verificar compra, bono, transferencia y retiro con cuentas autorizadas: bloqueado por Supabase externo sin sesión de prueba disponible.
 

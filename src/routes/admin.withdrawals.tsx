@@ -20,6 +20,8 @@ export const Route = createFileRoute("/admin/withdrawals")({
 });
 
 type Row = {
+  payout_method: string | null;
+  payout_identifier: string | null;
   source: string;
   stripe_environment: string | null;
   id: string;
@@ -141,6 +143,7 @@ function AdminWithdrawalsPage() {
                   <div>
                     <p className="font-semibold">{r.affiliate_name || "Afiliado"}</p>
                     <p className="text-xs text-muted-foreground">{r.source === "referral" ? "Saldo de referidos" : "Comisiones antiguas"} · {r.stripe_environment === "sandbox" ? "PRUEBA — no pagar dinero real" : "Real"}</p>
+                    <p className="mt-2 break-all text-sm">{r.payout_identifier ? `${r.payout_method === "zelle" ? "Zelle" : "Cash App"}: ${r.payout_identifier}` : "Destino no indicado (solicitud anterior)"}</p>
                     <p className="text-xs text-muted-foreground">
                       {r.affiliate_email || r.profile_id}
                     </p>
@@ -225,6 +228,7 @@ function AdminWithdrawalsPage() {
                       {new Date(r.updated_at).toLocaleString()}
                       {r.notes ? ` · ${r.notes}` : ""}
                     </p>
+                    <p className="break-all text-sm">{r.payout_identifier ? `${r.payout_method === "zelle" ? "Zelle" : "Cash App"}: ${r.payout_identifier}` : "Destino no indicado (solicitud anterior)"}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">${Number(r.amount_usd).toFixed(2)}</p>
