@@ -26,6 +26,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 import { TipSelector } from "@/components/TipSelector";
+import { spendableOrderCreditCents } from "@/lib/referral-credit";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
@@ -337,7 +338,7 @@ function StoreCartBar({
   const shippingCents = tier.feeCents + weightCents + processingCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + tipCents;
-  const creditCents = usarSaldo ? Math.min(Math.max(balanceCents, 0), Math.max(grossCents - 100, 0)) : 0;
+  const creditCents = usarSaldo ? spendableOrderCreditCents(balanceCents, grossCents, processingCents + tier.companyCents) : 0;
   const totalCents = Math.max(0, grossCents - creditCents);
 
   const zoneDays = daysForZip(deliveryZones, cliente?.codigo_postal as string | undefined, pricing);

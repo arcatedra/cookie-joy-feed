@@ -16,7 +16,9 @@ export const cancelPendingCheckout = createServerFn({ method: "POST" })
     const { paymentsEnvironmentForHost, stripeGet, stripePost } = await import("./stripe.server");
     const env = order.stripe_environment;
     if ((env !== "sandbox" && env !== "live") || env !== paymentsEnvironmentForHost(getRequestHost())) throw new Error("El pedido pertenece a otro ambiente.");
+    if (order.estado === "cancelado") return { cancelled: true };
     if (order.estado !== "pendiente" && order.estado !== "pendiente_pago") return { cancelled: false };
+    if (!order.stripe_checkout_session_id) throw new Error("Espera a que termine de abrirse el pago.");
     if (order.stripe_checkout_session_id) {
       const session = await stripeGet<{ status: string }>(`/v1/checkout/sessions/${order.stripe_checkout_session_id}`, env);
       if (session.status === "complete") return { cancelled: false };

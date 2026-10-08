@@ -931,7 +931,7 @@
       },
       {
         "title": "7. Delivery days and cut-off times",
-        "body": "Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
+        "body": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday. Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
       },
       {
         "title": "8. Drivers: independent contractors",
@@ -1483,7 +1483,7 @@
       },
       "delivery": {
         "q": "How long does delivery take?",
-        "a": "Delivery times depend on your area. You'll get email updates on your shipment status at every stage."
+        "a": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       },
       "cancel": {
         "q": "How do I cancel my subscription?",
@@ -1758,6 +1758,7 @@
     "devolucion_saldo": "Credit returned",
     "retiro_pendiente": "Reserved for withdrawal",
     "retiro_devuelto": "Withdrawal returned",
-    "error": "Could not load your credit."
+    "error": "Could not load your credit.",
+    "credited": "Added to credit"
   }
 }

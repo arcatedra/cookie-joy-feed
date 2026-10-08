@@ -119,7 +119,7 @@ function MiCuentaPage() {
         <h3 className="mt-5 font-semibold">{t("credit.history")}</h3>
         <ul className="mt-2 divide-y divide-border text-sm">{credit?.withdrawals.map((w) => <li key={w.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(w.created_at).toLocaleDateString()} · {t(`credit.${w.status}`, { defaultValue: w.status })}</span><span>${Number(w.amount_usd).toFixed(2)}</span></li>)}</ul>
         <h3 className="mt-5 font-semibold">{t("credit.bonuses")}</h3>
-        <ul className="mt-2 divide-y divide-border text-sm">{credit?.rewards.map((r) => <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(r.created_at).toLocaleDateString()} · {t(r.status === "pagado" ? "credit.paid_out" : "credit.blocked")}</span><span>${Number(r.amount_usd).toFixed(2)}</span></li>)}</ul>
+        <ul className="mt-2 divide-y divide-border text-sm">{credit?.rewards.map((r) => <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(r.created_at).toLocaleDateString()} · {t(r.status === "pagado" ? "credit.credited" : "credit.blocked")}</span><span>${Number(r.amount_usd).toFixed(2)}</span></li>)}</ul>
       </section>
 
       <form onSubmit={onSubmit} className="space-y-4 border rounded-lg p-4 bg-card">

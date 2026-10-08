@@ -147,7 +147,7 @@ export const captureOrder = createServerFn({ method: "POST" })
     const { data: pedido } = await supabaseAdmin
       .from("pedidos")
       .select(
-        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,captura_intentos,stripe_payment_intent_id,propina,credito_aplicado,stripe_environment",
+        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,monto_capturado,captura_intentos,stripe_payment_intent_id,propina,credito_aplicado,stripe_environment",
       )
       .eq("id", data.pedidoId)
       .maybeSingle();
@@ -163,7 +163,7 @@ export const captureOrder = createServerFn({ method: "POST" })
       await grantReferralRewardForOrder(data.pedidoId, "cookie");
       const { flushCookieOrderTip } = await import("./driver-payouts.server");
       await flushCookieOrderTip(data.pedidoId);
-      return { ok: true, alreadyDone: true as const };
+      return { ok: true, capturado: Number(p.monto_capturado ?? 0), autorizado: Number(p.monto_autorizado ?? 0), recortado: false, sobrante: Math.max(0, Number(p.monto_autorizado ?? 0) - Number(p.monto_capturado ?? 0)) };
     }
     if (p.estado !== "autorizado" && p.estado !== "autorizacion_fallida") {
       return { ok: false, error: "Este pedido no tiene dinero reservado." };
@@ -208,7 +208,10 @@ export const captureOrder = createServerFn({ method: "POST" })
     const authorizedCents = Math.round(Number(p.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) return { ok: false, error: "No hay monto reservado válido." };
 
-    const wantedCents = Math.max(0, realSubtotalCents + shippingCents + taxCents + Math.round(Number(p.propina ?? 0) * 100) - Math.round(Number(p.credito_aplicado ?? 0) * 100));
+    const realGrossCents = realSubtotalCents + shippingCents + taxCents + Math.round(Number(p.propina ?? 0) * 100);
+    const { data: adjustedCredit, error: adjustmentError } = await supabaseAdmin.rpc("adjust_order_credit", { p_kind: "cookie", p_order: data.pedidoId, p_limit: Math.max(0, Math.min(realSubtotalCents + shippingCents + taxCents, realGrossCents - 100)) / 100 });
+    if (adjustmentError) return { ok: false, error: "No se pudo ajustar el saldo del pedido." };
+    const wantedCents = Math.max(0, realGrossCents - Math.round(Number(adjustedCredit ?? 0) * 100));
     const captureCents = Math.min(Math.max(wantedCents, 50), authorizedCents);
     const recortado = wantedCents > authorizedCents;
 
