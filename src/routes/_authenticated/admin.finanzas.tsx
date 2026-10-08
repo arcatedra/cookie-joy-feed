@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/finanzas")({
   component: AdminFinancialsPage,
   errorComponent: ({ error }) => (
     <div className="p-6 text-sm text-destructive">
-      {error.message === "FORBIDDEN" ? "Acceso restringido a administradores." : error.message}
+      {(error as Error).message === "FORBIDDEN" ? "Acceso restringido a administradores." : (error as Error).message}
     </div>
   ),
   notFoundComponent: () => <div className="p-6 text-sm">No encontrado</div>,
