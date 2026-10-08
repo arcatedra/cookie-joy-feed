@@ -261,7 +261,8 @@ export function availableDeliveryDates(
   // Si ya pasó la hora de corte, mañana deja de estar disponible.
   const firstOffset = hour >= p.cutoffHourEt ? 2 : 1;
   const out: string[] = [];
-  for (let i = firstOffset; i <= firstOffset + 21 && out.length < count; i++) {
+  // La reserva de la tarjeta vence a los 7 días: solo fechas dentro de los próximos 6.
+  for (let i = firstOffset; i <= MAX_DELIVERY_DAYS_AHEAD && out.length < count; i++) {
     const d = addDays(date, i);
     if (days.includes(weekdayOf(d))) out.push(d);
   }
@@ -279,8 +280,13 @@ export function isDeliveryDateAllowed(
   if (!(zoneDays ?? allowedDeliveryDays(p)).includes(weekdayOf(dateStr))) return false;
   const { date, hour } = nowInEasternTime(from);
   const earliest = addDays(date, hour >= p.cutoffHourEt ? 2 : 1);
-  return dateStr >= earliest;
+  return dateStr >= earliest && dateStr <= addDays(date, MAX_DELIVERY_DAYS_AHEAD);
 }
+
+/** La reserva de Stripe dura 7 días; la entrega debe caer antes. */
+export const MAX_DELIVERY_DAYS_AHEAD = 6;
+/** Días que dura una reserva de tarjeta sin cobrar. */
+export const AUTHORIZATION_VALID_DAYS = 7;
 
 /** Convierte las filas key/value de la base en un objeto de ajustes. */
 export function pricingFromRows(
