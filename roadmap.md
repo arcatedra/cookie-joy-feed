@@ -3,12 +3,13 @@
 ## Cambios de entrega, propina y referidos del 8 de octubre
 
 - [x] Registrar los requisitos y revisar el funcionamiento actual.
-- [ ] Presentar el plan antes de cambiar pagos o permisos y esperar aprobación del dueño.
-- [ ] Unificar el texto de entrega solicitado en español e inglés.
-- [ ] Propina opcional en tienda y galletas con valores solicitados y destino íntegro al repartidor.
-- [ ] Bono único de $5 por primera compra cobrada, compartido entre tienda y galletas.
-- [ ] Saldo para descuentos en ambas compras y retiros seguros con historial.
-- [ ] Verificar sin cobros reales, sin modificar usuarios/clientes ni publicar.
+- [x] Presentar el plan antes de cambiar pagos o permisos y esperar aprobación del dueño.
+- [x] Unificar el texto de entrega solicitado en español e inglés.
+- [x] Propina opcional en tienda y galletas con valores solicitados y destino íntegro al repartidor.
+- [x] Bono único de $5 por primera compra cobrada, compartido entre tienda y galletas.
+- [x] Saldo para descuentos en ambas compras y retiros seguros con historial.
+- [x] Verificar permisos, pruebas automáticas y botones públicos sin cobros reales, sin modificar usuarios/clientes ni publicar.
+- [ ] Verificar compra, bono, transferencia y retiro con cuentas autorizadas: bloqueado por Supabase externo sin sesión de prueba disponible.
 
 - [x] Aprobar el plan para cambios de más de tres archivos y posibles cambios de estructura.
 - [x] Corregir textos de pago por pedido, días de entrega y pie duplicado en los nueve idiomas.
