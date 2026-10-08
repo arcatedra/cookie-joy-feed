@@ -6,15 +6,21 @@ const GATEWAY_BASE = "https://connector-gateway.lovable.dev/stripe";
 
 export type StripeEnv = "sandbox" | "live";
 
-// DEV_FORCE_SANDBOX: while the project is still in testing we hard-force
-// Stripe sandbox on every host (preview AND the published domain) so no
-// real charge can ever be initiated. To go live for real payments, restore
-// the previous host-based logic:
-//   const n = (host ?? "").toLowerCase();
-//   if (!n || n.includes("localhost") || n.includes("preview")) return "sandbox";
-//   return "live";
-export function paymentsEnvironmentForHost(_host?: string | null): StripeEnv {
-  return "sandbox";
+// Live payments on the published site; test mode only on preview/local hosts.
+// Server-side calls without a host (payouts, background work) run in the
+// published app, so they default to live.
+export function paymentsEnvironmentForHost(host?: string | null): StripeEnv {
+  const n = (host ?? "").toLowerCase();
+  if (
+    n.includes("localhost") ||
+    n.includes("127.0.0.1") ||
+    n.includes("preview") ||
+    n.includes("lovableproject.com")
+  ) {
+    return "sandbox";
+  }
+  if (!n && process.env.NODE_ENV === "development") return "sandbox";
+  return "live";
 }
 
 function requireEnv(name: string): string {
