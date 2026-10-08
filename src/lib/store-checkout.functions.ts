@@ -54,6 +54,7 @@ const schema = z.object({
   propina: z.number().min(0).max(200).optional().default(0),
   /** Usar el saldo disponible del cliente. */
   usarSaldo: z.boolean().optional().default(true),
+  locale: z.enum(["es", "en"]).default("es"),
 });
 
 /** Envío fijo del marketplace (no toca las tarifas de galletas). */
@@ -144,14 +145,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     );
     const grossCents = subtotalCents + shippingCents + weightCents + serviceCents + tipCents;
 
-    // ---- Saldo de referidos ------------------------------------------------
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { reserveOrderCredit, releaseOrderCredit } = await import("./order-credit.server");
     let creditCents = 0;
-    if (data.usarSaldo !== false) {
-      const { data: bal } = await db.rpc("get_my_credit_balance");
-      const available = Math.max(0, Math.round(Number(bal ?? 0) * 100));
-      creditCents = Math.min(available, Math.max(grossCents - 100, 0));
-    }
-    const totalCents = grossCents - creditCents;
+    let totalCents = grossCents;
 
     // ---- Margen de reserva (mismo ajuste configurable de siempre) --------
     let bufferPct = 15;
@@ -164,30 +161,14 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       if (row?.pct != null) bufferPct = Number(row.pct);
       if (row?.min_cents != null) bufferMinCents = Number(row.min_cents);
     }
-    const bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
-    const authorizedCents = totalCents + bufferCents;
+    let bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
+    let authorizedCents = totalCents + bufferCents;
 
     const commissionPct = Number(business.comision_porcentaje ?? 15);
     const commissionEstimated = Math.round((subtotalCents * commissionPct) / 100) / 100;
 
-    // Limpia pedidos propios abandonados (sin pago) de esta tienda.
-    {
-      const { data: stale } = await db
-        .from("store_orders")
-        .select("id")
-        .eq("cliente_id", userId)
-        .eq("business_id", data.businessId)
-        .eq("estado", "pendiente_pago")
-        .is("stripe_payment_intent_id", null);
-      const ids = (stale ?? []).map((r: any) => r.id);
-      if (ids.length) {
-        await db.from("store_order_items").delete().in("order_id", ids);
-        await db.from("store_orders").delete().in("id", ids);
-      }
-    }
-
     // ---- Pedido en 'pendiente_pago' --------------------------------------
-    const { data: order, error: orderErr } = await db
+    const { data: order, error: orderErr } = await supabaseAdmin
       .from("store_orders")
       .insert({
         business_id: data.businessId,
@@ -220,6 +201,16 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     }
 
 
+    if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "store", order.id, Math.max(grossCents - 100, 0), env);
+    totalCents = grossCents - creditCents;
+    bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
+    authorizedCents = totalCents + bufferCents;
+    const { error: totalsError } = await supabaseAdmin.from("store_orders").update({ credito_aplicado: creditCents / 100, total_estimado: totalCents / 100 }).eq("id", order.id);
+    if (totalsError) {
+      await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
+      throw new Error("No se pudo guardar el saldo aplicado.");
+    }
     const { error: itemsErr } = await db.from("store_order_items").insert(
       priced.map((it) => ({
         order_id: order.id,
@@ -232,7 +223,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       })),
     );
     if (itemsErr) {
-      await db.from("store_orders").delete().eq("id", order.id);
+      await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
       throw new Error("No se pudo guardar el detalle del pedido.");
     }
 
@@ -296,6 +288,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
           ui_mode: "embedded_page",
           return_url: `${origin}/mis-pedidos/tienda/${order.id}?pago=1`,
           customer_email: email || undefined,
+          locale: data.locale,
+          custom_text: { after_submit: { message: data.locale === "en" ? "Order the day before, get it in 24 hours: Monday, Wednesday and Friday" : "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes" } },
           line_items: lineItems,
           payment_intent_data: {
             description: `HAZOREX TIENDA ${order.numero_pedido}`,
@@ -308,12 +302,12 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       );
     } catch (e) {
       console.error("[store-checkout] stripe error", e);
-      await db.from("store_order_items").delete().eq("order_id", order.id);
-      await db.from("store_orders").delete().eq("id", order.id);
+
+      await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
       throw new Error("No se pudo iniciar el pago. Inténtalo de nuevo.");
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await (supabaseAdmin as any)
       .from("store_orders")
       .update({
@@ -322,11 +316,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       })
       .eq("id", order.id);
 
-    // El saldo NO se descuenta aquí: si el cliente abandona el pago o la
-    // tarjeta falla, perdería su saldo. El descuento se registra cuando el
-    // pago queda confirmado (webhook de pagos).
-
-
+    // El saldo queda apartado de forma atómica; cancelación y vencimiento lo devuelven.
 
     return {
       orderId: order.id as string,
