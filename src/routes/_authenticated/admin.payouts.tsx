@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/payouts")({
   }),
   component: AdminPayoutsPage,
   errorComponent: ({ error }) => (
-    <div className="p-6 text-sm text-destructive">{error.message}</div>
+    <div className="p-6 text-sm text-destructive">{(error as Error).message}</div>
   ),
   notFoundComponent: () => <div className="p-6 text-sm">No encontrado</div>,
 });

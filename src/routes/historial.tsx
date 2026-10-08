@@ -33,7 +33,7 @@ export const Route = createFileRoute("/historial")({
       : comingSoonMeta,
   }),
   component: () => (sweepstakesEnabled ? <HistoryPage /> : <SweepstakesComingSoon />),
-  errorComponent: ({ error }) => <ErrorBlock message={error.message} />,
+  errorComponent: ({ error }) => <ErrorBlock message={(error as Error).message} />,
   notFoundComponent: () => <NotFoundBlock />,
 });
 
