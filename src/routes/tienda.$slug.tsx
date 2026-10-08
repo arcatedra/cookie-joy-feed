@@ -20,7 +20,7 @@ import {
   daysForZip,
   tierForSubtotal,
   weightFeeCents,
-  processingFeeCents,
+  serviceFeeCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
@@ -329,7 +329,7 @@ function StoreCartBar({
   const tipCents = Math.max(0, Math.round(propina * 100));
   const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
   // El cliente ve un solo precio de entrega: tramo + libras extra + recargo de procesamiento.
-  const processingCents = processingFeeCents(subtotalCents + tier.feeCents + weightCents, pricing);
+  const processingCents = serviceFeeCents(subtotalCents + tier.feeCents + weightCents, pricing);
   const shippingCents = tier.feeCents + weightCents + processingCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + tipCents;
@@ -440,6 +440,7 @@ function StoreCartBar({
           </span>
         </div>
 
+        <p className="text-xs text-muted-foreground">Servicio: {pricing.servicePct}% sobre productos, envío y peso, con mínimo de ${pricing.serviceMinUsd.toFixed(2)}. Cargo de servicio: ${(processingCents / 100).toFixed(2)}. Peso adicional sobre {pricing.weightIncludedLb} lb: ${(weightCents / 100).toFixed(2)}.</p>
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="text-muted-foreground">Propina para el repartidor</span>
           {[0, 2, 3, 5].map((v) => (
@@ -498,7 +499,7 @@ function StoreCartBar({
             <DialogTitle>Pago seguro</DialogTitle>
           </DialogHeader>
           <p className="text-xs text-muted-foreground">
-            Reservamos un poco más en tu tarjeta por si cambia el peso. Al final solo se cobra lo real.
+            Reservamos el total más un 15% (mínimo $5 de margen) para ajustes de peso. Al final solo se cobra lo real.
           </p>
           {clientSecret && (
             <EmbeddedCheckoutProvider key={clientSecret} stripe={getStripe()} options={{ clientSecret }}>

@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { pricingFromRows, processingFeeCents, tierForSubtotal, weightFeeCents } from "./pricing";
+import { pricingFromRows, serviceFeeCents, tierForSubtotal, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -173,7 +173,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const tier = tierForSubtotal(realSubtotalCents, pricing);
     const shippingCents = tier.feeCents;
     const weightCents = weightFeeCents(realLb, pricing);
-    const serviceCents = processingFeeCents(
+    const serviceCents = serviceFeeCents(
       realSubtotalCents + shippingCents + weightCents,
       pricing,
     );

@@ -16,7 +16,7 @@ import {
   isDeliveryDateAllowed,
   daysForZip,
   pricingFromRows,
-  processingFeeCents,
+  serviceFeeCents,
   tierForSubtotal,
   weightFeeCents,
 } from "./pricing";
@@ -138,7 +138,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const shippingCents = tier.feeCents;
     const tipCents = Math.round((data.propina ?? 0) * 100);
     // Recargo que cubre la comisión de Stripe: va dentro del precio de entrega.
-    const serviceCents = processingFeeCents(
+    const serviceCents = serviceFeeCents(
       subtotalCents + shippingCents + weightCents,
       pricing,
     );
