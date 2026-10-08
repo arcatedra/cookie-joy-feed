@@ -24,6 +24,7 @@ import {
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
+import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 import { TipSelector } from "@/components/TipSelector";
 
 export const Route = createFileRoute("/tienda/$slug")({
@@ -274,6 +275,8 @@ function StoreCartBar({
   const fetchCredit = useServerFn(getMyCredit);
   const fetchCliente = useServerFn(getMyCliente);
   const checkout = useServerFn(createStoreCheckout);
+  const cancelCheckout = useServerFn(cancelPendingCheckout);
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
 
   const [fecha, setFecha] = useState<string>("");
   const [propina, setPropina] = useState(0);
@@ -378,6 +381,7 @@ function StoreCartBar({
       });
       // El carrito NO se vacía aquí: solo cuando Stripe autoriza el pago.
       if (!res.clientSecret) throw new Error("No se pudo abrir la pantalla de pago.");
+      setPendingOrderId(res.orderId);
       setClientSecret(res.clientSecret);
     } catch (err) {
       toast.error((err as Error).message || "No se pudo iniciar el pago.");
@@ -389,7 +393,7 @@ function StoreCartBar({
   const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-4 backdrop-blur">
+    <div className="fixed inset-x-0 bottom-0 z-40 max-h-[70dvh] overflow-y-auto border-t border-border bg-card/95 p-4 backdrop-blur">
       <div className="mx-auto max-w-5xl space-y-3">
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
@@ -467,7 +471,13 @@ function StoreCartBar({
           Pagar ${(totalCents / 100).toFixed(2)}
         </button>
       </div>
-      <Dialog open={!!clientSecret} onOpenChange={(o) => !o && setClientSecret(null)}>
+      <Dialog open={!!clientSecret} onOpenChange={async (open) => {
+        if (open || !pendingOrderId || busy) return;
+        setBusy(true);
+        try { const result = await cancelCheckout({ data: { kind: "store", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setPendingOrderId(null); } }
+        catch (error) { toast.error(error instanceof Error ? error.message : "No se pudo cerrar el pago."); }
+        finally { setBusy(false); }
+      }}>
         <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Pago seguro</DialogTitle>

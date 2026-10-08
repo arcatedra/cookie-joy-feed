@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyCredit } from "@/lib/wallet-credits.functions";
 import { TipSelector } from "@/components/TipSelector";
 import { Button } from "@/components/ui/button";
+import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -60,6 +61,8 @@ function CartPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const checkout = useServerFn(createCartCheckout);
+  const cancelCheckout = useServerFn(cancelPendingCheckout);
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
   const fetchCredit = useServerFn(getMyCredit);
   const { data: credit } = useQuery({ queryKey: ["my-credit"], queryFn: () => fetchCredit(), enabled: !!user });
   const [propina, setPropina] = useState(0);
@@ -124,6 +127,7 @@ function CartPage() {
           locale: i18n.language.startsWith("en") ? "en" : "es",
         },
       });
+      setPendingOrderId(res.pedidoId);
       setClientSecret(res.clientSecret);
       setConfirmedTotal(res.totalEstimado);
       setTimeout(() => {
@@ -356,6 +360,13 @@ function CartPage() {
             <EmbeddedCheckoutProvider stripe={getStripe()} options={checkoutOptions}>
               <EmbeddedCheckout />
             </EmbeddedCheckoutProvider>
+            <Button variant="outline" className="m-4" disabled={loadingCheckout} onClick={async () => {
+              if (!pendingOrderId) return;
+              setLoadingCheckout(true);
+              try { const result = await cancelCheckout({ data: { kind: "cookie", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setConfirmedTotal(null); setPendingOrderId(null); } }
+              catch (error) { toast.error(error instanceof Error ? error.message : t("cartPage.checkoutError")); }
+              finally { setLoadingCheckout(false); }
+            }}>{t("common.back")}</Button>
           </section>
         )}
 

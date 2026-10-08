@@ -68,6 +68,9 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     const proto = host?.startsWith("localhost") ? "http" : "https";
     const origin = `${proto}://${host}`;
 
+    const { attachReferralIfPending } = await import("./referrals-attach.server");
+    await attachReferralIfPending({ supabase: supabase, userId });
+
     // ---- Trusted pricing -------------------------------------------------
     // Never charge the price sent by the browser. Real products are priced from
     // the `productos` table; static catalog items from a server-side allowlist.

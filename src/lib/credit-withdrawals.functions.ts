@@ -12,5 +12,5 @@ export const listCreditWithdrawalsForAdmin = createServerFn({ method: "GET" })
     ]);
     if (listError || detailsError) throw new Error("No se pudieron consultar los retiros.");
     const byId = new Map((details ?? []).map((row) => [row.id, row]));
-    return (rows ?? []).map((row) => ({ ...row, source: byId.get(row.id)?.source ?? "affiliate", stripe_environment: byId.get(row.id)?.stripe_environment ?? null }));
+    return (rows ?? []).map((row: { id: string; profile_id: string; amount_usd: number; status: string; notes: string | null; created_at: string; updated_at: string; affiliate_name: string | null; affiliate_email: string | null }) => ({ ...row, source: byId.get(row.id)?.source ?? "affiliate", stripe_environment: byId.get(row.id)?.stripe_environment ?? null }));
   });
