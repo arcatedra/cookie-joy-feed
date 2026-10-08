@@ -478,11 +478,12 @@ export type Database = {
       driver_payouts: {
         Row: {
           amount_usd: number
+          cookie_order_id: string | null
           created_at: string
           driver_id: string
           id: string
           last_error: string | null
-          order_id: string
+          order_id: string | null
           paid_at: string | null
           status: string
           tier_amount_usd: number
@@ -493,11 +494,12 @@ export type Database = {
         }
         Insert: {
           amount_usd?: number
+          cookie_order_id?: string | null
           created_at?: string
           driver_id: string
           id?: string
           last_error?: string | null
-          order_id: string
+          order_id?: string | null
           paid_at?: string | null
           status?: string
           tier_amount_usd?: number
@@ -508,11 +510,12 @@ export type Database = {
         }
         Update: {
           amount_usd?: number
+          cookie_order_id?: string | null
           created_at?: string
           driver_id?: string
           id?: string
           last_error?: string | null
-          order_id?: string
+          order_id?: string | null
           paid_at?: string | null
           status?: string
           tier_amount_usd?: number
@@ -522,6 +525,13 @@ export type Database = {
           weight_amount_usd?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "driver_payouts_cookie_order_id_fkey"
+            columns: ["cookie_order_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "driver_payouts_driver_id_fkey"
             columns: ["driver_id"]
@@ -863,6 +873,7 @@ export type Database = {
           cliente_id: string
           costo_envio: number
           creado_en: string
+          credito_aplicado: number
           direccion_envio: Json
           estado: string
           flujo_pago: string
@@ -874,7 +885,9 @@ export type Database = {
           monto_capturado: number | null
           notas: string | null
           numero_pedido: string
+          propina: number
           stripe_checkout_session_id: string | null
+          stripe_environment: string | null
           stripe_payment_intent_id: string | null
           subtotal: number
           total: number
@@ -888,6 +901,7 @@ export type Database = {
           cliente_id: string
           costo_envio?: number
           creado_en?: string
+          credito_aplicado?: number
           direccion_envio: Json
           estado?: string
           flujo_pago?: string
@@ -899,7 +913,9 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          propina?: number
           stripe_checkout_session_id?: string | null
+          stripe_environment?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           total?: number
@@ -913,6 +929,7 @@ export type Database = {
           cliente_id?: string
           costo_envio?: number
           creado_en?: string
+          credito_aplicado?: number
           direccion_envio?: Json
           estado?: string
           flujo_pago?: string
@@ -924,7 +941,9 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          propina?: number
           stripe_checkout_session_id?: string | null
+          stripe_environment?: string | null
           stripe_payment_intent_id?: string | null
           subtotal?: number
           total?: number
@@ -1166,9 +1185,11 @@ export type Database = {
           created_at: string
           id: string
           order_id: string | null
+          order_kind: string | null
           referee_id: string
           referrer_id: string
           status: string
+          stripe_environment: string | null
           updated_at: string
         }
         Insert: {
@@ -1177,9 +1198,11 @@ export type Database = {
           created_at?: string
           id?: string
           order_id?: string | null
+          order_kind?: string | null
           referee_id: string
           referrer_id: string
           status?: string
+          stripe_environment?: string | null
           updated_at?: string
         }
         Update: {
@@ -1188,9 +1211,11 @@ export type Database = {
           created_at?: string
           id?: string
           order_id?: string | null
+          order_kind?: string | null
           referee_id?: string
           referrer_id?: string
           status?: string
+          stripe_environment?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1873,24 +1898,33 @@ export type Database = {
           amount_usd: number
           created_at: string
           id: string
+          operation_key: string | null
           order_id: string | null
+          order_kind: string | null
           reason: string
+          stripe_environment: string | null
           user_id: string
         }
         Insert: {
           amount_usd: number
           created_at?: string
           id?: string
+          operation_key?: string | null
           order_id?: string | null
+          order_kind?: string | null
           reason: string
+          stripe_environment?: string | null
           user_id: string
         }
         Update: {
           amount_usd?: number
           created_at?: string
           id?: string
+          operation_key?: string | null
           order_id?: string | null
+          order_kind?: string | null
           reason?: string
+          stripe_environment?: string | null
           user_id?: string
         }
         Relationships: []
@@ -1902,7 +1936,9 @@ export type Database = {
           id: string
           notes: string | null
           profile_id: string
+          source: string
           status: string
+          stripe_environment: string | null
           updated_at: string
         }
         Insert: {
@@ -1911,7 +1947,9 @@ export type Database = {
           id?: string
           notes?: string | null
           profile_id: string
+          source?: string
           status?: string
+          stripe_environment?: string | null
           updated_at?: string
         }
         Update: {
@@ -1920,7 +1958,9 @@ export type Database = {
           id?: string
           notes?: string | null
           profile_id?: string
+          source?: string
           status?: string
+          stripe_environment?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -2053,6 +2093,10 @@ export type Database = {
           pedido_id: string
         }[]
       }
+      credit_balance_for_environment: {
+        Args: { p_environment: string }
+        Returns: number
+      }
       delay_route_stops: {
         Args: { p_minutes: number }
         Returns: {
@@ -2116,6 +2160,15 @@ export type Database = {
           id: string
         }[]
       }
+      grant_captured_referral: {
+        Args: {
+          p_block_reason?: string
+          p_environment: string
+          p_kind: string
+          p_order: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -2143,6 +2196,10 @@ export type Database = {
           reel_id: string
         }[]
       }
+      release_order_credit: {
+        Args: { p_kind: string; p_order: string }
+        Returns: undefined
+      }
       request_affiliate_withdrawal: {
         Args: never
         Returns: {
@@ -2150,6 +2207,19 @@ export type Database = {
           commissions_count: number
           withdrawal_id: string
         }[]
+      }
+      request_wallet_withdrawal: {
+        Args: { p_amount: number; p_environment: string }
+        Returns: string
+      }
+      reserve_order_credit: {
+        Args: {
+          p_environment: string
+          p_kind: string
+          p_limit: number
+          p_order: string
+        }
+        Returns: number
       }
       respond_substitution: {
         Args: { p_item_id: string; p_response: string }
