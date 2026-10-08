@@ -6,7 +6,13 @@ export const NYC_DELIVERY_ZONES: readonly string[] = [
   "Queens",
   "Bronx",
   "Staten Island",
-  "Otra zona",
+  "Otras áreas",
 ] as const;
 
 export type NycDeliveryZone = (typeof NYC_DELIVERY_ZONES)[number];
+
+export const NYC_BOROUGHS = NYC_DELIVERY_ZONES.filter((zone) => zone !== "Otras áreas");
+
+export function zoneForPostalCode(zones: Array<{ name: string; borough?: string; zip_codes: string[]; activo?: boolean }>, zip: string) {
+  return zones.find((zone) => zone.activo !== false && zone.zip_codes.includes(zip));
+}

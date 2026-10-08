@@ -1,6 +1,6 @@
 # Revisión final antes de apertura
 
-- [ ] Aprobar el plan para cambios de más de tres archivos y posibles cambios de estructura.
+- [x] Aprobar el plan para cambios de más de tres archivos y posibles cambios de estructura.
 - [ ] Corregir textos de pago por pedido, días de entrega y pie duplicado en los nueve idiomas.
 - [ ] Unificar condados y código postal del negocio con las 42 zonas y Otras áreas.
 - [ ] Retirar la solicitud y el guardado de SSN, ITIN y cuentas bancarias en Hazorex, conservando datos existentes.

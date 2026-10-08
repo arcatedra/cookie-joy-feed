@@ -29,6 +29,10 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: i18n.t("homePage.metaTitle") },
       { name: "description", content: i18n.t("homePage.metaDesc") },
+      { property: "og:title", content: i18n.t("homePage.metaTitle") },
+      { property: "og:description", content: i18n.t("homePage.metaDesc") },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -131,7 +135,7 @@ function Home() {
           <p className="mx-auto mt-2 max-w-xl font-serif text-xs text-white/85 md:text-sm">
             {sweepstakesEnabled
               ? t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")
-              : t("hero.subtitleNoSweepstakes", "Ingredientes seleccionados, recetas artesanales y entrega en 24 horas.")}
+              : t("hero.subtitleNoSweepstakes", "Ingredientes seleccionados, recetas artesanales y entregas lunes, miércoles y viernes.")}
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
@@ -151,8 +155,8 @@ function Home() {
           </div>
           <p className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-[#E6C35C]/80">
             {sweepstakesEnabled
-              ? t("hero.trust", "✓ Verifiable draw · ✓ 24h shipping · ✓ Handcrafted cookies")
-              : t("hero.trustNoSweepstakes", "✓ Envío en 24h · ✓ Galletas artesanales · ✓ Pago seguro")}
+              ? t("hero.trust", "✓ Verifiable draw · ✓ Monday, Wednesday & Friday delivery · ✓ Handcrafted cookies")
+              : t("hero.trustNoSweepstakes", "✓ Entregas lunes, miércoles y viernes · ✓ Galletas artesanales · ✓ Pago seguro")}
           </p>
         </div>
       </section>

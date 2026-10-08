@@ -112,48 +112,8 @@ export const listPayoutMethods = createServerFn({ method: "GET" })
 
 export const addPayoutMethod = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (d: {
-      method_type: "bank_transfer" | "paypal" | "yappy" | "other";
-      display_label: string;
-      account_holder: string;
-      account_details: Record<string, string>;
-      is_default?: boolean;
-    }) => ({
-      method_type: z
-        .enum(["bank_transfer", "paypal", "yappy", "other"])
-        .parse(d.method_type),
-      display_label: z.string().min(2).max(80).parse(d.display_label),
-      account_holder: z.string().min(2).max(120).parse(d.account_holder),
-      account_details: z
-        .record(z.string(), z.string().max(200))
-        .parse(d.account_details),
-      is_default: z.boolean().optional().parse(d.is_default) ?? false,
-    }),
-  )
-  .handler(async ({ context, data }) => {
-    const { supabase, userId } = context;
-    const { data: existing } = await supabase
-      .from("driver_payout_methods")
-      .select("id")
-      .eq("driver_id", userId)
-      .limit(1);
-    const isFirst = !existing || existing.length === 0;
-    const { data: row, error } = await supabase
-      .from("driver_payout_methods")
-      .insert({
-        driver_id: userId,
-        method_type: data.method_type,
-        display_label: data.display_label,
-        account_holder: data.account_holder,
-        account_details: data.account_details,
-        is_default: isFirst ? true : data.is_default,
-      })
-      .select("id")
-      .single();
-    if (error) throw new Error(error.message);
-    return { id: row.id };
-  });
+  .inputValidator((_input: unknown) => { throw new Error("Los datos bancarios se proporcionan únicamente en Stripe."); })
+  .handler(async () => { throw new Error("Usa el registro de cobros de Stripe."); });
 
 export const setDefaultPayoutMethod = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

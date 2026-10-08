@@ -35,7 +35,7 @@ export function SiteFooter() {
                   )
                 : t(
                     "footer.taglineNoSweepstakes",
-                    "Galletas premium artesanales, horneadas cada día y entregadas en 24 horas.",
+                    "Galletas premium artesanales, horneadas artesanalmente. Entregas lunes, miércoles y viernes.",
                   )}
             </p>
           </div>
