@@ -129,3 +129,97 @@ export async function stripeGet<T = unknown>(
   }
   return JSON.parse(text) as T;
 }
+
+// ---------------------------------------------------------------------------
+// Stripe Accounts v2 (cuentas de cobro de tiendas y repartidores).
+// La cuenta real no permite "Accounts v1 support", así que las cuentas
+// conectadas se crean con /v2/core/accounts (configuración "recipient").
+// Las transferencias siguen usando /v1/transfers con source_transaction.
+// ---------------------------------------------------------------------------
+const STRIPE_V2_VERSION = "2026-03-25.preview";
+
+async function stripeV2<T = unknown>(
+  method: "GET" | "POST",
+  path: string,
+  env: StripeEnv,
+  body?: Record<string, unknown>,
+  extraHeaders: Record<string, string> = {},
+): Promise<T> {
+  const res = await fetch(`${GATEWAY_BASE}${path}`, {
+    method,
+    headers: {
+      ...gatewayHeaders(env),
+      "Stripe-Version": STRIPE_V2_VERSION,
+      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...extraHeaders,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`Stripe gateway ${path} failed: ${res.status} ${text}`);
+  return JSON.parse(text) as T;
+}
+
+/** Crea una cuenta conectada v2 que solo recibe transferencias (Express). */
+export async function createRecipientAccount(
+  input: { email: string; displayName: string; entityType: "individual" | "company"; metadata: Record<string, string> },
+  env: StripeEnv,
+  idempotencyKey: string,
+): Promise<string> {
+  const acct = await stripeV2<any>(
+    "POST",
+    "/v2/core/accounts",
+    env,
+    {
+      contact_email: input.email,
+      display_name: input.displayName,
+      dashboard: "express",
+      identity: { country: "us", entity_type: input.entityType },
+      configuration: {
+        recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } },
+      },
+      defaults: {
+        currency: "usd",
+        responsibilities: { fees_collector: "application", losses_collector: "application" },
+      },
+      metadata: input.metadata,
+    },
+    { "Idempotency-Key": idempotencyKey },
+  );
+  if (!acct?.id) throw new Error("No se pudo crear la cuenta de cobro.");
+  return acct.id as string;
+}
+
+/** Enlace de registro (onboarding) de una cuenta v2. */
+export async function createRecipientOnboardingLink(
+  accountId: string,
+  backTo: string,
+  env: StripeEnv,
+): Promise<string> {
+  const link = await stripeV2<any>("POST", "/v2/core/account_links", env, {
+    account: accountId,
+    use_case: {
+      type: "account_onboarding",
+      account_onboarding: { configurations: ["recipient"], refresh_url: backTo, return_url: backTo },
+    },
+  });
+  if (!link?.url) throw new Error("No se pudo generar el enlace de registro.");
+  return link.url as string;
+}
+
+/** Estado de una cuenta v2: puede recibir transferencias y depositar al banco. */
+export async function getRecipientStatus(
+  accountId: string,
+  env: StripeEnv,
+): Promise<{ transfersActive: boolean; payoutsActive: boolean }> {
+  const acct = await stripeV2<any>(
+    "GET",
+    `/v2/core/accounts/${accountId}?include=configuration.recipient&include=requirements`,
+    env,
+  );
+  const bal = acct?.configuration?.recipient?.capabilities?.stripe_balance ?? {};
+  return {
+    transfersActive: bal?.stripe_transfers?.status === "active",
+    payoutsActive: bal?.payouts?.status === "active",
+  };
+}

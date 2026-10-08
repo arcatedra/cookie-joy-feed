@@ -47,20 +47,25 @@ export const getConnectStatus = createServerFn({ method: "GET" })
       };
     }
 
-    const { paymentsEnvironmentForHost, stripeGet } = await import("./stripe.server");
+    const { paymentsEnvironmentForHost, getRecipientStatus } = await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
     let payoutsEnabled = biz.stripe_payouts_enabled;
     let detailsSubmitted = biz.stripe_onboarding_status === "complete";
     try {
-      const acct = await stripeGet<any>(`/v1/accounts/${biz.stripe_account_id}`, env);
-      payoutsEnabled = Boolean(acct?.payouts_enabled);
-      detailsSubmitted = Boolean(acct?.details_submitted);
+      const st = await getRecipientStatus(biz.stripe_account_id, env);
+      payoutsEnabled = st.transfersActive;
+      detailsSubmitted = st.transfersActive && st.payoutsActive;
       const status = payoutsEnabled && detailsSubmitted ? "complete" : "pending";
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await (supabaseAdmin as any)
         .from("businesses")
         .update({ stripe_onboarding_status: status, stripe_payouts_enabled: payoutsEnabled })
         .eq("id", biz.id);
+      // Al quedar lista, se envía todo lo pendiente (respaldo del webhook).
+      if (payoutsEnabled && !biz.stripe_payouts_enabled) {
+        const { flushBusinessPending } = await import("./payouts.server");
+        await flushBusinessPending(biz.id);
+      }
     } catch (e) {
       console.error("[store-connect] no se pudo leer la cuenta", e);
     }
@@ -85,7 +90,8 @@ export const createExpressAccountLink = createServerFn({ method: "POST" })
     const db = (context as any).supabase;
     const biz = await myBusiness(db, (context as any).userId);
 
-    const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
+    const { paymentsEnvironmentForHost, createRecipientAccount, createRecipientOnboardingLink } =
+      await import("./stripe.server");
     const env = paymentsEnvironmentForHost(getRequestHost());
     const host = getRequestHost() ?? "hazorex.com";
     const origin = host.includes("localhost") ? `http://${host}` : `https://${host}`;
@@ -95,39 +101,22 @@ export const createExpressAccountLink = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     if (!accountId) {
-      const acct = await stripePost<any>(
-        "/v1/accounts",
+      accountId = await createRecipientAccount(
         {
-          type: "express",
           email: biz.email,
-          business_profile: { name: biz.business_name },
-          capabilities: {
-            transfers: { requested: true },
-            card_payments: { requested: true },
-          },
+          displayName: biz.business_name,
+          entityType: "company",
           metadata: { business_id: biz.id },
         },
         env,
-        { "Idempotency-Key": `connect-account-${biz.id}` },
+        `connect-v2-account-${biz.id}`,
       );
-      accountId = acct?.id as string;
-      if (!accountId) throw new Error("No se pudo crear la cuenta de cobro.");
       await (supabaseAdmin as any)
         .from("businesses")
         .update({ stripe_account_id: accountId, stripe_onboarding_status: "pending" })
         .eq("id", biz.id);
     }
 
-    const link = await stripePost<any>(
-      "/v1/account_links",
-      {
-        account: accountId,
-        refresh_url: backTo,
-        return_url: backTo,
-        type: "account_onboarding",
-      },
-      env,
-    );
-    if (!link?.url) throw new Error("No se pudo generar el enlace de registro.");
-    return { url: link.url as string };
+    const url = await createRecipientOnboardingLink(accountId, backTo, env);
+    return { url };
   });
