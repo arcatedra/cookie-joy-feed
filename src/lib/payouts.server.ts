@@ -35,6 +35,24 @@ export function storeShareCents(o: any): number {
   return Math.round(usd * 100);
 }
 
+/**
+ * ID del cargo (charge) de un pedido de tienda. Se usa como `source_transaction`
+ * para que la transferencia salga de ese cobro y no del saldo disponible.
+ */
+export async function chargeIdForStoreOrder(orderId: string, db = adminDb()): Promise<string | null> {
+  const { stripeGet, paymentsEnvironmentForHost } = await import("./stripe.server");
+  const { data: o } = await db
+    .from("store_orders")
+    .select("stripe_payment_intent_id")
+    .eq("id", orderId)
+    .maybeSingle();
+  const pi = o?.stripe_payment_intent_id as string | null;
+  if (!pi) return null;
+  const intent = await stripeGet<any>(`/v1/payment_intents/${pi}`, paymentsEnvironmentForHost(null));
+  const lc = intent?.latest_charge;
+  return typeof lc === "string" ? lc : (lc?.id ?? null);
+}
+
 /** Transfiere a un negocio la parte de sus productos de un pedido. */
 export async function transferStoreOrder(orderId: string, db = adminDb()): Promise<TransferResult> {
   const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
@@ -69,12 +87,15 @@ export async function transferStoreOrder(orderId: string, db = adminDb()): Promi
   }
 
   try {
+    const charge = await chargeIdForStoreOrder(o.id, db);
+    if (!charge) return { ok: false, skipped: true, error: "El pedido aún no tiene cobro" };
     const tr = await stripePost<any>(
       "/v1/transfers",
       {
         amount: cents,
         currency: "usd",
         destination: biz.stripe_account_id,
+        source_transaction: charge,
         metadata: { store_order_id: o.id, business_id: o.business_id },
       },
       env,
@@ -131,12 +152,15 @@ export async function transferDriverPayout(
   }
 
   try {
+    const charge = p.order_id ? await chargeIdForStoreOrder(p.order_id, db) : null;
+    if (!charge) return { ok: false, skipped: true, error: "El pedido aún no tiene cobro" };
     const tr = await stripePost<any>(
       "/v1/transfers",
       {
         amount: cents,
         currency: "usd",
         destination: drv.stripe_account_id,
+        source_transaction: charge,
         metadata: { driver_payout_id: p.id, store_order_id: p.order_id },
       },
       env,
