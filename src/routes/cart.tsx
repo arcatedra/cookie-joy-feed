@@ -15,6 +15,12 @@ import { HazorexLogo } from "@/components/HazorexLogo";
 import { SubstitutionPicker } from "@/components/SubstitutionPicker";
 import { DEFAULT_SUBSTITUTION_MODE } from "@/lib/substitutions";
 import i18n from "@/i18n";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { getMyCredit } from "@/lib/wallet-credits.functions";
+import { TipSelector } from "@/components/TipSelector";
+import { Button } from "@/components/ui/button";
+import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -22,6 +28,10 @@ export const Route = createFileRoute("/cart")({
       { title: i18n.t("cartPage.metaTitle") },
       { name: "description", content: i18n.t("cartPage.metaDesc") },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: i18n.t("cartPage.metaTitle") },
+      { property: "og:description", content: i18n.t("cartPage.metaDesc") },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CartPage,
@@ -50,6 +60,14 @@ function CartPage() {
   const cart = useCart();
   const { t } = useTranslation();
   const { user } = useAuth();
+  const checkout = useServerFn(createCartCheckout);
+  const cancelCheckout = useServerFn(cancelPendingCheckout);
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
+  const fetchCredit = useServerFn(getMyCredit);
+  const { data: credit } = useQuery({ queryKey: ["my-credit"], queryFn: () => fetchCredit(), enabled: !!user });
+  const [propina, setPropina] = useState(0);
+  const [usarSaldo, setUsarSaldo] = useState(true);
+  const [confirmedTotal, setConfirmedTotal] = useState<number | null>(null);
   const [email, setEmail] = useState(user?.email ?? "");
   const [address, setAddress] = useState<AddressForm>({
     name: "",
@@ -71,7 +89,9 @@ function CartPage() {
 
   const shippingCost = shipping === "express" ? 4.99 : 0;
   const subtotal = cart.total;
-  const total = subtotal + shippingCost;
+  const gross = subtotal + shippingCost + propina;
+  const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0)) : 0;
+  const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
 
   const canCheckout =
     cart.count > 0 &&
@@ -86,7 +106,7 @@ function CartPage() {
     if (!canCheckout || loadingCheckout) return;
     setLoadingCheckout(true);
     try {
-      const res = await createCartCheckout({
+      const res = await checkout({
         data: {
           items: cart.items.map((it) => ({
             id: it.id,
@@ -100,12 +120,16 @@ function CartPage() {
             substitutionMode: it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE,
             substituteIds: it.substituteIds ?? [],
           })),
-          email,
           address,
           shipping,
+          propina,
+          usarSaldo,
+          locale: i18n.language.startsWith("en") ? "en" : "es",
         },
       });
+      setPendingOrderId(res.pedidoId);
       setClientSecret(res.clientSecret);
+      setConfirmedTotal(res.totalEstimado);
       setTimeout(() => {
         checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -280,6 +304,11 @@ function CartPage() {
                 />
               </div>
             </section>
+            <div className="mt-4 space-y-3">
+              <p className="text-sm text-muted-foreground">{t("deliveryPromise")}</p>
+              <TipSelector value={propina} onChange={setPropina} />
+              {Number(credit?.balance ?? 0) > 0 && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={usarSaldo} onChange={(e) => setUsarSaldo(e.target.checked)} />{t("credit.use", { amount: Number(credit?.balance ?? 0).toFixed(2) })}</label>}
+            </div>
           </>
         )}
 
@@ -289,6 +318,8 @@ function CartPage() {
             label={t("cartPage.shipping")}
             value={shippingCost === 0 ? t("cartPage.free") : `$${shippingCost.toFixed(2)}`}
           />
+          <Row label={t("tips.title")} value={`$${propina.toFixed(2)}`} />
+          {discount > 0 && <Row label={t("credit.discount")} value={`-$${discount.toFixed(2)}`} />}
           <div className="mt-2 flex items-baseline justify-between border-t border-border pt-3">
             <span className="text-base font-bold text-foreground">{t("cartPage.total")}</span>
             <span className="text-2xl font-extrabold text-primary">
@@ -306,7 +337,7 @@ function CartPage() {
 
 
         {!clientSecret && (
-          <button
+          <Button
             type="button"
             onClick={startCheckout}
             disabled={!canCheckout || loadingCheckout}
@@ -315,7 +346,7 @@ function CartPage() {
             {loadingCheckout
               ? t("cartPage.preparing")
               : t("cartPage.pay", { amount: `$${total.toFixed(2)}` })}
-          </button>
+          </Button>
         )}
 
         {!canCheckout && cart.count > 0 && !clientSecret && (
@@ -329,6 +360,13 @@ function CartPage() {
             <EmbeddedCheckoutProvider stripe={getStripe()} options={checkoutOptions}>
               <EmbeddedCheckout />
             </EmbeddedCheckoutProvider>
+            <Button variant="outline" className="m-4" disabled={loadingCheckout} onClick={async () => {
+              if (!pendingOrderId) return;
+              setLoadingCheckout(true);
+              try { const result = await cancelCheckout({ data: { kind: "cookie", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setConfirmedTotal(null); setPendingOrderId(null); } }
+              catch (error) { toast.error(error instanceof Error ? error.message : t("cartPage.checkoutError")); }
+              finally { setLoadingCheckout(false); }
+            }}>{t("common.back")}</Button>
           </section>
         )}
 

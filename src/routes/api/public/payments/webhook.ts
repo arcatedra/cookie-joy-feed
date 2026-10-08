@@ -106,13 +106,18 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
           const { data: existing } = await supabaseAdmin
             .from("pedidos")
-            .select("id, estado, cliente_id, total, flujo_pago")
+            .select("id, estado, cliente_id, total, flujo_pago, stripe_environment")
             .eq("id", pedidoId)
             .maybeSingle();
 
           if (!existing) {
             console.warn("[payments-webhook] pedido not found", { pedidoId });
             return Response.json({ ok: true, ignored: "pedido not found" });
+          }
+          if (existing.stripe_environment && existing.stripe_environment !== environment) return new Response("Environment mismatch", { status: 400 });
+          if (existing.estado === "pagado") {
+            const { grantReferralRewardForOrder } = await import("@/lib/referral-rewards.server");
+            await grantReferralRewardForOrder(existing.id, "cookie");
           }
           if (existing.estado === "pagado" || existing.estado === "autorizado") {
             return Response.json({ ok: true, alreadyProcessed: true });
@@ -126,6 +131,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
           const update: Record<string, unknown> = {
             estado: deferred ? "autorizado" : "pagado",
+            stripe_environment: environment,
             stripe_payment_intent_id: paymentIntentId,
             stripe_checkout_session_id: sessionId,
           };
@@ -134,6 +140,8 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             if (amountTotalCents > 0) update.monto_autorizado = amountTotalCents / 100;
           } else if (amountTotalCents > 0) {
             update.total = amountTotalCents / 100;
+            update.monto_capturado = amountTotalCents / 100;
+            update.capturado_en = new Date().toISOString();
           }
           if (shippingCents > 0) update.costo_envio = shippingCents / 100;
           if (taxCents > 0) update.impuestos = taxCents / 100;
@@ -148,6 +156,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return new Response("Pedido update failed", { status: 500 });
           }
 
+          if (!deferred) {
+            const { grantReferralRewardForOrder } = await import("@/lib/referral-rewards.server");
+            await grantReferralRewardForOrder(existing.id, "cookie");
+          }
           return Response.json({ ok: true, pedido: existing.id });
         }
 
@@ -171,7 +183,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
 
           const { data: existing } = await supabaseAdmin
             .from("store_orders")
-            .select("id, estado, cliente_id, credito_aplicado")
+            .select("id, estado, cliente_id, credito_aplicado, stripe_environment")
             .eq("id", storeOrderId)
             .maybeSingle();
 
@@ -179,12 +191,14 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             console.warn("[payments-webhook] store order no encontrado", { storeOrderId });
             return Response.json({ ok: true, ignored: "store order not found" });
           }
+          if (existing.stripe_environment && existing.stripe_environment !== environment) return new Response("Environment mismatch", { status: 400 });
           if (existing.estado !== "pendiente_pago") {
             return Response.json({ ok: true, alreadyProcessed: true });
           }
 
           const storeUpdate: Record<string, unknown> = {
             estado: "confirmado",
+            stripe_environment: environment,
             stripe_payment_intent_id: paymentIntentId,
             stripe_checkout_session_id: sessionId,
             autorizado_en: new Date().toISOString(),
@@ -201,31 +215,42 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             return new Response("Store order update failed", { status: 500 });
           }
 
-          // Recién ahora se descuenta el saldo usado (movimiento negativo):
-          // si el pago nunca se completa, el cliente conserva su saldo.
-          const creditUsed = Number(existing.credito_aplicado ?? 0);
-          if (creditUsed > 0) {
-            const { data: already } = await supabaseAdmin
-              .from("wallet_credits")
-              .select("id")
-              .eq("order_id", existing.id)
-              .eq("reason", "uso_en_pedido")
-              .maybeSingle();
-            if (!already) {
-              await supabaseAdmin.from("wallet_credits").insert({
-                user_id: existing.cliente_id,
-                amount_usd: -creditUsed,
-                reason: "uso_en_pedido",
-                order_id: existing.id,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              } as any);
-            }
-          }
-
           return Response.json({ ok: true, storeOrder: existing.id });
 
         }
 
+
+        // A failed/expired checkout never consumes the customer's reserved wallet credit.
+        if ((metaKind === "cookie_order" || metaKind === "store_order") &&
+          ["checkout.session.expired", "checkout.session.async_payment_failed"].includes(eventType)) {
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const kind = metaKind === "store_order" ? "store" : "cookie";
+          const id = kind === "store" ? meta.store_order_id : meta.pedido_id;
+          if (id) {
+            const table = kind === "store" ? "store_orders" : "pedidos";
+            const { data: cancelled, error } = await supabaseAdmin.from(table).update({ estado: "cancelado" }).eq("id", id).eq("stripe_environment", environment).in("estado", ["pendiente", "pendiente_pago"]).select("id");
+            if (error) return new Response("Cancellation failed", { status: 500 });
+            if (cancelled?.length) {
+              const { releaseOrderCredit } = await import("@/lib/order-credit.server");
+              await releaseOrderCredit(supabaseAdmin, kind, id);
+            }
+          }
+          return Response.json({ ok: true });
+        }
+        if (eventType === "payment_intent.succeeded" && (metaKind === "cookie_order" || metaKind === "store_order")) {
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const kind = metaKind === "store_order" ? "store" : "cookie";
+          const id = kind === "store" ? meta.store_order_id : meta.pedido_id;
+          const captured = Number(dataObject?.amount_received ?? 0);
+          if (id && captured > 0) {
+            const table = kind === "store" ? "store_orders" : "pedidos";
+            const { data: saved, error } = await supabaseAdmin.from(table).update({ monto_capturado: captured / 100, capturado_en: new Date().toISOString() }).eq("id", id).eq("stripe_environment", environment).is("capturado_en", null).select("id");
+            if (error) return new Response("Capture reconciliation failed", { status: 500 });
+            const { grantReferralRewardForOrder } = await import("@/lib/referral-rewards.server");
+            await grantReferralRewardForOrder(id, kind);
+          }
+          return Response.json({ ok: true });
+        }
 
         if (
           metaKind === "stars_purchase" &&

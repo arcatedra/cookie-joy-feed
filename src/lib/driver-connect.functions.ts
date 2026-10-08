@@ -59,7 +59,7 @@ export const getDriverConnectStatus = createServerFn({ method: "GET" })
           })
           .eq("id", drv.id);
         // Al quedar lista, se envía todo lo pendiente (respaldo del webhook).
-        if (payoutsEnabled && !drv.stripe_payouts_enabled) {
+        if (payoutsEnabled) {
           const { flushDriverPending } = await import("./payouts.server");
           await flushDriverPending(drv.id);
         }

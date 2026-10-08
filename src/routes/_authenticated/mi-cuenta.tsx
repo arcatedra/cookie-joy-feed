@@ -4,16 +4,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { getMyCliente, upsertMyCliente } from "@/lib/clientes.functions";
-import { getMyCredit } from "@/lib/wallet-credits.functions";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { getMyCredit, requestCreditWithdrawal } from "@/lib/wallet-credits.functions";
 
 export const Route = createFileRoute("/_authenticated/mi-cuenta")({
   head: () => ({
-    meta: [{ title: "Mi cuenta — HAZOREX" }],
+    meta: [{ title: "Mi cuenta — HAZOREX" }, { name: "description", content: "Tu cuenta, saldo e historial de referidos en Hazorex." }, { property: "og:title", content: "Mi cuenta — HAZOREX" }, { property: "og:description", content: "Tu cuenta, saldo e historial de referidos en Hazorex." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }],
   }),
   component: MiCuentaPage,
 });
 
 function MiCuentaPage() {
+  const { t } = useTranslation();
+  const withdraw = useServerFn(requestCreditWithdrawal);
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [withdrawing, setWithdrawing] = useState(false);
   const fetchCliente = useServerFn(getMyCliente);
   const saveCliente = useServerFn(upsertMyCliente);
   const fetchCredit = useServerFn(getMyCredit);
@@ -22,7 +28,7 @@ function MiCuentaPage() {
     queryKey: ["cliente", "me"],
     queryFn: () => fetchCliente(),
   });
-  const { data: credit } = useQuery({
+  const { data: credit, refetch: refetchCredit, error: creditError } = useQuery({
     queryKey: ["my-credit"],
     queryFn: () => fetchCredit(),
   });
@@ -75,20 +81,21 @@ function MiCuentaPage() {
       </p>
 
       <section className="border rounded-lg p-4 bg-card">
-        <h2 className="font-semibold mb-3">Mi saldo</h2>
+        <h2 className="font-semibold mb-3">{t("credit.title")}</h2>
+        {creditError && <p role="alert" className="text-sm text-destructive">{t("credit.error")}</p>}
+        {credit?.environment === "sandbox" && <p className="text-xs text-muted-foreground">{t("credit.test")}</p>}
         <div className="text-3xl font-black text-emerald-600">
           ${Number(credit?.balance ?? 0).toFixed(2)}
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          Ganas $5 por cada amigo que recibe su primer pedido. El saldo se descuenta solo en tu
-          próxima compra.
+          {t("credit.earned")}
         </p>
         {credit?.movements?.length ? (
           <ul className="mt-3 divide-y text-sm">
             {credit.movements.map((m) => (
               <li key={m.id} className="flex justify-between py-1.5">
                 <span className="text-muted-foreground">
-                  {movimientoLabel(m.reason)} · {new Date(m.created_at).toLocaleDateString()}
+                  {t(`credit.${m.reason}`, { defaultValue: movimientoLabel(m.reason) })} · {new Date(m.created_at).toLocaleDateString()}
                 </span>
                 <span className={Number(m.amount_usd) < 0 ? "text-red-600" : "text-emerald-600"}>
                   {Number(m.amount_usd) < 0 ? "-" : "+"}${Math.abs(Number(m.amount_usd)).toFixed(2)}
@@ -97,10 +104,23 @@ function MiCuentaPage() {
             ))}
           </ul>
         ) : (
-          <p className="mt-3 text-sm text-muted-foreground">Aún no tienes movimientos.</p>
+          <p className="mt-3 text-sm text-muted-foreground">{t("credit.empty")}</p>
         )}
+        <div className="mt-5 space-y-3 border-t border-border pt-4">
+          <p className="text-xs text-muted-foreground">{t("credit.manual")}</p>
+          <label className="block text-sm">{t("credit.amount")}<input aria-label={t("credit.amount")} type="number" min="0.01" max={credit?.balance ?? 0} step="0.01" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} className="mt-1 block w-40 rounded-md border border-input bg-background px-3 py-2" /></label>
+          <Button disabled={withdrawing || !credit || Number(withdrawAmount) <= 0 || Number(withdrawAmount) > credit.balance} onClick={async () => {
+            setWithdrawing(true);
+            try { await withdraw({ data: { amount: Math.round(Number(withdrawAmount) * 100) / 100 } }); setWithdrawAmount(""); await refetchCredit(); toast.success(t("credit.requested")); }
+            catch (error) { toast.error(error instanceof Error ? error.message : t("credit.error")); }
+            finally { setWithdrawing(false); }
+          }}>{t("credit.request")}</Button>
+        </div>
+        <h3 className="mt-5 font-semibold">{t("credit.history")}</h3>
+        <ul className="mt-2 divide-y divide-border text-sm">{credit?.withdrawals.map((w) => <li key={w.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(w.created_at).toLocaleDateString()} · {t(`credit.${w.status}`, { defaultValue: w.status })}</span><span>${Number(w.amount_usd).toFixed(2)}</span></li>)}</ul>
+        <h3 className="mt-5 font-semibold">{t("credit.bonuses")}</h3>
+        <ul className="mt-2 divide-y divide-border text-sm">{credit?.rewards.map((r) => <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2"><span>{new Date(r.created_at).toLocaleDateString()} · {t(r.status === "pagado" ? "credit.paid_out" : "credit.blocked")}</span><span>${Number(r.amount_usd).toFixed(2)}</span></li>)}</ul>
       </section>
-
 
       <form onSubmit={onSubmit} className="space-y-4 border rounded-lg p-4 bg-card">
         <h2 className="font-semibold">Datos de envío</h2>

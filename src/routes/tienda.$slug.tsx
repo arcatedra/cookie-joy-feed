@@ -24,6 +24,8 @@ import {
   DEFAULT_PRICING,
 } from "@/lib/pricing";
 import { useAuth } from "@/lib/auth";
+import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
+import { TipSelector } from "@/components/TipSelector";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
@@ -273,10 +275,12 @@ function StoreCartBar({
   const fetchCredit = useServerFn(getMyCredit);
   const fetchCliente = useServerFn(getMyCliente);
   const checkout = useServerFn(createStoreCheckout);
+  const cancelCheckout = useServerFn(cancelPendingCheckout);
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
 
   const [fecha, setFecha] = useState<string>("");
   const [propina, setPropina] = useState(0);
-  const [propinaOtro, setPropinaOtro] = useState("");
+  const { t, i18n } = useTranslation();
   const [usarSaldo, setUsarSaldo] = useState(true);
   const [busy, setBusy] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -351,7 +355,7 @@ function StoreCartBar({
       toast.error("Inicia sesión para continuar.");
       return;
     }
-    if (!hasAddress) {
+    if (!hasAddress || !cliente) {
       toast.error("Agrega tu dirección en Mi cuenta antes de pagar.");
       return;
     }
@@ -362,20 +366,22 @@ function StoreCartBar({
           businessId,
           items: lines.map((l) => ({ productId: l.p.id, qty: l.qty })),
           address: {
-            name: String(cliente!.nombre_completo ?? ""),
-            street: String(cliente!.direccion_linea1 ?? ""),
-            apt: String(cliente!.direccion_linea2 ?? ""),
-            city: String(cliente!.ciudad ?? ""),
-            zip: String(cliente!.codigo_postal ?? ""),
-            country: String(cliente!.pais ?? "US").slice(0, 2),
+            name: String(cliente.nombre_completo ?? ""),
+            street: String(cliente.direccion_linea1 ?? ""),
+            apt: String(cliente.direccion_linea2 ?? ""),
+            city: String(cliente.ciudad ?? ""),
+            zip: String(cliente.codigo_postal ?? ""),
+            country: String(cliente.pais ?? "US").slice(0, 2),
           },
           fechaEntrega: fecha || fechas[0],
           propina: tipCents / 100,
           usarSaldo,
+          locale: i18n.language.startsWith("en") ? "en" : "es",
         },
       });
       // El carrito NO se vacía aquí: solo cuando Stripe autoriza el pago.
       if (!res.clientSecret) throw new Error("No se pudo abrir la pantalla de pago.");
+      setPendingOrderId(res.orderId);
       setClientSecret(res.clientSecret);
     } catch (err) {
       toast.error((err as Error).message || "No se pudo iniciar el pago.");
@@ -387,7 +393,7 @@ function StoreCartBar({
   const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-4 backdrop-blur">
+    <div className="fixed inset-x-0 bottom-0 z-40 max-h-[70dvh] overflow-y-auto border-t border-border bg-card/95 p-4 backdrop-blur">
       <div className="mx-auto max-w-5xl space-y-3">
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
@@ -431,7 +437,7 @@ function StoreCartBar({
                 checked={usarSaldo}
                 onChange={(e) => setUsarSaldo(e.target.checked)}
               />
-              <span>Usar mi saldo (${(balanceCents / 100).toFixed(2)})</span>
+              <span>{t("credit.use", { amount: (balanceCents / 100).toFixed(2) })}</span>
             </label>
           )}
           <span className="text-muted-foreground">
@@ -441,37 +447,9 @@ function StoreCartBar({
         </div>
 
         <p className="text-xs text-muted-foreground">Servicio: {pricing.servicePct}% sobre productos, envío y peso, con mínimo de ${pricing.serviceMinUsd.toFixed(2)}. Cargo de servicio: ${(processingCents / 100).toFixed(2)}. Peso adicional sobre {pricing.weightIncludedLb} lb: ${(weightCents / 100).toFixed(2)}.</p>
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-muted-foreground">Propina para el repartidor</span>
-          {[0, 2, 3, 5].map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => {
-                setPropina(v);
-                setPropinaOtro("");
-              }}
-              className={`rounded-full px-3 py-1 font-semibold ${
-                propina === v && propinaOtro === ""
-                  ? "bg-[#1e3a5f] text-white"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              {v === 0 ? "Sin propina" : `$${v}`}
-            </button>
-          ))}
-          <input
-            value={propinaOtro}
-            onChange={(e) => {
-              const v = e.target.value.replace(/[^0-9.]/g, "");
-              setPropinaOtro(v);
-              setPropina(Number(v) || 0);
-            }}
-            inputMode="decimal"
-            placeholder="Otro monto"
-            className="w-24 rounded-lg border border-border bg-background px-2 py-1"
-          />
-        </div>
+        <TipSelector value={propina} onChange={setPropina} />
+        <p className="text-xs text-muted-foreground">{t("deliveryPromise")}</p>
+        {creditCents > 0 && <p className="text-xs text-muted-foreground">{t("credit.discount")}: -${(creditCents / 100).toFixed(2)}</p>}
 
         {!hasAddress && user && (
           <p className="text-xs text-amber-700">
@@ -493,7 +471,13 @@ function StoreCartBar({
           Pagar ${(totalCents / 100).toFixed(2)}
         </button>
       </div>
-      <Dialog open={!!clientSecret} onOpenChange={(o) => !o && setClientSecret(null)}>
+      <Dialog open={!!clientSecret} onOpenChange={async (open) => {
+        if (open || !pendingOrderId || busy) return;
+        setBusy(true);
+        try { const result = await cancelCheckout({ data: { kind: "store", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setPendingOrderId(null); } }
+        catch (error) { toast.error(error instanceof Error ? error.message : "No se pudo cerrar el pago."); }
+        finally { setBusy(false); }
+      }}>
         <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Pago seguro</DialogTitle>

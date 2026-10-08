@@ -135,7 +135,7 @@ function Home() {
           <p className="mx-auto mt-2 max-w-xl font-serif text-xs text-white/85 md:text-sm">
             {sweepstakesEnabled
               ? t("hero.subtitle", "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.")
-              : t("hero.subtitleNoSweepstakes", "Ingredientes seleccionados, recetas artesanales y entregas lunes, miércoles y viernes.")}
+              : t("hero.subtitleNoSweepstakes", "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes")}
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <Link
@@ -155,8 +155,8 @@ function Home() {
           </div>
           <p className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-[#E6C35C]/80">
             {sweepstakesEnabled
-              ? t("hero.trust", "✓ Verifiable draw · ✓ Monday, Wednesday & Friday delivery · ✓ Handcrafted cookies")
-              : t("hero.trustNoSweepstakes", "✓ Entregas lunes, miércoles y viernes · ✓ Galletas artesanales · ✓ Pago seguro")}
+              ? t("hero.trust", "Order the day before, get it in 24 hours: Monday, Wednesday and Friday")
+              : t("hero.trustNoSweepstakes", "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes")}
           </p>
         </div>
       </section>

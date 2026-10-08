@@ -145,6 +145,9 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     );
     const grossCents = subtotalCents + shippingCents + weightCents + serviceCents + tipCents;
 
+    const { attachReferralIfPending } = await import("./referrals-attach.server");
+    await attachReferralIfPending({ supabase: db, userId });
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { reserveOrderCredit, releaseOrderCredit } = await import("./order-credit.server");
     let creditCents = 0;

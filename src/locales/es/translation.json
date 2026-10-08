@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Planes de suscripción — HAZOREX",
-    "metaDesc": "lunes, miércoles y viernes",
+    "metaDesc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "title": "Planes de suscripción",
-    "deliveryBadge": "lunes, miércoles y viernes",
+    "deliveryBadge": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "activePlan": "Plan activo",
     "remaining": "Restantes",
     "scheduledCount": "{{used}} de {{total}} entregas programadas este mes",
@@ -352,33 +352,33 @@
     "mostPopular": "Más popular",
     "perMonth": "/ mes",
     "schedule": "Programar entregas",
-    "scheduleHint": "lunes, miércoles y viernes",
+    "scheduleHint": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "prevMonth": "Mes anterior",
     "nextMonth": "Mes siguiente",
     "yourDeliveries": "Tus entregas",
     "usedAll": "Ya usaste las {{count}} entregas de este plan. Sube de plan para añadir más.",
-    "footnote": "lunes, miércoles y viernes",
+    "footnote": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "removeDate": "Quitar {{date}}",
     "tiers": {
       "starter": {
         "title": "Plan Inicial",
         "cadence": "2 ENTREGAS / MES",
-        "desc": "2 ENTREGAS / MES · lunes, miércoles y viernes"
+        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       },
       "essential": {
         "title": "Plan Esencial",
         "cadence": "4 ENTREGAS / MES",
-        "desc": "4 ENTREGAS / MES · lunes, miércoles y viernes"
+        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       },
       "intermediate": {
         "title": "Plan Intermedio",
         "cadence": "6 ENTREGAS / MES",
-        "desc": "6 ENTREGAS / MES · lunes, miércoles y viernes"
+        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       },
       "premium": {
         "title": "Plan Premium",
         "cadence": "8 ENTREGAS / MES",
-        "desc": "8 ENTREGAS / MES · lunes, miércoles y viernes"
+        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       }
     },
     "yourPlan": "Tu Plan Hazorex"
@@ -1099,9 +1099,9 @@
     "subtitle": "Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.",
     "ctaShop": "Ver galletas",
     "ctaHow": "Cómo funciona el sorteo",
-    "trust": "✓ lunes, miércoles y viernes · HAZOREX",
-    "subtitleNoSweepstakes": "HAZOREX — Galletas Artesanales Premium · lunes, miércoles y viernes",
-    "trustNoSweepstakes": "✓ lunes, miércoles y viernes · HAZOREX"
+    "trust": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
+    "subtitleNoSweepstakes": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
+    "trustNoSweepstakes": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
   },
   "footer": {
     "tagline": "Galletas premium con sorteos diarios 100% verificables. Cada compra te da acceso al sorteo del día.",
@@ -1125,7 +1125,7 @@
     "winners": "Ganadores",
     "followUs": "Síguenos",
     "socialComingSoon": "Próximamente",
-    "taglineNoSweepstakes": "HAZOREX — Galletas Artesanales Premium · lunes, miércoles y viernes"
+    "taglineNoSweepstakes": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
   },
   "repartidoresPage": {
     "metaTitle": "Sé repartidor · Hazorex",
@@ -1585,8 +1585,8 @@
     "zip": "ZIP",
     "phone": "Teléfono",
     "shipping": "Envío",
-    "standard": "Estándar (3-5 días)",
-    "express": "Exprés (1-2 días)",
+    "standard": "Estándar",
+    "express": "Exprés",
     "free": "Gratis",
     "subtotal": "Subtotal",
     "total": "Total",
@@ -1625,7 +1625,7 @@
     "metaTitle": "HAZOREX — Galletas Artesanales Premium",
     "metaDesc": "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en HAZOREX.",
     "sliderHeading": "Inspirado en tus antojos",
-    "sliderSub": "lunes, miércoles y viernes",
+    "sliderSub": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "seeMore": "Ver más",
     "addToCart": "Agregar al carrito"
   },
@@ -1740,5 +1740,37 @@
       "sat": "Sábado",
       "sun": "Domingo"
     }
+  },
+  "deliveryPromise": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
+  "tips": {
+    "title": "Propina opcional para el repartidor",
+    "none": "Sin propina",
+    "other": "Otra cantidad",
+    "amount": "Cantidad ($)",
+    "share": "El 100% de la propina va al repartidor."
+  },
+  "credit": {
+    "use": "Usar mi saldo (${{amount}})",
+    "discount": "Descuento con saldo",
+    "title": "Mi saldo",
+    "earned": "Ganas $5 cuando se cobra la primera compra de cada invitado, en tienda o galletas. Sin límite: 10 invitados = $50.",
+    "manual": "Retiro manual: el administrador realiza el pago fuera de Hazorex y confirma el resultado. No necesitas conectar Stripe. No introduzcas datos bancarios aquí.",
+    "request": "Solicitar retiro",
+    "amount": "Importe a retirar ($)",
+    "requested": "Retiro solicitado",
+    "history": "Mis retiros",
+    "bonuses": "Bonos de referidos",
+    "empty": "Aún no tienes movimientos.",
+    "test": "Saldo de prueba — no es dinero real",
+    "pending": "Pendiente",
+    "paid_out": "Pagado",
+    "rejected": "Rechazado",
+    "blocked": "Bloqueado",
+    "referido": "Bono por referido",
+    "uso_en_pedido": "Usado en un pedido",
+    "devolucion_saldo": "Saldo devuelto",
+    "retiro_pendiente": "Apartado para retiro",
+    "retiro_devuelto": "Retiro devuelto",
+    "error": "No se pudo consultar tu saldo."
   }
 }

@@ -8,16 +8,20 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { useServerFn } from "@tanstack/react-start";
+import { listCreditWithdrawalsForAdmin } from "@/lib/credit-withdrawals.functions";
 
 export const Route = createFileRoute("/admin/withdrawals")({
   component: AdminWithdrawalsPage,
   ssr: false,
   head: () => ({
-    meta: [{ title: "Admin · Retiros" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Retiros — Administración Hazorex" }, { name: "description", content: "Revisión de solicitudes y pagos manuales de referidos de Hazorex." }, { property: "og:title", content: "Retiros — Administración Hazorex" }, { property: "og:description", content: "Revisión de solicitudes y pagos manuales de referidos de Hazorex." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }],
   }),
 });
 
 type Row = {
+  source: string;
+  stripe_environment: string | null;
   id: string;
   profile_id: string;
   amount_usd: number;
@@ -40,6 +44,7 @@ const statusClass = (s: string) =>
       : "bg-amber-500/15 text-amber-600 dark:text-amber-400";
 
 function AdminWithdrawalsPage() {
+  const listWithdrawals = useServerFn(listCreditWithdrawalsForAdmin);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -65,9 +70,7 @@ function AdminWithdrawalsPage() {
     queryKey: ["admin-withdrawals"],
     enabled: isAdmin === true,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("admin_list_withdrawals");
-      if (error) throw error;
-      return (data ?? []) as Row[];
+      return await listWithdrawals() as Row[];
     },
   });
 
@@ -118,7 +121,7 @@ function AdminWithdrawalsPage() {
       <header>
         <h1 className="text-2xl font-bold">Solicitudes de retiro</h1>
         <p className="text-sm text-muted-foreground">
-          Revisa y procesa manualmente los pagos a afiliados.
+          El pago se realiza fuera de Hazorex. Marca Pagado únicamente después de pagar; este botón no envía dinero. No registres números bancarios ni datos fiscales.
         </p>
       </header>
 
@@ -137,6 +140,7 @@ function AdminWithdrawalsPage() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="font-semibold">{r.affiliate_name || "Afiliado"}</p>
+                    <p className="text-xs text-muted-foreground">{r.source === "referral" ? "Saldo de referidos" : "Comisiones antiguas"} · {r.stripe_environment === "sandbox" ? "PRUEBA — no pagar dinero real" : "Real"}</p>
                     <p className="text-xs text-muted-foreground">
                       {r.affiliate_email || r.profile_id}
                     </p>
@@ -154,7 +158,7 @@ function AdminWithdrawalsPage() {
                   </div>
                 </div>
                 <Textarea
-                  placeholder="Notas internas (opcional): referencia de pago, motivo de rechazo, etc."
+                  placeholder="Referencia no sensible del pago realizado; obligatoria para retiros de referidos."
                   className="mt-3"
                   rows={2}
                   value={notesById[r.id] ?? ""}
@@ -169,7 +173,7 @@ function AdminWithdrawalsPage() {
                         notes: notesById[r.id],
                       })
                     }
-                    disabled={processMutation.isPending}
+                    disabled={processMutation.isPending || (r.source === "referral" && !(notesById[r.id] ?? "").trim())}
                     className="gap-2"
                   >
                     <CheckCircle2 className="h-4 w-4" />
@@ -178,7 +182,7 @@ function AdminWithdrawalsPage() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      if (!confirm("¿Rechazar esta solicitud? Las comisiones volverán al saldo disponible del afiliado."))
+                      if (!confirm("¿Rechazar esta solicitud? El saldo apartado volverá a estar disponible una sola vez."))
                         return;
                       processMutation.mutate({
                         id: r.id,

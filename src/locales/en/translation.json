@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Subscription Plans — HAZOREX",
-    "metaDesc": "Monday, Wednesday and Friday",
+    "metaDesc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "title": "Subscription Plans",
-    "deliveryBadge": "Monday, Wednesday and Friday",
+    "deliveryBadge": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "activePlan": "Active Plan",
     "remaining": "Remaining",
     "scheduledCount": "{{used}} of {{total}} deliveries scheduled this month",
@@ -352,33 +352,33 @@
     "mostPopular": "Most Popular",
     "perMonth": "/ mo.",
     "schedule": "Schedule Deliveries",
-    "scheduleHint": "Monday, Wednesday and Friday",
+    "scheduleHint": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "prevMonth": "Previous month",
     "nextMonth": "Next month",
     "yourDeliveries": "Your Deliveries",
     "usedAll": "You've used all {{count}} deliveries on this plan. Upgrade to add more.",
-    "footnote": "Monday, Wednesday and Friday",
+    "footnote": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "removeDate": "Remove {{date}}",
     "tiers": {
       "starter": {
         "title": "Starter Plan",
         "cadence": "2 DELIVERIES / MONTH",
-        "desc": "2 DELIVERIES / MONTH · Monday, Wednesday and Friday"
+        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       },
       "essential": {
         "title": "Essential Plan",
         "cadence": "4 DELIVERIES / MONTH",
-        "desc": "4 DELIVERIES / MONTH · Monday, Wednesday and Friday"
+        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       },
       "intermediate": {
         "title": "Intermediate Plan",
         "cadence": "6 DELIVERIES / MONTH",
-        "desc": "6 DELIVERIES / MONTH · Monday, Wednesday and Friday"
+        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       },
       "premium": {
         "title": "Premium Plan",
         "cadence": "8 DELIVERIES / MONTH",
-        "desc": "8 DELIVERIES / MONTH · Monday, Wednesday and Friday"
+        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       }
     },
     "yourPlan": "Your Hazorex Plan"
@@ -1099,9 +1099,9 @@
     "subtitle": "Every purchase enters the daily draw automatically. 100% verifiable result with a cryptographic seed — no middlemen.",
     "ctaShop": "Shop cookies",
     "ctaHow": "How the draw works",
-    "trust": "✓ Monday, Wednesday and Friday · HAZOREX",
-    "subtitleNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Monday, Wednesday and Friday",
-    "trustNoSweepstakes": "✓ Monday, Wednesday and Friday · HAZOREX"
+    "trust": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
+    "subtitleNoSweepstakes": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
+    "trustNoSweepstakes": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
   },
   "footer": {
     "tagline": "Premium cookies with 100% verifiable daily sweepstakes. Every purchase grants entry to that day's draw.",
@@ -1125,7 +1125,7 @@
     "winners": "Winners",
     "followUs": "Follow us",
     "socialComingSoon": "Coming soon",
-    "taglineNoSweepstakes": "HAZOREX — Premium Handcrafted Cookies · Monday, Wednesday and Friday"
+    "taglineNoSweepstakes": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
   },
   "repartidoresPage": {
     "metaTitle": "Become a driver · Hazorex",
@@ -1585,8 +1585,8 @@
     "zip": "ZIP",
     "phone": "Phone",
     "shipping": "Shipping",
-    "standard": "Standard (3-5 days)",
-    "express": "Express (1-2 days)",
+    "standard": "Standard",
+    "express": "Express",
     "free": "Free",
     "subtotal": "Subtotal",
     "total": "Total",
@@ -1612,7 +1612,7 @@
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
     "metaDesc": "Discover gourmet cookies, custom packs and monthly subscriptions at HAZOREX.",
     "sliderHeading": "Inspired by your cravings",
-    "sliderSub": "Monday, Wednesday and Friday",
+    "sliderSub": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "seeMore": "See more",
     "addToCart": "Add to cart"
   },
@@ -1727,5 +1727,37 @@
       "sat": "Saturday",
       "sun": "Sunday"
     }
+  },
+  "deliveryPromise": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
+  "tips": {
+    "title": "Optional driver tip",
+    "none": "No tip",
+    "other": "Other amount",
+    "amount": "Amount ($)",
+    "share": "100% of your tip goes to the driver."
+  },
+  "credit": {
+    "use": "Use my credit (${{amount}})",
+    "discount": "Credit discount",
+    "title": "My credit",
+    "earned": "Earn $5 when each invited person pays for their first store or cookie purchase. No invite limit: 10 invites = $50.",
+    "manual": "Manual withdrawal: the administrator pays outside Hazorex and confirms the result. No Stripe account is required. Do not enter bank details here.",
+    "request": "Request withdrawal",
+    "amount": "Withdrawal amount ($)",
+    "requested": "Withdrawal requested",
+    "history": "My withdrawals",
+    "bonuses": "Referral rewards",
+    "empty": "No transactions yet.",
+    "test": "Test credit — not real money",
+    "pending": "Pending",
+    "paid_out": "Paid",
+    "rejected": "Rejected",
+    "blocked": "Blocked",
+    "referido": "Referral reward",
+    "uso_en_pedido": "Used in an order",
+    "devolucion_saldo": "Credit returned",
+    "retiro_pendiente": "Reserved for withdrawal",
+    "retiro_devuelto": "Withdrawal returned",
+    "error": "Could not load your credit."
   }
 }

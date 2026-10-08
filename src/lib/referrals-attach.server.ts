@@ -26,7 +26,7 @@ export async function attachReferralIfPending(params: {
 
   const { supabase, userId } = params;
 
-  // Only act when the cliente row exists and has no referrer yet.
+  // Read the historical customer link, but never write customer data.
   const { data: cliente } = await supabase
     .from("clientes")
     .select("id, referred_by_profile_id")
@@ -37,6 +37,8 @@ export async function attachReferralIfPending(params: {
     try { deleteCookie(REF_COOKIE, { path: "/" }); } catch { /* noop */ }
     return { attached: false };
   }
+  const { data: profile } = await supabase.from("profiles").select("id,referred_by").eq("id", userId).maybeSingle();
+  if (!profile || profile.referred_by) return { attached: false };
 
   // Resolve profile by referral_code with elevated privileges (RLS on profiles
   // is per-owner). Never self-refer.
@@ -52,10 +54,10 @@ export async function attachReferralIfPending(params: {
   }
 
   const { error } = await supabaseAdmin
-    .from("clientes")
-    .update({ referred_by_profile_id: prof.id })
+    .from("profiles")
+    .update({ referred_by: prof.id })
     .eq("id", userId)
-    .is("referred_by_profile_id", null); // race-safe: never overwrite
+    .is("referred_by", null); // protected by trigger; never overwrite
   if (error) {
     console.warn("[referrals] attach failed", error.message);
     return { attached: false };

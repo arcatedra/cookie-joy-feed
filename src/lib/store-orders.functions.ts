@@ -234,6 +234,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         monto_capturado: captureCents / 100,
         comision_final: commissionFinal,
         ajuste_pendiente: pendingAdjustmentCents / 100,
+        subtotal: realSubtotalCents / 100,
         cargo_servicio: serviceCents / 100,
         costo_envio: shippingCents / 100,
         tramo: tier.tier,
@@ -246,7 +247,9 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         captura_error: null,
       })
       .eq("id", order.id);
-    if (upErr) console.error("[store-orders] no se pudo guardar el cobro", upErr);
+    if (upErr) throw new Error("El cobro se realizó, pero falta guardar la confirmación. Reintenta para reconciliarlo sin duplicar el cobro.");
+    const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+    await grantReferralRewardForOrder(order.id);
 
     // Pago inmediato a la tienda (y reintento de lo pendiente de esa tienda).
     if (!upErr) {
@@ -337,6 +340,7 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
         );
       } catch (e) {
         console.error("[store-orders] no se pudo liberar la reserva", e);
+        throw new Error("No se pudo cancelar la reserva; el saldo permanece apartado hasta confirmar la cancelación.");
       }
     }
 
@@ -346,32 +350,8 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
       .update({ estado: "cancelado" })
       .eq("id", order.id);
 
-    // Devuelve el saldo solo si realmente se llegó a descontar (pago confirmado)
-    // y si no se devolvió antes.
-    if (Number(order.credito_aplicado ?? 0) > 0) {
-      const [{ data: used }, { data: returned }] = await Promise.all([
-        (supabaseAdmin as any)
-          .from("wallet_credits")
-          .select("id")
-          .eq("order_id", order.id)
-          .eq("reason", "uso_en_pedido")
-          .maybeSingle(),
-        (supabaseAdmin as any)
-          .from("wallet_credits")
-          .select("id")
-          .eq("order_id", order.id)
-          .eq("reason", "devolucion_saldo")
-          .maybeSingle(),
-      ]);
-      if (used && !returned) {
-        await (supabaseAdmin as any).from("wallet_credits").insert({
-          user_id: order.cliente_id,
-          amount_usd: Number(order.credito_aplicado),
-          reason: "devolucion_saldo",
-          order_id: order.id,
-        });
-      }
-    }
+    const { releaseOrderCredit } = await import("./order-credit.server");
+    await releaseOrderCredit(supabaseAdmin, "store", order.id);
 
     return { ok: true };
   });

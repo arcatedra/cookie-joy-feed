@@ -147,7 +147,7 @@ export const captureOrder = createServerFn({ method: "POST" })
     const { data: pedido } = await supabaseAdmin
       .from("pedidos")
       .select(
-        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,captura_intentos,stripe_payment_intent_id",
+        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,captura_intentos,stripe_payment_intent_id,propina,credito_aplicado,stripe_environment",
       )
       .eq("id", data.pedidoId)
       .maybeSingle();
@@ -204,12 +204,13 @@ export const captureOrder = createServerFn({ method: "POST" })
     const authorizedCents = Math.round(Number(p.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) return { ok: false, error: "No hay monto reservado válido." };
 
-    const wantedCents = realSubtotalCents + shippingCents + taxCents;
+    const wantedCents = Math.max(0, realSubtotalCents + shippingCents + taxCents + Math.round(Number(p.propina ?? 0) * 100) - Math.round(Number(p.credito_aplicado ?? 0) * 100));
     const captureCents = Math.min(Math.max(wantedCents, 50), authorizedCents);
     const recortado = wantedCents > authorizedCents;
 
     const host = getRequestHost();
-    const env = paymentsEnvironmentForHost(host);
+    const env = p.stripe_environment;
+    if ((env !== "sandbox" && env !== "live") || env !== paymentsEnvironmentForHost(host)) return { ok: false, error: "El pedido pertenece a otro ambiente o requiere verificar su ambiente." };
 
     try {
       await stripeCapturePaymentIntent(
@@ -237,7 +238,7 @@ export const captureOrder = createServerFn({ method: "POST" })
       };
     }
 
-    await supabaseAdmin
+    const { error: savedError } = await supabaseAdmin
       .from("pedidos")
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .update({
@@ -251,6 +252,11 @@ export const captureOrder = createServerFn({ method: "POST" })
       } as any)
       .eq("id", data.pedidoId);
 
+    if (savedError) return { ok: false, error: "El cobro se realizó, pero falta guardar su confirmación. Reintenta para reconciliarlo, sin duplicar el cobro." };
+    const { grantReferralRewardForOrder } = await import("./referral-rewards.server");
+    await grantReferralRewardForOrder(data.pedidoId, "cookie");
+    const { flushCookieOrderTip } = await import("./driver-payouts.server");
+    await flushCookieOrderTip(data.pedidoId);
     return {
       ok: true,
       capturado: captureCents / 100,
@@ -278,7 +284,7 @@ export const releaseOrderAuthorization = createServerFn({ method: "POST" })
 
     const { data: pedido } = await supabaseAdmin
       .from("pedidos")
-      .select("id,estado,flujo_pago,stripe_payment_intent_id")
+      .select("id,estado,flujo_pago,stripe_payment_intent_id,stripe_environment")
       .eq("id", data.pedidoId)
       .maybeSingle();
     if (!pedido) return { ok: false, error: "El pedido no existe." };
@@ -287,11 +293,13 @@ export const releaseOrderAuthorization = createServerFn({ method: "POST" })
     const intentId = (p.stripe_payment_intent_id as string | null) ?? null;
     if (!intentId) return { ok: false, error: "Falta la referencia del pago reservado." };
 
+    const env = p.stripe_environment;
+    if ((env !== "sandbox" && env !== "live") || env !== paymentsEnvironmentForHost(getRequestHost())) return { ok: false, error: "El pedido pertenece a otro ambiente." };
     try {
       await stripeCancelPaymentIntent(
         intentId,
         `release-${data.pedidoId}`,
-        paymentsEnvironmentForHost(getRequestHost()),
+        env,
       );
     } catch (e) {
       console.error("[order-capture] release failed", e);
@@ -303,5 +311,7 @@ export const releaseOrderAuthorization = createServerFn({ method: "POST" })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .update({ estado: "cancelado", monto_capturado: 0 } as any)
       .eq("id", data.pedidoId);
+    const { releaseOrderCredit } = await import("./order-credit.server");
+    await releaseOrderCredit(supabaseAdmin, "cookie", data.pedidoId);
     return { ok: true };
   });

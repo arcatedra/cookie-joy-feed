@@ -46,3 +46,11 @@ export async function registerDriverPayoutForOrder(orderId: string): Promise<voi
     console.error("[driver-payouts] no se pudo registrar el pago", orderId, e);
   }
 }
+
+/** Database delivery trigger registers the tip; transfer keeps the original charge and idempotency key. */
+export async function flushCookieOrderTip(orderId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin.from("driver_payouts").select("id").eq("cookie_order_id", orderId).neq("status", "pagado");
+  const { transferDriverPayout } = await import("./payouts.server");
+  for (const payout of data ?? []) await transferDriverPayout(payout.id);
+}
