@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/negocio/")({
   component: MyBusinessPage,
   errorComponent: ({ error }) => (
     <div className="min-h-screen bg-[#f4f1ea] p-6 text-sm text-destructive">
-      {error.message}
+      {(error as Error).message}
     </div>
   ),
   notFoundComponent: () => (

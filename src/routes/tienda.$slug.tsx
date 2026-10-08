@@ -48,7 +48,7 @@ export const Route = createFileRoute("/tienda/$slug")({
     };
   },
   component: StorePage,
-  errorComponent: ({ error }) => <div className="p-6 text-sm text-destructive">{error.message}</div>,
+  errorComponent: ({ error }) => <div className="p-6 text-sm text-destructive">{(error as Error).message}</div>,
   notFoundComponent: () => (
     <div className="p-10 text-center text-sm text-muted-foreground">Tienda no encontrada</div>
   ),
