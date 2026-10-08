@@ -136,7 +136,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       const { createStoreCheckout } = await import("./store-checkout.functions");
       const handler: any = kind === "cookie" ? createCartCheckout : createStoreCheckout;
       const result = await handler({ data: { address, propina: 3, usarSaldo: false,
-        ...(kind === "cookie" ? { items: [{ id: uid(90), name: "PRUEBA", price: 0.01, qty: 1 }] : { businessId: uid(91), items: [{ productId: uid(92), qty: 1 }] }) },
+        ...(kind === "cookie" ? { items: [{ id: uid(90), name: "PRUEBA", price: 0.01, qty: 1 }] } : { businessId: uid(91), items: [{ productId: uid(92), qty: 1 }] }) },
         context: { supabase: client("authenticated"), userId: uid(2), claims: { email: "prueba@example.com" } } });
       expect(result.clientSecret).toBe("PRUEBA_secret");
       const table = kind === "cookie" ? "pedidos" : "store_orders";
