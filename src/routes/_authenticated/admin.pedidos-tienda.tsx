@@ -7,7 +7,7 @@ import { Loader2, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { groupByZoneZip } from "@/lib/pricing";
-import { adminAssignStoreOrder, adminListStoreDeliveries } from "@/lib/store-delivery.functions";
+import { adminAssignStoreOrder, adminListExpiredReservations, adminListStoreDeliveries } from "@/lib/store-delivery.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/pedidos-tienda")({
   head: () => ({
@@ -41,6 +41,11 @@ function AdminStoreDeliveries() {
     queryKey: ["admin-store-deliveries"],
     queryFn: () => fetchList(),
   });
+  const fetchExpired = useServerFn(adminListExpiredReservations);
+  const { data: expired } = useQuery({
+    queryKey: ["admin-expired-reservations"],
+    queryFn: () => fetchExpired(),
+  });
 
   async function onAssign(id: string, driverId: string) {
     setBusy(id);
@@ -66,6 +71,26 @@ function AdminStoreDeliveries() {
           <RefreshCw className="mr-2 h-4 w-4" /> Actualizar
         </Button>
       </header>
+      {(expired?.pedidos ?? []).length > 0 && (
+        <section className="rounded-2xl border border-destructive/40 bg-destructive/5 p-4">
+          <h2 className="text-sm font-bold text-destructive">
+            Reserva vencida ({expired!.pedidos.length})
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Pasaron más de 7 días sin cobrar: la tarjeta ya no está reservada. Hay que cancelar o volver a cobrar.
+          </p>
+          <ul className="mt-2 space-y-1 text-sm">
+            {expired!.pedidos.map((o) => (
+              <li key={o.id} className="flex justify-between gap-2">
+                <span>Pedido {o.id.slice(0, 8)} · entrega {o.fecha_entrega ?? "—"}</span>
+                <span className="text-muted-foreground">
+                  reservado el {new Date(o.autorizado_en).toLocaleDateString("es")} · ${Number(o.monto_autorizado ?? 0).toFixed(2)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {isLoading ? (
         <div className="flex justify-center p-10">
           <Loader2 className="h-5 w-5 animate-spin" />
