@@ -345,9 +345,9 @@
   },
   "subscribe": {
     "metaTitle": "Abopläne — HAZOREX",
-    "metaDesc": "Wähle dein HAZOREX-Cookie-Abo. Lieferung nur montags und freitags.",
+    "metaDesc": "Montag, Mittwoch und Freitag",
     "title": "Abopläne",
-    "deliveryBadge": "Lieferung nur Montag & Freitag",
+    "deliveryBadge": "Montag, Mittwoch und Freitag",
     "activePlan": "Aktiver Plan",
     "remaining": "Verbleibend",
     "scheduledCount": "{{used}} von {{total}} Lieferungen diesen Monat geplant",
@@ -355,33 +355,33 @@
     "mostPopular": "Am beliebtesten",
     "perMonth": "/ Monat",
     "schedule": "Lieferungen planen",
-    "scheduleHint": "Nur Montage und Freitage wählbar.",
+    "scheduleHint": "Montag, Mittwoch und Freitag",
     "prevMonth": "Vorheriger Monat",
     "nextMonth": "Nächster Monat",
     "yourDeliveries": "Deine Lieferungen",
     "usedAll": "Du hast alle {{count}} Lieferungen genutzt. Upgrade für mehr.",
-    "footnote": "*Nur MONTAGS & FREITAGS verfügbar",
+    "footnote": "Montag, Mittwoch und Freitag",
     "removeDate": "{{date}} entfernen",
     "tiers": {
       "starter": {
         "title": "Starter-Plan",
         "cadence": "2 LIEFERUNGEN / MONAT",
-        "desc": "Perfekt für Einsteiger: 2 Lieferungen pro Monat, montags oder freitags. Zusätzliche Lieferungen jederzeit für 10 $ pro Stück."
+        "desc": "2 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
       },
       "essential": {
         "title": "Essential-Plan",
         "cadence": "4 LIEFERUNGEN / MONAT",
-        "desc": "Unser beliebtester Plan: bis zu 4 Lieferungen pro Monat, flexibel planbar."
+        "desc": "4 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
       },
       "intermediate": {
         "title": "Intermediate-Plan",
         "cadence": "6 LIEFERUNGEN / MONAT",
-        "desc": "Mehr Flexibilität: bis zu 6 Lieferungen pro Monat."
+        "desc": "6 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
       },
       "premium": {
         "title": "Premium-Plan",
         "cadence": "8 LIEFERUNGEN / MONAT",
-        "desc": "Volle Versorgung: bis zu 8 Lieferungen pro Monat (montags und freitags)."
+        "desc": "8 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
       }
     },
     "yourPlan": "Dein Hazorex-Plan"
@@ -600,7 +600,9 @@
     "subtitle": "Jeder Kauf nimmt automatisch an der täglichen Verlosung teil. 100% verifizierbares Ergebnis mit kryptografischem Seed — keine Mittelsmänner.",
     "ctaShop": "Kekse ansehen",
     "ctaHow": "So funktioniert die Verlosung",
-    "trust": "✓ Verifizierbare Verlosung · ✓ 24h Versand · ✓ Handgemachte Kekse"
+    "trust": "✓ Montag, Mittwoch und Freitag · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Premium Handgemachte Kekse · Montag, Mittwoch und Freitag",
+    "trustNoSweepstakes": "✓ Montag, Mittwoch und Freitag · HAZOREX"
   },
   "footer": {
     "tagline": "Premium-Kekse mit 100% verifizierbaren täglichen Verlosungen. Jeder Kauf gewährt Zugang zur Tagesverlosung.",
@@ -623,7 +625,8 @@
     "becomeDriver": "Werde Fahrer",
     "winners": "Gewinner",
     "followUs": "Folge uns",
-    "socialComingSoon": "Demnächst"
+    "socialComingSoon": "Demnächst",
+    "taglineNoSweepstakes": "HAZOREX — Premium Handgemachte Kekse · Montag, Mittwoch und Freitag"
   },
   "ruleta": {
     "metaTitle": "HAZOREX Roulette — Drehen und Gewinnen ⭐",
@@ -1083,11 +1086,11 @@
   "repartidoresPage": {
     "metaTitle": "Werde Fahrer · Hazorex",
     "metaDesc": "Werde Teil des Hazorex-Fahrerteams. Bewirb dich in Minuten, wähle deine Arbeitszeiten und verdiene Geld, indem du Bestellungen in deiner Stadt auslieferst.",
-    "metaOg": "Bewirb dich als Hazorex-Fahrer. Flexible Arbeitszeiten, wöchentliche Zahlungen und transparenter Genehmigungsprozess.",
+    "metaOg": "Werde Teil des Hazorex-Fahrerteams. Bewirb dich in Minuten, wähle deine Arbeitszeiten und verdiene Geld, indem du Bestellungen in deiner Stadt auslieferst. Bezahlung nach jeder Lieferung",
     "hero": {
       "badge": "Bewirb dich in 5 Minuten",
       "titlePart1": "Verdiene",
-      "titleHighlight": "ab $22 pro Stunde",
+      "titleHighlight": "pro Bestellung",
       "titlePart2": "als Fahrer für Hazorex",
       "subtitlePart1": "Du bestimmst deine Zeit, wir die Bestellungen. Du brauchst nur ein",
       "subtitleHighlight": "wähle dein fahrzeug",
@@ -1095,10 +1098,11 @@
       "viewRequirements": "Anforderungen ansehen →",
       "perks": {
         "flexible": "Flexible Arbeitszeiten",
-        "weekly": "Wöchentliche Zahlungen",
+        "weekly": "Bezahlung nach jeder Lieferung",
         "noFee": "Keine Anmeldegebühr",
         "reply48": "Antwort in 48 Std."
-      }
+      },
+      "example": "Beispiel für eine Bestellung von $60 und 50 lb: Lieferung ${{base}} + Gewicht ${{weight}} + Trinkgeld ${{tip}} = ${{total}}. Kein Stundenlohnversprechen."
     },
     "signInGate": {
       "title": "Starte deine Bewerbung",
@@ -1163,7 +1167,7 @@
       "r1": "Mindestens 18 Jahre alt",
       "r2": "Eigenes Fahrrad oder E-Bike",
       "r3": "Ideal für dicht besiedelte Gebiete. Kein Führerschein und keine Versicherung erforderlich.",
-      "r4": "SSN or ITIN",
+      "r4": "Steuer- und Bankdaten werden nur bei Stripe angegeben.",
       "r5": "Gültiger NY-Führerschein Klasse M oder DM / Gültiger NY-Führerschein Klasse D (oder E)",
       "r6": "Klares Profilfoto (Selfie)"
     },
@@ -1179,7 +1183,7 @@
       },
       "q3": {
         "q": "Wann werde ich bezahlt?",
-        "a": "Die Zahlungen werden wöchentlich für die Gesamtzahl der abgeschlossenen Lieferungen abgewickelt."
+        "a": "Pro Bestellung erhältst du deinen Lieferanteil, Gewichtszuschlag und 100% Trinkgeld. Die Überweisung beginnt nach Lieferung; Bankeinzahlungen hängen von Stripe und deiner Bank ab."
       },
       "q4": {
         "q": "Kann ich meine Arbeitszeiten selbst wählen?",
@@ -1312,12 +1316,9 @@
         "err_address": "Gib deine Adresse ein",
         "err_vehicle": "Wähle Fahrrad/E-Bike, Motorrad oder Auto",
         "err_license": "Gib deine Führerscheinnummer ein",
-        "err_insurer": "Gib deine Versicherungsgesellschaft ein",
-        "err_taxId": "Gib eine gültige 9-stellige SSN oder ITIN ein"
+        "err_insurer": "Gib deine Versicherungsgesellschaft ein"
       },
-      "taxIdType": "Steuer-ID-Typ",
-      "taxId": "SSN oder ITIN",
-      "taxIdPrivacy": "Deine vollständige Nummer wird vor dem Speichern verschlüsselt und nicht erneut angezeigt."
+      "stripePrivacy": "Steuer- und Bankdaten werden nur bei Stripe angegeben."
     },
     "summary": {
       "name": "Name",
@@ -1330,8 +1331,7 @@
       "license": "Führerschein",
       "insurer": "Versicherung",
       "plate": "Kennzeichen",
-      "edit": "Bearbeiten",
-      "taxId": "SSN oder ITIN"
+      "edit": "Bearbeiten"
     },
     "success": {
       "title": "Bewerbung erhalten!",
@@ -1370,10 +1370,12 @@
       "phone": "Telefon *",
       "address": "Geschäftsadresse *",
       "addressPlaceholder": "Straße, Hausnummer, Stadtteil",
-      "city": "Stadt *",
-      "selectZone": "Wähle ein Gebiet",
+      "city": "Stadtbezirk *",
+      "selectZone": "Stadtbezirk auswählen",
       "required": "* Pflichtfelder. Deine Informationen sind geschützt und sicher.",
-      "otherZone": "Andere Zone"
+      "otherZone": "Andere Gebiete",
+      "postalCode": "Postleitzahl *",
+      "neighborhood": "Viertel"
     },
     "types": {
       "supermercado": "Supermarkt",
@@ -1398,7 +1400,9 @@
       "cityRequired": "Die Stadt ist erforderlich",
       "mustSignIn": "Du musst dich anmelden, um ein Geschäft zu registrieren",
       "alreadyRegistered": "Du hast bereits ein Geschäft registriert",
-      "generic": "Fehler bei der Registrierung des Geschäfts"
+      "generic": "Fehler bei der Registrierung des Geschäfts",
+      "postalCode": "Die Postleitzahl muss 5 Ziffern haben.",
+      "boroughMismatch": "Diese Postleitzahl gehört zu einem anderen Stadtbezirk."
     },
     "success": {
       "title": "Antrag gesendet!",
@@ -1544,7 +1548,7 @@
     "metaTitle": "HAZOREX — Premium Handgemachte Kekse",
     "metaDesc": "Entdecke Gourmet-Kekse, individuelle Packs und Monatsabos bei HAZOREX.",
     "sliderHeading": "Inspiriert von deinem Verlangen",
-    "sliderSub": "Heute gebacken · 24h Versand",
+    "sliderSub": "Montag, Mittwoch und Freitag",
     "seeMore": "Mehr sehen",
     "addToCart": "In den Warenkorb"
   },
@@ -1597,7 +1601,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Andere Gebiete",
+    "neighborhood": "Viertel",
+    "allBoroughs": "Stadtbezirk auswählen"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1648,13 +1655,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "Montag",
+      "tue": "Dienstag",
+      "wed": "Mittwoch",
+      "thu": "Donnerstag",
+      "fri": "Freitag",
+      "sat": "Samstag",
+      "sun": "Sonntag"
     }
   }
 }

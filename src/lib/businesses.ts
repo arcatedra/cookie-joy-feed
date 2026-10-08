@@ -18,6 +18,7 @@ export interface Business {
   phone: string;
   address: string;
   city: string | null;
+  postal_code: string | null;
   status: BusinessStatus;
   rejection_reason: string | null;
   logo_url: string | null;
@@ -61,6 +62,7 @@ export interface BusinessRegistrationInput {
   phone: string;
   address: string;
   city?: string | null;
+  postal_code?: string | null;
   logo_url?: string | null;
 }
 

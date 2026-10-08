@@ -345,9 +345,9 @@
   },
   "subscribe": {
     "metaTitle": "Planos de assinatura — HAZOREX",
-    "metaDesc": "Escolha seu plano de assinatura HAZOREX. Entregas apenas às segundas e sextas.",
+    "metaDesc": "segunda, quarta e sexta-feira",
     "title": "Planos de assinatura",
-    "deliveryBadge": "Entregas apenas às segundas e sextas",
+    "deliveryBadge": "segunda, quarta e sexta-feira",
     "activePlan": "Plano ativo",
     "remaining": "Restante",
     "scheduledCount": "{{used}} de {{total}} entregas agendadas este mês",
@@ -355,33 +355,33 @@
     "mostPopular": "Mais popular",
     "perMonth": "/ mês",
     "schedule": "Agendar entregas",
-    "scheduleHint": "Apenas segundas e sextas estão disponíveis.",
+    "scheduleHint": "segunda, quarta e sexta-feira",
     "prevMonth": "Mês anterior",
     "nextMonth": "Próximo mês",
     "yourDeliveries": "Suas entregas",
     "usedAll": "Você usou todas as {{count}} entregas do plano. Faça upgrade para adicionar mais.",
-    "footnote": "*Disponível apenas às SEGUNDAS e SEXTAS",
+    "footnote": "segunda, quarta e sexta-feira",
     "removeDate": "Remover {{date}}",
     "tiers": {
       "starter": {
         "title": "Plano Inicial",
         "cadence": "2 ENTREGAS / MÊS",
-        "desc": "Perfeito para o essencial. Inclui 2 entregas por mês às segundas ou sextas. Adicione entregas extras por US$ 10 cada."
+        "desc": "2 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
       },
       "essential": {
         "title": "Plano Essencial",
         "cadence": "4 ENTREGAS / MÊS",
-        "desc": "Nosso plano mais popular. Até 4 entregas por mês com agendamento flexível."
+        "desc": "4 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
       },
       "intermediate": {
         "title": "Plano Intermediário",
         "cadence": "6 ENTREGAS / MÊS",
-        "desc": "Mais flexibilidade para casas movimentadas. Até 6 entregas por mês."
+        "desc": "6 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
       },
       "premium": {
         "title": "Plano Premium",
         "cadence": "8 ENTREGAS / MÊS",
-        "desc": "Cobertura mensal completa: até 8 entregas (duas vezes por semana, segundas e sextas)."
+        "desc": "8 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
       }
     },
     "yourPlan": "Seu Plano Hazorex"
@@ -1055,7 +1055,9 @@
     "subtitle": "Cada compra entra automaticamente no sorteio do dia. Resultado 100% verificável com seed criptográfica — sem intermediários.",
     "ctaShop": "Ver biscoitos",
     "ctaHow": "Como funciona o sorteio",
-    "trust": "✓ Sorteio verificável · ✓ Entrega 24h · ✓ Biscoitos artesanais"
+    "trust": "✓ segunda, quarta e sexta-feira · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Biscoitos Artesanais Premium · segunda, quarta e sexta-feira",
+    "trustNoSweepstakes": "✓ segunda, quarta e sexta-feira · HAZOREX"
   },
   "footer": {
     "tagline": "Biscoitos premium com sorteios diários 100% verificáveis. Cada compra dá acesso ao sorteio do dia.",
@@ -1078,16 +1080,17 @@
     "becomeDriver": "Seja um entregador",
     "winners": "Ganhadores",
     "followUs": "Siga-nos",
-    "socialComingSoon": "Em breve"
+    "socialComingSoon": "Em breve",
+    "taglineNoSweepstakes": "HAZOREX — Biscoitos Artesanais Premium · segunda, quarta e sexta-feira"
   },
   "repartidoresPage": {
     "metaTitle": "Seja um entregador · Hazorex",
     "metaDesc": "Junte-se à equipe de entregadores da Hazorex. Candidate-se em minutos, escolha seus horários e ganhe dinheiro entregando pedidos em sua cidade.",
-    "metaOg": "Candidate-se como entregador da Hazorex. Horários flexíveis, pagamentos semanais e processo de aprovação transparente.",
+    "metaOg": "Junte-se à equipe de entregadores da Hazorex. Candidate-se em minutos, escolha seus horários e ganhe dinheiro entregando pedidos em sua cidade. Receba após entregar cada pedido",
     "hero": {
       "badge": "Candidate-se em 5 minutos",
       "titlePart1": "Ganhe",
-      "titleHighlight": "a partir de $22 por hora",
+      "titleHighlight": "por pedido",
       "titlePart2": "fazendo entregas com a Hazorex",
       "subtitlePart1": "Você gerencia seu tempo, nós os pedidos. Você só precisa de",
       "subtitleHighlight": "escolha seu veículo",
@@ -1095,10 +1098,11 @@
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horários flexíveis",
-        "weekly": "Pagamentos semanais",
+        "weekly": "Receba após entregar cada pedido",
         "noFee": "Sem taxa inicial",
         "reply48": "Resposta em 48h"
-      }
+      },
+      "example": "Exemplo para um pedido de $60 e 50 lb: entrega ${{base}} + peso ${{weight}} + gorjeta ${{tip}} = ${{total}}. Não é promessa por hora."
     },
     "signInGate": {
       "title": "Comece sua candidatura",
@@ -1163,7 +1167,7 @@
       "r1": "18 anos ou mais",
       "r2": "Bicicleta ou e-bike própria",
       "r3": "Ideal para áreas densas. Não precisa de habilitação nem seguro.",
-      "r4": "SSN or ITIN",
+      "r4": "Dados fiscais e bancários são fornecidos somente na Stripe.",
       "r5": "Licença NY Classe M ou DM válida / Licença NY Classe D (ou E) válida",
       "r6": "Foto de perfil nítida (selfie)"
     },
@@ -1179,7 +1183,7 @@
       },
       "q3": {
         "q": "Quando eu recebo?",
-        "a": "Os pagamentos são processados semanalmente pelo total de entregas concluídas."
+        "a": "Por pedido: sua parte da entrega, adicional de peso e 100% da gorjeta. A transferência começa na entrega; o depósito depende da Stripe e do banco."
       },
       "q4": {
         "q": "Posso escolher meus horários?",
@@ -1312,12 +1316,9 @@
         "err_address": "Insira seu endereço",
         "err_vehicle": "Escolha bicicleta/e-bike, moto ou carro",
         "err_license": "Insira o número da sua carteira de motorista",
-        "err_insurer": "Insira sua seguradora",
-        "err_taxId": "Digite um SSN ou ITIN válido de 9 dígitos"
+        "err_insurer": "Insira sua seguradora"
       },
-      "taxIdType": "Tipo de identificação fiscal",
-      "taxId": "SSN ou ITIN",
-      "taxIdPrivacy": "Seu número completo é criptografado antes de ser salvo e não será exibido novamente."
+      "stripePrivacy": "Dados fiscais e bancários são fornecidos somente na Stripe."
     },
     "summary": {
       "name": "Nome",
@@ -1330,8 +1331,7 @@
       "license": "Carteira de motorista",
       "insurer": "Seguradora",
       "plate": "Placa",
-      "edit": "Editar",
-      "taxId": "SSN ou ITIN"
+      "edit": "Editar"
     },
     "success": {
       "title": "Candidatura recebida!",
@@ -1370,10 +1370,12 @@
       "phone": "Telefone *",
       "address": "Endereço do negócio *",
       "addressPlaceholder": "Rua, número, bairro",
-      "city": "Cidade *",
-      "selectZone": "Selecione uma área",
+      "city": "Distrito *",
+      "selectZone": "Selecione um distrito",
       "required": "* Campos obrigatórios. Suas informações estão protegidas e seguras.",
-      "otherZone": "Outra zona"
+      "otherZone": "Outras áreas",
+      "postalCode": "Código postal *",
+      "neighborhood": "Bairro"
     },
     "types": {
       "supermercado": "Supermercado",
@@ -1398,7 +1400,9 @@
       "cityRequired": "A cidade é obrigatória",
       "mustSignIn": "Você deve fazer login para cadastrar um negócio",
       "alreadyRegistered": "Você já tem um negócio cadastrado",
-      "generic": "Erro ao cadastrar o negócio"
+      "generic": "Erro ao cadastrar o negócio",
+      "postalCode": "O código postal deve ter 5 dígitos.",
+      "boroughMismatch": "Este código postal pertence a outro distrito."
     },
     "success": {
       "title": "Solicitação enviada!",
@@ -1544,7 +1548,7 @@
     "metaTitle": "HAZOREX — Biscoitos Artesanais Premium",
     "metaDesc": "Descubra biscoitos gourmet, packs personalizados e assinaturas mensais na HAZOREX.",
     "sliderHeading": "Inspirado nos seus desejos",
-    "sliderSub": "Assados hoje · Entrega em 24h",
+    "sliderSub": "segunda, quarta e sexta-feira",
     "seeMore": "Ver mais",
     "addToCart": "Adicionar ao carrinho"
   },
@@ -1597,7 +1601,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Outras áreas",
+    "neighborhood": "Bairro",
+    "allBoroughs": "Selecione um distrito"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1648,13 +1655,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "Segunda-feira",
+      "tue": "Terça-feira",
+      "wed": "Quarta-feira",
+      "thu": "Quinta-feira",
+      "fri": "Sexta-feira",
+      "sat": "Sábado",
+      "sun": "Domingo"
     }
   }
 }

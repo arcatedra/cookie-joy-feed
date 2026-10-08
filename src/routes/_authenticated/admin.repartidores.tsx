@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { sendTransactionalEmail } from "@/lib/email/send";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   listDriversForReview,
@@ -114,8 +115,21 @@ function DriverReviewDialog({ driverId, onClose }: { driverId: string; onClose: 
 
   const approve = useMutation({
     mutationFn: () => approveFn({ data: { driverId } }),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Repartidor aprobado");
+      const driver = detail.data?.driver;
+      if (driver?.email) {
+        try {
+          await sendTransactionalEmail({
+            templateName: "driver-approved",
+            recipientEmail: driver.email,
+            idempotencyKey: `driver-approved-${driverId}`,
+            templateData: { driverName: driver.full_name, dashboardUrl: `${window.location.origin}/repartidor/cobros` },
+          });
+        } catch {
+          toast.warning("Repartidor aprobado, pero no se pudo enviar el correo de aviso.");
+        }
+      }
       qc.invalidateQueries({ queryKey: ["admin-drivers"] });
       qc.invalidateQueries({ queryKey: ["admin-driver", driverId] });
       onClose();

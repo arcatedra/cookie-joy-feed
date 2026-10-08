@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Planes de suscripción — HAZOREX",
-    "metaDesc": "Elige tu plan de suscripción de galletas HAZOREX. Entregas solo lunes y viernes.",
+    "metaDesc": "lunes, miércoles y viernes",
     "title": "Planes de suscripción",
-    "deliveryBadge": "Entregas solo lunes y viernes",
+    "deliveryBadge": "lunes, miércoles y viernes",
     "activePlan": "Plan activo",
     "remaining": "Restantes",
     "scheduledCount": "{{used}} de {{total}} entregas programadas este mes",
@@ -352,33 +352,33 @@
     "mostPopular": "Más popular",
     "perMonth": "/ mes",
     "schedule": "Programar entregas",
-    "scheduleHint": "Solo se pueden seleccionar lunes y viernes.",
+    "scheduleHint": "lunes, miércoles y viernes",
     "prevMonth": "Mes anterior",
     "nextMonth": "Mes siguiente",
     "yourDeliveries": "Tus entregas",
     "usedAll": "Ya usaste las {{count}} entregas de este plan. Sube de plan para añadir más.",
-    "footnote": "*Disponible solo los LUNES Y VIERNES",
+    "footnote": "lunes, miércoles y viernes",
     "removeDate": "Quitar {{date}}",
     "tiers": {
       "starter": {
         "title": "Plan Inicial",
         "cadence": "2 ENTREGAS / MES",
-        "desc": "Perfecto para lo esencial. Incluye 2 entregas al mes en lunes o viernes. Añade entregas adicionales por $10 cada una."
+        "desc": "2 ENTREGAS / MES · lunes, miércoles y viernes"
       },
       "essential": {
         "title": "Plan Esencial",
         "cadence": "4 ENTREGAS / MES",
-        "desc": "Nuestra opción más popular. Disfruta de hasta 4 entregas al mes con horarios flexibles: semanales, quincenales o como mejor te venga."
+        "desc": "4 ENTREGAS / MES · lunes, miércoles y viernes"
       },
       "intermediate": {
         "title": "Plan Intermedio",
         "cadence": "6 ENTREGAS / MES",
-        "desc": "Más flexibilidad para hogares activos. Hasta 6 entregas al mes los lunes o viernes."
+        "desc": "6 ENTREGAS / MES · lunes, miércoles y viernes"
       },
       "premium": {
         "title": "Plan Premium",
         "cadence": "8 ENTREGAS / MES",
-        "desc": "Cobertura mensual completa. Máxima comodidad con hasta 8 entregas al mes (dos veces por semana, lunes y viernes)."
+        "desc": "8 ENTREGAS / MES · lunes, miércoles y viernes"
       }
     },
     "yourPlan": "Tu Plan Hazorex"
@@ -1099,7 +1099,9 @@
     "subtitle": "Cada compra entra automáticamente al sorteo del día. Resultado 100% verificable con seed criptográfico — sin intermediarios.",
     "ctaShop": "Ver galletas",
     "ctaHow": "Cómo funciona el sorteo",
-    "trust": "✓ Sorteo verificable · ✓ Envío en 24h · ✓ Galletas artesanales"
+    "trust": "✓ lunes, miércoles y viernes · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Galletas Artesanales Premium · lunes, miércoles y viernes",
+    "trustNoSweepstakes": "✓ lunes, miércoles y viernes · HAZOREX"
   },
   "footer": {
     "tagline": "Galletas premium con sorteos diarios 100% verificables. Cada compra te da acceso al sorteo del día.",
@@ -1122,16 +1124,17 @@
     "becomeDriver": "Sé repartidor",
     "winners": "Ganadores",
     "followUs": "Síguenos",
-    "socialComingSoon": "Próximamente"
+    "socialComingSoon": "Próximamente",
+    "taglineNoSweepstakes": "HAZOREX — Galletas Artesanales Premium · lunes, miércoles y viernes"
   },
   "repartidoresPage": {
     "metaTitle": "Sé repartidor · Hazorex",
     "metaDesc": "Únete al equipo de repartidores de Hazorex. Postúlate en minutos, elige tus horarios y gana dinero entregando pedidos en tu ciudad.",
-    "metaOg": "Postúlate como repartidor de Hazorex. Horarios flexibles, pagos semanales y proceso de aprobación transparente.",
+    "metaOg": "Únete al equipo de repartidores de Hazorex. Postúlate en minutos, elige tus horarios y gana dinero entregando pedidos en tu ciudad. Cobras al entregar cada pedido",
     "hero": {
       "badge": "Postúlate en 5 minutos",
       "titlePart1": "Gana",
-      "titleHighlight": "desde $22 la hora",
+      "titleHighlight": "por pedido",
       "titlePart2": "repartiendo con Hazorex",
       "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Elige",
       "subtitleHighlight": "bicicleta, moto o auto",
@@ -1139,10 +1142,11 @@
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horarios flexibles",
-        "weekly": "Pagos semanales",
+        "weekly": "Cobras al entregar cada pedido",
         "noFee": "Sin cuota inicial",
         "reply48": "Respuesta en 48 h"
-      }
+      },
+      "example": "Ejemplo para un pedido de $60 y 50 lb: envío ${{base}} + peso ${{weight}} + propina ${{tip}} = ${{total}}. No es una promesa por hora."
     },
     "signInGate": {
       "title": "Empieza tu postulación",
@@ -1207,7 +1211,7 @@
       "r1": "18 años o más",
       "r2": "Bicicleta, e-bike, moto o auto propio",
       "r3": "Identificación con foto",
-      "r4": "SSN o ITIN",
+      "r4": "Tus datos fiscales y bancarios se proporcionan únicamente en Stripe al conectar tu cuenta de cobro.",
       "r5": "Licencia y seguro cuando correspondan al vehículo",
       "r6": "Foto de perfil clara (selfie)"
     },
@@ -1223,7 +1227,7 @@
       },
       "q3": {
         "q": "¿Cuándo cobro?",
-        "a": "Los pagos se procesan semanalmente por el total de entregas completadas."
+        "a": "Tu pago por pedido incluye tu parte del envío, cargo por peso y el 100% de la propina. La transferencia se inicia al entregar; el depósito depende de Stripe y tu banco."
       },
       "q4": {
         "q": "¿Puedo elegir mis horarios?",
@@ -1356,13 +1360,10 @@
         "err_address": "Ingresa tu dirección",
         "err_vehicle": "Selecciona bicicleta/e-bike, moto o auto",
         "err_license": "Ingresa tu número de licencia",
-        "err_insurer": "Ingresa tu aseguradora",
-        "err_taxId": "Ingresa un SSN o ITIN válido de 9 dígitos"
+        "err_insurer": "Ingresa tu aseguradora"
       },
-      "taxIdType": "Tipo de identificación fiscal",
-      "taxId": "SSN o ITIN",
-      "taxIdPrivacy": "Tu número completo se cifra antes de guardarse y no volverá a mostrarse.",
-      "noZones": "Todavía no hay zonas disponibles. Vuelve pronto."
+      "noZones": "Todavía no hay zonas disponibles. Vuelve pronto.",
+      "stripePrivacy": "Tus datos fiscales y bancarios se proporcionan únicamente en Stripe al conectar tu cuenta de cobro."
     },
     "summary": {
       "name": "Nombre",
@@ -1375,8 +1376,7 @@
       "license": "Licencia",
       "insurer": "Aseguradora",
       "plate": "Placa",
-      "edit": "Editar",
-      "taxId": "SSN o ITIN"
+      "edit": "Editar"
     },
     "success": {
       "title": "¡Postulación recibida!",
@@ -1415,10 +1415,12 @@
       "phone": "Teléfono *",
       "address": "Dirección del negocio *",
       "addressPlaceholder": "Calle, número, colonia",
-      "city": "Ciudad *",
-      "selectZone": "Selecciona una zona",
+      "city": "Condado *",
+      "selectZone": "Selecciona un condado",
       "required": "* Campos obligatorios. Tu información está protegida y segura.",
-      "otherZone": "Otra zona"
+      "otherZone": "Otras áreas",
+      "postalCode": "Código postal *",
+      "neighborhood": "Barrio"
     },
     "types": {
       "supermercado": "Supermercado",
@@ -1443,7 +1445,9 @@
       "cityRequired": "La ciudad es obligatoria",
       "mustSignIn": "Debes iniciar sesión para registrar un negocio",
       "alreadyRegistered": "Ya tienes un negocio registrado",
-      "generic": "Error al registrar el negocio"
+      "generic": "Error al registrar el negocio",
+      "postalCode": "El código postal debe tener 5 dígitos.",
+      "boroughMismatch": "El código postal pertenece a otro condado."
     },
     "success": {
       "title": "¡Solicitud enviada!",
@@ -1621,7 +1625,7 @@
     "metaTitle": "HAZOREX — Galletas Artesanales Premium",
     "metaDesc": "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en HAZOREX.",
     "sliderHeading": "Inspirado en tus antojos",
-    "sliderSub": "Selección horneada hoy · Envío en 24h",
+    "sliderSub": "lunes, miércoles y viernes",
     "seeMore": "Ver más",
     "addToCart": "Agregar al carrito"
   },
@@ -1674,7 +1678,10 @@
     "searchPlaceholder": "Buscar tienda...",
     "allZones": "Todas las zonas",
     "allTypes": "Todos los tipos",
-    "empty": "Todavía no hay tiendas con productos publicados."
+    "empty": "Todavía no hay tiendas con productos publicados.",
+    "otherAreas": "Otras áreas",
+    "neighborhood": "Barrio",
+    "allBoroughs": "Selecciona un condado"
   },
   "storePage": {
     "closedNotice": "Esta tienda está cerrada ahora. Puedes ver su catálogo.",

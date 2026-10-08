@@ -8,10 +8,12 @@ import {
   BUSINESS_TYPE_LABELS,
   type BusinessType,
 } from "@/lib/businesses";
-import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+import { NYC_BOROUGHS, zoneForPostalCode } from "@/lib/nyc-zones";
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { supabase } from "@/integrations/supabase/client";
 import i18n from "@/i18n";
+import { useQuery } from "@tanstack/react-query";
+import { getPricingConfig } from "@/lib/pricing.functions";
 
 export const Route = createFileRoute("/negocios/registro")({
   head: () => ({
@@ -19,6 +21,10 @@ export const Route = createFileRoute("/negocios/registro")({
       { title: i18n.t("negociosRegistro.metaTitle") },
       { name: "description", content: i18n.t("negociosRegistro.metaDesc") },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: i18n.t("negociosRegistro.metaTitle") },
+      { property: "og:description", content: i18n.t("negociosRegistro.metaDesc") },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: BusinessRegistrationPage,
@@ -42,6 +48,7 @@ type FormState = {
   phone: string;
   address: string;
   city: string;
+  postal_code: string;
 };
 
 const INITIAL: FormState = {
@@ -51,11 +58,13 @@ const INITIAL: FormState = {
   phone: "",
   address: "",
   city: "",
+  postal_code: "",
 };
 
 function BusinessRegistrationPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const zoneQuery = useQuery({ queryKey: ["pricing-config"], queryFn: () => getPricingConfig() });
   const [bootLoading, setBootLoading] = useState(true);
   const [bootError, setBootError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -64,6 +73,7 @@ function BusinessRegistrationPage() {
   const [hasAccount, setHasAccount] = useState(false);
   const [existing, setExisting] = useState(false);
   const [formData, setFormData] = useState<FormState>(INITIAL);
+  const matchedZone = zoneForPostalCode(zoneQuery.data?.deliveryZones ?? [], formData.postal_code);
 
   const loadBoot = async () => {
     setBootLoading(true);
@@ -72,7 +82,7 @@ function BusinessRegistrationPage() {
       const { data } = await supabase.auth.getUser();
       setHasAccount(!!data.user);
       if (data.user) {
-        setFormData((f) => ({ ...f, email: data.user!.email ?? "" }));
+        setFormData((f) => ({ ...f, email: data.user.email ?? "" }));
         const mine = await fetchMyBusiness();
         setExisting(!!mine);
       }
@@ -104,6 +114,8 @@ function BusinessRegistrationPage() {
     if (formData.phone.replace(/\D/g, "").length < 10) return setError(t("negociosRegistro.errors.phoneFormat")), false;
     if (!formData.address.trim()) return setError(t("negociosRegistro.errors.addressRequired")), false;
     if (!formData.city.trim()) return setError(t("negociosRegistro.errors.cityRequired")), false;
+    if (!/^\d{5}$/.test(formData.postal_code)) return setError(t("negociosRegistro.errors.postalCode")), false;
+    if (matchedZone?.borough && matchedZone.borough !== formData.city) return setError(t("negociosRegistro.errors.boroughMismatch")), false;
     return true;
   };
 
@@ -128,6 +140,7 @@ function BusinessRegistrationPage() {
         phone: formData.phone.trim(),
         address: formData.address.trim(),
         city: formData.city.trim() || null,
+        postal_code: formData.postal_code,
       });
       setSubmitted(true);
       setFormData(INITIAL);
@@ -317,8 +330,8 @@ function BusinessRegistrationPage() {
                 className={inputCls}
               >
                 <option value="">{t("negociosRegistro.form.selectZone")}</option>
-                {NYC_DELIVERY_ZONES.map((z) => {
-                  const isOther = z === "Otra zona";
+                {NYC_BOROUGHS.map((z) => {
+                  const isOther = z === "Otras áreas";
                   return (
                     <option key={z} value={z} translate={isOther ? undefined : "no"}>
                       {isOther ? t("negociosRegistro.form.otherZone") : z}
@@ -327,6 +340,11 @@ function BusinessRegistrationPage() {
                 })}
               </select>
             </Field>
+
+            <Field label={t("negociosRegistro.form.postalCode")}>
+              <input name="postal_code" inputMode="numeric" pattern="[0-9]{5}" maxLength={5} required value={formData.postal_code} onChange={handleChange} className={inputCls} placeholder="11372" />
+            </Field>
+            {/^\d{5}$/.test(formData.postal_code) && zoneQuery.data && <p className="text-sm text-muted-foreground">{t("negociosRegistro.form.neighborhood")}: {matchedZone?.name ?? t("negociosRegistro.form.otherZone")}</p>}
 
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
               ⏱️ <strong>{t("negociosRegistro.notice.strong")}</strong>{" "}

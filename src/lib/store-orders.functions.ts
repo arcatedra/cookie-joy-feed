@@ -10,7 +10,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { pricingFromRows, processingFeeCents, tierForSubtotal, weightFeeCents } from "./pricing";
+import { pricingFromRows, serviceFeeCents, tierForSubtotal, weightFeeCents } from "./pricing";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -173,7 +173,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const tier = tierForSubtotal(realSubtotalCents, pricing);
     const shippingCents = tier.feeCents;
     const weightCents = weightFeeCents(realLb, pricing);
-    const serviceCents = processingFeeCents(
+    const serviceCents = serviceFeeCents(
       realSubtotalCents + shippingCents + weightCents,
       pricing,
     );
@@ -195,7 +195,9 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const { paymentsEnvironmentForHost, stripeCapturePaymentIntent } = await import(
       "./stripe.server"
     );
-    const env = paymentsEnvironmentForHost(getRequestHost());
+    const { environmentForStoreOrder } = await import("./payouts.server");
+    const env = await environmentForStoreOrder(order.id, db);
+    if (env !== paymentsEnvironmentForHost(getRequestHost())) throw new Error("Este pedido pertenece a otro ambiente de pago.");
 
     try {
       await stripeCapturePaymentIntent(
@@ -331,7 +333,7 @@ export const cancelStoreOrder = createServerFn({ method: "POST" })
         await stripeCancelPaymentIntent(
           order.stripe_payment_intent_id,
           `store-cancel-${order.id}`,
-          paymentsEnvironmentForHost(getRequestHost()),
+          await (await import("./payouts.server")).environmentForStoreOrder(order.id, db),
         );
       } catch (e) {
         console.error("[store-orders] no se pudo liberar la reserva", e);

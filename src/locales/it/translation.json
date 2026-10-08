@@ -342,9 +342,9 @@
   },
   "subscribe": {
     "metaTitle": "Piani di Abbonamento — HAZOREX",
-    "metaDesc": "Scegli il tuo piano di abbonamento ai biscotti HAZOREX. Consegne solo il lunedì e il venerdì.",
+    "metaDesc": "lunedì, mercoledì e venerdì",
     "title": "Piani di Abbonamento",
-    "deliveryBadge": "Consegna Solo Lunedì e Venerdì",
+    "deliveryBadge": "lunedì, mercoledì e venerdì",
     "activePlan": "Piano Attivo",
     "remaining": "Rimanenti",
     "scheduledCount": "{{used}} di {{total}} consegne programmate questo mese",
@@ -352,33 +352,33 @@
     "mostPopular": "Più Popolare",
     "perMonth": "/ mese",
     "schedule": "Programma le Consegne",
-    "scheduleHint": "Solo lunedì e venerdì sono selezionabili.",
+    "scheduleHint": "lunedì, mercoledì e venerdì",
     "prevMonth": "Mese precedente",
     "nextMonth": "Mese successivo",
     "yourDeliveries": "Le tue consegne",
     "usedAll": "Hai utilizzato tutte le {{count}} consegne previste da questo piano. Effettua l'upgrade per aggiungerne altre.",
-    "footnote": "*Disponibile SOLO il LUNEDÌ e il VENERDÌ",
+    "footnote": "lunedì, mercoledì e venerdì",
     "removeDate": "Rimuovi {{date}}",
     "tiers": {
       "starter": {
         "title": "Piano Starter",
         "cadence": "2 CONSEGNE / MESE",
-        "desc": "Perfetto per l'essenziale. Include 2 consegne al mese di lunedì o venerdì. Aggiungi consegne extra a $10 ciascuna."
+        "desc": "2 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
       },
       "essential": {
         "title": "Piano Essential",
         "cadence": "4 CONSEGNE / MESE",
-        "desc": "La nostra scelta più popolare. Goditi fino a 4 consegne al mese. Programmazione flessibile: usale settimanalmente, bisettimanalmente o come si adatta alla tua routine."
+        "desc": "4 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
       },
       "intermediate": {
         "cadence": "6 CONSEGNE / MESE",
-        "desc": "Flessibilità extra per le famiglie attive. Ottieni fino a 6 consegne al mese programmate il lunedì o il venerdì.",
+        "desc": "6 CONSEGNE / MESE · lunedì, mercoledì e venerdì",
         "title": "Piano Intermedio"
       },
       "premium": {
         "title": "Piano Premium",
         "cadence": "8 CONSEGNE / MESE",
-        "desc": "Copertura mensile completa. Massima comodità con fino a 8 consegne al mese (due volte a settimana il lunedì e il venerdì)."
+        "desc": "8 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
       }
     },
     "yourPlan": "Il tuo Piano Hazorex"
@@ -1052,7 +1052,9 @@
     "subtitle": "Ogni acquisto partecipa automaticamente all'estrazione del giorno. Risultato 100% verificabile con seed crittografico — senza intermediari.",
     "ctaShop": "Vedi biscotti",
     "ctaHow": "Come funziona l'estrazione",
-    "trust": "✓ Estrazione verificabile · ✓ Spedizione 24h · ✓ Biscotti artigianali"
+    "trust": "✓ lunedì, mercoledì e venerdì · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — Biscotti Artigianali Premium · lunedì, mercoledì e venerdì",
+    "trustNoSweepstakes": "✓ lunedì, mercoledì e venerdì · HAZOREX"
   },
   "footer": {
     "tagline": "Biscotti premium con estrazioni quotidiane 100% verificabili. Ogni acquisto dà accesso all'estrazione del giorno.",
@@ -1075,16 +1077,17 @@
     "becomeDriver": "Diventa un rider",
     "winners": "Vincitori",
     "followUs": "Seguici",
-    "socialComingSoon": "Prossimamente"
+    "socialComingSoon": "Prossimamente",
+    "taglineNoSweepstakes": "HAZOREX — Biscotti Artigianali Premium · lunedì, mercoledì e venerdì"
   },
   "repartidoresPage": {
     "metaTitle": "Diventa un rider · Hazorex",
     "metaDesc": "Unisciti al team di rider di Hazorex. Candidati in pochi minuti, scegli i tuoi orari e guadagna consegnando ordini nella tua città.",
-    "metaOg": "Candidati come rider di Hazorex. Orari flessibili, pagamenti settimanali e processo di approvazione trasparente.",
+    "metaOg": "Unisciti al team di rider di Hazorex. Candidati in pochi minuti, scegli i tuoi orari e guadagna consegnando ordini nella tua città. Pagamento dopo ogni consegna",
     "hero": {
       "badge": "Candidati in 5 minuti",
       "titlePart1": "Guadagna",
-      "titleHighlight": "a partire da $22 l’ora",
+      "titleHighlight": "per ordine",
       "titlePart2": "consegnando con Hazorex",
       "subtitlePart1": "Tu gestisci il tuo tempo, noi gli ordini. Hai solo bisogno di",
       "subtitleHighlight": "scegli il tuo veicolo",
@@ -1092,10 +1095,11 @@
       "viewRequirements": "Vedi requisiti →",
       "perks": {
         "flexible": "Orari flessibili",
-        "weekly": "Pagamenti settimanali",
+        "weekly": "Pagamento dopo ogni consegna",
         "noFee": "Nessuna quota iniziale",
         "reply48": "Risposta in 48 ore"
-      }
+      },
+      "example": "Esempio per un ordine di $60 e 50 lb: consegna ${{base}} + peso ${{weight}} + mancia ${{tip}} = ${{total}}. Nessuna promessa oraria."
     },
     "signInGate": {
       "title": "Inizia la tua candidatura",
@@ -1160,7 +1164,7 @@
       "r1": "Almeno 18 anni",
       "r2": "Bicicletta o e-bike propria",
       "r3": "Ideale per zone dense. Nessuna patente o assicurazione richiesta.",
-      "r4": "SSN or ITIN",
+      "r4": "I dati fiscali e bancari si forniscono solo a Stripe.",
       "r5": "Patente NY Classe M o DM valida / Patente NY Classe D (o E) valida",
       "r6": "Foto del profilo chiara (selfie)"
     },
@@ -1176,7 +1180,7 @@
       },
       "q3": {
         "q": "Quando vengo pagato?",
-        "a": "I pagamenti vengono elaborati settimanalmente per il totale delle consegne completate."
+        "a": "Per ordine ricevi la tua quota di consegna, supplemento peso e il 100% delle mance. Il trasferimento parte alla consegna; il deposito dipende da Stripe e dalla banca."
       },
       "q4": {
         "q": "Posso scegliere i miei orari?",
@@ -1309,12 +1313,9 @@
         "err_address": "Inserisci il tuo indirizzo",
         "err_vehicle": "Scegli bicicletta/e-bike, moto o auto",
         "err_license": "Inserisci il numero della tua patente",
-        "err_insurer": "Inserisci la tua compagnia assicurativa",
-        "err_taxId": "Inserisci un SSN o ITIN valido di 9 cifre"
+        "err_insurer": "Inserisci la tua compagnia assicurativa"
       },
-      "taxIdType": "Tipo di identificativo fiscale",
-      "taxId": "SSN o ITIN",
-      "taxIdPrivacy": "Il numero completo viene cifrato prima del salvataggio e non sarà mostrato di nuovo."
+      "stripePrivacy": "I dati fiscali e bancari si forniscono solo a Stripe."
     },
     "summary": {
       "name": "Nome",
@@ -1327,8 +1328,7 @@
       "license": "Patente",
       "insurer": "Compagnia assicurativa",
       "plate": "Targa",
-      "edit": "Modifica",
-      "taxId": "SSN o ITIN"
+      "edit": "Modifica"
     },
     "success": {
       "title": "Candidatura ricevuta!",
@@ -1367,10 +1367,12 @@
       "phone": "Telefono *",
       "address": "Indirizzo dell'attività *",
       "addressPlaceholder": "Via, numero, quartiere",
-      "city": "Città *",
-      "selectZone": "Seleziona una zona",
+      "city": "Distretto *",
+      "selectZone": "Seleziona un distretto",
       "required": "* Campi obbligatori. Le tue informazioni sono protette e sicure.",
-      "otherZone": "Altra zona"
+      "otherZone": "Altre aree",
+      "postalCode": "Codice postale *",
+      "neighborhood": "Quartiere"
     },
     "types": {
       "supermercado": "Supermercato",
@@ -1395,7 +1397,9 @@
       "cityRequired": "La città è obbligatoria",
       "mustSignIn": "Devi accedere per registrare un'attività",
       "alreadyRegistered": "Hai già un'attività registrata",
-      "generic": "Errore durante la registrazione dell'attività"
+      "generic": "Errore durante la registrazione dell'attività",
+      "postalCode": "Il codice postale deve avere 5 cifre.",
+      "boroughMismatch": "Questo codice postale appartiene a un altro distretto."
     },
     "success": {
       "title": "Richiesta inviata!",
@@ -1541,7 +1545,7 @@
     "metaTitle": "HAZOREX — Biscotti Artigianali Premium",
     "metaDesc": "Scopri biscotti gourmet, pack personalizzati e abbonamenti mensili su HAZOREX.",
     "sliderHeading": "Ispirato alle tue voglie",
-    "sliderSub": "Sfornati oggi · Spedizione in 24h",
+    "sliderSub": "lunedì, mercoledì e venerdì",
     "seeMore": "Vedi altro",
     "addToCart": "Aggiungi al carrello"
   },
@@ -1594,7 +1598,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "Altre aree",
+    "neighborhood": "Quartiere",
+    "allBoroughs": "Seleziona un distretto"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1645,13 +1652,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "Lunedì",
+      "tue": "Martedì",
+      "wed": "Mercoledì",
+      "thu": "Giovedì",
+      "fri": "Venerdì",
+      "sat": "Sabato",
+      "sun": "Domenica"
     }
   }
 }

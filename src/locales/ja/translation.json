@@ -690,9 +690,9 @@
   },
   "subscribe": {
     "metaTitle": "サブスクリプションプラン — HAZOREX",
-    "metaDesc": "HAZOREXクッキーのサブスクリプションプランをお選びください。配達は月曜日と金曜日のみです。",
+    "metaDesc": "月曜日・水曜日・金曜日",
     "title": "サブスクリプションプラン",
-    "deliveryBadge": "配達は月曜日と金曜日のみ",
+    "deliveryBadge": "月曜日・水曜日・金曜日",
     "activePlan": "有効なプラン",
     "remaining": "残り",
     "scheduledCount": "今月の配達予定{{total}}件中{{used}}件",
@@ -700,33 +700,33 @@
     "mostPopular": "一番人気",
     "perMonth": "/月",
     "schedule": "配達をスケジュール",
-    "scheduleHint": "月曜日と金曜日のみ選択可能です。",
+    "scheduleHint": "月曜日・水曜日・金曜日",
     "prevMonth": "前の月",
     "nextMonth": "次の月",
     "yourDeliveries": "あなたの配達",
     "usedAll": "このプランの配達{{count}}回分をすべて使用しました。追加するにはプランをアップグレードしてください。",
-    "footnote": "*月曜日と金曜日のみ利用可能",
+    "footnote": "月曜日・水曜日・金曜日",
     "removeDate": "{{date}}を削除",
     "tiers": {
       "starter": {
         "title": "スタータープラン",
         "cadence": "月2回配達",
-        "desc": "基本的なニーズに最適です。月2回、月曜日または金曜日に配達します。追加の配達はそれぞれ$10で追加できます。"
+        "desc": "月2回配達 · 月曜日・水曜日・金曜日"
       },
       "essential": {
         "title": "エッセンシャルプラン",
         "cadence": "月4回配達",
-        "desc": "当店で一番人気のオプションです。毎週、隔週、またはご都合に合わせて、月に最大4回の配達を柔軟なスケジュールでお楽しみいただけます。"
+        "desc": "月4回配達 · 月曜日・水曜日・金曜日"
       },
       "intermediate": {
         "title": "インターミディエイトプラン",
         "cadence": "月6回配達",
-        "desc": "アクティブなご家庭にさらなる柔軟性を。月曜日または金曜日に、月に最大6回の配達が可能です。"
+        "desc": "月6回配達 · 月曜日・水曜日・金曜日"
       },
       "premium": {
         "title": "プレミアムプラン",
         "cadence": "月8回配達",
-        "desc": "毎月フルカバー。週2回（月曜日と金曜日）、月に最大8回の配達で最高の利便性を提供します。"
+        "desc": "月8回配達 · 月曜日・水曜日・金曜日"
       }
     },
     "yourPlan": "あなたの Hazorex プラン"
@@ -1057,7 +1057,9 @@
     "subtitle": "ご購入ごとにその日の抽選へ自動的にエントリー。結果は暗号学的シードにより100%検証可能 — 第三者の介在なし。",
     "ctaShop": "クッキーを見る",
     "ctaHow": "抽選の仕組み",
-    "trust": "✓ 検証可能な抽選 · ✓ 24時間以内発送 · ✓ 手作りクッキー"
+    "trust": "✓ 月曜日・水曜日・金曜日 · HAZOREX",
+    "subtitleNoSweepstakes": "HAZOREX — プレミアム手作りクッキー · 月曜日・水曜日・金曜日",
+    "trustNoSweepstakes": "✓ 月曜日・水曜日・金曜日 · HAZOREX"
   },
   "footer": {
     "tagline": "100%検証可能な毎日の抽選付きプレミアムクッキー。ご購入ごとにその日の抽選に参加できます。",
@@ -1080,16 +1082,17 @@
     "becomeDriver": "配達員になる",
     "winners": "受賞者",
     "followUs": "フォローする",
-    "socialComingSoon": "近日公開"
+    "socialComingSoon": "近日公開",
+    "taglineNoSweepstakes": "HAZOREX — プレミアム手作りクッキー · 月曜日・水曜日・金曜日"
   },
   "repartidoresPage": {
     "metaTitle": "配達員になる · Hazorex",
     "metaDesc": "Hazorexの配達員チームに参加しませんか。数分で応募し、自分のスケジュールで働き、あなたの街で配達してお金を稼ぎましょう。",
-    "metaOg": "Hazorexの配達員に応募。柔軟な勤務時間、週払い、透明性の高い承認プロセス。",
+    "metaOg": "Hazorexの配達員チームに参加しませんか。数分で応募し、自分のスケジュールで働き、あなたの街で配達してお金を稼ぎましょう。 各注文の配達後に支払い",
     "hero": {
       "badge": "5分で応募",
       "titlePart1": "時給",
-      "titleHighlight": "$22から",
+      "titleHighlight": "注文ごとに",
       "titlePart2": "Hazorexで配達して稼ごう",
       "subtitlePart1": "時間はあなた次第、注文は私たちにお任せください。必要なのは",
       "subtitleHighlight": "車両を選択",
@@ -1097,10 +1100,11 @@
       "viewRequirements": "要件を見る →",
       "perks": {
         "flexible": "柔軟な勤務時間",
-        "weekly": "週払い",
+        "weekly": "各注文の配達後に支払い",
         "noFee": "初期費用なし",
         "reply48": "48時間以内に返信"
-      }
+      },
+      "example": "$60・50 lbの注文例：配達 ${{base}} + 重量 ${{weight}} + チップ ${{tip}} = ${{total}}。時給の保証ではありません。"
     },
     "signInGate": {
       "title": "応募を開始する",
@@ -1165,7 +1169,7 @@
       "r1": "18歳以上",
       "r2": "自分の自転車またはEバイク",
       "r3": "人口密集地域に最適。免許や保険は不要です。",
-      "r4": "SSN or ITIN",
+      "r4": "税務・銀行情報はStripeでのみ入力します。",
       "r5": "有効なNYクラスMまたはDM免許 / 有効なNYクラスD（またはE）免許",
       "r6": "鮮明なプロフィール写真（自撮り）"
     },
@@ -1181,7 +1185,7 @@
       },
       "q3": {
         "q": "報酬はいつ支払われますか？",
-        "a": "完了した配達の合計額が週単位で支払われます。"
+        "a": "注文ごとに配達料金の取り分、重量追加料金、チップの100%を受け取ります。配達後に送金を開始し、銀行への入金はStripeと銀行によります。"
       },
       "q4": {
         "q": "勤務時間は選べますか？",
@@ -1314,12 +1318,9 @@
         "err_address": "住所を入力してください",
         "err_vehicle": "自転車/Eバイク、バイク、自動車を選択してください",
         "err_license": "免許証番号を入力してください",
-        "err_insurer": "保険会社を入力してください",
-        "err_taxId": "有効な9桁のSSNまたはITINを入力してください"
+        "err_insurer": "保険会社を入力してください"
       },
-      "taxIdType": "納税者番号の種類",
-      "taxId": "SSN または ITIN",
-      "taxIdPrivacy": "番号全体は保存前に暗号化され、再表示されません。"
+      "stripePrivacy": "税務・銀行情報はStripeでのみ入力します。"
     },
     "summary": {
       "name": "氏名",
@@ -1332,8 +1333,7 @@
       "license": "免許証",
       "insurer": "保険会社",
       "plate": "ナンバープレート",
-      "edit": "編集",
-      "taxId": "SSN または ITIN"
+      "edit": "編集"
     },
     "success": {
       "title": "応募を受け付けました！",
@@ -1372,10 +1372,12 @@
       "phone": "電話番号 *",
       "address": "事業所の住所 *",
       "addressPlaceholder": "通り、番地、地区",
-      "city": "市 *",
-      "selectZone": "エリアを選択してください",
+      "city": "区 *",
+      "selectZone": "区を選択",
       "required": "* 必須項目。あなたの情報は安全に保護されます。",
-      "otherZone": "その他のエリア"
+      "otherZone": "その他の地域",
+      "postalCode": "郵便番号 *",
+      "neighborhood": "地区"
     },
     "types": {
       "supermercado": "スーパーマーケット",
@@ -1400,7 +1402,9 @@
       "cityRequired": "市は必須です",
       "mustSignIn": "ビジネスを登録するにはログインする必要があります",
       "alreadyRegistered": "すでにビジネスが登録されています",
-      "generic": "ビジネスの登録中にエラーが発生しました"
+      "generic": "ビジネスの登録中にエラーが発生しました",
+      "postalCode": "郵便番号は5桁で入力してください。",
+      "boroughMismatch": "この郵便番号は別の区に属しています。"
     },
     "success": {
       "title": "申請が送信されました！",
@@ -1546,7 +1550,7 @@
     "metaTitle": "HAZOREX — プレミアム手作りクッキー",
     "metaDesc": "HAZOREXでグルメクッキー、カスタムパック、月額サブスクを見つけよう。",
     "sliderHeading": "あなたの気分にインスパイア",
-    "sliderSub": "本日焼き上げ・24時間配送",
+    "sliderSub": "月曜日・水曜日・金曜日",
     "seeMore": "もっと見る",
     "addToCart": "カートに追加"
   },
@@ -1599,7 +1603,10 @@
     "searchPlaceholder": "Search store...",
     "allZones": "All areas",
     "allTypes": "All types",
-    "empty": "No stores with published products yet."
+    "empty": "No stores with published products yet.",
+    "otherAreas": "その他の地域",
+    "neighborhood": "地区",
+    "allBoroughs": "区を選択"
   },
   "storePage": {
     "closedNotice": "This store is closed right now. You can still browse the catalog.",
@@ -1650,13 +1657,13 @@
     "publishedCount": "{{count}} published products",
     "viewPublic": "View my store",
     "days": {
-      "mon": "Monday",
-      "tue": "Tuesday",
-      "wed": "Wednesday",
-      "thu": "Thursday",
-      "fri": "Friday",
-      "sat": "Saturday",
-      "sun": "Sunday"
+      "mon": "月曜日",
+      "tue": "火曜日",
+      "wed": "水曜日",
+      "thu": "木曜日",
+      "fri": "金曜日",
+      "sat": "土曜日",
+      "sun": "日曜日"
     }
   }
 }

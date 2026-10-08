@@ -39,8 +39,14 @@ export function storeShareCents(o: any): number {
  * ID del cargo (charge) de un pedido de tienda. Se usa como `source_transaction`
  * para que la transferencia salga de ese cobro y no del saldo disponible.
  */
+export async function environmentForStoreOrder(orderId: string, db = adminDb()): Promise<import("./stripe.server").StripeEnv> {
+  const { data: order, error } = await db.from("store_orders").select("stripe_environment").eq("id", orderId).maybeSingle();
+  if (error || !order || (order.stripe_environment !== "sandbox" && order.stripe_environment !== "live")) throw new Error("El pedido no tiene ambiente Stripe verificado; no se enviará dinero.");
+  return order.stripe_environment;
+}
+
 export async function chargeIdForStoreOrder(orderId: string, db = adminDb()): Promise<string | null> {
-  const { stripeGet, paymentsEnvironmentForHost } = await import("./stripe.server");
+  const { stripeGet } = await import("./stripe.server");
   const { data: o } = await db
     .from("store_orders")
     .select("stripe_payment_intent_id")
@@ -48,15 +54,14 @@ export async function chargeIdForStoreOrder(orderId: string, db = adminDb()): Pr
     .maybeSingle();
   const pi = o?.stripe_payment_intent_id as string | null;
   if (!pi) return null;
-  const intent = await stripeGet<any>(`/v1/payment_intents/${pi}`, paymentsEnvironmentForHost(null));
+  const intent = await stripeGet<any>(`/v1/payment_intents/${pi}`, await environmentForStoreOrder(orderId, db));
   const lc = intent?.latest_charge;
   return typeof lc === "string" ? lc : (lc?.id ?? null);
 }
 
 /** Transfiere a un negocio la parte de sus productos de un pedido. */
 export async function transferStoreOrder(orderId: string, db = adminDb()): Promise<TransferResult> {
-  const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
-  const env = paymentsEnvironmentForHost(null);
+  const { stripePost } = await import("./stripe.server");
 
   const { data: o } = await db
     .from("store_orders")
@@ -70,7 +75,7 @@ export async function transferStoreOrder(orderId: string, db = adminDb()): Promi
 
   const { data: biz } = await db
     .from("businesses")
-    .select("stripe_account_id, stripe_payouts_enabled")
+    .select("stripe_account_id, stripe_payouts_enabled, stripe_environment")
     .eq("id", o.business_id)
     .maybeSingle();
   if (!biz?.stripe_account_id || !biz.stripe_payouts_enabled) {
@@ -87,6 +92,8 @@ export async function transferStoreOrder(orderId: string, db = adminDb()): Promi
   }
 
   try {
+    const env = await environmentForStoreOrder(o.id, db);
+    if (biz.stripe_environment !== env) return { ok: false, error: "La cuenta y el pedido pertenecen a ambientes distintos" };
     const charge = await chargeIdForStoreOrder(o.id, db);
     if (!charge) return { ok: false, skipped: true, error: "El pedido aún no tiene cobro" };
     const tr = await stripePost<any>(
@@ -122,8 +129,7 @@ export async function transferDriverPayout(
   payoutId: string,
   db = adminDb(),
 ): Promise<TransferResult> {
-  const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
-  const env = paymentsEnvironmentForHost(null);
+  const { stripePost } = await import("./stripe.server");
 
   const { data: p } = await db
     .from("driver_payouts")
@@ -135,7 +141,7 @@ export async function transferDriverPayout(
 
   const { data: drv } = await db
     .from("drivers")
-    .select("stripe_account_id, stripe_payouts_enabled")
+    .select("stripe_account_id, stripe_payouts_enabled, stripe_environment")
     .eq("id", p.driver_id)
     .maybeSingle();
   if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled) {
@@ -152,6 +158,8 @@ export async function transferDriverPayout(
   }
 
   try {
+    const env = await environmentForStoreOrder(p.order_id, db);
+    if (drv.stripe_environment !== env) return { ok: false, error: "La cuenta y el pedido pertenecen a ambientes distintos" };
     const charge = p.order_id ? await chargeIdForStoreOrder(p.order_id, db) : null;
     if (!charge) return { ok: false, skipped: true, error: "El pedido aún no tiene cobro" };
     const tr = await stripePost<any>(

@@ -7,7 +7,7 @@ import { Loader2, Search, Store } from "lucide-react";
 import { listPublicStores } from "@/lib/store-public.functions";
 import { LoadErrorState } from "@/components/LoadErrorState";
 import { BUSINESS_TYPE_LABELS, type BusinessType } from "@/lib/businesses";
-import { NYC_DELIVERY_ZONES } from "@/lib/nyc-zones";
+import { NYC_BOROUGHS } from "@/lib/nyc-zones";
 
 export const Route = createFileRoute("/tiendas")({
   head: () => ({
@@ -46,6 +46,7 @@ function StoresPage() {
 
   const [q, setQ] = useState("");
   const [zone, setZone] = useState<string>("");
+  const [neighborhood, setNeighborhood] = useState("");
   const [type, setType] = useState<string>("");
 
   const list = useMemo(() => {
@@ -56,11 +57,12 @@ function StoresPage() {
       if (type && s.business_type !== type) return false;
       if (zone) {
         const zones: string[] = s.zonas_que_atiende ?? [];
-        if (!zones.includes(zone) && s.city !== zone) return false;
+        if (s.city !== zone) return false;
       }
+      if (neighborhood && s.neighborhood !== neighborhood) return false;
       return true;
     });
-  }, [data, q, zone, type]);
+  }, [data, q, zone, neighborhood, type]);
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">
@@ -80,15 +82,20 @@ function StoresPage() {
         <div className="flex flex-wrap gap-2">
           <select
             value={zone}
-            onChange={(e) => setZone(e.target.value)}
+            onChange={(e) => { setZone(e.target.value); setNeighborhood(""); }}
             className="rounded-lg border border-border px-3 py-2 text-sm"
           >
             <option value="">{t("stores.allZones")}</option>
-            {NYC_DELIVERY_ZONES.map((z) => (
+            {NYC_BOROUGHS.map((z) => (
               <option key={z} value={z}>
                 {z}
               </option>
             ))}
+          </select>
+          <select aria-label={t("stores.neighborhood")} value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} className="max-w-full rounded-lg border border-border px-3 py-2 text-sm">
+            <option value="">{t("stores.allZones")}</option>
+            {[...new Set((data ?? []).filter((s: any) => !zone || s.city === zone).map((s: any) => s.neighborhood).filter(Boolean))].map((name) => <option key={String(name)} value={String(name)}>{name === "Otras áreas" ? t("stores.otherAreas") : String(name)}</option>)}
+            <option value="Otras áreas">{t("stores.otherAreas")}</option>
           </select>
           <select
             value={type}
@@ -133,7 +140,8 @@ function StoresPage() {
                   <div className="truncate font-semibold">{s.business_name}</div>
                   <div className="truncate text-xs text-muted-foreground">
                     {BUSINESS_TYPE_LABELS[s.business_type as BusinessType]}
-                    {(s.zonas_que_atiende?.[0] ?? s.city) ? ` · ${s.zonas_que_atiende?.[0] ?? s.city}` : ""}
+                    {s.city ? ` · ${s.city}` : ""}
+                     {s.neighborhood ? ` · ${s.neighborhood === "Otras áreas" ? t("stores.otherAreas") : s.neighborhood}` : ""}
                   </div>
                 </div>
               </Link>

@@ -31,10 +31,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SiteFooter } from "@/components/SiteFooter";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import i18n from "@/i18n";
-import { saveDriverTaxId } from "@/lib/driver-tax.functions";
+import { getPricingConfig } from "@/lib/pricing.functions";
+import { DEFAULT_PRICING, tierForSubtotal, weightFeeCents } from "@/lib/pricing";
 
 export const Route = createFileRoute("/repartidores")({
   head: () => ({
@@ -44,6 +44,7 @@ export const Route = createFileRoute("/repartidores")({
       { property: "og:title", content: i18n.t("repartidoresPage.metaTitle") },
       { property: "og:description", content: i18n.t("repartidoresPage.metaOg") },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://hazorex.com/repartidores" },
     ],
     links: [{ rel: "canonical", href: "https://hazorex.com/repartidores" }],
@@ -75,7 +76,7 @@ function RepartidoresLanding() {
       const { data, error } = await supabase
         .from("drivers")
         .select("application_status, rejection_reason")
-        .eq("id", user!.id)
+        .eq("id", user?.id ?? "")
         .maybeSingle();
       if (error) return null;
       return data as DriverRow | null;
@@ -83,6 +84,10 @@ function RepartidoresLanding() {
   });
 
   const [showForm, setShowForm] = useState(false);
+  const pricingQuery = useQuery({ queryKey: ["pricing-config"], queryFn: () => getPricingConfig() });
+  const pricing = pricingQuery.data?.pricing ?? DEFAULT_PRICING;
+  const exampleBase = tierForSubtotal(6000, pricing).driverCents / 100;
+  const exampleWeight = weightFeeCents(50, pricing) / 100;
 
   return (
     <div className="min-h-screen bg-[#f4f1ea] text-[#1e3a5f]">
@@ -111,6 +116,8 @@ function RepartidoresLanding() {
             </span>
             {t("repartidoresPage.hero.subtitlePart2")}
           </p>
+
+          <p className="mt-4 max-w-2xl text-sm">{t("repartidoresPage.hero.example", { base: exampleBase.toFixed(2), weight: exampleWeight.toFixed(2), tip: "3.00", total: (exampleBase + exampleWeight + 3).toFixed(2) })}</p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <ApplyCta
@@ -360,7 +367,7 @@ function RepartidoresLanding() {
         </div>
       </section>
 
-      <SiteFooter />
+
     </div>
   );
 }
@@ -564,8 +571,6 @@ const step2Schema = z.object({
   licenseNumber: z.string().trim().max(50),
   insurer: z.string().trim().max(80),
   plateNumber: z.string().trim().max(20).optional(),
-  taxIdType: z.enum(["ssn", "itin"]),
-  taxId: z.string().refine((value) => /^\d{9}$/.test(value.replace(/\D/g, "")), "err_taxId"),
 }).superRefine((value, ctx) => {
   if (value.vehicleType === "bicicleta") return;
   if (value.licenseNumber.length < 3) ctx.addIssue({ code: "custom", path: ["licenseNumber"], message: "err_license" });
@@ -609,8 +614,6 @@ function ApplicationForm({
     licenseNumber: "",
     insurer: "",
     plateNumber: "",
-    taxIdType: "ssn",
-    taxId: "",
   });
   const [files, setFiles] = useState<Partial<Record<DocKey, File>>>({});
   const [zoneIds, setZoneIds] = useState<string[]>([]);
@@ -635,7 +638,6 @@ function ApplicationForm({
     });
   };
   const [accept, setAccept] = useState(false);
-  const saveTaxId = useServerFn(saveDriverTaxId);
 
   const docLabel = (k: DocKey) => {
     if (k === "licencia_conducir") {
@@ -675,7 +677,6 @@ function ApplicationForm({
         uploaded[key] = signed.signedUrl;
       }
 
-      await saveTaxId({ data: { taxIdType: s2.taxIdType, taxId: s2.taxId } });
 
       const profilePhotoUrl = uploaded.foto_perfil ?? null;
       const { error: drvErr } = await supabase.from("drivers").insert({
@@ -1009,18 +1010,7 @@ function ApplicationForm({
               </>
             )}
 
-            <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
-              <Field label={t("repartidoresPage.form.taxIdType")} htmlFor="taxIdType" required>
-                <select id="taxIdType" value={s2.taxIdType} onChange={(e) => setS2({ ...s2, taxIdType: e.target.value as "ssn" | "itin" })} className="flex min-h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                  <option value="ssn">SSN</option>
-                  <option value="itin">ITIN</option>
-                </select>
-              </Field>
-              <Field label={t("repartidoresPage.form.taxId")} htmlFor="taxId" error={errors.taxId} required>
-                <Input id="taxId" type="password" inputMode="numeric" autoComplete="off" maxLength={11} placeholder="000-00-0000" value={s2.taxId} onChange={(e) => setS2({ ...s2, taxId: e.target.value })} className="min-h-11" />
-              </Field>
-            </div>
-            <p className="text-xs text-[#4a3525]/70">{t("repartidoresPage.form.taxIdPrivacy")}</p>
+            <p className="text-sm text-muted-foreground">{t("repartidoresPage.form.stripePrivacy")}</p>
 
             <div className="flex justify-between pt-2">
               <Button
@@ -1143,7 +1133,6 @@ function ApplicationForm({
                   { label: t("repartidoresPage.summary.insurer"), value: s2.insurer },
                   { label: t("repartidoresPage.summary.plate"), value: s2.plateNumber || "—" },
                 ]),
-                { label: t("repartidoresPage.summary.taxId"), value: `${s2.taxIdType.toUpperCase()} •••• ${s2.taxId.replace(/\D/g, "").slice(-4)}` },
               ]}
             />
 

@@ -116,7 +116,7 @@ function OnboardingPage() {
               {" "}Te comprometes a cumplir con las normas de tránsito, trato respetuoso a comercios y
               clientes, y las políticas de calidad de Hazorex (puntualidad, foto/firma de entrega, no
               manipulación de pedidos). Hazorex retiene una comisión sobre cada entrega según la tarifa
-              vigente y realiza pagos semanales.
+              vigente. Cobras al entregar cada pedido; el depósito bancario depende de Stripe y de tu banco.
             </p>
           </div>
           <Button
@@ -164,7 +164,7 @@ function OnboardingPage() {
             <li><span className="font-semibold text-[#1e3a5f]">2.</span> Cuando llegue un pedido, verás la dirección, distancia y ganancia estimada. Tienes 30 seg para aceptarlo.</li>
             <li><span className="font-semibold text-[#1e3a5f]">3.</span> Ve al punto de <b>recolección</b>, confirma "Recogí el pedido".</li>
             <li><span className="font-semibold text-[#1e3a5f]">4.</span> Navega al cliente, entrega y sube <b>foto, firma o código</b> como prueba.</li>
-            <li><span className="font-semibold text-[#1e3a5f]">5.</span> Tu ganancia se acumula. Pagos semanales.</li>
+            <li><span className="font-semibold text-[#1e3a5f]">5.</span> Cobras al entregar cada pedido.</li>
           </ol>
           <Button
             className="mt-4 w-full bg-[#c8862e] text-white hover:bg-[#a86e21]"
