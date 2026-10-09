@@ -1,5 +1,17 @@
 # Revisión final antes de apertura
 
+## Apertura: cambios solicitados el 9 de octubre
+
+- [ ] Presentar el plan completo y esperar aprobación antes de cambios de pagos o más de tres archivos.
+- [ ] Actualizar contacto, pie con sesión y textos SSN/Checkr/Stripe.
+- [ ] Retirar reseñas inventadas y unificar catálogo/nombres/enlaces; Más Vendidas con ventas reales o orden fijo.
+- [ ] Mínimo de galletas $12 en pantalla y servidor; cobro exacto y solo entrega programada.
+- [ ] Enlaces Tiendas automáticos y únicos cuando existan tiendas aprobadas con productos.
+- [ ] Eliminar suscripciones del código sin borrar tablas ni datos.
+- [ ] Aplicar tarifas por parada/lote, extras sobre 45 lb y límites por vehículo a repartidor y admin sin recalcular datos históricos.
+- [ ] Corregir diferencia inicial de textos React #418 y revisar hallazgos de Project monitoring.
+- [ ] Ejecutar pruebas aisladas y revisar pantallas; entregar resumen y bloqueos sin publicar.
+
 ## Cambios de entrega, propina y referidos del 8 de octubre
 
 - [x] Registrar los requisitos y revisar el funcionamiento actual.
