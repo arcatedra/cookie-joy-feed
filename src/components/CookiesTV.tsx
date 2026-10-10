@@ -135,12 +135,11 @@ export function reelProductKeyFromSlug(slug: string | null | undefined): string 
 // that /shop reads directly from the database.
 const REEL_SLUG_TO_PRODUCTO_ID: Record<string, string> = {
   "p-cchunk":     "a1111111-0000-0000-0000-000000000001", // Chocolate Chunk
-  "p-snicker":    "a1111111-0000-0000-0000-000000000008", // Snickerdoodle
+  "p-snicker":    "a1111111-0000-0000-0000-000000000002", // Snickerdoodle (canela), not Snicker candy
   "p-oatmeal":    "a1111111-0000-0000-0000-000000000003", // Oatmeal Raisin
   "p-mint":       "a1111111-0000-0000-0000-000000000004", // Mint Chocolate
   "p-pista":      "a1111111-0000-0000-0000-000000000005", // Pistachio
   "p-triple":     "a1111111-0000-0000-0000-000000000006", // Triple Chocolate
-  "p-doublechoc": "a1111111-0000-0000-0000-000000000006", // Triple Chocolate (same image line)
   "p-mm":         "a1111111-0000-0000-0000-000000000007", // M&M Festivo
   "p-pb":         "a1111111-0000-0000-0000-000000000009", // Mantequilla de Maní Crujiente
 };
@@ -753,6 +752,13 @@ export function CookiesTV() {
     return m;
   }, [productos]);
 
+  // Only show a reel when its actual flavor has an available catalog product.
+  // Keep records intact; filter the carousel and fullscreen view consistently.
+  const catalogReels = useMemo(
+    () => reels.filter((reel) => resolveProductoForReel(reel.product_slug, productosById)?.disponible),
+    [reels, productosById],
+  );
+
 
 
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
@@ -1012,7 +1018,7 @@ export function CookiesTV() {
             </div>
           )}
           {!loading &&
-            reels.map((r, index) => (
+            catalogReels.map((r, index) => (
               <ReelCard
                 key={r.id}
                 reel={r}
@@ -1033,7 +1039,7 @@ export function CookiesTV() {
               />
             ))}
 
-          {!loading && reels.length === 0 && (
+          {!loading && catalogReels.length === 0 && (
             <p className="py-10 text-xs text-[#666]">Aún no hay reels. ¡Sé el primero!</p>
           )}
         </div>
@@ -1066,9 +1072,9 @@ export function CookiesTV() {
         />
       )}
 
-      {expandedIndex !== null && reels[expandedIndex] && (
+      {expandedIndex !== null && catalogReels[expandedIndex] && (
         <ExpandedReelModal
-          reels={reels}
+          reels={catalogReels}
           initialIndex={expandedIndex}
           onClose={() => setExpandedIndex(null)}
           likeCounts={likeCounts}

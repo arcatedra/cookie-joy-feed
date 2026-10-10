@@ -286,7 +286,6 @@ function CartPage() {
               <p className="mt-3 text-sm text-muted-foreground">{t("deliveryPromise")}</p>
             </section>
             <div className="mt-4 space-y-3">
-              <p className="text-sm text-muted-foreground">{t("deliveryPromise")}</p>
               <TipSelector value={propina} onChange={setPropina} />
               {Number(credit?.balance ?? 0) > 0 && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={usarSaldo} onChange={(e) => setUsarSaldo(e.target.checked)} />{t("credit.use", { amount: Number(credit?.balance ?? 0).toFixed(2) })}</label>}
             </div>
