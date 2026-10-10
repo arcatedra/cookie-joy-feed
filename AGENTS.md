@@ -2,6 +2,7 @@
 
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
 - All cookie shopping surfaces read the shared product catalog with a Spanish display-name adapter; public bestseller output exposes only aggregate product order, never buyer records.
+- Reel product associations require an exact available catalog flavor, shared by carousel and fullscreen; hide unmatched media without deleting records to prevent misleading purchases.
 - New orders persist a driver pricing model while historical orders keep their existing amounts; database assignment triggers serialize driver capacity checks across cookie routes and store stops.
 - Browser cart and preferred language hydrate only after mounting so their first render matches server output.
 
