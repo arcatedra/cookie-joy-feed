@@ -1,5 +1,13 @@
 # Revisión final antes de apertura
 
+## Correcciones del 10 de octubre y continuación
+- [ ] Aprobar el plan de correcciones de portada/textos y bloques reservables antes de cambios de más de tres archivos o pagos.
+- [ ] Corregir reel de canela; ocultar reels sin coincidencia real de sabor, sin borrar registros.
+- [ ] Usar catálogo y orden de ventas reales en Más Vendidas de la portada.
+- [ ] Retirar menciones comerciales de suscripciones y nombrar la baja como baja de correos.
+- [ ] Mostrar una sola promesa de entrega en el envío del carrito, sin cambiar cobros.
+- [ ] Verificar correcciones y ejecutar el modelo de bloques únicamente tras aprobar su plan.
+
 ## Nueva solicitud: bloques reservables (después de los nueve cambios)
 - [ ] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo.
 - [ ] Mostrar plan y esperar aprobación antes de reemplazar cargos/pagos del marketplace.
