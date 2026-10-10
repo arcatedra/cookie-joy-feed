@@ -8,13 +8,15 @@
 - [x] Mostrar una sola promesa de entrega en el envío del carrito, sin cambiar cobros.
 - [x] Verificar correcciones: portada/Confianza/carrito sin errores; 19 pruebas aisladas pasan.
 - [x] Preparar reglas validadas de bloques, pesos, puerta, vehículos y piso horario, sin activarlas.
-- [ ] Resolver financiación del pago fijo/bonos cuando superan los cargos de entrega de pedidos del lote; requiere decisión del dueño antes de integrar transferencias.
-- [ ] Ejecutar el resto del modelo aprobado después de resolver financiación; mantenerlo inactivo hasta verificaciones completas.
+- [ ] Exigir mínimo 3 pedidos por lote; combinar sobrantes de 1–2 con zona cercana o avisar al admin para decisión manual.
+- [ ] Reemplazar aumentos automáticos por aviso a 12 horas y controles manuales +$5, +$10 o monto escrito.
+- [ ] Cobrar puerta como ingreso Hazorex; bono al repartidor opcional por lote, apagado por defecto y visible solo al activarlo.
+- [ ] Integrar el modelo aprobado y mantenerlo inactivo hasta verificaciones completas del dueño.
 
 ## Nueva solicitud: bloques reservables (después de los nueve cambios)
 - [x] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo en memoria y plan aprobado.
 - [x] Mostrar y aprobar plan antes de reemplazar cargos/pagos del marketplace.
-- [ ] Integrar bloques aprobados: financiación de importes que exceden los cargos de los pedidos pendiente de decisión del dueño; no modificar aún pagos existentes.
+- [ ] Integrar bloques aprobados con aportes propios de Hazorex cuando correspondan; mantener inactivo hasta pruebas completas.
 
 ## Apertura: cambios solicitados el 9 de octubre
 
