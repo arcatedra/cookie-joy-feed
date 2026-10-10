@@ -140,7 +140,6 @@
       "bestSellers": "热销产品",
       "deals": "今日特价",
       "buildPack": "自组套餐",
-      "subscriptions": "曲奇订阅",
       "yourAccount": "您的账户",
       "ordersReturns": "退货与订单",
       "cart": "您的购物车",
@@ -152,7 +151,6 @@
       "bestSellers": "热销产品",
       "buildPack": "自组套餐",
       "support": "客户服务",
-      "subscriptions": "曲奇订阅",
       "shop": "🛍️ 商店",
       "roulette": "🎰 抽奖",
       "drivers": "🛵 成为骑手",
@@ -175,7 +173,6 @@
   "nav": {
     "home": "首页",
     "explore": "探索",
-    "subscribe": "订阅",
     "profile": "个人资料"
   },
   "errors": {
@@ -185,8 +182,8 @@
     "didNotLoadDesc": "我们这边出了点问题。您可以尝试刷新或返回首页。"
   },
   "home": {
-    "metaTitle": "HAZOREX — 美食曲奇，按月配送",
-    "metaDesc": "探索手工美食曲奇，加入 HAZOREX 月度订阅，享受新鲜出炉的美味直送上门。",
+    "metaTitle": "HAZOREX — 手工优质饼干",
+    "metaDesc": "探索HAZOREX手工饼干和定制组合。",
     "welcome": "欢迎回来",
     "greeting": "早上好，{{name}}！",
     "freshToday": "今天有新鲜批次出炉",
@@ -195,10 +192,6 @@
     "trending": "时下流行",
     "categories": "特色分类",
     "cookiePacks": "曲奇套餐",
-    "subscriptionEyebrow": "月度礼盒",
-    "subscriptionHeadline": "12 块新鲜曲奇，直送上门。",
-    "subscriptionSubcopy": "随时取消 · 免运费",
-    "startSubscription": "开始订阅",
     "promoTitle": "准备好尝试点新东西了吗？",
     "promoSubtitle": "探索我们的限量版和本月最爱。",
     "promoCta": "查看完整菜单",
@@ -209,12 +202,6 @@
       "buildPackLink": "查看选项",
       "buildPackCta": "开始组合",
       "buildPackAlt": "自定义曲奇盒",
-      "subscriptionTitle": "月度订阅",
-      "subscriptionLink": "探索俱乐部",
-      "subscriptionClub": "HAZOREX 俱乐部",
-      "subscriptionHeadline": "每周新鲜烘焙配送",
-      "subscriptionSubcopy": "随时取消 · 含运费",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "限时特惠",
       "flashLink": "查看所有特惠",
       "flashProduct": "什锦 9 曲奇套餐",
@@ -340,52 +327,9 @@
     "treeNuts": "坚果",
     "peanuts": "花生"
   },
-  "subscribe": {
-    "metaTitle": "订阅计划 — HAZOREX",
-    "metaDesc": "星期一、星期三和星期五",
-    "title": "订阅计划",
-    "deliveryBadge": "星期一、星期三和星期五",
-    "activePlan": "当前计划",
-    "remaining": "剩余",
-    "scheduledCount": "本月已安排 {{used}} / {{total}} 次配送",
-    "choosePlan": "选择您的计划",
-    "mostPopular": "最受欢迎",
-    "perMonth": "/ 月",
-    "schedule": "安排配送",
-    "scheduleHint": "星期一、星期三和星期五",
-    "prevMonth": "上个月",
-    "nextMonth": "下个月",
-    "yourDeliveries": "您的配送安排",
-    "usedAll": "您已用完此计划的全部 {{count}} 次配送。升级以添加更多。",
-    "footnote": "星期一、星期三和星期五",
-    "removeDate": "移除 {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "入门计划",
-        "cadence": "每月 2 次配送",
-        "desc": "每月 2 次配送 · 星期一、星期三和星期五"
-      },
-      "essential": {
-        "title": "基础计划",
-        "cadence": "每月 4 次配送",
-        "desc": "每月 4 次配送 · 星期一、星期三和星期五"
-      },
-      "intermediate": {
-        "title": "中级计划",
-        "cadence": "每月 6 次配送",
-        "desc": "每月 6 次配送 · 星期一、星期三和星期五"
-      },
-      "premium": {
-        "title": "高级计划",
-        "cadence": "每月 8 次配送",
-        "desc": "每月 8 次配送 · 星期一、星期三和星期五"
-      }
-    },
-    "yourPlan": "你的 Hazorex 方案"
-  },
   "profile": {
     "metaTitle": "我的个人资料 — HAZOREX",
-    "metaDesc": "管理您的 HAZOREX 账户、订单和订阅。",
+    "metaDesc": "管理您的HAZOREX账户和订单。",
     "title": "我的个人资料",
     "settings": "设置",
     "city": "纽约",
@@ -394,8 +338,6 @@
     "favorites": "收藏夹",
     "level": "等级",
     "cookieFan": "曲奇爱好者",
-    "currentPlan": "当前计划",
-    "enthusiast": "热衷者计划",
     "active": "有效",
     "recentOrders": "最近订单",
     "order": "订单 #{{id}}",
@@ -441,26 +383,6 @@
     "thanks": "谢谢您！",
     "thanksDesc": "您的曲奇已在路上。一封确认邮件已发送给您。",
     "backHome": "返回首页"
-  },
-  "subscribeGate": {
-    "dialogTitle": "订阅以激活您的配送和购物权限",
-    "dialogDesc": "购买和配送仅对订阅会员开放。",
-    "freeShipping": "每个计划都包含免费配送（$0）！",
-    "viewPlans": "查看订阅计划",
-    "signInAndSubscribe": "登录并订阅",
-    "keepBrowsing": "继续浏览",
-    "bannerEyebrow": "成为会员",
-    "bannerTitle": "订阅以激活您的配送",
-    "bannerSubcopy": "每个计划都包含免费配送（$0）！",
-    "bannerCta": "查看计划",
-    "cartWarning": "您需要有效订阅才能结算。",
-    "cartCta": "订阅以购买",
-    "cartProcessing": "处理中…",
-    "cartConfirm": "确认并支付订单",
-    "cartTerms": "确认订单即表示您接受商店的服务条款。",
-    "noActive": "您没有有效的订阅。订阅以开始安排配送。",
-    "scheduled": "配送已安排",
-    "canceled": "配送已取消"
   },
   "checkout": {
     "secure": "安全结算",
@@ -862,15 +784,15 @@
     "sections": {
       "authTitle": "身份验证和访问",
       "authP1": "账户访问通过电子邮件和密码或 Google 登录完成。密码从不以纯文本形式存储：凭证管理和验证由平台的托管身份验证提供商处理。",
-      "authP2": "每个用户只能读取和修改自己的个人资料以及自己的订单、订阅和捐赠。管理角色受限制并在服务器端进行验证。",
+      "authP2": "每个用户只能读取和修改自己的个人资料以及自己的订单。管理角色受限制并在服务器端进行验证。",
       "paymentsTitle": "支付",
       "paymentsP1": "支付通过 Stripe 处理。HAZOREX 不存储也无法访问完整的卡号、CVV 或有效期：这些数据使用其安全元素在您的浏览器和 Stripe 之间直接传输。",
       "dataTitle": "我们收集的数据",
-      "dataP1": "我们仅收集运营此应用程序所必需的数据：您的电子邮件、可选的显示名称、您进行实物购买时的邮寄地址，以及与您账户关联的订单、订阅和捐赠历史记录。",
+      "dataP1": "我们仅收集运营此应用程序所必需的数据：您的电子邮件、可选的显示名称、您进行实物购买时的邮寄地址，以及与您账户关联的订单历史记录。",
       "subprocessorsTitle": "子处理商",
       "subprocessorsP1": "为提供服务，我们依赖以下子处理商：Lovable Cloud（托管、数据库和身份验证）、Stripe（支付处理）和一个交易性电子邮件提供商。每个子处理商仅接收其功能所需的最低限度数据。",
       "emailTitle": "电子邮件",
-      "emailP1": "我们只发送交易性电子邮件（订单、订阅和账户变更确认）。我们不进行大规模营销活动。每封电子邮件都包含一个退订链接，可禁止将来向该地址发送邮件。",
+      "emailP1": "我们只发送交易邮件（订单确认和账户变更），不进行大规模营销。每封邮件都包含停止向该地址发送邮件的链接。",
       "retentionTitle": "保留与删除",
       "retentionP1": "只要您的账户处于活动状态，我们就会保留您的数据。如果您希望删除您的账户或请求删除您的个人数据，请致信网站的联系电子邮件，我们将处理该请求。",
       "reportTitle": "如何报告安全问题",
@@ -1061,7 +983,6 @@
     "shop": "商店",
     "allCookies": "饼干",
     "roulette": "每日轮盘",
-    "subscribe": "订阅",
     "explore": "探索",
     "account": "账户",
     "profile": "我的资料",
@@ -1418,10 +1339,10 @@
   },
   "supportPage": {
     "metaTitle": "客户支持 — HAZOREX",
-    "metaDesc": "联系 HAZOREX 支持团队。关于订单、配送、订阅和抽奖的邮箱及常见问题。",
+    "metaDesc": "联系 HAZOREX 支持团队。关于订单、配送和抽奖的邮箱及常见问题。",
     "metaOg": "我们随时为您服务。请发邮件至 hazorex0@gmail.com。",
     "heroTitle": "有什么可以帮您?",
-    "heroSubtitle": "我们的团队随时为您解答关于订单、配送、订阅或每日抽奖的任何问题。",
+    "heroSubtitle": "我们的团队解答订单、配送和每日抽奖相关问题。",
     "contactTitle": "联系我们",
     "contactSubtitle": "我们在工作时间回复,通常在 24 小时内。",
     "emailLabel": "邮箱",
@@ -1544,7 +1465,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — 手工优质饼干",
-    "metaDesc": "在 HAZOREX 探索美味饼干、定制套装和月度订阅。",
+    "metaDesc": "探索HAZOREX手工饼干和定制组合。",
     "sliderHeading": "灵感来自你的渴望",
     "sliderSub": "星期一、星期三和星期五",
     "seeMore": "查看更多",
@@ -1556,7 +1477,7 @@
   },
   "profilePage": {
     "metaTitle": "我的资料 — HAZOREX",
-    "metaDesc": "管理您的 HAZOREX 账户、订单和订阅。"
+    "metaDesc": "管理您的HAZOREX账户和订单。"
   },
   "shopPage": {
     "subtitle": "按件购买 · Stripe 安全支付",

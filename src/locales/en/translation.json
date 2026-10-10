@@ -140,7 +140,6 @@
       "bestSellers": "Best sellers",
       "deals": "Today's deals",
       "buildPack": "Build your pack",
-      "subscriptions": "Cookie orders",
       "yourAccount": "Your account",
       "ordersReturns": "Returns & orders",
       "cart": "Your cart",
@@ -152,7 +151,6 @@
       "bestSellers": "Best Sellers",
       "buildPack": "Build a Pack",
       "support": "Customer Service",
-      "subscriptions": "Cookie orders",
       "shop": "🛍️ Shop",
       "roulette": "🎰 Sweepstakes",
       "drivers": "🛵 Become a driver",
@@ -175,7 +173,6 @@
   "nav": {
     "home": "Home",
     "explore": "Explore",
-    "subscribe": "Subscribe",
     "profile": "Profile"
   },
   "errors": {
@@ -185,8 +182,8 @@
     "didNotLoadDesc": "Something went wrong on our end. You can try refreshing or head back home."
   },
   "home": {
-    "metaTitle": "HAZOREX — Gourmet Cookies, Delivered Monthly",
-    "metaDesc": "Discover artisanal gourmet cookies and join the HAZOREX monthly orders for freshly baked treats at your door.",
+    "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
+    "metaDesc": "Discover HAZOREX handcrafted cookies and custom packs.",
     "welcome": "Welcome back",
     "greeting": "Good Morning, {{name}}!",
     "freshToday": "Fresh batches dropped today",
@@ -195,10 +192,6 @@
     "trending": "Trending Now",
     "categories": "Featured Categories",
     "cookiePacks": "Cookie Packs",
-    "subscriptionEyebrow": "Monthly box",
-    "subscriptionHeadline": "12 fresh cookies, delivered to your door.",
-    "subscriptionSubcopy": "Cancel anytime · Free shipping",
-    "startSubscription": "Start orders",
     "promoTitle": "Ready to try something new?",
     "promoSubtitle": "Discover our limited editions and this month's favorites.",
     "promoCta": "View full menu",
@@ -209,12 +202,6 @@
       "buildPackLink": "View options",
       "buildPackCta": "Start building",
       "buildPackAlt": "Custom cookie box",
-      "subscriptionTitle": "Monthly orders",
-      "subscriptionLink": "Discover the club",
-      "subscriptionClub": "HAZOREX CLUB",
-      "subscriptionHeadline": "Weekly freshly baked deliveries",
-      "subscriptionSubcopy": "Cancel anytime · Shipping included",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Flash Deals",
       "flashLink": "See all deals",
       "flashProduct": "Assorted 9-Cookie Pack",
@@ -340,52 +327,9 @@
     "treeNuts": "TREE NUTS",
     "peanuts": "PEANUTS"
   },
-  "subscribe": {
-    "metaTitle": "orders Plans — HAZOREX",
-    "metaDesc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
-    "title": "orders Plans",
-    "deliveryBadge": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
-    "activePlan": "Active Plan",
-    "remaining": "Remaining",
-    "scheduledCount": "{{used}} of {{total}} deliveries scheduled this month",
-    "choosePlan": "Choose Your Plan",
-    "mostPopular": "Most Popular",
-    "perMonth": "/ mo.",
-    "schedule": "Schedule Deliveries",
-    "scheduleHint": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
-    "prevMonth": "Previous month",
-    "nextMonth": "Next month",
-    "yourDeliveries": "Your Deliveries",
-    "usedAll": "You've used all {{count}} deliveries on this plan. Upgrade to add more.",
-    "footnote": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
-    "removeDate": "Remove {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "Starter Plan",
-        "cadence": "2 DELIVERIES / MONTH",
-        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
-      },
-      "essential": {
-        "title": "Essential Plan",
-        "cadence": "4 DELIVERIES / MONTH",
-        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
-      },
-      "intermediate": {
-        "title": "Intermediate Plan",
-        "cadence": "6 DELIVERIES / MONTH",
-        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
-      },
-      "premium": {
-        "title": "Premium Plan",
-        "cadence": "8 DELIVERIES / MONTH",
-        "desc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
-      }
-    },
-    "yourPlan": "Your Hazorex Plan"
-  },
   "profile": {
     "metaTitle": "My Profile — HAZOREX",
-    "metaDesc": "Manage your HAZOREX account, orders, and orders.",
+    "metaDesc": "Manage your HAZOREX account and orders.",
     "title": "My Profile",
     "settings": "Settings",
     "city": "New York",
@@ -394,8 +338,6 @@
     "favorites": "Favorites",
     "level": "Level",
     "cookieFan": "Cookie Fan",
-    "currentPlan": "Current Plan",
-    "enthusiast": "Enthusiast Plan",
     "active": "Active",
     "recentOrders": "Recent Orders",
     "order": "Order #{{id}}",
@@ -441,26 +383,6 @@
     "thanks": "Thank you!",
     "thanksDesc": "Your cookies are on their way. A confirmation has been sent.",
     "backHome": "Back to home"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Subscribe to activate your deliveries and shop",
-    "dialogDesc": "Purchases and deliveries are available only to subscribed members.",
-    "freeShipping": "FREE delivery ($0) included in every plan!",
-    "viewPlans": "View orders plans",
-    "signInAndSubscribe": "Sign in and subscribe",
-    "keepBrowsing": "Keep browsing",
-    "bannerEyebrow": "Become a member",
-    "bannerTitle": "Subscribe to activate your deliveries",
-    "bannerSubcopy": "FREE delivery ($0) included in every plan!",
-    "bannerCta": "View plans",
-    "cartWarning": "You need an active orders to checkout.",
-    "cartCta": "Subscribe to buy",
-    "cartProcessing": "Processing…",
-    "cartConfirm": "Confirm and Pay Order",
-    "cartTerms": "By confirming your order, you accept the store's terms of service.",
-    "noActive": "You don't have an active orders. Subscribe to start scheduling deliveries.",
-    "scheduled": "Delivery scheduled",
-    "canceled": "Delivery canceled"
   },
   "checkout": {
     "secure": "Secure Checkout",
@@ -870,7 +792,7 @@
       "subprocessorsTitle": "Subprocessors",
       "subprocessorsP1": "To provide the service we rely on the following subprocessors: Lovable Cloud (hosting, database and authentication), Stripe (payment processing) and a transactional email provider. Each receives only the minimum data needed for its function.",
       "emailTitle": "Email",
-      "emailP1": "We only send transactional emails (order, orders and account-change confirmations). We do not run mass marketing campaigns. Each email includes an unsubscribe link that disables future sends to that address.",
+      "emailP1": "We only send transactional emails (order confirmations and account changes). We do not run mass marketing campaigns. Each email includes a link to stop receiving emails at that address.",
       "retentionTitle": "Retention and deletion",
       "retentionP1": "We keep your data while your account is active. If you wish to delete your account or request deletion of your personal data, write to the site's contact email and we will process the request.",
       "reportTitle": "How to report a security issue",
@@ -1022,11 +944,11 @@
     "footer": "© {{year}} {{sponsor}} · All rights reserved."
   },
   "unsubscribe": {
-    "metaTitle": "Unsubscribe · HAZOREX",
+    "metaTitle": "Stop receiving emails · HAZOREX",
     "heading": "Unsubscribe from emails",
     "loading": "Loading…",
     "confirmQuestion": "Confirm you want to stop receiving HAZOREX emails?",
-    "confirmBtn": "Confirm unsubscribe",
+    "confirmBtn": "Stop receiving emails",
     "done": "Done. You won't receive any more emails.",
     "already": "This email was already unsubscribed.",
     "invalid": "Invalid or expired link.",
@@ -1108,7 +1030,6 @@
     "shop": "Shop",
     "allCookies": "Cookies",
     "roulette": "Daily roulette",
-    "subscribe": "orders",
     "explore": "Explore",
     "account": "Account",
     "profile": "My profile",
@@ -1476,10 +1397,10 @@
   },
   "supportPage": {
     "metaTitle": "Customer support — HAZOREX",
-    "metaDesc": "Get in touch with the HAZOREX support team. Email us and browse FAQs about orders, delivery, orders, and the sweepstakes.",
+    "metaDesc": "Get in touch with the HAZOREX support team. Email us and browse FAQs about orders, delivery, and the sweepstakes.",
     "metaOg": "We're here to help. Email us at hazorex0@gmail.com.",
     "heroTitle": "How can we help?",
-    "heroSubtitle": "Our team is here to answer any questions about your orders, deliveries, orders, or the daily sweepstakes.",
+    "heroSubtitle": "Our team is here to answer questions about your orders, deliveries or the daily sweepstakes.",
     "contactTitle": "Contact us",
     "contactSubtitle": "We reply during business hours, usually within 24 hours.",
     "emailLabel": "Email",
@@ -1621,7 +1542,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
-    "metaDesc": "Discover gourmet cookies, custom packs and monthly orders at HAZOREX.",
+    "metaDesc": "Discover HAZOREX handcrafted cookies and custom packs.",
     "sliderHeading": "Inspired by your cravings",
     "sliderSub": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "seeMore": "See more",
@@ -1633,7 +1554,7 @@
   },
   "profilePage": {
     "metaTitle": "My Profile — HAZOREX",
-    "metaDesc": "Manage your HAZOREX account, orders and orders."
+    "metaDesc": "Manage your HAZOREX account and orders."
   },
   "shopPage": {
     "subtitle": "Buy by the piece · Secure checkout with Stripe",

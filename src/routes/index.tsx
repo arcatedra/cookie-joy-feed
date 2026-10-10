@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import i18n, { formatPrice } from "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus } from "lucide-react";
 import { useCookieCatalog } from "@/lib/cookie-catalog";
+import { useQuery } from "@tanstack/react-query";
+import { bestSellingCookieIds } from "@/lib/productos.functions";
 import { useStoresVisible } from "@/lib/store-visibility";
 import { CookieCatalogGrid } from "@/components/CookieCatalogGrid";
 import { CookiesTV } from "@/components/CookiesTV";
@@ -318,30 +320,33 @@ function CardShell({
 
 function BestSellersCard() {
   const { t } = useTranslation();
-  const items = [
-    { key: "classic", img: imgChocChunk },
-    { key: "redVelvet", img: imgCookiesCream },
-    { key: "tripleChoc", img: imgDoubleChoc },
-    { key: "oatRaisin", img: imgOatmeal },
-  ] as const;
+  const { data: products = [] } = useCookieCatalog();
+  const { data: ranking = [] } = useQuery({
+    queryKey: ["cookie-sales-ranking"], queryFn: () => bestSellingCookieIds(), staleTime: 60_000,
+  });
+  const order = new Map(ranking.map((id, index) => [id, index]));
+  const items = [...products].sort((a, b) =>
+    (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+    || a.id.localeCompare(b.id),
+  ).slice(0, 4);
   return (
     <CardShell
       title={t("home.cards.bestSellersTitle")}
-      link={{ to: "/menu", label: t("home.cards.bestSellersLink") }}
+      link={{ to: "/best-sellers", label: t("home.cards.bestSellersLink") }}
     >
       <div className="grid grid-cols-2 gap-2">
         {items.map((it) => (
-          <Link key={it.key} to="/menu" className="group">
-            <div className="aspect-square overflow-hidden rounded-sm bg-[#f7f7f7]">
+          <Link key={it.id} to="/shop" className="group">
+            <div className="aspect-square overflow-hidden rounded-sm bg-muted">
               <img
-                src={it.img}
-                alt={t(`home.cards.best.${it.key}`)}
+                src={it.imagen_url || imgBox}
+                alt={it.nombre}
                 loading="lazy"
                 className="h-full w-full object-cover transition group-hover:scale-105"
               />
             </div>
-            <p className="mt-1 line-clamp-1 text-[11px] text-[#444] group-hover:text-[#c7511f]">
-              {t(`home.cards.best.${it.key}`)}
+            <p className="mt-1 line-clamp-1 text-[11px] text-muted-foreground group-hover:text-primary">
+              {it.nombre}
             </p>
           </Link>
         ))}

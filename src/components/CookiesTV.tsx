@@ -35,6 +35,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { spanishCookieName } from "@/lib/cookie-catalog";
+import { resolveProductoForReel } from "@/lib/reel-catalog";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -129,30 +130,7 @@ export function reelProductKeyFromSlug(slug: string | null | undefined): string 
   return k && i18n.exists(k) ? k : undefined;
 }
 
-// Maps each reel's stable product_slug to the canonical productos.id (UUID)
-// seeded in the Supabase `productos` table. This keeps Reels and /shop in
-// sync: buying from a Reel adds the same product row (id, name, price)
-// that /shop reads directly from the database.
-const REEL_SLUG_TO_PRODUCTO_ID: Record<string, string> = {
-  "p-cchunk":     "a1111111-0000-0000-0000-000000000001", // Chocolate Chunk
-  "p-snicker":    "a1111111-0000-0000-0000-000000000008", // Snickerdoodle
-  "p-oatmeal":    "a1111111-0000-0000-0000-000000000003", // Oatmeal Raisin
-  "p-mint":       "a1111111-0000-0000-0000-000000000004", // Mint Chocolate
-  "p-pista":      "a1111111-0000-0000-0000-000000000005", // Pistachio
-  "p-triple":     "a1111111-0000-0000-0000-000000000006", // Triple Chocolate
-  "p-doublechoc": "a1111111-0000-0000-0000-000000000006", // Triple Chocolate (same image line)
-  "p-mm":         "a1111111-0000-0000-0000-000000000007", // M&M Festivo
-  "p-pb":         "a1111111-0000-0000-0000-000000000009", // Mantequilla de Maní Crujiente
-};
-export function resolveProductoForReel(
-  slug: string | null | undefined,
-  productosById: Map<string, Producto> | null | undefined,
-): Producto | null {
-  if (!slug || !productosById) return null;
-  const id = REEL_SLUG_TO_PRODUCTO_ID[slug];
-  if (!id) return null;
-  return productosById.get(id) ?? null;
-}
+export { resolveProductoForReel } from "@/lib/reel-catalog";
 function translateReelKey(
   value: string | null | undefined,
   slugFallback?: string | null,
@@ -753,6 +731,13 @@ export function CookiesTV() {
     return m;
   }, [productos]);
 
+  // Only show a reel when its actual flavor has an available catalog product.
+  // Keep records intact; filter the carousel and fullscreen view consistently.
+  const catalogReels = useMemo(
+    () => reels.filter((reel) => resolveProductoForReel(reel.product_slug, productosById)?.disponible),
+    [reels, productosById],
+  );
+
 
 
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
@@ -1012,7 +997,7 @@ export function CookiesTV() {
             </div>
           )}
           {!loading &&
-            reels.map((r, index) => (
+            catalogReels.map((r, index) => (
               <ReelCard
                 key={r.id}
                 reel={r}
@@ -1033,7 +1018,7 @@ export function CookiesTV() {
               />
             ))}
 
-          {!loading && reels.length === 0 && (
+          {!loading && catalogReels.length === 0 && (
             <p className="py-10 text-xs text-[#666]">Aún no hay reels. ¡Sé el primero!</p>
           )}
         </div>
@@ -1066,9 +1051,9 @@ export function CookiesTV() {
         />
       )}
 
-      {expandedIndex !== null && reels[expandedIndex] && (
+      {expandedIndex !== null && catalogReels[expandedIndex] && (
         <ExpandedReelModal
-          reels={reels}
+          reels={catalogReels}
           initialIndex={expandedIndex}
           onClose={() => setExpandedIndex(null)}
           likeCounts={likeCounts}

@@ -140,7 +140,6 @@
       "bestSellers": "Bestseller",
       "deals": "Offerte del giorno",
       "buildPack": "Crea la tua confezione",
-      "subscriptions": "Abbonamenti biscotti",
       "yourAccount": "Il tuo account",
       "ordersReturns": "Resi e ordini",
       "cart": "Il tuo carrello",
@@ -152,7 +151,6 @@
       "bestSellers": "Bestseller",
       "buildPack": "Crea un Pacchetto",
       "support": "Servizio Clienti",
-      "subscriptions": "Abbonamenti Biscotti",
       "shop": "🛍️ Negozio",
       "roulette": "🎰 Concorso",
       "drivers": "🛵 Diventa corriere",
@@ -175,7 +173,6 @@
   "nav": {
     "home": "Home",
     "explore": "Esplora",
-    "subscribe": "Abbonati",
     "profile": "Profilo"
   },
   "errors": {
@@ -185,8 +182,8 @@
     "didNotLoadDesc": "Qualcosa è andato storto da parte nostra. Puoi provare ad aggiornare o tornare alla home."
   },
   "home": {
-    "metaTitle": "HAZOREX — Biscotti Gourmet, Consegnati Mensilmente",
-    "metaDesc": "Scopri i biscotti gourmet artigianali e unisciti all'abbonamento mensile HAZOREX per delizie appena sfornate a casa tua.",
+    "metaTitle": "HAZOREX — Biscotti Artigianali Premium",
+    "metaDesc": "Scopri i biscotti artigianali e i pacchetti personalizzati HAZOREX.",
     "welcome": "Bentornato",
     "greeting": "Buongiorno, {{name}}!",
     "freshToday": "Nuove sfornate oggi",
@@ -195,10 +192,6 @@
     "trending": "Di tendenza",
     "categories": "Categorie in evidenza",
     "cookiePacks": "Confezioni di biscotti",
-    "subscriptionEyebrow": "Scatola mensile",
-    "subscriptionHeadline": "12 biscotti freschi, consegnati a casa tua.",
-    "subscriptionSubcopy": "Annulla in qualsiasi momento · Spedizione gratuita",
-    "startSubscription": "Inizia l'abbonamento",
     "promoTitle": "Pronto a provare qualcosa di nuovo?",
     "promoSubtitle": "Scopri le nostre edizioni limitate e i preferiti del mese.",
     "promoCta": "Vedi il menu completo",
@@ -209,12 +202,6 @@
       "buildPackLink": "Visualizza opzioni",
       "buildPackCta": "Inizia a comporre",
       "buildPackAlt": "Scatola di biscotti personalizzata",
-      "subscriptionTitle": "Abbonamento Mensile",
-      "subscriptionLink": "Scopri il club",
-      "subscriptionClub": "HAZOREX CLUB",
-      "subscriptionHeadline": "Consegne settimanali di biscotti appena sfornati",
-      "subscriptionSubcopy": "Annulla in qualsiasi momento · Spedizione inclusa",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Offerte Lampo",
       "flashLink": "Vedi tutte le offerte",
       "flashProduct": "Confezione assortita da 9 biscotti",
@@ -340,52 +327,9 @@
     "treeNuts": "FRUTTA A GUSCIO",
     "peanuts": "ARACHIDI"
   },
-  "subscribe": {
-    "metaTitle": "Piani di Abbonamento — HAZOREX",
-    "metaDesc": "lunedì, mercoledì e venerdì",
-    "title": "Piani di Abbonamento",
-    "deliveryBadge": "lunedì, mercoledì e venerdì",
-    "activePlan": "Piano Attivo",
-    "remaining": "Rimanenti",
-    "scheduledCount": "{{used}} di {{total}} consegne programmate questo mese",
-    "choosePlan": "Scegli il tuo piano",
-    "mostPopular": "Più Popolare",
-    "perMonth": "/ mese",
-    "schedule": "Programma le Consegne",
-    "scheduleHint": "lunedì, mercoledì e venerdì",
-    "prevMonth": "Mese precedente",
-    "nextMonth": "Mese successivo",
-    "yourDeliveries": "Le tue consegne",
-    "usedAll": "Hai utilizzato tutte le {{count}} consegne previste da questo piano. Effettua l'upgrade per aggiungerne altre.",
-    "footnote": "lunedì, mercoledì e venerdì",
-    "removeDate": "Rimuovi {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "Piano Starter",
-        "cadence": "2 CONSEGNE / MESE",
-        "desc": "2 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
-      },
-      "essential": {
-        "title": "Piano Essential",
-        "cadence": "4 CONSEGNE / MESE",
-        "desc": "4 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
-      },
-      "intermediate": {
-        "cadence": "6 CONSEGNE / MESE",
-        "desc": "6 CONSEGNE / MESE · lunedì, mercoledì e venerdì",
-        "title": "Piano Intermedio"
-      },
-      "premium": {
-        "title": "Piano Premium",
-        "cadence": "8 CONSEGNE / MESE",
-        "desc": "8 CONSEGNE / MESE · lunedì, mercoledì e venerdì"
-      }
-    },
-    "yourPlan": "Il tuo Piano Hazorex"
-  },
   "profile": {
     "metaTitle": "Il mio Profilo — HAZOREX",
-    "metaDesc": "Gestisci il tuo account, ordini e abbonamento HAZOREX.",
+    "metaDesc": "Gestisci il tuo account HAZOREX e i tuoi ordini.",
     "title": "Il mio Profilo",
     "settings": "Impostazioni",
     "city": "New York",
@@ -394,8 +338,6 @@
     "favorites": "Preferiti",
     "level": "Livello",
     "cookieFan": "Fan dei Biscotti",
-    "currentPlan": "Piano Attivo",
-    "enthusiast": "Piano Appassionato",
     "active": "Attivo",
     "recentOrders": "Ordini Recenti",
     "order": "Ordine #{{id}}",
@@ -441,26 +383,6 @@
     "thanks": "Grazie!",
     "thanksDesc": "I tuoi biscotti sono in arrivo. Ti è stata inviata una conferma.",
     "backHome": "Torna alla home"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Abbonati per attivare le tue consegne e fare acquisti",
-    "dialogDesc": "Gli acquisti e le consegne sono disponibili solo per i membri abbonati.",
-    "freeShipping": "Consegna GRATUITA ($0) inclusa in ogni piano!",
-    "viewPlans": "Visualizza piani di abbonamento",
-    "signInAndSubscribe": "Accedi e abbonati",
-    "keepBrowsing": "Continua a navigare",
-    "bannerEyebrow": "Diventa un membro",
-    "bannerTitle": "Abbonati per attivare le tue consegne",
-    "bannerSubcopy": "Consegna GRATUITA ($0) inclusa in ogni piano!",
-    "bannerCta": "Visualizza piani",
-    "cartWarning": "Hai bisogno di un abbonamento attivo per effettuare il checkout.",
-    "cartCta": "Abbonati per acquistare",
-    "cartProcessing": "Elaborazione…",
-    "cartConfirm": "Conferma e paga l'ordine",
-    "cartTerms": "Confermando l'ordine, accetti i termini di servizio del negozio.",
-    "noActive": "Non hai un abbonamento attivo. Abbonati per iniziare a programmare le consegne.",
-    "scheduled": "Consegna programmata",
-    "canceled": "Consegna annullata"
   },
   "checkout": {
     "secure": "Checkout Sicuro",
@@ -870,7 +792,7 @@
       "subprocessorsTitle": "Sub-processori",
       "subprocessorsP1": "Per fornire il servizio ci affidiamo ai seguenti sub-processori: Lovable Cloud (hosting, database e autenticazione), Stripe (elaborazione dei pagamenti) e un provider di email transazionali. Ciascuno riceve solo i dati minimi necessari per la sua funzione.",
       "emailTitle": "Email",
-      "emailP1": "Inviamo solo email transazionali (conferme di ordini, abbonamenti e modifiche all'account). Non conduciamo campagne di marketing di massa. Ogni email include un link per annullare l'iscrizione che disabilita futuri invii a quell'indirizzo.",
+      "emailP1": "Inviamo solo email transazionali (conferme di ordine e modifiche all’account). Non svolgiamo campagne di marketing di massa. Ogni email include un link per non ricevere altre email a questo indirizzo.",
       "retentionTitle": "Conservazione e cancellazione",
       "retentionP1": "Conserviamo i tuoi dati finché il tuo account è attivo. Se desideri cancellare il tuo account o richiedere la cancellazione dei tuoi dati personali, scrivi all'email di contatto del sito e processeremo la richiesta.",
       "reportTitle": "Come segnalare un problema di sicurezza",
@@ -1061,7 +983,6 @@
     "shop": "Shop",
     "allCookies": "Biscotti",
     "roulette": "Roulette del giorno",
-    "subscribe": "Abbonamento",
     "explore": "Esplora",
     "account": "Account",
     "profile": "Il mio profilo",
@@ -1421,7 +1342,7 @@
     "metaDesc": "Contatta il team di supporto HAZOREX. E-mail e FAQ su ordini, consegne, abbonamenti e concorso.",
     "metaOg": "Siamo qui per aiutarti. Scrivici a hazorex0@gmail.com.",
     "heroTitle": "Come possiamo aiutarti?",
-    "heroSubtitle": "Il nostro team è qui per rispondere a qualsiasi domanda su ordini, consegne, abbonamento o il concorso giornaliero.",
+    "heroSubtitle": "Il nostro team risponde alle domande su ordini, consegne e concorso giornaliero.",
     "contactTitle": "Contattaci",
     "contactSubtitle": "Rispondiamo negli orari lavorativi, di solito entro 24 ore.",
     "emailLabel": "E-mail",
@@ -1544,7 +1465,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Biscotti Artigianali Premium",
-    "metaDesc": "Scopri biscotti gourmet, pack personalizzati e abbonamenti mensili su HAZOREX.",
+    "metaDesc": "Scopri i biscotti artigianali e i pacchetti personalizzati HAZOREX.",
     "sliderHeading": "Ispirato alle tue voglie",
     "sliderSub": "lunedì, mercoledì e venerdì",
     "seeMore": "Vedi altro",
@@ -1556,7 +1477,7 @@
   },
   "profilePage": {
     "metaTitle": "Il mio profilo — HAZOREX",
-    "metaDesc": "Gestisci il tuo account HAZOREX, ordini e abbonamento."
+    "metaDesc": "Gestisci il tuo account HAZOREX e i tuoi ordini."
   },
   "shopPage": {
     "subtitle": "Acquisto a pezzo · Pagamento sicuro con Stripe",

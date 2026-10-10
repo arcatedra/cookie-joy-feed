@@ -7,6 +7,10 @@ export const Route = createFileRoute("/trust")({
     meta: [
       { title: i18n.t("trust.metaTitle") },
       { name: "description", content: i18n.t("trust.metaDesc") },
+      { property: "og:title", content: i18n.t("trust.metaTitle") },
+      { property: "og:description", content: i18n.t("trust.metaDesc") },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: TrustPage,

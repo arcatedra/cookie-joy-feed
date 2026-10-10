@@ -140,7 +140,6 @@
       "bestSellers": "Más vendidas",
       "deals": "Ofertas del día",
       "buildPack": "Crea tu pack",
-      "subscriptions": "pedidos de galletas",
       "yourAccount": "Tu cuenta",
       "ordersReturns": "Devoluciones y pedidos",
       "cart": "Tu carrito",
@@ -152,7 +151,6 @@
       "bestSellers": "Más Vendidas",
       "buildPack": "Crea tu Pack",
       "support": "Servicio al Cliente",
-      "subscriptions": "pedidos de Galletas",
       "shop": "🛍️ Tienda",
       "roulette": "🎰 Sorteo",
       "drivers": "🛵 Sé repartidor",
@@ -175,7 +173,6 @@
   "nav": {
     "home": "Inicio",
     "explore": "Explorar",
-    "subscribe": "Suscripción",
     "profile": "Perfil"
   },
   "errors": {
@@ -185,8 +182,8 @@
     "didNotLoadDesc": "Algo salió mal por nuestra parte. Prueba a recargar o vuelve al inicio."
   },
   "home": {
-    "metaTitle": "HAZOREX — Galletas gourmet, entregadas cada mes",
-    "metaDesc": "Descubre galletas gourmet artesanales y únete a la suscripción mensual de HAZOREX para recibir delicias recién horneadas en tu puerta.",
+    "metaTitle": "HAZOREX — Galletas Artesanales Premium",
+    "metaDesc": "Descubre las galletas artesanales y packs personalizados de HAZOREX.",
     "welcome": "Bienvenido de nuevo",
     "greeting": "¡Buenos días, {{name}}!",
     "freshToday": "Nuevas hornadas frescas hoy",
@@ -195,10 +192,6 @@
     "trending": "Tendencias",
     "categories": "Categorías destacadas",
     "cookiePacks": "Packs de galletas",
-    "subscriptionEyebrow": "Caja mensual",
-    "subscriptionHeadline": "12 galletas frescas, entregadas en tu puerta.",
-    "subscriptionSubcopy": "Cancela cuando quieras · Envío gratis",
-    "startSubscription": "Iniciar suscripción",
     "promoTitle": "¿Listo para probar lo nuevo?",
     "promoSubtitle": "Descubre nuestras ediciones limitadas y los favoritos del mes.",
     "promoCta": "Ver menú completo",
@@ -209,12 +202,6 @@
       "buildPackLink": "Ver opciones",
       "buildPackCta": "Empezar a armar",
       "buildPackAlt": "Caja de galletas personalizada",
-      "subscriptionTitle": "Suscripción Mensual",
-      "subscriptionLink": "Conocer el club",
-      "subscriptionClub": "CLUB HAZOREX",
-      "subscriptionHeadline": "Entregas semanales recién horneadas",
-      "subscriptionSubcopy": "Cancela cuando quieras · Envío incluido",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Ofertas Relámpago",
       "flashLink": "Ver todas las ofertas",
       "flashProduct": "Pack 9 Galletas Surtidas",
@@ -340,52 +327,9 @@
     "treeNuts": "FRUTOS SECOS",
     "peanuts": "MANÍ"
   },
-  "subscribe": {
-    "metaTitle": "Planes de suscripción — HAZOREX",
-    "metaDesc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
-    "title": "Planes de suscripción",
-    "deliveryBadge": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
-    "activePlan": "Plan activo",
-    "remaining": "Restantes",
-    "scheduledCount": "{{used}} de {{total}} entregas programadas este mes",
-    "choosePlan": "Elige tu plan",
-    "mostPopular": "Más popular",
-    "perMonth": "/ mes",
-    "schedule": "Programar entregas",
-    "scheduleHint": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
-    "prevMonth": "Mes anterior",
-    "nextMonth": "Mes siguiente",
-    "yourDeliveries": "Tus entregas",
-    "usedAll": "Ya usaste las {{count}} entregas de este plan. Sube de plan para añadir más.",
-    "footnote": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
-    "removeDate": "Quitar {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "Plan Inicial",
-        "cadence": "2 ENTREGAS / MES",
-        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
-      },
-      "essential": {
-        "title": "Plan Esencial",
-        "cadence": "4 ENTREGAS / MES",
-        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
-      },
-      "intermediate": {
-        "title": "Plan Intermedio",
-        "cadence": "6 ENTREGAS / MES",
-        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
-      },
-      "premium": {
-        "title": "Plan Premium",
-        "cadence": "8 ENTREGAS / MES",
-        "desc": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
-      }
-    },
-    "yourPlan": "Tu Plan Hazorex"
-  },
   "profile": {
     "metaTitle": "Mi perfil — HAZOREX",
-    "metaDesc": "Gestiona tu cuenta, pedidos y suscripción de HAZOREX.",
+    "metaDesc": "Administra tu cuenta HAZOREX y tus pedidos.",
     "title": "Mi perfil",
     "settings": "Ajustes",
     "city": "Nueva York",
@@ -394,8 +338,6 @@
     "favorites": "Favoritos",
     "level": "Nivel",
     "cookieFan": "Fan de galletas",
-    "currentPlan": "Plan actual",
-    "enthusiast": "Plan Entusiasta",
     "active": "Activo",
     "recentOrders": "Pedidos recientes",
     "order": "Pedido #{{id}}",
@@ -441,26 +383,6 @@
     "thanks": "¡Gracias!",
     "thanksDesc": "Tus galletas están en camino. Te hemos enviado una confirmación.",
     "backHome": "Volver al inicio"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Suscríbete para activar tus entregas y comprar",
-    "dialogDesc": "Las compras y entregas están disponibles solo para miembros suscritos.",
-    "freeShipping": "¡Delivery GRATIS ($0) incluido en todos los planes!",
-    "viewPlans": "Ver planes de suscripción",
-    "signInAndSubscribe": "Iniciar sesión y suscribirme",
-    "keepBrowsing": "Seguir explorando",
-    "bannerEyebrow": "Hazte miembro",
-    "bannerTitle": "Suscríbete para activar tus entregas",
-    "bannerSubcopy": "¡Delivery GRATIS ($0) incluido en todos tus planes!",
-    "bannerCta": "Ver planes",
-    "cartWarning": "Necesitas una suscripción activa para finalizar la compra.",
-    "cartCta": "Suscríbete para comprar",
-    "cartProcessing": "Procesando…",
-    "cartConfirm": "Confirmar y Pagar Pedido",
-    "cartTerms": "Al confirmar tu pedido, aceptas los términos de servicio de la tienda.",
-    "noActive": "No tienes una suscripción activa. Suscríbete para empezar a programar entregas.",
-    "scheduled": "Entrega programada",
-    "canceled": "Entrega cancelada"
   },
   "checkout": {
     "secure": "Pago Seguro",
@@ -870,7 +792,7 @@
       "subprocessorsTitle": "Subprocesadores",
       "subprocessorsP1": "Para proporcionar el servicio, dependemos de los siguientes subprocesadores: Lovable Cloud (hosting, base de datos y autenticación), Stripe (procesamiento de pagos) y un proveedor de correos electrónicos transaccionales. Cada uno recibe solo los datos mínimos necesarios para su función.",
       "emailTitle": "Correo electrónico",
-      "emailP1": "Solo enviamos correos electrónicos transaccionales (confirmaciones de pedido, suscripción y cambios en la cuenta). No realizamos campañas masivas de marketing. Cada correo electrónico incluye un enlace para cancelar la suscripción que deshabilita futuros envíos a esa dirección.",
+      "emailP1": "Solo enviamos correos electrónicos transaccionales (confirmaciones de pedido y cambios en la cuenta). No realizamos campañas masivas de marketing. Cada correo incluye un enlace para darte de baja de los correos y detener futuros envíos a esa dirección.",
       "retentionTitle": "Retención y eliminación",
       "retentionP1": "Mantenemos tus datos mientras tu cuenta esté activa. Si deseas eliminar tu cuenta o solicitar la eliminación de tus datos personales, escribe al correo electrónico de contacto del sitio y procesaremos la solicitud.",
       "reportTitle": "Cómo reportar un problema de seguridad",
@@ -1022,11 +944,11 @@
     "footer": "© {{year}} {{sponsor}} · Todos los derechos reservados."
   },
   "unsubscribe": {
-    "metaTitle": "Cancelar suscripción · HAZOREX",
-    "heading": "Cancelar suscripción a correos electrónicos",
+    "metaTitle": "Darte de baja de los correos · HAZOREX",
+    "heading": "Darte de baja de los correos",
     "loading": "Cargando...",
     "confirmQuestion": "¿Confirmas que quieres dejar de recibir correos de HAZOREX?",
-    "confirmBtn": "Confirmar cancelación de suscripción",
+    "confirmBtn": "Confirmar baja de correos",
     "done": "Hecho. No recibirás más correos electrónicos.",
     "already": "Este correo electrónico ya fue dado de baja.",
     "invalid": "Enlace inválido o expirado.",
@@ -1108,7 +1030,6 @@
     "shop": "Tienda",
     "allCookies": "Galletas",
     "roulette": "Ruleta del día",
-    "subscribe": "Suscripción",
     "explore": "Explorar",
     "account": "Cuenta",
     "profile": "Mi perfil",
@@ -1476,10 +1397,10 @@
   },
   "supportPage": {
     "metaTitle": "Atención al cliente — HAZOREX",
-    "metaDesc": "Contacta con el equipo de soporte de HAZOREX. Correo, preguntas frecuentes sobre pedidos, entregas, pedidos y sorteo.",
+    "metaDesc": "Contacta con el equipo de soporte de HAZOREX. Correo, preguntas frecuentes sobre pedidos, entregas y sorteo.",
     "metaOg": "Estamos aquí para ayudarte. Escríbenos a hazorex0@gmail.com.",
     "heroTitle": "¿En qué podemos ayudarte?",
-    "heroSubtitle": "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos, entregas, suscripción o el sorteo diario.",
+    "heroSubtitle": "Nuestro equipo está aquí para resolver dudas sobre tus pedidos, entregas o el sorteo diario.",
     "contactTitle": "Contáctanos",
     "contactSubtitle": "Respondemos en horario laboral, normalmente en menos de 24 horas.",
     "emailLabel": "Correo",
@@ -1634,7 +1555,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Galletas Artesanales Premium",
-    "metaDesc": "Descubre galletas gourmet, packs personalizados y pedidos mensuales en HAZOREX.",
+    "metaDesc": "Descubre las galletas artesanales y packs personalizados de HAZOREX.",
     "sliderHeading": "Inspirado en tus antojos",
     "sliderSub": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "seeMore": "Ver más",
@@ -1646,7 +1567,7 @@
   },
   "profilePage": {
     "metaTitle": "Mi Perfil — HAZOREX",
-    "metaDesc": "Administra tu cuenta HAZOREX, pedidos y suscripción."
+    "metaDesc": "Administra tu cuenta HAZOREX y tus pedidos."
   },
   "shopPage": {
     "subtitle": "Compra por unidad · Pago seguro con Stripe",

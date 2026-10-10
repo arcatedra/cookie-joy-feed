@@ -1,97 +1,90 @@
-# Correcciones de portada y bloques reservables de Hazorex
+# Continuación: bloques reservables de Hazorex
 
-## Orden y límites
-Primero completar y comprobar las cuatro correcciones pequeñas; después implementar los bloques reservables. Este plan requiere tu aprobación porque las correcciones abarcan más de tres archivos y los bloques cambian pagos y añaden información operativa.
+## Correcciones terminadas
+- “Magia de canela y azúcar” añade **Canela y azúcar**, no Snicker, al carrito.
+- Cookies & Cream, Nutella y el reel de pistacho con chocolate blanco quedan ocultos porque no tienen una coincidencia exacta de sabor en el catálogo. No se borraron registros.
+- Más Vendidas usa los mismos productos y nombres de la tienda, ordenados por ventas reales o por un orden fijo si no hay ventas.
+- Confianza y las traducciones ya no anuncian suscripciones comerciales; se conserva la baja de correos.
+- El envío del carrito muestra la promesa de entrega una sola vez.
+- Comprobaciones de portada, Confianza, carrito y compra local desde el reel de canela sin errores; 19 pruebas aisladas pasaron. No hubo cobros, publicaciones ni cambios en usuarios/clientes.
 
-- No publicar, borrar tablas ni borrar datos existentes.
-- No modificar ni borrar usuarios o clientes.
-- No efectuar cobros ni transferencias reales durante las pruebas.
-- Conservar pedidos históricos y sus importes; aplicar el nuevo modelo solo a pedidos nuevos después de su activación.
-- Mantener separados los ambientes de prueba y real, y conservar las protecciones contra cobros y transferencias duplicados.
+## Alcance de la aprobación
+Continuar el modelo de bloques solicitado. Las reglas de cálculo están preparadas y probadas, pero **no están conectadas a los cobros actuales**. Mantener el modelo nuevo inactivo hasta completar sus controles y pruebas.
 
-## 1. Correcciones pequeñas, antes de los bloques
-- **Reels:** corregir la asociación de “Magia de canela y azúcar” a “Canela y azúcar”. Ocultar Cookies & Cream y cualquier reel cuyo sabor no corresponda a un producto disponible. Revisar también las asociaciones de Nutella y chocolate doble: no sustituirlas arbitrariamente por triple chocolate. Ocultar significa dejar de mostrarlos, no borrar registros. Aplicar el mismo filtro al carrusel y a su vista ampliada.
-- **Más Vendidas de portada:** usar productos del catálogo común, con sus nombres e imágenes reales. Ordenar por las ventas reales ya disponibles; si no hay ventas, usar un orden fijo. No mostrar Clásica, Red Velvet ni otros sabores inventados.
-- **Confianza y textos:** dejar “confirmaciones de pedido y cambios en la cuenta”; revisar los textos visibles y títulos del sitio, en español e inglés y las otras traducciones disponibles, para retirar suscripciones comerciales. Conservar los enlaces de baja de correos, nombrados “darte de baja de los correos”. No alterar las notificaciones ni sus controles.
-- **Carrito de galletas:** quitar únicamente la repetición del texto de entrega. No cambiar el cobro, la propina ni la validación del mínimo.
-- Comprobar portada, reels ampliados, Confianza, Soporte y carrito en la vista previa; probar que los productos inexistentes se ocultan y los nombres coinciden con la tienda.
+No publicar, borrar datos/tablas ni modificar usuarios o clientes. Conservar importes y comportamiento de pedidos históricos. No efectuar cobros ni transferencias reales durante las pruebas.
 
-## 2. Cargo único del marketplace
-Reemplazar envío, servicio del 18% y cargo anterior por peso por **Entrega y servicio**, editable en administración:
+## 1. Cargo al cliente
+Reemplazar los cargos anteriores del marketplace por **Entrega y servicio**, con todos los importes editables en administración:
 
-| Peso del pedido | Cargo inicial |
+| Peso | Cargo |
 |---|---:|
 | Hasta 15 lb | $12 |
-| Más de 15 y hasta 30 lb | $25 |
-| Más de 30 y hasta 45 lb | $35 |
-| Más de 45 y hasta 80 lb | $35 + $0.70 por libra adicional sobre 45 |
+| Más de 15–30 lb | $25 |
+| Más de 30–45 lb | $35 |
+| Más de 45–80 lb | $35 + $0.70 por libra sobre 45 |
 
-- Bloquear pedidos superiores a 80 lb y pedir dividirlos; mostrar el aviso antes de pagar.
-- Recalcular con el peso real al preparar, sin saltarse la autorización disponible. Si hace falta cobrar más de lo autorizado, solicitar una nueva autorización, nunca un cargo sorpresa.
-- Las galletas mantienen su carrito separado, precios fijos, mínimo $12, cobro exacto y ningún cargo por peso.
-- Incorporar ventanas de entrega lunes, miércoles y viernes; usar horario de Nueva York, incluidos cambios de horario estacional.
+- Más de 80 lb: pedir dividir la compra antes de pagar.
+- Recalcular al preparar con peso real. Nunca cobrar por encima de lo autorizado sin nuevo consentimiento.
+- Galletas separadas: precios fijos, mínimo $12 y sin cargo por peso. No cambiar su cobro actual.
+- Ventanas de entrega lunes, miércoles y viernes en horario de Nueva York.
 
-## 3. Lobby y entrega opcional al apartamento
-- Entrega por defecto en puerta del edificio o lobby, visible al pedir y en Términos.
-- Servicio opcional: $5 con ascensor; $8 por escaleras de más de dos pisos, elegido por el cliente. Importes editables.
-- Presentarlo como servicio de Hazorex, nunca como propina ni cargo destinado al repartidor en la pantalla del cliente.
-- Internamente sumar el importe completo como bono de puerta del lote y mostrarlo al repartidor antes de aceptar; añadir 5 u 8 minutos a esa parada.
-- La propina permanece independiente, opcional y 100% para el repartidor.
+## 2. Puerta y propina
+- Lobby/puerta del edificio por defecto.
+- Apartamento opcional: ascensor $5; escaleras de más de dos pisos $8. Añadir 5/8 minutos a la parada.
+- Mostrarlo al cliente como servicio Hazorex, separado de la propina; internamente, el importe completo será bono al repartidor.
+- Propina opcional, íntegra al repartidor. Aumentos posteriores requieren consentimiento y confirmación del cobro.
 
-## 4. Lotes, reservas y asignación
-- Agrupar pedidos pagados por zona la noche anterior a cada día de entrega. Los pedidos solo autorizados no cuentan como pagados; mostrar en administración los que no estén listos para entrar al lote.
-- Separar **reserva de horario** de **lote asignado**, con duración de 1 a 4 horas; nunca más de 4.
-- Capacidad orientativa: 5 pedidos livianos por hora y 4 medianos o pesados. Mezclar cargas, considerar traslados, recogida, ventanas y bonos de puerta; no asignar todos los pesados a la misma persona si existen alternativas compatibles.
-- Marcar productos individuales de más de 8 lb y productos fríos. El encargado podrá indicar también artículos que requieren retorno seguro si el cliente está ausente.
-- Pantalla del repartidor: día, hora, zona, paradas, tamaño, artículos pesados, fríos, entregas al apartamento y pago; **sin libras**. Pesos visibles solo en administración.
-- Registro de presencia en recogida; botón administrativo “Asignar lote” con repartidores presentes y vehículos. Si no recibe asignación en 15 minutos, asignar automáticamente un lote compatible. Si no hay uno, avisar en lugar de asignar algo incompatible.
-- Lotes abiertos activables por administración. Reservas y asignaciones exclusivas: un lote, una persona, incluso si dos personas lo solicitan a la vez.
-- Permitir varios viajes, conservando un único lote. Ordenar paradas respetando ventanas, estimar el recorrido y ofrecer Google Maps por parada.
+## 3. Bloques, horarios y vehículos
+- Agrupar la noche anterior por zona solo pedidos efectivamente cobrados; identificar autorizaciones pendientes sin incluirlas como pagadas.
+- Reservas de 1–4 horas y lotes abiertos opcionales. Un lote activo por persona, incluso con solicitudes simultáneas.
+- Repartidor ve día/hora/zona/paradas/tamaño/marcas de pesado, frío y puerta/pago; nunca libras.
+- Registrar presencia; admin asigna a persona presente y compatible. Tras 15 minutos sin asignación, asignar automáticamente un lote compatible o avisar si no existe.
+- Estimar 5 paradas livianas/hora y 4 medianas/pesadas, incluyendo recogidas, trayectos y puerta; máximo 4 horas.
+- Varios viajes dentro del mismo lote, ordenados por ventanas; Google Maps por parada.
+- Límites por viaje: bici/e-bike 50 lb; bici de carga con vagón 200; moto 60; carro 400; van 1,000. Una parada indivisible no puede exceder la capacidad del vehículo.
+- Añadir bici de carga y bolsa térmica a la postulación. Fríos requieren bolsa térmica; marcar productos individuales de más de 8 lb.
 
-## 5. Vehículos y conservación
-Añadir bici de carga y declaración de bolsa térmica en la postulación. Límites editables por viaje: bici/e-bike 50 lb, bici de carga con vagón 200 lb, moto 60 lb, carro 400 lb, van 1,000 lb.
+## 4. Pago fijo y financiación
+- Admin fija el pago antes de publicar: sugerencia $40/4 paradas, ajustada al tiempo estimado.
+- Bloquear base inferior a $23/h estimada, sin contar propinas ni bonos. Mantener este mínimo como política interna editable, no como afirmación de cumplimiento legal.
+- Sin repartidor: +$5 a 12 horas y otros +$5 a 4 horas; avisos y aumentos únicos. No reducir pagos aceptados.
+- Pago fijo + bonos de puerta + propinas completas, sin descuentos por cancelaciones.
 
-La compatibilidad comprobará cada viaje, no solo el peso total del lote: varios viajes pueden permitir un lote mayor, pero una parada indivisible que supere el límite no se asignará a ese vehículo. Los productos fríos requieren bolsa térmica.
+**Decisión incluida en esta aprobación:** si el pago fijo, aumentos o bonos exceden los cargos de entrega disponibles, Hazorex cubre la diferencia con fondos propios. No se toma dinero destinado a la tienda ni se sube el cargo al cliente automáticamente.
 
-## 6. Pago fijo, protección mínima y aumentos
-- Sugerir $40 por 4 paradas, aproximadamente $10 por parada. El dueño cambia el precio de cada lote antes de publicarlo.
-- Mostrar en administración paradas, peso, zona, tiempo estimado, viajes y bonos de puerta. Repartidor: precio fijo + bonos de puerta + 100% de propinas.
-- Bloquear publicación si **el precio base, sin propinas ni bonos**, es inferior a $23 por hora estimada. Así los bonos no se usan para reducir la protección solicitada.
-- Conservar $23 como mínimo interno editable; comprobar la normativa vigente de NYC y su alcance antes de afirmar cumplimiento legal. Registrar fecha de revisión de la tarifa legal y avisar para revisar cada 1 de abril. El cálculo estimado no sustituye las obligaciones sobre tiempo real.
-- Lote sin repartidor: +$5 a 12 horas y otros +$5 a 4 horas antes, con avisos y sin repetir aumentos. No reducir un precio ya aceptado.
-- Registrar y liquidar pagos con controles de autorización y duplicados; sustituir el modelo anterior por parada solo para el nuevo modelo.
+Por ejemplo, cuatro pedidos pequeños aportan $48 de entrega. Un bloque estimado de dos horas exige al menos $46 de base; dos aumentos de $5 elevan ese compromiso a $56, antes de otros bonos. La diferencia debe financiarla Hazorex.
 
-## 7. Bono semanal y prioridad
-- Bono opcional inicialmente $25; todos los importes, umbrales y plazos editables en administración y publicados en /repartidores.
-- Requisitos: 5 lotes completados, 95% de puntualidad, cero cancelaciones con menos de 12 horas, promedio real de 4.7 y cero reclamos confirmados.
-- Calcular candidatos con registros reales y aprobar cada bono antes de pagarlo. Sin calificaciones suficientes, no inventar un promedio para concederlo.
-- Nunca descontar del pago fijo o las propinas. Cancelación tardía: perder prioridad durante 7 días; registrar la causa y fin del periodo.
-- Dar prioridad por calificaciones reales con criterios claros; no usar reseñas falsas.
+- Mostrar compromiso, fondos de pedidos y diferencia antes de publicar/aprobar un bono.
+- Mantener la parte financiada por pedidos vinculada a sus cobros originales. Registrar por separado cualquier aporte propio de Hazorex, con confirmación del dueño y protección contra duplicados.
+- Si faltan fondos, mostrar pendiente y avisar; no presentar un pago como realizado ni descontar el compromiso del repartidor.
+- Conservar separación prueba/real, reintentos y protección contra pagos dobles.
 
-## 8. Comunicación, entrega y reclamos
-- Mensajes de un toque: “Voy en camino”, “Llego en 5 minutos”, “Estoy en el lobby”, “Ya subo con tu pedido”, “Te lo dejé en la puerta”.
-- Aviso de salida hacia cada dirección con hora estimada; foto obligatoria al entregar y acceso del cliente a su propia foto.
-- Tras la entrega: “¡Tu pedido llegó! ¿Quieres agregar o subir la propina?”. El incremento requerirá consentimiento y confirmación de su cobro; no duplicar la propina original.
-- Calificación real de 1 a 5 vinculada al pedido entregado.
-- Ausencia: contactar desde la app, registrar espera de 5 minutos y dejar en lugar seguro con foto. Para fríos o artículos marcados de retorno, regresar y avisar al administrador.
-- Reclamos de rotos o faltantes con foto dentro de 24 horas; el dueño revisa y decide cualquier reembolso desde administración, con confirmación antes de ejecutarlo.
+## 5. Bonos, prioridad y tiempo
+- Bono semanal opcional $25, editable: mínimo 5 lotes, 95% puntualidad, 0 cancelaciones <12h, calificación real ≥4.7 y 0 reclamos confirmados. Admin revisa y aprueba.
+- No inventar calificaciones ni descontar pago fijo o propinas. Cancelación tardía: pérdida de prioridad por 7 días, con causa y fecha de finalización.
+- Registrar reserva, presencia, recogida, viajes, esperas y entregas. Exceso de más de 30 minutos: aviso y ajuste sugerido para revisión.
+- Reporte semanal previsto frente a real, pagos, propinas, bonos y ajustes.
+- Verificar normativa NYC vigente y su alcance antes de afirmar legalidad; la estimación no sustituye obligaciones sobre tiempo real.
 
-## 9. Tiempo y textos
-- Guardar reserva, presencia, recogida, inicio de viaje, espera y cada entrega.
-- Si el tiempo real supera al previsto más de 30 minutos, avisar y sugerir ajuste para revisión del dueño, sin alterar pagos automáticamente. No presentar el rechazo discrecional como exención de obligaciones legales.
-- Reporte semanal de tiempo previsto frente a real, importes, propinas, bonos y ajustes.
-- Actualizar /repartidores, Términos y Cómo funciona con pago fijo, viajes múltiples, criterios del bono, cargos nuevos, máximo 80 lb, lobby y apartamento opcional. Sin promesas de salario por hora.
+## 6. Entrega y atención
+- Mensajes de un toque, aviso de salida y ETA.
+- Foto obligatoria y acceso limitado al cliente correspondiente; calificación real 1–5 por pedido entregado.
+- Cliente ausente: contactar y esperar 5 minutos; lugar seguro y foto. Fríos/artículos de retorno vuelven y se avisa al admin.
+- Reclamos con foto dentro de 24 horas; reembolso decidido y confirmado por el dueño.
+- Actualizar Repartidores, Términos y Cómo funciona con cargos, lobby/puerta, viajes, pago fijo y criterios del bono, en español e inglés.
 
 ## Detalles técnicos y automatización
-- Ampliar la estructura operativa con configuración versionada, bloques, reservas, viajes, paradas, presencia, eventos de tiempo, bonos y reclamos; reutilizar lo existente donde sea compatible. No migrar importes históricos al nuevo cálculo.
-- Nuevas tablas con permisos explícitos y protección por propietario/repartidor asignado/administrador; validar importes, estado y asignaciones en el servidor.
-- Agrupación nocturna y vencimientos son tareas temporales completas dentro de PostgreSQL; verificar primero que la programación disponible permite ejecutarlas. No crear Supabase Edge Functions ni llamadas programadas HTTP con secretos incrustados.
-- Para la asignación tras 15 minutos, programar comprobaciones solo mientras haya presencias pendientes y detenerlas al vaciarse. Proponer frecuencia de un minuto durante esos periodos: puede realizar hasta 1,440 comprobaciones en un día completo y consumir recursos aun sin cambios; explicarlo antes de activarlo. Reservar los aumentos para sus plazos de 12/4 horas, con protección frente a ejecuciones repetidas.
-- Avisos externos por cambios registrados mediante un mecanismo verificado; si la conexión disponible no permite los avisos automáticos, señalar el bloqueo y no fingir que una pantalla abierta equivale a automatización nocturna.
-- No activar el nuevo modelo hasta tener todas las comprobaciones esenciales; el dueño publica personalmente.
+- Ampliar estructuras operativas y configuración versionada sin recalcular históricos; tablas nuevas con permisos explícitos y protección por cliente/repartidor/admin.
+- Verificar asignación, dinero y cambios de estado en el servidor; pruebas concurrentes para reserva exclusiva.
+- Agrupación nocturna, aumentos y revisión de presencias mediante programación interna de PostgreSQL, sin cron externo ni secretos en llamadas programadas.
+- Revisión cada minuto solo durante periodos con presencias pendientes; detenerla cuando no queden. Hasta 1,440 comprobaciones en un día completo de actividad; no mantenerla ejecutándose permanentemente sin necesidad.
+- Avisos automáticos mediante eventos persistidos y entrega verificada. Si la conexión disponible no permite completarlos, informar el bloqueo antes de activar el modelo.
+- Transferencias a tiendas y fondos destinados a ellas quedan protegidos. El aporte propio de Hazorex no reemplaza la vinculación de los pagos financiados por pedidos a sus cargos originales.
 
 ## Pruebas y entrega
-- Pruebas aisladas de pesos límite, cargos, 80 lb, bonos, mínimo por hora, viajes, fríos, ventanas, reserva concurrente, 15 minutos, aumentos únicos, tiempo real y autorización de fotos/reclamos.
-- Simular Stripe para cobros, propinas posteriores, ajustes y pagos; verificar que no se duplican ni cruzan ambientes.
-- Revisar las pantallas en vista previa. La prueba completa con cuentas requiere sesiones autorizadas; con el Supabase externo actual no inventar acceso ni modificar usuarios para conseguirlo.
-- Entregar lista corta de correcciones, pruebas realizadas y bloqueos. No publicar.
+- Pesos límite, 80 lb, puerta, vehículos/viajes/fríos, ventanas y mínimo horario.
+- Reserva simultánea, presencia y 15 minutos, aumentos sin duplicados y tiempo real.
+- Fotos/reclamos con acceso autorizado, bonos con registros reales y financiación insuficiente.
+- Stripe simulado: reintentos, consentimiento, propinas posteriores, aportes propios, históricos y separación de ambientes; sin pagos reales.
+- Revisar pantallas en vista previa. La prueba completa de cuentas requiere acceso autorizado; no crear ni elevar usuarios para fabricarla.
+- Entregar lista breve de cambios, pruebas y pendientes. **Tú publicas personalmente.**

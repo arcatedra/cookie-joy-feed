@@ -5,7 +5,14 @@ import i18n from '@/i18n'
 
 export const Route = createFileRoute('/unsubscribe')({
   component: UnsubscribePage,
-  head: () => ({ meta: [{ title: i18n.t('unsubscribe.metaTitle') }] }),
+  head: () => ({ meta: [
+    { title: i18n.t('unsubscribe.metaTitle') },
+    { name: 'description', content: i18n.t('unsubscribe.confirmQuestion') },
+    { property: 'og:title', content: i18n.t('unsubscribe.metaTitle') },
+    { property: 'og:description', content: i18n.t('unsubscribe.confirmQuestion') },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ] }),
 })
 
 type State = 'loading' | 'valid' | 'invalid' | 'already' | 'done' | 'error'

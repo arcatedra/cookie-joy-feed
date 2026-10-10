@@ -140,7 +140,6 @@
       "bestSellers": "Mais vendidos",
       "deals": "Ofertas do dia",
       "buildPack": "Monte seu pack",
-      "subscriptions": "Assinaturas de cookies",
       "yourAccount": "Sua conta",
       "ordersReturns": "Devoluções e pedidos",
       "cart": "Seu carrinho",
@@ -152,7 +151,6 @@
       "bestSellers": "Mais vendidos",
       "buildPack": "Monte um pack",
       "support": "Atendimento ao cliente",
-      "subscriptions": "Assinaturas de cookies",
       "shop": "🛍️ Loja",
       "roulette": "🎰 Sorteio",
       "drivers": "🛵 Seja entregador",
@@ -178,7 +176,6 @@
   "nav": {
     "home": "Início",
     "explore": "Explorar",
-    "subscribe": "Assinar",
     "profile": "Perfil"
   },
   "errors": {
@@ -188,8 +185,8 @@
     "didNotLoadDesc": "Algo deu errado. Tente atualizar ou volte ao início."
   },
   "home": {
-    "metaTitle": "HAZOREX — Cookies Gourmet entregues mensalmente",
-    "metaDesc": "Descubra cookies gourmet artesanais e assine a HAZOREX para receber guloseimas fresquinhas em casa.",
+    "metaTitle": "HAZOREX — Biscoitos Artesanais Premium",
+    "metaDesc": "Descubra biscoitos artesanais e packs personalizados HAZOREX.",
     "welcome": "Bem-vindo de volta",
     "greeting": "Bom dia, {{name}}!",
     "freshToday": "Fornadas fresquinhas de hoje",
@@ -198,10 +195,6 @@
     "trending": "Em alta agora",
     "categories": "Categorias em destaque",
     "cookiePacks": "Packs de cookies",
-    "subscriptionEyebrow": "Caixa mensal",
-    "subscriptionHeadline": "12 cookies fresquinhos, entregues na sua porta.",
-    "subscriptionSubcopy": "Cancele quando quiser · Frete grátis",
-    "startSubscription": "Começar assinatura",
     "promoTitle": "Pronto para experimentar algo novo?",
     "promoSubtitle": "Descubra nossas edições limitadas e os favoritos do mês.",
     "promoCta": "Ver cardápio completo",
@@ -212,12 +205,6 @@
       "buildPackLink": "Ver opções",
       "buildPackCta": "Começar a montar",
       "buildPackAlt": "Caixa de cookies personalizada",
-      "subscriptionTitle": "Assinatura mensal",
-      "subscriptionLink": "Conheça o clube",
-      "subscriptionClub": "HAZOREX CLUB",
-      "subscriptionHeadline": "Entregas semanais fresquinhas do forno",
-      "subscriptionSubcopy": "Cancele quando quiser · Frete incluído",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Ofertas relâmpago",
       "flashLink": "Ver todas as ofertas",
       "flashProduct": "Pack sortido de 9 cookies",
@@ -343,52 +330,9 @@
     "treeNuts": "OLEAGINOSAS",
     "peanuts": "AMENDOIM"
   },
-  "subscribe": {
-    "metaTitle": "Planos de assinatura — HAZOREX",
-    "metaDesc": "segunda, quarta e sexta-feira",
-    "title": "Planos de assinatura",
-    "deliveryBadge": "segunda, quarta e sexta-feira",
-    "activePlan": "Plano ativo",
-    "remaining": "Restante",
-    "scheduledCount": "{{used}} de {{total}} entregas agendadas este mês",
-    "choosePlan": "Escolha seu plano",
-    "mostPopular": "Mais popular",
-    "perMonth": "/ mês",
-    "schedule": "Agendar entregas",
-    "scheduleHint": "segunda, quarta e sexta-feira",
-    "prevMonth": "Mês anterior",
-    "nextMonth": "Próximo mês",
-    "yourDeliveries": "Suas entregas",
-    "usedAll": "Você usou todas as {{count}} entregas do plano. Faça upgrade para adicionar mais.",
-    "footnote": "segunda, quarta e sexta-feira",
-    "removeDate": "Remover {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "Plano Inicial",
-        "cadence": "2 ENTREGAS / MÊS",
-        "desc": "2 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
-      },
-      "essential": {
-        "title": "Plano Essencial",
-        "cadence": "4 ENTREGAS / MÊS",
-        "desc": "4 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
-      },
-      "intermediate": {
-        "title": "Plano Intermediário",
-        "cadence": "6 ENTREGAS / MÊS",
-        "desc": "6 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
-      },
-      "premium": {
-        "title": "Plano Premium",
-        "cadence": "8 ENTREGAS / MÊS",
-        "desc": "8 ENTREGAS / MÊS · segunda, quarta e sexta-feira"
-      }
-    },
-    "yourPlan": "Seu Plano Hazorex"
-  },
   "profile": {
     "metaTitle": "Meu perfil — HAZOREX",
-    "metaDesc": "Gerencie sua conta, pedidos e assinatura HAZOREX.",
+    "metaDesc": "Gerencie sua conta HAZOREX e seus pedidos.",
     "title": "Meu perfil",
     "settings": "Configurações",
     "city": "Nova York",
@@ -397,8 +341,6 @@
     "favorites": "Favoritos",
     "level": "Nível",
     "cookieFan": "Fã de Cookies",
-    "currentPlan": "Plano atual",
-    "enthusiast": "Plano Entusiasta",
     "active": "Ativo",
     "recentOrders": "Pedidos recentes",
     "order": "Pedido nº {{id}}",
@@ -444,26 +386,6 @@
     "thanks": "Obrigado!",
     "thanksDesc": "Seus cookies estão a caminho. Enviamos a confirmação por e-mail.",
     "backHome": "Voltar ao início"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Assine para ativar suas entregas e comprar",
-    "dialogDesc": "Compras e entregas estão disponíveis apenas para membros assinantes.",
-    "freeShipping": "Entrega GRÁTIS ($0) incluída em todos os planos!",
-    "viewPlans": "Ver planos de assinatura",
-    "signInAndSubscribe": "Entrar e assinar",
-    "keepBrowsing": "Continuar navegando",
-    "bannerEyebrow": "Torne-se membro",
-    "bannerTitle": "Assine para ativar suas entregas",
-    "bannerSubcopy": "Entrega GRÁTIS ($0) incluída em todos os planos!",
-    "bannerCta": "Ver planos",
-    "cartWarning": "Você precisa de uma assinatura ativa para finalizar a compra.",
-    "cartCta": "Assine para comprar",
-    "cartProcessing": "Processando…",
-    "cartConfirm": "Confirmar e Pagar Pedido",
-    "cartTerms": "Ao confirmar seu pedido, você aceita os termos de serviço da loja.",
-    "noActive": "Você não tem uma assinatura ativa. Assine para começar a agendar entregas.",
-    "scheduled": "Entrega agendada",
-    "canceled": "Entrega cancelada"
   },
   "checkout": {
     "secure": "Pagamento Seguro",
@@ -865,15 +787,15 @@
     "sections": {
       "authTitle": "Autenticação e acesso",
       "authP1": "O acesso à conta é feito com e-mail e senha ou login com o Google. As senhas nunca são armazenadas em texto simples: o gerenciamento e a verificação de credenciais são feitos pelo provedor de autenticação gerenciado da plataforma.",
-      "authP2": "Cada usuário só pode ler e modificar seu próprio perfil e seus próprios pedidos, assinaturas e doações. As funções administrativas são restritas e verificadas no lado do servidor.",
+      "authP2": "Cada usuário só pode ler e modificar seu próprio perfil e seus próprios pedidos. As funções administrativas são restritas e verificadas no lado do servidor.",
       "paymentsTitle": "Pagamentos",
       "paymentsP1": "Os pagamentos são processados através do Stripe. A HAZOREX não armazena nem tem acesso aos números completos de cartão, CVV ou datas de validade: esses dados viajam diretamente entre seu navegador e o Stripe usando seus elementos seguros.",
       "dataTitle": "Dados que coletamos",
-      "dataP1": "Coletamos apenas os dados necessários para operar o aplicativo: seu e-mail, um nome de exibição opcional, seu endereço de entrega quando você faz uma compra física e um histórico de pedidos, assinaturas e doações associados à sua conta.",
+      "dataP1": "Coletamos apenas os dados necessários para operar o aplicativo: seu e-mail, um nome de exibição opcional, seu endereço de entrega quando você faz uma compra física e um histórico de pedidos associados à sua conta.",
       "subprocessorsTitle": "Subprocessadores",
       "subprocessorsP1": "Para fornecer o serviço, contamos com os seguintes subprocessadores: Lovable Cloud (hospedagem, banco de dados e autenticação), Stripe (processamento de pagamentos) e um provedor de e-mail transacional. Cada um recebe apenas os dados mínimos necessários para sua função.",
       "emailTitle": "E-mail",
-      "emailP1": "Enviamos apenas e-mails transacionais (confirmações de pedido, assinatura e alteração de conta). Não realizamos campanhas de marketing em massa. Cada e-mail inclui um link para cancelar a inscrição que desativa envios futuros para esse endereço.",
+      "emailP1": "Enviamos apenas e-mails transacionais (confirmações de pedido e alterações de conta). Não realizamos campanhas de marketing em massa. Cada e-mail inclui um link para deixar de receber e-mails nesse endereço.",
       "retentionTitle": "Retenção e exclusão",
       "retentionP1": "Mantemos seus dados enquanto sua conta estiver ativa. Se desejar excluir sua conta ou solicitar a exclusão de seus dados pessoais, escreva para o e-mail de contato do site e processaremos a solicitação.",
       "reportTitle": "Como relatar um problema de segurança",
@@ -1064,7 +986,6 @@
     "shop": "Loja",
     "allCookies": "Biscoitos",
     "roulette": "Roleta diária",
-    "subscribe": "Assinatura",
     "explore": "Explorar",
     "account": "Conta",
     "profile": "Meu perfil",
@@ -1421,10 +1342,10 @@
   },
   "supportPage": {
     "metaTitle": "Atendimento ao cliente — HAZOREX",
-    "metaDesc": "Fale com a equipe de suporte da HAZOREX. E-mail e perguntas frequentes sobre pedidos, entregas, assinaturas e sorteio.",
+    "metaDesc": "Fale com a equipe de suporte da HAZOREX. E-mail e perguntas frequentes sobre pedidos, entregas e sorteio.",
     "metaOg": "Estamos aqui para ajudar. Escreva para hazorex0@gmail.com.",
     "heroTitle": "Como podemos ajudar?",
-    "heroSubtitle": "Nossa equipe está aqui para tirar qualquer dúvida sobre seus pedidos, entregas, assinatura ou o sorteio diário.",
+    "heroSubtitle": "Nossa equipe responde dúvidas sobre pedidos, entregas e sorteio diário.",
     "contactTitle": "Fale conosco",
     "contactSubtitle": "Respondemos em horário comercial, normalmente em menos de 24 horas.",
     "emailLabel": "E-mail",
@@ -1547,7 +1468,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Biscoitos Artesanais Premium",
-    "metaDesc": "Descubra biscoitos gourmet, packs personalizados e assinaturas mensais na HAZOREX.",
+    "metaDesc": "Descubra biscoitos artesanais e packs personalizados HAZOREX.",
     "sliderHeading": "Inspirado nos seus desejos",
     "sliderSub": "segunda, quarta e sexta-feira",
     "seeMore": "Ver mais",
@@ -1559,7 +1480,7 @@
   },
   "profilePage": {
     "metaTitle": "Meu Perfil — HAZOREX",
-    "metaDesc": "Gerencie sua conta HAZOREX, pedidos e assinatura."
+    "metaDesc": "Gerencie sua conta HAZOREX e seus pedidos."
   },
   "shopPage": {
     "subtitle": "Compre por unidade · Pagamento seguro com Stripe",
