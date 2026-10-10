@@ -878,6 +878,7 @@ export type Database = {
           creado_en: string
           credito_aplicado: number
           direccion_envio: Json
+          driver_pricing_model: string | null
           estado: string
           flujo_pago: string
           id: string
@@ -906,6 +907,7 @@ export type Database = {
           creado_en?: string
           credito_aplicado?: number
           direccion_envio: Json
+          driver_pricing_model?: string | null
           estado?: string
           flujo_pago?: string
           id?: string
@@ -934,6 +936,7 @@ export type Database = {
           creado_en?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          driver_pricing_model?: string | null
           estado?: string
           flujo_pago?: string
           id?: string
@@ -1493,6 +1496,7 @@ export type Database = {
           numero_pedido: string
           peso_total_kg: number
           peso_total_lb: number
+          pricing_model: string | null
           propina: number
           recogido_en: string | null
           repartidor_id: string | null
@@ -1543,6 +1547,7 @@ export type Database = {
           numero_pedido?: string
           peso_total_kg?: number
           peso_total_lb?: number
+          pricing_model?: string | null
           propina?: number
           recogido_en?: string | null
           repartidor_id?: string | null
@@ -1593,6 +1598,7 @@ export type Database = {
           numero_pedido?: string
           peso_total_kg?: number
           peso_total_lb?: number
+          pricing_model?: string | null
           propina?: number
           recogido_en?: string | null
           repartidor_id?: string | null

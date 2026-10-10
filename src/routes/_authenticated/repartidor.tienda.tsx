@@ -183,6 +183,7 @@ function DriverStorePage() {
           {(data.mios ?? []).length > 0 && (
             <section className="space-y-3">
               <h2 className="font-semibold">Mis pedidos en curso</h2>
+              <p className="font-bold">Total del lote: {money(sum(data.mios, (c) => c.gananciaUsd))}</p>
               {data.mios.map((c) => (
                 <article key={c.id} className="space-y-2 rounded-2xl border bg-card p-4">
                   <div className="flex items-center justify-between">
@@ -198,7 +199,7 @@ function DriverStorePage() {
                     <MapPin className="h-4 w-4" /> {c.clienteDireccion}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {c.articulos} artículos · {c.pesoLb} lb · Ganas {money(c.gananciaUsd)}
+                    {c.articulos} artículos · {c.pesoLb} lb
                   </p>
                   {NEXT[c.estadoEntrega ?? ""] && (
                     <Button className="w-full" disabled={busy === c.id} onClick={() => onAdvance(c)}>
@@ -260,7 +261,6 @@ function DriverStorePage() {
                             <article key={c.id} className="space-y-2 rounded-xl border bg-card p-4">
                               <div className="flex items-center justify-between">
                                 <span className="font-semibold">{c.tienda}</span>
-                                <span className="text-lg font-bold">{money(c.gananciaUsd)}</span>
                               </div>
                               <p className="flex items-center gap-2 text-sm">
                                 <Store className="h-4 w-4" /> {c.tiendaDireccion || "Dirección de la tienda"}
