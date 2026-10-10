@@ -2191,6 +2191,13 @@ export type Database = {
       }
       minutes_per_stop: { Args: never; Returns: number }
       promote_available_commissions: { Args: never; Returns: number }
+      public_cookie_sales: {
+        Args: never
+        Returns: {
+          producto_id: string
+          unidades: number
+        }[]
+      }
       recalculate_route_etas: {
         Args: { p_route_id: string }
         Returns: undefined
