@@ -3,10 +3,16 @@ import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import hazorexSymbolAsset from "@/assets/hazorex-symbol-gold-transparent.png.asset.json";
+import { useAuth } from "@/lib/auth";
+import { useStoresVisible } from "@/lib/store-visibility";
+import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_TEL } from "@/lib/contact";
+import { Button } from "@/components/ui/button";
 
 const hazorexSymbolUrl = hazorexSymbolAsset.url;
 
 export function SiteFooter() {
+  const { user, signOut } = useAuth();
+  const storesVisible = useStoresVisible();
   const { t } = useTranslation();
   const year = new Date().getFullYear();
 
@@ -38,6 +44,7 @@ export function SiteFooter() {
                     "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
                   )}
             </p>
+            <div className="mt-3 flex flex-col gap-2 text-sm"><a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a><a href={SUPPORT_TEL}>{SUPPORT_PHONE}</a></div>
           </div>
 
           {/* Tienda */}
@@ -46,7 +53,7 @@ export function SiteFooter() {
               {t("footer.shop", "Tienda")}
             </h3>
             <ul className="mt-3 space-y-2 font-serif text-sm">
-              <li><Link to="/tiendas" className="text-white/80 hover:text-[#E6C35C]">{t("footer.stores", "Tiendas")}</Link></li>
+              {storesVisible && <li><Link to="/tiendas" className="text-white/80 hover:text-[#E6C35C]">{t("footer.stores", "Tiendas")}</Link></li>}
               {sweepstakesEnabled && <li><Link to="/ruleta" className="text-white/80 hover:text-[#E6C35C]">{t("footer.roulette", "Ruleta del día")}</Link></li>}
               <li><Link to="/shop" className="text-white/80 hover:text-[#E6C35C]">{t("footer.explore", "Explorar")}</Link></li>
             </ul>
@@ -62,7 +69,7 @@ export function SiteFooter() {
               {sweepstakesEnabled && <li><Link to="/historial" className="text-white/80 hover:text-[#E6C35C]">{t("footer.history", "Historial")}</Link></li>}
               <li><Link to="/deliveries" className="text-white/80 hover:text-[#E6C35C]">{t("footer.deliveries", "Entregas")}</Link></li>
               <li><Link to="/repartidores" className="text-white/80 hover:text-[#E6C35C]">{t("footer.becomeDriver", "Sé repartidor")}</Link></li>
-              <li><Link to="/auth" className="text-white/80 hover:text-[#E6C35C]">{t("footer.signIn", "Iniciar sesión")}</Link></li>
+              <li>{user ? <Button variant="link" className="h-auto p-0 text-inherit" onClick={() => void signOut()}>{t("auth.signOut", "Cerrar sesión")}</Button> : <Link to="/auth" className="text-white/80 hover:text-[#E6C35C]">{t("footer.signIn", "Iniciar sesión")}</Link>}</li>
             </ul>
           </div>
 

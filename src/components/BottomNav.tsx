@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home as HomeIcon, Search, Package, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useStoresVisible } from "@/lib/store-visibility";
 
 const tabs = [
   { to: "/", key: "home", Icon: HomeIcon },
@@ -10,6 +11,7 @@ const tabs = [
 ] as const;
 
 export function BottomNav() {
+  const storesVisible = useStoresVisible();
   const location = useLocation();
   const pathname = location.pathname;
   const { t } = useTranslation();
@@ -17,7 +19,7 @@ export function BottomNav() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-md">
       <div className="m-3 flex items-center justify-between rounded-[32px] bg-primary px-2 py-2 shadow-2xl shadow-primary/20">
-        {tabs.map(({ to, key, Icon }) => {
+        {tabs.filter((tab) => tab.key !== "stores" || storesVisible).map(({ to, key, Icon }) => {
           const label = t(`nav.${key}`);
           const active = pathname === to;
           if (active) {

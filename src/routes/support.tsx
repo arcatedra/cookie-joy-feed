@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Mail, MessageCircle, HelpCircle, ShoppingBag, Truck, RotateCcw, Trophy, Phone, Clock } from "lucide-react";
 import i18n from "@/i18n";
 import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_TEL } from "@/lib/contact";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -24,7 +25,6 @@ export const Route = createFileRoute("/support")({
   component: SupportPage,
 });
 
-const SUPPORT_EMAIL = "soporte@hazorex.com";
 
 const ALL_FAQ_KEYS = [
   { Icon: ShoppingBag, id: "order" },
@@ -93,7 +93,7 @@ function SupportPage() {
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="flex items-center gap-3 rounded-xl border border-dashed border-border bg-background/50 p-4">
+            <a href={SUPPORT_TEL} className="flex items-center gap-3 rounded-xl border border-border bg-background/50 p-4">
               <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
                 <Phone className="h-5 w-5" />
               </div>
@@ -102,13 +102,10 @@ function SupportPage() {
                   {t("supportPage.phoneLabel", "Teléfono")}
                 </p>
                 <p className="text-sm font-bold text-card-foreground">
-                  {t("supportPage.phoneComingSoon", "Próximamente")}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("supportPage.phoneNote", "Línea directa en preparación")}
+                  {SUPPORT_PHONE}
                 </p>
               </div>
-            </div>
+            </a>
 
             <div className="flex items-center gap-3 rounded-xl border border-border bg-background p-4">
               <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
