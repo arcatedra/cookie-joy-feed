@@ -158,7 +158,13 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       const id = result.pedidoId ?? result.orderId;
       const row = (await state.db?.query(`SELECT propina,subtotal,stripe_checkout_session_id FROM ${table} WHERE id=$1`, [id]))?.rows[0];
       expect(row).toMatchObject({ propina: "3", subtotal: "20", stripe_checkout_session_id: `cs_test_${kind}` });
-      expect(state.stripe).toHaveBeenLastCalledWith("/v1/checkout/sessions", expect.objectContaining({ payment_intent_data: expect.objectContaining({ capture_method: "manual" }) }), "sandbox");
+      expect(state.stripe).toHaveBeenLastCalledWith("/v1/checkout/sessions", expect.objectContaining({ payment_intent_data: expect.objectContaining({ capture_method: kind === "cookie" ? "automatic" : "manual" }) }), "sandbox");
+      if (kind === "cookie") {
+        const request = state.stripe.mock.calls.at(-1)?.[1];
+        const amount = request.line_items.reduce((sum: number, line: any) => sum + line.price_data.unit_amount * line.quantity, 0);
+        expect(amount).toBe(2300);
+        expect(request.line_items.some((line: any) => /margen|hold|exprés|express/i.test(line.price_data.product_data.name))).toBe(false);
+      }
     });
   }
   it("dos familiares compran y se cobra a ambos; la dirección compartida bloquea únicamente el segundo bono", async () => {

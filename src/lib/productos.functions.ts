@@ -46,5 +46,5 @@ export const bestSellingCookieIds = createServerFn({ method: "GET" }).handler(as
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.rpc("public_cookie_sales");
   if (error) throw new Error("No se pudo consultar el orden de ventas.");
-  return (data ?? []).map((row) => row.producto_id);
+  return (data ?? []).map((row: { producto_id: string }) => row.producto_id);
 });

@@ -8,7 +8,6 @@ const TABLES = [
   "amoe_entries",
   "profiles",
   "donations",
-  "subscriptions",
   "user_tokens",
   "prize_pool_ledger",
   "sweepstakes_config",

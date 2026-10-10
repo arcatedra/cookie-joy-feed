@@ -1728,12 +1728,7 @@ function ReelCard({
             )}
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[11px] font-semibold">
-                {producto
-                  ? (() => {
-                      const k = translateReelKey(reel.product_name, reel.product_slug);
-                      return k && i18n.exists(k) ? t(k) : producto.nombre;
-                    })()
-                  : producto ? spanishCookieName(producto.nombre) : ""}
+                {producto ? spanishCookieName(producto.nombre) : ""}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(producto?.precio ?? reel.product_price ?? 0).toFixed(2)}

@@ -161,7 +161,7 @@ function AdminShippingPage() {
       <header>
         <h1 className="text-2xl font-bold">Configuración de envíos</h1>
         <p className="text-sm text-muted-foreground">
-          Por defecto los envíos se rigen por el conteo de la suscripción activa.
+          Por defecto los envíos usan las tarifas por pedido.
           Activa esta opción solo si quieres cobrar por milla recorrida (estilo Uber).
         </p>
       </header>
@@ -170,7 +170,7 @@ function AdminShippingPage() {
         <CardHeader>
           <CardTitle>Envíos por milla</CardTitle>
           <CardDescription>
-            Cuando está apagado, la app ignora estos valores y usa el modelo de suscripción.
+            Cuando está apagado, la app ignora estos valores y usa las tarifas por pedido.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

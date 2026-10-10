@@ -128,14 +128,14 @@ async function handleDeliveryCompleted(
   if (!orderId) throw new Error('payload.order_id requerido')
 
   const { data: order, error: orderErr } = await supabase
-    .from('subscription_orders')
-    .select('id, customer_id, recipient_name, delivery_address, package_code')
+    .from('pedidos')
+    .select('id, cliente_id, direccion_envio, numero_pedido')
     .eq('id', orderId)
     .maybeSingle()
   if (orderErr || !order) throw new Error(`Pedido no encontrado: ${orderErr?.message ?? orderId}`)
 
   const { data: authUser, error: authErr } = await (supabase as any).auth.admin.getUserById(
-    order.customer_id,
+    order.cliente_id,
   )
   if (authErr) throw new Error(`No se pudo leer el usuario: ${authErr.message}`)
   const recipient = String(authUser?.user?.email ?? '').toLowerCase()
@@ -144,11 +144,11 @@ async function handleDeliveryCompleted(
   // Nombre para saludo: profiles.full_name o recipient_name como fallback.
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name')
-    .eq('id', order.customer_id)
+    .select('name')
+    .eq('id', order.cliente_id)
     .maybeSingle()
   const customerName =
-    (profile?.full_name as string | undefined) || order.recipient_name || ''
+    (profile?.name as string | undefined) || ''
 
   const messageId = `delivery-completed-${notificationId}`
   const idempotencyKey = messageId
@@ -197,9 +197,9 @@ async function handleDeliveryCompleted(
   const tpl = TEMPLATES['delivery-completed']
   const element = React.createElement(tpl.component, {
     customerName,
-    deliveryAddress: order.delivery_address ?? '',
+    deliveryAddress: JSON.stringify(order.direccion_envio ?? {}),
     photoUrl,
-    packageCode: order.package_code ?? '',
+    packageCode: order.numero_pedido ?? '',
   })
   const html = await render(element)
   const text = await render(element, { plainText: true })
