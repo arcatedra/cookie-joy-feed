@@ -63,7 +63,3 @@ export const listMyPedidos = createServerFn({ method: "GET" })
     })) as Pedido[];
   });
 
-/** Hazorex ya no usa suscripciones: se mantiene por compatibilidad y no consulta nada. */
-export const getMySuscripcion = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async () => null as null | Record<string, any>);

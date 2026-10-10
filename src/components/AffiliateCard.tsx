@@ -228,7 +228,7 @@ export function AffiliateCard() {
           ) : commissions.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
               Aún no tienes comisiones. Comparte tu enlace de invitación para empezar a ganar $5
-              por cada suscripción activada.
+              por la primera compra cobrada de cada invitado elegible.
             </p>
           ) : (
             <ul className="mt-2 divide-y divide-border rounded-xl border border-border">

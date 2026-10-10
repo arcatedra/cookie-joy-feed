@@ -15,7 +15,7 @@ export const Route = createFileRoute("/support")({
           ? i18n.t("supportPage.metaDesc")
           : i18n.t(
               "supportPage.metaDescNoSweepstakes",
-              "Contacta con el equipo de soporte de HAZOREX. Correo y preguntas frecuentes sobre pedidos, entregas y suscripciones.",
+              "Contacta con el equipo de soporte de HAZOREX. Correo y preguntas frecuentes sobre pedidos y entregas.",
             ),
       },
       { property: "og:title", content: i18n.t("supportPage.metaTitle") },
@@ -48,7 +48,7 @@ function SupportPage() {
             ? t("supportPage.heroSubtitle")
             : t(
                 "supportPage.heroSubtitleNoSweepstakes",
-                "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos, entregas o suscripción.",
+                "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos y entregas.",
               )}
         </p>
       </section>

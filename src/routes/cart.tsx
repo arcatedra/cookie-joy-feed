@@ -1,3 +1,4 @@
+import { useCookieCatalog, legacyCookieProduct } from "@/lib/cookie-catalog";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
@@ -57,6 +58,7 @@ interface AddressForm {
 
 function CartPage() {
   const cart = useCart();
+  const { data: cookieProducts = [] } = useCookieCatalog();
   const { t } = useTranslation();
   const { user } = useAuth();
   const checkout = useServerFn(createCartCheckout);
@@ -177,7 +179,7 @@ function CartPage() {
         <section className="mt-5 divide-y divide-border rounded-2xl bg-card ring-1 ring-border">
           {cart.items.map((it) => {
             const resolvedKey = it.nameKey ?? deriveCartItemNameKey(it.id);
-            const displayName = resolvedKey && i18n.exists(resolvedKey) ? t(resolvedKey) : it.name;
+            const displayName = legacyCookieProduct(it.id, cookieProducts)?.nombre ?? it.name;
             return (
             <div key={it.id} className="flex items-center gap-3 p-3">
               <img

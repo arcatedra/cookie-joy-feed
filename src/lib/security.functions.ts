@@ -52,7 +52,7 @@ export const restoreSoftDeleted = createServerFn({ method: 'POST' })
   .inputValidator((input: { table: string; id: string }) =>
     z
       .object({
-        table: z.enum(['profiles', 'donations', 'subscriptions', 'winner_claims']),
+        table: z.enum(['profiles', 'donations', 'winner_claims']),
         id: z.string().uuid(),
       })
       .parse(input),

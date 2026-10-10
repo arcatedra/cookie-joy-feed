@@ -41,7 +41,6 @@ const readCspNonce = createIsomorphicFn()
   .server((): string | undefined => getCspNonce());
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
-import { SubscriptionGateProvider } from "@/lib/subscription-gate";
 import { TopNav } from "@/components/TopNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PreDrawCountdownBanner } from "@/components/PreDrawCountdownBanner";
@@ -186,7 +185,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <SubscriptionGateProvider>
           <CartProvider>
             <div className="min-h-screen bg-background">
               {sweepstakesEnabled && !hideSiteChrome && <PreDrawCountdownBanner />}
@@ -199,7 +197,6 @@ function RootComponent() {
             {/* Sonner injects a runtime <style> block — passing `nonce` lets it pass CSP. */}
             <Toaster position="top-center" richColors {...(nonce ? { nonce } : {})} />
           </CartProvider>
-        </SubscriptionGateProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -16,7 +16,7 @@ export interface DeliveryRoute {
   route_name: string;
   zone_id: string;
   dispatch_date: string;
-  delivery_day: 'lunes' | 'viernes';
+  delivery_day: 'lunes' | 'miercoles' | 'viernes';
   total_stops: number;
   fixed_pay: number;
   status: RouteStatus;

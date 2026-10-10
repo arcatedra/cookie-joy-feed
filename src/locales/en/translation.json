@@ -1567,7 +1567,7 @@
     },
     "s11": {
       "title": "11. Driver and store data",
-      "body": "If you apply as a driver we collect your contact details, vehicle, documents and tax number (SSN or ITIN). The tax number is stored encrypted and used only for tax obligations; no one on the team sees it in full. Your documents are kept in private storage accessible only to you and the admin team."
+      "body": "Hazorex collects driver contact, vehicle and application documents. Hazorex does not request or store SSN/ITIN or bank account numbers. Background-check information is entered directly with Checkr; payment-account information is entered securely with Stripe."
     },
     "s12": {
       "title": "12. Address and deliveries",

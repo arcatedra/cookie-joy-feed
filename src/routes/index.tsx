@@ -138,7 +138,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Subscription promo banner (hidden when already subscribed) */}
+      
       <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
       </section>
 

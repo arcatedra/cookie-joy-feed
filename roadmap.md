@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Nueva solicitud: bloques reservables (después de los nueve cambios)
+- [ ] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo.
+- [ ] Mostrar plan y esperar aprobación antes de reemplazar cargos/pagos del marketplace.
+- [ ] Implementar y probar el modelo aprobado sin publicar ni borrar datos; pendiente de aprobación del nuevo plan.
+
 ## Apertura: cambios solicitados el 9 de octubre
 
 - [ ] Presentar el plan completo y esperar aprobación antes de cambios de pagos o más de tres archivos.
