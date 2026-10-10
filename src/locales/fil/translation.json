@@ -140,7 +140,7 @@
       "bestSellers": "Pinakamabili",
       "deals": "Mga deal ngayon",
       "buildPack": "Gumawa ng pack",
-      "subscriptions": "Cookie subscriptions",
+      "subscriptions": "Cookie pedidos",
       "yourAccount": "Iyong account",
       "ordersReturns": "Mga isasauli at order",
       "cart": "Iyong cart",
@@ -152,7 +152,7 @@
       "bestSellers": "Pinakamabili",
       "buildPack": "Gumawa ng pack",
       "support": "Customer Service",
-      "subscriptions": "Cookie subscriptions",
+      "subscriptions": "Cookie pedidos",
       "shop": "🛍️ Tindahan",
       "roulette": "🎰 Sweepstakes",
       "drivers": "🛵 Maging driver",
@@ -201,7 +201,7 @@
     "subscriptionEyebrow": "Buwanang kahon",
     "subscriptionHeadline": "12 sariwang cookies, ipinapadala sa iyo.",
     "subscriptionSubcopy": "Kanselahin anumang oras · Libreng padala",
-    "startSubscription": "Magsimula ng subscription",
+    "startSubscription": "Magsimula ng pedidos",
     "promoTitle": "Handa nang sumubok ng bago?",
     "promoSubtitle": "Tuklasin ang aming limited edition at paboritong cookies ng buwan.",
     "promoCta": "Tingnan ang buong menu",
@@ -212,7 +212,7 @@
       "buildPackLink": "Tingnan ang opsyon",
       "buildPackCta": "Simulan",
       "buildPackAlt": "Custom cookie box",
-      "subscriptionTitle": "Buwanang Subscription",
+      "subscriptionTitle": "Buwanang pedidos",
       "subscriptionLink": "Tuklasin ang club",
       "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Lingguhang sariwang inihurnong padala",
@@ -344,9 +344,9 @@
     "peanuts": "MANI"
   },
   "subscribe": {
-    "metaTitle": "Mga Subscription Plan — HAZOREX",
+    "metaTitle": "Mga pedidos Plan — HAZOREX",
     "metaDesc": "Lunes, Miyerkules at Biyernes",
-    "title": "Mga Subscription Plan",
+    "title": "Mga pedidos Plan",
     "deliveryBadge": "Lunes, Miyerkules at Biyernes",
     "activePlan": "Aktibong Plan",
     "remaining": "Natitira",
@@ -388,7 +388,7 @@
   },
   "profile": {
     "metaTitle": "Aking Profile — HAZOREX",
-    "metaDesc": "Pamahalaan ang iyong HAZOREX account, mga order, at subscription.",
+    "metaDesc": "Pamahalaan ang iyong HAZOREX account, mga order, at pedidos.",
     "title": "Aking Profile",
     "settings": "Mga setting",
     "city": "New York",
@@ -449,19 +449,19 @@
     "dialogTitle": "Mag-subscribe para i-activate ang iyong mga delivery at bumili",
     "dialogDesc": "Ang mga pagbili at delivery ay para lang sa mga subscribed na miyembro.",
     "freeShipping": "LIBRENG delivery ($0) kasama sa lahat ng plano!",
-    "viewPlans": "Tingnan ang mga subscription plan",
+    "viewPlans": "Tingnan ang mga pedidos plan",
     "signInAndSubscribe": "Mag-sign in at mag-subscribe",
     "keepBrowsing": "Magpatuloy sa pag-browse",
     "bannerEyebrow": "Maging miyembro",
     "bannerTitle": "Mag-subscribe para i-activate ang iyong mga delivery",
     "bannerSubcopy": "LIBRENG delivery ($0) kasama sa lahat ng plano!",
     "bannerCta": "Tingnan ang mga plano",
-    "cartWarning": "Kailangan mo ng aktibong subscription para mag-checkout.",
+    "cartWarning": "Kailangan mo ng aktibong pedidos para mag-checkout.",
     "cartCta": "Mag-subscribe para bumili",
     "cartProcessing": "Pinoproseso…",
     "cartConfirm": "Kumpirmahin at Bayaran ang Order",
     "cartTerms": "Sa pag-confirm ng iyong order, tinatanggap mo ang mga tuntunin ng tindahan.",
-    "noActive": "Wala kang aktibong subscription. Mag-subscribe para magsimulang mag-schedule ng delivery.",
+    "noActive": "Wala kang aktibong pedidos. Mag-subscribe para magsimulang mag-schedule ng delivery.",
     "scheduled": "Naka-schedule ang delivery",
     "canceled": "Kinansela ang delivery"
   },
@@ -865,15 +865,15 @@
     "sections": {
       "authTitle": "Pagpapatunay at pag-access",
       "authP1": "Ang pag-access sa account ay ginagawa gamit ang email at password o Google sign-in. Ang mga password ay hindi kailanman iniimbak sa plain text: ang pamamahala at pag-verify ng kredensyal ay pinangangasiwaan ng managed authentication provider ng platform.",
-      "authP2": "Ang bawat user ay maaari lamang basahin at baguhin ang kanilang sariling profile at ang kanilang sariling mga order, subscription at donasyon. Ang mga tungkuling administratibo ay limitado at vini-verify sa server-side.",
+      "authP2": "Ang bawat user ay maaari lamang basahin at baguhin ang kanilang sariling profile at ang kanilang sariling mga order, pedidos at donasyon. Ang mga tungkuling administratibo ay limitado at vini-verify sa server-side.",
       "paymentsTitle": "Mga Pagbabayad",
       "paymentsP1": "Ang mga pagbabayad ay pinoproseso sa pamamagitan ng Stripe. Hindi iniimbak o may access ang HAZOREX sa buong numero ng card, CVV o mga petsa ng expiration: ang data na ito ay direktang naglalakbay sa pagitan ng iyong browser at Stripe gamit ang kanilang mga secure element.",
       "dataTitle": "Data na aming kinokolekta",
-      "dataP1": "Kinokolekta lamang namin ang data na kinakailangan upang mapatakbo ang aplikasyon: iyong email, isang opsyonal na display name, iyong shipping address kapag gumawa ka ng isang pisikal na pagbili, at isang kasaysayan ng mga order, subscription at donasyon na nauugnay sa iyong account.",
+      "dataP1": "Kinokolekta lamang namin ang data na kinakailangan upang mapatakbo ang aplikasyon: iyong email, isang opsyonal na display name, iyong shipping address kapag gumawa ka ng isang pisikal na pagbili, at isang kasaysayan ng mga order, pedidos at donasyon na nauugnay sa iyong account.",
       "subprocessorsTitle": "Mga Subprocessor",
       "subprocessorsP1": "Upang maibigay ang serbisyo, umaasa kami sa mga sumusunod na subprocessor: Lovable Cloud (hosting, database at authentication), Stripe (payment processing) at isang transactional email provider. Bawat isa ay tumatanggap lamang ng pinakamababang data na kailangan para sa function nito.",
       "emailTitle": "Email",
-      "emailP1": "Nagpapadala lamang kami ng mga transactional email (mga kumpirmasyon sa order, subscription at pagbabago ng account). Hindi kami nagpapatakbo ng mga mass marketing campaign. Bawat email ay may kasamang unsubscribe link na nagdi-disable ng mga susunod na pagpapadala sa address na iyon.",
+      "emailP1": "Nagpapadala lamang kami ng mga transactional email (mga kumpirmasyon sa order, pedidos at pagbabago ng account). Hindi kami nagpapatakbo ng mga mass marketing campaign. Bawat email ay may kasamang unsubscribe link na nagdi-disable ng mga susunod na pagpapadala sa address na iyon.",
       "retentionTitle": "Pagpapanatili at pagtanggal",
       "retentionP1": "Pinapanatili namin ang iyong data habang aktibo ang iyong account. Kung nais mong tanggalin ang iyong account o humiling ng pagtanggal ng iyong personal na data, sumulat sa contact email ng site at ipoproseso namin ang kahilingan.",
       "reportTitle": "Paano mag-ulat ng isyu sa seguridad",
@@ -1064,7 +1064,7 @@
     "shop": "Tindahan",
     "allCookies": "Cookies",
     "roulette": "Araw-araw na ruleta",
-    "subscribe": "Subscription",
+    "subscribe": "pedidos",
     "explore": "Tuklasin",
     "account": "Account",
     "profile": "Aking profile",
@@ -1421,10 +1421,10 @@
   },
   "supportPage": {
     "metaTitle": "Customer support — HAZOREX",
-    "metaDesc": "Makipag-ugnayan sa HAZOREX support team. Email at mga FAQ tungkol sa mga order, delivery, subscription, at sweepstakes.",
+    "metaDesc": "Makipag-ugnayan sa HAZOREX support team. Email at mga FAQ tungkol sa mga order, delivery, pedidos, at sweepstakes.",
     "metaOg": "Nandito kami para tumulong. I-email kami sa hazorex0@gmail.com.",
     "heroTitle": "Paano ka namin matutulungan?",
-    "heroSubtitle": "Nandito ang aming team para sagutin ang mga tanong mo tungkol sa iyong mga order, delivery, subscription, o araw-araw na sweepstakes.",
+    "heroSubtitle": "Nandito ang aming team para sagutin ang mga tanong mo tungkol sa iyong mga order, delivery, pedidos, o araw-araw na sweepstakes.",
     "contactTitle": "Makipag-ugnayan",
     "contactSubtitle": "Sumasagot kami tuwing business hours, karaniwang sa loob ng 24 oras.",
     "emailLabel": "Email",
@@ -1441,8 +1441,8 @@
         "a": "Ang oras ng delivery ay depende sa iyong lugar. Makakatanggap ka ng mga update sa email sa bawat yugto ng shipment mo."
       },
       "cancel": {
-        "q": "Paano ko kakanselahin ang subscription ko?",
-        "a": "Pumunta sa iyong profile, buksan ang aktibong subscription, at pindutin ang cancel. Kung kailangan mo ng tulong, i-email kami sa hazorex0@gmail.com."
+        "q": "¿Cuál es el pedido mínimo?",
+        "a": "El pedido mínimo de galletas es $12 en productos."
       },
       "sweepstakes": {
         "q": "Paano sumali sa araw-araw na sweepstakes?",
@@ -1536,7 +1536,8 @@
     "remove": "alisin",
     "back": "balik",
     "checkoutError": "Hindi ma-start ang bayad",
-    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
+    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
@@ -1546,7 +1547,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
-    "metaDesc": "Tuklasin ang gourmet cookies, custom packs at monthly subscriptions sa HAZOREX.",
+    "metaDesc": "Tuklasin ang gourmet cookies, custom packs at monthly pedidos sa HAZOREX.",
     "sliderHeading": "Inspirado sa iyong crave",
     "sliderSub": "Lunes, Miyerkules at Biyernes",
     "seeMore": "Tingnan pa",
@@ -1558,7 +1559,7 @@
   },
   "profilePage": {
     "metaTitle": "Aking Profile — HAZOREX",
-    "metaDesc": "Pamahalaan ang iyong HAZOREX account, order at subscription."
+    "metaDesc": "Pamahalaan ang iyong HAZOREX account, order at pedidos."
   },
   "shopPage": {
     "subtitle": "Bilhin bawat piraso · Ligtas na checkout via Stripe",
@@ -1663,5 +1664,6 @@
       "sat": "Sabado",
       "sun": "Linggo"
     }
-  }
+  },
+  "deliveryPromise": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
 }

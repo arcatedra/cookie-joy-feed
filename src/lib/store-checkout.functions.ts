@@ -1,3 +1,4 @@
+import { stopCompensation } from "./cookie-order-rules";
 /**
  * Checkout del marketplace de tiendas.
  * Crea el pedido de tienda y abre un pago con RESERVA (capture_method: manual).
@@ -183,11 +184,11 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         costo_envio: shippingCents / 100,
         cargo_servicio: serviceCents / 100,
         tramo: tier.tier,
-        envio_repartidor: tier.driverCents / 100,
+        envio_repartidor: stopCompensation(totalLb).baseCents / 100,
         envio_empresa: tier.companyCents / 100,
         propina: tipCents / 100,
         cargo_peso: weightCents / 100,
-        cargo_peso_repartidor: weightCents / 100,
+        cargo_peso_repartidor: stopCompensation(totalLb).driverWeightCents / 100,
         peso_total_lb: totalLb,
         fecha_entrega: data.fechaEntrega ?? null,
         credito_aplicado: creditCents / 100,

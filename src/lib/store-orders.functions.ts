@@ -1,3 +1,4 @@
+import { stopCompensation } from "./cookie-order-rules";
 /**
  * Pedidos del marketplace: consulta, avance de la tienda y COBRO final.
  *
@@ -244,10 +245,10 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         cargo_servicio: serviceCents / 100,
         costo_envio: shippingCents / 100,
         tramo: tier.tier,
-        envio_repartidor: tier.driverCents / 100,
+        envio_repartidor: order.pricing_model === "batch_v1" ? stopCompensation(realLb).baseCents / 100 : Number(order.envio_repartidor),
         envio_empresa: tier.companyCents / 100,
         cargo_peso: weightCents / 100,
-        cargo_peso_repartidor: weightCents / 100,
+        cargo_peso_repartidor: order.pricing_model === "batch_v1" ? stopCompensation(realLb).driverWeightCents / 100 : Number(order.cargo_peso_repartidor),
         peso_total_lb: realLb,
         capturado_en: new Date().toISOString(),
         captura_error: null,
