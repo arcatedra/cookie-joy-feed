@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertCookieMinimum } from "./cookie-order-rules";
 
 interface StripeSession {
   id: string;
@@ -15,8 +16,6 @@ const itemSchema = z.object({
   price: z.number().positive().max(10000),
   qty: z.number().int().min(1).max(99),
   image: z.string().max(2000).optional(),
-  substitutionMode: z.enum(["best_match", "specific", "refund"]).default("best_match"),
-  substituteIds: z.array(z.string().uuid()).max(3).default([]),
 });
 
 const addressSchema = z.object({
@@ -32,15 +31,14 @@ const addressSchema = z.object({
 const schema = z.object({
   items: z.array(itemSchema).min(1).max(40),
   address: addressSchema,
-  shipping: z.enum(["standard", "express"]).default("standard"),
+  shipping: z.literal("standard").default("standard"),
   propina: z.number().finite().min(0).max(200).default(0),
   usarSaldo: z.boolean().default(true),
   locale: z.enum(["es", "en"]).default("es"),
 });
 
 const SHIPPING_RATES = {
-  standard: { label: "Envío estándar", amount: 0 },
-  express: { label: "Envío exprés", amount: 499 },
+  standard: { label: "Entrega programada", amount: 0 },
 } as const;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -103,8 +101,6 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         price: p.precio,
         qty: it.qty,
         image: it.image,
-        substitutionMode: it.substitutionMode,
-        substituteIds: it.substituteIds,
       };
       }
       const price = resolveStaticPrice(it.id, it.price);
@@ -117,8 +113,6 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         price,
         qty: it.qty,
         image: it.image,
-        substitutionMode: it.substitutionMode,
-        substituteIds: it.substituteIds,
       };
     });
 
@@ -128,29 +122,13 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       0,
     );
     const tipCents = Math.round(data.propina * 100);
+    assertCookieMinimum(subtotalCents);
     const grossCents = subtotalCents + shippingRate.amount + tipCents;
     let creditCents = 0;
     let totalCents = grossCents;
 
-    // ---- Margen de autorización -----------------------------------------
-    // Se reserva (autoriza) el estimado + un margen, y al terminar el empaque
-    // se captura solo el monto real. Ver /admin/empaque.
-    let bufferPct = 15;
-    let bufferMinCents = 500;
-    {
-      const { data: cfg } = await supabase.rpc("auth_buffer_settings" as never);
-      const row = (Array.isArray(cfg) ? cfg[0] : cfg) as
-        | { pct?: number; min_cents?: number }
-        | null
-        | undefined;
-      if (row?.pct != null) bufferPct = Number(row.pct);
-      if (row?.min_cents != null) bufferMinCents = Number(row.min_cents);
-    }
-    let bufferCents = Math.max(
-      Math.round((subtotalCents * bufferPct) / 100),
-      bufferMinCents,
-    );
-    let authorizedCents = totalCents + bufferCents;
+    // Own cookies have fixed prices: charge exactly the payable total.
+    let authorizedCents = totalCents;
 
 
 
@@ -169,7 +147,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         moneda: "USD",
         direccion_envio: data.address,
         metodo_pago: "stripe",
-        flujo_pago: "autorizacion_diferida",
+        flujo_pago: "captura_inmediata",
         monto_autorizado: authorizedCents / 100,
       })
       .select("id, numero_pedido")
@@ -181,8 +159,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
 
     if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "cookie", pedidoRow.id, Math.max(0, Math.min(grossCents - 100, subtotalCents + shippingRate.amount)), env);
     totalCents = grossCents - creditCents;
-    bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
-    authorizedCents = totalCents + bufferCents;
+    authorizedCents = totalCents;
     const { error: totalsError } = await supabaseAdmin.from("pedidos").update({ credito_aplicado: creditCents / 100, total: totalCents / 100, monto_autorizado: authorizedCents / 100 }).eq("id", pedidoRow.id);
     if (totalsError) {
       await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
@@ -197,8 +174,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       precio_unitario: it.price,
       cantidad: it.qty,
       subtotal_item: Math.round(it.price * 100 * it.qty) / 100,
-      substitution_mode: it.substitutionMode ?? "best_match",
-      substitute_ids: it.substituteIds ?? [],
+      substitution_mode: "refund",
+      substitute_ids: [],
       status: "pendiente",
     }));
     const { error: itemsErr } = await supabase.from("pedido_items").insert(itemsInsert);
@@ -225,13 +202,12 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     if (creditCents > 0) {
       lineItems.splice(0, lineItems.length, {
         quantity: 1,
-        price_data: { currency: "usd", unit_amount: totalCents + bufferCents, product_data: { name: `HAZOREX ${pedidoRow.numero_pedido} (${data.locale === "en" ? "credit applied" : "saldo aplicado"}: -$${(creditCents / 100).toFixed(2)})` } },
+        price_data: { currency: "usd", unit_amount: totalCents, product_data: { name: `HAZOREX ${pedidoRow.numero_pedido} (${data.locale === "en" ? "credit applied" : "saldo aplicado"}: -$${(creditCents / 100).toFixed(2)})` } },
       });
     } else {
       for (const [name, cents] of [
         [data.locale === "en" ? "Delivery" : "Entrega", shippingRate.amount],
         [data.locale === "en" ? "Driver tip (100%)" : "Propina para el repartidor (100%)", tipCents],
-        [data.locale === "en" ? "Adjustment hold (only the actual amount is charged)" : "Margen para ajustes (se cobra solo lo real)", bufferCents],
       ] as Array<[string, number]>) {
         if (cents > 0) lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: cents, product_data: { name } } });
       }
@@ -251,8 +227,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           custom_text: { after_submit: { message: data.locale === "en" ? "Order the day before, get it in 24 hours: Monday, Wednesday and Friday" : "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes" } },
           payment_intent_data: {
             description: `HAZOREX ${pedidoRow.numero_pedido}`,
-            // Reserva el dinero; el cobro real ocurre al terminar el empaque.
-            capture_method: "manual",
+            capture_method: "automatic",
             metadata: {
               kind: "cookie_order",
               pedido_id: pedidoRow.id,
