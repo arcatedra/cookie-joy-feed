@@ -119,7 +119,7 @@ function RepartidoresLanding() {
             {t("repartidoresPage.hero.subtitlePart2")}
           </p>
 
-          <p className="mt-4 max-w-2xl text-sm">{t("repartidoresPage.hero.example", { base: exampleBase.toFixed(2), weight: exampleWeight.toFixed(2), tip: "3.00", total: (exampleBase + exampleWeight + 3).toFixed(2) })}</p>
+          <p className="mt-4 max-w-2xl text-sm">{t("repartidoresPage.hero.example")}</p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <ApplyCta

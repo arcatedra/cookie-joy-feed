@@ -89,8 +89,8 @@ export function suggestRouteDefaults(batch: PendingBatch): { routeName: string; 
   });
   const routeName = `Ruta ${batch.zone_name} - ${batch.delivery_day} ${dateLabel}`;
 
-  // Heurística simple: $4.50 por parada. Ajusta a tu margen real.
-  const suggestedPay = Math.round(batch.total_orders * 4.5 * 100) / 100;
+  // Cookie routes pay the small-order base per stop; tips are separate.
+  const suggestedPay = Math.round(batch.total_orders * 5 * 100) / 100;
 
   return { routeName, suggestedPay };
 }

@@ -130,10 +130,6 @@ function CobrosRepartidor() {
                     <Banknote className="h-4 w-4" />
                     {money(p.amount_usd)}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Entrega {money(p.tier_amount_usd)} · Peso {money(p.weight_amount_usd)} · Propina{" "}
-                    {money(p.tip_amount_usd)}
-                  </p>
                 </div>
                 <span
                   className={`rounded-full px-2 py-1 text-xs font-semibold ${
