@@ -1,17 +1,20 @@
 # Revisión final antes de apertura
 
 ## Correcciones del 10 de octubre y continuación
-- [ ] Aprobar el plan de correcciones de portada/textos y bloques reservables antes de cambios de más de tres archivos o pagos.
-- [ ] Corregir reel de canela; ocultar reels sin coincidencia real de sabor, sin borrar registros.
-- [ ] Usar catálogo y orden de ventas reales en Más Vendidas de la portada.
-- [ ] Retirar menciones comerciales de suscripciones y nombrar la baja como baja de correos.
-- [ ] Mostrar una sola promesa de entrega en el envío del carrito, sin cambiar cobros.
-- [ ] Verificar correcciones y ejecutar el modelo de bloques únicamente tras aprobar su plan.
+- [x] Aprobar el plan de correcciones de portada/textos y bloques reservables antes de cambios de más de tres archivos o pagos.
+- [x] Corregir reel de canela; ocultar reels sin coincidencia real de sabor, sin borrar registros.
+- [x] Usar catálogo y orden de ventas reales en Más Vendidas de la portada.
+- [x] Retirar menciones comerciales de suscripciones y nombrar la baja como baja de correos.
+- [x] Mostrar una sola promesa de entrega en el envío del carrito, sin cambiar cobros.
+- [x] Verificar correcciones: portada/Confianza/carrito sin errores; 19 pruebas aisladas pasan.
+- [x] Preparar reglas validadas de bloques, pesos, puerta, vehículos y piso horario, sin activarlas.
+- [ ] Resolver financiación del pago fijo/bonos cuando superan los cargos de entrega de pedidos del lote; requiere decisión del dueño antes de integrar transferencias.
+- [ ] Ejecutar el resto del modelo aprobado después de resolver financiación; mantenerlo inactivo hasta verificaciones completas.
 
 ## Nueva solicitud: bloques reservables (después de los nueve cambios)
-- [ ] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo.
-- [ ] Mostrar plan y esperar aprobación antes de reemplazar cargos/pagos del marketplace.
-- [ ] Implementar y probar el modelo aprobado sin publicar ni borrar datos; pendiente de aprobación del nuevo plan.
+- [x] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo en memoria y plan aprobado.
+- [x] Mostrar y aprobar plan antes de reemplazar cargos/pagos del marketplace.
+- [ ] Integrar bloques aprobados: financiación de importes que exceden los cargos de los pedidos pendiente de decisión del dueño; no modificar aún pagos existentes.
 
 ## Apertura: cambios solicitados el 9 de octubre
 
