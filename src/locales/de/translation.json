@@ -140,7 +140,6 @@
       "bestSellers": "Bestseller",
       "deals": "Angebote des Tages",
       "buildPack": "Pack zusammenstellen",
-      "subscriptions": "Cookie-Abos",
       "yourAccount": "Dein Konto",
       "ordersReturns": "Rücksendungen & Bestellungen",
       "cart": "Dein Warenkorb",
@@ -152,7 +151,6 @@
       "bestSellers": "Bestseller",
       "buildPack": "Pack zusammenstellen",
       "support": "Kundenservice",
-      "subscriptions": "Cookie-Abos",
       "shop": "🛍️ Shop",
       "roulette": "🎰 Gewinnspiel",
       "drivers": "🛵 Fahrer werden",
@@ -178,7 +176,6 @@
   "nav": {
     "home": "Start",
     "explore": "Entdecken",
-    "subscribe": "Abonnieren",
     "profile": "Profil"
   },
   "errors": {
@@ -188,8 +185,8 @@
     "didNotLoadDesc": "Etwas ist schiefgelaufen. Bitte aktualisiere oder gehe zurück zur Startseite."
   },
   "home": {
-    "metaTitle": "HAZOREX — Gourmet-Cookies, monatlich geliefert",
-    "metaDesc": "Entdecke handgemachte Gourmet-Cookies und abonniere HAZOREX für frisch gebackene Leckereien.",
+    "metaTitle": "HAZOREX — Premium Handgemachte Kekse",
+    "metaDesc": "Entdecke handgemachte Cookies und individuelle Packs bei HAZOREX.",
     "welcome": "Willkommen zurück",
     "greeting": "Guten Morgen, {{name}}!",
     "freshToday": "Frische Chargen heute",
@@ -198,10 +195,6 @@
     "trending": "Jetzt im Trend",
     "categories": "Empfohlene Kategorien",
     "cookiePacks": "Cookie-Packs",
-    "subscriptionEyebrow": "Monatsbox",
-    "subscriptionHeadline": "12 frische Cookies direkt zu dir nach Hause.",
-    "subscriptionSubcopy": "Jederzeit kündbar · Kostenloser Versand",
-    "startSubscription": "Abo starten",
     "promoTitle": "Lust auf etwas Neues?",
     "promoSubtitle": "Entdecke unsere Limited Editions und Monatsfavoriten.",
     "promoCta": "Gesamtes Menü ansehen",
@@ -212,12 +205,6 @@
       "buildPackLink": "Optionen ansehen",
       "buildPackCta": "Jetzt zusammenstellen",
       "buildPackAlt": "Individuelle Cookie-Box",
-      "subscriptionTitle": "Monatsabo",
-      "subscriptionLink": "Club entdecken",
-      "subscriptionClub": "HAZOREX CLUB",
-      "subscriptionHeadline": "Wöchentlich frisch gebacken geliefert",
-      "subscriptionSubcopy": "Jederzeit kündbar · Versand inklusive",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Blitzangebote",
       "flashLink": "Alle Angebote",
       "flashProduct": "9er-Cookie-Mix",
@@ -343,52 +330,9 @@
     "treeNuts": "SCHALENFRÜCHTE",
     "peanuts": "ERDNÜSSE"
   },
-  "subscribe": {
-    "metaTitle": "Abopläne — HAZOREX",
-    "metaDesc": "Montag, Mittwoch und Freitag",
-    "title": "Abopläne",
-    "deliveryBadge": "Montag, Mittwoch und Freitag",
-    "activePlan": "Aktiver Plan",
-    "remaining": "Verbleibend",
-    "scheduledCount": "{{used}} von {{total}} Lieferungen diesen Monat geplant",
-    "choosePlan": "Wähle deinen Plan",
-    "mostPopular": "Am beliebtesten",
-    "perMonth": "/ Monat",
-    "schedule": "Lieferungen planen",
-    "scheduleHint": "Montag, Mittwoch und Freitag",
-    "prevMonth": "Vorheriger Monat",
-    "nextMonth": "Nächster Monat",
-    "yourDeliveries": "Deine Lieferungen",
-    "usedAll": "Du hast alle {{count}} Lieferungen genutzt. Upgrade für mehr.",
-    "footnote": "Montag, Mittwoch und Freitag",
-    "removeDate": "{{date}} entfernen",
-    "tiers": {
-      "starter": {
-        "title": "Starter-Plan",
-        "cadence": "2 LIEFERUNGEN / MONAT",
-        "desc": "2 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
-      },
-      "essential": {
-        "title": "Essential-Plan",
-        "cadence": "4 LIEFERUNGEN / MONAT",
-        "desc": "4 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
-      },
-      "intermediate": {
-        "title": "Intermediate-Plan",
-        "cadence": "6 LIEFERUNGEN / MONAT",
-        "desc": "6 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
-      },
-      "premium": {
-        "title": "Premium-Plan",
-        "cadence": "8 LIEFERUNGEN / MONAT",
-        "desc": "8 LIEFERUNGEN / MONAT · Montag, Mittwoch und Freitag"
-      }
-    },
-    "yourPlan": "Dein Hazorex-Plan"
-  },
   "profile": {
     "metaTitle": "Mein Profil — HAZOREX",
-    "metaDesc": "Konto, Bestellungen und Abo verwalten.",
+    "metaDesc": "Verwalte dein HAZOREX-Konto und deine Bestellungen.",
     "title": "Mein Profil",
     "settings": "Einstellungen",
     "city": "New York",
@@ -397,8 +341,6 @@
     "favorites": "Favoriten",
     "level": "Level",
     "cookieFan": "Cookie-Fan",
-    "currentPlan": "Aktueller Plan",
-    "enthusiast": "Enthusiast-Plan",
     "active": "Aktiv",
     "recentOrders": "Letzte Bestellungen",
     "order": "Bestellung Nr. {{id}}",
@@ -444,26 +386,6 @@
     "thanks": "Danke!",
     "thanksDesc": "Deine Cookies sind unterwegs. Bestätigung wurde gesendet.",
     "backHome": "Zur Startseite"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Abonniere, um deine Lieferungen zu aktivieren und einzukaufen",
-    "dialogDesc": "Käufe und Lieferungen sind nur für Abonnenten verfügbar.",
-    "freeShipping": "KOSTENLOSE Lieferung ($0) in jedem Plan enthalten!",
-    "viewPlans": "Abopläne ansehen",
-    "signInAndSubscribe": "Anmelden und abonnieren",
-    "keepBrowsing": "Weiter stöbern",
-    "bannerEyebrow": "Werde Mitglied",
-    "bannerTitle": "Abonniere, um deine Lieferungen zu aktivieren",
-    "bannerSubcopy": "KOSTENLOSE Lieferung ($0) in jedem Plan enthalten!",
-    "bannerCta": "Pläne ansehen",
-    "cartWarning": "Du benötigst ein aktives Abo, um zur Kasse zu gehen.",
-    "cartCta": "Abonniere zum Kaufen",
-    "cartProcessing": "Wird verarbeitet…",
-    "cartConfirm": "Bestellung bestätigen und bezahlen",
-    "cartTerms": "Mit der Bestätigung deiner Bestellung akzeptierst du die AGB des Shops.",
-    "noActive": "Du hast kein aktives Abo. Abonniere, um Lieferungen zu planen.",
-    "scheduled": "Lieferung geplant",
-    "canceled": "Lieferung storniert"
   },
   "checkout": {
     "secure": "Sichere Kasse",
@@ -609,7 +531,6 @@
     "shop": "Shop",
     "allCookies": "Kekse",
     "roulette": "Tagesroulette",
-    "subscribe": "Abo",
     "explore": "Entdecken",
     "account": "Konto",
     "profile": "Mein Profil",
@@ -900,15 +821,15 @@
     "sections": {
       "authTitle": "Authentifizierung und Zugriff",
       "authP1": "Der Kontozugriff erfolgt per E-Mail und Passwort oder über Google-Login. Passwörter werden niemals im Klartext gespeichert: Die Verwaltung und Überprüfung der Anmeldedaten wird vom verwalteten Authentifizierungsanbieter der Plattform übernommen.",
-      "authP2": "Jeder Benutzer kann nur sein eigenes Profil und seine eigenen Bestellungen, Abonnements und Spenden lesen und ändern. Administrative Rollen sind eingeschränkt und werden serverseitig überprüft.",
+      "authP2": "Jeder Benutzer kann nur sein eigenes Profil und seine eigenen Bestellungen lesen und ändern. Administrative Rollen sind eingeschränkt und werden serverseitig überprüft.",
       "paymentsTitle": "Zahlungen",
       "paymentsP1": "Zahlungen werden über Stripe abgewickelt. HAZOREX speichert keine vollständigen Kartennummern, CVVs oder Ablaufdaten und hat auch keinen Zugriff darauf: Diese Daten werden direkt zwischen Ihrem Browser und Stripe über deren sichere Elemente übertragen.",
       "dataTitle": "Welche Daten wir sammeln",
-      "dataP1": "Wir sammeln nur die Daten, die für den Betrieb der Anwendung notwendig sind: Ihre E-Mail-Adresse, ein optionaler Benutzername, Ihre Lieferadresse bei einem physischen Kauf und eine Historie von Bestellungen, Abonnements und Spenden, die mit Ihrem Konto verknüpft sind.",
+      "dataP1": "Wir sammeln nur die Daten, die für den Betrieb der Anwendung notwendig sind: Ihre E-Mail-Adresse, ein optionaler Benutzername, Ihre Lieferadresse bei einem physischen Kauf und eine Historie von Bestellungen, die mit Ihrem Konto verknüpft sind.",
       "subprocessorsTitle": "Subprozessoren",
       "subprocessorsP1": "Um den Dienst bereitzustellen, sind wir auf die folgenden Subprozessoren angewiesen: Lovable Cloud (Hosting, Datenbank und Authentifizierung), Stripe (Zahlungsabwicklung) und einen Anbieter für transaktionale E-Mails. Jeder erhält nur die minimal notwendigen Daten für seine Funktion.",
       "emailTitle": "E-Mail",
-      "emailP1": "Wir senden nur transaktionale E-Mails (Bestell-, Abonnementbestätigungen und Kontenänderungen). Wir führen keine Massenmarketingkampagnen durch. Jede E-Mail enthält einen Abmeldelink, der zukünftige Sendungen an diese Adresse deaktiviert.",
+      "emailP1": "Wir senden nur transaktionale E-Mails (Bestellbestätigungen und Kontoänderungen). Wir führen keine Massenmarketingkampagnen durch. Jede E-Mail enthält einen Link, um keine weiteren E-Mails an diese Adresse zu erhalten.",
       "retentionTitle": "Aufbewahrung und Löschung",
       "retentionP1": "Wir bewahren Ihre Daten auf, solange Ihr Konto aktiv ist. Wenn Sie Ihr Konto löschen oder die Löschung Ihrer persönlichen Daten beantragen möchten, schreiben Sie bitte an die Kontakt-E-Mail-Adresse der Website, und wir werden die Anfrage bearbeiten.",
       "reportTitle": "Wie man ein Sicherheitsproblem meldet",
@@ -1424,7 +1345,7 @@
     "metaDesc": "Kontaktiere das HAZOREX-Support-Team. E-Mail und FAQs zu Bestellungen, Lieferungen, Abos und dem Gewinnspiel.",
     "metaOg": "Wir sind für dich da. Schreib uns an hazorex0@gmail.com.",
     "heroTitle": "Wie können wir helfen?",
-    "heroSubtitle": "Unser Team beantwortet alle Fragen zu deinen Bestellungen, Lieferungen, deinem Abo oder dem täglichen Gewinnspiel.",
+    "heroSubtitle": "Unser Team beantwortet Fragen zu Bestellungen, Lieferungen und dem täglichen Gewinnspiel.",
     "contactTitle": "Kontakt",
     "contactSubtitle": "Wir antworten während der Geschäftszeiten, in der Regel innerhalb von 24 Stunden.",
     "emailLabel": "E-Mail",
@@ -1547,7 +1468,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Premium Handgemachte Kekse",
-    "metaDesc": "Entdecke Gourmet-Kekse, individuelle Packs und Monatsabos bei HAZOREX.",
+    "metaDesc": "Entdecke handgemachte Cookies und individuelle Packs bei HAZOREX.",
     "sliderHeading": "Inspiriert von deinem Verlangen",
     "sliderSub": "Montag, Mittwoch und Freitag",
     "seeMore": "Mehr sehen",
@@ -1559,7 +1480,7 @@
   },
   "profilePage": {
     "metaTitle": "Mein Profil — HAZOREX",
-    "metaDesc": "Verwalte dein HAZOREX-Konto, Bestellungen und Abo."
+    "metaDesc": "Verwalte dein HAZOREX-Konto und deine Bestellungen."
   },
   "shopPage": {
     "subtitle": "Einzelkauf · Sichere Zahlung mit Stripe",

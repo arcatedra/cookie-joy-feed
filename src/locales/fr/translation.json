@@ -140,7 +140,6 @@
       "bestSellers": "Meilleures ventes",
       "deals": "Offres du jour",
       "buildPack": "Créez votre propre pack",
-      "subscriptions": "Abonnements cookies",
       "yourAccount": "Votre compte",
       "ordersReturns": "Retours & commandes",
       "cart": "Votre panier",
@@ -152,7 +151,6 @@
       "bestSellers": "Meilleures ventes",
       "buildPack": "Créer un pack",
       "support": "Service client",
-      "subscriptions": "Abonnements cookies",
       "shop": "🛍️ Boutique",
       "roulette": "🎰 Tirage",
       "drivers": "🛵 Devenir livreur",
@@ -175,7 +173,6 @@
   "nav": {
     "home": "Accueil",
     "explore": "Explorer",
-    "subscribe": "S'abonner",
     "profile": "Profil"
   },
   "errors": {
@@ -185,8 +182,8 @@
     "didNotLoadDesc": "Une erreur est survenue de notre côté. Vous pouvez essayer d'actualiser ou retourner à l'accueil."
   },
   "home": {
-    "metaTitle": "HAZOREX — Cookies Gourmands, Livrés Chaque Mois",
-    "metaDesc": "Découvrez des cookies gourmands artisanaux et rejoignez l'abonnement mensuel HAZOREX pour des douceurs fraîchement préparées livrées à votre porte.",
+    "metaTitle": "HAZOREX — Cookies Artisanaux Premium",
+    "metaDesc": "Découvrez les cookies artisanaux et packs personnalisés HAZOREX.",
     "welcome": "Bienvenue à nouveau",
     "greeting": "Bonjour, {{name}} !",
     "freshToday": "Nouveaux lots sortis aujourd'hui",
@@ -195,10 +192,6 @@
     "trending": "Tendances actuelles",
     "categories": "Catégories phares",
     "cookiePacks": "Packs de cookies",
-    "subscriptionEyebrow": "Boîte mensuelle",
-    "subscriptionHeadline": "12 cookies frais, livrés à votre porte.",
-    "subscriptionSubcopy": "Annulez à tout moment · Livraison gratuite",
-    "startSubscription": "Démarrer l'abonnement",
     "promoTitle": "Prêt à essayer quelque chose de nouveau ?",
     "promoSubtitle": "Découvrez nos éditions limitées et les favoris du mois.",
     "promoCta": "Voir le menu complet",
@@ -209,12 +202,6 @@
       "buildPackLink": "Voir les options",
       "buildPackCta": "Commencer à créer",
       "buildPackAlt": "Boîte de cookies personnalisée",
-      "subscriptionTitle": "Abonnement Mensuel",
-      "subscriptionLink": "Découvrir le club",
-      "subscriptionClub": "CLUB HAZOREX",
-      "subscriptionHeadline": "Livraisons hebdomadaires de cookies fraîchement préparés",
-      "subscriptionSubcopy": "Annulez à tout moment · Livraison incluse",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "Offres Éclair",
       "flashLink": "Voir toutes les offres",
       "flashProduct": "Pack assorti de 9 cookies",
@@ -340,52 +327,9 @@
     "treeNuts": "FRUITS À COQUE",
     "peanuts": "ARACHIDES"
   },
-  "subscribe": {
-    "metaTitle": "Plans d'Abonnement — HAZOREX",
-    "metaDesc": "lundi, mercredi et vendredi",
-    "title": "Plans d'Abonnement",
-    "deliveryBadge": "lundi, mercredi et vendredi",
-    "activePlan": "Plan Actif",
-    "remaining": "Restant",
-    "scheduledCount": "{{used}} sur {{total}} livraisons prévues ce mois-ci",
-    "choosePlan": "Choisissez Votre Plan",
-    "mostPopular": "Le Plus Populaire",
-    "perMonth": "/ mois",
-    "schedule": "Planifier les Livraisons",
-    "scheduleHint": "lundi, mercredi et vendredi",
-    "prevMonth": "Mois précédent",
-    "nextMonth": "Mois suivant",
-    "yourDeliveries": "Vos Livraisons",
-    "usedAll": "Vous avez utilisé toutes les {{count}} livraisons de ce plan. Passez à un plan supérieur pour en ajouter davantage.",
-    "footnote": "lundi, mercredi et vendredi",
-    "removeDate": "Supprimer le {{date}}",
-    "tiers": {
-      "starter": {
-        "title": "Plan Démarrage",
-        "cadence": "2 LIVRAISONS / MOIS",
-        "desc": "2 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
-      },
-      "essential": {
-        "title": "Plan Essentiel",
-        "cadence": "4 LIVRAISONS / MOIS",
-        "desc": "4 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
-      },
-      "intermediate": {
-        "cadence": "6 LIVRAISONS / MOIS",
-        "desc": "6 LIVRAISONS / MOIS · lundi, mercredi et vendredi",
-        "title": "Plan Intermédiaire"
-      },
-      "premium": {
-        "title": "Plan Premium",
-        "cadence": "8 LIVRAISONS / MOIS",
-        "desc": "8 LIVRAISONS / MOIS · lundi, mercredi et vendredi"
-      }
-    },
-    "yourPlan": "Votre Plan Hazorex"
-  },
   "profile": {
     "metaTitle": "Mon Profil — HAZOREX",
-    "metaDesc": "Gérez votre compte HAZOREX, vos commandes et votre abonnement.",
+    "metaDesc": "Gérez votre compte HAZOREX et vos commandes.",
     "title": "Mon Profil",
     "settings": "Paramètres",
     "city": "New York",
@@ -394,8 +338,6 @@
     "favorites": "Favoris",
     "level": "Niveau",
     "cookieFan": "Fan de cookies",
-    "currentPlan": "Plan Actuel",
-    "enthusiast": "Plan Enthousiaste",
     "active": "Actif",
     "recentOrders": "Commandes récentes",
     "order": "Commande n°{{id}}",
@@ -441,26 +383,6 @@
     "thanks": "Merci !",
     "thanksDesc": "Vos cookies sont en route. Une confirmation a été envoyée.",
     "backHome": "Retour à l'accueil"
-  },
-  "subscribeGate": {
-    "dialogTitle": "Abonnez-vous pour activer vos livraisons et vos achats",
-    "dialogDesc": "Les achats et les livraisons sont disponibles uniquement pour les membres abonnés.",
-    "freeShipping": "Livraison GRATUITE (0 $) incluse dans chaque plan !",
-    "viewPlans": "Voir les plans d'abonnement",
-    "signInAndSubscribe": "Connectez-vous et abonnez-vous",
-    "keepBrowsing": "Continuer à naviguer",
-    "bannerEyebrow": "Devenez membre",
-    "bannerTitle": "Abonnez-vous pour activer vos livraisons",
-    "bannerSubcopy": "Livraison GRATUITE (0 $) incluse dans chaque plan !",
-    "bannerCta": "Voir les plans",
-    "cartWarning": "Vous avez besoin d'un abonnement actif pour passer à la caisse.",
-    "cartCta": "S'abonner pour acheter",
-    "cartProcessing": "Traitement…",
-    "cartConfirm": "Confirmer et Payer la Commande",
-    "cartTerms": "En confirmant votre commande, vous acceptez les conditions générales de vente du magasin.",
-    "noActive": "Vous n'avez pas d'abonnement actif. Abonnez-vous pour commencer à planifier les livraisons.",
-    "scheduled": "Livraison planifiée",
-    "canceled": "Livraison annulée"
   },
   "checkout": {
     "secure": "Paiement Sécurisé",
@@ -862,15 +784,15 @@
     "sections": {
       "authTitle": "Authentification et accès",
       "authP1": "L'accès au compte se fait par e-mail et mot de passe ou par connexion Google. Les mots de passe ne sont jamais stockés en clair : la gestion et la vérification des identifiants sont gérées par le fournisseur d'authentification géré de la plateforme.",
-      "authP2": "Chaque utilisateur ne peut lire et modifier que son propre profil et ses propres commandes, abonnements et dons. Les rôles administratifs sont restreints et vérifiés côté serveur.",
+      "authP2": "Chaque utilisateur ne peut lire et modifier que son propre profil et ses propres commandes. Les rôles administratifs sont restreints et vérifiés côté serveur.",
       "paymentsTitle": "Paiements",
       "paymentsP1": "Les paiements sont traités via Stripe. HAZOREX ne stocke ni n'a accès aux numéros de carte complets, aux CVV ou aux dates d'expiration : ces données transitent directement entre votre navigateur et Stripe en utilisant leurs éléments sécurisés.",
       "dataTitle": "Données que nous collectons",
-      "dataP1": "Nous ne collectons que les données nécessaires au fonctionnement de l'application : votre e-mail, un nom d'affichage facultatif, votre adresse de livraison lorsque vous effectuez un achat physique, et un historique des commandes, abonnements et dons associés à votre compte.",
+      "dataP1": "Nous ne collectons que les données nécessaires au fonctionnement de l'application : votre e-mail, un nom d'affichage facultatif, votre adresse de livraison lorsque vous effectuez un achat physique, et un historique des commandes associés à votre compte.",
       "subprocessorsTitle": "Sous-traitants",
       "subprocessorsP1": "Pour fournir le service, nous nous appuyons sur les sous-traitants suivants : Lovable Cloud (hébergement, base de données et authentification), Stripe (traitement des paiements) et un fournisseur d'e-mails transactionnels. Chacun ne reçoit que le minimum de données nécessaires à sa fonction.",
       "emailTitle": "E-mail",
-      "emailP1": "Nous n'envoyons que des e-mails transactionnels (confirmations de commande, d'abonnement et de modification de compte). Nous ne menons pas de campagnes de marketing de masse. Chaque e-mail inclut un lien de désabonnement qui désactive les futurs envois à cette adresse.",
+      "emailP1": "Nous envoyons uniquement des e-mails transactionnels (confirmations de commande et modifications de compte). Nous ne menons pas de campagnes marketing de masse. Chaque e-mail comporte un lien pour ne plus recevoir de courriels à cette adresse.",
       "retentionTitle": "Conservation et suppression",
       "retentionP1": "Nous conservons vos données tant que votre compte est actif. Si vous souhaitez supprimer votre compte ou demander la suppression de vos données personnelles, écrivez à l'e-mail de contact du site et nous traiterons la demande.",
       "reportTitle": "Comment signaler un problème de sécurité",
@@ -1061,7 +983,6 @@
     "shop": "Boutique",
     "allCookies": "Cookies",
     "roulette": "Roulette du jour",
-    "subscribe": "Abonnement",
     "explore": "Explorer",
     "account": "Compte",
     "profile": "Mon profil",
@@ -1418,10 +1339,10 @@
   },
   "supportPage": {
     "metaTitle": "Service client — HAZOREX",
-    "metaDesc": "Contactez l'équipe de support HAZOREX. E-mail et questions fréquentes sur les commandes, livraisons, abonnements et le tirage.",
+    "metaDesc": "Contactez l'équipe de support HAZOREX. E-mail et questions fréquentes sur les commandes, livraisons et le tirage.",
     "metaOg": "Nous sommes là pour vous aider. Écrivez-nous à hazorex0@gmail.com.",
     "heroTitle": "Comment pouvons-nous vous aider ?",
-    "heroSubtitle": "Notre équipe est là pour répondre à toutes vos questions sur vos commandes, livraisons, abonnement ou le tirage quotidien.",
+    "heroSubtitle": "Notre équipe répond à vos questions sur les commandes, livraisons et le tirage quotidien.",
     "contactTitle": "Nous contacter",
     "contactSubtitle": "Nous répondons pendant les heures ouvrables, généralement en moins de 24 heures.",
     "emailLabel": "E-mail",
@@ -1544,7 +1465,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Cookies Artisanaux Premium",
-    "metaDesc": "Découvrez des cookies gourmets, des packs personnalisés et des abonnements mensuels chez HAZOREX.",
+    "metaDesc": "Découvrez les cookies artisanaux et packs personnalisés HAZOREX.",
     "sliderHeading": "Inspiré par vos envies",
     "sliderSub": "lundi, mercredi et vendredi",
     "seeMore": "Voir plus",
@@ -1556,7 +1477,7 @@
   },
   "profilePage": {
     "metaTitle": "Mon profil — HAZOREX",
-    "metaDesc": "Gérez votre compte HAZOREX, commandes et abonnement."
+    "metaDesc": "Gérez votre compte HAZOREX et vos commandes."
   },
   "shopPage": {
     "subtitle": "Achat à l'unité · Paiement sécurisé avec Stripe",

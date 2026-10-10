@@ -167,7 +167,7 @@
       "subprocessorsTitle": "サブプロセッサ",
       "subprocessorsP1": "サービスを提供するために、当社は次のサブプロセッサに依存しています：Lovable Cloud（ホスティング、データベース、認証）、Stripe（支払い処理）、およびトランザクションメールプロバイダー。各プロセッサは、その機能に必要な最小限のデータのみを受け取ります。",
       "emailTitle": "メール",
-      "emailP1": "当社はトランザクションメール（注文確認、サブスクリプション、アカウント変更）のみを送信します。大量のマーケティングキャンペーンは行いません。各メールには、そのアドレスへの今後の送信を無効にするための配信停止リンクが含まれています。",
+      "emailP1": "注文確認やアカウント変更に関するメールのみを送信します。大規模なマーケティング配信は行いません。各メールには、このアドレスへのメール配信を停止するリンクがあります。",
       "retentionTitle": "保持と削除",
       "retentionP1": "アカウントが有効である限り、お客様のデータを保持します。アカウントの削除または個人データの削除を希望する場合は、サイトの連絡先メールアドレスにご連絡いただければ、リクエストを処理します。",
       "reportTitle": "セキュリティ問題の報告方法",
@@ -483,7 +483,6 @@
       "bestSellers": "ベストセラー",
       "deals": "本日のお買い得情報",
       "buildPack": "自分だけのパックを作成",
-      "subscriptions": "クッキーの定期購入",
       "yourAccount": "あなたのアカウント",
       "ordersReturns": "返品と注文",
       "cart": "あなたのカート",
@@ -495,7 +494,6 @@
       "bestSellers": "ベストセラー",
       "buildPack": "自分だけのパックを作成",
       "support": "カスタマーサービス",
-      "subscriptions": "クッキーの定期購入",
       "shop": "🛍️ ショップ",
       "roulette": "🎰 抽選",
       "drivers": "🛵 配達員になる",
@@ -518,7 +516,6 @@
   "nav": {
     "home": "ホーム",
     "explore": "探す",
-    "subscribe": "サブスクリプション",
     "profile": "プロフィール"
   },
   "errors": {
@@ -528,8 +525,8 @@
     "didNotLoadDesc": "こちら側で問題が発生しました。再読み込みするか、ホームページに戻ってください。"
   },
   "home": {
-    "metaTitle": "HAZOREX — 毎月届くグルメクッキー",
-    "metaDesc": "職人技のグルメクッキーを発見し、HAZOREXの月額サブスクリプションに参加して、焼きたてのおいしさをご自宅までお届けします。",
+    "metaTitle": "HAZOREX — プレミアム手作りクッキー",
+    "metaDesc": "HAZOREXの手作りクッキーとカスタムパックをご覧ください。",
     "welcome": "おかえりなさい",
     "greeting": "おはようございます、{{name}}さん！",
     "freshToday": "本日の焼きたて",
@@ -538,10 +535,6 @@
     "trending": "トレンド",
     "categories": "注目カテゴリー",
     "cookiePacks": "クッキーパック",
-    "subscriptionEyebrow": "月替わりボックス",
-    "subscriptionHeadline": "焼きたてクッキー12枚を、ご自宅までお届けします。",
-    "subscriptionSubcopy": "いつでもキャンセル可能 · 送料無料",
-    "startSubscription": "サブスクリプションを始める",
     "promoTitle": "新しい味を試してみませんか？",
     "promoSubtitle": "限定版や今月のおすすめを発見してください。",
     "promoCta": "全メニューを見る",
@@ -552,12 +545,6 @@
       "buildPackLink": "オプションを見る",
       "buildPackCta": "作成を始める",
       "buildPackAlt": "カスタムクッキーボックス",
-      "subscriptionTitle": "月額サブスクリプション",
-      "subscriptionLink": "クラブについて知る",
-      "subscriptionClub": "CLUB HAZOREX",
-      "subscriptionHeadline": "毎週焼きたてをお届け",
-      "subscriptionSubcopy": "いつでもキャンセル可能 · 送料込み",
-      "subscriptionPrice": "$19.99/mes",
       "flashTitle": "フラッシュセール",
       "flashLink": "すべてのセールを見る",
       "flashProduct": "クッキー9個入り詰め合わせパック",
@@ -688,52 +675,9 @@
     "treeNuts": "木の実",
     "peanuts": "ピーナッツ"
   },
-  "subscribe": {
-    "metaTitle": "サブスクリプションプラン — HAZOREX",
-    "metaDesc": "月曜日・水曜日・金曜日",
-    "title": "サブスクリプションプラン",
-    "deliveryBadge": "月曜日・水曜日・金曜日",
-    "activePlan": "有効なプラン",
-    "remaining": "残り",
-    "scheduledCount": "今月の配達予定{{total}}件中{{used}}件",
-    "choosePlan": "プランを選択",
-    "mostPopular": "一番人気",
-    "perMonth": "/月",
-    "schedule": "配達をスケジュール",
-    "scheduleHint": "月曜日・水曜日・金曜日",
-    "prevMonth": "前の月",
-    "nextMonth": "次の月",
-    "yourDeliveries": "あなたの配達",
-    "usedAll": "このプランの配達{{count}}回分をすべて使用しました。追加するにはプランをアップグレードしてください。",
-    "footnote": "月曜日・水曜日・金曜日",
-    "removeDate": "{{date}}を削除",
-    "tiers": {
-      "starter": {
-        "title": "スタータープラン",
-        "cadence": "月2回配達",
-        "desc": "月2回配達 · 月曜日・水曜日・金曜日"
-      },
-      "essential": {
-        "title": "エッセンシャルプラン",
-        "cadence": "月4回配達",
-        "desc": "月4回配達 · 月曜日・水曜日・金曜日"
-      },
-      "intermediate": {
-        "title": "インターミディエイトプラン",
-        "cadence": "月6回配達",
-        "desc": "月6回配達 · 月曜日・水曜日・金曜日"
-      },
-      "premium": {
-        "title": "プレミアムプラン",
-        "cadence": "月8回配達",
-        "desc": "月8回配達 · 月曜日・水曜日・金曜日"
-      }
-    },
-    "yourPlan": "あなたの Hazorex プラン"
-  },
   "profile": {
     "metaTitle": "マイプロフィール — HAZOREX",
-    "metaDesc": "HAZOREXアカウント、注文、サブスクリプションを管理します。",
+    "metaDesc": "HAZOREXアカウントと注文を管理できます。",
     "title": "マイプロフィール",
     "settings": "設定",
     "city": "ニューヨーク",
@@ -742,8 +686,6 @@
     "favorites": "お気に入り",
     "level": "レベル",
     "cookieFan": "クッキーファン",
-    "currentPlan": "現在のプラン",
-    "enthusiast": "熱狂者プラン",
     "active": "有効",
     "recentOrders": "最近の注文",
     "order": "注文番号 #{{id}}",
@@ -789,26 +731,6 @@
     "thanks": "ありがとうございます！",
     "thanksDesc": "クッキーは現在配送中です。確認メールをお送りしました。",
     "backHome": "ホームに戻る"
-  },
-  "subscribeGate": {
-    "dialogTitle": "配送を有効にして購入するには、定期購入してください",
-    "dialogDesc": "購入と配送は、定期購入メンバーのみ利用可能です。",
-    "freeShipping": "全てのプランで配送料無料（$0）！",
-    "viewPlans": "定期購入プランを見る",
-    "signInAndSubscribe": "ログインして定期購入する",
-    "keepBrowsing": "閲覧を続ける",
-    "bannerEyebrow": "メンバーになる",
-    "bannerTitle": "定期購入して配送を有効にする",
-    "bannerSubcopy": "全てのプランで配送料無料（$0）！",
-    "bannerCta": "プランを見る",
-    "cartWarning": "購入を完了するにはアクティブな定期購入が必要です。",
-    "cartCta": "定期購入して購入する",
-    "cartProcessing": "処理中…",
-    "cartConfirm": "注文を確定して支払う",
-    "cartTerms": "注文を確定すると、ストアの利用規約に同意したことになります。",
-    "noActive": "アクティブな定期購入がありません。定期購入して配送のスケジュールを開始してください。",
-    "scheduled": "配送スケジュール済み",
-    "canceled": "配送キャンセル済み"
   },
   "checkout": {
     "secure": "安全な支払い",
@@ -1066,7 +988,6 @@
     "shop": "ショップ",
     "allCookies": "クッキー",
     "roulette": "本日のルーレット",
-    "subscribe": "定期購入",
     "explore": "もっと見る",
     "account": "アカウント",
     "profile": "マイプロフィール",
@@ -1426,7 +1347,7 @@
     "metaDesc": "HAZOREX サポートチームにお問い合わせください。注文、配送、サブスクリプション、抽選に関するメールとよくある質問。",
     "metaOg": "お気軽にご連絡ください。hazorex0@gmail.com までメールをどうぞ。",
     "heroTitle": "どのようにお手伝いできますか?",
-    "heroSubtitle": "注文、配送、サブスクリプション、毎日の抽選に関するご質問に、私たちのチームがお答えします。",
+    "heroSubtitle": "注文、配達、毎日の抽選についてお問い合わせください。",
     "contactTitle": "お問い合わせ",
     "contactSubtitle": "営業時間内に、通常 24 時間以内に返信します。",
     "emailLabel": "メール",
@@ -1549,7 +1470,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — プレミアム手作りクッキー",
-    "metaDesc": "HAZOREXでグルメクッキー、カスタムパック、月額サブスクを見つけよう。",
+    "metaDesc": "HAZOREXの手作りクッキーとカスタムパックをご覧ください。",
     "sliderHeading": "あなたの気分にインスパイア",
     "sliderSub": "月曜日・水曜日・金曜日",
     "seeMore": "もっと見る",
@@ -1561,7 +1482,7 @@
   },
   "profilePage": {
     "metaTitle": "マイプロフィール — HAZOREX",
-    "metaDesc": "HAZOREXアカウント・注文・サブスクを管理。"
+    "metaDesc": "HAZOREXアカウントと注文を管理できます。"
   },
   "shopPage": {
     "subtitle": "1個から購入・Stripeで安全決済",
