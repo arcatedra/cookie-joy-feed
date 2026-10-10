@@ -6,7 +6,7 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-export type DispatchDay = 'lunes' | 'viernes';
+export type DispatchDay = 'lunes' | 'miercoles' | 'viernes';
 
 export interface ZoneDispatchSummary {
   zone_id: string;
@@ -30,7 +30,7 @@ const MAX_STANDARD_WEIGHT_KG = 20;
  * que es el que efectivamente guarda dispatch_date en cada pedido.
  */
 export function getNextDispatchDate(day: DispatchDay, from: Date = new Date()): Date {
-  const targetDow = day === 'lunes' ? 1 : 5; // 0=domingo ... 6=sábado
+  const targetDow = day === 'lunes' ? 1 : day === 'miercoles' ? 3 : 5; // 0=domingo ... 6=sábado
   const currentDow = from.getDay();
   const daysAhead = (targetDow - currentDow + 7) % 7;
   const result = new Date(from);
@@ -62,33 +62,6 @@ export async function fetchZoneDispatchSummary(
   }
 
   return (data ?? []) as ZoneDispatchSummary[];
-}
-
-/**
- * Registra un nuevo pedido de suscripción. dispatch_date se calcula solo,
- * automáticamente, dentro de la base de datos (trigger) — no hace falta
- * enviarlo desde el front-end.
- */
-export async function createSubscriptionOrder(
-  supabase: SupabaseClient,
-  order: { customerId: string; zoneId: string; deliveryDay: DispatchDay; weightKg: number }
-) {
-  const { data, error } = await supabase
-    .from('subscription_orders')
-    .insert({
-      customer_id: order.customerId,
-      zone_id: order.zoneId,
-      delivery_day: order.deliveryDay,
-      weight_kg: order.weightKg,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error(`No se pudo registrar el pedido: ${error.message}`);
-  }
-
-  return data;
 }
 
 // =========================================================
@@ -135,8 +108,8 @@ export function checkCartWeight(
     `📦 Límite de Peso Superado (Máx. ${maxWeightKg} kg)\n` +
     `Tu pedido actual pesa ${formatKg(currentWeightKg)} kg (te pasaste por ${formatKg(overByKg)} kg). ` +
     `Para continuar, elige una opción:\n` +
-    `• Opción A: Quita el producto que te sobra (${formatKg(overByKg)} kg) para enviarlo bajo tu suscripción actual.\n` +
-    `• Opción B: Deja el carrito como está y usa tu segunda entrega del mes para cubrir el peso extra.`;
+    `• Quita productos o divide la compra en pedidos separados.\n` +
+    ``;
 
   return { exceeded: true, currentWeightKg, overByKg, message };
 }

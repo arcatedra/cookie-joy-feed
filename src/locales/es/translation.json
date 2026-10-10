@@ -1567,7 +1567,7 @@
     },
     "s11": {
       "title": "11. Datos de repartidores y tiendas",
-      "body": "Si te postulas como repartidor recogemos tus datos de contacto, tu vehículo, tus documentos y tu número fiscal (SSN o ITIN). El número fiscal se guarda cifrado y solo se usa para cumplir obligaciones fiscales; nadie del equipo lo ve completo. Tus documentos se guardan en un almacenamiento privado al que solo tú y el equipo de administración tienen acceso."
+      "body": "Hazorex recoge contacto, vehículo y documentos de postulación del repartidor. Hazorex no pide ni guarda SSN/ITIN ni números de cuenta bancaria. Los datos de antecedentes se entregan directamente a Checkr y los de la cuenta de cobro, de forma segura a Stripe."
     },
     "s12": {
       "title": "12. Dirección y entregas",

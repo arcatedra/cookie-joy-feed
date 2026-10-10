@@ -1713,7 +1713,7 @@ function ReelCard({
             <ExternalLink className="h-3.5 w-3.5" />
             {reel.cta_label?.trim() || t("reels.moreInfo", "Más información")}
           </a>
-        ) : reel.product_name && (
+        ) : producto && (
           <button
             type="button"
             onClick={buy}

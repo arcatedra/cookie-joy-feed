@@ -112,7 +112,7 @@ export function getLocale(lang?: string): string {
 export function formatPrice(value: number, _lang?: string): string {
   // Prices are always denominated in USD and rendered with the en-US locale
   // ($ before the number, period decimal) regardless of the UI language, so
-  // /shop, /subscribe, /cart and emails all match.
+  // /shop, /cart and emails all match.
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",

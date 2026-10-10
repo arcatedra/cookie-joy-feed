@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin/testing")({
     <div className="mx-auto max-w-xl p-6 text-sm">
       <h1 className="text-xl font-bold">Pruebas</h1>
       <p className="mt-2 text-muted-foreground">
-        Hazorex ya no usa suscripciones, así que las herramientas de suscripción de prueba se quitaron.
+        Las pruebas de compras se realizan únicamente con datos aislados y pagos simulados.
       </p>
       <Link to="/profile" className="mt-4 inline-block underline">Volver</Link>
     </div>

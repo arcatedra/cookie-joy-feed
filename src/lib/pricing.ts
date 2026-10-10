@@ -1,3 +1,4 @@
+import { stopCompensation } from "./cookie-order-rules";
 /**
  * Modelo de cobro por pedido del marketplace (sin suscripciones).
  * Valores editables en /admin/precios (tabla pricing_settings).
@@ -341,11 +342,8 @@ export function driverPayUsd(
   input: { itemCount: number; weightFeeUsd: number; tipUsd: number },
   p: PricingSettings,
 ): number {
-  const extraItems = Math.max(0, input.itemCount - p.driverItemThreshold);
-  const base = p.driverPerStopUsd + extraItems * p.driverPerItemUsd;
-  const weightShare = (input.weightFeeUsd * p.driverWeightSharePct) / 100;
-  const tipShare = (input.tipUsd * p.driverTipSharePct) / 100;
-  return Math.round((base + weightShare + tipShare) * 100) / 100;
+  const extraLb = Math.max(0, input.weightFeeUsd / 0.7);
+  return stopCompensation(45 + extraLb, input.tipUsd).totalCents / 100;
 }
 
 /** Peso total del carrito en libras. */
