@@ -229,7 +229,7 @@ function AdminSweepstakesPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="sponsor_email">Email de soporte</Label>
-            <Input id="sponsor_email" type="email" value={sponsorEmail} onChange={(e) => setSponsorEmail(e.target.value)} maxLength={200} placeholder="soporte@hazorex.com" />
+            <Input id="sponsor_email" type="email" value={sponsorEmail} onChange={(e) => setSponsorEmail(e.target.value)} maxLength={200} placeholder="hazorex0@gmail.com" />
           </div>
         </CardContent>
       </Card>

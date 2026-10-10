@@ -11,7 +11,7 @@ interface Props {
 const DriverRejected = ({
   driverName = 'Repartidor/a',
   reason = 'No se cumplen los requisitos actuales.',
-  supportEmail = 'soporte@hazorex.com',
+  supportEmail = 'hazorex0@gmail.com',
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
@@ -49,7 +49,7 @@ export const template = {
   previewData: {
     driverName: 'María',
     reason: 'La foto de la licencia no es legible.',
-    supportEmail: 'soporte@hazorex.com',
+    supportEmail: 'hazorex0@gmail.com',
   },
 } satisfies TemplateEntry
 

@@ -6,7 +6,6 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import i18n, { formatPrice } from "@/i18n";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { listProductos, type Producto } from "@/lib/productos.functions";
 
 export const productosQueryOptions = queryOptions({
@@ -31,7 +30,6 @@ export const Route = createFileRoute("/shop")({
 function ShopPage() {
   const { t, i18n } = useTranslation();
   const cart = useCart();
-  const gate = useSubscriptionGate();
   const { data: products } = useSuspenseQuery(productosQueryOptions);
 
   return (
@@ -101,16 +99,6 @@ function ShopPage() {
                       {p.descripcion}
                     </p>
                   )}
-                  <div className="mt-1 flex items-center gap-1">
-                    <div className="flex">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-3 w-3 fill-amber-400 text-amber-400"
-                        />
-                      ))}
-                    </div>
-                  </div>
                   <div className="mt-2 flex items-center justify-between">
                     <span className="text-sm font-bold text-primary">
                       {formatPrice(price, i18n.language)}
@@ -120,7 +108,7 @@ function ShopPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    gate.guard(() => {
+                    (() => {
                       cart.add({
                         id: p.id,
                         name: p.nombre,
@@ -133,7 +121,7 @@ function ShopPage() {
                           defaultValue: "{{name}} added to cart",
                         }),
                       );
-                    });
+                    })();
                   }}
                   className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-orange text-white shadow-md transition active:scale-90"
                   aria-label={t("cartFloating.addAria", {

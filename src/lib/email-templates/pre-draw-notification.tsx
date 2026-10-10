@@ -37,7 +37,7 @@ const PreDrawNotification = ({
             los avisos del sorteo desde tu perfil en cualquier momento.
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · hazorex0@gmail.com</Text>
       </Container>
     </Body>
   </Html>

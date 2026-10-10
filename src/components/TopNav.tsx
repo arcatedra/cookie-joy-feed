@@ -350,7 +350,7 @@ export function TopNav() {
             {t("topnav.all")}
           </button>
           <div className="no-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
-            {quickLinkKeys.map((l) => {
+            {visibleQuickLinks.map((l) => {
               const isHighlighted = "highlighted" in l && l.highlighted;
               return (
                 <Link

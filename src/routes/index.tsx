@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import i18n, { formatPrice } from "@/i18n";
 import { ChevronLeft, ChevronRight, Star, Plus } from "lucide-react";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { CookiesTV } from "@/components/CookiesTV";
 import { DailyWinnerBanner } from "@/components/DailyWinnerBanner";
 import { sweepstakesEnabled } from "@/lib/feature-flags";
@@ -444,7 +443,6 @@ function FeaturedCard() {
 function ProductSlider() {
   const { t } = useTranslation();
   const cart = useCart();
-  const gate = useSubscriptionGate();
   
   
   return (
@@ -499,7 +497,7 @@ function ProductSlider() {
                 <button
                   type="button"
                   onClick={() =>
-                    gate.guard(() =>
+                    (() =>
                       cart.add({ id: `slider-${p.id}`, name, nameKey: p.nameKey, price: p.price, image: p.image }),
                     )
                   }

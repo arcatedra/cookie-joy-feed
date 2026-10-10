@@ -903,7 +903,7 @@
     "s6Title": "6. 责任限制",
     "s6Body": "服务按“原样”提供。不保证不间断的可用性或特定结果。",
     "s7Title": "7. 联系方式",
-    "s7Body": "soporte@hazorex.com"
+    "s7Body": "hazorex0@gmail.com"
   },
   "sweepstakesRules": {
     "metaTitle": "官方抽奖规则 — HAZOREX",
@@ -1207,11 +1207,11 @@
       },
       "rejected": {
         "title": "申请被拒绝",
-        "body": "您可以发送邮件至 soporte@hazorex.com 以解决问题并重新申请。"
+        "body": "您可以发送邮件至 hazorex0@gmail.com 以解决问题并重新申请。"
       },
       "suspended": {
         "title": "账户已暂停",
-        "body": "请发送邮件至 soporte@hazorex.com 了解更多详情。"
+        "body": "请发送邮件至 hazorex0@gmail.com 了解更多详情。"
       }
     },
     "docs": {
@@ -1292,7 +1292,7 @@
       "previewAlt": "{{name}} 的预览",
       "privacy": {
         "strong": "您的文件隐私。",
-        "body": "仅用于验证您的身份和资格。它们以加密方式存储，只有审核团队可以访问。您可以随时通过发送邮件至 soporte@hazorex.com 请求删除。另请参阅我们的",
+        "body": "仅用于验证您的身份和资格。它们以加密方式存储，只有审核团队可以访问。您可以随时通过发送邮件至 hazorex0@gmail.com 请求删除。另请参阅我们的",
         "link": "隐私政策"
       },
       "accept": {
@@ -1419,7 +1419,7 @@
   "supportPage": {
     "metaTitle": "客户支持 — HAZOREX",
     "metaDesc": "联系 HAZOREX 支持团队。关于订单、配送、订阅和抽奖的邮箱及常见问题。",
-    "metaOg": "我们随时为您服务。请发邮件至 soporte@hazorex.com。",
+    "metaOg": "我们随时为您服务。请发邮件至 hazorex0@gmail.com。",
     "heroTitle": "有什么可以帮您?",
     "heroSubtitle": "我们的团队随时为您解答关于订单、配送、订阅或每日抽奖的任何问题。",
     "contactTitle": "联系我们",
@@ -1439,7 +1439,7 @@
       },
       "cancel": {
         "q": "如何取消我的订阅?",
-        "a": "进入个人资料,打开有效订阅并点击取消。如需帮助,请发邮件至 soporte@hazorex.com。"
+        "a": "进入个人资料,打开有效订阅并点击取消。如需帮助,请发邮件至 hazorex0@gmail.com。"
       },
       "sweepstakes": {
         "q": "如何参与每日抽奖?",
