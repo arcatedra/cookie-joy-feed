@@ -1443,8 +1443,8 @@
         "a": "配送時間はお住まいの地域によって異なります。各段階で配送状況の更新をメールでお知らせします。"
       },
       "cancel": {
-        "q": "サブスクリプションをキャンセルするには?",
-        "a": "プロフィールに移動し、アクティブなサブスクリプションを開いてキャンセルをクリックしてください。ヘルプが必要な場合は hazorex0@gmail.com までメールでご連絡ください。"
+        "q": "¿Cuál es el pedido mínimo?",
+        "a": "El pedido mínimo de galletas es $12 en productos."
       },
       "sweepstakes": {
         "q": "毎日の抽選に参加するには?",
@@ -1538,7 +1538,8 @@
     "remove": "削除",
     "back": "戻る",
     "checkoutError": "支払いを開始できませんでした",
-    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
+    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
@@ -1665,5 +1666,6 @@
       "sat": "土曜日",
       "sun": "日曜日"
     }
-  }
+  },
+  "deliveryPromise": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
 }

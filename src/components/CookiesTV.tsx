@@ -34,8 +34,8 @@ import {
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
+import { spanishCookieName } from "@/lib/cookie-catalog";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { syncReelPlayback } from "@/lib/reel-playback";
@@ -114,7 +114,6 @@ const REEL_TEXT_KEY_MAP: Record<string, string> = {
 // the localized name.
 const SLUG_TO_PRODUCT_KEY: Record<string, string> = {
   "p-pb": "reels.items.pb.product",
-  "p-cc": "reels.items.cookiescream.product",
   "p-doublechoc": "reels.items.nutella.product",
   "p-cchunk": "reels.items.cchunk.product",
   "p-mint": "reels.items.mint.product",
@@ -136,14 +135,13 @@ export function reelProductKeyFromSlug(slug: string | null | undefined): string 
 // that /shop reads directly from the database.
 const REEL_SLUG_TO_PRODUCTO_ID: Record<string, string> = {
   "p-cchunk":     "a1111111-0000-0000-0000-000000000001", // Chocolate Chunk
-  "p-snicker":    "a1111111-0000-0000-0000-000000000002", // Snickerdoodle
+  "p-snicker":    "a1111111-0000-0000-0000-000000000008", // Snickerdoodle
   "p-oatmeal":    "a1111111-0000-0000-0000-000000000003", // Oatmeal Raisin
   "p-mint":       "a1111111-0000-0000-0000-000000000004", // Mint Chocolate
   "p-pista":      "a1111111-0000-0000-0000-000000000005", // Pistachio
   "p-triple":     "a1111111-0000-0000-0000-000000000006", // Triple Chocolate
   "p-doublechoc": "a1111111-0000-0000-0000-000000000006", // Triple Chocolate (same image line)
   "p-mm":         "a1111111-0000-0000-0000-000000000007", // M&M Festivo
-  "p-cc":         "a1111111-0000-0000-0000-000000000008", // Snicker (closest fallback for cookies&cream)
   "p-pb":         "a1111111-0000-0000-0000-000000000009", // Mantequilla de Maní Crujiente
 };
 export function resolveProductoForReel(
@@ -220,7 +218,6 @@ const FALLBACK_VIDEO: Record<string, string> = {
 };
 const FALLBACK_PRODUCT_IMG: Record<string, string> = {
   "p-doublechoc": imgDoubleChoc,
-  "p-cc": imgCookiesCream,
   "p-pb": imgPB,
   "p-cchunk": imgChocChunk,
   "p-mint": imgMint,
@@ -1122,7 +1119,6 @@ function ReelCard({
   const { t } = useTranslation(); // subscribe so reel titles re-render on language change
   const { user } = useAuth();
   const cart = useCart();
-  const gate = useSubscriptionGate();
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -1203,37 +1199,10 @@ function ReelCard({
   };
 
   const buy = () => {
-    // Prefer the canonical `productos` row so the cart holds the same UUID,
-    // name and price as /shop. Fallback to the reel's own fields for legacy
-    // rows whose product_slug has no matching seeded product.
-    if (producto) {
-      const nameKey = translateReelKey(reel.product_name, reel.product_slug);
-      const displayName = nameKey && i18n.exists(nameKey) ? i18n.t(nameKey) : producto.nombre;
-      gate.guard(() => {
-        cart.add({
-          id: producto.id,
-          name: displayName,
-          nameKey,
-          price: Number(producto.precio),
-          image: producto.imagen_url || productImg,
-        });
-        toast.success(t("reels.addedToCart", { name: displayName, defaultValue: "{{name}} added to cart" }));
-      });
-      return;
-    }
-    const name = translateReelText(reel.product_name, reel.product_slug);
-    const price = reel.product_price;
-    if (!name || price == null) return;
-    gate.guard(() => {
-      cart.add({
-        id: `reel-${reel.product_slug || reel.id}`,
-        name,
-        nameKey: translateReelKey(reel.product_name, reel.product_slug),
-        price: Number(price),
-        image: productImg,
-      });
-      toast.success(t("reels.addedToCart", { name, defaultValue: "{{name}} added to cart" }));
-    });
+    if (!producto) return;
+    const name = spanishCookieName(producto.nombre);
+    cart.add({id:producto.id,name,price:Number(producto.precio),image:producto.imagen_url || productImg});
+    toast.success(t("reels.addedToCart", {name}));
   };
 
   const shareUrl = () => {
@@ -1764,7 +1733,7 @@ function ReelCard({
                       const k = translateReelKey(reel.product_name, reel.product_slug);
                       return k && i18n.exists(k) ? t(k) : producto.nombre;
                     })()
-                  : translateReelText(reel.product_name, reel.product_slug)}
+                  : producto ? spanishCookieName(producto.nombre) : ""}
               </span>
               <span className="block text-[11px] font-extrabold text-amber-300">
                 ${Number(producto?.precio ?? reel.product_price ?? 0).toFixed(2)}

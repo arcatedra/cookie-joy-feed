@@ -140,7 +140,7 @@
       "bestSellers": "Más vendidas",
       "deals": "Ofertas del día",
       "buildPack": "Crea tu pack",
-      "subscriptions": "Suscripciones de galletas",
+      "subscriptions": "pedidos de galletas",
       "yourAccount": "Tu cuenta",
       "ordersReturns": "Devoluciones y pedidos",
       "cart": "Tu carrito",
@@ -152,7 +152,7 @@
       "bestSellers": "Más Vendidas",
       "buildPack": "Crea tu Pack",
       "support": "Servicio al Cliente",
-      "subscriptions": "Suscripciones de Galletas",
+      "subscriptions": "pedidos de Galletas",
       "shop": "🛍️ Tienda",
       "roulette": "🎰 Sorteo",
       "drivers": "🛵 Sé repartidor",
@@ -862,11 +862,11 @@
     "sections": {
       "authTitle": "Autenticación y acceso",
       "authP1": "El acceso a la cuenta se realiza con correo electrónico y contraseña o con inicio de sesión de Google. Las contraseñas nunca se almacenan en texto plano: la gestión y verificación de credenciales es manejada por el proveedor de autenticación gestionado de la plataforma.",
-      "authP2": "Cada usuario solo puede leer y modificar su propio perfil y sus propios pedidos, suscripciones y donaciones. Los roles administrativos están restringidos y se verifican del lado del servidor.",
+      "authP2": "Cada usuario solo puede leer y modificar su propio perfil y sus propios pedidos, compras. Los roles administrativos están restringidos y se verifican del lado del servidor.",
       "paymentsTitle": "Pagos",
       "paymentsP1": "Los pagos se procesan a través de Stripe. HAZOREX no almacena ni tiene acceso a los números completos de tarjeta, CVV o fechas de vencimiento: estos datos viajan directamente entre tu navegador y Stripe usando sus elementos seguros.",
       "dataTitle": "Datos que recopilamos",
-      "dataP1": "Solo recopilamos los datos necesarios para operar la aplicación: tu correo electrónico, un nombre de usuario opcional, tu dirección de envío cuando realizas una compra física, y un historial de pedidos, suscripciones y donaciones asociadas a tu cuenta.",
+      "dataP1": "Solo recopilamos los datos necesarios para operar la aplicación: tu correo electrónico, un nombre de usuario opcional, tu dirección de envío cuando realizas una compra física, y un historial de pedidos, compras asociadas a tu cuenta.",
       "subprocessorsTitle": "Subprocesadores",
       "subprocessorsP1": "Para proporcionar el servicio, dependemos de los siguientes subprocesadores: Lovable Cloud (hosting, base de datos y autenticación), Stripe (procesamiento de pagos) y un proveedor de correos electrónicos transaccionales. Cada uno recibe solo los datos mínimos necesarios para su función.",
       "emailTitle": "Correo electrónico",
@@ -907,7 +907,7 @@
     "model": [
       {
         "title": "1. Qué es Hazorex",
-        "body": "Hazorex es una plataforma de pedidos y entrega a domicilio. Recibes tu pedido de tiendas y supermercados aliados. <strong>No cobramos suscripciones ni membresías:</strong> solo pagas por cada pedido que haces."
+        "body": "Hazorex es una plataforma de pedidos y entrega a domicilio. Recibes tu pedido de tiendas y supermercados aliados. <strong>No cobramos pedidos ni membresías:</strong> solo pagas por cada pedido que haces."
       },
       {
         "title": "2. Precios de los productos",
@@ -1146,7 +1146,7 @@
         "noFee": "Sin cuota inicial",
         "reply48": "Respuesta en 48 h"
       },
-      "example": "Ejemplo para un pedido de $60 y 50 lb: envío ${{base}} + peso ${{weight}} + propina ${{tip}} = ${{total}}. No es una promesa por hora."
+      "example": "Ejemplo: un lote de 4 pedidos (2 pequeños, 1 mediano y 1 grande) = $5 + $5 + $5.50 + $6 = $21.50, más el 100% de las propinas. Pedidos de más de 45 lb te pagan un extra por libra. No es una promesa de pago por hora."
     },
     "signInGate": {
       "title": "Empieza tu postulación",
@@ -1155,7 +1155,7 @@
     },
     "readyGate": {
       "title": "Todo listo para tu postulación",
-      "body": "Tarda ~5 minutos. Ten a mano tu identificación con foto y SSN o ITIN, además de licencia y seguro si tu vehículo los requiere.",
+      "body": "Ten a mano tu identificación con foto, y licencia y seguro si tu vehículo los requiere. Hazorex NO pide ni guarda tu SSN/ITIN: solo lo pones directamente en la página segura de Checkr, nuestro proveedor de verificación de antecedentes. Para cobrar, conectas tu cuenta de banco de forma segura por Stripe.",
       "cta": "Empezar postulación"
     },
     "cta": {
@@ -1476,7 +1476,7 @@
   },
   "supportPage": {
     "metaTitle": "Atención al cliente — HAZOREX",
-    "metaDesc": "Contacta con el equipo de soporte de HAZOREX. Correo, preguntas frecuentes sobre pedidos, entregas, suscripciones y sorteo.",
+    "metaDesc": "Contacta con el equipo de soporte de HAZOREX. Correo, preguntas frecuentes sobre pedidos, entregas, pedidos y sorteo.",
     "metaOg": "Estamos aquí para ayudarte. Escríbenos a hazorex0@gmail.com.",
     "heroTitle": "¿En qué podemos ayudarte?",
     "heroSubtitle": "Nuestro equipo está aquí para resolver cualquier duda sobre tus pedidos, entregas, suscripción o el sorteo diario.",
@@ -1496,8 +1496,8 @@
         "a": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
       },
       "cancel": {
-        "q": "¿Cómo cancelo mi suscripción?",
-        "a": "Entra en tu perfil, ve a la sección de suscripción activa y pulsa cancelar. Si necesitas ayuda, escríbenos a hazorex0@gmail.com."
+        "q": "¿Cuál es el pedido mínimo?",
+        "a": "El pedido mínimo de galletas es $12 en productos."
       },
       "sweepstakes": {
         "q": "¿Cómo participo en el sorteo diario?",
@@ -1610,7 +1610,8 @@
     "remove": "eliminar",
     "back": "volver",
     "checkoutError": "No se pudo iniciar el pago",
-    "authHoldNote": "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque."
+    "authHoldNote": "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque.",
+    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}"
   },
   "favorites": {
     "add": "Guardar en favoritos",
@@ -1633,7 +1634,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Galletas Artesanales Premium",
-    "metaDesc": "Descubre galletas gourmet, packs personalizados y suscripciones mensuales en HAZOREX.",
+    "metaDesc": "Descubre galletas gourmet, packs personalizados y pedidos mensuales en HAZOREX.",
     "sliderHeading": "Inspirado en tus antojos",
     "sliderSub": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes",
     "seeMore": "Ver más",

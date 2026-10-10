@@ -1441,8 +1441,8 @@
         "a": "Die Lieferzeiten hängen von deiner Region ab. Du erhältst per E-Mail Updates zu jedem Schritt deiner Sendung."
       },
       "cancel": {
-        "q": "Wie kündige ich mein Abo?",
-        "a": "Gehe zu deinem Profil, öffne dein aktives Abo und klicke auf kündigen. Wenn du Hilfe brauchst, schreib uns an hazorex0@gmail.com."
+        "q": "¿Cuál es el pedido mínimo?",
+        "a": "El pedido mínimo de galletas es $12 en productos."
       },
       "sweepstakes": {
         "q": "Wie nehme ich am täglichen Gewinnspiel teil?",
@@ -1536,7 +1536,8 @@
     "remove": "entfernen",
     "back": "zurück",
     "checkoutError": "Zahlung konnte nicht gestartet werden",
-    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
+    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
@@ -1663,5 +1664,6 @@
       "sat": "Samstag",
       "sun": "Sonntag"
     }
-  }
+  },
+  "deliveryPromise": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes"
 }

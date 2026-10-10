@@ -140,7 +140,7 @@
       "bestSellers": "Best sellers",
       "deals": "Today's deals",
       "buildPack": "Build your pack",
-      "subscriptions": "Cookie subscriptions",
+      "subscriptions": "Cookie orders",
       "yourAccount": "Your account",
       "ordersReturns": "Returns & orders",
       "cart": "Your cart",
@@ -152,7 +152,7 @@
       "bestSellers": "Best Sellers",
       "buildPack": "Build a Pack",
       "support": "Customer Service",
-      "subscriptions": "Cookie Subscriptions",
+      "subscriptions": "Cookie orders",
       "shop": "🛍️ Shop",
       "roulette": "🎰 Sweepstakes",
       "drivers": "🛵 Become a driver",
@@ -186,7 +186,7 @@
   },
   "home": {
     "metaTitle": "HAZOREX — Gourmet Cookies, Delivered Monthly",
-    "metaDesc": "Discover artisanal gourmet cookies and join the HAZOREX monthly subscription for freshly baked treats at your door.",
+    "metaDesc": "Discover artisanal gourmet cookies and join the HAZOREX monthly orders for freshly baked treats at your door.",
     "welcome": "Welcome back",
     "greeting": "Good Morning, {{name}}!",
     "freshToday": "Fresh batches dropped today",
@@ -198,7 +198,7 @@
     "subscriptionEyebrow": "Monthly box",
     "subscriptionHeadline": "12 fresh cookies, delivered to your door.",
     "subscriptionSubcopy": "Cancel anytime · Free shipping",
-    "startSubscription": "Start subscription",
+    "startSubscription": "Start orders",
     "promoTitle": "Ready to try something new?",
     "promoSubtitle": "Discover our limited editions and this month's favorites.",
     "promoCta": "View full menu",
@@ -209,7 +209,7 @@
       "buildPackLink": "View options",
       "buildPackCta": "Start building",
       "buildPackAlt": "Custom cookie box",
-      "subscriptionTitle": "Monthly Subscription",
+      "subscriptionTitle": "Monthly orders",
       "subscriptionLink": "Discover the club",
       "subscriptionClub": "HAZOREX CLUB",
       "subscriptionHeadline": "Weekly freshly baked deliveries",
@@ -341,9 +341,9 @@
     "peanuts": "PEANUTS"
   },
   "subscribe": {
-    "metaTitle": "Subscription Plans — HAZOREX",
+    "metaTitle": "orders Plans — HAZOREX",
     "metaDesc": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
-    "title": "Subscription Plans",
+    "title": "orders Plans",
     "deliveryBadge": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "activePlan": "Active Plan",
     "remaining": "Remaining",
@@ -385,7 +385,7 @@
   },
   "profile": {
     "metaTitle": "My Profile — HAZOREX",
-    "metaDesc": "Manage your HAZOREX account, orders, and subscription.",
+    "metaDesc": "Manage your HAZOREX account, orders, and orders.",
     "title": "My Profile",
     "settings": "Settings",
     "city": "New York",
@@ -446,19 +446,19 @@
     "dialogTitle": "Subscribe to activate your deliveries and shop",
     "dialogDesc": "Purchases and deliveries are available only to subscribed members.",
     "freeShipping": "FREE delivery ($0) included in every plan!",
-    "viewPlans": "View subscription plans",
+    "viewPlans": "View orders plans",
     "signInAndSubscribe": "Sign in and subscribe",
     "keepBrowsing": "Keep browsing",
     "bannerEyebrow": "Become a member",
     "bannerTitle": "Subscribe to activate your deliveries",
     "bannerSubcopy": "FREE delivery ($0) included in every plan!",
     "bannerCta": "View plans",
-    "cartWarning": "You need an active subscription to checkout.",
+    "cartWarning": "You need an active orders to checkout.",
     "cartCta": "Subscribe to buy",
     "cartProcessing": "Processing…",
     "cartConfirm": "Confirm and Pay Order",
     "cartTerms": "By confirming your order, you accept the store's terms of service.",
-    "noActive": "You don't have an active subscription. Subscribe to start scheduling deliveries.",
+    "noActive": "You don't have an active orders. Subscribe to start scheduling deliveries.",
     "scheduled": "Delivery scheduled",
     "canceled": "Delivery canceled"
   },
@@ -862,15 +862,15 @@
     "sections": {
       "authTitle": "Authentication and access",
       "authP1": "Account access is done with email and password or Google sign-in. Passwords are never stored in plain text: credential management and verification is handled by the platform's managed authentication provider.",
-      "authP2": "Each user can only read and modify their own profile and their own orders, subscriptions and donations. Administrative roles are restricted and verified server-side.",
+      "authP2": "Each user can only read and modify their own profile and their own orders, purchases. Administrative roles are restricted and verified server-side.",
       "paymentsTitle": "Payments",
       "paymentsP1": "Payments are processed through Stripe. HAZOREX does not store or have access to full card numbers, CVV or expiration dates: this data travels directly between your browser and Stripe using their secure elements.",
       "dataTitle": "Data we collect",
-      "dataP1": "We only collect data necessary to operate the application: your email, an optional display name, your shipping address when you make a physical purchase, and a history of orders, subscriptions and donations associated with your account.",
+      "dataP1": "We only collect data necessary to operate the application: your email, an optional display name, your shipping address when you make a physical purchase, and a history of orders, purchases associated with your account.",
       "subprocessorsTitle": "Subprocessors",
       "subprocessorsP1": "To provide the service we rely on the following subprocessors: Lovable Cloud (hosting, database and authentication), Stripe (payment processing) and a transactional email provider. Each receives only the minimum data needed for its function.",
       "emailTitle": "Email",
-      "emailP1": "We only send transactional emails (order, subscription and account-change confirmations). We do not run mass marketing campaigns. Each email includes an unsubscribe link that disables future sends to that address.",
+      "emailP1": "We only send transactional emails (order, orders and account-change confirmations). We do not run mass marketing campaigns. Each email includes an unsubscribe link that disables future sends to that address.",
       "retentionTitle": "Retention and deletion",
       "retentionP1": "We keep your data while your account is active. If you wish to delete your account or request deletion of your personal data, write to the site's contact email and we will process the request.",
       "reportTitle": "How to report a security issue",
@@ -907,7 +907,7 @@
     "model": [
       {
         "title": "1. What Hazorex is",
-        "body": "Hazorex is an ordering and home-delivery platform. Your order is fulfilled by partner stores and supermarkets. <strong>We do not charge subscriptions or memberships:</strong> you only pay per order."
+        "body": "Hazorex is an ordering and home-delivery platform. Your order is fulfilled by partner stores and supermarkets. <strong>We do not charge orders or memberships:</strong> you only pay per order."
       },
       {
         "title": "2. Product prices",
@@ -1108,7 +1108,7 @@
     "shop": "Shop",
     "allCookies": "Cookies",
     "roulette": "Daily roulette",
-    "subscribe": "Subscription",
+    "subscribe": "orders",
     "explore": "Explore",
     "account": "Account",
     "profile": "My profile",
@@ -1146,7 +1146,7 @@
         "noFee": "No initial fee",
         "reply48": "Response in 48h"
       },
-      "example": "Example for a $60, 50 lb order: delivery ${{base}} + weight ${{weight}} + tip ${{tip}} = ${{total}}. This is not an hourly promise."
+      "example": "Example: a batch of 4 orders (2 small, 1 medium and 1 large) = $5 + $5 + $5.50 + $6 = $21.50, plus 100% of tips. Orders over 45 lb pay an extra amount per pound. This is not an hourly pay promise."
     },
     "signInGate": {
       "title": "Start your application",
@@ -1155,7 +1155,7 @@
     },
     "readyGate": {
       "title": "Everything's ready for your application",
-      "body": "It takes ~5 minutes. Have your photo ID and SSN or ITIN ready, plus a license and insurance if required for your vehicle.",
+      "body": "Have your photo ID ready, plus a license and insurance if your vehicle requires them. Hazorex never asks for or stores your SSN/ITIN: enter it only on Checkr’s secure background-check page. To receive payments, securely connect your bank account through Stripe.",
       "cta": "Start application"
     },
     "cta": {
@@ -1476,10 +1476,10 @@
   },
   "supportPage": {
     "metaTitle": "Customer support — HAZOREX",
-    "metaDesc": "Get in touch with the HAZOREX support team. Email us and browse FAQs about orders, delivery, subscriptions, and the sweepstakes.",
+    "metaDesc": "Get in touch with the HAZOREX support team. Email us and browse FAQs about orders, delivery, orders, and the sweepstakes.",
     "metaOg": "We're here to help. Email us at hazorex0@gmail.com.",
     "heroTitle": "How can we help?",
-    "heroSubtitle": "Our team is here to answer any questions about your orders, deliveries, subscription, or the daily sweepstakes.",
+    "heroSubtitle": "Our team is here to answer any questions about your orders, deliveries, orders, or the daily sweepstakes.",
     "contactTitle": "Contact us",
     "contactSubtitle": "We reply during business hours, usually within 24 hours.",
     "emailLabel": "Email",
@@ -1496,8 +1496,8 @@
         "a": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday"
       },
       "cancel": {
-        "q": "How do I cancel my subscription?",
-        "a": "Go to your profile, open your active subscription, and click cancel. If you need help, email us at hazorex0@gmail.com."
+        "q": "What is the minimum order?",
+        "a": "The minimum cookie order is $12 in products."
       },
       "sweepstakes": {
         "q": "How do I enter the daily sweepstakes?",
@@ -1610,7 +1610,8 @@
     "remove": "remove",
     "back": "back",
     "checkoutError": "Could not start payment",
-    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed."
+    "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
+    "minimum": "Minimum order $12 — you need ${{missing}} more"
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",
@@ -1620,7 +1621,7 @@
   },
   "homePage": {
     "metaTitle": "HAZOREX — Premium Handcrafted Cookies",
-    "metaDesc": "Discover gourmet cookies, custom packs and monthly subscriptions at HAZOREX.",
+    "metaDesc": "Discover gourmet cookies, custom packs and monthly orders at HAZOREX.",
     "sliderHeading": "Inspired by your cravings",
     "sliderSub": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday",
     "seeMore": "See more",
@@ -1632,7 +1633,7 @@
   },
   "profilePage": {
     "metaTitle": "My Profile — HAZOREX",
-    "metaDesc": "Manage your HAZOREX account, orders and subscription."
+    "metaDesc": "Manage your HAZOREX account, orders and orders."
   },
   "shopPage": {
     "subtitle": "Buy by the piece · Secure checkout with Stripe",
