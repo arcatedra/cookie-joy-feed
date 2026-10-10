@@ -7,10 +7,11 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import i18n, { formatPrice } from "@/i18n";
 import { useCart } from "@/lib/cart";
 import { listProductos, type Producto } from "@/lib/productos.functions";
+import { normalizeCookie } from "@/lib/cookie-catalog";
 
 export const productosQueryOptions = queryOptions({
   queryKey: ["productos", "shop"],
-  queryFn: () => listProductos(),
+  queryFn: async () => (await listProductos()).map(normalizeCookie),
 });
 
 export const Route = createFileRoute("/shop")({

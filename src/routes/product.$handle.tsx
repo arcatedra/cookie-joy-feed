@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-// Legacy /product/:handle route — subscription model, no per-product page.
+// Legacy /product/:handle route — retained link to the current cookie catalog.
 export const Route = createFileRoute("/product/$handle")({
   beforeLoad: () => {
-    throw redirect({ to: "/subscribe" });
+    throw redirect({ to: "/shop" });
   },
 });
