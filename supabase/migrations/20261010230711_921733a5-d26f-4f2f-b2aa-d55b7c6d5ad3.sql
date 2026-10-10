@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.public_cookie_sales() FROM anon, authenticated; GRANT EXECUTE ON FUNCTION public.public_cookie_sales() TO service_role;
