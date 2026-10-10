@@ -295,7 +295,7 @@ function CartPage() {
           <Row label={t("cartPage.subtotal")} value={`$${subtotal.toFixed(2)}`} />
           <Row
             label={t("cartPage.shipping")}
-            value={shippingCost === 0 ? t("cartPage.free") : `$${shippingCost.toFixed(2)}`}
+                    {t("cartPage.free")}
           />
           <Row label={t("tips.title")} value={`$${propina.toFixed(2)}`} />
           {discount > 0 && <Row label={t("credit.discount")} value={`-$${discount.toFixed(2)}`} />}

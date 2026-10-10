@@ -40,3 +40,11 @@ export const listProductos = createServerFn({ method: "GET" }).handler(
     return (data ?? []) as Producto[];
   },
 );
+
+/** Public output is only product IDs in sales order, never customer information. */
+export const bestSellingCookieIds = createServerFn({ method: "GET" }).handler(async (): Promise<string[]> => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.rpc("public_cookie_sales");
+  if (error) throw new Error("No se pudo consultar el orden de ventas.");
+  return (data ?? []).map((row) => row.producto_id);
+});

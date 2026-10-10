@@ -60,7 +60,7 @@ export function TopNav() {
   const goSearch = (term?: string) => {
     setSearchOpen(false);
     const q = (term ?? searchVal).trim();
-    navigate({ to: "/search", search: q ? { q } : {} });
+    navigate({ to: "/search", search: { q } });
   };
   const [searchVal, setSearchVal] = useState("");
   const [category, setCategory] = useState<(typeof categoryKeys)[number]>("all");
