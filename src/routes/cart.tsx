@@ -12,8 +12,7 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
-import { SubstitutionPicker } from "@/components/SubstitutionPicker";
-import { DEFAULT_SUBSTITUTION_MODE } from "@/lib/substitutions";
+import { COOKIE_MINIMUM_CENTS } from "@/lib/cookie-order-rules";
 import i18n from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -78,7 +77,6 @@ function CartPage() {
     phone: "",
     country: "US",
   });
-  const [shipping, setShipping] = useState<"standard" | "express">("standard");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const checkoutRef = useRef<HTMLDivElement>(null);
@@ -87,14 +85,16 @@ function CartPage() {
     if (user?.email && !email) setEmail(user.email);
   }, [user, email]);
 
-  const shippingCost = shipping === "express" ? 4.99 : 0;
+  const shippingCost = 0;
   const subtotal = cart.total;
+  const missingCents = Math.max(0, COOKIE_MINIMUM_CENTS - Math.round(subtotal * 100));
   const gross = subtotal + shippingCost + propina;
   const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
   const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
 
   const canCheckout =
     cart.count > 0 &&
+    missingCents === 0 &&
     /.+@.+\..+/.test(email) &&
     address.name.length >= 2 &&
     address.street.length >= 2 &&
@@ -117,11 +117,9 @@ function CartPage() {
             price: it.price,
             qty: it.qty,
             image: it.image?.startsWith("http") ? it.image : undefined,
-            substitutionMode: it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE,
-            substituteIds: it.substituteIds ?? [],
           })),
           address,
-          shipping,
+          shipping: "standard",
           propina,
           usarSaldo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
@@ -213,12 +211,6 @@ function CartPage() {
                     <Plus className="h-3 w-3" />
                   </button>
                 </div>
-                <SubstitutionPicker
-                  itemId={it.id}
-                  mode={it.substitutionMode ?? DEFAULT_SUBSTITUTION_MODE}
-                  substituteIds={it.substituteIds ?? []}
-                  onChange={(mode, ids) => cart.setSubstitution(it.id, mode, ids)}
-                />
               </div>
               <div className="flex flex-col items-end gap-2">
                 <span className="text-sm font-bold text-foreground">
@@ -289,20 +281,7 @@ function CartPage() {
               <h2 className="text-sm font-bold uppercase tracking-wider text-foreground">
                 {t("cartPage.shipping")}
               </h2>
-              <div className="mt-3 space-y-2">
-                <ShippingOption
-                  checked={shipping === "standard"}
-                  onChange={() => setShipping("standard")}
-                  label={t("cartPage.standard")}
-                  price={t("cartPage.free")}
-                />
-                <ShippingOption
-                  checked={shipping === "express"}
-                  onChange={() => setShipping("express")}
-                  label={t("cartPage.express")}
-                  price="$4.99"
-                />
-              </div>
+              <p className="mt-3 text-sm text-muted-foreground">{t("deliveryPromise")}</p>
             </section>
             <div className="mt-4 space-y-3">
               <p className="text-sm text-muted-foreground">{t("deliveryPromise")}</p>
@@ -326,16 +305,11 @@ function CartPage() {
               ${total.toFixed(2)}
             </span>
           </div>
-          <p className="mt-2 rounded-md bg-muted/60 p-2 text-xs text-muted-foreground">
-            {t("cartPage.authHoldNote", {
-              defaultValue:
-                "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque.",
-            })}
-          </p>
         </section>
 
 
 
+        {missingCents > 0 && !clientSecret && <p role="status" className="mt-4 text-sm font-semibold text-destructive">{t("cartPage.minimum", { missing: (missingCents / 100).toFixed(2), defaultValue: "Pedido mínimo $12 — te faltan ${{missing}}" })}</p>}
         {!clientSecret && (
           <Button
             type="button"

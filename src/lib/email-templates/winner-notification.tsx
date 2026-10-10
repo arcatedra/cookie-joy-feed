@@ -50,7 +50,7 @@ const WinnerNotification = ({
             <span style={url}>{claimUrl}</span>
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · hazorex0@gmail.com</Text>
       </Container>
     </Body>
   </Html>

@@ -3,9 +3,9 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Minus, ShoppingCart, Package } from "lucide-react";
 import { useCart } from "@/lib/cart";
-import { useSubscriptionGate } from "@/lib/subscription-gate";
 
 import i18n from "@/i18n";
+import { useCookieCatalog } from "@/lib/cookie-catalog";
 import imgChocChunk from "@/assets/ins-chocolate-chunk.jpg";
 import imgSnicker from "@/assets/ins-snickerdoodle.jpg";
 import imgSugar from "@/assets/ins-sugar.jpg";
@@ -17,25 +17,6 @@ import imgPB from "@/assets/ins-pb.jpg";
 import imgVeganChoc from "@/assets/ins-vegan-choc.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
 import imgPack6 from "@/assets/pack-6.jpg";
-
-interface Cookie {
-  id: string;
-  nameKey: string;
-  image: string;
-}
-
-const COOKIES: Cookie[] = [
-  { id: "c1", nameKey: "cookies.c1.name", image: imgChocChunk },
-  { id: "c2", nameKey: "cookies.c2.name", image: imgSnicker },
-  { id: "c3", nameKey: "cookies.c3.name", image: imgSugar },
-  { id: "c4", nameKey: "cookies.c4.name", image: imgDoubleChoc },
-  { id: "c5", nameKey: "cookies.c5.name", image: imgOatmeal },
-  { id: "c6", nameKey: "cookies.c6.name", image: imgWhiteMac },
-  { id: "c7", nameKey: "cookies.c7.name", image: imgMM },
-  { id: "c8", nameKey: "cookies.c8.name", image: imgPB },
-  { id: "c9", nameKey: "cookies.c9.name", image: imgVeganChoc },
-  { id: "c10", nameKey: "cookies.c10.name", image: imgMint },
-];
 
 const SIZES = [
   { count: 6, price: 22 },
@@ -58,7 +39,8 @@ export const Route = createFileRoute("/build-pack")({
 function BuildPackPage() {
   const { t } = useTranslation();
   const cart = useCart();
-  const gate = useSubscriptionGate();
+  const { data: products = [] } = useCookieCatalog();
+  const COOKIES = products.map(p => ({id:p.id,name:p.nombre,image:p.imagen_url ?? ""}));
   
 
   const [sizeIdx, setSizeIdx] = useState(0);
@@ -92,9 +74,8 @@ function BuildPackPage() {
 
   const addToCart = () => {
     if (remaining !== 0) return;
-    if (!gate.guard()) return;
     const parts = Object.entries(selection)
-      .map(([id, qty]) => `${qty}× ${t(COOKIES.find((c) => c.id === id)!.nameKey)}`)
+      .map(([id, qty]) => `${qty}× ${(COOKIES.find((c) => c.id === id)?.name ?? "")}`)
       .join(", ");
     const name = t("buildPackPage.cartName", "Pack personalizado ({{count}} galletas)", { count: size.count });
     cart.add({
@@ -147,7 +128,7 @@ function BuildPackPage() {
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {COOKIES.map((c) => {
               const qty = selection[c.id] ?? 0;
-              const name = t(c.nameKey);
+              const name = c.name;
               return (
                 <li key={c.id} className="flex flex-col overflow-hidden rounded-lg border border-border bg-white">
                   <div className="aspect-square overflow-hidden bg-muted">
@@ -210,7 +191,7 @@ function BuildPackPage() {
               ) : (
                 Object.entries(selection).map(([id, qty]) => (
                   <li key={id} className="flex justify-between">
-                    <span>{t(COOKIES.find((c) => c.id === id)!.nameKey)}</span>
+                    <span>{(COOKIES.find((c) => c.id === id)?.name ?? "")}</span>
                     <span className="font-semibold">×{qty}</span>
                   </li>
                 ))

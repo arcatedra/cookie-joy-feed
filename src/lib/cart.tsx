@@ -91,9 +91,9 @@ function readStorage(): CartItem[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   // Lazy init reads localStorage synchronously on the client so the first
   // client render already reflects the persisted cart. On SSR it returns [].
-  const [items, setItems] = useState<CartItem[]>(() => readStorage());
+  const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const hydratedRef = useRef(typeof window !== "undefined");
+  const hydratedRef = useRef(false);
 
   // Belt-and-suspenders: after mount, if SSR produced [] but storage has data,
   // reconcile once. Marks hydration complete before the save effect fires.

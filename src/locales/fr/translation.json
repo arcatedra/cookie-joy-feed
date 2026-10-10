@@ -903,7 +903,7 @@
     "s6Title": "6. Limitation de Responsabilité",
     "s6Body": "Le service est fourni \"en l'état\". Aucune garantie de disponibilité ininterrompue ou de résultats spécifiques.",
     "s7Title": "7. Contact",
-    "s7Body": "soporte@hazorex.com"
+    "s7Body": "hazorex0@gmail.com"
   },
   "sweepstakesRules": {
     "metaTitle": "Règlement Officiel du Concours — HAZOREX",
@@ -1207,11 +1207,11 @@
       },
       "rejected": {
         "title": "Candidature rejetée",
-        "body": "Vous pouvez nous écrire à soporte@hazorex.com pour régler les détails et postuler à nouveau."
+        "body": "Vous pouvez nous écrire à hazorex0@gmail.com pour régler les détails et postuler à nouveau."
       },
       "suspended": {
         "title": "Compte suspendu",
-        "body": "Écrivez-nous à soporte@hazorex.com pour plus de détails."
+        "body": "Écrivez-nous à hazorex0@gmail.com pour plus de détails."
       }
     },
     "docs": {
@@ -1292,7 +1292,7 @@
       "previewAlt": "Aperçu de {{name}}",
       "privacy": {
         "strong": "Confidentialité de vos documents.",
-        "body": "Ils sont utilisés uniquement pour vérifier votre identité et votre éligibilité. Ils sont stockés de manière chiffrée et seule l'équipe de vérification y a accès. Vous pouvez demander leur suppression à tout moment en écrivant à soporte@hazorex.com. Voir aussi notre",
+        "body": "Ils sont utilisés uniquement pour vérifier votre identité et votre éligibilité. Ils sont stockés de manière chiffrée et seule l'équipe de vérification y a accès. Vous pouvez demander leur suppression à tout moment en écrivant à hazorex0@gmail.com. Voir aussi notre",
         "link": "Politique de confidentialité"
       },
       "accept": {
@@ -1419,7 +1419,7 @@
   "supportPage": {
     "metaTitle": "Service client — HAZOREX",
     "metaDesc": "Contactez l'équipe de support HAZOREX. E-mail et questions fréquentes sur les commandes, livraisons, abonnements et le tirage.",
-    "metaOg": "Nous sommes là pour vous aider. Écrivez-nous à soporte@hazorex.com.",
+    "metaOg": "Nous sommes là pour vous aider. Écrivez-nous à hazorex0@gmail.com.",
     "heroTitle": "Comment pouvons-nous vous aider ?",
     "heroSubtitle": "Notre équipe est là pour répondre à toutes vos questions sur vos commandes, livraisons, abonnement ou le tirage quotidien.",
     "contactTitle": "Nous contacter",
@@ -1439,7 +1439,7 @@
       },
       "cancel": {
         "q": "Comment annuler mon abonnement ?",
-        "a": "Accédez à votre profil, ouvrez votre abonnement actif et cliquez sur annuler. Si vous avez besoin d'aide, écrivez-nous à soporte@hazorex.com."
+        "a": "Accédez à votre profil, ouvrez votre abonnement actif et cliquez sur annuler. Si vous avez besoin d'aide, écrivez-nous à hazorex0@gmail.com."
       },
       "sweepstakes": {
         "q": "Comment participer au tirage quotidien ?",

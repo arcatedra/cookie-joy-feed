@@ -34,7 +34,7 @@ const DriverApproved = ({
             de tu licencia o seguro.
           </Text>
         </Section>
-        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · hazorex0@gmail.com</Text>
       </Container>
     </Body>
   </Html>

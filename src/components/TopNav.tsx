@@ -20,6 +20,7 @@ const hazorexSymbolUrl = hazorexSymbolAsset.url;
 import { DeliveryCounter } from "@/components/DeliveryCounter";
 import { NotificationBell } from "@/components/NotificationBell";
 import { sweepstakesEnabled } from "@/lib/feature-flags";
+import { useStoresVisible } from "@/lib/store-visibility";
 
 const categoryKeys = ["all", "filled", "healthy", "giftBoxes"] as const;
 
@@ -34,7 +35,6 @@ const allQuickLinkKeys = [
   { key: "buildPack", to: "/build-pack" },
 
   { key: "support", to: "/support" },
-  { key: "stores", to: "/tiendas" },
 ] as const;
 
 // Con sweepstakesEnabled=false se oculta el acceso a la Ruleta (no se borra).
@@ -44,6 +44,8 @@ const quickLinkKeys = allQuickLinkKeys.filter(
 
 
 export function TopNav() {
+  const storesVisible = useStoresVisible();
+  const visibleQuickLinks = quickLinkKeys.filter((l) => l.key !== "stores" || storesVisible);
   const { t } = useTranslation();
   const { count: cartCount, hydrated: cartHydrated } = useCart();
   const { user, signOut } = useAuth();
@@ -243,9 +245,9 @@ export function TopNav() {
                 <Link to="/profile" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.ordersReturns")}
                 </Link>
-                <Link to="/tiendas" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
+                {storesVisible && <Link to="/tiendas" onClick={() => setAcctOpen(false)} className="block px-3 py-2 text-sm text-slate-900 hover:bg-amber-50">
                   {t("topnav.cats.stores", "Tiendas")}
-                </Link>
+                </Link>}
                 <div className="border-t border-border" />
                 {user ? (
                   <>
@@ -348,7 +350,7 @@ export function TopNav() {
             {t("topnav.all")}
           </button>
           <div className="no-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
-            {quickLinkKeys.map((l) => {
+            {visibleQuickLinks.map((l) => {
               const isHighlighted = "highlighted" in l && l.highlighted;
               return (
                 <Link

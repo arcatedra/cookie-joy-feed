@@ -16,7 +16,7 @@ export const Route = createFileRoute("/privacidad")({
 });
 
 const BLUE = "#1e3a5f";
-const EMAIL = "privacy@hazorex.com";
+const EMAIL = "hazorex0@gmail.com";
 
 function PrivacyPage() {
   const { t } = useTranslation();

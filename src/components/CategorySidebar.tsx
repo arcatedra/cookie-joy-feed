@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
+import { useStoresVisible } from "@/lib/store-visibility";
 import {
   Sheet,
   SheetContent,
@@ -49,6 +50,7 @@ const groups = [
 ] as const;
 
 export function CategorySidebar({ open, onOpenChange }: Props) {
+  const storesVisible = useStoresVisible();
   const { t } = useTranslation();
   const { user } = useAuth();
   const displayName =
@@ -73,7 +75,7 @@ export function CategorySidebar({ open, onOpenChange }: Props) {
               {t(`topnav.groups.${g.key}`)}
             </p>
             <ul>
-              {g.items.map((item, i) => (
+              {g.items.filter((item) => (item.label !== "stores" || storesVisible) && (item.label !== "signIn" || !user)).map((item, i) => (
                 <li key={`${g.key}-${i}`}>
                   <Link
                     to={item.to}

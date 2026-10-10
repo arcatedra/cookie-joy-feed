@@ -11,7 +11,7 @@ interface Props {
 const DriverApplicationReceived = ({
   driverName = 'Repartidor/a',
   referenceId = '—',
-  supportEmail = 'soporte@hazorex.com',
+  supportEmail = 'hazorex0@gmail.com',
 }: Props) => (
   <Html lang="es" dir="ltr">
     <Head />
@@ -60,7 +60,7 @@ export const template = {
   previewData: {
     driverName: 'María',
     referenceId: 'HZX-DRV-A1B2C3',
-    supportEmail: 'soporte@hazorex.com',
+    supportEmail: 'hazorex0@gmail.com',
   },
 } satisfies TemplateEntry
 

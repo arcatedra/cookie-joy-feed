@@ -24,7 +24,7 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
     return {
       sponsor_name: "HAZOREX LLC",
       sponsor_address: "",
-      sponsor_email: "soporte@hazorex.com",
+      sponsor_email: "hazorex0@gmail.com",
       excluded_states: ["FL", "RI"] as string[],
       min_age: 18,
       claim_window_days: 14,
@@ -37,7 +37,7 @@ export const getSweepstakesPublicConfig = createServerFn({ method: "GET" }).hand
   return {
     sponsor_name: (row?.sponsor_name as string) ?? "HAZOREX LLC",
     sponsor_address: (row?.sponsor_address as string) ?? "",
-    sponsor_email: (row?.sponsor_email as string) ?? "soporte@hazorex.com",
+    sponsor_email: (row?.sponsor_email as string) ?? "hazorex0@gmail.com",
     excluded_states: ((row?.excluded_states as string[]) ?? ["FL", "RI"]),
     min_age: Number(row?.min_age ?? 18),
     claim_window_days: Number(row?.claim_window_days ?? 14),

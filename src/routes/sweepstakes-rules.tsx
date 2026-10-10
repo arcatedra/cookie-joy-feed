@@ -36,7 +36,7 @@ function RulesPage() {
   const sponsorAddress = cfg?.address_valid
     ? cfg!.sponsor_address
     : t("sweepstakesRules.addressPlaceholder");
-  const sponsorEmail = cfg?.sponsor_email ?? "soporte@hazorex.com";
+  const sponsorEmail = cfg?.sponsor_email ?? "hazorex0@gmail.com";
   const excluded = (cfg?.excluded_states ?? ["FL", "RI"]).join(", ");
   const maxPrize = (cfg?.max_daily_prize_usd ?? 4999).toLocaleString("en-US");
   const claimDays = cfg?.claim_window_days ?? 14;

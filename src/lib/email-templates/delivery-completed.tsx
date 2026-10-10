@@ -44,7 +44,7 @@ const DeliveryCompleted = ({
           <Hr style={hr} />
           <Text style={text}>Gracias por confiar en HAZOREX 🍪</Text>
         </Section>
-        <Text style={footer}>HAZOREX · soporte@hazorex.com</Text>
+        <Text style={footer}>HAZOREX · hazorex0@gmail.com</Text>
       </Container>
     </Body>
   </Html>
