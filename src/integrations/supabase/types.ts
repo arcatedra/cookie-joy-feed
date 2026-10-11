@@ -2825,6 +2825,22 @@ export type Database = {
         Returns: boolean
       }
       minutes_per_stop: { Args: never; Returns: number }
+      my_available_delivery_blocks: {
+        Args: never
+        Returns: {
+          committed_pay: number
+          door_bonus_amount: number
+          door_bonus_enabled: boolean
+          estimated_minutes: number
+          estimated_trips: number
+          id: string
+          requires_thermal_bag: boolean
+          starts_at: string
+          stops: Json
+          tips_total: number
+          zone_name: string
+        }[]
+      }
       promote_available_commissions: { Args: never; Returns: number }
       public_cookie_sales: {
         Args: never
