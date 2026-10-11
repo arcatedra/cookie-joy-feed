@@ -1,0 +1,3 @@
+ALTER TABLE public.store_products ADD COLUMN IF NOT EXISTS foto_original_url text, ADD COLUMN IF NOT EXISTS foto_fondo_editado boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN public.store_products.foto_original_url IS 'Stored original photograph preserved before background editing.';
+COMMENT ON COLUMN public.store_products.foto_fondo_editado IS 'Current image has edited background; display modification attribution.';
