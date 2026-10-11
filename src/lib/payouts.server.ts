@@ -133,7 +133,7 @@ export async function transferDriverPayout(
 
   const { data: p } = await db
     .from("driver_payouts")
-    .select("id, driver_id, order_id, cookie_order_id, block_id, weekly_bonus_id, amount_usd, status")
+    .select("id, driver_id, order_id, cookie_order_id, block_id, weekly_bonus_id, post_tip_id, amount_usd, status")
     .eq("id", payoutId)
     .maybeSingle();
   if (!p) return { ok: false, error: "Pago no encontrado" };
@@ -182,7 +182,15 @@ export async function transferDriverPayout(
   try {
     let env: import("./stripe.server").StripeEnv;
     let charge: string | null;
-    if (p.cookie_order_id) {
+    let idempotencyKey = `driver-payout-${p.id}`;
+    if (p.post_tip_id) {
+      // Propina extra después de la entrega: sale del cobro de esa propina.
+      const { data: tip } = await db.from("post_delivery_tips").select("status,stripe_environment,charge_id,driver_id").eq("id", p.post_tip_id).maybeSingle();
+      if (!tip || tip.status !== "pagado" || tip.driver_id !== p.driver_id) return { ok: false, error: "La propina extra no está cobrada" };
+      env = tip.stripe_environment;
+      charge = tip.charge_id ?? null;
+      idempotencyKey = `post-tip-${p.post_tip_id}`;
+    } else if (p.cookie_order_id) {
       const { data: cookie } = await db.from("pedidos").select("stripe_environment,stripe_payment_intent_id,monto_capturado").eq("id", p.cookie_order_id).maybeSingle();
       if (!cookie || (cookie.stripe_environment !== "sandbox" && cookie.stripe_environment !== "live") || money(cookie.monto_capturado) <= 0) return { ok: false, error: "Falta el cobro verificado de galletas" };
       const { data: delivered } = await db.from("route_stops").select("id,delivery_routes!inner(driver_id)").eq("order_id", p.cookie_order_id).eq("status", "entregado").eq("delivery_routes.driver_id", p.driver_id).limit(1);
@@ -204,10 +212,10 @@ export async function transferDriverPayout(
         currency: "usd",
         destination: drv.stripe_account_id,
         source_transaction: charge,
-        metadata: { driver_payout_id: p.id, store_order_id: p.order_id ?? undefined, cookie_order_id: p.cookie_order_id ?? undefined },
+        metadata: { driver_payout_id: p.id, store_order_id: p.order_id ?? undefined, cookie_order_id: p.cookie_order_id ?? undefined, post_tip_id: p.post_tip_id ?? undefined },
       },
       env,
-      { "Idempotency-Key": `driver-payout-${p.id}` },
+      { "Idempotency-Key": idempotencyKey },
     );
     await db
       .from("driver_payouts")
