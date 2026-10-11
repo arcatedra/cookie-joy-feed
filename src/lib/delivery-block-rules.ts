@@ -68,3 +68,25 @@ export function manualBlockPay(baseUsd: number, increaseUsd: number, doorBonusEn
   }
   return Math.round((baseUsd + increaseUsd + (doorBonusEnabled ? doorBonusUsd : 0)) * 100) / 100;
 }
+/** Same building = same street line + ZIP (apartment ignored), normalized. */
+export function deliveryAddressKey(address: unknown): string {
+  const a = (address ?? {}) as Record<string, unknown>;
+  const street = String(a.street ?? a.address ?? a.line1 ?? "").toLowerCase().replace(/\b(apt|apartment|unit|suite|#)\b.*$/, "");
+  const zip = String(a.zip ?? a.postal_code ?? "").replace(/\D/g, "").slice(0, 5);
+  const norm = street.replace(/[^a-z0-9]/g, "");
+  return norm && zip ? `${norm}|${zip}` : "";
+}
+
+/** Orders sharing a building must travel together: returns missing same-building order ids. */
+export function missingSameBuildingOrders(selected: { id: string; key: string }[], available: { id: string; key: string }[]): string[] {
+  const keys = new Set(selected.map((o) => o.key).filter(Boolean));
+  const chosen = new Set(selected.map((o) => o.id));
+  return available.filter((o) => o.key && keys.has(o.key) && !chosen.has(o.id)).map((o) => o.id);
+}
+
+/** Stops of the same building become consecutive, keeping first-seen order. */
+export function groupStopsByBuilding<T extends { key: string }>(orders: T[]): T[] {
+  const order: string[] = []; const map = new Map<string, T[]>();
+  orders.forEach((o, i) => { const k = o.key || `solo-${i}`; if (!map.has(k)) { map.set(k, []); order.push(k); } map.get(k)!.push(o); });
+  return order.flatMap((k) => map.get(k)!);
+}

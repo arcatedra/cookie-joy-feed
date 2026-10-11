@@ -461,6 +461,7 @@ export type Database = {
           amount_usd: number
           block_id: string
           component: string
+          cookie_order_id: string | null
           created_at: string
           id: string
           last_error: string | null
@@ -476,6 +477,7 @@ export type Database = {
           amount_usd: number
           block_id: string
           component: string
+          cookie_order_id?: string | null
           created_at?: string
           id?: string
           last_error?: string | null
@@ -491,6 +493,7 @@ export type Database = {
           amount_usd?: number
           block_id?: string
           component?: string
+          cookie_order_id?: string | null
           created_at?: string
           id?: string
           last_error?: string | null
@@ -508,6 +511,13 @@ export type Database = {
             columns: ["block_id"]
             isOneToOne: false
             referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_payout_parts_cookie_order_id_fkey"
+            columns: ["cookie_order_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
             referencedColumns: ["id"]
           },
           {
@@ -776,8 +786,10 @@ export type Database = {
       }
       delivery_block_stops: {
         Row: {
+          address_key: string
           arrived_at: string | null
           block_id: string
+          cookie_order_id: string | null
           created_at: string
           delivered_at: string | null
           delivery_note: string | null
@@ -796,7 +808,7 @@ export type Database = {
           sequence_number: number
           size_label: string
           status: string
-          store_order_id: string
+          store_order_id: string | null
           trip_id: string | null
           updated_at: string
           wait_started_at: string | null
@@ -805,8 +817,10 @@ export type Database = {
           window_start: string | null
         }
         Insert: {
+          address_key?: string
           arrived_at?: string | null
           block_id: string
+          cookie_order_id?: string | null
           created_at?: string
           delivered_at?: string | null
           delivery_note?: string | null
@@ -825,7 +839,7 @@ export type Database = {
           sequence_number: number
           size_label: string
           status?: string
-          store_order_id: string
+          store_order_id?: string | null
           trip_id?: string | null
           updated_at?: string
           wait_started_at?: string | null
@@ -834,8 +848,10 @@ export type Database = {
           window_start?: string | null
         }
         Update: {
+          address_key?: string
           arrived_at?: string | null
           block_id?: string
+          cookie_order_id?: string | null
           created_at?: string
           delivered_at?: string | null
           delivery_note?: string | null
@@ -854,7 +870,7 @@ export type Database = {
           sequence_number?: number
           size_label?: string
           status?: string
-          store_order_id?: string
+          store_order_id?: string | null
           trip_id?: string | null
           updated_at?: string
           wait_started_at?: string | null
@@ -868,6 +884,13 @@ export type Database = {
             columns: ["block_id"]
             isOneToOne: false
             referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_stops_cookie_order_id_fkey"
+            columns: ["cookie_order_id"]
+            isOneToOne: true
+            referencedRelation: "pedidos"
             referencedColumns: ["id"]
           },
           {

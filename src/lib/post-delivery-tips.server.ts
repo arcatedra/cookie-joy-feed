@@ -47,10 +47,17 @@ export async function loadDeliveredOrder(kind: TipKind, orderId: string): Promis
     if (!o) return null;
     const { data: stops } = await db.from("route_stops").select("delivered_at,updated_at,delivery_routes!inner(driver_id)").eq("order_id", orderId).eq("status", "entregado").limit(1);
     const stop = stops?.[0];
+    let driverId: string | null = stop?.delivery_routes?.driver_id ?? null;
+    let deliveredAt: string | null = stop ? (stop.delivered_at ?? stop.updated_at) : null;
+    if (!stop) {
+      const { data: bs } = await db.from("delivery_block_stops").select("delivered_at,delivery_blocks!inner(assigned_driver_id)").eq("cookie_order_id", orderId).eq("status", "delivered").limit(1);
+      driverId = bs?.[0]?.delivery_blocks?.assigned_driver_id ?? null;
+      deliveredAt = bs?.[0]?.delivered_at ?? null;
+    }
     return {
       kind, orderId, clienteId: o.cliente_id, numero: String(o.numero_pedido ?? ""),
-      driverId: stop?.delivery_routes?.driver_id ?? null,
-      deliveredAt: stop ? (stop.delivered_at ?? stop.updated_at) : null,
+      driverId,
+      deliveredAt,
       env: o.stripe_environment === "sandbox" || o.stripe_environment === "live" ? o.stripe_environment : null,
       paymentIntentId: o.stripe_payment_intent_id ?? null,
     };

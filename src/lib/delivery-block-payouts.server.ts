@@ -1,4 +1,4 @@
-import { adminDb, chargeIdForStoreOrder, environmentForStoreOrder, money, type TransferResult } from "./payouts.server";
+import { adminDb, money, type TransferResult } from "./payouts.server";
 
 type StripeEnv = import("./stripe.server").StripeEnv;
 
@@ -45,7 +45,7 @@ export async function registerDeliveryBlockPayout(blockId: string, db = adminDb(
 }
 
 export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb()): Promise<TransferResult> {
-  const { stripePost } = await import("./stripe.server");
+  const { stripePost, stripeGet } = await import("./stripe.server");
   const { data: payout } = await db
     .from("driver_payouts")
     .select("id,driver_id,block_id,amount_usd,status")
@@ -65,40 +65,52 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
 
   const { data: stops, error: stopsError } = await db
     .from("delivery_block_stops")
-    .select("store_order_id,store_orders!inner(monto_capturado,costo_envio,cargo_peso,cargo_servicio,propina,credito_aplicado,stripe_environment)")
+    .select("store_order_id,cookie_order_id,store_orders(monto_capturado,costo_envio,cargo_peso,cargo_servicio,propina,credito_aplicado,stripe_environment,stripe_payment_intent_id),pedidos(monto_capturado,costo_envio,propina,stripe_environment,stripe_payment_intent_id)")
     .eq("block_id", payout.block_id)
     .order("sequence_number");
   if (stopsError || !stops?.length) return { ok: false, error: stopsError?.message ?? "El lote no tiene pedidos" };
 
-  const orderIds: string[] = stops.map((stop: any) => stop.store_order_id as string);
-  const environments = new Set(stops.map((stop: any) => stop.store_orders?.stripe_environment));
+  // Each stop is a store order or a Hazorex Galletas order; both fund the block from delivery + tip only.
+  type Part = { orderId: string; isCookie: boolean; captured: number; available: number; env: string; pi: string | null };
+  const parts: Part[] = stops.map((stop: any): Part => {
+    const isCookie = !!stop.cookie_order_id;
+    const o = isCookie ? stop.pedidos : stop.store_orders;
+    const captured = Math.round(money(o?.monto_capturado) * 100);
+    const available = isCookie
+      ? Math.max(0, Math.min(captured, Math.round((money(o?.costo_envio) + money(o?.propina)) * 100)))
+      : Math.max(0, captured - Math.max(0, Math.min(captured, captured + Math.round(money(o?.credito_aplicado) * 100) - Math.round((money(o?.costo_envio) + money(o?.cargo_peso) + money(o?.cargo_servicio) + money(o?.propina)) * 100))));
+    return { orderId: (stop.store_order_id ?? stop.cookie_order_id) as string, isCookie, captured, available, env: o?.stripe_environment, pi: o?.stripe_payment_intent_id as string | null };
+  });
+  const environments = new Set(parts.map((p) => p.env));
   if (environments.size !== 1 || !environments.has(driver.stripe_environment)) {
     return { ok: false, error: "Los pedidos y la cuenta pertenecen a ambientes distintos" };
   }
-  if (stops.some((stop: any) => money(stop.store_orders?.monto_capturado) <= 0)) {
+  if (parts.some((p) => p.captured <= 0)) {
     return { ok: false, error: "Todos los pedidos del lote deben estar cobrados" };
   }
 
-  const env = await environmentForStoreOrder(orderIds[0], db) as StripeEnv;
+  const env = driver.stripe_environment as StripeEnv;
+  if (env !== "sandbox" && env !== "live") return { ok: false, error: "Ambiente Stripe no verificado" };
   const totalCents = Math.round(money(payout.amount_usd) * 100);
-  const availableByOrder = new Map<string, number>(orderIds.map((orderId: string, index: number): [string, number] => {
-    const order = (stops[index] as any).store_orders;
-    const captured = Math.round(money(order?.monto_capturado) * 100);
-    const storeCents = Math.max(0, Math.min(captured, captured + Math.round(money(order?.credito_aplicado) * 100) - Math.round((money(order?.costo_envio) + money(order?.cargo_peso) + money(order?.cargo_servicio) + money(order?.propina)) * 100)));
-    return [orderId, Math.max(0, captured - storeCents)] as const;
-  }));
-  const totalAvailableCents = [...availableByOrder.values()].reduce((sum: number, cents: number) => sum + cents, 0);
+  const totalAvailableCents = parts.reduce((sum: number, p: Part) => sum + p.available, 0);
   if (totalAvailableCents < totalCents) {
     return { ok: false, error: "Los fondos de entrega, servicio y propinas no cubren el pago comprometido; administración debe revisar el aporte de Hazorex" };
   }
+  const chargeFor = async (pi: string | null) => {
+    if (!pi) return null;
+    const intent = await stripeGet<any>(`/v1/payment_intents/${pi}`, env);
+    const lc = intent?.latest_charge;
+    return typeof lc === "string" ? lc : (lc?.id ?? null);
+  };
 
   let remaining = totalCents;
   let paidCents = 0;
   let firstTransferId: string | null = null;
   try {
-    for (const orderId of orderIds) {
+    for (const part of parts) {
+      const orderId = part.orderId;
       if (remaining <= 0) break;
-      const partCents = Math.min(remaining, availableByOrder.get(orderId) ?? 0);
+      const partCents = Math.min(remaining, part.available);
       if (partCents <= 0) continue;
       const operationKey = `block-payout-${payout.id}-${orderId}`;
       const { data: existing } = await db.from("delivery_block_payout_parts").select("id,status,amount_usd,transfer_id").eq("operation_key", operationKey).maybeSingle();
@@ -109,19 +121,20 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
         firstTransferId = firstTransferId ?? existing.transfer_id ?? null;
         continue;
       }
-      const charge = await chargeIdForStoreOrder(orderId, db);
+      const charge = await chargeFor(part.pi);
       if (!charge) throw new Error(`El pedido ${orderId} todavía no tiene cargo`);
       const tr = await stripePost<any>("/v1/transfers", {
         amount: partCents,
         currency: "usd",
         destination: driver.stripe_account_id,
         source_transaction: charge,
-        metadata: { driver_payout_id: payout.id, delivery_block_id: payout.block_id, store_order_id: orderId },
+        metadata: { driver_payout_id: payout.id, delivery_block_id: payout.block_id, ...(part.isCookie ? { cookie_order_id: orderId } : { store_order_id: orderId }) },
       }, env, { "Idempotency-Key": operationKey });
       await db.from("delivery_block_payout_parts").upsert({
         payout_id: payout.id,
         block_id: payout.block_id,
-        store_order_id: orderId,
+        store_order_id: part.isCookie ? null : orderId,
+        cookie_order_id: part.isCookie ? orderId : null,
         component: "block_payment",
         amount_usd: partCents / 100,
         operation_key: operationKey,
