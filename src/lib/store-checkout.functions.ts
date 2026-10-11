@@ -21,6 +21,7 @@ import {
   tierForWeight,
   weightFeeCents,
 } from "./pricing";
+import { unitPriceCents } from "./house-store-rules";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
@@ -57,6 +58,8 @@ const schema = z.object({
   doorService: z.enum(["lobby", "elevator", "stairs"]).optional().default("lobby"),
   /** Usar el saldo disponible del cliente. */
   usarSaldo: z.boolean().optional().default(true),
+  /** Qué hacer si falta un producto. */
+  reemplazo: z.enum(["similar", "no_reemplazar", "llamar"]).optional().default("similar"),
   locale: z.enum(["es", "en"]).default("es"),
 });
 
@@ -96,7 +99,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const ids = [...new Set(data.items.map((i) => i.productId))];
     const { data: rows, error: prodErr } = await db
       .from("store_products")
-      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb")
+      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb, vendido_por_lb")
       .in("id", ids)
       .eq("business_id", data.businessId);
     if (prodErr) throw new Error("No se pudieron verificar los precios.");
@@ -117,7 +120,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         productId: it.productId,
         name: String(p.nombre),
         unit: String(p.unidad ?? "unidad"),
-        priceCents: Math.round(Number(p.precio) * 100),
+        priceCents: unitPriceCents(p),
         pesoLb: Number(p.peso_lb ?? pricing.defaultProductWeightLb),
         qty: it.qty,
       };
@@ -197,6 +200,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         envio_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).baseCents / 100,
         envio_empresa: blockEnabled ? shippingCents / 100 : tier.companyCents / 100,
         propina: tipCents / 100,
+        reemplazo: data.reemplazo,
         cargo_peso: weightCents / 100,
         cargo_peso_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).driverWeightCents / 100,
         peso_total_lb: totalLb,

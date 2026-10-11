@@ -68,3 +68,6 @@
 - No publicar ni efectuar cobros reales.
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
+## Supermercado propio (11 oct)
+- [x] /admin/productos, /supermercado, reemplazo en pago, 10 productos de prueba.
+- [ ] Probar /admin/productos con sesión de admin (sin sesión autorizada en esta vista previa).

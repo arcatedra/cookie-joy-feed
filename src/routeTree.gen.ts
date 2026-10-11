@@ -29,6 +29,7 @@ import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SupermercadoRouteImport } from './routes/supermercado'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as TerminosRouteImport } from './routes/terminos'
@@ -65,6 +66,7 @@ import { Route as AuthenticatedAdminPayoutsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminPedidosGalletasRouteImport } from './routes/_authenticated/admin.pedidos-galletas'
 import { Route as AuthenticatedAdminPedidosTiendaRouteImport } from './routes/_authenticated/admin.pedidos-tienda'
 import { Route as AuthenticatedAdminPreciosRouteImport } from './routes/_authenticated/admin.precios'
+import { Route as AuthenticatedAdminProductosRouteImport } from './routes/_authenticated/admin.productos'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
@@ -212,6 +214,11 @@ const ShopRoute = ShopRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupermercadoRoute = SupermercadoRouteImport.update({
+  id: '/supermercado',
+  path: '/supermercado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SupportRoute = SupportRouteImport.update({
@@ -402,6 +409,12 @@ const AuthenticatedAdminPreciosRoute =
   AuthenticatedAdminPreciosRouteImport.update({
     id: '/admin/precios',
     path: '/admin/precios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminProductosRoute =
+  AuthenticatedAdminProductosRouteImport.update({
+    id: '/admin/productos',
+    path: '/admin/productos',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminRepartidoresRoute =
@@ -713,6 +726,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -749,6 +763,7 @@ export interface FileRoutesByFullPath {
   '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -818,6 +833,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -853,6 +869,7 @@ export interface FileRoutesByTo {
   '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -925,6 +942,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -961,6 +979,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/_authenticated/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/_authenticated/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/_authenticated/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -1033,6 +1052,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1069,6 +1089,7 @@ export interface FileRouteTypes {
     | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
+    | '/admin/productos'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -1138,6 +1159,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1173,6 +1195,7 @@ export interface FileRouteTypes {
     | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
+    | '/admin/productos'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -1244,6 +1267,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1280,6 +1304,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pedidos-galletas'
     | '/_authenticated/admin/pedidos-tienda'
     | '/_authenticated/admin/precios'
+    | '/_authenticated/admin/productos'
     | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
@@ -1352,6 +1377,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SupermercadoRoute: typeof SupermercadoRoute
   SupportRoute: typeof SupportRoute
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
   TerminosRoute: typeof TerminosRoute
@@ -1530,6 +1556,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supermercado': {
+      id: '/supermercado'
+      path: '/supermercado'
+      fullPath: '/supermercado'
+      preLoaderRoute: typeof SupermercadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/support': {
@@ -1782,6 +1815,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/precios'
       fullPath: '/admin/precios'
       preLoaderRoute: typeof AuthenticatedAdminPreciosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/productos': {
+      id: '/_authenticated/admin/productos'
+      path: '/admin/productos'
+      fullPath: '/admin/productos'
+      preLoaderRoute: typeof AuthenticatedAdminProductosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/repartidores': {
@@ -2202,6 +2242,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminPedidosGalletasRoute: typeof AuthenticatedAdminPedidosGalletasRoute
   AuthenticatedAdminPedidosTiendaRoute: typeof AuthenticatedAdminPedidosTiendaRoute
   AuthenticatedAdminPreciosRoute: typeof AuthenticatedAdminPreciosRoute
+  AuthenticatedAdminProductosRoute: typeof AuthenticatedAdminProductosRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
@@ -2238,6 +2279,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAdminPedidosGalletasRoute,
   AuthenticatedAdminPedidosTiendaRoute: AuthenticatedAdminPedidosTiendaRoute,
   AuthenticatedAdminPreciosRoute: AuthenticatedAdminPreciosRoute,
+  AuthenticatedAdminProductosRoute: AuthenticatedAdminProductosRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
@@ -2315,6 +2357,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SupermercadoRoute: SupermercadoRoute,
   SupportRoute: SupportRoute,
   SweepstakesRulesRoute: SweepstakesRulesRoute,
   TerminosRoute: TerminosRoute,

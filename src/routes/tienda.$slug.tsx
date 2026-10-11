@@ -27,6 +27,7 @@ import {
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "@/lib/delivery-block-rules";
 import { useAuth } from "@/lib/auth";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
+import { unitPriceCents } from "@/lib/house-store-rules";
 import { TipSelector } from "@/components/TipSelector";
 import { spendableOrderCreditCents } from "@/lib/referral-credit";
 
@@ -262,7 +263,7 @@ function StorePage() {
   );
 }
 
-function StoreCartBar({
+export function StoreCartBar({
   businessId,
   products,
   cart,
@@ -286,6 +287,7 @@ function StoreCartBar({
   const [doorService, setDoorService] = useState<DoorService>("lobby");
   const { t, i18n } = useTranslation();
   const [usarSaldo, setUsarSaldo] = useState(true);
+  const [reemplazo, setReemplazo] = useState<"similar" | "no_reemplazar" | "llamar">("similar");
   const [busy, setBusy] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
@@ -325,7 +327,7 @@ function StoreCartBar({
   );
 
   const subtotalCents = lines.reduce(
-    (s, l) => s + Math.round(Number(l.p.precio) * 100) * l.qty,
+    (s, l) => s + unitPriceCents(l.p) * l.qty,
     0,
   );
   const totalLb = cartWeightLb(
@@ -385,6 +387,7 @@ function StoreCartBar({
           propina: tipCents / 100,
           doorService,
           usarSaldo,
+          reemplazo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
         },
       });
@@ -470,6 +473,14 @@ function StoreCartBar({
         </div>
 
         <p className="text-xs text-muted-foreground">{blockEnabled ? `Entrega y servicio según peso real: $${((blockQuote?.deliveryCents ?? 0) / 100).toFixed(2)}${processingCents ? ` · Apartamento: $${(processingCents / 100).toFixed(2)}` : ""}.` : `Entrega según el peso: hasta ${pricing.tierSmallMaxLb} lb $${pricing.tierSmallFeeUsd.toFixed(2)}, hasta ${pricing.tierMediumMaxLb} lb $${pricing.tierMediumFeeUsd.toFixed(2)}, hasta ${pricing.weightIncludedLb} lb $${pricing.tierLargeFeeUsd.toFixed(2)}; luego $${pricing.weightExtraPerLbUsd.toFixed(2)} por libra extra.`}</p>
+        <label className="block text-xs">
+          <span className="mb-1 block text-muted-foreground">{i18n.language.startsWith("en") ? "If an item is out of stock" : "Si falta un producto"}</span>
+          <select value={reemplazo} onChange={(e) => setReemplazo(e.target.value as any)} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            <option value="similar">{i18n.language.startsWith("en") ? "Replace with a similar item" : "Reemplazar por uno similar"}</option>
+            <option value="no_reemplazar">{i18n.language.startsWith("en") ? "Don't replace (refund)" : "No reemplazar (se descuenta)"}</option>
+            <option value="llamar">{i18n.language.startsWith("en") ? "Call me" : "Llamarme"}</option>
+          </select>
+        </label>
         <TipSelector value={propina} onChange={setPropina} />
         <p className="text-xs text-muted-foreground">{t("deliveryPromise")}</p>
         {creditCents > 0 && <p className="text-xs text-muted-foreground">{t("credit.discount")}: -${(creditCents / 100).toFixed(2)}</p>}

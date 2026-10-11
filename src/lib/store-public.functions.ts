@@ -30,7 +30,7 @@ function publicClient() {
 
 async function sign(sb: any, path: string | null): Promise<string | null> {
   if (!path) return null;
-  if (/^https?:\/\//i.test(path)) return path;
+  if (/^https?:\/\//i.test(path) || path.startsWith("/")) return path;
   const { data } = await sb.storage.from(BUCKET).createSignedUrl(path, 60 * 60);
   return data?.signedUrl ?? null;
 }
