@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertCookieMinimum } from "./cookie-order-rules";
+import { assertCookieSubtotal, cookieDeliveryFeeCents } from "./cookie-order-rules";
 
 interface StripeSession {
   id: string;
@@ -35,10 +35,11 @@ const schema = z.object({
   propina: z.number().finite().min(0).max(200).default(0),
   usarSaldo: z.boolean().default(true),
   locale: z.enum(["es", "en"]).default("es"),
+  expectedDeliveryCents: z.number().int().min(0).max(10000).optional(),
 });
 
 const SHIPPING_RATES = {
-  standard: { label: "Entrega programada", amount: 0 },
+  standard: { label: "Entrega y servicio" },
 } as const;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -116,13 +117,19 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       };
     });
 
-    const shippingRate = SHIPPING_RATES[data.shipping];
+    // "Entrega y servicio" fija, leída del servidor (editable en /admin/precios).
+    const { data: pricingRows } = await supabaseAdmin.from("pricing_settings").select("key, value");
+    const { pricingFromRows } = await import("./pricing");
+    const shippingRate = { label: SHIPPING_RATES[data.shipping].label, amount: cookieDeliveryFeeCents(pricingFromRows(pricingRows as any)) };
+    if (data.expectedDeliveryCents !== undefined && data.expectedDeliveryCents !== shippingRate.amount) {
+      throw new Error("El costo de entrega cambió. Recarga la página para ver el total actualizado.");
+    }
     const subtotalCents = pricedItems.reduce(
       (s, it) => s + Math.round(it.price * 100) * it.qty,
       0,
     );
     const tipCents = Math.round(data.propina * 100);
-    assertCookieMinimum(subtotalCents);
+    assertCookieSubtotal(subtotalCents);
     const grossCents = subtotalCents + shippingRate.amount + tipCents;
     let creditCents = 0;
     let totalCents = grossCents;
@@ -206,12 +213,20 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       });
     } else {
       for (const [name, cents] of [
-        [data.locale === "en" ? "Delivery" : "Entrega", shippingRate.amount],
+        [data.locale === "en" ? "Delivery & service" : "Entrega y servicio", shippingRate.amount],
         [data.locale === "en" ? "Driver tip (100%)" : "Propina para el repartidor (100%)", tipCents],
       ] as Array<[string, number]>) {
         if (cents > 0) lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: cents, product_data: { name } } });
       }
     }
+
+    // Cliente de Stripe para poder guardar la tarjeta (con el aviso de Stripe)
+    // y permitir una propina extra después de la entrega. Si falla, se sigue sin guardar.
+    const { resolveStripeCustomer } = await import("./post-delivery-tips.server");
+    const stripeCustomerId = await resolveStripeCustomer(env, userId, email).catch((e) => {
+      console.warn("[cart-checkout] no se pudo preparar el cliente de Stripe", e);
+      return null;
+    });
 
     let session: StripeSession;
     try {
@@ -221,13 +236,14 @@ export const createCartCheckout = createServerFn({ method: "POST" })
           mode: "payment",
           ui_mode: "embedded_page",
           return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          customer_email: email || undefined,
+          ...(stripeCustomerId ? { customer: stripeCustomerId } : { customer_email: email || undefined }),
           line_items: lineItems,
           locale: data.locale,
           custom_text: { after_submit: { message: data.locale === "en" ? "Order the day before, get it in 24 hours: Monday, Wednesday and Friday" : "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes" } },
           payment_intent_data: {
             description: `HAZOREX ${pedidoRow.numero_pedido}`,
             capture_method: "automatic",
+            ...(stripeCustomerId ? { setup_future_usage: "off_session" } : {}),
             metadata: {
               kind: "cookie_order",
               pedido_id: pedidoRow.id,
