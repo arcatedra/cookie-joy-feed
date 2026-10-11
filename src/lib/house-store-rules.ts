@@ -94,3 +94,10 @@ export function discountPct(precio: number, anterior: number | null | undefined)
   if (!anterior || anterior <= precio) return 0;
   return Math.round(((anterior - precio) / anterior) * 100);
 }
+
+/** Precio de una unidad del carrito: los productos por libra cobran una porción estimada (precio/lb × peso aprox.). */
+export function unitPriceCents(p: { precio: unknown; peso_lb?: unknown; vendido_por_lb?: unknown }): number {
+  const precio = Number(p.precio);
+  if (p.vendido_por_lb === true) return Math.round(precio * (Number(p.peso_lb) || 1) * 100);
+  return Math.round(precio * 100);
+}

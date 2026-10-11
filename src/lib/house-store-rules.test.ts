@@ -24,3 +24,11 @@ describe("supermercado Hazorex", () => {
     expect(weightFeeCents(54, DEFAULT_PRICING)).toBe(720);
   });
 });
+
+describe("precio por libra", () => {
+  it("cobra la porción estimada", async () => {
+    const { unitPriceCents } = await import("./house-store-rules");
+    expect(unitPriceCents({ precio: 0.83, peso_lb: 2, vendido_por_lb: true })).toBe(166);
+    expect(unitPriceCents({ precio: 1.05, peso_lb: 0.5, vendido_por_lb: false })).toBe(105);
+  });
+});

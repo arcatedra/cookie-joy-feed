@@ -27,6 +27,7 @@ import {
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "@/lib/delivery-block-rules";
 import { useAuth } from "@/lib/auth";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
+import { unitPriceCents } from "@/lib/house-store-rules";
 import { TipSelector } from "@/components/TipSelector";
 import { spendableOrderCreditCents } from "@/lib/referral-credit";
 
@@ -326,7 +327,7 @@ export function StoreCartBar({
   );
 
   const subtotalCents = lines.reduce(
-    (s, l) => s + Math.round(Number(l.p.precio) * 100) * l.qty,
+    (s, l) => s + unitPriceCents(l.p) * l.qty,
     0,
   );
   const totalLb = cartWeightLb(

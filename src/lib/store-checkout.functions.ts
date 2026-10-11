@@ -21,6 +21,7 @@ import {
   tierForWeight,
   weightFeeCents,
 } from "./pricing";
+import { unitPriceCents } from "./house-store-rules";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
@@ -98,7 +99,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const ids = [...new Set(data.items.map((i) => i.productId))];
     const { data: rows, error: prodErr } = await db
       .from("store_products")
-      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb")
+      .select("id, nombre, precio, unidad, disponible, business_id, peso_lb, vendido_por_lb")
       .in("id", ids)
       .eq("business_id", data.businessId);
     if (prodErr) throw new Error("No se pudieron verificar los precios.");
@@ -119,7 +120,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         productId: it.productId,
         name: String(p.nombre),
         unit: String(p.unidad ?? "unidad"),
-        priceCents: Math.round(Number(p.precio) * 100),
+        priceCents: unitPriceCents(p),
         pesoLb: Number(p.peso_lb ?? pricing.defaultProductWeightLb),
         qty: it.qty,
       };
