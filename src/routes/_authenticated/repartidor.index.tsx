@@ -20,6 +20,7 @@ import {
 } from "@/lib/courier.functions";
 import { BatchSuggestionDialog } from "@/components/courier/BatchSuggestionDialog";
 import { listMyAvailableDeliveryBlocks, reserveDeliveryBlock } from "@/lib/delivery-blocks.functions";
+import { getMyReservedBlocks, markDeliveryBlockPresent, runDeliveryBlockAutoAssignment } from "@/lib/delivery-block-operations.functions";
 
 export const Route = createFileRoute("/_authenticated/repartidor/")({
   component: RepartidorHome,
@@ -76,8 +77,13 @@ function RepartidorHome() {
   });
   const blocksFn = useServerFn(listMyAvailableDeliveryBlocks);
   const reserveBlockFn = useServerFn(reserveDeliveryBlock);
+  const reservedBlocksFn = useServerFn(getMyReservedBlocks);
+  const presentFn = useServerFn(markDeliveryBlockPresent);
+  const autoAssignFn = useServerFn(runDeliveryBlockAutoAssignment);
   const blocks = useQuery({ queryKey:["courier","blocks"], queryFn:()=>blocksFn(), staleTime:15_000 });
-  const reserveBlock = useMutation({ mutationFn:(blockId:string)=>reserveBlockFn({data:{blockId}}), onSuccess:()=>{ qc.invalidateQueries({queryKey:["courier","blocks"]}); toast.success("Lote reservado."); }, onError:(e:Error)=>toast.error(e.message) });
+  const reservedBlocks = useQuery({ queryKey:["courier","reserved-blocks"], queryFn:async()=>{ await autoAssignFn({data:{}}); return reservedBlocksFn(); }, refetchInterval:15_000 });
+  const reserveBlock = useMutation({ mutationFn:(blockId:string)=>reserveBlockFn({data:{blockId}}), onSuccess:()=>{ qc.invalidateQueries({queryKey:["courier","blocks"]}); qc.invalidateQueries({queryKey:["courier","reserved-blocks"]}); toast.success("Lote reservado."); }, onError:(e:Error)=>toast.error(e.message) });
+  const markPresent = useMutation({ mutationFn:(reservationId:string)=>presentFn({data:{reservationId}}), onSuccess:(r)=>{ qc.invalidateQueries({queryKey:["courier","reserved-blocks"]}); toast.success(`Presencia registrada. Si no se asigna antes, la asignación automática se revisa a las ${new Date(r.dueAt).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}.`); }, onError:(e:Error)=>toast.error(e.message) });
 
   const acceptFn = useServerFn(acceptOrder);
   const accept = useMutation({
@@ -334,6 +340,7 @@ function RepartidorHome() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-6">
+        {(reservedBlocks.data ?? []).length > 0 && <section className="mb-8 space-y-3"><div className="flex items-center justify-between"><h2 className="font-serif text-lg font-bold text-[#1e3a5f]">Mis horarios reservados</h2><Link to="/repartidor/bloque" className="text-sm font-semibold underline">Ver lote activo</Link></div>{reservedBlocks.data?.map((reservation:any)=><Card key={reservation.id}><CardContent className="space-y-3 p-4"><div><p className="font-semibold">{reservation.delivery_blocks?.zone_name}</p><p className="text-xs text-muted-foreground">{new Date(reservation.delivery_blocks?.starts_at).toLocaleString()} · estado {reservation.status}</p></div>{reservation.status==="reserved"&&<Button className="w-full" disabled={markPresent.isPending} onClick={()=>markPresent.mutate(reservation.id)}>Estoy presente y listo</Button>}{reservation.status==="present"&&<p className="text-sm text-muted-foreground">Presencia confirmada. Si administración no asigna en 15 minutos, se revisará tu compatibilidad automáticamente.</p>}{reservation.status==="assigned"&&<Button asChild className="w-full"><Link to="/repartidor/bloque">Abrir ruta asignada</Link></Button>}</CardContent></Card>)}</section>}
         {blocks.data?.enabled && (
           <section className="mb-8 space-y-3">
             <h2 className="font-serif text-lg font-bold text-[#1e3a5f]">Lotes disponibles</h2>

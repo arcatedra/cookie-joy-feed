@@ -11,12 +11,13 @@
 - [x] Exigir mínimo 3 pedidos por lote; combinar sobrantes de 1–2 con zona cercana o avisar al admin para decisión manual.
 - [x] Reemplazar aumentos automáticos por aviso a 12 horas y controles manuales +$5, +$10 o monto escrito.
 - [x] Cobrar puerta como ingreso Hazorex; bono al repartidor opcional por lote, apagado por defecto y visible solo al activarlo.
-- [ ] Integrar pagos finales, autoasignación, navegación, mensajes, reclamos y reportes; mantener todo inactivo hasta verificaciones completas del dueño.
+- [x] Integrar pagos finales, autoasignación, navegación, mensajes, reclamos y reportes; mantener todo inactivo hasta verificaciones completas del dueño.
 
 ## Nueva solicitud: bloques reservables (después de los nueve cambios)
 - [x] Registrar montos editables, entrega en puerta, lotes/horarios, vehículos, incentivos, mensajes y control de tiempo en memoria y plan aprobado.
 - [x] Mostrar y aprobar plan antes de reemplazar cargos/pagos del marketplace.
-- [ ] Integrar transferencias finales de bloques con aportes propios de Hazorex cuando correspondan; mantener inactivo hasta pruebas completas.
+- [x] Integrar transferencias finales de bloques con reparto idempotente entre cargos cobrados; mantener inactivo hasta pruebas completas.
+- [ ] Validar el recorrido autenticado y una transferencia Connect de prueba con cuentas autorizadas; bloqueado por falta de sesión administrada en Supabase externo.
 
 ## Apertura: cambios solicitados el 9 de octubre
 

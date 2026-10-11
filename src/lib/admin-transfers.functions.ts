@@ -32,7 +32,7 @@ export const listTransfers = createServerFn({ method: "GET" })
     const [{ data: payouts }, { data: orders }] = await Promise.all([
       admin
         .from("driver_payouts")
-        .select("id, driver_id, order_id, amount_usd, status, last_error, created_at, paid_at")
+        .select("id, driver_id, order_id, block_id, weekly_bonus_id, amount_usd, status, last_error, created_at, paid_at")
         .order("created_at", { ascending: false })
         .limit(200),
       admin
@@ -77,7 +77,7 @@ export const listTransfers = createServerFn({ method: "GET" })
         id: p.id,
         kind: "repartidor",
         nombre: (driverById.get(p.driver_id) as any)?.full_name ?? "Repartidor",
-        pedido: (numById.get(p.order_id) as string | undefined) ?? null,
+        pedido: p.block_id ? `Lote ${String(p.block_id).slice(0, 8)}` : p.weekly_bonus_id ? "Bono semanal" : (numById.get(p.order_id) as string | undefined) ?? null,
         montoUsd: Number(p.amount_usd ?? 0),
         estado: p.status === "pagado" ? "pagado" : p.status === "fallido" ? "fallido" : "pendiente",
         error: p.last_error ?? null,

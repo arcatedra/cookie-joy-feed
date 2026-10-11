@@ -133,11 +133,18 @@ export async function transferDriverPayout(
 
   const { data: p } = await db
     .from("driver_payouts")
-    .select("id, driver_id, order_id, cookie_order_id, amount_usd, status")
+    .select("id, driver_id, order_id, cookie_order_id, block_id, weekly_bonus_id, amount_usd, status")
     .eq("id", payoutId)
     .maybeSingle();
   if (!p) return { ok: false, error: "Pago no encontrado" };
   if (p.status === "pagado") return { ok: true, skipped: true };
+  if (p.block_id) {
+    const { transferDeliveryBlockPayout } = await import("./delivery-block-payouts.server");
+    return transferDeliveryBlockPayout(p.id, db);
+  }
+  if (p.weekly_bonus_id) {
+    return { ok: false, skipped: true, error: "El bono semanal aprobado requiere pago manual registrado por administración" };
+  }
 
   const { data: drv } = await db
     .from("drivers")
