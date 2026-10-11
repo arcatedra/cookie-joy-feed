@@ -24,10 +24,19 @@ export function categoryEn(es: string): string {
 
 const money = z.coerce.number().min(0.01, "Precio inválido").max(10000);
 
+export const HOUSE_PRODUCE_SUBCATEGORIES = [{ es: "Frutas", en: "Fruit" }, { es: "Verduras", en: "Vegetables" }] as const;
+
+export function productDescription(p: { descripcion?: string | null; descripcion_en?: string | null }, en: boolean): string {
+  return (en ? p.descripcion_en : p.descripcion) || "";
+}
+
 export const houseProductSchema = z.object({
   id: z.string().uuid().optional(),
   nombre: z.string().trim().min(1, "Falta el nombre").max(160),
   nombre_en: z.string().trim().max(160).default(""),
+  descripcion: z.string().trim().max(240).optional(),
+  descripcion_en: z.string().trim().max(240).optional(),
+  subcategoria: z.enum(["Frutas", "Verduras"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
@@ -61,6 +70,7 @@ export function productPhotoPatch(input: Pick<HouseProductInput, "imagen_url" | 
 export const TEMPLATE_HEADERS = [
   "nombre", "nombre_en", "categoria", "precio", "precio_anterior", "tamano",
   "peso_lb", "por_libra", "disponible", "stock", "super", "direccion",
+  "descripcion", "descripcion_en", "subcategoria",
 ] as const;
 
 function yes(v: unknown, def: boolean): boolean {
@@ -99,6 +109,9 @@ export function parseBulkRows(rows: Record<string, unknown>[]) {
       super: r.super ?? "",
       direccion: r.direccion ?? "",
       imagen_url: null,
+      descripcion: r.descripcion === undefined ? undefined : String(r.descripcion),
+      descripcion_en: r.descripcion_en === undefined ? undefined : String(r.descripcion_en),
+      subcategoria: String(r.subcategoria ?? "").trim() || null,
     });
     if (parsed.success) ok.push(parsed.data);
     else errors.push({ row: i + 2, message: parsed.error.issues.map((x) => x.message).join("; ") });

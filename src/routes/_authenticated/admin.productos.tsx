@@ -13,7 +13,7 @@ import {
   adminSaveHouseProduct,
   adminUploadHouseImage,
 } from "@/lib/house-store.functions";
-import { HOUSE_CATEGORIES, TEMPLATE_HEADERS, parseBulkRows, type HouseProductInput } from "@/lib/house-store-rules";
+import { HOUSE_CATEGORIES, HOUSE_PRODUCE_SUBCATEGORIES, TEMPLATE_HEADERS, parseBulkRows, type HouseProductInput } from "@/lib/house-store-rules";
 
 export const Route = createFileRoute("/_authenticated/admin/productos")({
   head: () => ({
@@ -107,7 +107,7 @@ function AdminProductsPage() {
                     </div>
                   </div>
                 </td>
-                <td className="p-2">{p.categoria}</td>
+                 <td className="p-2">{p.categoria}{p.subcategoria && <p className="text-xs text-muted-foreground">{p.subcategoria}</p>}</td>
                 <td className="p-2"><QuickNum value={p.precio} onSave={(v) => v && patch(p.id, { precio: v })} /></td>
                 <td className="p-2"><QuickNum value={p.precio_anterior} onSave={(v) => patch(p.id, { precio_anterior: v })} /></td>
                 <td className="p-2"><QuickNum value={p.stock} int onSave={(v) => patch(p.id, { stock: v })} /></td>
@@ -125,6 +125,7 @@ function AdminProductsPage() {
                     tamano: p.tamano ?? "", peso_lb: Number(p.peso_lb ?? 0), vendido_por_lb: !!p.vendido_por_lb,
                     disponible: p.disponible !== false, stock: p.stock ?? null, super: p.super, direccion: p.direccion, imagen_url: null,
                     codigo_barras: p.codigo_barras ?? null,
+                     descripcion: p.descripcion ?? "", descripcion_en: p.descripcion_en ?? "", subcategoria: p.subcategoria ?? null,
                   })}>Editar</Button>
                 </td>
               </tr>
@@ -212,6 +213,8 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
         <div className="grid gap-3 sm:grid-cols-2">
           {input("nombre", "Nombre (español)")}
           {input("nombre_en", "Nombre (inglés)")}
+          {input("descripcion", "Descripción corta (español)", { maxLength: 240 })}
+          {input("descripcion_en", "Descripción corta (inglés)", { maxLength: 240 })}
           <label className="block text-sm">
             <span className="mb-1 block text-xs text-muted-foreground">Categoría</span>
             <select value={f.categoria} onChange={(e) => set("categoria", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2">
@@ -222,6 +225,13 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
             <span className="mb-1 block text-xs text-muted-foreground">Foto</span>
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => onFile(e.target.files?.[0])} className="w-full text-xs" />
           </label>
+          {f.categoria === "Frutas y verduras" && <label className="block text-sm">
+            <span className="mb-1 block text-xs text-muted-foreground">Subcategoría</span>
+            <select value={f.subcategoria ?? ""} onChange={(e) => set("subcategoria", e.target.value || null)} className="w-full rounded-lg border border-border bg-background px-3 py-2">
+              <option value="">Sin subcategoría</option>
+              {HOUSE_PRODUCE_SUBCATEGORIES.map((c) => <option key={c.es}>{c.es}</option>)}
+            </select>
+          </label>}
           {input("precio", f.vendido_por_lb ? "Precio por libra ($)" : "Precio ($)", { inputMode: "decimal" })}
           {input("precio_anterior", "Precio anterior / oferta ($, opcional)", { inputMode: "decimal" })}
           {input("tamano", "Tamaño (ej. 16 oz)")}

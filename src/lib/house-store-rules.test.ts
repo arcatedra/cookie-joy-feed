@@ -1,6 +1,36 @@
 import { describe, expect, it } from "vitest";
 import { discountPct, parseBulkRows, productPhotoPatch, houseProductSchema } from "./house-store-rules";
 import { DEFAULT_PRICING, tierForWeight, weightFeeCents } from "./pricing";
+import { HOUSE_FRUIT_CATALOG } from "./house-fruit-catalog";
+import { productDescription, unitPriceCents } from "./house-store-rules";
+
+describe("catálogo de frutas", () => {
+  it("incluye 43 frutas distintas sin duplicar las cuatro existentes", () => {
+    expect(HOUSE_FRUIT_CATALOG).toHaveLength(43);
+    expect(new Set(HOUSE_FRUIT_CATALOG.map((p) => p[0])).size).toBe(43);
+    const names = HOUSE_FRUIT_CATALOG.map((p) => p[0]);
+    for (const name of ["Aguacate Hass grande", "Guineos / plátanos", "Uvas verdes sin semilla", "Fresas Driscoll's"]) expect(names).not.toContain(name);
+  });
+  it("valida pesos, unidades y descripciones bilingües", () => {
+    for (const [nombre, nombre_en, precio, vendido_por_lb, peso_lb, descripcion, descripcion_en] of HOUSE_FRUIT_CATALOG) {
+      expect(houseProductSchema.safeParse({ nombre, nombre_en, precio, vendido_por_lb, peso_lb, descripcion, descripcion_en, categoria: "Frutas y verduras", subcategoria: "Frutas" }).success).toBe(true);
+      expect(descripcion.length).toBeGreaterThan(10);
+      expect(descripcion_en.length).toBeGreaterThan(10);
+    }
+    expect(unitPriceCents({ precio: 1.56, vendido_por_lb: true, peso_lb: 0.4 })).toBe(62);
+    expect(unitPriceCents({ precio: 16.58, vendido_por_lb: false, peso_lb: 15 })).toBe(1658);
+  });
+  it("conserva campos omitidos y rechaza subcategorías inválidas", () => {
+    const p = houseProductSchema.parse({ nombre: "Mango", precio: 2, peso_lb: 0.8, categoria: "Frutas y verduras" });
+    expect(p.descripcion).toBeUndefined();
+    expect(p.subcategoria).toBeUndefined();
+    expect(houseProductSchema.safeParse({ ...p, subcategoria: "Otra" }).success).toBe(false);
+    expect(productDescription({ descripcion: "Fruta fresca", descripcion_en: "Fresh fruit" }, true)).toBe("Fresh fruit");
+    const bulk = parseBulkRows([{ nombre: "Mango", precio: 2, peso_lb: 0.8, categoria: "Frutas y verduras", subcategoria: "Frutas", descripcion: "Mango dulce", descripcion_en: "Sweet mango" }]);
+    expect(bulk.ok[0]?.descripcion_en).toBe("Sweet mango");
+    expect(bulk.ok[0]?.subcategoria).toBe("Frutas");
+  });
+});
 
 describe("supermercado Hazorex", () => {
   it("conserva crédito al editar precios y elimina crédito al reemplazar la foto", () => {

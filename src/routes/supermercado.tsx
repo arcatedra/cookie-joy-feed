@@ -8,6 +8,8 @@ import { getHouseBestSellers } from "@/lib/house-store.functions";
 import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, discountPct } from "@/lib/house-store-rules";
 import { StoreCartBar, storeCartKey } from "./tienda.$slug";
 import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
+import { Button } from "@/components/ui/button";
+import { HOUSE_PRODUCE_SUBCATEGORIES, productDescription } from "@/lib/house-store-rules";
 
 export const Route = createFileRoute("/supermercado")({
   loader: async () => {
@@ -39,6 +41,7 @@ function SupermarketPage() {
   const { store, categories, products } = Route.useLoaderData() as any;
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string | null>(null);
+  const [subcat, setSubcat] = useState<string | null>(null);
   const [cart, setCart] = useState<Record<string, number>>({});
   const [loaded, setLoaded] = useState(false);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -75,17 +78,17 @@ function SupermarketPage() {
 
   const term = q.trim().toLowerCase();
   const results = term
-    ? visible.filter((p) => `${p.nombre} ${p.nombre_en ?? ""}`.toLowerCase().includes(term))
+     ? visible.filter((p) => (!cat || catName.get(p.category_id) === cat) && (!subcat || p.subcategoria === subcat) && `${p.nombre} ${p.nombre_en ?? ""}`.toLowerCase().includes(term))
     : null;
 
   const offers = visible.filter((p) => discountPct(Number(p.precio), Number(p.precio_anterior)) > 0);
   const bestList = best.map((id) => visible.find((p) => p.id === id)).filter(Boolean) as P[];
   const rows = HOUSE_CATEGORIES.map((c) => ({
     ...c,
-    items: visible.filter((p) => catName.get(p.category_id) === c.es),
+     items: visible.filter((p) => catName.get(p.category_id) === c.es && (!subcat || p.subcategoria === subcat)),
   })).filter((r) => r.items.length > 0 && (!cat || cat === r.es));
 
-  const card = (p: P) => <ProductCard key={p.id} p={p} name={name(p)} qty={cart[p.id] ?? 0} onAdd={add} L={L} />;
+   const card = (p: P) => <ProductCard key={p.id} p={p} name={name(p)} description={productDescription(p, en)} qty={cart[p.id] ?? 0} onAdd={add} L={L} />;
 
   return (
     <main className="mx-auto max-w-6xl pb-64">
@@ -109,13 +112,17 @@ function SupermarketPage() {
       </header>
 
       <nav className="sticky top-0 z-30 mt-3 flex gap-2 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur">
-        <button onClick={() => setCat(null)} className={chip(!cat)}>{L("Todo", "All")}</button>
+         <Button variant="ghost" onClick={() => { setCat(null); setSubcat(null); }} className={chip(!cat)}>{L("Todo", "All")}</Button>
         {HOUSE_CATEGORIES.map((c) => (
-          <button key={c.es} onClick={() => setCat(cat === c.es ? null : c.es)} className={chip(cat === c.es)}>
+           <Button variant="ghost" key={c.es} onClick={() => { setCat(cat === c.es ? null : c.es); setSubcat(null); }} className={chip(cat === c.es)}>
             {en ? c.en : c.es}
-          </button>
+           </Button>
         ))}
       </nav>
+      {cat === "Frutas y verduras" && <nav aria-label={L("Subcategorías", "Subcategories")} className="flex flex-wrap gap-2 border-b border-border px-4 py-2">
+        <Button variant="ghost" onClick={() => setSubcat(null)} className={chip(!subcat)}>{L("Todo", "All")}</Button>
+        {HOUSE_PRODUCE_SUBCATEGORIES.map((c) => <Button variant="ghost" key={c.es} onClick={() => setSubcat(c.es)} className={chip(subcat === c.es)}>{en ? c.en : c.es}</Button>)}
+      </nav>}
 
       {results ? (
         <section className="px-4 pt-4">
@@ -131,9 +138,10 @@ function SupermarketPage() {
           {!cat && offers.length > 0 && <Row title={L("Ofertas", "Deals")}>{offers.map(card)}</Row>}
           {!cat && bestList.length > 0 && <Row title={L("Más vendidos", "Best sellers")}>{bestList.map(card)}</Row>}
           {rows.map((r) => (
-            <Row key={r.es} title={en ? r.en : r.es} refCb={(el) => (sectionRefs.current[r.es] = el)}>
-              {r.items.map(card)}
-            </Row>
+             r.es === "Frutas y verduras" && cat === r.es ? <section key={r.es} className="px-4 pt-5">
+               <h2 className="mb-3 text-lg font-bold">{subcat ? L(subcat, subcat === "Frutas" ? "Fruit" : "Vegetables") : L(r.es, r.en)}</h2>
+               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{r.items.map(card)}</div>
+             </section> : <Row key={r.es} title={en ? r.en : r.es} refCb={(el) => (sectionRefs.current[r.es] = el)}>{r.items.map(card)}</Row>
           ))}
           {rows.length === 0 && (
             <p className="px-4 pt-6 text-sm text-muted-foreground">
@@ -167,7 +175,7 @@ function Row({ title, children, refCb }: { title: string; children: React.ReactN
   );
 }
 
-function ProductCard({ p, name, qty, onAdd, L }: { p: P; name: string; qty: number; onAdd: (id: string, d: number) => void; L: (a: string, b: string) => string }) {
+function ProductCard({ p, name, description, qty, onAdd, L }: { p: P; name: string; description: string; qty: number; onAdd: (id: string, d: number) => void; L: (a: string, b: string) => string }) {
   const price = Number(p.precio);
   const prev = Number(p.precio_anterior) || null;
   const off = discountPct(price, prev);
@@ -205,6 +213,7 @@ function ProductCard({ p, name, qty, onAdd, L }: { p: P; name: string; qty: numb
         {off > 0 && prev && <span className="text-xs text-muted-foreground line-through">${prev.toFixed(2)}</span>}
       </div>
       <p className="line-clamp-2 text-sm font-medium leading-tight">{name}</p>
+      {description && <p className="mt-1 text-xs text-muted-foreground">{description}</p>}
       {p.tamano && <p className="text-xs text-muted-foreground">{p.tamano}</p>}
       <ProductPhotoCredit product={p} />
       {perLb && (

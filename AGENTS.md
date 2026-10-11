@@ -1,5 +1,7 @@
 # Marketplace safety
 
+- Produce subcategories and bilingual descriptions are persisted catalog fields shared by admin and public views; omitted edit fields preserve existing metadata, preventing accidental content loss.
+
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
 - All cookie shopping surfaces read the shared product catalog with a Spanish display-name adapter; public bestseller output exposes only aggregate product order, never buyer records.
 - Reel product associations require an exact available catalog flavor, shared by carousel and fullscreen; hide unmatched media without deleting records to prevent misleading purchases.
