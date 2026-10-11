@@ -70,7 +70,7 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
     .order("sequence_number");
   if (stopsError || !stops?.length) return { ok: false, error: stopsError?.message ?? "El lote no tiene pedidos" };
 
-  const orderIds = stops.map((stop: any) => stop.store_order_id as string);
+  const orderIds: string[] = stops.map((stop: any) => stop.store_order_id as string);
   const environments = new Set(stops.map((stop: any) => stop.store_orders?.stripe_environment));
   if (environments.size !== 1 || !environments.has(driver.stripe_environment)) {
     return { ok: false, error: "Los pedidos y la cuenta pertenecen a ambientes distintos" };
@@ -81,13 +81,13 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
 
   const env = await environmentForStoreOrder(orderIds[0], db) as StripeEnv;
   const totalCents = Math.round(money(payout.amount_usd) * 100);
-  const availableByOrder = new Map(orderIds.map((orderId, index) => {
+  const availableByOrder = new Map<string, number>(orderIds.map((orderId: string, index: number): [string, number] => {
     const order = (stops[index] as any).store_orders;
     const captured = Math.round(money(order?.monto_capturado) * 100);
     const storeCents = Math.max(0, Math.min(captured, captured + Math.round(money(order?.credito_aplicado) * 100) - Math.round((money(order?.costo_envio) + money(order?.cargo_peso) + money(order?.cargo_servicio) + money(order?.propina)) * 100)));
     return [orderId, Math.max(0, captured - storeCents)] as const;
   }));
-  const totalAvailableCents = [...availableByOrder.values()].reduce((sum, cents) => sum + cents, 0);
+  const totalAvailableCents = [...availableByOrder.values()].reduce((sum: number, cents: number) => sum + cents, 0);
   if (totalAvailableCents < totalCents) {
     return { ok: false, error: "Los fondos de entrega, servicio y propinas no cubren el pago comprometido; administración debe revisar el aporte de Hazorex" };
   }
