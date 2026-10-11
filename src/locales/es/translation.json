@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Costo de entrega",
-        "body": "Cada pedido paga un costo de entrega que depende del tamaño del pedido y del peso total. Ese costo se muestra como un único precio final antes de confirmar; no hay cargos ocultos ni cobros posteriores fuera de lo descrito en estos términos."
+        "body": "Cuando el modelo de bloques esté activo, cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $35; sobre 45 lb se suman $0.70 por libra excedente. El máximo es 80 lb por pedido. Mientras esté apagado, se aplica el precio mostrado antes de confirmar."
       },
       {
         "title": "4. Cómo se cobra: reserva y cobro final",
@@ -852,7 +852,11 @@
         "body": "La propina es voluntaria y va <strong>100% al repartidor</strong>. Hazorex no retiene ninguna parte de la propina."
       },
       {
-        "title": "7. Días y horarios de entrega",
+        "title": "7. Entrega en apartamento",
+        "body": "La entrega normal termina en el lobby o puerta del edificio. Puedes pedir entrega al apartamento por $5 con ascensor o $8 por escaleras sobre dos pisos. Es un servicio e ingreso de Hazorex, separado de la propina; cualquier bono al repartidor lo decide Hazorex y no cambia el precio del cliente."
+      },
+      {
+        "title": "8. Días y horarios de entrega",
         "body": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes. Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
       },
       {
@@ -1055,7 +1059,7 @@
     "hero": {
       "badge": "Postúlate en 5 minutos",
       "titlePart1": "Gana",
-      "titleHighlight": "por pedido",
+      "titleHighlight": "por bloque",
       "titlePart2": "repartiendo con Hazorex",
       "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Elige",
       "subtitleHighlight": "bicicleta, moto o auto",
@@ -1063,11 +1067,11 @@
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horarios flexibles",
-        "weekly": "Cobras al entregar cada pedido",
+        "weekly": "Cobras al completar tu bloque",
         "noFee": "Sin cuota inicial",
         "reply48": "Respuesta en 48 h"
       },
-      "example": "Ejemplo: un lote de 4 pedidos (2 pequeños, 1 mediano y 1 grande) = $5 + $5 + $5.50 + $6 = $21.50, más el 100% de las propinas. Pedidos de más de 45 lb te pagan un extra por libra. No es una promesa de pago por hora."
+      "example": "Ejemplo: un bloque de 4 paradas puede ofrecer $40 de pago base, más 100% de las propinas y cualquier bono de puerta que Hazorex active. Ves el pago total antes de reservar; dura entre 1 y 4 horas."
     },
     "signInGate": {
       "title": "Empieza tu postulación",
@@ -1110,6 +1114,22 @@
         "perk2": "Identificación válida",
         "perk3": "Bicicleta o e-bike propia",
         "perk4": "Casco"
+      },
+      "bici_carga": {
+        "label": "Bicicleta de carga",
+        "desc": "Bicicleta o e-bike con remolque para lotes grandes.",
+        "perk1": "18 años o más",
+        "perk2": "Identificación válida",
+        "perk3": "Bicicleta de carga o remolque propio",
+        "perk4": "Casco"
+      },
+      "van": {
+        "label": "Van",
+        "desc": "Para lotes grandes y varios viajes.",
+        "perk1": "Licencia Clase D (o E) de NY, vigente",
+        "perk2": "Registración e inspección al día",
+        "perk3": "Seguro del vehículo vigente",
+        "perk4": "Capacidad de carga segura"
       }
     },
     "how": {
@@ -1148,7 +1168,7 @@
       },
       "q3": {
         "q": "¿Cuándo cobro?",
-        "a": "Tu pago por pedido incluye tu parte del envío, cargo por peso y el 100% de la propina. La transferencia se inicia al entregar; el depósito depende de Stripe y tu banco."
+        "a": "Ves el pago total del bloque antes de reservar. Incluye la base y los bonos que Hazorex active; además recibes 100% de las propinas. La transferencia se inicia al completar el bloque y depende de Stripe y tu banco."
       },
       "q4": {
         "q": "¿Puedo elegir mis horarios?",

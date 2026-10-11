@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Delivery charge",
-        "body": "Every order pays a delivery charge based on the size of the order and its total weight. It is shown as a single final price before you confirm; there are no hidden fees beyond what is described in these terms."
+        "body": "When the reservable-block model is active, each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $35; above 45 lb adds $0.70 per excess pound. The maximum is 80 lb per order. While it is off, the price shown before confirmation applies."
       },
       {
         "title": "4. How we charge: hold and final charge",
@@ -852,7 +852,11 @@
         "body": "Tips are voluntary and go <strong>100% to the driver</strong>. Hazorex keeps no part of the tip."
       },
       {
-        "title": "7. Delivery days and cut-off times",
+        "title": "7. Apartment delivery",
+        "body": "Standard delivery ends at the lobby or building entrance. You may request apartment delivery for $5 with an elevator or $8 by stairs above two floors. This is a Hazorex service and revenue, separate from tips; Hazorex decides any driver bonus without changing the customer's price."
+      },
+      {
+        "title": "8. Delivery days and cut-off times",
         "body": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday. Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
       },
       {
@@ -1055,7 +1059,7 @@
     "hero": {
       "badge": "Apply in 5 minutes",
       "titlePart1": "Earn",
-      "titleHighlight": "per order",
+      "titleHighlight": "per block",
       "titlePart2": "delivering with Hazorex.",
       "subtitlePart1": "You manage your time, we handle the orders. Choose a",
       "subtitleHighlight": "bike, motorcycle, or car",
@@ -1063,11 +1067,11 @@
       "viewRequirements": "View requirements →",
       "perks": {
         "flexible": "Flexible hours",
-        "weekly": "Get paid after delivering each order",
+        "weekly": "Get paid after completing your block",
         "noFee": "No initial fee",
         "reply48": "Response in 48h"
       },
-      "example": "Example: a batch of 4 orders (2 small, 1 medium and 1 large) = $5 + $5 + $5.50 + $6 = $21.50, plus 100% of tips. Orders over 45 lb pay an extra amount per pound. This is not an hourly pay promise."
+      "example": "Example: a 4-stop block may offer $40 base pay, plus 100% of tips and any door bonus Hazorex activates. You see total pay before reserving; blocks last 1 to 4 hours."
     },
     "signInGate": {
       "title": "Start your application",
@@ -1110,6 +1114,22 @@
         "perk2": "Photo ID",
         "perk3": "Your own bike or e-bike",
         "perk4": "Helmet"
+      },
+      "bici_carga": {
+        "label": "Cargo bike",
+        "desc": "Bike or e-bike with a trailer for larger blocks.",
+        "perk1": "18 years or older",
+        "perk2": "Photo ID",
+        "perk3": "Your own cargo bike or trailer",
+        "perk4": "Helmet"
+      },
+      "van": {
+        "label": "Van",
+        "desc": "For large blocks and multiple trips.",
+        "perk1": "Valid NY Class D (or E) license",
+        "perk2": "Registration and inspection current",
+        "perk3": "Valid vehicle insurance",
+        "perk4": "Safe cargo capacity"
       }
     },
     "how": {
@@ -1148,7 +1168,7 @@
       },
       "q3": {
         "q": "When do I get paid?",
-        "a": "Your pay per order includes your share of delivery, weight fees and 100% of tips. The transfer starts after delivery; bank deposits depend on Stripe and your bank."
+        "a": "You see total block pay before reserving. It includes base pay and any bonus Hazorex activates, plus 100% of tips. The transfer starts after completing the block and depends on Stripe and your bank."
       },
       "q4": {
         "q": "Can I choose my hours?",

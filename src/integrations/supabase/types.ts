@@ -2826,7 +2826,7 @@ export type Database = {
       }
       minutes_per_stop: { Args: never; Returns: number }
       my_available_delivery_blocks: {
-        Args: never
+        Args: { p_driver: string }
         Returns: {
           committed_pay: number
           door_bonus_amount: number
@@ -2897,7 +2897,10 @@ export type Database = {
         }
         Returns: string
       }
-      reserve_delivery_block: { Args: { p_block: string }; Returns: string }
+      reserve_delivery_block: {
+        Args: { p_block: string; p_driver: string }
+        Returns: string
+      }
       reserve_order_credit: {
         Args: {
           p_environment: string
