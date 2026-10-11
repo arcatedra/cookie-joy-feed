@@ -36,7 +36,12 @@ export const getDeliveryBlockAdminOperations=createServerFn({method:"GET"}).midd
     admin.from("delivery_block_reservations").select("id,block_id,driver_id,status,present_at,auto_assign_due_at,delivery_blocks(zone_name,starts_at,status,assigned_driver_id)").in("status",["reserved","present"]).order("reserved_at"),
     admin.from("drivers").select("id,full_name,application_status").eq("application_status","aprobado").order("full_name"),
   ]);
-  return {claims:claims??[],blocks:blocks??[],bonuses:bonuses??[],reservations:reservations??[],drivers:drivers??[]};
+  const claimsWithPhotos=await Promise.all((claims??[]).map(async(claim:any)=>{
+    if(!claim.photo_url)return {...claim,photo_signed_url:null};
+    const {data}=await admin.storage.from("delivery-photos").createSignedUrl(claim.photo_url,3600);
+    return {...claim,photo_signed_url:data?.signedUrl??null};
+  }));
+  return {claims:claimsWithPhotos,blocks:blocks??[],bonuses:bonuses??[],reservations:reservations??[],drivers:drivers??[]};
 });
 
 export const resolveDeliveryClaim=createServerFn({method:"POST"}).middleware([requireSupabaseAuth])
