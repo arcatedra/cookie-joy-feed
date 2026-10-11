@@ -27,7 +27,7 @@ import {
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "@/lib/delivery-block-rules";
 import { useAuth } from "@/lib/auth";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
-import { unitPriceCents } from "@/lib/house-store-rules";
+import { unitPriceCents, productDescription } from "@/lib/house-store-rules";
 import { TipSelector } from "@/components/TipSelector";
 import { spendableOrderCreditCents } from "@/lib/referral-credit";
 import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
@@ -74,7 +74,8 @@ function getStripe() {
 export const storeCartKey = (businessId: string) => `hz-store-cart:${businessId}`;
 
 function StorePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const en = i18n.language.startsWith("en");
   const { store, categories, products } = Route.useLoaderData() as any;
   const [q, setQ] = useState("");
   const [cart, setCart] = useState<Record<string, number>>({});
@@ -208,7 +209,8 @@ function StorePage() {
                         </span>
                       )}
                     </div>
-                    <div className="mt-2 line-clamp-2 text-sm font-semibold">{p.nombre}</div>
+                    <div className="mt-2 line-clamp-2 text-sm font-semibold">{en && p.nombre_en ? p.nombre_en : p.nombre}</div>
+                    {productDescription(p, en) && <p className="mt-1 text-xs text-muted-foreground">{productDescription(p, en)}</p>}
                     <ProductPhotoCredit product={p} />
                     <div className="text-xs text-muted-foreground">
                       ${Number(p.precio).toFixed(2)} / {p.unidad}
