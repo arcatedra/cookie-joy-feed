@@ -39,8 +39,22 @@ export const houseProductSchema = z.object({
   super: z.string().trim().max(120).default(""),
   direccion: z.string().trim().max(240).default(""),
   imagen_url: z.string().max(500).nullable().default(null),
+  codigo_barras: z.string().trim().regex(/^\d{8,14}$/, "Código de barras inválido").nullable().optional(),
 });
 export type HouseProductInput = z.infer<typeof houseProductSchema>;
+
+/** Omitir metadatos conserva la foto; reemplazarla elimina el crédito de la foto anterior. */
+export function productPhotoPatch(input: Pick<HouseProductInput, "imagen_url" | "codigo_barras">) {
+  return {
+    ...(input.codigo_barras !== undefined ? { codigo_barras: input.codigo_barras } : {}),
+    ...(input.imagen_url !== null ? {
+      imagen_url: input.imagen_url,
+      foto_credito: null,
+      foto_origen_url: null,
+      foto_licencia: null,
+    } : {}),
+  };
+}
 
 export const TEMPLATE_HEADERS = [
   "nombre", "nombre_en", "categoria", "precio", "precio_anterior", "tamano",

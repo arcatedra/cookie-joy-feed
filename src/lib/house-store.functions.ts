@@ -5,7 +5,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { HOUSE_STORE_SLUG, houseProductSchema, type HouseProductInput } from "./house-store-rules";
+import { HOUSE_STORE_SLUG, houseProductSchema, productPhotoPatch, type HouseProductInput } from "./house-store-rules";
 
 async function requireAdmin(context: any) {
   const db = context.supabase;
@@ -84,7 +84,7 @@ async function upsertProducts(db: any, items: HouseProductInput[]) {
       disponible: it.disponible,
       stock: it.stock,
     };
-    if (it.imagen_url !== null) row.imagen_url = it.imagen_url;
+    Object.assign(row, productPhotoPatch(it));
     const q = it.id
       ? db.from("store_products").update(row).eq("id", it.id).eq("business_id", store.id).select("id").single()
       : db.from("store_products").insert(row).select("id").single();
