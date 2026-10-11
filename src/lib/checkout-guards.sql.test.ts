@@ -12,7 +12,7 @@ vi.mock("@tanstack/react-start", () => ({ createServerFn: () => {
 } }));
 vi.mock("@tanstack/react-start/server", () => ({ getRequestHost: () => "localhost:8080" }));
 vi.mock("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
-vi.mock("./stripe.server", () => ({ paymentsEnvironmentForHost: () => "sandbox", stripePost: state.stripe }));
+vi.mock("./stripe.server", () => ({ paymentsEnvironmentForHost: () => "sandbox", stripePost: state.stripe, stripeGet: async () => ({ data: [{ id: "cus_PRUEBA" }] }) }));
 vi.mock("./referrals-attach.server", () => ({ attachReferralIfPending: async () => undefined }));
 vi.mock("./order-credit.server", () => ({ reserveOrderCredit: async () => 0, releaseOrderCredit: async () => undefined }));
 vi.mock("@/integrations/supabase/client.server", () => ({ supabaseAdmin: client("service_role") }));
@@ -162,7 +162,9 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       if (kind === "cookie") {
         const request = state.stripe.mock.calls.at(-1)?.[1];
         const amount = request.line_items.reduce((sum: number, line: any) => sum + line.price_data.unit_amount * line.quantity, 0);
-        expect(amount).toBe(2300);
+        expect(amount).toBe(3500); // $20 galletas + $12 entrega y servicio + $3 propina
+        expect(request.line_items.some((line: any) => line.price_data.product_data.name === "Entrega y servicio" && line.price_data.unit_amount === 1200)).toBe(true);
+        expect(request).toMatchObject({ customer: "cus_PRUEBA", payment_intent_data: expect.objectContaining({ setup_future_usage: "off_session" }) });
         expect(request.line_items.some((line: any) => /margen|hold|exprés|express/i.test(line.price_data.product_data.name))).toBe(false);
       }
     });
