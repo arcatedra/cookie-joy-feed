@@ -143,7 +143,21 @@ export async function transferDriverPayout(
     return transferDeliveryBlockPayout(p.id, db);
   }
   if (p.weekly_bonus_id) {
-    return { ok: false, skipped: true, error: "El bono semanal aprobado requiere pago manual registrado por administración" };
+    const { data: bonus } = await db.from("delivery_weekly_bonuses").select("status").eq("id",p.weekly_bonus_id).maybeSingle();
+    if (bonus?.status !== "approved") return { ok:false,error:"El bono semanal no está aprobado" };
+    if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled || (drv.stripe_environment!=="sandbox"&&drv.stripe_environment!=="live")) return { ok:false,skipped:true,error:"El repartidor aún no conectó su cuenta" };
+    const cents=Math.round(money(p.amount_usd)*100);
+    try {
+      const tr=await stripePost<any>("/v1/transfers",{amount:cents,currency:"usd",destination:drv.stripe_account_id,metadata:{driver_payout_id:p.id,weekly_bonus_id:p.weekly_bonus_id}},drv.stripe_environment,{"Idempotency-Key":`weekly-bonus-${p.weekly_bonus_id}`});
+      const paidAt=new Date().toISOString();
+      await db.from("driver_payouts").update({status:"pagado",transfer_id:tr?.id??null,paid_at:paidAt,last_error:null}).eq("id",p.id);
+      await db.from("delivery_weekly_bonuses").update({status:"paid",paid_at:paidAt}).eq("id",p.weekly_bonus_id);
+      return {ok:true};
+    } catch(e) {
+      const msg=e instanceof Error?e.message:"Error de transferencia";
+      await db.from("driver_payouts").update({status:"fallido",last_error:msg.slice(0,500)}).eq("id",p.id);
+      return {ok:false,error:msg};
+    }
   }
 
   const { data: drv } = await db

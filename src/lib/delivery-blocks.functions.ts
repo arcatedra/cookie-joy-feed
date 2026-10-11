@@ -76,7 +76,7 @@ export const updateDeliveryBlockPay = createServerFn({ method: "POST" }).middlew
     if (readError) throw new Error(readError.message);
     const committed = manualBlockPay(Number(block.base_pay), data.increase, data.doorBonusEnabled, data.doorBonusAmount);
     if (["reserved","assigned","active","completed"].includes(block.status) && committed < Number(block.committed_pay)) throw new Error("No puedes reducir un pago ya aceptado.");
-    const { error } = await db.from("delivery_blocks").update({ manual_increase: data.increase, door_bonus_enabled: data.doorBonusEnabled, door_bonus_amount: data.doorBonusEnabled ? data.doorBonusAmount : 0 }).eq("id",data.blockId);
+    const { error } = await db.from("delivery_blocks").update({ manual_increase: data.increase, door_bonus_enabled: data.doorBonusEnabled, door_bonus_amount: data.doorBonusEnabled ? data.doorBonusAmount : 0, committed_pay: committed }).eq("id",data.blockId);
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
@@ -84,10 +84,10 @@ export const updateDeliveryBlockPay = createServerFn({ method: "POST" }).middlew
 export const publishDeliveryBlock = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ blockId: z.string().uuid() }).parse(raw)).handler(async ({ context, data }) => {
     const db = await requireAdmin(context);
-    const { data: block, error: readError } = await db.from("delivery_blocks").select("base_pay,estimated_minutes,delivery_block_stops(count)").eq("id",data.blockId).single();
+    const { data: block, error: readError } = await db.from("delivery_blocks").select("committed_pay,estimated_minutes,delivery_block_stops(count)").eq("id",data.blockId).single();
     if (readError) throw new Error(readError.message);
     const { data: settings } = await db.from("delivery_block_settings").select("minimum_hourly,min_orders").eq("singleton",true).single();
-    assertPublishableBlock(Number(block.base_pay), Number(block.estimated_minutes), { minimumHourlyUsd:Number(settings?.minimum_hourly ?? 23) } as any);
+    assertPublishableBlock(Number(block.committed_pay), Number(block.estimated_minutes), { minimumHourlyUsd:Number(settings?.minimum_hourly ?? 23) } as any);
     assertBlockOrderCount(Number(block.delivery_block_stops?.[0]?.count ?? 0), { minOrders:Number(settings?.min_orders ?? 3) } as any);
     const { error } = await db.from("delivery_blocks").update({ status:"published", published_at:new Date().toISOString() }).eq("id",data.blockId);
     if (error) throw new Error(error.message);
