@@ -217,6 +217,7 @@ export type Database = {
           email: string
           horario: Json
           id: string
+          is_house: boolean
           logo_url: string | null
           owner_user_id: string
           phone: string
@@ -246,6 +247,7 @@ export type Database = {
           email: string
           horario?: Json
           id?: string
+          is_house?: boolean
           logo_url?: string | null
           owner_user_id: string
           phone: string
@@ -275,6 +277,7 @@ export type Database = {
           email?: string
           horario?: Json
           id?: string
+          is_house?: boolean
           logo_url?: string | null
           owner_user_id?: string
           phone?: string
@@ -2489,6 +2492,7 @@ export type Database = {
           pricing_model: string | null
           propina: number
           recogido_en: string | null
+          reemplazo: string
           repartidor_id: string | null
           repartidor_nombre: string | null
           stripe_checkout_session_id: string | null
@@ -2542,6 +2546,7 @@ export type Database = {
           pricing_model?: string | null
           propina?: number
           recogido_en?: string | null
+          reemplazo?: string
           repartidor_id?: string | null
           repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
@@ -2595,6 +2600,7 @@ export type Database = {
           pricing_model?: string | null
           propina?: number
           recogido_en?: string | null
+          reemplazo?: string
           repartidor_id?: string | null
           repartidor_nombre?: string | null
           stripe_checkout_session_id?: string | null
@@ -2625,6 +2631,38 @@ export type Database = {
           },
         ]
       }
+      store_product_sourcing: {
+        Row: {
+          created_at: string
+          direccion: string
+          product_id: string
+          super: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          direccion?: string
+          product_id: string
+          super?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          direccion?: string
+          product_id?: string
+          super?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_product_sourcing_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "store_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       store_products: {
         Row: {
           business_id: string
@@ -2636,13 +2674,18 @@ export type Database = {
           imagen_url: string | null
           is_cold: boolean
           nombre: string
+          nombre_en: string | null
           orden: number
           peso_kg: number
           peso_lb: number
           precio: number
+          precio_anterior: number | null
           requires_safe_return: boolean
+          stock: number | null
+          tamano: string | null
           unidad: string
           updated_at: string
+          vendido_por_lb: boolean
         }
         Insert: {
           business_id: string
@@ -2654,13 +2697,18 @@ export type Database = {
           imagen_url?: string | null
           is_cold?: boolean
           nombre: string
+          nombre_en?: string | null
           orden?: number
           peso_kg?: number
           peso_lb?: number
           precio?: number
+          precio_anterior?: number | null
           requires_safe_return?: boolean
+          stock?: number | null
+          tamano?: string | null
           unidad?: string
           updated_at?: string
+          vendido_por_lb?: boolean
         }
         Update: {
           business_id?: string
@@ -2672,13 +2720,18 @@ export type Database = {
           imagen_url?: string | null
           is_cold?: boolean
           nombre?: string
+          nombre_en?: string | null
           orden?: number
           peso_kg?: number
           peso_lb?: number
           precio?: number
+          precio_anterior?: number | null
           requires_safe_return?: boolean
+          stock?: number | null
+          tamano?: string | null
           unidad?: string
           updated_at?: string
+          vendido_por_lb?: boolean
         }
         Relationships: [
           {
