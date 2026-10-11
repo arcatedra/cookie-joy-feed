@@ -133,11 +133,15 @@ export async function transferDriverPayout(
 
   const { data: p } = await db
     .from("driver_payouts")
-    .select("id, driver_id, order_id, cookie_order_id, amount_usd, status")
+    .select("id, driver_id, order_id, cookie_order_id, block_id, weekly_bonus_id, amount_usd, status")
     .eq("id", payoutId)
     .maybeSingle();
   if (!p) return { ok: false, error: "Pago no encontrado" };
   if (p.status === "pagado") return { ok: true, skipped: true };
+  if (p.block_id) {
+    const { transferDeliveryBlockPayout } = await import("./delivery-block-payouts.server");
+    return transferDeliveryBlockPayout(p.id, db);
+  }
 
   const { data: drv } = await db
     .from("drivers")
@@ -146,6 +150,24 @@ export async function transferDriverPayout(
     .maybeSingle();
   if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled) {
     return { ok: false, skipped: true, error: "El repartidor aún no conectó su cuenta" };
+  }
+
+  if (p.weekly_bonus_id) {
+    const { data: bonus } = await db.from("delivery_weekly_bonuses").select("status").eq("id",p.weekly_bonus_id).maybeSingle();
+    if (bonus?.status !== "approved") return { ok:false,error:"El bono semanal no está aprobado" };
+    if (drv.stripe_environment!=="sandbox"&&drv.stripe_environment!=="live") return { ok:false,error:"La cuenta no tiene ambiente Stripe verificado" };
+    const cents=Math.round(money(p.amount_usd)*100);
+    try {
+      const tr=await stripePost<any>("/v1/transfers",{amount:cents,currency:"usd",destination:drv.stripe_account_id,metadata:{driver_payout_id:p.id,weekly_bonus_id:p.weekly_bonus_id}},drv.stripe_environment,{"Idempotency-Key":`weekly-bonus-${p.weekly_bonus_id}`});
+      const paidAt=new Date().toISOString();
+      await db.from("driver_payouts").update({status:"pagado",transfer_id:tr?.id??null,paid_at:paidAt,last_error:null}).eq("id",p.id);
+      await db.from("delivery_weekly_bonuses").update({status:"paid",paid_at:paidAt}).eq("id",p.weekly_bonus_id);
+      return {ok:true};
+    } catch(e) {
+      const msg=e instanceof Error?e.message:"Error de transferencia";
+      await db.from("driver_payouts").update({status:"fallido",last_error:msg.slice(0,500)}).eq("id",p.id);
+      return {ok:false,error:msg};
+    }
   }
 
   const cents = Math.round(money(p.amount_usd) * 100);

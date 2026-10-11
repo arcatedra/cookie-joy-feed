@@ -65,12 +65,12 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
 
   const { data: stops, error: stopsError } = await db
     .from("delivery_block_stops")
-    .select("store_order_id,store_orders!inner(monto_capturado,stripe_environment)")
+    .select("store_order_id,store_orders!inner(monto_capturado,costo_envio,cargo_peso,cargo_servicio,propina,credito_aplicado,stripe_environment)")
     .eq("block_id", payout.block_id)
     .order("sequence_number");
   if (stopsError || !stops?.length) return { ok: false, error: stopsError?.message ?? "El lote no tiene pedidos" };
 
-  const orderIds = stops.map((stop: any) => stop.store_order_id as string);
+  const orderIds: string[] = stops.map((stop: any) => stop.store_order_id as string);
   const environments = new Set(stops.map((stop: any) => stop.store_orders?.stripe_environment));
   if (environments.size !== 1 || !environments.has(driver.stripe_environment)) {
     return { ok: false, error: "Los pedidos y la cuenta pertenecen a ambientes distintos" };
@@ -81,9 +81,15 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
 
   const env = await environmentForStoreOrder(orderIds[0], db) as StripeEnv;
   const totalCents = Math.round(money(payout.amount_usd) * 100);
-  const totalCapturedCents = stops.reduce((sum: number, stop: any) => sum + Math.round(money(stop.store_orders?.monto_capturado) * 100), 0);
-  if (totalCapturedCents < totalCents) {
-    return { ok: false, error: "Los cobros del lote no cubren el pago comprometido" };
+  const availableByOrder = new Map<string, number>(orderIds.map((orderId: string, index: number): [string, number] => {
+    const order = (stops[index] as any).store_orders;
+    const captured = Math.round(money(order?.monto_capturado) * 100);
+    const storeCents = Math.max(0, Math.min(captured, captured + Math.round(money(order?.credito_aplicado) * 100) - Math.round((money(order?.costo_envio) + money(order?.cargo_peso) + money(order?.cargo_servicio) + money(order?.propina)) * 100)));
+    return [orderId, Math.max(0, captured - storeCents)] as const;
+  }));
+  const totalAvailableCents = [...availableByOrder.values()].reduce((sum: number, cents: number) => sum + cents, 0);
+  if (totalAvailableCents < totalCents) {
+    return { ok: false, error: "Los fondos de entrega, servicio y propinas no cubren el pago comprometido; administración debe revisar el aporte de Hazorex" };
   }
 
   let remaining = totalCents;
@@ -92,8 +98,7 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
   try {
     for (const orderId of orderIds) {
       if (remaining <= 0) break;
-      const { data: order } = await db.from("store_orders").select("monto_capturado").eq("id", orderId).single();
-      const partCents = Math.min(remaining, Math.round(money(order?.monto_capturado) * 100));
+      const partCents = Math.min(remaining, availableByOrder.get(orderId) ?? 0);
       if (partCents <= 0) continue;
       const operationKey = `block-payout-${payout.id}-${orderId}`;
       const { data: existing } = await db.from("delivery_block_payout_parts").select("id,status,amount_usd,transfer_id").eq("operation_key", operationKey).maybeSingle();

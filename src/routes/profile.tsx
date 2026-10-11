@@ -300,6 +300,7 @@ function AdminStoreMenu({ userId }: { userId: string }) {
   if (!data) return null;
   const items = [
     { to: "/admin/pedidos-tienda", label: "Pedidos de tienda", count: data.pedidos },
+    { to: "/admin/bloques", label: "Bloques reservables", count: 0 },
     { to: "/admin/transferencias", label: "Transferencias", count: data.transferencias },
     { to: "/admin/precios", label: "Precios y zonas", count: 0 },
     { to: "/admin/negocios", label: "Negocios", count: data.negocios },

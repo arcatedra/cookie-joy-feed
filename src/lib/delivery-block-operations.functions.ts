@@ -56,6 +56,7 @@ export const markDeliveryBlockPresent = createServerFn({ method: "POST" }).middl
 export const runDeliveryBlockAutoAssignment = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ blockId:uuid.optional() }).parse(raw)).handler(async ({ context, data }) => {
     const db = await adminDb();
+    const { data:isAdmin } = await context.supabase.rpc("has_role",{_user_id:context.userId,_role:"admin"});
     const { data: reservations, error } = await db.from("delivery_block_reservations")
       .select("id,block_id,driver_id,auto_assign_due_at,delivery_blocks!inner(id,assigned_driver_id,status)")
       .eq("status","present").not("auto_assign_due_at","is",null).lte("auto_assign_due_at",new Date().toISOString());
@@ -63,6 +64,7 @@ export const runDeliveryBlockAutoAssignment = createServerFn({ method: "POST" })
     let assigned = 0;
     for (const reservation of reservations ?? []) {
       if (data.blockId && reservation.block_id !== data.blockId) continue;
+      if (!isAdmin && reservation.driver_id !== context.userId) continue;
       if (reservation.delivery_blocks?.assigned_driver_id) continue;
       const { error: assignError } = await db.rpc("assign_delivery_block", { p_block:reservation.block_id, p_driver:reservation.driver_id, p_actor:context.userId });
       if (!assignError) assigned++;

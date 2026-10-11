@@ -1,9 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getStoreDeliveryPhoto } from "@/lib/store-delivery.functions";
 import { getMyStoreOrder } from "@/lib/store-orders.functions";
+import { submitDeliveryBlockRating } from "@/lib/delivery-block-operations.functions";
+import { submitDeliveryClaim } from "@/lib/delivery-block-admin.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Camera, Star } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/mis-pedidos/tienda/$id")({
   head: () => ({
@@ -59,6 +65,12 @@ const money = (n: unknown) => `$${Number(n ?? 0).toFixed(2)}`;
 function StoreOrderDetailPage() {
   const { id } = Route.useParams();
   const fetchOrder = useServerFn(getMyStoreOrder);
+  const rate = useServerFn(submitDeliveryBlockRating);
+  const claim = useServerFn(submitDeliveryClaim);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [stars,setStars]=useState(5);
+  const [reason,setReason]=useState("");
+  const [busy,setBusy]=useState(false);
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["store-order", id],
     queryFn: () => fetchOrder({ data: { id } }),
@@ -105,6 +117,7 @@ function StoreOrderDetailPage() {
 
   const { order, items, store } = data as any;
   const cobrado = order.monto_capturado != null;
+  async function sendClaim(file?:File){if(!file||!reason.trim())return toast.error("Escribe el motivo y añade una foto.");setBusy(true);try{const {data:u}=await supabase.auth.getUser();if(!u.user)throw new Error("Inicia sesión de nuevo");const ext=(file.name.split(".").pop()||"jpg").slice(0,5);const path=`${u.user.id}/claim-${order.id}-${Date.now()}.${ext}`;const {error}=await supabase.storage.from("delivery-photos").upload(path,file,{contentType:file.type||"image/jpeg"});if(error)throw error;await claim({data:{orderId:order.id,reason,photoPath:path}});toast.success("Reclamo enviado para revisión.");setReason("");}catch(e){toast.error(e instanceof Error?e.message:"No se pudo enviar");}finally{setBusy(false);if(fileRef.current)fileRef.current.value="";}}
 
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-4">
@@ -171,6 +184,7 @@ function StoreOrderDetailPage() {
           {money(cobrado ? order.monto_capturado : order.monto_autorizado)}
         </span>
       </div>
+      {order.estado==="entregado"&&order.pricing_model==="reservable_block_v1"&&<section className="space-y-4 rounded-lg border bg-card p-4"><div><h2 className="font-semibold">Califica al repartidor</h2><div className="mt-2 flex gap-1">{[1,2,3,4,5].map((n)=><button key={n} type="button" aria-label={`${n} estrellas`} onClick={()=>setStars(n)}><Star className={`size-7 ${n<=stars?"fill-primary text-primary":"text-muted-foreground"}`}/></button>)}</div><Button className="mt-3" onClick={async()=>{try{await rate({data:{orderId:order.id,stars}});toast.success("Gracias por tu calificación.");}catch(e){toast.error(e instanceof Error?e.message:"No se pudo calificar")}}}>Enviar calificación</Button></div><div className="border-t pt-4"><h2 className="font-semibold">Reclamo dentro de 24 horas</h2><p className="mt-1 text-xs text-muted-foreground">La decisión y cualquier reembolso los revisa Hazorex.</p><textarea value={reason} onChange={(e)=>setReason(e.target.value)} placeholder="¿Qué ocurrió?" maxLength={120} className="mt-3 min-h-20 w-full rounded-md border bg-background p-3 text-sm"/><input ref={fileRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e)=>sendClaim(e.target.files?.[0])}/><Button variant="outline" disabled={busy||!reason.trim()} onClick={()=>fileRef.current?.click()}><Camera className="mr-2 size-4"/>Añadir foto y enviar</Button></div></section>}
     </div>
   );
 }
