@@ -69,6 +69,8 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Aprobar el plan para 43 frutas nuevas, fotos propias, descripciones ES/EN y subcategorías Frutas/Verduras.
+- [ ] Añadir y verificar catálogo de frutas sin duplicados; conservar productos existentes y no tocar pagos/clientes ni publicar.
 - [ ] Aprobar plan de fondos blancos con originales conservados y 13 productos nuevos de Lácteos y huevos / Carnes y mariscos.
 - [ ] Aplicar fotos verificadas, créditos de edición y catálogo nuevo; comprobar resultados y comunicar excepciones sin publicar ni tocar pagos/clientes.
 - [x] Aprobar plan de fotos reales Open Food Facts, créditos/códigos de barras, precios regulares y seis productos nuevos antes de cambios de catálogo.
