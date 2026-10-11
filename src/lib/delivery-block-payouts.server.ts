@@ -71,7 +71,8 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
   if (stopsError || !stops?.length) return { ok: false, error: stopsError?.message ?? "El lote no tiene pedidos" };
 
   // Each stop is a store order or a Hazorex Galletas order; both fund the block from delivery + tip only.
-  const parts = stops.map((stop: any) => {
+  type Part = { orderId: string; isCookie: boolean; captured: number; available: number; env: string; pi: string | null };
+  const parts: Part[] = stops.map((stop: any): Part => {
     const isCookie = !!stop.cookie_order_id;
     const o = isCookie ? stop.pedidos : stop.store_orders;
     const captured = Math.round(money(o?.monto_capturado) * 100);
@@ -91,7 +92,7 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
   const env = driver.stripe_environment as StripeEnv;
   if (env !== "sandbox" && env !== "live") return { ok: false, error: "Ambiente Stripe no verificado" };
   const totalCents = Math.round(money(payout.amount_usd) * 100);
-  const totalAvailableCents = parts.reduce((sum, p) => sum + p.available, 0);
+  const totalAvailableCents = parts.reduce((sum: number, p: Part) => sum + p.available, 0);
   if (totalAvailableCents < totalCents) {
     return { ok: false, error: "Los fondos de entrega, servicio y propinas no cubren el pago comprometido; administración debe revisar el aporte de Hazorex" };
   }
