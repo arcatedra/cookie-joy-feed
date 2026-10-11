@@ -350,6 +350,558 @@ export type Database = {
           },
         ]
       }
+      delivery_block_events: {
+        Row: {
+          actor_id: string | null
+          block_id: string
+          details: Json
+          event_type: string
+          id: string
+          occurred_at: string
+          stop_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          block_id: string
+          details?: Json
+          event_type: string
+          id?: string
+          occurred_at?: string
+          stop_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          block_id?: string
+          details?: Json
+          event_type?: string
+          id?: string
+          occurred_at?: string
+          stop_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_events_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_events_stop_id_fkey"
+            columns: ["stop_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_block_stops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_block_reservations: {
+        Row: {
+          block_id: string
+          cancel_reason: string | null
+          cancelled_at: string | null
+          created_at: string
+          driver_id: string
+          id: string
+          present_at: string | null
+          priority_penalty_until: string | null
+          reserved_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          block_id: string
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          driver_id: string
+          id?: string
+          present_at?: string | null
+          priority_penalty_until?: string | null
+          reserved_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          block_id?: string
+          cancel_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          driver_id?: string
+          id?: string
+          present_at?: string | null
+          priority_penalty_until?: string | null
+          reserved_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_reservations_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: true
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_reservations_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_block_settings: {
+        Row: {
+          auto_assign_minutes: number
+          bike_lb: number
+          bonus_min_blocks: number
+          bonus_on_time_pct: number
+          bonus_rating: number
+          car_lb: number
+          cargo_bike_lb: number
+          claim_hours: number
+          elevator_fee: number
+          elevator_minutes: number
+          enabled: boolean
+          extra_lb_fee: number
+          heavy_item_lb: number
+          included_lb: number
+          large_fee: number
+          late_cancel_hours: number
+          legal_rate_reviewed_at: string | null
+          light_stops_hour: number
+          max_order_lb: number
+          medium_fee: number
+          medium_max_lb: number
+          min_orders: number
+          minimum_hourly: number
+          motorcycle_lb: number
+          no_show_minutes: number
+          other_stops_hour: number
+          overtime_minutes: number
+          priority_penalty_days: number
+          singleton: boolean
+          small_fee: number
+          small_max_lb: number
+          stairs_fee: number
+          stairs_minutes: number
+          suggested_pay: number
+          unassigned_alert_hours: number
+          updated_at: string
+          van_lb: number
+          weekly_bonus: number
+        }
+        Insert: {
+          auto_assign_minutes?: number
+          bike_lb?: number
+          bonus_min_blocks?: number
+          bonus_on_time_pct?: number
+          bonus_rating?: number
+          car_lb?: number
+          cargo_bike_lb?: number
+          claim_hours?: number
+          elevator_fee?: number
+          elevator_minutes?: number
+          enabled?: boolean
+          extra_lb_fee?: number
+          heavy_item_lb?: number
+          included_lb?: number
+          large_fee?: number
+          late_cancel_hours?: number
+          legal_rate_reviewed_at?: string | null
+          light_stops_hour?: number
+          max_order_lb?: number
+          medium_fee?: number
+          medium_max_lb?: number
+          min_orders?: number
+          minimum_hourly?: number
+          motorcycle_lb?: number
+          no_show_minutes?: number
+          other_stops_hour?: number
+          overtime_minutes?: number
+          priority_penalty_days?: number
+          singleton?: boolean
+          small_fee?: number
+          small_max_lb?: number
+          stairs_fee?: number
+          stairs_minutes?: number
+          suggested_pay?: number
+          unassigned_alert_hours?: number
+          updated_at?: string
+          van_lb?: number
+          weekly_bonus?: number
+        }
+        Update: {
+          auto_assign_minutes?: number
+          bike_lb?: number
+          bonus_min_blocks?: number
+          bonus_on_time_pct?: number
+          bonus_rating?: number
+          car_lb?: number
+          cargo_bike_lb?: number
+          claim_hours?: number
+          elevator_fee?: number
+          elevator_minutes?: number
+          enabled?: boolean
+          extra_lb_fee?: number
+          heavy_item_lb?: number
+          included_lb?: number
+          large_fee?: number
+          late_cancel_hours?: number
+          legal_rate_reviewed_at?: string | null
+          light_stops_hour?: number
+          max_order_lb?: number
+          medium_fee?: number
+          medium_max_lb?: number
+          min_orders?: number
+          minimum_hourly?: number
+          motorcycle_lb?: number
+          no_show_minutes?: number
+          other_stops_hour?: number
+          overtime_minutes?: number
+          priority_penalty_days?: number
+          singleton?: boolean
+          small_fee?: number
+          small_max_lb?: number
+          stairs_fee?: number
+          stairs_minutes?: number
+          suggested_pay?: number
+          unassigned_alert_hours?: number
+          updated_at?: string
+          van_lb?: number
+          weekly_bonus?: number
+        }
+        Relationships: []
+      }
+      delivery_block_stops: {
+        Row: {
+          arrived_at: string | null
+          block_id: string
+          created_at: string
+          delivered_at: string | null
+          delivery_photo_url: string | null
+          departed_at: string | null
+          door_service: string
+          door_service_fee: number
+          estimated_minutes: number
+          eta: string | null
+          has_cold_items: boolean
+          heavy_items: number
+          id: string
+          requires_safe_return: boolean
+          returned_at: string | null
+          sequence_number: number
+          size_label: string
+          status: string
+          store_order_id: string
+          trip_id: string | null
+          updated_at: string
+          wait_started_at: string | null
+          weight_lb: number
+          window_end: string | null
+          window_start: string | null
+        }
+        Insert: {
+          arrived_at?: string | null
+          block_id: string
+          created_at?: string
+          delivered_at?: string | null
+          delivery_photo_url?: string | null
+          departed_at?: string | null
+          door_service?: string
+          door_service_fee?: number
+          estimated_minutes?: number
+          eta?: string | null
+          has_cold_items?: boolean
+          heavy_items?: number
+          id?: string
+          requires_safe_return?: boolean
+          returned_at?: string | null
+          sequence_number: number
+          size_label: string
+          status?: string
+          store_order_id: string
+          trip_id?: string | null
+          updated_at?: string
+          wait_started_at?: string | null
+          weight_lb: number
+          window_end?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          arrived_at?: string | null
+          block_id?: string
+          created_at?: string
+          delivered_at?: string | null
+          delivery_photo_url?: string | null
+          departed_at?: string | null
+          door_service?: string
+          door_service_fee?: number
+          estimated_minutes?: number
+          eta?: string | null
+          has_cold_items?: boolean
+          heavy_items?: number
+          id?: string
+          requires_safe_return?: boolean
+          returned_at?: string | null
+          sequence_number?: number
+          size_label?: string
+          status?: string
+          store_order_id?: string
+          trip_id?: string | null
+          updated_at?: string
+          wait_started_at?: string | null
+          weight_lb?: number
+          window_end?: string | null
+          window_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_stops_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_stops_store_order_id_fkey"
+            columns: ["store_order_id"]
+            isOneToOne: true
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_stops_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_block_trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_block_trips: {
+        Row: {
+          block_id: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          picked_up_at: string | null
+          status: string
+          trip_number: number
+          updated_at: string
+          vehicle_type: string
+          weight_lb: number
+        }
+        Insert: {
+          block_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          picked_up_at?: string | null
+          status?: string
+          trip_number: number
+          updated_at?: string
+          vehicle_type: string
+          weight_lb?: number
+        }
+        Update: {
+          block_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          picked_up_at?: string | null
+          status?: string
+          trip_number?: number
+          updated_at?: string
+          vehicle_type?: string
+          weight_lb?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_trips_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_blocks: {
+        Row: {
+          accepted_at: string | null
+          accepted_pay: number | null
+          assigned_at: string | null
+          assigned_driver_id: string | null
+          base_pay: number
+          committed_pay: number
+          completed_at: string | null
+          created_at: string
+          dispatch_date: string
+          door_bonus_amount: number
+          door_bonus_enabled: boolean
+          estimated_minutes: number
+          estimated_trips: number
+          hazorex_funding: number
+          id: string
+          is_open: boolean
+          manual_increase: number
+          order_funding: number
+          pricing_model: string
+          published_at: string | null
+          requires_thermal_bag: boolean
+          starts_at: string
+          status: string
+          tips_total: number
+          unassigned_alerted_at: string | null
+          updated_at: string
+          zone_id: string | null
+          zone_name: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_pay?: number | null
+          assigned_at?: string | null
+          assigned_driver_id?: string | null
+          base_pay?: number
+          committed_pay?: number
+          completed_at?: string | null
+          created_at?: string
+          dispatch_date: string
+          door_bonus_amount?: number
+          door_bonus_enabled?: boolean
+          estimated_minutes: number
+          estimated_trips?: number
+          hazorex_funding?: number
+          id?: string
+          is_open?: boolean
+          manual_increase?: number
+          order_funding?: number
+          pricing_model?: string
+          published_at?: string | null
+          requires_thermal_bag?: boolean
+          starts_at: string
+          status?: string
+          tips_total?: number
+          unassigned_alerted_at?: string | null
+          updated_at?: string
+          zone_id?: string | null
+          zone_name: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_pay?: number | null
+          assigned_at?: string | null
+          assigned_driver_id?: string | null
+          base_pay?: number
+          committed_pay?: number
+          completed_at?: string | null
+          created_at?: string
+          dispatch_date?: string
+          door_bonus_amount?: number
+          door_bonus_enabled?: boolean
+          estimated_minutes?: number
+          estimated_trips?: number
+          hazorex_funding?: number
+          id?: string
+          is_open?: boolean
+          manual_increase?: number
+          order_funding?: number
+          pricing_model?: string
+          published_at?: string | null
+          requires_thermal_bag?: boolean
+          starts_at?: string
+          status?: string
+          tips_total?: number
+          unassigned_alerted_at?: string | null
+          updated_at?: string
+          zone_id?: string | null
+          zone_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_blocks_assigned_driver_id_fkey"
+            columns: ["assigned_driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_blocks_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_claims: {
+        Row: {
+          created_at: string
+          customer_id: string
+          description: string | null
+          id: string
+          photo_url: string | null
+          reason: string
+          refund_amount: number | null
+          resolution: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          stop_id: string | null
+          store_order_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          description?: string | null
+          id?: string
+          photo_url?: string | null
+          reason: string
+          refund_amount?: number | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          stop_id?: string | null
+          store_order_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          description?: string | null
+          id?: string
+          photo_url?: string | null
+          reason?: string
+          refund_amount?: number | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          stop_id?: string | null
+          store_order_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_claims_stop_id_fkey"
+            columns: ["stop_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_block_stops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_claims_store_order_id_fkey"
+            columns: ["store_order_id"]
+            isOneToOne: false
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_routes: {
         Row: {
           accepted_at: string | null
@@ -409,6 +961,68 @@ export type Database = {
           value_int?: number
         }
         Relationships: []
+      }
+      delivery_weekly_bonuses: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          approved_by: string | null
+          confirmed_claims: number
+          created_at: string
+          driver_id: string
+          eligible_blocks: number
+          id: string
+          late_cancellations: number
+          on_time_pct: number
+          paid_at: string | null
+          rating: number | null
+          status: string
+          updated_at: string
+          week_start: string
+        }
+        Insert: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          confirmed_claims?: number
+          created_at?: string
+          driver_id: string
+          eligible_blocks?: number
+          id?: string
+          late_cancellations?: number
+          on_time_pct?: number
+          paid_at?: string | null
+          rating?: number | null
+          status?: string
+          updated_at?: string
+          week_start: string
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          confirmed_claims?: number
+          created_at?: string
+          driver_id?: string
+          eligible_blocks?: number
+          id?: string
+          late_cancellations?: number
+          on_time_pct?: number
+          paid_at?: string | null
+          rating?: number | null
+          status?: string
+          updated_at?: string
+          week_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_weekly_bonuses_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       delivery_zones: {
         Row: {
@@ -582,6 +1196,7 @@ export type Database = {
         Row: {
           created_at: string
           driver_id: string
+          has_thermal_bag: boolean
           id: string
           insurer: string | null
           license_number: string | null
@@ -592,6 +1207,7 @@ export type Database = {
         Insert: {
           created_at?: string
           driver_id: string
+          has_thermal_bag?: boolean
           id?: string
           insurer?: string | null
           license_number?: string | null
@@ -602,6 +1218,7 @@ export type Database = {
         Update: {
           created_at?: string
           driver_id?: string
+          has_thermal_bag?: boolean
           id?: string
           insurer?: string | null
           license_number?: string | null
@@ -2252,6 +2869,7 @@ export type Database = {
         }
         Returns: string
       }
+      reserve_delivery_block: { Args: { p_block: string }; Returns: string }
       reserve_order_credit: {
         Args: {
           p_environment: string
