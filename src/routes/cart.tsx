@@ -13,7 +13,7 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
-import { cookieDeliveryFeeCents } from "@/lib/cookie-order-rules";
+import { cookieDeliveryFeeCents, COOKIE_MIN_SUBTOTAL_CENTS } from "@/lib/cookie-order-rules";
 import { getPricingConfig } from "@/lib/pricing.functions";
 import i18n from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
@@ -97,8 +97,10 @@ function CartPage() {
   const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
   const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
 
+  const missingCents = Math.max(0, COOKIE_MIN_SUBTOTAL_CENTS - Math.round(subtotal * 100));
   const canCheckout =
     cart.count > 0 &&
+    missingCents === 0 &&
     !!pricingConfig &&
     /.+@.+\..+/.test(email) &&
     address.name.length >= 2 &&
@@ -313,6 +315,11 @@ function CartPage() {
           </div>
         </section>
 
+        {!clientSecret && cart.count > 0 && missingCents > 0 && (
+          <p className="mt-4 text-center text-sm font-semibold text-destructive">
+            {t("cartPage.minimumMissing", { missing: (missingCents / 100).toFixed(2) })}
+          </p>
+        )}
         {!clientSecret && (
           <Button
             type="button"
