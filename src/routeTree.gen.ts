@@ -62,6 +62,7 @@ import { Route as AuthenticatedAdminFinanzasRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminLiveRouteImport } from './routes/_authenticated/admin.live'
 import { Route as AuthenticatedAdminNegociosRouteImport } from './routes/_authenticated/admin.negocios'
 import { Route as AuthenticatedAdminPayoutsRouteImport } from './routes/_authenticated/admin.payouts'
+import { Route as AuthenticatedAdminPedidosGalletasRouteImport } from './routes/_authenticated/admin.pedidos-galletas'
 import { Route as AuthenticatedAdminPedidosTiendaRouteImport } from './routes/_authenticated/admin.pedidos-tienda'
 import { Route as AuthenticatedAdminPreciosRouteImport } from './routes/_authenticated/admin.precios'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
@@ -383,6 +384,12 @@ const AuthenticatedAdminPayoutsRoute =
   AuthenticatedAdminPayoutsRouteImport.update({
     id: '/admin/payouts',
     path: '/admin/payouts',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminPedidosGalletasRoute =
+  AuthenticatedAdminPedidosGalletasRouteImport.update({
+    id: '/admin/pedidos-galletas',
+    path: '/admin/pedidos-galletas',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminPedidosTiendaRoute =
@@ -739,6 +746,7 @@ export interface FileRoutesByFullPath {
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
+  '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
@@ -842,6 +850,7 @@ export interface FileRoutesByTo {
   '/admin/live': typeof AuthenticatedAdminLiveRoute
   '/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
+  '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
@@ -949,6 +958,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/live': typeof AuthenticatedAdminLiveRoute
   '/_authenticated/admin/negocios': typeof AuthenticatedAdminNegociosRoute
   '/_authenticated/admin/payouts': typeof AuthenticatedAdminPayoutsRoute
+  '/_authenticated/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/_authenticated/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/_authenticated/admin/precios': typeof AuthenticatedAdminPreciosRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
@@ -1056,6 +1066,7 @@ export interface FileRouteTypes {
     | '/admin/live'
     | '/admin/negocios'
     | '/admin/payouts'
+    | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
     | '/admin/repartidores'
@@ -1159,6 +1170,7 @@ export interface FileRouteTypes {
     | '/admin/live'
     | '/admin/negocios'
     | '/admin/payouts'
+    | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
     | '/admin/repartidores'
@@ -1265,6 +1277,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/live'
     | '/_authenticated/admin/negocios'
     | '/_authenticated/admin/payouts'
+    | '/_authenticated/admin/pedidos-galletas'
     | '/_authenticated/admin/pedidos-tienda'
     | '/_authenticated/admin/precios'
     | '/_authenticated/admin/repartidores'
@@ -1750,6 +1763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPayoutsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/pedidos-galletas': {
+      id: '/_authenticated/admin/pedidos-galletas'
+      path: '/admin/pedidos-galletas'
+      fullPath: '/admin/pedidos-galletas'
+      preLoaderRoute: typeof AuthenticatedAdminPedidosGalletasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/pedidos-tienda': {
       id: '/_authenticated/admin/pedidos-tienda'
       path: '/admin/pedidos-tienda'
@@ -2179,6 +2199,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminLiveRoute: typeof AuthenticatedAdminLiveRoute
   AuthenticatedAdminNegociosRoute: typeof AuthenticatedAdminNegociosRoute
   AuthenticatedAdminPayoutsRoute: typeof AuthenticatedAdminPayoutsRoute
+  AuthenticatedAdminPedidosGalletasRoute: typeof AuthenticatedAdminPedidosGalletasRoute
   AuthenticatedAdminPedidosTiendaRoute: typeof AuthenticatedAdminPedidosTiendaRoute
   AuthenticatedAdminPreciosRoute: typeof AuthenticatedAdminPreciosRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
@@ -2213,6 +2234,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminLiveRoute: AuthenticatedAdminLiveRoute,
   AuthenticatedAdminNegociosRoute: AuthenticatedAdminNegociosRoute,
   AuthenticatedAdminPayoutsRoute: AuthenticatedAdminPayoutsRoute,
+  AuthenticatedAdminPedidosGalletasRoute:
+    AuthenticatedAdminPedidosGalletasRoute,
   AuthenticatedAdminPedidosTiendaRoute: AuthenticatedAdminPedidosTiendaRoute,
   AuthenticatedAdminPreciosRoute: AuthenticatedAdminPreciosRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
