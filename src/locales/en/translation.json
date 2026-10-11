@@ -1438,7 +1438,7 @@
       },
       "cancel": {
         "q": "What is the minimum order?",
-        "a": "The minimum cookie order is $12 in products."
+        "a": "There is no minimum purchase; delivery costs $12."
       },
       "sweepstakes": {
         "q": "How do I enter the daily sweepstakes?",

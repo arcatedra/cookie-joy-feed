@@ -1438,7 +1438,7 @@
       },
       "cancel": {
         "q": "¿Cuál es el pedido mínimo?",
-        "a": "El pedido mínimo de galletas es $12 en productos."
+        "a": "No hay mínimo de compra; la entrega cuesta $12."
       },
       "sweepstakes": {
         "q": "¿Cómo participo en el sorteo diario?",
