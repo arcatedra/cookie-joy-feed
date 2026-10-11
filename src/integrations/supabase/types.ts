@@ -2096,6 +2096,8 @@ export type Database = {
           created_at: string
           credito_aplicado: number
           direccion_envio: Json
+          door_service: string
+          door_service_fee: number
           en_camino_en: string | null
           entregado_en: string | null
           envio_empresa: number
@@ -2147,6 +2149,8 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          door_service?: string
+          door_service_fee?: number
           en_camino_en?: string | null
           entregado_en?: string | null
           envio_empresa?: number
@@ -2198,6 +2202,8 @@ export type Database = {
           created_at?: string
           credito_aplicado?: number
           direccion_envio?: Json
+          door_service?: string
+          door_service_fee?: number
           en_camino_en?: string | null
           entregado_en?: string | null
           envio_empresa?: number
@@ -2257,11 +2263,13 @@ export type Database = {
           disponible: boolean
           id: string
           imagen_url: string | null
+          is_cold: boolean
           nombre: string
           orden: number
           peso_kg: number
           peso_lb: number
           precio: number
+          requires_safe_return: boolean
           unidad: string
           updated_at: string
         }
@@ -2273,11 +2281,13 @@ export type Database = {
           disponible?: boolean
           id?: string
           imagen_url?: string | null
+          is_cold?: boolean
           nombre: string
           orden?: number
           peso_kg?: number
           peso_lb?: number
           precio?: number
+          requires_safe_return?: boolean
           unidad?: string
           updated_at?: string
         }
@@ -2289,11 +2299,13 @@ export type Database = {
           disponible?: boolean
           id?: string
           imagen_url?: string | null
+          is_cold?: boolean
           nombre?: string
           orden?: number
           peso_kg?: number
           peso_lb?: number
           precio?: number
+          requires_safe_return?: boolean
           unidad?: string
           updated_at?: string
         }

@@ -33,6 +33,15 @@ export const getDeliveryBlockAdmin = createServerFn({ method: "GET" }).middlewar
   return { settings, blocks: (blocks ?? []).map((block: any) => ({ ...block, needsDriverAlert: !block.assigned_driver_id && block.status === "published" && new Date(block.starts_at).getTime() - now <= Number(settings.unassigned_alert_hours) * 3_600_000 })) };
 });
 
+export const listOrdersForDeliveryBlocks = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const db = await requireAdmin(context);
+  const { data, error } = await db.from("store_orders")
+    .select("id,numero_pedido,fecha_entrega,peso_total_lb,propina,direccion_envio,monto_capturado,estado,created_at,businesses(business_name)")
+    .gt("monto_capturado",0).in("estado",["listo","entregado"]).is("repartidor_id",null).order("fecha_entrega").order("created_at");
+  if (error) throw new Error(error.message);
+  return data ?? [];
+});
+
 export const updateDeliveryBlockSettings = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => settingsSchema.parse(raw)).handler(async ({ context, data }) => {
     const db = await requireAdmin(context);
@@ -44,7 +53,10 @@ export const updateDeliveryBlockSettings = createServerFn({ method: "POST" }).mi
 const blockSchema = z.object({ zoneId: z.string().uuid().nullable(), zoneName: z.string().trim().min(1).max(120), startsAt: z.string().datetime(), estimatedMinutes: z.number().int().min(60).max(240), basePay: z.number().positive(), orderIds: z.array(z.string().uuid()).min(3) });
 export const createDeliveryBlockDraft = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => blockSchema.parse(raw)).handler(async ({ context, data }) => {
-    const db = await requireAdmin(context); assertBlockOrderCount(data.orderIds.length); assertPublishableBlock(data.basePay, data.estimatedMinutes);
+    const db = await requireAdmin(context);
+    const { data: settings } = await db.from("delivery_block_settings").select("min_orders,minimum_hourly").eq("singleton",true).single();
+    assertBlockOrderCount(data.orderIds.length, { minOrders:Number(settings?.min_orders ?? 3) } as any);
+    assertPublishableBlock(data.basePay, data.estimatedMinutes, { minimumHourlyUsd:Number(settings?.minimum_hourly ?? 23) } as any);
     const { data: orders, error: orderError } = await db.from("store_orders").select("id,peso_total_lb,propina,estado,monto_capturado").in("id", data.orderIds);
     if (orderError || orders?.length !== data.orderIds.length) throw new Error("No se pudieron validar todos los pedidos.");
     if (orders.some((order: any) => Number(order.monto_capturado ?? 0) <= 0)) throw new Error("Solo se pueden agrupar pedidos efectivamente cobrados.");
@@ -74,7 +86,9 @@ export const publishDeliveryBlock = createServerFn({ method: "POST" }).middlewar
     const db = await requireAdmin(context);
     const { data: block, error: readError } = await db.from("delivery_blocks").select("base_pay,estimated_minutes,delivery_block_stops(count)").eq("id",data.blockId).single();
     if (readError) throw new Error(readError.message);
-    assertPublishableBlock(Number(block.base_pay), Number(block.estimated_minutes));
+    const { data: settings } = await db.from("delivery_block_settings").select("minimum_hourly,min_orders").eq("singleton",true).single();
+    assertPublishableBlock(Number(block.base_pay), Number(block.estimated_minutes), { minimumHourlyUsd:Number(settings?.minimum_hourly ?? 23) } as any);
+    assertBlockOrderCount(Number(block.delivery_block_stops?.[0]?.count ?? 0), { minOrders:Number(settings?.min_orders ?? 3) } as any);
     const { error } = await db.from("delivery_blocks").update({ status:"published", published_at:new Date().toISOString() }).eq("id",data.blockId);
     if (error) throw new Error(error.message);
     return { ok: true as const };
@@ -90,7 +104,7 @@ export const listMyAvailableDeliveryBlocks = createServerFn({ method: "GET" }).m
 
 export const reserveDeliveryBlock = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ blockId:z.string().uuid() }).parse(raw)).handler(async ({ context, data }) => {
-    const { data, error } = await context.supabase.rpc("reserve_delivery_block", { p_block:data.blockId });
+    const { data: reservationId, error } = await context.supabase.rpc("reserve_delivery_block", { p_block:data.blockId });
     if (error) throw new Error(error.message);
-    return { reservationId:data as string };
+    return { reservationId:reservationId as string };
   });

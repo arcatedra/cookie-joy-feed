@@ -19,10 +19,11 @@ export async function registerDriverPayoutForOrder(orderId: string): Promise<voi
 
     const { data: order } = await db
       .from("store_orders")
-      .select("id, repartidor_id, envio_repartidor, cargo_peso_repartidor, propina, estado")
+      .select("id, repartidor_id, envio_repartidor, cargo_peso_repartidor, propina, estado, pricing_model")
       .eq("id", orderId)
       .maybeSingle();
     if (!order?.repartidor_id) return;
+    if (order.pricing_model === "reservable_block_v1") return;
 
     const tier = money(order.envio_repartidor);
     const weight = money(order.cargo_peso_repartidor);

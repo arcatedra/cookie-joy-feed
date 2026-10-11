@@ -19,8 +19,7 @@ export const blockConfigSchema = z.object({
   priorityPenaltyDays: z.number().int().min(0).default(7), overtimeMinutes: z.number().min(0).default(30),
   noShowMinutes: z.number().min(0).default(5), claimHours: z.number().positive().default(24),
 }).refine((c) => c.smallMaxLb < c.mediumMaxLb && c.mediumMaxLb < c.includedLb && c.includedLb < c.maxOrderLb,
-  { message: "Los límites de peso deben estar en orden creciente." })
-  .refine((c) => c.boostSecondHours < c.boostFirstHours, { message: "El segundo aumento debe estar más cerca de la salida." });
+  { message: "Los límites de peso deben estar en orden creciente." });
 
 export type BlockConfig = z.infer<typeof blockConfigSchema>;
 export const DEFAULT_BLOCK_CONFIG = blockConfigSchema.parse({});

@@ -23,6 +23,7 @@ import {
   serviceFeeCents,
   DEFAULT_PRICING,
 } from "@/lib/pricing";
+import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "@/lib/delivery-block-rules";
 import { useAuth } from "@/lib/auth";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 import { TipSelector } from "@/components/TipSelector";
@@ -281,6 +282,7 @@ function StoreCartBar({
 
   const [fecha, setFecha] = useState<string>("");
   const [propina, setPropina] = useState(0);
+  const [doorService, setDoorService] = useState<DoorService>("lobby");
   const { t, i18n } = useTranslation();
   const [usarSaldo, setUsarSaldo] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -305,6 +307,9 @@ function StoreCartBar({
   });
 
   const pricing = config?.pricing ?? DEFAULT_PRICING;
+  const blockSettings = (config as any)?.blockSettings;
+  const blockEnabled = blockSettings?.enabled === true;
+  const blockConfig = blockEnabled ? { ...DEFAULT_BLOCK_CONFIG, smallMaxLb:Number(blockSettings.small_max_lb), mediumMaxLb:Number(blockSettings.medium_max_lb), includedLb:Number(blockSettings.included_lb), maxOrderLb:Number(blockSettings.max_order_lb), smallUsd:Number(blockSettings.small_fee), mediumUsd:Number(blockSettings.medium_fee), largeUsd:Number(blockSettings.large_fee), extraLbUsd:Number(blockSettings.extra_lb_fee), elevatorUsd:Number(blockSettings.elevator_fee), stairsUsd:Number(blockSettings.stairs_fee), elevatorMinutes:Number(blockSettings.elevator_minutes), stairsMinutes:Number(blockSettings.stairs_minutes) } : DEFAULT_BLOCK_CONFIG;
   const deliveryZones = (config as any)?.deliveryZones as import("@/lib/pricing").DeliveryZone[] | undefined;
 
   const lines = useMemo(
@@ -329,13 +334,14 @@ function StoreCartBar({
     })),
     pricing,
   );
-  const overLimit = totalLb > pricing.weightMaxLb;
+  const overLimit = totalLb > (blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb);
   const tier = tierForSubtotal(subtotalCents, pricing);
   const tipCents = Math.max(0, Math.round(propina * 100));
-  const weightCents = overLimit ? 0 : weightFeeCents(totalLb, pricing);
+  const blockQuote = blockEnabled && !overLimit ? blockOrderQuote(totalLb, doorService, blockConfig) : null;
+  const weightCents = blockEnabled || overLimit ? 0 : weightFeeCents(totalLb, pricing);
   // El cliente ve un solo precio de entrega: tramo + libras extra + recargo de procesamiento.
-  const processingCents = serviceFeeCents(subtotalCents + tier.feeCents + weightCents, pricing);
-  const shippingCents = tier.feeCents + weightCents + processingCents;
+  const processingCents = blockEnabled ? (blockQuote?.doorCents ?? 0) : serviceFeeCents(subtotalCents + tier.feeCents + weightCents, pricing);
+  const shippingCents = blockEnabled ? (blockQuote?.deliveryCents ?? 0) + processingCents : tier.feeCents + weightCents + processingCents;
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + tipCents;
   const creditCents = usarSaldo ? spendableOrderCreditCents(balanceCents, grossCents, processingCents + tier.companyCents) : 0;
@@ -376,6 +382,7 @@ function StoreCartBar({
           },
           fechaEntrega: fecha || fechas[0],
           propina: tipCents / 100,
+          doorService,
           usarSaldo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
         },
@@ -411,10 +418,24 @@ function StoreCartBar({
           </div>
           {overLimit ? (
             <p className="mt-1 text-xs font-semibold text-red-600">
-              Máximo {pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
+              Máximo {blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
             </p>
           ) : null}
         </div>
+
+        {blockEnabled && (
+          <div className="space-y-2 text-xs">
+            <p className="font-semibold">Punto de entrega</p>
+            <div className="flex flex-wrap gap-2">
+              {([['lobby','Lobby / puerta del edificio',0],['elevator','Apartamento con ascensor',blockConfig.elevatorUsd],['stairs','Apartamento por escaleras',blockConfig.stairsUsd]] as const).map(([value,label,fee]) => (
+                <Button key={value} type="button" size="sm" variant={doorService === value ? "default" : "outline"} onClick={() => setDoorService(value)}>
+                  {label}{fee > 0 ? ` +$${fee.toFixed(2)}` : ""}
+                </Button>
+              ))}
+            </div>
+            <p className="text-muted-foreground">La entrega al apartamento es un servicio opcional de Hazorex y no es una propina.</p>
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-3 text-xs">
           <label className="flex items-center gap-2">
@@ -447,7 +468,7 @@ function StoreCartBar({
           </span>
         </div>
 
-        <p className="text-xs text-muted-foreground">Servicio: {pricing.servicePct}% sobre productos, envío y peso, con mínimo de ${pricing.serviceMinUsd.toFixed(2)}. Cargo de servicio: ${(processingCents / 100).toFixed(2)}. Peso adicional sobre {pricing.weightIncludedLb} lb: ${(weightCents / 100).toFixed(2)}.</p>
+        <p className="text-xs text-muted-foreground">{blockEnabled ? `Entrega y servicio según peso real: $${((blockQuote?.deliveryCents ?? 0) / 100).toFixed(2)}${processingCents ? ` · Apartamento: $${(processingCents / 100).toFixed(2)}` : ""}.` : `Servicio: ${pricing.servicePct}% sobre productos, envío y peso, con mínimo de $${pricing.serviceMinUsd.toFixed(2)}. Cargo de servicio: $${(processingCents / 100).toFixed(2)}. Peso adicional sobre ${pricing.weightIncludedLb} lb: $${(weightCents / 100).toFixed(2)}.`}</p>
         <TipSelector value={propina} onChange={setPropina} />
         <p className="text-xs text-muted-foreground">{t("deliveryPromise")}</p>
         {creditCents > 0 && <p className="text-xs text-muted-foreground">{t("credit.discount")}: -${(creditCents / 100).toFixed(2)}</p>}

@@ -21,6 +21,7 @@ import {
   tierForSubtotal,
   weightFeeCents,
 } from "./pricing";
+import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
   id: string;
@@ -53,6 +54,7 @@ const schema = z.object({
   fechaEntrega: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   /** Propina voluntaria para el repartidor (USD). */
   propina: z.number().min(0).max(200).optional().default(0),
+  doorService: z.enum(["lobby", "elevator", "stairs"]).optional().default("lobby"),
   /** Usar el saldo disponible del cliente. */
   usarSaldo: z.boolean().optional().default(true),
   locale: z.enum(["es", "en"]).default("es"),
@@ -102,6 +104,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     // ---- Ajustes de precio (cargo de servicio, peso) ----------------------
     const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
     const pricing = pricingFromRows(pricingRows);
+    const { data: blockRow } = await db.from("delivery_block_settings").select("*").eq("singleton",true).maybeSingle();
+    const blockEnabled = blockRow?.enabled === true;
 
     const byId = new Map<string, any>((rows ?? []).map((r: any) => [r.id, r]));
     const priced = data.items.map((it) => {
@@ -123,9 +127,10 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
 
     const totalLb = cartWeightLb(priced, pricing);
-    if (totalLb > pricing.weightMaxLb) {
+    const maxWeight = blockEnabled ? Number(blockRow.max_order_lb) : pricing.weightMaxLb;
+    if (totalLb > maxWeight) {
       throw new Error(
-        `Máximo ${pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.`,
+        `Máximo ${maxWeight} lb por pedido. Divide tu compra en 2 pedidos.`,
       );
     }
     const { data: dzRows } = await db
@@ -136,11 +141,13 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       throw new Error("Ese día de entrega ya no está disponible. Elige otro.");
     }
     const tier = tierForSubtotal(subtotalCents, pricing);
-    const weightCents = weightFeeCents(totalLb, pricing);
-    const shippingCents = tier.feeCents;
+    const blockConfig = blockEnabled ? { ...DEFAULT_BLOCK_CONFIG, smallMaxLb:Number(blockRow.small_max_lb), mediumMaxLb:Number(blockRow.medium_max_lb), includedLb:Number(blockRow.included_lb), maxOrderLb:Number(blockRow.max_order_lb), smallUsd:Number(blockRow.small_fee), mediumUsd:Number(blockRow.medium_fee), largeUsd:Number(blockRow.large_fee), extraLbUsd:Number(blockRow.extra_lb_fee), elevatorUsd:Number(blockRow.elevator_fee), stairsUsd:Number(blockRow.stairs_fee), elevatorMinutes:Number(blockRow.elevator_minutes), stairsMinutes:Number(blockRow.stairs_minutes) } : DEFAULT_BLOCK_CONFIG;
+    const blockQuote = blockEnabled ? blockOrderQuote(totalLb, data.doorService as DoorService, blockConfig) : null;
+    const weightCents = blockEnabled ? 0 : weightFeeCents(totalLb, pricing);
+    const shippingCents = blockQuote?.deliveryCents ?? tier.feeCents;
     const tipCents = Math.round((data.propina ?? 0) * 100);
     // Recargo que cubre la comisión de Stripe: va dentro del precio de entrega.
-    const serviceCents = serviceFeeCents(
+    const serviceCents = blockEnabled ? (blockQuote?.doorCents ?? 0) : serviceFeeCents(
       subtotalCents + shippingCents + weightCents,
       pricing,
     );
@@ -183,12 +190,15 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         subtotal: subtotalCents / 100,
         costo_envio: shippingCents / 100,
         cargo_servicio: serviceCents / 100,
+        door_service: blockEnabled ? data.doorService : "lobby",
+        door_service_fee: blockEnabled ? serviceCents / 100 : 0,
+        pricing_model: blockEnabled ? "reservable_block_v1" : "batch_v1",
         tramo: tier.tier,
-        envio_repartidor: stopCompensation(totalLb).baseCents / 100,
-        envio_empresa: tier.companyCents / 100,
+        envio_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).baseCents / 100,
+        envio_empresa: blockEnabled ? shippingCents / 100 : tier.companyCents / 100,
         propina: tipCents / 100,
         cargo_peso: weightCents / 100,
-        cargo_peso_repartidor: stopCompensation(totalLb).driverWeightCents / 100,
+        cargo_peso_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).driverWeightCents / 100,
         peso_total_lb: totalLb,
         fecha_entrega: data.fechaEntrega ?? null,
         credito_aplicado: creditCents / 100,
@@ -261,7 +271,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         });
       }
       const extras: Array<[string, number]> = [
-        ["Entrega", shippingCents + weightCents + serviceCents],
+        [blockEnabled ? "Entrega y servicio" : "Entrega", shippingCents + weightCents],
+        [blockEnabled ? "Entrega en tu apartamento" : "Servicio", serviceCents],
         ["Propina para el repartidor", tipCents],
         ["Margen para ajustes de peso y faltantes (se cobra solo lo real)", bufferCents],
       ];
