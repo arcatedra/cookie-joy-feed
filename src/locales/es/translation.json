@@ -1055,7 +1055,7 @@
     "hero": {
       "badge": "Postúlate en 5 minutos",
       "titlePart1": "Gana",
-      "titleHighlight": "por pedido",
+      "titleHighlight": "por bloque",
       "titlePart2": "repartiendo con Hazorex",
       "subtitlePart1": "Tú manejas tu tiempo, nosotros los pedidos. Elige",
       "subtitleHighlight": "bicicleta, moto o auto",
@@ -1063,11 +1063,11 @@
       "viewRequirements": "Ver requisitos →",
       "perks": {
         "flexible": "Horarios flexibles",
-        "weekly": "Cobras al entregar cada pedido",
+        "weekly": "Cobras al completar tu bloque",
         "noFee": "Sin cuota inicial",
         "reply48": "Respuesta en 48 h"
       },
-      "example": "Ejemplo: un lote de 4 pedidos (2 pequeños, 1 mediano y 1 grande) = $5 + $5 + $5.50 + $6 = $21.50, más el 100% de las propinas. Pedidos de más de 45 lb te pagan un extra por libra. No es una promesa de pago por hora."
+      "example": "Ejemplo: un bloque de 4 paradas puede ofrecer $40 de pago base, más 100% de las propinas y cualquier bono de puerta que Hazorex active. Ves el pago total antes de reservar; dura entre 1 y 4 horas."
     },
     "signInGate": {
       "title": "Empieza tu postulación",
@@ -1148,7 +1148,7 @@
       },
       "q3": {
         "q": "¿Cuándo cobro?",
-        "a": "Tu pago por pedido incluye tu parte del envío, cargo por peso y el 100% de la propina. La transferencia se inicia al entregar; el depósito depende de Stripe y tu banco."
+        "a": "Ves el pago total del bloque antes de reservar. Incluye la base y los bonos que Hazorex active; además recibes 100% de las propinas. La transferencia se inicia al completar el bloque y depende de Stripe y tu banco."
       },
       "q4": {
         "q": "¿Puedo elegir mis horarios?",

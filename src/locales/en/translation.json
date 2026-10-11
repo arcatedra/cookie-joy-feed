@@ -1055,7 +1055,7 @@
     "hero": {
       "badge": "Apply in 5 minutes",
       "titlePart1": "Earn",
-      "titleHighlight": "per order",
+      "titleHighlight": "per block",
       "titlePart2": "delivering with Hazorex.",
       "subtitlePart1": "You manage your time, we handle the orders. Choose a",
       "subtitleHighlight": "bike, motorcycle, or car",
@@ -1063,11 +1063,11 @@
       "viewRequirements": "View requirements →",
       "perks": {
         "flexible": "Flexible hours",
-        "weekly": "Get paid after delivering each order",
+        "weekly": "Get paid after completing your block",
         "noFee": "No initial fee",
         "reply48": "Response in 48h"
       },
-      "example": "Example: a batch of 4 orders (2 small, 1 medium and 1 large) = $5 + $5 + $5.50 + $6 = $21.50, plus 100% of tips. Orders over 45 lb pay an extra amount per pound. This is not an hourly pay promise."
+      "example": "Example: a 4-stop block may offer $40 base pay, plus 100% of tips and any door bonus Hazorex activates. You see total pay before reserving; blocks last 1 to 4 hours."
     },
     "signInGate": {
       "title": "Start your application",
@@ -1148,7 +1148,7 @@
       },
       "q3": {
         "q": "When do I get paid?",
-        "a": "Your pay per order includes your share of delivery, weight fees and 100% of tips. The transfer starts after delivery; bank deposits depend on Stripe and your bank."
+        "a": "You see total block pay before reserving. It includes base pay and any bonus Hazorex activates, plus 100% of tips. The transfer starts after completing the block and depends on Stripe and your bank."
       },
       "q4": {
         "q": "Can I choose my hours?",

@@ -98,7 +98,7 @@ export const listMyAvailableDeliveryBlocks = createServerFn({ method: "GET" }).m
   const { data: settings } = await context.supabase.from("delivery_block_settings").select("enabled").eq("singleton",true).single();
   if (!settings?.enabled) return { enabled:false as const, blocks:[] };
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin.rpc("my_available_delivery_blocks");
+  const { data, error } = await supabaseAdmin.rpc("my_available_delivery_blocks", { p_driver:context.userId });
   if (error) throw new Error(error.message);
   return { enabled:true as const, blocks:data ?? [] };
 });
@@ -108,7 +108,7 @@ export const reserveDeliveryBlock = createServerFn({ method: "POST" }).middlewar
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error: driverError } = await context.supabase.from("drivers").select("id").eq("id",context.userId).eq("application_status","aprobado").single();
     if (driverError) throw new Error("Tu cuenta de repartidor no está aprobada.");
-    const { data: reservationId, error } = await supabaseAdmin.rpc("reserve_delivery_block", { p_block:data.blockId });
+    const { data: reservationId, error } = await supabaseAdmin.rpc("reserve_delivery_block", { p_block:data.blockId, p_driver:context.userId });
     if (error) throw new Error(error.message);
     return { reservationId:reservationId as string };
   });
