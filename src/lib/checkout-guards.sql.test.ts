@@ -87,7 +87,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
         stripe_environment text,stripe_payment_intent_id text,stripe_checkout_session_id text,capturado_en timestamptz);
       CREATE TABLE store_orders(LIKE pedidos INCLUDING ALL);
       ALTER TABLE store_orders ADD business_id uuid,ADD cargo_servicio numeric,ADD tramo text,ADD envio_repartidor numeric,ADD envio_empresa numeric,
-        ADD cargo_peso numeric,ADD cargo_peso_repartidor numeric,ADD peso_total_lb numeric,ADD fecha_entrega date,ADD total_estimado numeric,ADD comision_porcentaje numeric,ADD comision_estimada numeric;
+        ADD cargo_peso numeric,ADD cargo_peso_repartidor numeric,ADD peso_total_lb numeric,ADD fecha_entrega date,ADD total_estimado numeric,ADD comision_porcentaje numeric,ADD comision_estimada numeric,ADD door_service text,ADD door_service_fee numeric,ADD pricing_model text;
       CREATE TABLE pedido_items(pedido_id uuid,producto_id uuid,nombre_producto text,precio_unitario numeric,cantidad numeric,subtotal_item numeric,substitution_mode text,substitute_ids jsonb,status text);
       CREATE TABLE store_order_items(order_id uuid,product_id uuid,nombre_producto text,unidad text,precio_unitario numeric,cantidad numeric,subtotal_item numeric);
       CREATE TABLE referral_rewards(id uuid DEFAULT gen_random_uuid(),referrer_id uuid,referee_id uuid,status text,block_reason text,order_id uuid,amount_usd numeric,order_kind text,stripe_environment text,UNIQUE(referee_id,stripe_environment));
