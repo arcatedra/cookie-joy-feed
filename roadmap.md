@@ -69,7 +69,7 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
-- [ ] Aprobar plan de fotos reales Open Food Facts, créditos/códigos de barras, precios regulares y seis productos nuevos antes de cambios de catálogo.
-- [ ] Aplicar y verificar catálogo autorizado; informar coincidencias exactas y fotos conservadas, sin publicar ni tocar pagos/clientes.
+- [x] Aprobar plan de fotos reales Open Food Facts, créditos/códigos de barras, precios regulares y seis productos nuevos antes de cambios de catálogo.
+- [x] Aplicar y verificar catálogo autorizado: 16 productos, ocho fotos exactas guardadas con crédito/código, tres fotos existentes conservadas sin coincidencia; seis pruebas pasan, celular/escritorio sin errores, sin publicar ni tocar pagos/clientes.
 - [x] /admin/productos, /supermercado, reemplazo en pago, 10 productos de prueba.
 - [ ] Probar /admin/productos con sesión de admin (sin sesión autorizada en esta vista previa).
