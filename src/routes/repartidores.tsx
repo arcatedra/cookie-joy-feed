@@ -570,14 +570,14 @@ const step1Schema = z.object({
 });
 
 const step2Schema = z.object({
-  vehicleType: z.enum(["bicicleta", "moto", "auto"], {
+  vehicleType: z.enum(["bicicleta", "bici_carga", "moto", "auto", "van"], {
     error: () => "err_vehicle",
   }),
   licenseNumber: z.string().trim().max(50),
   insurer: z.string().trim().max(80),
   plateNumber: z.string().trim().max(20).optional(),
 }).superRefine((value, ctx) => {
-  if (value.vehicleType === "bicicleta") return;
+  if (value.vehicleType === "bicicleta" || value.vehicleType === "bici_carga") return;
   if (value.licenseNumber.length < 3) ctx.addIssue({ code: "custom", path: ["licenseNumber"], message: "err_license" });
   if (value.insurer.length < 2) ctx.addIssue({ code: "custom", path: ["insurer"], message: "err_insurer" });
 });
@@ -700,7 +700,7 @@ function ApplicationForm({
       const { error: vehErr } = await supabase.from("driver_vehicles").insert({
         driver_id: userId,
         vehicle_type: s2.vehicleType,
-        plate_number: s2.vehicleType === "bicicleta" ? null : s2.plateNumber || null,
+        plate_number: s2.vehicleType === "bicicleta" || s2.vehicleType === "bici_carga" ? null : s2.plateNumber || null,
       });
       if (vehErr) throw new Error(t("repartidoresPage.form.vehicleError", { msg: vehErr.message }));
 
@@ -749,7 +749,7 @@ function ApplicationForm({
 
   const requiredDocs: DocKey[] = useMemo(() => {
     const base: DocKey[] = ["identificacion", "foto_perfil"];
-    if (s2.vehicleType !== "bicicleta") base.push("licencia_conducir", "seguro_vehiculo");
+    if (s2.vehicleType !== "bicicleta" && s2.vehicleType !== "bici_carga") base.push("licencia_conducir", "seguro_vehiculo");
     if (s2.vehicleType === "moto") base.push("casco");
     return base;
   }, [s2.vehicleType]);
@@ -974,9 +974,9 @@ function ApplicationForm({
               subtitle={t("repartidoresPage.form.step2.subtitle")}
             />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {(["bicicleta", "moto", "auto"] as const).map((v) => {
+              {(["bicicleta", "bici_carga", "moto", "auto", "van"] as const).map((v) => {
                 const active = s2.vehicleType === v;
-                const Icon = v === "bicicleta" ? Bike : v === "moto" ? Scooter : Car;
+                const Icon = v === "bicicleta" || v === "bici_carga" ? Bike : v === "moto" ? Scooter : Car;
                 return (
                   <button
                     key={v}
@@ -998,7 +998,7 @@ function ApplicationForm({
               <p className="text-xs text-red-600">{errors.vehicleType}</p>
             )}
 
-            {s2.vehicleType !== "bicicleta" && (
+            {s2.vehicleType !== "bicicleta" && s2.vehicleType !== "bici_carga" && (
               <>
                 <Field label={t("repartidoresPage.form.licenseNumber")} htmlFor="licenseNumber" error={errors.licenseNumber} required>
                   <Input id="licenseNumber" value={s2.licenseNumber} onChange={(e) => setS2({ ...s2, licenseNumber: e.target.value })} className="min-h-11" />

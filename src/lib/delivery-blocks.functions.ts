@@ -97,14 +97,18 @@ export const publishDeliveryBlock = createServerFn({ method: "POST" }).middlewar
 export const listMyAvailableDeliveryBlocks = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { data: settings } = await context.supabase.from("delivery_block_settings").select("enabled").eq("singleton",true).single();
   if (!settings?.enabled) return { enabled:false as const, blocks:[] };
-  const { data, error } = await context.supabase.from("delivery_blocks").select("id,zone_name,starts_at,estimated_minutes,committed_pay,door_bonus_enabled,door_bonus_amount,estimated_trips,requires_thermal_bag,delivery_block_stops(id,size_label,heavy_items,has_cold_items,door_service)").eq("status","published").eq("is_open",true).is("assigned_driver_id",null).order("starts_at");
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.rpc("my_available_delivery_blocks");
   if (error) throw new Error(error.message);
   return { enabled:true as const, blocks:data ?? [] };
 });
 
 export const reserveDeliveryBlock = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ blockId:z.string().uuid() }).parse(raw)).handler(async ({ context, data }) => {
-    const { data: reservationId, error } = await context.supabase.rpc("reserve_delivery_block", { p_block:data.blockId });
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: driverError } = await context.supabase.from("drivers").select("id").eq("id",context.userId).eq("application_status","aprobado").single();
+    if (driverError) throw new Error("Tu cuenta de repartidor no está aprobada.");
+    const { data: reservationId, error } = await supabaseAdmin.rpc("reserve_delivery_block", { p_block:data.blockId });
     if (error) throw new Error(error.message);
     return { reservationId:reservationId as string };
   });

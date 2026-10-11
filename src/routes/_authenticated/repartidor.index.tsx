@@ -19,6 +19,7 @@ import {
   savePushSubscription,
 } from "@/lib/courier.functions";
 import { BatchSuggestionDialog } from "@/components/courier/BatchSuggestionDialog";
+import { listMyAvailableDeliveryBlocks, reserveDeliveryBlock } from "@/lib/delivery-blocks.functions";
 
 export const Route = createFileRoute("/_authenticated/repartidor/")({
   component: RepartidorHome,
@@ -73,6 +74,10 @@ function RepartidorHome() {
     gcTime: 10 * 60_000,
     placeholderData: keepPreviousData,
   });
+  const blocksFn = useServerFn(listMyAvailableDeliveryBlocks);
+  const reserveBlockFn = useServerFn(reserveDeliveryBlock);
+  const blocks = useQuery({ queryKey:["courier","blocks"], queryFn:()=>blocksFn(), staleTime:15_000 });
+  const reserveBlock = useMutation({ mutationFn:(blockId:string)=>reserveBlockFn({data:{blockId}}), onSuccess:()=>{ qc.invalidateQueries({queryKey:["courier","blocks"]}); toast.success("Lote reservado."); }, onError:(e:Error)=>toast.error(e.message) });
 
   const acceptFn = useServerFn(acceptOrder);
   const accept = useMutation({
@@ -329,6 +334,12 @@ function RepartidorHome() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-6">
+        {blocks.data?.enabled && (
+          <section className="mb-8 space-y-3">
+            <h2 className="font-serif text-lg font-bold text-[#1e3a5f]">Lotes disponibles</h2>
+            {blocks.data.blocks.map((block:any) => <Card key={block.id}><CardContent className="space-y-3 p-4"><div className="flex justify-between gap-3"><div><p className="font-semibold">{block.zone_name}</p><p className="text-xs text-muted-foreground">{new Date(block.starts_at).toLocaleString()} · {block.estimated_minutes} min · {(block.stops ?? []).length} paradas</p></div><strong>${Number(block.committed_pay + block.tips_total).toFixed(2)}</strong></div><div className="flex flex-wrap gap-2 text-xs">{(block.stops ?? []).map((stop:any)=><Badge key={stop.id} variant="outline">{stop.size_label}{stop.heavy_items ? " · pesado" : ""}{stop.has_cold_items ? " · frío" : ""}{stop.door_service !== "lobby" ? " · puerta" : ""}</Badge>)}</div><Button className="w-full" disabled={reserveBlock.isPending} onClick={()=>reserveBlock.mutate(block.id)}>Reservar horario</Button></CardContent></Card>)}
+          </section>
+        )}
         {!isOnline ? (
           <Card className="border-dashed">
             <CardContent className="py-12 text-center">
