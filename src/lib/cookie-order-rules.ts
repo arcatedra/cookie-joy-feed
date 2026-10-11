@@ -1,10 +1,24 @@
-export const COOKIE_MINIMUM_CENTS = 1200;
+/** Sin mínimo de compra: cada pedido de galletas paga una "Entrega y servicio" fija. */
+export const DEFAULT_COOKIE_DELIVERY_CENTS = 1200;
 
-export function assertCookieMinimum(subtotalCents: number) {
-  if (!Number.isInteger(subtotalCents) || subtotalCents < COOKIE_MINIMUM_CENTS) {
-    const missing = Math.max(0, COOKIE_MINIMUM_CENTS - subtotalCents);
-    throw new Error(`Pedido mínimo $12 — te faltan $${(missing / 100).toFixed(2)}`);
-  }
+export function cookieDeliveryFeeCents(settings?: { cookieDeliveryFeeUsd?: number } | null): number {
+  const usd = Number(settings?.cookieDeliveryFeeUsd);
+  if (!Number.isFinite(usd) || usd < 0 || usd > 100) return DEFAULT_COOKIE_DELIVERY_CENTS;
+  return Math.round(usd * 100);
+}
+
+export function assertCookieSubtotal(subtotalCents: number) {
+  if (!Number.isInteger(subtotalCents) || subtotalCents <= 0) throw new Error("Tu carrito está vacío.");
+}
+
+/** Propina extra después de la entrega: entre $1 y $100, hasta 24 horas después. */
+export const POST_TIP_WINDOW_MS = 24 * 60 * 60 * 1000;
+export function assertPostTipAllowed(amountUsd: number, deliveredAt: string | Date | null | undefined, now = Date.now()) {
+  if (!Number.isFinite(amountUsd) || amountUsd < 1 || amountUsd > 100) throw new Error("La propina debe ser entre $1 y $100.");
+  if (Math.round(amountUsd * 100) !== amountUsd * 100) throw new Error("Monto de propina inválido.");
+  const t = deliveredAt ? new Date(deliveredAt).getTime() : NaN;
+  if (!Number.isFinite(t)) throw new Error("El pedido todavía no está entregado.");
+  if (now - t > POST_TIP_WINDOW_MS) throw new Error("Ya pasaron 24 horas desde la entrega.");
 }
 
 export function stopCompensation(weightLb: number, tipUsd = 0, cookie = false) {
