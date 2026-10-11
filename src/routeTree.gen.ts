@@ -66,6 +66,7 @@ import { Route as AuthenticatedAdminPayoutsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminPedidosGalletasRouteImport } from './routes/_authenticated/admin.pedidos-galletas'
 import { Route as AuthenticatedAdminPedidosTiendaRouteImport } from './routes/_authenticated/admin.pedidos-tienda'
 import { Route as AuthenticatedAdminPreciosRouteImport } from './routes/_authenticated/admin.precios'
+import { Route as AuthenticatedAdminProductosRouteImport } from './routes/_authenticated/admin.productos'
 import { Route as AuthenticatedAdminRepartidoresRouteImport } from './routes/_authenticated/admin.repartidores'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminSuggestionsRouteImport } from './routes/_authenticated/admin.suggestions'
@@ -408,6 +409,12 @@ const AuthenticatedAdminPreciosRoute =
   AuthenticatedAdminPreciosRouteImport.update({
     id: '/admin/precios',
     path: '/admin/precios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminProductosRoute =
+  AuthenticatedAdminProductosRouteImport.update({
+    id: '/admin/productos',
+    path: '/admin/productos',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminRepartidoresRoute =
@@ -756,6 +763,7 @@ export interface FileRoutesByFullPath {
   '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -861,6 +869,7 @@ export interface FileRoutesByTo {
   '/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -970,6 +979,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pedidos-galletas': typeof AuthenticatedAdminPedidosGalletasRoute
   '/_authenticated/admin/pedidos-tienda': typeof AuthenticatedAdminPedidosTiendaRoute
   '/_authenticated/admin/precios': typeof AuthenticatedAdminPreciosRoute
+  '/_authenticated/admin/productos': typeof AuthenticatedAdminProductosRoute
   '/_authenticated/admin/repartidores': typeof AuthenticatedAdminRepartidoresRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/suggestions': typeof AuthenticatedAdminSuggestionsRoute
@@ -1079,6 +1089,7 @@ export interface FileRouteTypes {
     | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
+    | '/admin/productos'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -1184,6 +1195,7 @@ export interface FileRouteTypes {
     | '/admin/pedidos-galletas'
     | '/admin/pedidos-tienda'
     | '/admin/precios'
+    | '/admin/productos'
     | '/admin/repartidores'
     | '/admin/security'
     | '/admin/suggestions'
@@ -1292,6 +1304,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pedidos-galletas'
     | '/_authenticated/admin/pedidos-tienda'
     | '/_authenticated/admin/precios'
+    | '/_authenticated/admin/productos'
     | '/_authenticated/admin/repartidores'
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/suggestions'
@@ -1804,6 +1817,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPreciosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/productos': {
+      id: '/_authenticated/admin/productos'
+      path: '/admin/productos'
+      fullPath: '/admin/productos'
+      preLoaderRoute: typeof AuthenticatedAdminProductosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/repartidores': {
       id: '/_authenticated/admin/repartidores'
       path: '/admin/repartidores'
@@ -2222,6 +2242,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminPedidosGalletasRoute: typeof AuthenticatedAdminPedidosGalletasRoute
   AuthenticatedAdminPedidosTiendaRoute: typeof AuthenticatedAdminPedidosTiendaRoute
   AuthenticatedAdminPreciosRoute: typeof AuthenticatedAdminPreciosRoute
+  AuthenticatedAdminProductosRoute: typeof AuthenticatedAdminProductosRoute
   AuthenticatedAdminRepartidoresRoute: typeof AuthenticatedAdminRepartidoresRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminSuggestionsRoute: typeof AuthenticatedAdminSuggestionsRoute
@@ -2258,6 +2279,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAdminPedidosGalletasRoute,
   AuthenticatedAdminPedidosTiendaRoute: AuthenticatedAdminPedidosTiendaRoute,
   AuthenticatedAdminPreciosRoute: AuthenticatedAdminPreciosRoute,
+  AuthenticatedAdminProductosRoute: AuthenticatedAdminProductosRoute,
   AuthenticatedAdminRepartidoresRoute: AuthenticatedAdminRepartidoresRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminSuggestionsRoute: AuthenticatedAdminSuggestionsRoute,
