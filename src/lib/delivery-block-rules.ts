@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const blockConfigSchema = z.object({
+  minOrders: z.number().int().min(3).default(3),
   smallMaxLb: z.number().positive().default(15), mediumMaxLb: z.number().positive().default(30),
   includedLb: z.number().positive().default(45), maxOrderLb: z.number().positive().default(80),
   smallUsd: z.number().min(0).default(12), mediumUsd: z.number().min(0).default(25), largeUsd: z.number().min(0).default(35),
@@ -10,7 +11,7 @@ export const blockConfigSchema = z.object({
   suggestedStopUsd: z.number().min(0).default(10), minimumHourlyUsd: z.number().positive().default(23),
   bikeLb: z.number().positive().default(50), cargoBikeLb: z.number().positive().default(200), motorcycleLb: z.number().positive().default(60),
   carLb: z.number().positive().default(400), vanLb: z.number().positive().default(1000),
-  boostUsd: z.number().min(0).default(5), boostFirstHours: z.number().positive().default(12), boostSecondHours: z.number().positive().default(4),
+  suggestedPayUsd: z.number().min(0).default(40), unassignedAlertHours: z.number().positive().default(12),
   autoAssignMinutes: z.number().int().min(1).default(15), weeklyBonusUsd: z.number().min(0).default(25),
   bonusMinBlocks: z.number().int().min(1).default(5), bonusOnTimePct: z.number().min(0).max(100).default(95),
   bonusRating: z.number().min(1).max(5).default(4.7), bonusMaxComplaints: z.number().int().min(0).default(0),
@@ -54,4 +55,17 @@ export function assertPublishableBlock(baseUsd: number, estimatedMinutes: number
   if (!Number.isFinite(estimatedMinutes) || estimatedMinutes < 60 || estimatedMinutes > 240) throw new Error("El bloque debe durar entre una y cuatro horas.");
   const minimumCents = Math.ceil(c.minimumHourlyUsd * 100 * estimatedMinutes / 60);
   if (!Number.isFinite(baseUsd) || Math.round(baseUsd * 100) < minimumCents) throw new Error(`El pago base debe ser al menos $${(minimumCents / 100).toFixed(2)}; propinas y bonos no cuentan para este mínimo.`);
+}
+
+export function assertBlockOrderCount(orderCount: number, c: BlockConfig = DEFAULT_BLOCK_CONFIG) {
+  if (!Number.isInteger(orderCount) || orderCount < c.minOrders) {
+    throw new Error(`Un lote necesita al menos ${c.minOrders} pedidos.`);
+  }
+}
+
+export function manualBlockPay(baseUsd: number, increaseUsd: number, doorBonusEnabled: boolean, doorBonusUsd: number) {
+  for (const value of [baseUsd, increaseUsd, doorBonusUsd]) {
+    if (!Number.isFinite(value) || value < 0) throw new Error("Los montos del lote no son válidos.");
+  }
+  return Math.round((baseUsd + increaseUsd + (doorBonusEnabled ? doorBonusUsd : 0)) * 100) / 100;
 }

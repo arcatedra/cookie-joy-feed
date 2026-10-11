@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_BLOCK_CONFIG, blockConfigSchema, blockOrderQuote, blockVehicleCapacity, estimateBlockMinutes, assertPublishableBlock } from "./delivery-block-rules";
+import { DEFAULT_BLOCK_CONFIG, blockConfigSchema, blockOrderQuote, blockVehicleCapacity, estimateBlockMinutes, assertPublishableBlock, assertBlockOrderCount, manualBlockPay } from "./delivery-block-rules";
 describe("bloques reservables: reglas sin cobros reales", () => {
   it("usa límites de peso inclusivos y un único cargo", () => {
     for (const [lb, cents] of [[15,1200],[15.01,2500],[30,2500],[30.01,3500],[45,3500],[50,3850],[80,5950]]) expect(blockOrderQuote(lb,"lobby").deliveryCents).toBe(cents);
@@ -22,5 +22,17 @@ describe("bloques reservables: reglas sin cobros reales", () => {
     expect(() => assertPublishableBlock(46,120)).not.toThrow();
     expect(() => assertPublishableBlock(100,241)).toThrow();
     expect(blockConfigSchema.safeParse({...DEFAULT_BLOCK_CONFIG,smallMaxLb:40}).success).toBe(false);
+  });
+  it("nunca crea lotes de uno o dos pedidos", () => {
+    expect(() => assertBlockOrderCount(1)).toThrow("al menos 3");
+    expect(() => assertBlockOrderCount(2)).toThrow("al menos 3");
+    expect(() => assertBlockOrderCount(3)).not.toThrow();
+    expect(() => assertBlockOrderCount(8)).not.toThrow();
+  });
+  it("solo aumenta pago manualmente y deja el bono de puerta apagado", () => {
+    expect(manualBlockPay(40, 0, false, 8)).toBe(40);
+    expect(manualBlockPay(40, 5, false, 8)).toBe(45);
+    expect(manualBlockPay(40, 10, true, 6)).toBe(56);
+    expect(() => manualBlockPay(40, -5, false, 0)).toThrow();
   });
 });
