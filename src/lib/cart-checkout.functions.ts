@@ -219,7 +219,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         "/v1/checkout/sessions",
         {
           mode: "payment",
-          ui_mode: "embedded",
+          ui_mode: "embedded_page",
           return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
           customer_email: email || undefined,
           line_items: lineItems,
