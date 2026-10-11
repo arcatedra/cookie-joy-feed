@@ -79,6 +79,7 @@ import { Route as AuthenticatedNegociosCobrosRouteImport } from './routes/_authe
 import { Route as AuthenticatedNegociosPanelRouteImport } from './routes/_authenticated/negocios.panel'
 import { Route as AuthenticatedNegociosPedidosRouteImport } from './routes/_authenticated/negocios.pedidos'
 import { Route as AuthenticatedRepartidorIndexRouteImport } from './routes/_authenticated/repartidor.index'
+import { Route as AuthenticatedRepartidorBloqueRouteImport } from './routes/_authenticated/repartidor.bloque'
 import { Route as AuthenticatedRepartidorCalificacionesRouteImport } from './routes/_authenticated/repartidor.calificaciones'
 import { Route as AuthenticatedRepartidorCobrosRouteImport } from './routes/_authenticated/repartidor.cobros'
 import { Route as AuthenticatedRepartidorFacturasRouteImport } from './routes/_authenticated/repartidor.facturas'
@@ -486,6 +487,12 @@ const AuthenticatedRepartidorIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedRepartidorRoute,
   } as any)
+const AuthenticatedRepartidorBloqueRoute =
+  AuthenticatedRepartidorBloqueRouteImport.update({
+    id: '/bloque',
+    path: '/bloque',
+    getParentRoute: () => AuthenticatedRepartidorRoute,
+  } as any)
 const AuthenticatedRepartidorCalificacionesRoute =
   AuthenticatedRepartidorCalificacionesRouteImport.update({
     id: '/calificaciones',
@@ -747,6 +754,7 @@ export interface FileRoutesByFullPath {
   '/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
+  '/repartidor/bloque': typeof AuthenticatedRepartidorBloqueRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -849,6 +857,7 @@ export interface FileRoutesByTo {
   '/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
+  '/repartidor/bloque': typeof AuthenticatedRepartidorBloqueRoute
   '/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -955,6 +964,7 @@ export interface FileRoutesById {
   '/_authenticated/negocios/cobros': typeof AuthenticatedNegociosCobrosRoute
   '/_authenticated/negocios/panel': typeof AuthenticatedNegociosPanelRoute
   '/_authenticated/negocios/pedidos': typeof AuthenticatedNegociosPedidosRoute
+  '/_authenticated/repartidor/bloque': typeof AuthenticatedRepartidorBloqueRoute
   '/_authenticated/repartidor/calificaciones': typeof AuthenticatedRepartidorCalificacionesRoute
   '/_authenticated/repartidor/cobros': typeof AuthenticatedRepartidorCobrosRoute
   '/_authenticated/repartidor/facturas': typeof AuthenticatedRepartidorFacturasRoute
@@ -1061,6 +1071,7 @@ export interface FileRouteTypes {
     | '/negocios/cobros'
     | '/negocios/panel'
     | '/negocios/pedidos'
+    | '/repartidor/bloque'
     | '/repartidor/calificaciones'
     | '/repartidor/cobros'
     | '/repartidor/facturas'
@@ -1163,6 +1174,7 @@ export interface FileRouteTypes {
     | '/negocios/cobros'
     | '/negocios/panel'
     | '/negocios/pedidos'
+    | '/repartidor/bloque'
     | '/repartidor/calificaciones'
     | '/repartidor/cobros'
     | '/repartidor/facturas'
@@ -1268,6 +1280,7 @@ export interface FileRouteTypes {
     | '/_authenticated/negocios/cobros'
     | '/_authenticated/negocios/panel'
     | '/_authenticated/negocios/pedidos'
+    | '/_authenticated/repartidor/bloque'
     | '/_authenticated/repartidor/calificaciones'
     | '/_authenticated/repartidor/cobros'
     | '/_authenticated/repartidor/facturas'
@@ -1856,6 +1869,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepartidorIndexRouteImport
       parentRoute: typeof AuthenticatedRepartidorRoute
     }
+    '/_authenticated/repartidor/bloque': {
+      id: '/_authenticated/repartidor/bloque'
+      path: '/bloque'
+      fullPath: '/repartidor/bloque'
+      preLoaderRoute: typeof AuthenticatedRepartidorBloqueRouteImport
+      parentRoute: typeof AuthenticatedRepartidorRoute
+    }
     '/_authenticated/repartidor/calificaciones': {
       id: '/_authenticated/repartidor/calificaciones'
       path: '/calificaciones'
@@ -2105,6 +2125,7 @@ const AuthenticatedMisPedidosRouteWithChildren =
   )
 
 interface AuthenticatedRepartidorRouteChildren {
+  AuthenticatedRepartidorBloqueRoute: typeof AuthenticatedRepartidorBloqueRoute
   AuthenticatedRepartidorCalificacionesRoute: typeof AuthenticatedRepartidorCalificacionesRoute
   AuthenticatedRepartidorCobrosRoute: typeof AuthenticatedRepartidorCobrosRoute
   AuthenticatedRepartidorFacturasRoute: typeof AuthenticatedRepartidorFacturasRoute
@@ -2120,6 +2141,7 @@ interface AuthenticatedRepartidorRouteChildren {
 
 const AuthenticatedRepartidorRouteChildren: AuthenticatedRepartidorRouteChildren =
   {
+    AuthenticatedRepartidorBloqueRoute: AuthenticatedRepartidorBloqueRoute,
     AuthenticatedRepartidorCalificacionesRoute:
       AuthenticatedRepartidorCalificacionesRoute,
     AuthenticatedRepartidorCobrosRoute: AuthenticatedRepartidorCobrosRoute,
