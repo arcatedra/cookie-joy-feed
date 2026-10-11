@@ -33,14 +33,6 @@ export const getDeliveryBlockAdmin = createServerFn({ method: "GET" }).middlewar
   return { settings, blocks: (blocks ?? []).map((block: any) => ({ ...block, needsDriverAlert: !block.assigned_driver_id && block.status === "published" && new Date(block.starts_at).getTime() - now <= Number(settings.unassigned_alert_hours) * 3_600_000 })) };
 });
 
-export const getDeliveryBlockSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { createClient } = await import("@supabase/supabase-js");
-  const db = createClient(process.env["SUPABASE_URL"]!, process.env["SUPABASE_PUBLISHABLE_KEY"]!, { auth:{ persistSession:false, autoRefreshToken:false } });
-  const { data, error } = await db.from("delivery_block_settings").select("*").eq("singleton",true).single();
-  if (error) throw new Error("No se pudo cargar la configuración de entrega.");
-  return data;
-});
-
 export const listOrdersForDeliveryBlocks = createServerFn({ method: "GET" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const db = await requireAdmin(context);
   const { data, error } = await db.from("store_orders")
@@ -112,7 +104,7 @@ export const listMyAvailableDeliveryBlocks = createServerFn({ method: "GET" }).m
 
 export const reserveDeliveryBlock = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) => z.object({ blockId:z.string().uuid() }).parse(raw)).handler(async ({ context, data }) => {
-    const { data, error } = await context.supabase.rpc("reserve_delivery_block", { p_block:data.blockId });
+    const { data: reservationId, error } = await context.supabase.rpc("reserve_delivery_block", { p_block:data.blockId });
     if (error) throw new Error(error.message);
-    return { reservationId:data as string };
+    return { reservationId:reservationId as string };
   });
