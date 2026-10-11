@@ -1114,6 +1114,22 @@
         "perk2": "Identificación válida",
         "perk3": "Bicicleta o e-bike propia",
         "perk4": "Casco"
+      },
+      "bici_carga": {
+        "label": "Bicicleta de carga",
+        "desc": "Bicicleta o e-bike con remolque para lotes grandes.",
+        "perk1": "18 años o más",
+        "perk2": "Identificación válida",
+        "perk3": "Bicicleta de carga o remolque propio",
+        "perk4": "Casco"
+      },
+      "van": {
+        "label": "Van",
+        "desc": "Para lotes grandes y varios viajes.",
+        "perk1": "Licencia Clase D (o E) de NY, vigente",
+        "perk2": "Registración e inspección al día",
+        "perk3": "Seguro del vehículo vigente",
+        "perk4": "Capacidad de carga segura"
       }
     },
     "how": {
