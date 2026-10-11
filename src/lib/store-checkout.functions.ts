@@ -294,6 +294,13 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       cliente_id: userId,
     };
 
+    // Guardar la tarjeta (con el aviso de Stripe) para una propina después de la entrega.
+    const { resolveStripeCustomer } = await import("./post-delivery-tips.server");
+    const stripeCustomerId = await resolveStripeCustomer(env, userId, email).catch((e) => {
+      console.warn("[store-checkout] no se pudo preparar el cliente de Stripe", e);
+      return null;
+    });
+
     let session: StripeSession;
     try {
       session = await stripePost<StripeSession>(
@@ -302,13 +309,14 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
           mode: "payment",
           ui_mode: "embedded_page",
           return_url: `${origin}/mis-pedidos/tienda/${order.id}?pago=1`,
-          customer_email: email || undefined,
+          ...(stripeCustomerId ? { customer: stripeCustomerId } : { customer_email: email || undefined }),
           locale: data.locale,
           custom_text: { after_submit: { message: data.locale === "en" ? "Order the day before, get it in 24 hours: Monday, Wednesday and Friday" : "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes" } },
           line_items: lineItems,
           payment_intent_data: {
             description: `HAZOREX TIENDA ${order.numero_pedido}`,
             capture_method: "manual",
+            ...(stripeCustomerId ? { setup_future_usage: "off_session" } : {}),
             metadata,
           },
           metadata,
