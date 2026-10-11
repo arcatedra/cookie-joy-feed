@@ -1323,6 +1323,7 @@ export type Database = {
           last_error: string | null
           order_id: string | null
           paid_at: string | null
+          post_tip_id: string | null
           status: string
           tier_amount_usd: number
           tip_amount_usd: number
@@ -1341,6 +1342,7 @@ export type Database = {
           last_error?: string | null
           order_id?: string | null
           paid_at?: string | null
+          post_tip_id?: string | null
           status?: string
           tier_amount_usd?: number
           tip_amount_usd?: number
@@ -1359,6 +1361,7 @@ export type Database = {
           last_error?: string | null
           order_id?: string | null
           paid_at?: string | null
+          post_tip_id?: string | null
           status?: string
           tier_amount_usd?: number
           tip_amount_usd?: number
@@ -1394,6 +1397,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: true
             referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "driver_payouts_post_tip_id_fkey"
+            columns: ["post_tip_id"]
+            isOneToOne: true
+            referencedRelation: "post_delivery_tips"
             referencedColumns: ["id"]
           },
           {
@@ -1848,6 +1858,63 @@ export type Database = {
           role?: string
           texto_intentado?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      post_delivery_tips: {
+        Row: {
+          amount: number
+          charge_id: string | null
+          checkout_session_id: string | null
+          cliente_id: string
+          created_at: string
+          driver_id: string
+          id: string
+          kind: string
+          last_error: string | null
+          order_id: string
+          paid_at: string | null
+          payment_intent_id: string | null
+          request_id: string
+          status: string
+          stripe_environment: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          charge_id?: string | null
+          checkout_session_id?: string | null
+          cliente_id: string
+          created_at?: string
+          driver_id: string
+          id?: string
+          kind: string
+          last_error?: string | null
+          order_id: string
+          paid_at?: string | null
+          payment_intent_id?: string | null
+          request_id: string
+          status?: string
+          stripe_environment: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          charge_id?: string | null
+          checkout_session_id?: string | null
+          cliente_id?: string
+          created_at?: string
+          driver_id?: string
+          id?: string
+          kind?: string
+          last_error?: string | null
+          order_id?: string
+          paid_at?: string | null
+          payment_intent_id?: string | null
+          request_id?: string
+          status?: string
+          stripe_environment?: string
+          updated_at?: string
         }
         Relationships: []
       }
