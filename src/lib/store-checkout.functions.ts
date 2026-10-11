@@ -18,7 +18,7 @@ import {
   daysForZip,
   pricingFromRows,
   serviceFeeCents,
-  tierForSubtotal,
+  tierForWeight,
   weightFeeCents,
 } from "./pricing";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
@@ -140,7 +140,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     if (data.fechaEntrega && !isDeliveryDateAllowed(data.fechaEntrega, pricing, new Date(), zoneDays)) {
       throw new Error("Ese día de entrega ya no está disponible. Elige otro.");
     }
-    const tier = tierForSubtotal(subtotalCents, pricing);
+    const tier = tierForWeight(totalLb, pricing);
     const blockConfig = blockEnabled ? { ...DEFAULT_BLOCK_CONFIG, smallMaxLb:Number(blockRow.small_max_lb), mediumMaxLb:Number(blockRow.medium_max_lb), includedLb:Number(blockRow.included_lb), maxOrderLb:Number(blockRow.max_order_lb), smallUsd:Number(blockRow.small_fee), mediumUsd:Number(blockRow.medium_fee), largeUsd:Number(blockRow.large_fee), extraLbUsd:Number(blockRow.extra_lb_fee), elevatorUsd:Number(blockRow.elevator_fee), stairsUsd:Number(blockRow.stairs_fee), elevatorMinutes:Number(blockRow.elevator_minutes), stairsMinutes:Number(blockRow.stairs_minutes) } : DEFAULT_BLOCK_CONFIG;
     const blockQuote = blockEnabled ? blockOrderQuote(totalLb, data.doorService as DoorService, blockConfig) : null;
     const weightCents = blockEnabled ? 0 : weightFeeCents(totalLb, pricing);

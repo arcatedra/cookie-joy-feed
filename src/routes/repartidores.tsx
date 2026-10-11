@@ -35,7 +35,7 @@ import { Label } from "@/components/ui/label";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import i18n from "@/i18n";
 import { getPricingConfig } from "@/lib/pricing.functions";
-import { DEFAULT_PRICING, tierForSubtotal, weightFeeCents } from "@/lib/pricing";
+import { DEFAULT_PRICING, tierForWeight, weightFeeCents } from "@/lib/pricing";
 
 export const Route = createFileRoute("/repartidores")({
   head: () => ({
@@ -88,7 +88,7 @@ function RepartidoresLanding() {
   const [showForm, setShowForm] = useState(false);
   const pricingQuery = useQuery({ queryKey: ["pricing-config"], queryFn: () => getPricingConfig() });
   const pricing = pricingQuery.data?.pricing ?? DEFAULT_PRICING;
-  const exampleBase = tierForSubtotal(6000, pricing).driverCents / 100;
+  const exampleBase = tierForWeight(10, pricing).driverCents / 100;
   const exampleWeight = weightFeeCents(50, pricing) / 100;
 
   return (

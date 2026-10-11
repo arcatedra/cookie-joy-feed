@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin/precios")({
 const LABELS: Record<keyof PricingSettings, string> = {
   serviceMinUsd: "Cargo de servicio mínimo ($)",
   servicePct: "Cargo de servicio (% del pedido)",
-  weightIncludedLb: "Libras incluidas (sin cargo extra)",
+  weightIncludedLb: "Grande: hasta (lb), luego cobra por libra extra",
   weightTier2MaxLb: "Tramo 2 hasta (lb)",
   weightTier2FeeUsd: "Cargo tramo 2 ($)",
   weightTier3MaxLb: "Tramo 3 hasta (lb)",
@@ -39,6 +39,8 @@ const LABELS: Record<keyof PricingSettings, string> = {
   referralBonusUsd: "Bono por referido ($)",
   tierSmallMaxUsd: "Tramo chico: hasta ($)",
   tierMediumMaxUsd: "Tramo mediano: hasta ($)",
+  tierSmallMaxLb: "Chico: hasta (lb)",
+  tierMediumMaxLb: "Mediano: hasta (lb)",
   tierSmallFeeUsd: "Chico: envío total ($)",
   tierSmallDriverUsd: "Chico: para el repartidor ($)",
   tierSmallCompanyUsd: "Chico: para la empresa ($)",
@@ -61,8 +63,9 @@ const LABELS: Record<keyof PricingSettings, string> = {
 const COOKIE_FIELDS: (keyof PricingSettings)[] = ["cookieDeliveryFeeUsd", "cookieDistanceFeeEnabled", "cookieDistanceFeePerMileUsd"];
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
-  "tierSmallMaxUsd",
-  "tierMediumMaxUsd",
+  "tierSmallMaxLb",
+  "tierMediumMaxLb",
+  "weightIncludedLb",
   "tierSmallFeeUsd",
   "tierSmallDriverUsd",
   "tierSmallCompanyUsd",
@@ -72,12 +75,16 @@ const TIER_FIELDS: (keyof PricingSettings)[] = [
   "tierLargeFeeUsd",
   "tierLargeDriverUsd",
   "tierLargeCompanyUsd",
-  "weightIncludedLb",
   "weightExtraPerLbUsd",
   "weightMaxLb",
   "defaultProductWeightLb",
   "cutoffHourEt",
-  "processingFeePct",
+];
+
+/** Campos que ya no se usan y no se muestran. */
+const HIDDEN_FIELDS: (keyof PricingSettings)[] = [
+  "tierSmallMaxUsd", "tierMediumMaxUsd", "weightTier2MaxLb", "weightTier2FeeUsd",
+  "weightTier3MaxLb", "weightTier3FeeUsd", "serviceMinUsd", "servicePct", "processingFeePct",
 ];
 
 const DAY_NAMES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -242,7 +249,7 @@ function PreciosPage() {
         <section className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
           {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[])
             .filter(
-              (f) => f !== "deliveryDaysMask" && f !== "payoutFrequencyDays" && !TIER_FIELDS.includes(f) && !COOKIE_FIELDS.includes(f),
+              (f) => f !== "deliveryDaysMask" && f !== "payoutFrequencyDays" && !TIER_FIELDS.includes(f) && !COOKIE_FIELDS.includes(f) && !HIDDEN_FIELDS.includes(f),
             )
             .map((field) => (
             <label key={field} className="block text-sm">
