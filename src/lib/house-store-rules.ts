@@ -52,6 +52,8 @@ export function productPhotoPatch(input: Pick<HouseProductInput, "imagen_url" | 
       foto_credito: null,
       foto_origen_url: null,
       foto_licencia: null,
+      foto_original_url: null,
+      foto_fondo_editado: false,
     } : {}),
   };
 }
