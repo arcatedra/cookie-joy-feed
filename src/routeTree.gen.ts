@@ -55,6 +55,7 @@ import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as ReelReelIdRouteImport } from './routes/reel.$reelId'
 import { Route as SorteoGanadoresRouteImport } from './routes/sorteo.ganadores'
 import { Route as TiendaSlugRouteImport } from './routes/tienda.$slug'
+import { Route as AuthenticatedAdminBloquesRouteImport } from './routes/_authenticated/admin.bloques'
 import { Route as AuthenticatedAdminCspViolationsRouteImport } from './routes/_authenticated/admin.csp-violations'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
 import { Route as AuthenticatedAdminFinanzasRouteImport } from './routes/_authenticated/admin.finanzas'
@@ -342,6 +343,12 @@ const TiendaSlugRoute = TiendaSlugRouteImport.update({
   path: '/tienda/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminBloquesRoute =
+  AuthenticatedAdminBloquesRouteImport.update({
+    id: '/admin/bloques',
+    path: '/admin/bloques',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminCspViolationsRoute =
   AuthenticatedAdminCspViolationsRouteImport.update({
     id: '/admin/csp-violations',
@@ -718,6 +725,7 @@ export interface FileRoutesByFullPath {
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/tienda/$slug': typeof TiendaSlugRoute
   '/join/': typeof JoinIndexRoute
+  '/admin/bloques': typeof AuthenticatedAdminBloquesRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -819,6 +827,7 @@ export interface FileRoutesByTo {
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/tienda/$slug': typeof TiendaSlugRoute
   '/join': typeof JoinIndexRoute
+  '/admin/bloques': typeof AuthenticatedAdminBloquesRoute
   '/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -924,6 +933,7 @@ export interface FileRoutesById {
   '/sorteo/ganadores': typeof SorteoGanadoresRoute
   '/tienda/$slug': typeof TiendaSlugRoute
   '/join/': typeof JoinIndexRoute
+  '/_authenticated/admin/bloques': typeof AuthenticatedAdminBloquesRoute
   '/_authenticated/admin/csp-violations': typeof AuthenticatedAdminCspViolationsRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
   '/_authenticated/admin/finanzas': typeof AuthenticatedAdminFinanzasRoute
@@ -1029,6 +1039,7 @@ export interface FileRouteTypes {
     | '/sorteo/ganadores'
     | '/tienda/$slug'
     | '/join/'
+    | '/admin/bloques'
     | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
@@ -1130,6 +1141,7 @@ export interface FileRouteTypes {
     | '/sorteo/ganadores'
     | '/tienda/$slug'
     | '/join'
+    | '/admin/bloques'
     | '/admin/csp-violations'
     | '/admin/deliveries'
     | '/admin/finanzas'
@@ -1234,6 +1246,7 @@ export interface FileRouteTypes {
     | '/sorteo/ganadores'
     | '/tienda/$slug'
     | '/join/'
+    | '/_authenticated/admin/bloques'
     | '/_authenticated/admin/csp-violations'
     | '/_authenticated/admin/deliveries'
     | '/_authenticated/admin/finanzas'
@@ -1674,6 +1687,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/tienda/$slug'
       preLoaderRoute: typeof TiendaSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/bloques': {
+      id: '/_authenticated/admin/bloques'
+      path: '/admin/bloques'
+      fullPath: '/admin/bloques'
+      preLoaderRoute: typeof AuthenticatedAdminBloquesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/csp-violations': {
       id: '/_authenticated/admin/csp-violations'
@@ -2130,6 +2150,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMisPedidosRoute: typeof AuthenticatedMisPedidosRouteWithChildren
   AuthenticatedRepartidorRoute: typeof AuthenticatedRepartidorRouteWithChildren
   AuthenticatedSuggestionsRoute: typeof AuthenticatedSuggestionsRoute
+  AuthenticatedAdminBloquesRoute: typeof AuthenticatedAdminBloquesRoute
   AuthenticatedAdminCspViolationsRoute: typeof AuthenticatedAdminCspViolationsRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
   AuthenticatedAdminFinanzasRoute: typeof AuthenticatedAdminFinanzasRoute
@@ -2163,6 +2184,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMisPedidosRoute: AuthenticatedMisPedidosRouteWithChildren,
   AuthenticatedRepartidorRoute: AuthenticatedRepartidorRouteWithChildren,
   AuthenticatedSuggestionsRoute: AuthenticatedSuggestionsRoute,
+  AuthenticatedAdminBloquesRoute: AuthenticatedAdminBloquesRoute,
   AuthenticatedAdminCspViolationsRoute: AuthenticatedAdminCspViolationsRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
   AuthenticatedAdminFinanzasRoute: AuthenticatedAdminFinanzasRoute,
