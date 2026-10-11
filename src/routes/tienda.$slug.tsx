@@ -19,7 +19,7 @@ import {
   cartWeightLb,
   availableDeliveryDates,
   daysForZip,
-  tierForSubtotal,
+  tierForWeight,
   weightFeeCents,
   serviceFeeCents,
   DEFAULT_PRICING,
@@ -336,7 +336,7 @@ function StoreCartBar({
     pricing,
   );
   const overLimit = totalLb > (blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb);
-  const tier = tierForSubtotal(subtotalCents, pricing);
+  const tier = tierForWeight(totalLb, pricing);
   const tipCents = Math.max(0, Math.round(propina * 100));
   const blockQuote = blockEnabled && !overLimit ? blockOrderQuote(totalLb, doorService, blockConfig) : null;
   const weightCents = blockEnabled || overLimit ? 0 : weightFeeCents(totalLb, pricing);
@@ -469,7 +469,7 @@ function StoreCartBar({
           </span>
         </div>
 
-        <p className="text-xs text-muted-foreground">{blockEnabled ? `Entrega y servicio según peso real: $${((blockQuote?.deliveryCents ?? 0) / 100).toFixed(2)}${processingCents ? ` · Apartamento: $${(processingCents / 100).toFixed(2)}` : ""}.` : `Servicio: ${pricing.servicePct}% sobre productos, envío y peso, con mínimo de $${pricing.serviceMinUsd.toFixed(2)}. Cargo de servicio: $${(processingCents / 100).toFixed(2)}. Peso adicional sobre ${pricing.weightIncludedLb} lb: $${(weightCents / 100).toFixed(2)}.`}</p>
+        <p className="text-xs text-muted-foreground">{blockEnabled ? `Entrega y servicio según peso real: $${((blockQuote?.deliveryCents ?? 0) / 100).toFixed(2)}${processingCents ? ` · Apartamento: $${(processingCents / 100).toFixed(2)}` : ""}.` : `Entrega según el peso: hasta ${pricing.tierSmallMaxLb} lb $${pricing.tierSmallFeeUsd.toFixed(2)}, hasta ${pricing.tierMediumMaxLb} lb $${pricing.tierMediumFeeUsd.toFixed(2)}, hasta ${pricing.weightIncludedLb} lb $${pricing.tierLargeFeeUsd.toFixed(2)}; luego $${pricing.weightExtraPerLbUsd.toFixed(2)} por libra extra.`}</p>
         <TipSelector value={propina} onChange={setPropina} />
         <p className="text-xs text-muted-foreground">{t("deliveryPromise")}</p>
         {creditCents > 0 && <p className="text-xs text-muted-foreground">{t("credit.discount")}: -${(creditCents / 100).toFixed(2)}</p>}

@@ -23,6 +23,9 @@ export interface PricingSettings {
   /** Tramos de envío por monto del pedido. */
   tierSmallMaxUsd: number;
   tierMediumMaxUsd: number;
+  /** Tamaño del pedido por peso total (lb). */
+  tierSmallMaxLb: number;
+  tierMediumMaxLb: number;
   tierSmallFeeUsd: number;
   tierSmallDriverUsd: number;
   tierSmallCompanyUsd: number;
@@ -68,6 +71,8 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   referralBonusUsd: "referral_bonus_usd",
   tierSmallMaxUsd: "tier_small_max_usd",
   tierMediumMaxUsd: "tier_medium_max_usd",
+  tierSmallMaxLb: "tier_small_max_lb",
+  tierMediumMaxLb: "tier_medium_max_lb",
   tierSmallFeeUsd: "tier_small_fee_usd",
   tierSmallDriverUsd: "tier_small_driver_usd",
   tierSmallCompanyUsd: "tier_small_company_usd",
@@ -105,21 +110,23 @@ export const DEFAULT_PRICING: PricingSettings = {
   referralBonusUsd: 5,
   tierSmallMaxUsd: 50,
   tierMediumMaxUsd: 120,
+  tierSmallMaxLb: 15,
+  tierMediumMaxLb: 30,
   tierSmallFeeUsd: 12,
   tierSmallDriverUsd: 6,
   tierSmallCompanyUsd: 6,
-  tierMediumFeeUsd: 18,
+  tierMediumFeeUsd: 25,
   tierMediumDriverUsd: 6,
   tierMediumCompanyUsd: 12,
-  tierLargeFeeUsd: 35,
+  tierLargeFeeUsd: 39.99,
   tierLargeDriverUsd: 10,
   tierLargeCompanyUsd: 25,
   cutoffHourEt: 20,
   // lunes (2) + miércoles (8) + viernes (32)
   deliveryDaysMask: 42,
-  weightExtraPerLbUsd: 0.7,
+  weightExtraPerLbUsd: 0.8,
   payoutFrequencyDays: 1,
-  processingFeePct: 3,
+  processingFeePct: 0,
   cookieDeliveryFeeUsd: 12,
   cookieDistanceFeeEnabled: 0,
   cookieDistanceFeePerMileUsd: 0,
@@ -130,9 +137,9 @@ export const DEFAULT_PRICING: PricingSettings = {
  * y se suma dentro del precio de entrega (el cliente no ve el desglose).
  * Es 100% para la empresa.
  */
-export function processingFeeCents(baseCents: number, p: PricingSettings): number {
-  const pct = Number.isFinite(p.processingFeePct) ? p.processingFeePct : 0;
-  return Math.max(0, Math.round((baseCents * pct) / 100));
+export function processingFeeCents(_baseCents: number, _p: PricingSettings): number {
+  // Ya no se cobra recargo de procesamiento en tiendas.
+  return 0;
 }
 
 export type OrderTier = "chico" | "mediano" | "grande";
@@ -144,11 +151,11 @@ export interface TierFee {
   companyCents: number;
 }
 
-/** Clasifica el pedido por su subtotal y devuelve el cobro de entrega. */
-export function tierForSubtotal(subtotalCents: number, p: PricingSettings): TierFee {
-  const usd = subtotalCents / 100;
+/** Clasifica el pedido por su peso total (lb) y devuelve el cobro de entrega. */
+export function tierForWeight(totalLb: number, p: PricingSettings): TierFee {
+  const lb = Number.isFinite(totalLb) ? totalLb : 0;
   const c = (v: number) => Math.round(v * 100);
-  if (usd <= p.tierSmallMaxUsd) {
+  if (lb <= p.tierSmallMaxLb) {
     return {
       tier: "chico",
       feeCents: c(p.tierSmallFeeUsd),
@@ -156,7 +163,7 @@ export function tierForSubtotal(subtotalCents: number, p: PricingSettings): Tier
       companyCents: c(p.tierSmallCompanyUsd),
     };
   }
-  if (usd <= p.tierMediumMaxUsd) {
+  if (lb <= p.tierMediumMaxLb) {
     return {
       tier: "mediano",
       feeCents: c(p.tierMediumFeeUsd),
@@ -315,9 +322,9 @@ export function pricingFromRows(
 }
 
 /** Cargo de servicio: el mayor entre el mínimo y el porcentaje del pedido. */
-export function serviceFeeCents(subtotalCents: number, p: PricingSettings): number {
-  const pct = Math.round((subtotalCents * p.servicePct) / 100);
-  return Math.max(Math.round(p.serviceMinUsd * 100), pct);
+export function serviceFeeCents(_subtotalCents: number, _p: PricingSettings): number {
+  // Ya no se cobra cargo de servicio en tiendas: solo entrega por peso.
+  return 0;
 }
 
 /** Cargo extra por peso según los tramos configurados. */
