@@ -21,4 +21,4 @@
 - Delivery block stops reference exactly one store order or one cookie order; same-building orders must share a block and cookie orders in blocks never enter legacy cookie routes, so each delivery and tip is paid once.
 - Hazorex's own supermarket is a regular approved business (slug `hazorex-supermercado`) reusing store checkout; supplier "where to buy" lives in admin/assigned-driver-only `store_product_sourcing`, so it never reaches public catalog reads.
 - Per-pound products charge one estimated portion (price/lb × approx lb) per cart unit, shared by cart and server checkout so totals match.
-- Product photo attribution belongs to the current stored image; catalog edits preserve it unless the image is replaced, preventing false credits on later uploads.
+- Product photo attribution and background-edit status belong to the current stored image; preserve the original storage reference on background edits and clear attribution/status on unrelated replacements, preventing false credits while keeping originals recoverable.

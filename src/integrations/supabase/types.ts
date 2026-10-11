@@ -2672,8 +2672,10 @@ export type Database = {
           descripcion: string | null
           disponible: boolean
           foto_credito: string | null
+          foto_fondo_editado: boolean
           foto_licencia: string | null
           foto_origen_url: string | null
+          foto_original_url: string | null
           id: string
           imagen_url: string | null
           is_cold: boolean
@@ -2699,8 +2701,10 @@ export type Database = {
           descripcion?: string | null
           disponible?: boolean
           foto_credito?: string | null
+          foto_fondo_editado?: boolean
           foto_licencia?: string | null
           foto_origen_url?: string | null
+          foto_original_url?: string | null
           id?: string
           imagen_url?: string | null
           is_cold?: boolean
@@ -2726,8 +2730,10 @@ export type Database = {
           descripcion?: string | null
           disponible?: boolean
           foto_credito?: string | null
+          foto_fondo_editado?: boolean
           foto_licencia?: string | null
           foto_origen_url?: string | null
+          foto_original_url?: string | null
           id?: string
           imagen_url?: string | null
           is_cold?: boolean

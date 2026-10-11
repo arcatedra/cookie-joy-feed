@@ -2,6 +2,7 @@ type Photo = {
   foto_credito?: string | null;
   foto_origen_url?: string | null;
   foto_licencia?: string | null;
+  foto_fondo_editado?: boolean;
 };
 
 export function ProductPhotoCredit({ product }: { product: Photo }) {
@@ -11,6 +12,7 @@ export function ProductPhotoCredit({ product }: { product: Photo }) {
     <p className="mt-1 text-[10px] leading-snug text-muted-foreground">
       <a href={product.foto_origen_url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Foto: Open Food Facts</a>
       {" ("}<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-SA</a>{")"}
+       {product.foto_fondo_editado === true ? ", fondo editado" : null}
     </p>
   );
 }

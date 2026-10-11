@@ -6,7 +6,7 @@ describe("supermercado Hazorex", () => {
   it("conserva crédito al editar precios y elimina crédito al reemplazar la foto", () => {
     expect(productPhotoPatch({ imagen_url: null })).toEqual({});
     expect(productPhotoPatch({ imagen_url: null, codigo_barras: "0076808000287" })).toEqual({ codigo_barras: "0076808000287" });
-    expect(productPhotoPatch({ imagen_url: "house/nueva.jpg" })).toEqual({ imagen_url: "house/nueva.jpg", foto_credito: null, foto_origen_url: null, foto_licencia: null });
+    expect(productPhotoPatch({ imagen_url: "house/nueva.jpg" })).toEqual({ imagen_url: "house/nueva.jpg", foto_credito: null, foto_origen_url: null, foto_licencia: null, foto_original_url: null, foto_fondo_editado: false });
   });
   it("guarda códigos como texto sin perder ceros y rechaza códigos inventados", () => {
     const base = { nombre: "Espaguetis", categoria: "Despensa", precio: 2.61, peso_lb: 1 };

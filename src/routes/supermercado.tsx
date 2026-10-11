@@ -146,6 +146,7 @@ function SupermarketPage() {
       <footer className="px-4 pt-8 text-xs text-muted-foreground">
         <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Foto: Open Food Facts</a>
         {" ("}<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-SA</a>{")"}
+        {products.some((p: P) => p.foto_fondo_editado === true) ? ", fondo editado" : null}
       </footer>
       <StoreCartBar businessId={store.id} products={products} cart={cart} onClear={() => setCart({})} />
     </main>
