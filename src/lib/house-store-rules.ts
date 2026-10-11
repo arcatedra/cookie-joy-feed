@@ -26,6 +26,21 @@ const money = z.coerce.number().min(0.01, "Precio inválido").max(10000);
 
 export const HOUSE_PRODUCE_SUBCATEGORIES = [{ es: "Frutas", en: "Fruit" }, { es: "Verduras", en: "Vegetables" }] as const;
 
+export const HOUSE_MEAT_SUBCATEGORIES = [
+  { es: "Pollo y pavo", en: "Chicken & turkey" },
+  { es: "Res", en: "Beef" },
+  { es: "Cerdo", en: "Pork" },
+  { es: "Cordero y chivo", en: "Lamb & goat" },
+  { es: "Pescado", en: "Fish" },
+  { es: "Mariscos", en: "Shellfish" },
+] as const;
+
+export function houseSubcategories(category: string | null) {
+  if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
+  if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
+  return [];
+}
+
 export function productDescription(p: { descripcion?: string | null; descripcion_en?: string | null }, en: boolean): string {
   return (en ? p.descripcion_en : p.descripcion) || "";
 }
@@ -36,7 +51,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
@@ -49,6 +64,8 @@ export const houseProductSchema = z.object({
   direccion: z.string().trim().max(240).default(""),
   imagen_url: z.string().max(500).nullable().default(null),
   codigo_barras: z.string().trim().regex(/^\d{8,14}$/, "Código de barras inválido").nullable().optional(),
+}).refine((p) => !p.subcategoria || houseSubcategories(p.categoria).some((c) => c.es === p.subcategoria), {
+  path: ["subcategoria"], message: "Subcategoría no válida para esta categoría",
 });
 export type HouseProductInput = z.infer<typeof houseProductSchema>;
 

@@ -13,7 +13,7 @@ import {
   adminSaveHouseProduct,
   adminUploadHouseImage,
 } from "@/lib/house-store.functions";
-import { HOUSE_CATEGORIES, HOUSE_PRODUCE_SUBCATEGORIES, TEMPLATE_HEADERS, parseBulkRows, type HouseProductInput } from "@/lib/house-store-rules";
+import { HOUSE_CATEGORIES, houseSubcategories, TEMPLATE_HEADERS, parseBulkRows, type HouseProductInput } from "@/lib/house-store-rules";
 
 export const Route = createFileRoute("/_authenticated/admin/productos")({
   head: () => ({
@@ -217,7 +217,7 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
           {input("descripcion_en", "Descripción corta (inglés)", { maxLength: 240 })}
           <label className="block text-sm">
             <span className="mb-1 block text-xs text-muted-foreground">Categoría</span>
-            <select value={f.categoria} onChange={(e) => set("categoria", e.target.value)} className="w-full rounded-lg border border-border bg-background px-3 py-2">
+            <select value={f.categoria} onChange={(e) => setF((p: any) => ({ ...p, categoria: e.target.value, subcategoria: null }))} className="w-full rounded-lg border border-border bg-background px-3 py-2">
               {HOUSE_CATEGORIES.map((c) => <option key={c.es}>{c.es}</option>)}
             </select>
           </label>
@@ -225,11 +225,11 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
             <span className="mb-1 block text-xs text-muted-foreground">Foto</span>
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => onFile(e.target.files?.[0])} className="w-full text-xs" />
           </label>
-          {f.categoria === "Frutas y verduras" && <label className="block text-sm">
+          {houseSubcategories(f.categoria).length > 0 && <label className="block text-sm">
             <span className="mb-1 block text-xs text-muted-foreground">Subcategoría</span>
             <select value={f.subcategoria ?? ""} onChange={(e) => set("subcategoria", e.target.value || null)} className="w-full rounded-lg border border-border bg-background px-3 py-2">
               <option value="">Sin subcategoría</option>
-              {HOUSE_PRODUCE_SUBCATEGORIES.map((c) => <option key={c.es}>{c.es}</option>)}
+              {houseSubcategories(f.categoria).map((c) => <option key={c.es}>{c.es}</option>)}
             </select>
           </label>}
           {input("precio", f.vendido_por_lb ? "Precio por libra ($)" : "Precio ($)", { inputMode: "decimal" })}

@@ -85,7 +85,7 @@ async function upsertProducts(db: any, items: HouseProductInput[]) {
       stock: it.stock,
       ...(it.descripcion !== undefined ? { descripcion: it.descripcion || null } : {}),
       ...(it.descripcion_en !== undefined ? { descripcion_en: it.descripcion_en || null } : {}),
-      ...(it.subcategoria !== undefined ? { subcategoria: it.categoria === "Frutas y verduras" ? it.subcategoria : null } : {}),
+      ...(it.subcategoria !== undefined ? { subcategoria: it.subcategoria } : {}),
     };
     Object.assign(row, productPhotoPatch(it));
     const q = it.id
