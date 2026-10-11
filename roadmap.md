@@ -69,8 +69,9 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
-- [ ] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias; pendiente del OK del dueño.
-- [ ] Añadir catálogo aprobado sin duplicar los cinco productos de marca; verificar precios, pesos, ES/EN, filtros y fotos.
+- [x] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias.
+- [x] Añadir 64 productos con foto y descripciones ES/EN, sin duplicar ni alterar los cinco de marca; 14 pruebas pasan, seis filtros y fotos verificadas en celular/escritorio sin errores. Pavo molido Butterball existente sigue sin foto.
+- [ ] Verificar edición autenticada de las nuevas subcategorías en admin: bloqueado por Supabase externo sin sesión autorizada; validación del servidor cubierta por pruebas.
 - [x] Incorporar partes 2A y 2B: 59 verduras con precios/pesos indicados, fotos propias y descripción ES/EN; plan ampliado aprobado, 2A cargada una sola vez.
 - [x] Verificar totales: 47 frutas y 61 verduras (108); todos con foto; filtros/buscador ES/EN y celular comprobados, 11 pruebas aprobadas.
 - [x] Aprobar el plan para 43 frutas nuevas, fotos propias, descripciones ES/EN y subcategorías Frutas/Verduras.
