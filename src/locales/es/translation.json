@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Costo de entrega",
-        "body": "Cada pedido paga un costo de entrega que depende del tamaño del pedido y del peso total. Ese costo se muestra como un único precio final antes de confirmar; no hay cargos ocultos ni cobros posteriores fuera de lo descrito en estos términos."
+        "body": "Cuando el modelo de bloques esté activo, cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $35; sobre 45 lb se suman $0.70 por libra excedente. El máximo es 80 lb por pedido. Mientras esté apagado, se aplica el precio mostrado antes de confirmar."
       },
       {
         "title": "4. Cómo se cobra: reserva y cobro final",
@@ -852,7 +852,11 @@
         "body": "La propina es voluntaria y va <strong>100% al repartidor</strong>. Hazorex no retiene ninguna parte de la propina."
       },
       {
-        "title": "7. Días y horarios de entrega",
+        "title": "7. Entrega en apartamento",
+        "body": "La entrega normal termina en el lobby o puerta del edificio. Puedes pedir entrega al apartamento por $5 con ascensor o $8 por escaleras sobre dos pisos. Es un servicio e ingreso de Hazorex, separado de la propina; cualquier bono al repartidor lo decide Hazorex y no cambia el precio del cliente."
+      },
+      {
+        "title": "8. Días y horarios de entrega",
         "body": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes. Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
       },
       {

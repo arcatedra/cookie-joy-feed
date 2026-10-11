@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Delivery charge",
-        "body": "Every order pays a delivery charge based on the size of the order and its total weight. It is shown as a single final price before you confirm; there are no hidden fees beyond what is described in these terms."
+        "body": "When the reservable-block model is active, each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $35; above 45 lb adds $0.70 per excess pound. The maximum is 80 lb per order. While it is off, the price shown before confirmation applies."
       },
       {
         "title": "4. How we charge: hold and final charge",
@@ -852,7 +852,11 @@
         "body": "Tips are voluntary and go <strong>100% to the driver</strong>. Hazorex keeps no part of the tip."
       },
       {
-        "title": "7. Delivery days and cut-off times",
+        "title": "7. Apartment delivery",
+        "body": "Standard delivery ends at the lobby or building entrance. You may request apartment delivery for $5 with an elevator or $8 by stairs above two floors. This is a Hazorex service and revenue, separate from tips; Hazorex decides any driver bonus without changing the customer's price."
+      },
+      {
+        "title": "8. Delivery days and cut-off times",
         "body": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday. Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
       },
       {
