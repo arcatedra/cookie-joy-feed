@@ -2667,9 +2667,13 @@ export type Database = {
         Row: {
           business_id: string
           category_id: string | null
+          codigo_barras: string | null
           created_at: string
           descripcion: string | null
           disponible: boolean
+          foto_credito: string | null
+          foto_licencia: string | null
+          foto_origen_url: string | null
           id: string
           imagen_url: string | null
           is_cold: boolean
@@ -2690,9 +2694,13 @@ export type Database = {
         Insert: {
           business_id: string
           category_id?: string | null
+          codigo_barras?: string | null
           created_at?: string
           descripcion?: string | null
           disponible?: boolean
+          foto_credito?: string | null
+          foto_licencia?: string | null
+          foto_origen_url?: string | null
           id?: string
           imagen_url?: string | null
           is_cold?: boolean
@@ -2713,9 +2721,13 @@ export type Database = {
         Update: {
           business_id?: string
           category_id?: string | null
+          codigo_barras?: string | null
           created_at?: string
           descripcion?: string | null
           disponible?: boolean
+          foto_credito?: string | null
+          foto_licencia?: string | null
+          foto_origen_url?: string | null
           id?: string
           imagen_url?: string | null
           is_cold?: boolean
