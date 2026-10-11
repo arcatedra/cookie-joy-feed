@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { discountPct, parseBulkRows, productPhotoPatch, houseProductSchema } from "./house-store-rules";
 import { DEFAULT_PRICING, tierForWeight, weightFeeCents } from "./pricing";
 import { HOUSE_FRUIT_CATALOG } from "./house-fruit-catalog";
+import { HOUSE_VEGETABLE_CATALOG } from "./house-vegetable-catalog";
 import { productDescription, unitPriceCents } from "./house-store-rules";
 
 describe("catálogo de frutas", () => {
@@ -29,6 +30,27 @@ describe("catálogo de frutas", () => {
     const bulk = parseBulkRows([{ nombre: "Mango", precio: 2, peso_lb: 0.8, categoria: "Frutas y verduras", subcategoria: "Frutas", descripcion: "Mango dulce", descripcion_en: "Sweet mango" }]);
     expect(bulk.ok[0]?.descripcion_en).toBe("Sweet mango");
     expect(bulk.ok[0]?.subcategoria).toBe("Frutas");
+  });
+});
+
+describe("catálogo de verduras", () => {
+  it("incluye las partes 2A y 2B una sola vez y valida los 59 productos", () => {
+    expect(HOUSE_VEGETABLE_CATALOG).toHaveLength(59);
+    expect(new Set(HOUSE_VEGETABLE_CATALOG.map((p) => p[0])).size).toBe(59);
+    for (const [nombre, nombre_en, precio, vendido_por_lb, peso_lb, descripcion, descripcion_en] of HOUSE_VEGETABLE_CATALOG) {
+      expect(houseProductSchema.safeParse({ nombre, nombre_en, precio, vendido_por_lb, peso_lb, descripcion, descripcion_en, categoria: "Frutas y verduras", subcategoria: "Verduras" }).success).toBe(true);
+      expect(descripcion.length).toBeGreaterThan(10);
+      expect(descripcion_en.length).toBeGreaterThan(10);
+    }
+  });
+  it("cobra la porción de tomatillo y la bolsa de papas correctamente", () => {
+    const tomatillo = HOUSE_VEGETABLE_CATALOG.find((p) => p[0] === "Tomatillo");
+    const papas = HOUSE_VEGETABLE_CATALOG.find((p) => p[0] === "Papas Idaho 5 lb");
+    expect(tomatillo).toBeDefined();
+    expect(papas).toBeDefined();
+    if (!tomatillo || !papas) throw new Error("Falta un producto requerido");
+    expect(unitPriceCents({ precio: tomatillo[2], vendido_por_lb: tomatillo[3], peso_lb: tomatillo[4] })).toBe(220);
+    expect(unitPriceCents({ precio: papas[2], vendido_por_lb: papas[3], peso_lb: papas[4] })).toBe(471);
   });
 });
 
