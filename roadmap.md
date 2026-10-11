@@ -69,6 +69,8 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias; pendiente del OK del dueño.
+- [ ] Añadir catálogo aprobado sin duplicar los cinco productos de marca; verificar precios, pesos, ES/EN, filtros y fotos.
 - [x] Incorporar partes 2A y 2B: 59 verduras con precios/pesos indicados, fotos propias y descripción ES/EN; plan ampliado aprobado, 2A cargada una sola vez.
 - [x] Verificar totales: 47 frutas y 61 verduras (108); todos con foto; filtros/buscador ES/EN y celular comprobados, 11 pruebas aprobadas.
 - [x] Aprobar el plan para 43 frutas nuevas, fotos propias, descripciones ES/EN y subcategorías Frutas/Verduras.
