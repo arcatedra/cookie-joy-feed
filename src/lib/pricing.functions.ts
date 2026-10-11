@@ -16,15 +16,17 @@ function publicClient() {
 /** Ajustes de precio + días de ruta por zona. Público (se necesita para cotizar). */
 export const getPricingConfig = createServerFn({ method: "GET" }).handler(async () => {
   const db = publicClient() as any;
-  const [{ data: rows }, { data: zones }, { data: dz }] = await Promise.all([
+  const [{ data: rows }, { data: zones }, { data: dz }, { data: blockSettings }] = await Promise.all([
     db.from("pricing_settings").select("key, value"),
     db.from("zone_delivery_days").select("zone, days"),
     db.from("delivery_zones").select("id, name, borough, zip_codes, route_days, activo").order("borough").order("name"),
+    db.from("delivery_block_settings").select("*").eq("singleton", true).maybeSingle(),
   ]);
   return {
     pricing: pricingFromRows(rows),
     deliveryZones: (dz ?? []) as DeliveryZone[],
     zones: (zones ?? []) as Array<{ zone: string; days: number[] }>,
+    blockSettings,
   };
 });
 
