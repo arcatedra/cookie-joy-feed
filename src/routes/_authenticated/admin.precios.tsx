@@ -53,7 +53,12 @@ const LABELS: Record<keyof PricingSettings, string> = {
   weightExtraPerLbUsd: "Precio por libra extra ($)",
   processingFeePct: "Recargo de procesamiento (%)",
   payoutFrequencyDays: "Pago a súpers: inmediato",
+  cookieDeliveryFeeUsd: "Galletas: Entrega y servicio por pedido ($)",
+  cookieDistanceFeeEnabled: "Galletas: cobrar extra por distancia",
+  cookieDistanceFeePerMileUsd: "Galletas: extra por milla ($)",
 };
+
+const COOKIE_FIELDS: (keyof PricingSettings)[] = ["cookieDeliveryFeeUsd", "cookieDistanceFeeEnabled", "cookieDistanceFeePerMileUsd"];
 
 const TIER_FIELDS: (keyof PricingSettings)[] = [
   "tierSmallMaxUsd",
@@ -191,6 +196,44 @@ function PreciosPage() {
           </div>
         </section>
 
+        <section className="mt-6 rounded-xl border border-border bg-card p-5">
+          <h2 className="text-sm font-bold">Galletas</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Sin mínimo de compra. Cada pedido de galletas paga esta Entrega y servicio fija.
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <label className="block text-sm">
+              <span className="mb-1 block text-xs text-muted-foreground">{LABELS.cookieDeliveryFeeUsd}</span>
+              <input
+                value={form.cookieDeliveryFeeUsd ?? ""}
+                onChange={(e) => setForm({ ...form, cookieDeliveryFeeUsd: e.target.value })}
+                inputMode="decimal"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              />
+            </label>
+            <label className="block text-sm">
+              <span className="mb-1 block text-xs text-muted-foreground">{LABELS.cookieDistanceFeePerMileUsd}</span>
+              <input
+                value={form.cookieDistanceFeePerMileUsd ?? ""}
+                onChange={(e) => setForm({ ...form, cookieDistanceFeePerMileUsd: e.target.value })}
+                inputMode="decimal"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              />
+            </label>
+          </div>
+          <label className="mt-3 flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={Number(form.cookieDistanceFeeEnabled) === 1}
+              onChange={(e) => setForm({ ...form, cookieDistanceFeeEnabled: e.target.checked ? "1" : "0" })}
+            />
+            {LABELS.cookieDistanceFeeEnabled}
+          </label>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Preparado para más adelante: por ahora no se cobra aunque esté marcado.
+          </p>
+        </section>
+
         <p className="mt-6 rounded-xl border border-border bg-card p-4 text-sm">
           <span className="font-medium">Pago a súpers:</span> inmediato al cobrar el pedido.
           Lo pendiente se envía solo cuando la tienda o el repartidor conecta su cuenta.
@@ -199,7 +242,7 @@ function PreciosPage() {
         <section className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-5 sm:grid-cols-2">
           {(Object.keys(PRICING_KEYS) as (keyof PricingSettings)[])
             .filter(
-              (f) => f !== "deliveryDaysMask" && f !== "payoutFrequencyDays" && !TIER_FIELDS.includes(f),
+              (f) => f !== "deliveryDaysMask" && f !== "payoutFrequencyDays" && !TIER_FIELDS.includes(f) && !COOKIE_FIELDS.includes(f),
             )
             .map((field) => (
             <label key={field} className="block text-sm">
