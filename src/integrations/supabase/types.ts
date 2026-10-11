@@ -1759,6 +1759,44 @@ export type Database = {
           },
         ]
       }
+      pedido_status_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          from_estado: string | null
+          id: string
+          nota: string | null
+          pedido_id: string
+          to_estado: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          from_estado?: string | null
+          id?: string
+          nota?: string | null
+          pedido_id: string
+          to_estado: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          from_estado?: string | null
+          id?: string
+          nota?: string | null
+          pedido_id?: string
+          to_estado?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedido_status_events_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pedidos: {
         Row: {
           actualizado_en: string
