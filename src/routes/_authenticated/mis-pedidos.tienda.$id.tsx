@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Camera, Star } from "lucide-react";
 import { toast } from "sonner";
+import { PostDeliveryTipCard } from "@/components/PostDeliveryTipCard";
 
 export const Route = createFileRoute("/_authenticated/mis-pedidos/tienda/$id")({
   head: () => ({
@@ -157,6 +158,9 @@ function StoreOrderDetailPage() {
           {order.foto_entrega_url && <DeliveryPhoto orderId={order.id} />}
         </div>
       )}
+
+      {order.estado === "entregado" && <PostDeliveryTipCard kind="store" orderId={order.id} />}
+
 
       <ul className="rounded-lg border bg-card divide-y text-sm">
         {(items ?? []).map((it: any) => (

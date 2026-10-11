@@ -228,6 +228,8 @@ export const advanceStoreDelivery = createServerFn({ method: "POST" })
     if (data.step === "entregado") {
       const res = await finishDelivery(data.id);
       pagado = !!(res?.ok && !res.skipped);
+      const { notifyTipPrompt } = await import("./post-delivery-tips.server");
+      await notifyTipPrompt("store", data.id);
     }
     return { ok: true, pagado };
   });

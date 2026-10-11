@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Costo de entrega",
-        "body": "Cuando el modelo de bloques esté activo, cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $35; sobre 45 lb se suman $0.70 por libra excedente. El máximo es 80 lb por pedido. Mientras esté apagado, se aplica el precio mostrado antes de confirmar."
+        "body": "Cuando el modelo de bloques esté activo, cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $35; sobre 45 lb se suman $0.70 por libra excedente. El máximo es 80 lb por pedido. Mientras esté apagado, se aplica el precio mostrado antes de confirmar. <strong>Galletas Hazorex:</strong> no hay mínimo de compra; cada pedido de galletas paga una <strong>Entrega y servicio</strong> fija de $12. <strong>Propina:</strong> es opcional y el 100% es para tu repartidor. Después de la entrega puedes dejar o subir la propina durante 24 horas; si aceptas que Stripe guarde tu tarjeta al pagar, la usamos solo para esa propina y solo cuando tú la confirmas."
       },
       {
         "title": "4. Cómo se cobra: reserva y cobro final",
@@ -1438,7 +1438,7 @@
       },
       "cancel": {
         "q": "¿Cuál es el pedido mínimo?",
-        "a": "El pedido mínimo de galletas es $12 en productos."
+        "a": "No hay mínimo de compra; la entrega cuesta $12."
       },
       "sweepstakes": {
         "q": "¿Cómo participo en el sorteo diario?",
@@ -1552,7 +1552,9 @@
     "back": "volver",
     "checkoutError": "No se pudo iniciar el pago",
     "authHoldNote": "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque.",
-    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}"
+    "minimum": "Pedido mínimo $12 — te faltan ${{missing}}",
+    "deliveryService": "Entrega y servicio",
+    "noMinimum": "Sin mínimo de compra. Cada pedido de galletas paga ${{fee}} de entrega y servicio."
   },
   "favorites": {
     "add": "Guardar en favoritos",

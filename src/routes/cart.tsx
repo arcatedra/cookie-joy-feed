@@ -13,7 +13,8 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
-import { COOKIE_MINIMUM_CENTS } from "@/lib/cookie-order-rules";
+import { cookieDeliveryFeeCents } from "@/lib/cookie-order-rules";
+import { getPricingConfig } from "@/lib/pricing.functions";
 import i18n from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -87,16 +88,18 @@ function CartPage() {
     if (user?.email && !email) setEmail(user.email);
   }, [user, email]);
 
-  const shippingCost = 0;
+  const fetchPricing = useServerFn(getPricingConfig);
+  const { data: pricingConfig } = useQuery({ queryKey: ["pricing-config"], queryFn: () => fetchPricing() });
+  const deliveryCents = cookieDeliveryFeeCents(pricingConfig?.pricing);
+  const shippingCost = deliveryCents / 100;
   const subtotal = cart.total;
-  const missingCents = Math.max(0, COOKIE_MINIMUM_CENTS - Math.round(subtotal * 100));
   const gross = subtotal + shippingCost + propina;
   const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
   const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
 
   const canCheckout =
     cart.count > 0 &&
-    missingCents === 0 &&
+    !!pricingConfig &&
     /.+@.+\..+/.test(email) &&
     address.name.length >= 2 &&
     address.street.length >= 2 &&
@@ -125,6 +128,7 @@ function CartPage() {
           propina,
           usarSaldo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
+          expectedDeliveryCents: deliveryCents,
         },
       });
       setPendingOrderId(res.pedidoId);
@@ -284,6 +288,7 @@ function CartPage() {
                 {t("cartPage.shipping")}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground">{t("deliveryPromise")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("cartPage.noMinimum", { fee: shippingCost.toFixed(2) })}</p>
             </section>
             <div className="mt-4 space-y-3">
               <TipSelector value={propina} onChange={setPropina} />
@@ -295,8 +300,8 @@ function CartPage() {
         <section className="mt-4 space-y-1 rounded-2xl bg-card p-4 ring-1 ring-border text-sm">
           <Row label={t("cartPage.subtotal")} value={`$${subtotal.toFixed(2)}`} />
           <Row
-            label={t("cartPage.shipping")}
-            value={t("cartPage.free")}
+            label={t("cartPage.deliveryService")}
+            value={`$${shippingCost.toFixed(2)}`}
           />
           <Row label={t("tips.title")} value={`$${propina.toFixed(2)}`} />
           {discount > 0 && <Row label={t("credit.discount")} value={`-$${discount.toFixed(2)}`} />}
@@ -308,9 +313,6 @@ function CartPage() {
           </div>
         </section>
 
-
-
-        {missingCents > 0 && !clientSecret && <p role="status" className="mt-4 text-sm font-semibold text-destructive">{t("cartPage.minimum", { missing: (missingCents / 100).toFixed(2), defaultValue: "Pedido mínimo $12 — te faltan ${{missing}}" })}</p>}
         {!clientSecret && (
           <Button
             type="button"

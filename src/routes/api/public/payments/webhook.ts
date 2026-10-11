@@ -83,6 +83,27 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           (dataObject?.metadata as Record<string, string> | undefined)?.kind ??
           findString(payload, "kind");
 
+        // --- Propina extra después de la entrega -> 100% al repartidor ---
+        if (metaKind === "post_delivery_tip") {
+          const meta = (dataObject?.metadata as Record<string, string> | undefined) ?? {};
+          const piId =
+            eventType === "payment_intent.succeeded" ? objectId
+            : eventType === "checkout.session.completed" && dataObject?.payment_status === "paid" ? (dataObject?.payment_intent as string | undefined) ?? ""
+            : "";
+          if (meta.tip_id && piId.startsWith("pi_")) {
+            try {
+              await supabaseAdmin.from("post_delivery_tips" as any).update({ payment_intent_id: piId } as any).eq("id", meta.tip_id).is("payment_intent_id", null);
+              const { finalizePostDeliveryTip } = await import("@/lib/post-delivery-tips.server");
+              const res = await finalizePostDeliveryTip(meta.tip_id, piId, environment);
+              if (!res.ok) console.warn("[payments-webhook] propina extra no confirmada", meta.tip_id, res.error);
+            } catch (e) {
+              console.error("[payments-webhook] propina extra falló", e);
+              return new Response("Post tip failed", { status: 500 });
+            }
+          }
+          return Response.json({ ok: true });
+        }
+
         // --- Cookie order (cart checkout) -> mark pedido as pagado ---
         if (
           metaKind === "cookie_order" &&

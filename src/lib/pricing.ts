@@ -42,6 +42,12 @@ export interface PricingSettings {
   payoutFrequencyDays: number;
   /** Recargo (%) que cubre la comisión de Stripe. Va dentro del precio de entrega. */
   processingFeePct: number;
+  /** Galletas: "Entrega y servicio" fija por pedido. */
+  cookieDeliveryFeeUsd: number;
+  /** Galletas: cargo extra por distancia (1 = encendido). Preparado, apagado. */
+  cookieDistanceFeeEnabled: number;
+  /** Galletas: monto por milla cuando el cargo por distancia esté encendido. */
+  cookieDistanceFeePerMileUsd: number;
 }
 
 export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
@@ -76,6 +82,9 @@ export const PRICING_KEYS: Record<keyof PricingSettings, string> = {
   weightExtraPerLbUsd: "weight_extra_per_lb_usd",
   payoutFrequencyDays: "payout_frequency_days",
   processingFeePct: "processing_fee_pct",
+  cookieDeliveryFeeUsd: "cookie_delivery_fee_usd",
+  cookieDistanceFeeEnabled: "cookie_distance_fee_enabled",
+  cookieDistanceFeePerMileUsd: "cookie_distance_fee_per_mile_usd",
 };
 
 export const DEFAULT_PRICING: PricingSettings = {
@@ -111,6 +120,9 @@ export const DEFAULT_PRICING: PricingSettings = {
   weightExtraPerLbUsd: 0.7,
   payoutFrequencyDays: 1,
   processingFeePct: 3,
+  cookieDeliveryFeeUsd: 12,
+  cookieDistanceFeeEnabled: 0,
+  cookieDistanceFeePerMileUsd: 0,
 };
 
 /**

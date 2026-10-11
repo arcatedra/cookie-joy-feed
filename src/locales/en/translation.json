@@ -837,7 +837,7 @@
       },
       {
         "title": "3. Delivery charge",
-        "body": "When the reservable-block model is active, each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $35; above 45 lb adds $0.70 per excess pound. The maximum is 80 lb per order. While it is off, the price shown before confirmation applies."
+        "body": "When the reservable-block model is active, each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $35; above 45 lb adds $0.70 per excess pound. The maximum is 80 lb per order. While it is off, the price shown before confirmation applies. <strong>Hazorex cookies:</strong> there is no minimum purchase; every cookie order pays a flat $12 <strong>Delivery and service</strong> charge. <strong>Tip:</strong> optional, and 100% goes to your driver. After delivery you can add or raise the tip for 24 hours; if you let Stripe save your card at checkout, we use it only for that tip and only when you confirm it."
       },
       {
         "title": "4. How we charge: hold and final charge",
@@ -1438,7 +1438,7 @@
       },
       "cancel": {
         "q": "What is the minimum order?",
-        "a": "The minimum cookie order is $12 in products."
+        "a": "There is no minimum purchase; delivery costs $12."
       },
       "sweepstakes": {
         "q": "How do I enter the daily sweepstakes?",
@@ -1552,7 +1552,9 @@
     "back": "back",
     "checkoutError": "Could not start payment",
     "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
-    "minimum": "Minimum order $12 — you need ${{missing}} more"
+    "minimum": "Minimum order $12 — you need ${{missing}} more",
+    "deliveryService": "Delivery & service",
+    "noMinimum": "No minimum purchase. Every cookie order pays ${{fee}} for delivery and service."
   },
   "cartFloating": {
     "one": "{{count}} item · ${{total}}",

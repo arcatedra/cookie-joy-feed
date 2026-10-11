@@ -1,10 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { assertCookieMinimum, stopCompensation, vehicleOrderLimit } from "./cookie-order-rules";
+import { assertCookieSubtotal, assertPostTipAllowed, cookieDeliveryFeeCents, stopCompensation, vehicleOrderLimit } from "./cookie-order-rules";
 describe("reglas de apertura sin pagos reales", () => {
-  it("exige $12 antes de propina o saldo", () => {
-    expect(() => assertCookieMinimum(1199)).toThrow("$0.01");
-    expect(() => assertCookieMinimum(1200)).not.toThrow();
-    expect(() => assertCookieMinimum(NaN)).toThrow();
+  it("no hay mínimo: 1 galleta paga subtotal + entrega fija de $12", () => {
+    expect(() => assertCookieSubtotal(350)).not.toThrow();
+    expect(() => assertCookieSubtotal(0)).toThrow();
+    expect(() => assertCookieSubtotal(NaN)).toThrow();
+    expect(cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: 12 })).toBe(1200);
+    expect(350 + cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: 12 })).toBe(1550);
+    expect(cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: 9.5 })).toBe(950);
+    expect(cookieDeliveryFeeCents(null)).toBe(1200);
+    expect(cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: -1 })).toBe(1200);
+  });
+  it("propina extra solo entre $1 y $100 y dentro de 24 horas", () => {
+    const now = Date.parse("2026-10-11T12:00:00Z");
+    expect(() => assertPostTipAllowed(3, "2026-10-11T00:00:00Z", now)).not.toThrow();
+    expect(() => assertPostTipAllowed(3, "2026-10-10T11:59:00Z", now)).toThrow("24 horas");
+    expect(() => assertPostTipAllowed(0.5, "2026-10-11T00:00:00Z", now)).toThrow();
+    expect(() => assertPostTipAllowed(101, "2026-10-11T00:00:00Z", now)).toThrow();
+    expect(() => assertPostTipAllowed(3, null, now)).toThrow("entregado");
   });
   it("respeta límites inclusivos de peso y extra máximo", () => {
     expect(stopCompensation(15).baseCents).toBe(500);

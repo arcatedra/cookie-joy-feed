@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listMyPedidos } from "@/lib/pedidos.functions";
+import { listMyTipPrompts } from "@/lib/post-delivery-tips.functions";
+import { PostDeliveryTipCard } from "@/components/PostDeliveryTipCard";
 
 export const Route = createFileRoute("/_authenticated/mis-pedidos")({
   head: () => ({
@@ -24,10 +26,12 @@ const ESTADO_LABEL: Record<string, string> = {
 
 function MisPedidosPage() {
   const fetchPedidos = useServerFn(listMyPedidos);
+  const fetchTipPrompts = useServerFn(listMyTipPrompts);
   const { data, isLoading, error } = useQuery({
     queryKey: ["pedidos", "me"],
     queryFn: () => fetchPedidos(),
   });
+  const { data: tipPrompts } = useQuery({ queryKey: ["post-tip-prompts"], queryFn: () => fetchTipPrompts() });
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-4">
@@ -35,6 +39,13 @@ function MisPedidosPage() {
         <h1 className="text-2xl font-bold">Mis pedidos</h1>
         <Link to="/mi-cuenta" className="text-sm underline">Mi cuenta</Link>
       </div>
+
+      {(tipPrompts ?? []).map((p) => (
+        <div key={`${p.kind}-${p.orderId}`} className="space-y-1">
+          <p className="text-xs text-muted-foreground">Pedido #{p.numero}</p>
+          <PostDeliveryTipCard kind={p.kind} orderId={p.orderId} />
+        </div>
+      ))}
 
       {isLoading && <div className="text-sm text-muted-foreground">Cargando…</div>}
       {error && (
