@@ -4,6 +4,42 @@ import { DEFAULT_PRICING, tierForWeight, weightFeeCents } from "./pricing";
 import { HOUSE_FRUIT_CATALOG } from "./house-fruit-catalog";
 import { HOUSE_VEGETABLE_CATALOG } from "./house-vegetable-catalog";
 import { productDescription, unitPriceCents } from "./house-store-rules";
+import { HOUSE_MEAT_CATALOG } from "./house-meat-catalog";
+import { HOUSE_MEAT_SUBCATEGORIES, houseSubcategories } from "./house-store-rules";
+
+describe("catálogo de carnes y mariscos", () => {
+  it("valida los 64 productos únicos y las seis subcategorías", () => {
+    expect(HOUSE_MEAT_CATALOG).toHaveLength(64);
+    expect(new Set(HOUSE_MEAT_CATALOG.map((p) => p.nombre)).size).toBe(64);
+    expect(new Set(HOUSE_MEAT_CATALOG.map((p) => p.nombre_en)).size).toBe(64);
+    expect(HOUSE_MEAT_SUBCATEGORIES.map((c) => HOUSE_MEAT_CATALOG.filter((p) => p.subcategoria === c.es).length)).toEqual([14, 14, 9, 3, 14, 10]);
+    for (const p of HOUSE_MEAT_CATALOG) {
+      expect(houseProductSchema.safeParse({ ...p, categoria: "Carnes y mariscos" }).success).toBe(true);
+      expect(p.descripcion.length).toBeGreaterThan(10);
+      expect(p.descripcion_en.length).toBeGreaterThan(10);
+    }
+  });
+  it("rechaza subcategorías ajenas y conserva las omitidas", () => {
+    const base = { nombre: "Pollo", categoria: "Carnes y mariscos", precio: 2.09, peso_lb: 5 };
+    expect(houseProductSchema.parse(base).subcategoria).toBeUndefined();
+    expect(houseProductSchema.safeParse({ ...base, subcategoria: "Frutas" }).success).toBe(false);
+    expect(houseProductSchema.safeParse({ ...base, categoria: "Frutas y verduras", subcategoria: "Res" }).success).toBe(false);
+    expect(houseSubcategories("Despensa")).toEqual([]);
+    const bulk = parseBulkRows([{ ...base, subcategoria: "Pollo y pavo", por_libra: "sí" }]);
+    expect(bulk.ok[0]?.subcategoria).toBe("Pollo y pavo");
+  });
+  it("conserva unidades y pesos exactos sin duplicar marcas", () => {
+    const pollo = HOUSE_MEAT_CATALOG.find((p) => p.nombre === "Pollo entero");
+    const lobster = HOUSE_MEAT_CATALOG.find((p) => p.nombre_en === "Lobster tail");
+    const clams = HOUSE_MEAT_CATALOG.find((p) => p.nombre_en === "Littleneck clams");
+    if (!pollo || !lobster || !clams) throw new Error("Faltan productos requeridos");
+    expect(unitPriceCents(pollo)).toBe(1045);
+    expect(unitPriceCents(lobster)).toBe(1732);
+    expect(unitPriceCents(clams)).toBe(79);
+    expect(HOUSE_MEAT_CATALOG.filter((p) => !p.vendido_por_lb)).toHaveLength(4);
+    for (const p of HOUSE_MEAT_CATALOG) expect(p.nombre).not.toMatch(/Oscar Mayer|Butterball|Sabrett|Hillshire/);
+  });
+});
 
 describe("catálogo de frutas", () => {
   it("incluye 43 frutas distintas sin duplicar las cuatro existentes", () => {
