@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Minus, Plus, Search, ShoppingBasket } from "lucide-react";
 import { getPublicStore } from "@/lib/store-public.functions";
 import { getHouseBestSellers } from "@/lib/house-store.functions";
-import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, categoryEn, discountPct } from "@/lib/house-store-rules";
+import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, discountPct } from "@/lib/house-store-rules";
 import { StoreCartBar, storeCartKey } from "./tienda.$slug";
 
 export const Route = createFileRoute("/supermercado")({
@@ -212,4 +212,3 @@ function ProductCard({ p, name, qty, onAdd, L }: { p: P; name: string; qty: numb
   );
 }
 
-export { categoryEn };

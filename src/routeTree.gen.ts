@@ -29,6 +29,7 @@ import { Route as RuletaRouteImport } from './routes/ruleta'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SupermercadoRouteImport } from './routes/supermercado'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SweepstakesRulesRouteImport } from './routes/sweepstakes-rules'
 import { Route as TerminosRouteImport } from './routes/terminos'
@@ -212,6 +213,11 @@ const ShopRoute = ShopRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupermercadoRoute = SupermercadoRouteImport.update({
+  id: '/supermercado',
+  path: '/supermercado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SupportRoute = SupportRouteImport.update({
@@ -713,6 +719,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -818,6 +825,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -925,6 +933,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supermercado': typeof SupermercadoRoute
   '/support': typeof SupportRoute
   '/sweepstakes-rules': typeof SweepstakesRulesRoute
   '/terminos': typeof TerminosRoute
@@ -1033,6 +1042,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1138,6 +1148,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1244,6 +1255,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/shop'
     | '/sitemap.xml'
+    | '/supermercado'
     | '/support'
     | '/sweepstakes-rules'
     | '/terminos'
@@ -1352,6 +1364,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SupermercadoRoute: typeof SupermercadoRoute
   SupportRoute: typeof SupportRoute
   SweepstakesRulesRoute: typeof SweepstakesRulesRoute
   TerminosRoute: typeof TerminosRoute
@@ -1530,6 +1543,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supermercado': {
+      id: '/supermercado'
+      path: '/supermercado'
+      fullPath: '/supermercado'
+      preLoaderRoute: typeof SupermercadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/support': {
@@ -2315,6 +2335,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SupermercadoRoute: SupermercadoRoute,
   SupportRoute: SupportRoute,
   SweepstakesRulesRoute: SweepstakesRulesRoute,
   TerminosRoute: TerminosRoute,
