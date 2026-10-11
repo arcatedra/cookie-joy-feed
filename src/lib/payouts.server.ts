@@ -142,10 +142,20 @@ export async function transferDriverPayout(
     const { transferDeliveryBlockPayout } = await import("./delivery-block-payouts.server");
     return transferDeliveryBlockPayout(p.id, db);
   }
+
+  const { data: drv } = await db
+    .from("drivers")
+    .select("stripe_account_id, stripe_payouts_enabled, stripe_environment")
+    .eq("id", p.driver_id)
+    .maybeSingle();
+  if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled) {
+    return { ok: false, skipped: true, error: "El repartidor aún no conectó su cuenta" };
+  }
+
   if (p.weekly_bonus_id) {
     const { data: bonus } = await db.from("delivery_weekly_bonuses").select("status").eq("id",p.weekly_bonus_id).maybeSingle();
     if (bonus?.status !== "approved") return { ok:false,error:"El bono semanal no está aprobado" };
-    if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled || (drv.stripe_environment!=="sandbox"&&drv.stripe_environment!=="live")) return { ok:false,skipped:true,error:"El repartidor aún no conectó su cuenta" };
+    if (drv.stripe_environment!=="sandbox"&&drv.stripe_environment!=="live") return { ok:false,error:"La cuenta no tiene ambiente Stripe verificado" };
     const cents=Math.round(money(p.amount_usd)*100);
     try {
       const tr=await stripePost<any>("/v1/transfers",{amount:cents,currency:"usd",destination:drv.stripe_account_id,metadata:{driver_payout_id:p.id,weekly_bonus_id:p.weekly_bonus_id}},drv.stripe_environment,{"Idempotency-Key":`weekly-bonus-${p.weekly_bonus_id}`});
@@ -158,15 +168,6 @@ export async function transferDriverPayout(
       await db.from("driver_payouts").update({status:"fallido",last_error:msg.slice(0,500)}).eq("id",p.id);
       return {ok:false,error:msg};
     }
-  }
-
-  const { data: drv } = await db
-    .from("drivers")
-    .select("stripe_account_id, stripe_payouts_enabled, stripe_environment")
-    .eq("id", p.driver_id)
-    .maybeSingle();
-  if (!drv?.stripe_account_id || !drv.stripe_payouts_enabled) {
-    return { ok: false, skipped: true, error: "El repartidor aún no conectó su cuenta" };
   }
 
   const cents = Math.round(money(p.amount_usd) * 100);
