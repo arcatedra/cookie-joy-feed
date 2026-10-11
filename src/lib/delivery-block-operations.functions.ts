@@ -89,7 +89,7 @@ export const getMyActiveDeliveryBlock = createServerFn({ method: "GET" }).middle
   if (error) throw new Error(error.message);
   if (!block) return null;
   const { data: stops } = await db.from("delivery_block_stops")
-    .select("id,store_order_id,sequence_number,size_label,heavy_items,has_cold_items,requires_safe_return,door_service,window_start,window_end,estimated_minutes,status,departed_at,eta,arrived_at,wait_started_at,delivered_at,delivery_photo_url,store_orders!inner(numero_pedido,direccion_envio,business_id,businesses(business_name,address,city))")
+    .select("id,store_order_id,cookie_order_id,address_key,sequence_number,size_label,heavy_items,has_cold_items,requires_safe_return,door_service,window_start,window_end,estimated_minutes,status,departed_at,eta,arrived_at,wait_started_at,delivered_at,delivery_photo_url,store_orders(numero_pedido,direccion_envio,business_id,businesses(business_name,address,city)),pedidos(numero_pedido,direccion_envio)")
     .eq("block_id",block.id).order("sequence_number");
   return { block, stops:stops ?? [] };
 });
@@ -100,12 +100,13 @@ export const startDeliveryBlock = createServerFn({ method: "POST" }).middleware(
     const now = new Date();
     const { data: block, error } = await db.from("delivery_blocks").update({ status:"active",started_at:now.toISOString() }).eq("id",data.blockId).eq("assigned_driver_id",context.userId).eq("status","assigned").select("id").maybeSingle();
     if (error || !block) throw new Error(error?.message ?? "El lote no está listo para comenzar");
-    const { data: stops } = await db.from("delivery_block_stops").select("id,store_order_id,estimated_minutes,store_orders!inner(cliente_id)").eq("block_id",data.blockId).order("sequence_number");
+    const { data: stops } = await db.from("delivery_block_stops").select("id,store_order_id,cookie_order_id,estimated_minutes,store_orders(cliente_id),pedidos(cliente_id)").eq("block_id",data.blockId).order("sequence_number");
     let cursor = now.getTime();
     for (const stop of stops ?? []) {
       const eta = new Date(cursor).toISOString();
       await db.from("delivery_block_stops").update({ departed_at:now.toISOString(),eta,status:"en_route",departure_message_sent_at:now.toISOString() }).eq("id",stop.id);
-      await sendCustomerPush(stop.store_orders.cliente_id,"Tu pedido salió. Ya puedes ver la hora estimada de llegada.",stop.store_order_id);
+      const clienteId = stop.store_orders?.cliente_id ?? stop.pedidos?.cliente_id;
+      if (clienteId) await sendCustomerPush(clienteId,"Tu pedido salió. Ya puedes ver la hora estimada de llegada.",stop.store_order_id ?? stop.cookie_order_id);
       cursor += Number(stop.estimated_minutes || 15) * 60_000;
     }
     await db.from("delivery_block_events").insert({ block_id:data.blockId,actor_id:context.userId,event_type:"departed",details:{ started_at:now.toISOString() } });
@@ -116,7 +117,7 @@ export const updateDeliveryBlockStop = createServerFn({ method: "POST" }).middle
   .inputValidator((raw: unknown) => z.object({ stopId:uuid,action:z.enum(["arrived","waiting","delivered","returned"]),photoPath:z.string().max(400).optional(),note:z.string().trim().max(500).optional() }).parse(raw))
   .handler(async ({ context, data }) => {
     const db = await adminDb();
-    const { data: stop } = await db.from("delivery_block_stops").select("id,block_id,store_order_id,status,requires_safe_return,delivery_blocks!inner(assigned_driver_id,status)").eq("id",data.stopId).maybeSingle();
+    const { data: stop } = await db.from("delivery_block_stops").select("id,block_id,store_order_id,cookie_order_id,status,requires_safe_return,delivery_blocks!inner(assigned_driver_id,status)").eq("id",data.stopId).maybeSingle();
     if (!stop || stop.delivery_blocks.assigned_driver_id !== context.userId) throw new Error("Esta parada no está asignada a ti");
     const now = new Date().toISOString();
     if (data.action === "arrived") await db.from("delivery_block_stops").update({ status:"arrived",arrived_at:now }).eq("id",data.stopId);
@@ -125,9 +126,15 @@ export const updateDeliveryBlockStop = createServerFn({ method: "POST" }).middle
     if (data.action === "delivered") {
       if (!data.photoPath || !data.photoPath.startsWith(`${context.userId}/`)) throw new Error("La foto de entrega es obligatoria");
       await db.from("delivery_block_stops").update({ status:"delivered",delivered_at:now,delivery_photo_url:data.photoPath,delivery_note:data.note ?? null }).eq("id",data.stopId);
-      await db.from("store_orders").update({ estado:"entregado",estado_entrega:"entregado",entregado_en:now,foto_entrega_url:data.photoPath }).eq("id",stop.store_order_id);
       const { notifyTipPrompt } = await import("./post-delivery-tips.server");
-      await notifyTipPrompt("store", stop.store_order_id);
+      if (stop.store_order_id) {
+        await db.from("store_orders").update({ estado:"entregado",estado_entrega:"entregado",entregado_en:now,foto_entrega_url:data.photoPath }).eq("id",stop.store_order_id);
+        await notifyTipPrompt("store", stop.store_order_id);
+      } else if (stop.cookie_order_id) {
+        // Cookie tip is paid inside the block payout, never through route_stops triggers.
+        await db.from("pedidos").update({ estado:"entregado" }).eq("id",stop.cookie_order_id);
+        await notifyTipPrompt("cookie", stop.cookie_order_id);
+      }
     }
     await db.from("delivery_block_events").insert({ block_id:stop.block_id,stop_id:stop.id,actor_id:context.userId,event_type:data.action,details:{ note:data.note ?? null } });
     const { count } = await db.from("delivery_block_stops").select("id",{count:"exact",head:true}).eq("block_id",stop.block_id).not("status","in","(delivered,returned)");
