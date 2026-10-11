@@ -9,7 +9,7 @@ import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, discountPct } from "@/lib/house-sto
 import { StoreCartBar, storeCartKey } from "./tienda.$slug";
 import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
 import { Button } from "@/components/ui/button";
-import { HOUSE_PRODUCE_SUBCATEGORIES, productDescription } from "@/lib/house-store-rules";
+import { houseSubcategories, productDescription } from "@/lib/house-store-rules";
 
 export const Route = createFileRoute("/supermercado")({
   loader: async () => {
@@ -119,9 +119,9 @@ function SupermarketPage() {
            </Button>
         ))}
       </nav>
-      {cat === "Frutas y verduras" && <nav aria-label={L("Subcategorías", "Subcategories")} className="flex flex-wrap gap-2 border-b border-border px-4 py-2">
+      {houseSubcategories(cat).length > 0 && <nav aria-label={L("Subcategorías", "Subcategories")} className="flex flex-wrap gap-2 border-b border-border px-4 py-2">
         <Button variant="ghost" onClick={() => setSubcat(null)} className={chip(!subcat)}>{L("Todo", "All")}</Button>
-        {HOUSE_PRODUCE_SUBCATEGORIES.map((c) => <Button variant="ghost" key={c.es} onClick={() => setSubcat(c.es)} className={chip(subcat === c.es)}>{en ? c.en : c.es}</Button>)}
+        {houseSubcategories(cat).map((c) => <Button variant="ghost" key={c.es} onClick={() => setSubcat(c.es)} className={chip(subcat === c.es)}>{en ? c.en : c.es}</Button>)}
       </nav>}
 
       {results ? (
@@ -138,8 +138,8 @@ function SupermarketPage() {
           {!cat && offers.length > 0 && <Row title={L("Ofertas", "Deals")}>{offers.map(card)}</Row>}
           {!cat && bestList.length > 0 && <Row title={L("Más vendidos", "Best sellers")}>{bestList.map(card)}</Row>}
           {rows.map((r) => (
-             r.es === "Frutas y verduras" && cat === r.es ? <section key={r.es} className="px-4 pt-5">
-               <h2 className="mb-3 text-lg font-bold">{subcat ? L(subcat, subcat === "Frutas" ? "Fruit" : "Vegetables") : L(r.es, r.en)}</h2>
+             houseSubcategories(r.es).length > 0 && cat === r.es ? <section key={r.es} className="px-4 pt-5">
+               <h2 className="mb-3 text-lg font-bold">{subcat ? L(subcat, houseSubcategories(r.es).find((c) => c.es === subcat)?.en ?? subcat) : L(r.es, r.en)}</h2>
                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{r.items.map(card)}</div>
              </section> : <Row key={r.es} title={en ? r.en : r.es} refCb={(el) => (sectionRefs.current[r.es] = el)}>{r.items.map(card)}</Row>
           ))}
