@@ -1,4 +1,5 @@
-/** Sin mínimo de compra: cada pedido de galletas paga una "Entrega y servicio" fija. */
+/** Pedido mínimo $12 en productos; además cada pedido paga una "Entrega y servicio" fija. */
+export const COOKIE_MIN_SUBTOTAL_CENTS = 1200;
 export const DEFAULT_COOKIE_DELIVERY_CENTS = 1200;
 
 export function cookieDeliveryFeeCents(settings?: { cookieDeliveryFeeUsd?: number } | null): number {
@@ -9,6 +10,7 @@ export function cookieDeliveryFeeCents(settings?: { cookieDeliveryFeeUsd?: numbe
 
 export function assertCookieSubtotal(subtotalCents: number) {
   if (!Number.isInteger(subtotalCents) || subtotalCents <= 0) throw new Error("Tu carrito está vacío.");
+  if (subtotalCents < COOKIE_MIN_SUBTOTAL_CENTS) throw new Error(`Pedido mínimo $12 — te faltan $${((COOKIE_MIN_SUBTOTAL_CENTS - subtotalCents) / 100).toFixed(2)}`);
 }
 
 /** Propina extra después de la entrega: entre $1 y $100, hasta 24 horas después. */

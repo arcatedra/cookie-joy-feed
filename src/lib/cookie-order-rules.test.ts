@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { assertCookieSubtotal, assertPostTipAllowed, cookieDeliveryFeeCents, stopCompensation, vehicleOrderLimit } from "./cookie-order-rules";
 describe("reglas de apertura sin pagos reales", () => {
-  it("no hay mínimo: 1 galleta paga subtotal + entrega fija de $12", () => {
-    expect(() => assertCookieSubtotal(350)).not.toThrow();
+  it("mínimo $12 en productos + entrega fija de $12", () => {
+    expect(() => assertCookieSubtotal(350)).toThrow("te faltan $8.50");
+    expect(() => assertCookieSubtotal(1199)).toThrow();
+    expect(() => assertCookieSubtotal(1200)).not.toThrow();
+    expect(1500 + cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: 12 })).toBe(2700);
     expect(() => assertCookieSubtotal(0)).toThrow();
     expect(() => assertCookieSubtotal(NaN)).toThrow();
     expect(cookieDeliveryFeeCents({ cookieDeliveryFeeUsd: 12 })).toBe(1200);
