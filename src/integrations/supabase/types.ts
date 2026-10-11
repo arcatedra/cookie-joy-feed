@@ -2670,6 +2670,7 @@ export type Database = {
           codigo_barras: string | null
           created_at: string
           descripcion: string | null
+          descripcion_en: string | null
           disponible: boolean
           foto_credito: string | null
           foto_fondo_editado: boolean
@@ -2688,6 +2689,7 @@ export type Database = {
           precio_anterior: number | null
           requires_safe_return: boolean
           stock: number | null
+          subcategoria: string | null
           tamano: string | null
           unidad: string
           updated_at: string
@@ -2699,6 +2701,7 @@ export type Database = {
           codigo_barras?: string | null
           created_at?: string
           descripcion?: string | null
+          descripcion_en?: string | null
           disponible?: boolean
           foto_credito?: string | null
           foto_fondo_editado?: boolean
@@ -2717,6 +2720,7 @@ export type Database = {
           precio_anterior?: number | null
           requires_safe_return?: boolean
           stock?: number | null
+          subcategoria?: string | null
           tamano?: string | null
           unidad?: string
           updated_at?: string
@@ -2728,6 +2732,7 @@ export type Database = {
           codigo_barras?: string | null
           created_at?: string
           descripcion?: string | null
+          descripcion_en?: string | null
           disponible?: boolean
           foto_credito?: string | null
           foto_fondo_editado?: boolean
@@ -2746,6 +2751,7 @@ export type Database = {
           precio_anterior?: number | null
           requires_safe_return?: boolean
           stock?: number | null
+          subcategoria?: string | null
           tamano?: string | null
           unidad?: string
           updated_at?: string
