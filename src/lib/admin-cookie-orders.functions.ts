@@ -45,9 +45,19 @@ async function notifyCustomer(db: any, clienteId: string, orderId: string, estad
   } catch (e) { console.error("[admin-galletas] aviso falló", orderId, e); }
 }
 
+export type CookieAdminOrder = {
+  id: string; numero: string; creadoEn: string; estado: string; monto_capturado: number | null; capturadoEn: string | null;
+  cliente: { nombre: string; telefono: string; email: string };
+  direccion: Record<string, string | null>;
+  entrega: string;
+  items: { nombre: string; cantidad: number }[];
+  subtotal: number; envio: number; propina: number; total: number;
+  historial: { de: string | null; a: string; nota: string | null; en: string; por: string }[];
+};
+
 export const adminListCookieOrders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .handler(async ({ context }): Promise<{ pedidos: CookieAdminOrder[] }> => {
     await assertAdmin((context as any).supabase, (context as any).userId);
     const db = await admin();
     const { data: orders, error } = await db.from("pedidos")
@@ -78,7 +88,7 @@ export const adminListCookieOrders = createServerFn({ method: "GET" })
           items: (items ?? []).filter((i: any) => i.pedido_id === o.id).map((i: any) => ({ nombre: i.nombre_producto, cantidad: i.cantidad })),
           subtotal: Number(o.subtotal ?? 0), envio: Number(o.costo_envio ?? 0), propina: Number(o.propina ?? 0), total: Number(o.total ?? 0),
           historial: (events ?? []).filter((e: any) => e.pedido_id === o.id).map((e: any) => ({
-            de: e.from_estado, a: e.to_estado, nota: e.nota, en: e.created_at, por: actorName.get(e.actor_id) ?? "Admin",
+            de: e.from_estado, a: e.to_estado, nota: e.nota, en: e.created_at, por: String(actorName.get(e.actor_id) ?? "Admin"),
           })),
         };
       }),
