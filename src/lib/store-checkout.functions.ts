@@ -57,6 +57,8 @@ const schema = z.object({
   doorService: z.enum(["lobby", "elevator", "stairs"]).optional().default("lobby"),
   /** Usar el saldo disponible del cliente. */
   usarSaldo: z.boolean().optional().default(true),
+  /** Qué hacer si falta un producto. */
+  reemplazo: z.enum(["similar", "no_reemplazar", "llamar"]).optional().default("similar"),
   locale: z.enum(["es", "en"]).default("es"),
 });
 
@@ -197,6 +199,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         envio_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).baseCents / 100,
         envio_empresa: blockEnabled ? shippingCents / 100 : tier.companyCents / 100,
         propina: tipCents / 100,
+        reemplazo: data.reemplazo,
         cargo_peso: weightCents / 100,
         cargo_peso_repartidor: blockEnabled ? 0 : stopCompensation(totalLb).driverWeightCents / 100,
         peso_total_lb: totalLb,

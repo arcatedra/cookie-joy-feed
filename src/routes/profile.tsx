@@ -301,6 +301,7 @@ function AdminStoreMenu({ userId }: { userId: string }) {
   const items = [
     { to: "/admin/pedidos-tienda", label: "Pedidos de tienda", count: data.pedidos },
     { to: "/admin/pedidos-galletas", label: "Pedidos de galletas", count: 0 },
+    { to: "/admin/productos", label: "Productos del supermercado", count: 0 },
     { to: "/admin/bloques", label: "Bloques reservables", count: 0 },
     { to: "/admin/transferencias", label: "Transferencias", count: data.transferencias },
     { to: "/admin/precios", label: "Precios y zonas", count: 0 },
