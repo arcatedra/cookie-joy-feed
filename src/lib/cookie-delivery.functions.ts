@@ -12,5 +12,7 @@ export const transferDeliveredCookieTip = createServerFn({ method: "POST" })
     if (error || !stop || stop.status !== "entregado") throw new Error("La entrega no está confirmada para este repartidor.");
     const { flushCookieOrderTip } = await import("./driver-payouts.server");
     await flushCookieOrderTip(stop.order_id);
+    const { notifyTipPrompt } = await import("./post-delivery-tips.server");
+    await notifyTipPrompt("cookie", stop.order_id);
     return { ok: true };
   });
