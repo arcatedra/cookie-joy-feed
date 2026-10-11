@@ -395,8 +395,205 @@ export type Database = {
           },
         ]
       }
+      delivery_block_messages: {
+        Row: {
+          block_id: string
+          body: string
+          created_at: string
+          id: string
+          message_key: string | null
+          read_at: string | null
+          sender_id: string
+          sender_role: string
+          stop_id: string | null
+          store_order_id: string
+        }
+        Insert: {
+          block_id: string
+          body: string
+          created_at?: string
+          id?: string
+          message_key?: string | null
+          read_at?: string | null
+          sender_id: string
+          sender_role: string
+          stop_id?: string | null
+          store_order_id: string
+        }
+        Update: {
+          block_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          message_key?: string | null
+          read_at?: string | null
+          sender_id?: string
+          sender_role?: string
+          stop_id?: string | null
+          store_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_messages_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_messages_stop_id_fkey"
+            columns: ["stop_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_block_stops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_messages_store_order_id_fkey"
+            columns: ["store_order_id"]
+            isOneToOne: false
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_block_payout_parts: {
+        Row: {
+          amount_usd: number
+          block_id: string
+          component: string
+          created_at: string
+          id: string
+          last_error: string | null
+          operation_key: string
+          paid_at: string | null
+          payout_id: string
+          status: string
+          store_order_id: string | null
+          transfer_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_usd: number
+          block_id: string
+          component: string
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          operation_key: string
+          paid_at?: string | null
+          payout_id: string
+          status?: string
+          store_order_id?: string | null
+          transfer_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_usd?: number
+          block_id?: string
+          component?: string
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          operation_key?: string
+          paid_at?: string | null
+          payout_id?: string
+          status?: string
+          store_order_id?: string | null
+          transfer_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_payout_parts_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_payout_parts_payout_id_fkey"
+            columns: ["payout_id"]
+            isOneToOne: false
+            referencedRelation: "driver_payouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_payout_parts_store_order_id_fkey"
+            columns: ["store_order_id"]
+            isOneToOne: false
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_block_ratings: {
+        Row: {
+          block_id: string
+          comment: string | null
+          created_at: string
+          customer_id: string
+          driver_id: string
+          id: string
+          stars: number
+          stop_id: string
+          store_order_id: string
+        }
+        Insert: {
+          block_id: string
+          comment?: string | null
+          created_at?: string
+          customer_id: string
+          driver_id: string
+          id?: string
+          stars: number
+          stop_id: string
+          store_order_id: string
+        }
+        Update: {
+          block_id?: string
+          comment?: string | null
+          created_at?: string
+          customer_id?: string
+          driver_id?: string
+          id?: string
+          stars?: number
+          stop_id?: string
+          store_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_block_ratings_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_ratings_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_ratings_stop_id_fkey"
+            columns: ["stop_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_block_stops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_block_ratings_store_order_id_fkey"
+            columns: ["store_order_id"]
+            isOneToOne: true
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_block_reservations: {
         Row: {
+          auto_assign_due_at: string | null
           block_id: string
           cancel_reason: string | null
           cancelled_at: string | null
@@ -410,6 +607,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          auto_assign_due_at?: string | null
           block_id: string
           cancel_reason?: string | null
           cancelled_at?: string | null
@@ -423,6 +621,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          auto_assign_due_at?: string | null
           block_id?: string
           cancel_reason?: string | null
           cancelled_at?: string | null
@@ -581,8 +780,10 @@ export type Database = {
           block_id: string
           created_at: string
           delivered_at: string | null
+          delivery_note: string | null
           delivery_photo_url: string | null
           departed_at: string | null
+          departure_message_sent_at: string | null
           door_service: string
           door_service_fee: number
           estimated_minutes: number
@@ -608,8 +809,10 @@ export type Database = {
           block_id: string
           created_at?: string
           delivered_at?: string | null
+          delivery_note?: string | null
           delivery_photo_url?: string | null
           departed_at?: string | null
+          departure_message_sent_at?: string | null
           door_service?: string
           door_service_fee?: number
           estimated_minutes?: number
@@ -635,8 +838,10 @@ export type Database = {
           block_id?: string
           created_at?: string
           delivered_at?: string | null
+          delivery_note?: string | null
           delivery_photo_url?: string | null
           departed_at?: string | null
+          departure_message_sent_at?: string | null
           door_service?: string
           door_service_fee?: number
           estimated_minutes?: number
@@ -732,6 +937,7 @@ export type Database = {
         Row: {
           accepted_at: string | null
           accepted_pay: number | null
+          actual_minutes: number | null
           assigned_at: string | null
           assigned_driver_id: string | null
           base_pay: number
@@ -748,9 +954,12 @@ export type Database = {
           is_open: boolean
           manual_increase: number
           order_funding: number
+          payout_id: string | null
+          payout_status: string
           pricing_model: string
           published_at: string | null
           requires_thermal_bag: boolean
+          started_at: string | null
           starts_at: string
           status: string
           tips_total: number
@@ -762,6 +971,7 @@ export type Database = {
         Insert: {
           accepted_at?: string | null
           accepted_pay?: number | null
+          actual_minutes?: number | null
           assigned_at?: string | null
           assigned_driver_id?: string | null
           base_pay?: number
@@ -778,9 +988,12 @@ export type Database = {
           is_open?: boolean
           manual_increase?: number
           order_funding?: number
+          payout_id?: string | null
+          payout_status?: string
           pricing_model?: string
           published_at?: string | null
           requires_thermal_bag?: boolean
+          started_at?: string | null
           starts_at: string
           status?: string
           tips_total?: number
@@ -792,6 +1005,7 @@ export type Database = {
         Update: {
           accepted_at?: string | null
           accepted_pay?: number | null
+          actual_minutes?: number | null
           assigned_at?: string | null
           assigned_driver_id?: string | null
           base_pay?: number
@@ -808,9 +1022,12 @@ export type Database = {
           is_open?: boolean
           manual_increase?: number
           order_funding?: number
+          payout_id?: string | null
+          payout_status?: string
           pricing_model?: string
           published_at?: string | null
           requires_thermal_bag?: boolean
+          started_at?: string | null
           starts_at?: string
           status?: string
           tips_total?: number
@@ -845,6 +1062,8 @@ export type Database = {
           photo_url: string | null
           reason: string
           refund_amount: number | null
+          refund_id: string | null
+          refunded_at: string | null
           resolution: string | null
           resolved_at: string | null
           resolved_by: string | null
@@ -861,6 +1080,8 @@ export type Database = {
           photo_url?: string | null
           reason: string
           refund_amount?: number | null
+          refund_id?: string | null
+          refunded_at?: string | null
           resolution?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
@@ -877,6 +1098,8 @@ export type Database = {
           photo_url?: string | null
           reason?: string
           refund_amount?: number | null
+          refund_id?: string | null
+          refunded_at?: string | null
           resolution?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
@@ -1092,6 +1315,7 @@ export type Database = {
       driver_payouts: {
         Row: {
           amount_usd: number
+          block_id: string | null
           cookie_order_id: string | null
           created_at: string
           driver_id: string
@@ -1104,10 +1328,12 @@ export type Database = {
           tip_amount_usd: number
           transfer_id: string | null
           updated_at: string
+          weekly_bonus_id: string | null
           weight_amount_usd: number
         }
         Insert: {
           amount_usd?: number
+          block_id?: string | null
           cookie_order_id?: string | null
           created_at?: string
           driver_id: string
@@ -1120,10 +1346,12 @@ export type Database = {
           tip_amount_usd?: number
           transfer_id?: string | null
           updated_at?: string
+          weekly_bonus_id?: string | null
           weight_amount_usd?: number
         }
         Update: {
           amount_usd?: number
+          block_id?: string | null
           cookie_order_id?: string | null
           created_at?: string
           driver_id?: string
@@ -1136,9 +1364,17 @@ export type Database = {
           tip_amount_usd?: number
           transfer_id?: string | null
           updated_at?: string
+          weekly_bonus_id?: string | null
           weight_amount_usd?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "driver_payouts_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_blocks"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "driver_payouts_cookie_order_id_fkey"
             columns: ["cookie_order_id"]
@@ -1158,6 +1394,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: true
             referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "driver_payouts_weekly_bonus_id_fkey"
+            columns: ["weekly_bonus_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_weekly_bonuses"
             referencedColumns: ["id"]
           },
         ]
@@ -2715,6 +2958,10 @@ export type Database = {
         Returns: string
       }
       apply_substitution_timeouts: { Args: never; Returns: number }
+      assign_delivery_block: {
+        Args: { p_actor: string; p_block: string; p_driver: string }
+        Returns: boolean
+      }
       auth_buffer_settings: {
         Args: never
         Returns: {
@@ -2823,6 +3070,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      mark_delivery_block_present: {
+        Args: { p_driver: string; p_reservation: string }
+        Returns: string
       }
       minutes_per_stop: { Args: never; Returns: number }
       my_available_delivery_blocks: {
