@@ -126,6 +126,8 @@ export const updateDeliveryBlockStop = createServerFn({ method: "POST" }).middle
       if (!data.photoPath || !data.photoPath.startsWith(`${context.userId}/`)) throw new Error("La foto de entrega es obligatoria");
       await db.from("delivery_block_stops").update({ status:"delivered",delivered_at:now,delivery_photo_url:data.photoPath,delivery_note:data.note ?? null }).eq("id",data.stopId);
       await db.from("store_orders").update({ estado:"entregado",estado_entrega:"entregado",entregado_en:now,foto_entrega_url:data.photoPath }).eq("id",stop.store_order_id);
+      const { notifyTipPrompt } = await import("./post-delivery-tips.server");
+      await notifyTipPrompt("store", stop.store_order_id);
     }
     await db.from("delivery_block_events").insert({ block_id:stop.block_id,stop_id:stop.id,actor_id:context.userId,event_type:data.action,details:{ note:data.note ?? null } });
     const { count } = await db.from("delivery_block_stops").select("id",{count:"exact",head:true}).eq("block_id",stop.block_id).not("status","in","(delivered,returned)");
