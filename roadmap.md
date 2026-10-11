@@ -69,6 +69,8 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Incorporar parte 2B: 32 verduras con precios/pesos indicados, fotos propias y descripción ES/EN; recuperar parte 2A y presentar plan ampliado antes de cambios que requieran aprobación.
+- [ ] Al terminar frutas y verduras, verificar totales reales y comunicar cuáles quedaron sin foto.
 - [ ] Aprobar el plan para 43 frutas nuevas, fotos propias, descripciones ES/EN y subcategorías Frutas/Verduras.
 - [ ] Añadir y verificar catálogo de frutas sin duplicados; conservar productos existentes y no tocar pagos/clientes ni publicar.
 - [ ] Aprobar plan de fondos blancos con originales conservados y 13 productos nuevos de Lácteos y huevos / Carnes y mariscos.
