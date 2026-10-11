@@ -7,6 +7,7 @@ import { getPublicStore } from "@/lib/store-public.functions";
 import { getHouseBestSellers } from "@/lib/house-store.functions";
 import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, discountPct } from "@/lib/house-store-rules";
 import { StoreCartBar, storeCartKey } from "./tienda.$slug";
+import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
 
 export const Route = createFileRoute("/supermercado")({
   loader: async () => {
@@ -142,6 +143,10 @@ function SupermarketPage() {
         </>
       )}
 
+      <footer className="px-4 pt-8 text-xs text-muted-foreground">
+        <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Foto: Open Food Facts</a>
+        {" ("}<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-SA</a>{")"}
+      </footer>
       <StoreCartBar businessId={store.id} products={products} cart={cart} onClear={() => setCart({})} />
     </main>
   );
@@ -170,7 +175,7 @@ function ProductCard({ p, name, qty, onAdd, L }: { p: P; name: string; qty: numb
     <article className="flex flex-col rounded-2xl border border-border bg-card p-2 shadow-sm">
       <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
         {p.imagenUrl ? (
-          <img src={p.imagenUrl} alt={name} loading="lazy" width={300} height={300} className="h-full w-full object-cover" />
+          <img src={p.imagenUrl} alt={name} loading="lazy" width={300} height={300} className={`h-full w-full ${p.foto_credito ? "object-contain" : "object-cover"}`} />
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground"><ShoppingBasket className="h-8 w-8" /></div>
         )}
@@ -200,6 +205,7 @@ function ProductCard({ p, name, qty, onAdd, L }: { p: P; name: string; qty: numb
       </div>
       <p className="line-clamp-2 text-sm font-medium leading-tight">{name}</p>
       {p.tamano && <p className="text-xs text-muted-foreground">{p.tamano}</p>}
+      <ProductPhotoCredit product={p} />
       {perLb && (
         <p className="mt-1 text-[11px] leading-tight text-muted-foreground">
           {L(

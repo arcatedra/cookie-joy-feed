@@ -30,6 +30,7 @@ import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
 import { unitPriceCents } from "@/lib/house-store-rules";
 import { TipSelector } from "@/components/TipSelector";
 import { spendableOrderCreditCents } from "@/lib/referral-credit";
+import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
@@ -196,7 +197,7 @@ function StorePage() {
                           src={p.imagenUrl}
                           alt={p.nombre}
                           loading="lazy"
-                          className="h-28 w-full rounded-lg object-cover"
+                          className={`h-28 w-full rounded-lg ${p.foto_credito ? "object-contain" : "object-cover"}`}
                         />
                       ) : (
                         <div className="h-28 w-full rounded-lg bg-muted" />
@@ -208,6 +209,7 @@ function StorePage() {
                       )}
                     </div>
                     <div className="mt-2 line-clamp-2 text-sm font-semibold">{p.nombre}</div>
+                    <ProductPhotoCredit product={p} />
                     <div className="text-xs text-muted-foreground">
                       ${Number(p.precio).toFixed(2)} / {p.unidad}
                     </div>

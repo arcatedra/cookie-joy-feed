@@ -20,6 +20,10 @@ export const Route = createFileRoute("/_authenticated/admin/productos")({
     meta: [
       { title: "Productos del supermercado — Admin Hazorex" },
       { name: "description", content: "Agrega y edita los productos del supermercado de Hazorex." },
+      { property: "og:title", content: "Productos del supermercado — Admin Hazorex" },
+      { property: "og:description", content: "Administración del catálogo del supermercado Hazorex." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -98,6 +102,8 @@ function AdminProductsPage() {
                     <div>
                       <p className="font-medium">{p.nombre}</p>
                       <p className="text-xs text-muted-foreground">{p.tamano}{p.vendido_por_lb ? " · por libra" : ""}</p>
+                      {p.codigo_barras && <p className="text-xs text-muted-foreground">Código: {p.codigo_barras}</p>}
+                      {p.foto_credito && <p className="text-xs text-muted-foreground">{p.foto_credito} ({p.foto_licencia})</p>}
                     </div>
                   </div>
                 </td>
@@ -118,6 +124,7 @@ function AdminProductsPage() {
                     precio: Number(p.precio), precio_anterior: p.precio_anterior == null ? null : Number(p.precio_anterior),
                     tamano: p.tamano ?? "", peso_lb: Number(p.peso_lb ?? 0), vendido_por_lb: !!p.vendido_por_lb,
                     disponible: p.disponible !== false, stock: p.stock ?? null, super: p.super, direccion: p.direccion, imagen_url: null,
+                    codigo_barras: p.codigo_barras ?? null,
                   })}>Editar</Button>
                 </td>
               </tr>
@@ -181,6 +188,7 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
         ...f, precio: Number(f.precio), peso_lb: Number(f.peso_lb),
         precio_anterior: f.precio_anterior === "" || f.precio_anterior == null ? null : Number(f.precio_anterior),
         stock: f.stock === "" || f.stock == null ? null : Number(f.stock),
+        codigo_barras: f.codigo_barras?.trim() || null,
       } });
       await qc.invalidateQueries({ queryKey: ["admin-house-products"] });
       toast.success("Producto guardado");
@@ -217,6 +225,7 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
           {input("precio", f.vendido_por_lb ? "Precio por libra ($)" : "Precio ($)", { inputMode: "decimal" })}
           {input("precio_anterior", "Precio anterior / oferta ($, opcional)", { inputMode: "decimal" })}
           {input("tamano", "Tamaño (ej. 16 oz)")}
+          {input("codigo_barras", "Código de barras (opcional)", { inputMode: "numeric" })}
           {input("peso_lb", f.vendido_por_lb ? "Peso aproximado por porción (lb) *" : "Peso (lb) *", { inputMode: "decimal" })}
           <label className="block text-sm">
             <span className="mb-1 block text-xs text-muted-foreground">Se vende</span>
@@ -248,8 +257,8 @@ function BulkDialog({ onClose }: { onClose: () => void }) {
     const XLSX = await import("xlsx");
     const ws = XLSX.utils.aoa_to_sheet([
       [...TEMPLATE_HEADERS],
-      ["Aguacate Hass grande", "Large Hass avocado", "Frutas y verduras", 1.05, "", "1 unidad", 0.5, "no", "si", "", "Food Bazaar", ""],
-      ["Guineos / plátanos", "Bananas", "Frutas y verduras", 0.83, "", "aprox. 2 lb", 2, "si", "si", "", "Food Bazaar", ""],
+      ["Aguacate Hass grande", "Large Hass avocado", "Frutas y verduras", 3.14, "", "1 unidad", 0.5, "no", "si", "", "Food Bazaar", ""],
+      ["Guineos / plátanos", "Bananas", "Frutas y verduras", 2.40, "", "aprox. 2 lb", 2, "si", "si", "", "Food Bazaar", ""],
     ]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Productos");
