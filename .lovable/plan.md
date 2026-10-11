@@ -1,92 +1,51 @@
-# Continuación: bloques reservables de Hazorex
+# Entrega fija de $12 para galletas y propina después de la entrega
 
-## Correcciones terminadas
-- “Magia de canela y azúcar” añade **Canela y azúcar**, no Snicker, al carrito.
-- Cookies & Cream, Nutella y el reel de pistacho con chocolate blanco quedan ocultos porque no tienen una coincidencia exacta de sabor en el catálogo. No se borraron registros.
-- Más Vendidas usa los mismos productos y nombres de la tienda, ordenados por ventas reales o por un orden fijo si no hay ventas.
-- Confianza y las traducciones ya no anuncian suscripciones comerciales; se conserva la baja de correos.
-- El envío del carrito muestra la promesa de entrega una sola vez.
-- Comprobaciones de portada, Confianza, carrito y compra local desde el reel de canela sin errores; 19 pruebas aisladas pasaron. No hubo cobros, publicaciones ni cambios en usuarios/clientes.
+## 1. Galletas: "Entrega y servicio" fija de $12
+- Se quita "Envío gratis". Todo pedido de galletas paga **Entrega y servicio: $12** como una línea aparte en el carrito y en la pantalla de pago de Stripe.
+- Se quita el mínimo de $12 del subtotal: se puede comprar desde 1 galleta.
+- El servidor calcula los $12 por su cuenta (no confía en el navegador) y los manda a Stripe. Si el monto que llega no cuadra, el pedido no se crea.
+- En el admin (pantalla de precios) se agrega:
+  - "Entrega y servicio de galletas" = $12 (editable).
+  - "Cargo extra por distancia" (casilla **apagada** + monto por milla). Por ahora solo se guarda y no se cobra.
+- Textos actualizados en español e inglés: carrito, Términos y Preguntas frecuentes ("¿Cuál es el pedido mínimo?" → "No hay mínimo de compra; la entrega cuesta $12").
+- El saldo de referidos sigue pudiendo usarse como descuento, igual que hoy.
 
-## Alcance de la aprobación
-Continuar el modelo de bloques solicitado. Las reglas de cálculo están preparadas y probadas, pero **no están conectadas a los cobros actuales**. Mantener el modelo nuevo inactivo hasta completar sus controles y pruebas.
+## 2. Propina estilo Instacart/Uber (galletas y tiendas)
+**En el checkout:** igual que hoy: Sin propina / $2 / $3 / $5 / Otra, y el 100% es para el repartidor. Se agrega en la pantalla de pago de Stripe la opción de **guardar la tarjeta** para una propina posterior, con el aviso de consentimiento de Stripe.
 
-No publicar, borrar datos/tablas ni modificar usuarios o clientes. Conservar importes y comportamiento de pedidos históricos. No efectuar cobros ni transferencias reales durante las pruebas.
+**Después de entregar:**
+- Cuando el repartidor sube la foto o marca "entregado", el cliente recibe un aviso (notificación y campana).
+- En su pedido verá: "¡Tu pedido llegó! ¿Quieres dejar o subir la propina a tu repartidor?" con $2 / $3 / $5 / Otra / "No, gracias".
+- Solo aparece durante las 24 horas siguientes a la entrega. Después se oculta, y el servidor también lo rechaza.
+- **Cobro:**
+  - Si el cliente guardó la tarjeta, se cobra con ella después de que confirma en un solo toque.
+  - Si no la guardó, o si el banco pide verificación, se abre una ventanita de pago de Stripe solo por la propina.
+- El dinero va **100% al repartidor**, con transferencia directa a su cuenta de cobro. Tiene protección contra cobros o pagos dobles: cada propina lleva una clave única.
+- Queda registrada en el pedido (propina inicial + propinas extra) y en el reporte de propinas (semanal y del admin).
+- Límite por propina extra: entre $1 y $100.
 
-## 1. Cargo al cliente
-Reemplazar los cargos anteriores del marketplace por **Entrega y servicio**, con todos los importes editables en administración:
+## Lo que no se toca
+- La tabla de usuarios y clientes.
+- Los pagos de pedidos anteriores.
+- El modelo de lotes, que sigue apagado.
 
-| Peso | Cargo |
-|---|---:|
-| Hasta 15 lb | $12 |
-| Más de 15–30 lb | $25 |
-| Más de 30–45 lb | $35 |
-| Más de 45–80 lb | $35 + $0.70 por libra sobre 45 |
+No se publica. Las pruebas se hacen solo en modo prueba, con la tarjeta 4242.
 
-- Más de 80 lb: pedir dividir la compra antes de pagar.
-- Recalcular al preparar con peso real. Nunca cobrar por encima de lo autorizado sin nuevo consentimiento.
-- Galletas separadas: precios fijos, mínimo $12 y sin cargo por peso. No cambiar su cobro actual.
-- Ventanas de entrega lunes, miércoles y viernes en horario de Nueva York.
+## Pruebas
+- Pruebas automáticas del cálculo: 1 galleta = subtotal + $12, sin mínimo; propina fuera de 24 h rechazada; la misma propina no se cobra dos veces.
+- Prueba en modo prueba de la sesión de Stripe para galletas (línea de $12) y de un cobro de propina extra simulado.
+- La prueba completa con sesión iniciada depende de tener una sesión autorizada en la vista previa.
 
-## 2. Puerta y propina
-- Lobby/puerta del edificio por defecto.
-- Apartamento opcional: ascensor $5; escaleras de más de dos pisos $8. Añadir 5/8 minutos a la parada.
-- Mostrarlo al cliente como servicio Hazorex, separado de la propina; es ingreso de Hazorex y no se suma automáticamente al repartidor.
-- En cada lote, el admin puede activar “Dar bono de puerta” y escribir el monto; empieza apagado. El repartidor solo ve el bono cuando el admin lo activa.
-- Propina opcional, íntegra al repartidor. Aumentos posteriores requieren consentimiento y confirmación del cobro.
-
-## 3. Bloques, horarios y vehículos
-- Agrupar la noche anterior por zona solo pedidos efectivamente cobrados; identificar autorizaciones pendientes sin incluirlas como pagadas.
-- Nunca crear un lote con uno o dos pedidos. Cada lote debe tener al menos tres; si sobran uno o dos en una zona, sugerir unirlos a la zona más cercana compatible o avisar al admin para decidir.
-- Reservas de 1–4 horas y lotes abiertos opcionales. Un lote activo por persona, incluso con solicitudes simultáneas.
-- Repartidor ve día/hora/zona/paradas/tamaño/marcas de pesado, frío y puerta/pago; nunca libras.
-- Registrar presencia; admin asigna a persona presente y compatible. Tras 15 minutos sin asignación, asignar automáticamente un lote compatible o avisar si no existe.
-- Estimar 5 paradas livianas/hora y 4 medianas/pesadas, incluyendo recogidas, trayectos y puerta; máximo 4 horas.
-- Varios viajes dentro del mismo lote, ordenados por ventanas; Google Maps por parada.
-- Límites por viaje: bici/e-bike 50 lb; bici de carga con vagón 200; moto 60; carro 400; van 1,000. Una parada indivisible no puede exceder la capacidad del vehículo.
-- Añadir bici de carga y bolsa térmica a la postulación. Fríos requieren bolsa térmica; marcar productos individuales de más de 8 lb.
-
-## 4. Pago fijo y financiación
-- Admin fija el pago antes de publicar: sugerencia $40/4 paradas, ajustada al tiempo estimado.
-- Bloquear base inferior a $23/h estimada, sin contar propinas ni bonos. Mantener este mínimo como política interna editable, no como afirmación de cumplimiento legal.
-- Sin repartidor a 12 horas: mostrar aviso al admin. Nunca aumentar automáticamente. El admin decide con botones +$5, +$10 o un monto escrito; no reducir pagos ya aceptados.
-- Pago fijo + bonos de puerta + propinas completas, sin descuentos por cancelaciones.
-
-**Decisión incluida en esta aprobación:** si el pago fijo, aumentos o bonos exceden los cargos de entrega disponibles, Hazorex cubre la diferencia con fondos propios. No se toma dinero destinado a la tienda ni se sube el cargo al cliente automáticamente.
-
-Por ejemplo, cuatro pedidos pequeños aportan $48 de entrega. Un bloque estimado de dos horas exige al menos $46 de base; un aumento manual de $10 eleva ese compromiso a $56, antes de bonos opcionales. La diferencia debe financiarla Hazorex.
-
-- Mostrar compromiso, fondos de pedidos y diferencia antes de publicar/aprobar un bono.
-- Mantener la parte financiada por pedidos vinculada a sus cobros originales. Registrar por separado cualquier aporte propio de Hazorex, con confirmación del dueño y protección contra duplicados.
-- Si faltan fondos, mostrar pendiente y avisar; no presentar un pago como realizado ni descontar el compromiso del repartidor.
-- Conservar separación prueba/real, reintentos y protección contra pagos dobles.
-
-## 5. Bonos, prioridad y tiempo
-- Bono semanal opcional $25, editable: mínimo 5 lotes, 95% puntualidad, 0 cancelaciones <12h, calificación real ≥4.7 y 0 reclamos confirmados. Admin revisa y aprueba.
-- No inventar calificaciones ni descontar pago fijo o propinas. Cancelación tardía: pérdida de prioridad por 7 días, con causa y fecha de finalización.
-- Registrar reserva, presencia, recogida, viajes, esperas y entregas. Exceso de más de 30 minutos: aviso y ajuste sugerido para revisión.
-- Reporte semanal previsto frente a real, pagos, propinas, bonos y ajustes.
-- Verificar normativa NYC vigente y su alcance antes de afirmar legalidad; la estimación no sustituye obligaciones sobre tiempo real.
-
-## 6. Entrega y atención
-- Mensajes de un toque, aviso de salida y ETA.
-- Foto obligatoria y acceso limitado al cliente correspondiente; calificación real 1–5 por pedido entregado.
-- Cliente ausente: contactar y esperar 5 minutos; lugar seguro y foto. Fríos/artículos de retorno vuelven y se avisa al admin.
-- Reclamos con foto dentro de 24 horas; reembolso decidido y confirmado por el dueño.
-- Actualizar Repartidores, Términos y Cómo funciona con cargos, lobby/puerta, viajes, pago fijo y criterios del bono, en español e inglés.
-
-## Detalles técnicos y automatización
-- Ampliar estructuras operativas y configuración versionada sin recalcular históricos; tablas nuevas con permisos explícitos y protección por cliente/repartidor/admin.
-- Verificar asignación, dinero y cambios de estado en el servidor; pruebas concurrentes para reserva exclusiva.
-- Agrupación nocturna, avisos y revisión de presencias mediante programación interna de PostgreSQL, sin cron externo ni secretos en llamadas programadas. Los aumentos de pago son exclusivamente manuales.
-- Revisión cada minuto solo durante periodos con presencias pendientes; detenerla cuando no queden. Hasta 1,440 comprobaciones en un día completo de actividad; no mantenerla ejecutándose permanentemente sin necesidad.
-- Avisos automáticos mediante eventos persistidos y entrega verificada. Si la conexión disponible no permite completarlos, informar el bloqueo antes de activar el modelo.
-- Transferencias a tiendas y fondos destinados a ellas quedan protegidos. El aporte propio de Hazorex no reemplaza la vinculación de los pagos financiados por pedidos a sus cargos originales.
-
-## Pruebas y entrega
-- Pesos límite, 80 lb, puerta, vehículos/viajes/fríos, ventanas y mínimo horario.
-- Reserva simultánea, presencia y 15 minutos, aumentos sin duplicados y tiempo real.
-- Fotos/reclamos con acceso autorizado, bonos con registros reales y financiación insuficiente.
-- Stripe simulado: reintentos, consentimiento, propinas posteriores, aportes propios, históricos y separación de ambientes; sin pagos reales.
-- Revisar pantallas en vista previa. La prueba completa de cuentas requiere acceso autorizado; no crear ni elevar usuarios para fabricarla.
-- Entregar lista breve de cambios, pruebas y pendientes. **Tú publicas personalmente.**
+## Detalles técnicos
+- **Migración (aditiva, sin borrar nada):**
+  - `pricing_settings`: claves `cookie_delivery_fee_cents` (1200), `cookie_distance_fee_enabled` (false) y `cookie_distance_fee_per_mile_cents`.
+  - Nueva tabla `post_delivery_tips`: kind cookie|store, order_id, cliente_id, driver_id, amount, stripe_environment, payment_intent_id, transfer_id, status, idempotency key única, created_at. RLS: el cliente ve las suyas y el admin todas.
+  - Columnas `stripe_customer_id` y `saved_payment_method_id` en `pedidos` y `store_orders`. No se toca `clientes`.
+- **`cookie-order-rules.ts`:** se quita `assertCookieMinimum` y se agrega `cookieDeliveryFee(settings)`.
+- **`cart-checkout.functions.ts`:** agrega la línea "Entrega y servicio"; `costo_envio` = 12; `payment_intent_data.setup_future_usage: "off_session"` con un Customer de Stripe resuelto por metadata `userId`. `store-checkout.functions.ts`: lo mismo para guardar la tarjeta.
+- **Nuevo `post-delivery-tips.functions.ts`:**
+  - `createPostDeliveryTip`: valida la ventana de 24 h, dueño y entregado; PaymentIntent off_session con `Idempotency-Key`; si falla o requiere acción, devuelve un `clientSecret` para una sesión embebida.
+  - `listMyTipPrompt`.
+- **Webhook:** `payment_intent.succeeded` con `kind=post_delivery_tip` → registra y transfiere al repartidor (`transfer_group`, `source_transaction`, clave `post-tip-${id}`).
+- **Avisos:** se reutilizan el push y las notificaciones existentes al marcar entregado (`store-delivery`, entrega de galletas).
+- **Interfaz:** tarjeta de propina en `mis-pedidos.tienda.$id` y en el detalle de pedido de galletas; carrito `cart.tsx`; admin de precios; Términos y FAQ en `es`/`en`.
