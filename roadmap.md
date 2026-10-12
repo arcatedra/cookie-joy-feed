@@ -69,13 +69,13 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
-- [ ] Aprobar plan de Panadería: 38 productos, cinco subcategorías y fotos genéricas ausentes de cheddar/pavo.
-- [ ] Incorporar Panadería sin duplicados, con precios/pesos indicados, fotos propias y descripciones ES/EN; completar las dos fotos solo si faltan.
-- [ ] Verificar filtros, búsqueda, precios/pesos y fotos en español/inglés y celular/escritorio; informar cantidad añadida y fotos faltantes sin publicar.
+- [x] Aprobar plan de Panadería: 38 productos, cinco subcategorías y fotos genéricas ausentes de cheddar/pavo.
+- [x] Incorporar 38 productos de Panadería sin duplicados, con precios/pesos indicados, fotos propias y descripciones ES/EN; Food Bazaar en información restringida. Completar fotos ausentes de cheddar Kraft/pavo Butterball sin alterar otros datos.
+- [x] Verificar cinco filtros (9/7/6/9/7), 38 fotos cargadas, búsqueda ES/EN y celular/escritorio sin errores; 19 pruebas pasan y 38 filas coinciden exactamente con catálogo aprobado. Ninguno nuevo sin foto. Sin publicar ni tocar pagos/clientes; edición admin no comprobada por Supabase externo sin sesión autorizada.
 - [x] Aprobar plan de Lácteos y huevos: 41 productos genéricos, seis subcategorías, clasificación de ocho existentes y fotos faltantes de huevos/Reddi-wip.
-- [x] Añadir 41 productos con fotos propias y ES/EN; 49 total sin duplicados, seis filtros y fotos verificadas en celular/escritorio ES/EN; 17 pruebas pasan. Ocho existentes conservados; huevos y Reddi-wip con foto propia. Kraft cheddar rallado 8 oz existente sigue sin foto. Sin tocar pagos/clientes ni publicar.
+- [x] Añadir 41 productos con fotos propias y ES/EN; 49 total sin duplicados, seis filtros y fotos verificadas en celular/escritorio ES/EN; 17 pruebas pasan. Ocho existentes conservados; huevos y Reddi-wip con foto propia. Foto faltante de Kraft cheddar rallado completada con Panadería. Sin tocar pagos/clientes ni publicar.
 - [x] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias.
-- [x] Añadir 64 productos con foto y descripciones ES/EN, sin duplicar ni alterar los cinco de marca; 14 pruebas pasan, seis filtros y fotos verificadas en celular/escritorio sin errores. Pavo molido Butterball existente sigue sin foto.
+- [x] Añadir 64 productos con foto y descripciones ES/EN, sin duplicar ni alterar los cinco de marca; 14 pruebas pasan, seis filtros y fotos verificadas en celular/escritorio sin errores. Foto faltante de pavo molido Butterball completada con Panadería.
 - [ ] Verificar edición autenticada de las nuevas subcategorías en admin: bloqueado por Supabase externo sin sesión autorizada; validación del servidor cubierta por pruebas.
 - [x] Incorporar partes 2A y 2B: 59 verduras con precios/pesos indicados, fotos propias y descripción ES/EN; plan ampliado aprobado, 2A cargada una sola vez.
 - [x] Verificar totales: 47 frutas y 61 verduras (108); todos con foto; filtros/buscador ES/EN y celular comprobados, 11 pruebas aprobadas.
