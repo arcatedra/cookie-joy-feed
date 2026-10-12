@@ -69,6 +69,8 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Aprobar plan de Lácteos y huevos: 41 productos genéricos, seis subcategorías, clasificación de ocho existentes y fotos faltantes de huevos/Reddi-wip.
+- [ ] Añadir catálogo aprobado sin duplicados y verificar precios, pesos, fotos y filtros ES/EN; no tocar pagos/clientes ni publicar.
 - [x] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias.
 - [x] Añadir 64 productos con foto y descripciones ES/EN, sin duplicar ni alterar los cinco de marca; 14 pruebas pasan, seis filtros y fotos verificadas en celular/escritorio sin errores. Pavo molido Butterball existente sigue sin foto.
 - [ ] Verificar edición autenticada de las nuevas subcategorías en admin: bloqueado por Supabase externo sin sesión autorizada; validación del servidor cubierta por pruebas.
