@@ -69,6 +69,9 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Aprobar plan de Panadería: 38 productos, cinco subcategorías y fotos genéricas ausentes de cheddar/pavo.
+- [ ] Incorporar Panadería sin duplicados, con precios/pesos indicados, fotos propias y descripciones ES/EN; completar las dos fotos solo si faltan.
+- [ ] Verificar filtros, búsqueda, precios/pesos y fotos en español/inglés y celular/escritorio; informar cantidad añadida y fotos faltantes sin publicar.
 - [x] Aprobar plan de Lácteos y huevos: 41 productos genéricos, seis subcategorías, clasificación de ocho existentes y fotos faltantes de huevos/Reddi-wip.
 - [x] Añadir 41 productos con fotos propias y ES/EN; 49 total sin duplicados, seis filtros y fotos verificadas en celular/escritorio ES/EN; 17 pruebas pasan. Ocho existentes conservados; huevos y Reddi-wip con foto propia. Kraft cheddar rallado 8 oz existente sigue sin foto. Sin tocar pagos/clientes ni publicar.
 - [x] Aprobar plan para 64 carnes y mariscos, seis subcategorías y fotos propias.
