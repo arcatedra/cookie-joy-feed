@@ -69,7 +69,7 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
-- [ ] Aprobar plan de Despensa: 72 productos de marca, siete subcategorías y clasificación de cinco existentes sin duplicados.
+- [x] Aprobar plan de Despensa: 72 productos de marca, siete subcategorías y clasificación de cinco existentes sin duplicados.
 - [ ] Incorporar catálogo Despensa ES/EN con precios/pesos solicitados; buscar fotos OFF exactas o crear fotos propias genéricas, guardar originales y créditos pertinentes.
 - [ ] Verificar cantidades, precios/pesos, fotos y filtros ES/EN; entregar total añadido, fotos reales y propias, sin publicar ni tocar pagos/clientes.
 - [x] Aprobar plan para nombres con marca: 32 Panadería y 41 Lácteos y huevos, sin cambiar precios/pesos.
