@@ -2402,8 +2402,15 @@ export type Database = {
           id: string
           nombre_producto: string
           order_id: string
+          pick_status: string
+          picked_at: string | null
+          picked_by: string | null
+          picked_weight_lb: number | null
           precio_unitario: number
           product_id: string | null
+          replacement_name: string | null
+          replacement_product_id: string | null
+          scanned_barcode: string | null
           subtotal_item: number
           unidad: string
           updated_at: string
@@ -2415,8 +2422,15 @@ export type Database = {
           id?: string
           nombre_producto: string
           order_id: string
+          pick_status?: string
+          picked_at?: string | null
+          picked_by?: string | null
+          picked_weight_lb?: number | null
           precio_unitario: number
           product_id?: string | null
+          replacement_name?: string | null
+          replacement_product_id?: string | null
+          scanned_barcode?: string | null
           subtotal_item: number
           unidad?: string
           updated_at?: string
@@ -2428,8 +2442,15 @@ export type Database = {
           id?: string
           nombre_producto?: string
           order_id?: string
+          pick_status?: string
+          picked_at?: string | null
+          picked_by?: string | null
+          picked_weight_lb?: number | null
           precio_unitario?: number
           product_id?: string | null
+          replacement_name?: string | null
+          replacement_product_id?: string | null
+          scanned_barcode?: string | null
           subtotal_item?: number
           unidad?: string
           updated_at?: string
@@ -2668,6 +2689,7 @@ export type Database = {
           business_id: string
           category_id: string | null
           codigo_barras: string | null
+          codigos_barras: string[]
           created_at: string
           descripcion: string | null
           descripcion_en: string | null
@@ -2699,6 +2721,7 @@ export type Database = {
           business_id: string
           category_id?: string | null
           codigo_barras?: string | null
+          codigos_barras?: string[]
           created_at?: string
           descripcion?: string | null
           descripcion_en?: string | null
@@ -2730,6 +2753,7 @@ export type Database = {
           business_id?: string
           category_id?: string | null
           codigo_barras?: string | null
+          codigos_barras?: string[]
           created_at?: string
           descripcion?: string | null
           descripcion_en?: string | null
