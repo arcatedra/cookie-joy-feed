@@ -35,9 +35,19 @@ export const HOUSE_MEAT_SUBCATEGORIES = [
   { es: "Mariscos", en: "Shellfish" },
 ] as const;
 
+export const HOUSE_DAIRY_SUBCATEGORIES = [
+  { es: "Leche", en: "Milk" },
+  { es: "Cremas", en: "Cream" },
+  { es: "Huevos", en: "Eggs" },
+  { es: "Quesos", en: "Cheese" },
+  { es: "Yogur", en: "Yogurt" },
+  { es: "Mantequilla", en: "Butter" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
+  if (category === "Lácteos y huevos") return HOUSE_DAIRY_SUBCATEGORIES;
   return [];
 }
 
@@ -51,7 +61,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
