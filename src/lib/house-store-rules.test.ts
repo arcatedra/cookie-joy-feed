@@ -62,7 +62,10 @@ describe("catálogo de lácteos y huevos", () => {
     expect(unitPriceCents(HOUSE_DAIRY_CATALOG[0])).toBe(524);
     expect(HOUSE_DAIRY_CATALOG[14].precio).toBe(2.4);
     expect(HOUSE_DAIRY_CATALOG[14].peso_lb).toBe(2.4);
-    for (const p of HOUSE_DAIRY_CATALOG) expect(p.nombre).not.toMatch(/Kraft|Philadelphia|Polly-O|Organic Valley|Fairlife|Reddi-wip/);
+    // Legacy branded presentations remain separate from these approved renames.
+    for (const name of ["Kraft mozzarella rallada 8 oz", "Philadelphia queso crema 8 oz", "Polly-O mozzarella 16 oz", "Organic Valley leche entera 64 fl oz", "Fairlife leche entera sin lactosa 52 fl oz"]) {
+      expect(HOUSE_DAIRY_CATALOG.map((p) => p.nombre)).not.toContain(name);
+    }
     expect(HOUSE_DAIRY_CATALOG.map((p) => p.nombre)).not.toContain("Huevos grandes 12 unidades");
   });
   it("rechaza subcategorías de otra categoría y acepta CSV sin perder metadatos omitidos", () => {

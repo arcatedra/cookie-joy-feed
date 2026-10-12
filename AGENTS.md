@@ -2,6 +2,7 @@
 
 - Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve existing metadata, preventing accidental content loss.
 - Approved catalog additions have client-safe catalog fixtures and individual stored photos; data loads guard against duplicate Spanish or English names so repeated batches do not duplicate products.
+- Catalog renames target stable existing product IDs with previous-name guards and synchronize reference fixtures; never create replacement rows or alter commercial quantities, preventing duplicate products and unintended pricing changes.
 
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
 - All cookie shopping surfaces read the shared product catalog with a Spanish display-name adapter; public bestseller output exposes only aggregate product order, never buyer records.

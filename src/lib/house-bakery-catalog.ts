@@ -1,8 +1,8 @@
-// Approved bakery additions; client-safe catalog data.
+// Approved bakery catalog; branded names in both languages.
 export const HOUSE_BAKERY_CATALOG = [
   {
-    "nombre": "Pan blanco grande 20 oz",
-    "nombre_en": "Giant white bread",
+    "nombre": "Bogopa Pan blanco grande 20 oz",
+    "nombre_en": "Bogopa Giant white bread",
     "precio": 2.3,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -12,8 +12,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan blanco suave 20 oz",
-    "nombre_en": "Soft white bread",
+    "nombre": "Bimbo Pan blanco suave 20 oz",
+    "nombre_en": "Bimbo Soft white bread",
     "precio": 3.35,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -23,8 +23,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan de mantequilla 20 oz",
-    "nombre_en": "Butter bread",
+    "nombre": "Schmidt Old Tyme Pan de mantequilla 20 oz",
+    "nombre_en": "Schmidt Old Tyme Butter bread",
     "precio": 4.82,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -34,8 +34,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan italiano blanco 20 oz",
-    "nombre_en": "Italian white bread",
+    "nombre": "Pepperidge Farm Pan italiano blanco 20 oz",
+    "nombre_en": "Pepperidge Farm Italian white bread",
     "precio": 3.56,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -45,8 +45,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan integral 100% 20 oz",
-    "nombre_en": "100% whole wheat bread",
+    "nombre": "Nature's Own Pan integral 100% 20 oz",
+    "nombre_en": "Nature's Own 100% whole wheat bread",
     "precio": 4.82,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -56,8 +56,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan de trigo con miel 20 oz",
-    "nombre_en": "Honey wheat bread",
+    "nombre": "Schmidt Old Tyme Pan de trigo con miel 20 oz",
+    "nombre_en": "Schmidt Old Tyme Honey wheat bread",
     "precio": 4.82,
     "peso_lb": 1.25,
     "vendido_por_lb": false,
@@ -67,8 +67,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "20 oz"
   },
   {
-    "nombre": "Pan multigrano con semillas 27 oz",
-    "nombre_en": "Multigrain seeded bread",
+    "nombre": "Dave's Killer Bread 21 Whole Grains Pan multigrano con semillas 27 oz",
+    "nombre_en": "Dave's Killer Bread 21 Whole Grains Multigrain seeded bread",
     "precio": 7.86,
     "peso_lb": 1.7,
     "vendido_por_lb": false,
@@ -78,8 +78,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "27 oz"
   },
   {
-    "nombre": "Pan de masa madre 16 oz",
-    "nombre_en": "Sourdough loaf",
+    "nombre": "The Rustik Oven Pan de masa madre 16 oz",
+    "nombre_en": "The Rustik Oven Sourdough loaf",
     "precio": 6.08,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -89,8 +89,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "16 oz"
   },
   {
-    "nombre": "Pan rustico blanco 24 oz",
-    "nombre_en": "Farmhouse white bread",
+    "nombre": "Pepperidge Farm Farmhouse Pan rustico blanco 24 oz",
+    "nombre_en": "Pepperidge Farm Farmhouse Farmhouse white bread",
     "precio": 5.55,
     "peso_lb": 1.5,
     "vendido_por_lb": false,
@@ -100,8 +100,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "24 oz"
   },
   {
-    "nombre": "Panecillos dulces hawaianos 12",
-    "nombre_en": "Hawaiian sweet rolls 12",
+    "nombre": "King's Hawaiian Panecillos dulces hawaianos 12",
+    "nombre_en": "King's Hawaiian Hawaiian sweet rolls 12",
     "precio": 5.76,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -111,8 +111,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Panes para hamburguesa 8",
-    "nombre_en": "Hamburger buns 8",
+    "nombre": "Ball Park Panes para hamburguesa 8",
+    "nombre_en": "Ball Park Hamburger buns 8",
     "precio": 4.4,
     "peso_lb": 0.9,
     "vendido_por_lb": false,
@@ -122,8 +122,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Panes de hamburguesa con ajonjoli 8",
-    "nombre_en": "Sesame burger buns 8",
+    "nombre": "Ball Park Panes de hamburguesa con ajonjoli 8",
+    "nombre_en": "Ball Park Sesame burger buns 8",
     "precio": 4.4,
     "peso_lb": 0.9,
     "vendido_por_lb": false,
@@ -133,8 +133,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Panes brioche para hamburguesa 4",
-    "nombre_en": "Brioche burger buns 4",
+    "nombre": "St Pierre Panes brioche para hamburguesa 4",
+    "nombre_en": "St Pierre Brioche burger buns 4",
     "precio": 5.45,
     "peso_lb": 0.6,
     "vendido_por_lb": false,
@@ -144,8 +144,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Panes para hot dog 8",
-    "nombre_en": "Hot dog rolls 8",
+    "nombre": "Bogopa Panes para hot dog 8",
+    "nombre_en": "Bogopa Hot dog rolls 8",
     "precio": 2.3,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -155,8 +155,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Panes brioche para hot dog 6",
-    "nombre_en": "Brioche hot dog rolls 6",
+    "nombre": "St Pierre Panes brioche para hot dog 6",
+    "nombre_en": "St Pierre Brioche hot dog rolls 6",
     "precio": 7.02,
     "peso_lb": 0.6,
     "vendido_por_lb": false,
@@ -166,8 +166,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Mini panecillos de papa 12",
-    "nombre_en": "Potato slider rolls 12",
+    "nombre": "Martin's Mini panecillos de papa 12",
+    "nombre_en": "Martin's Potato slider rolls 12",
     "precio": 4.82,
     "peso_lb": 0.9,
     "vendido_por_lb": false,
@@ -177,8 +177,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Bagels sencillos 6",
-    "nombre_en": "Plain bagels 6",
+    "nombre": "Thomas' Bagels sencillos 6",
+    "nombre_en": "Thomas' Plain bagels 6",
     "precio": 5.76,
     "peso_lb": 1.3,
     "vendido_por_lb": false,
@@ -188,8 +188,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Bagels everything 6",
-    "nombre_en": "Everything bagels 6",
+    "nombre": "Thomas' Bagels everything 6",
+    "nombre_en": "Thomas' Everything bagels 6",
     "precio": 5.76,
     "peso_lb": 1.3,
     "vendido_por_lb": false,
@@ -199,8 +199,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Bagels de canela y pasas 6",
-    "nombre_en": "Cinnamon raisin bagels 6",
+    "nombre": "Thomas' Bagels de canela y pasas 6",
+    "nombre_en": "Thomas' Cinnamon raisin bagels 6",
     "precio": 5.76,
     "peso_lb": 1.3,
     "vendido_por_lb": false,
@@ -221,8 +221,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "English muffins 6",
-    "nombre_en": "English muffins 6",
+    "nombre": "Thomas' English muffins 6",
+    "nombre_en": "Thomas' English muffins 6",
     "precio": 5.97,
     "peso_lb": 0.8,
     "vendido_por_lb": false,
@@ -232,8 +232,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "English muffins de canela y pasas 6",
-    "nombre_en": "Cinnamon raisin English muffins 6",
+    "nombre": "Thomas' English muffins de canela y pasas 6",
+    "nombre_en": "Thomas' Cinnamon raisin English muffins 6",
     "precio": 5.97,
     "peso_lb": 0.8,
     "vendido_por_lb": false,
@@ -243,8 +243,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Bizcocho marmoleado 12 oz",
-    "nombre_en": "Marble loaf cake",
+    "nombre": "Entenmann's Bizcocho marmoleado 12 oz",
+    "nombre_en": "Entenmann's Marble loaf cake",
     "precio": 6.92,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -254,8 +254,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "12 oz"
   },
   {
-    "nombre": "Panettone 24 oz",
-    "nombre_en": "Panettone",
+    "nombre": "Bauducco Panettone 24 oz",
+    "nombre_en": "Bauducco Panettone",
     "precio": 9.44,
     "peso_lb": 1.5,
     "vendido_por_lb": false,
@@ -265,8 +265,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "24 oz"
   },
   {
-    "nombre": "Cheesecake estilo Nueva York 12 oz",
-    "nombre_en": "New York cheesecake",
+    "nombre": "The Father's Table Cheesecake estilo Nueva York 12 oz",
+    "nombre_en": "The Father's Table New York cheesecake",
     "precio": 7.97,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -331,8 +331,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Magdalenas 11",
-    "nombre_en": "Madeleines 11",
+    "nombre": "Entenmann's Magdalenas 11",
+    "nombre_en": "Entenmann's Madeleines 11",
     "precio": 8.91,
     "peso_lb": 0.6,
     "vendido_por_lb": false,
@@ -342,8 +342,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Tortillas de maiz blanco 80",
-    "nombre_en": "White corn tortillas 80",
+    "nombre": "La Banderita Tortillas de maiz blanco 80",
+    "nombre_en": "La Banderita White corn tortillas 80",
     "precio": 6.6,
     "peso_lb": 4.1,
     "vendido_por_lb": false,
@@ -353,8 +353,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Tortillas de maiz amarillo 80",
-    "nombre_en": "Yellow corn tortillas 80",
+    "nombre": "La Banderita Tortillas de maiz amarillo 80",
+    "nombre_en": "La Banderita Yellow corn tortillas 80",
     "precio": 6.6,
     "peso_lb": 4.1,
     "vendido_por_lb": false,
@@ -364,8 +364,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Tortillas duras para tacos 12",
-    "nombre_en": "Taco shells 12",
+    "nombre": "Old El Paso Tortillas duras para tacos 12",
+    "nombre_en": "Old El Paso Taco shells 12",
     "precio": 3.87,
     "peso_lb": 0.3,
     "vendido_por_lb": false,
@@ -375,8 +375,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Arepas de maiz blanco 16 oz",
-    "nombre_en": "White corn arepas",
+    "nombre": "Tropical Arepas de maiz blanco 16 oz",
+    "nombre_en": "Tropical White corn arepas",
     "precio": 3.66,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -386,8 +386,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "16 oz"
   },
   {
-    "nombre": "Arepas de maiz dulce 12 oz",
-    "nombre_en": "Sweet corn arepas",
+    "nombre": "Tropical Arepas de maiz dulce 12 oz",
+    "nombre_en": "Tropical Sweet corn arepas",
     "precio": 4.19,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -397,8 +397,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": "12 oz"
   },
   {
-    "nombre": "Pan naan 2",
-    "nombre_en": "Naan bread 2",
+    "nombre": "Stonefire Pan naan 2",
+    "nombre_en": "Stonefire Naan bread 2",
     "precio": 3.98,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -408,8 +408,8 @@ export const HOUSE_BAKERY_CATALOG = [
     "tamano": ""
   },
   {
-    "nombre": "Pan naan con ajo 2",
-    "nombre_en": "Garlic naan 2",
+    "nombre": "Stonefire Pan naan con ajo 2",
+    "nombre_en": "Stonefire Garlic naan 2",
     "precio": 3.98,
     "peso_lb": 0.5,
     "vendido_por_lb": false,

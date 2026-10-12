@@ -1,8 +1,8 @@
-// Approved dairy additions; client-safe catalog data.
+// Approved dairy catalog; branded names in both languages.
 export const HOUSE_DAIRY_CATALOG = [
   {
-    "nombre": "Leche entera galón",
-    "nombre_en": "Whole milk gallon",
+    "nombre": "Bogopa Leche entera galón",
+    "nombre_en": "Bogopa Whole milk gallon",
     "precio": 5.24,
     "peso_lb": 8.6,
     "vendido_por_lb": false,
@@ -11,8 +11,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche orgánica 2% 64 oz",
-    "nombre_en": "Organic 2% milk",
+    "nombre": "Organic Valley Leche orgánica 2% 64 oz",
+    "nombre_en": "Organic Valley Organic 2% milk",
     "precio": 8.91,
     "peso_lb": 4.3,
     "vendido_por_lb": false,
@@ -21,8 +21,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche orgánica descremada 64 oz",
-    "nombre_en": "Organic fat-free milk",
+    "nombre": "Organic Valley Leche orgánica descremada 64 oz",
+    "nombre_en": "Organic Valley Organic fat-free milk",
     "precio": 8.91,
     "peso_lb": 4.3,
     "vendido_por_lb": false,
@@ -31,8 +31,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche orgánica 1% 64 oz",
-    "nombre_en": "Organic 1% milk",
+    "nombre": "Organic Valley Leche orgánica 1% 64 oz",
+    "nombre_en": "Organic Valley Organic 1% milk",
     "precio": 8.91,
     "peso_lb": 4.3,
     "vendido_por_lb": false,
@@ -41,8 +41,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche entera sin lactosa 64 oz",
-    "nombre_en": "Lactose-free whole milk",
+    "nombre": "Lactaid Leche entera sin lactosa 64 oz",
+    "nombre_en": "Lactaid Lactose-free whole milk",
     "precio": 9.12,
     "peso_lb": 4.3,
     "vendido_por_lb": false,
@@ -51,8 +51,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche orgánica sin lactosa 2% 64 oz",
-    "nombre_en": "Organic lactose-free 2% milk",
+    "nombre": "Horizon Organic Leche orgánica sin lactosa 2% 64 oz",
+    "nombre_en": "Horizon Organic Organic lactose-free 2% milk",
     "precio": 10.28,
     "peso_lb": 4.3,
     "vendido_por_lb": false,
@@ -61,8 +61,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche de chocolate 6 x 8 oz",
-    "nombre_en": "Chocolate milk 6 pack",
+    "nombre": "Horizon Organic Leche de chocolate 6 x 8 oz",
+    "nombre_en": "Horizon Organic Chocolate milk 6 pack",
     "precio": 14.69,
     "peso_lb": 3.2,
     "vendido_por_lb": false,
@@ -71,8 +71,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Leche de fresa 6 x 8 oz",
-    "nombre_en": "Strawberry milk 6 pack",
+    "nombre": "Horizon Organic Leche de fresa 6 x 8 oz",
+    "nombre_en": "Horizon Organic Strawberry milk 6 pack",
     "precio": 14.69,
     "peso_lb": 3.2,
     "vendido_por_lb": false,
@@ -81,8 +81,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Leche"
   },
   {
-    "nombre": "Crema espesa 1 pt",
-    "nombre_en": "Heavy cream pint",
+    "nombre": "Farmland Fresh Dairies Crema espesa 1 pt",
+    "nombre_en": "Farmland Fresh Dairies Heavy cream pint",
     "precio": 5.24,
     "peso_lb": 1.1,
     "vendido_por_lb": false,
@@ -91,8 +91,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Crema espesa 1 qt",
-    "nombre_en": "Heavy cream quart",
+    "nombre": "Farmland Fresh Dairies Crema espesa 1 qt",
+    "nombre_en": "Farmland Fresh Dairies Heavy cream quart",
     "precio": 8.81,
     "peso_lb": 2.2,
     "vendido_por_lb": false,
@@ -101,8 +101,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Half and half 1 qt",
-    "nombre_en": "Half and half quart",
+    "nombre": "Farmland Fresh Dairies Half and half 1 qt",
+    "nombre_en": "Farmland Fresh Dairies Half and half quart",
     "precio": 4.61,
     "peso_lb": 2.2,
     "vendido_por_lb": false,
@@ -111,8 +111,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Half and half 1 pt",
-    "nombre_en": "Half and half pint",
+    "nombre": "Farmland Fresh Dairies Half and half 1 pt",
+    "nombre_en": "Farmland Fresh Dairies Half and half pint",
     "precio": 3.14,
     "peso_lb": 1.1,
     "vendido_por_lb": false,
@@ -121,8 +121,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Crema agria 16 oz",
-    "nombre_en": "Sour cream 16 oz",
+    "nombre": "Daisy Crema agria 16 oz",
+    "nombre_en": "Daisy Sour cream 16 oz",
     "precio": 4.19,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -131,8 +131,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Crema agria 8 oz",
-    "nombre_en": "Sour cream 8 oz",
+    "nombre": "Daisy Crema agria 8 oz",
+    "nombre_en": "Daisy Sour cream 8 oz",
     "precio": 2.4,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -141,8 +141,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Cremas"
   },
   {
-    "nombre": "Huevos blancos grandes 18",
-    "nombre_en": "Large white eggs 18",
+    "nombre": "Bogopa Huevos blancos grandes 18",
+    "nombre_en": "Bogopa Large white eggs 18",
     "precio": 2.4,
     "peso_lb": 2.4,
     "vendido_por_lb": false,
@@ -151,8 +151,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Huevos"
   },
   {
-    "nombre": "Huevos marrones orgánicos 12",
-    "nombre_en": "Organic brown eggs 12",
+    "nombre": "Bogopa Huevos marrones orgánicos 12",
+    "nombre_en": "Bogopa Organic brown eggs 12",
     "precio": 5.66,
     "peso_lb": 1.6,
     "vendido_por_lb": false,
@@ -161,8 +161,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Huevos"
   },
   {
-    "nombre": "Huevos orgánicos medianos 12",
-    "nombre_en": "Organic medium eggs 12",
+    "nombre": "Pete and Gerry's Huevos orgánicos medianos 12",
+    "nombre_en": "Pete and Gerry's Organic medium eggs 12",
     "precio": 6.81,
     "peso_lb": 1.4,
     "vendido_por_lb": false,
@@ -171,8 +171,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Huevos"
   },
   {
-    "nombre": "Huevos de gallinas camperas 12",
-    "nombre_en": "Free-range eggs 12",
+    "nombre": "Happy Egg Huevos de gallinas camperas 12",
+    "nombre_en": "Happy Egg Free-range eggs 12",
     "precio": 8.81,
     "peso_lb": 1.6,
     "vendido_por_lb": false,
@@ -181,8 +181,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Huevos"
   },
   {
-    "nombre": "Queso fresco 12 oz",
-    "nombre_en": "Queso fresco",
+    "nombre": "Tropical Queso fresco 12 oz",
+    "nombre_en": "Tropical Queso fresco",
     "precio": 5.76,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -191,8 +191,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso fresco centroamericano 12 oz",
-    "nombre_en": "Central American queso fresco",
+    "nombre": "Tropical Queso fresco centroamericano 12 oz",
+    "nombre_en": "Tropical Central American queso fresco",
     "precio": 5.76,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -201,8 +201,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso fresco hondureño 12 oz",
-    "nombre_en": "Honduran queso fresco",
+    "nombre": "La Ricura Queso fresco hondureño 12 oz",
+    "nombre_en": "La Ricura Honduran queso fresco",
     "precio": 6.29,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -211,8 +211,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso blanco 16 oz",
-    "nombre_en": "Queso blanco",
+    "nombre": "Tropical Queso blanco 16 oz",
+    "nombre_en": "Tropical Queso blanco",
     "precio": 7.34,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -221,8 +221,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso americano 16 lonjas",
-    "nombre_en": "American cheese slices 16",
+    "nombre": "Kraft Singles Queso americano 16 lonjas",
+    "nombre_en": "Kraft Singles American cheese slices 16",
     "precio": 7.65,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -231,8 +231,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso americano blanco 16 lonjas",
-    "nombre_en": "White American cheese slices",
+    "nombre": "Kraft Queso americano blanco 16 lonjas",
+    "nombre_en": "Kraft White American cheese slices",
     "precio": 7.65,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -241,8 +241,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso cheddar en bloque 8 oz",
-    "nombre_en": "Cheddar block",
+    "nombre": "Kraft Queso cheddar en bloque 8 oz",
+    "nombre_en": "Kraft Cheddar block",
     "precio": 7.02,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -251,8 +251,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Queso cheddar blanco 8 oz",
-    "nombre_en": "White cheddar",
+    "nombre": "Cracker Barrel Queso cheddar blanco 8 oz",
+    "nombre_en": "Cracker Barrel White cheddar",
     "precio": 7.34,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -261,8 +261,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Mozzarella fresca 16 oz",
-    "nombre_en": "Fresh mozzarella log",
+    "nombre": "BelGioioso Mozzarella fresca 16 oz",
+    "nombre_en": "BelGioioso Fresh mozzarella log",
     "precio": 8.91,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -271,8 +271,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Mozzarella semidescremada rallada 8 oz",
-    "nombre_en": "Part-skim shredded mozzarella",
+    "nombre": "Kraft Mozzarella semidescremada rallada 8 oz",
+    "nombre_en": "Kraft Part-skim shredded mozzarella",
     "precio": 7.02,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -281,8 +281,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Palitos de queso mozzarella",
-    "nombre_en": "Mozzarella string cheese",
+    "nombre": "Frigo Cheese Heads Palitos de queso mozzarella",
+    "nombre_en": "Frigo Cheese Heads Mozzarella string cheese",
     "precio": 9.44,
     "peso_lb": 0.75,
     "vendido_por_lb": false,
@@ -291,8 +291,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Paneer 8 oz",
-    "nombre_en": "Paneer",
+    "nombre": "Gopi Paneer 8 oz",
+    "nombre_en": "Gopi Paneer",
     "precio": 8.91,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -301,8 +301,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Quesitos individuales 12",
-    "nombre_en": "Mini snack cheeses 12",
+    "nombre": "Babybel Quesitos individuales 12",
+    "nombre_en": "Babybel Mini snack cheeses 12",
     "precio": 11.33,
     "peso_lb": 0.6,
     "vendido_por_lb": false,
@@ -311,8 +311,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Quesos"
   },
   {
-    "nombre": "Yogur griego vainilla 4 pk",
-    "nombre_en": "Vanilla Greek yogurt 4 pack",
+    "nombre": "Chobani Yogur griego vainilla 4 pk",
+    "nombre_en": "Chobani Vanilla Greek yogurt 4 pack",
     "precio": 10.28,
     "peso_lb": 1.4,
     "vendido_por_lb": false,
@@ -321,8 +321,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Yogur"
   },
   {
-    "nombre": "Yogur griego fresa 4 pk",
-    "nombre_en": "Strawberry Greek yogurt 4 pack",
+    "nombre": "Chobani Yogur griego fresa 4 pk",
+    "nombre_en": "Chobani Strawberry Greek yogurt 4 pack",
     "precio": 10.28,
     "peso_lb": 1.4,
     "vendido_por_lb": false,
@@ -331,8 +331,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Yogur"
   },
   {
-    "nombre": "Yogur griego individual 5.3 oz",
-    "nombre_en": "Greek yogurt cup",
+    "nombre": "Chobani Yogur griego individual 5.3 oz",
+    "nombre_en": "Chobani Greek yogurt cup",
     "precio": 2.93,
     "peso_lb": 0.35,
     "vendido_por_lb": false,
@@ -341,8 +341,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Yogur"
   },
   {
-    "nombre": "Yogur cremoso de frambuesa 8 oz",
-    "nombre_en": "Creamy raspberry yogurt",
+    "nombre": "Noosa Yogur cremoso de frambuesa 8 oz",
+    "nombre_en": "Noosa Creamy raspberry yogurt",
     "precio": 3.87,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -351,8 +351,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Yogur"
   },
   {
-    "nombre": "Yogur de coco sin lácteos 5.3 oz",
-    "nombre_en": "Dairy-free coconut yogurt",
+    "nombre": "So Delicious Yogur de coco sin lácteos 5.3 oz",
+    "nombre_en": "So Delicious Dairy-free coconut yogurt",
     "precio": 3.56,
     "peso_lb": 0.35,
     "vendido_por_lb": false,
@@ -361,8 +361,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Yogur"
   },
   {
-    "nombre": "Mantequilla con sal en barras 1 lb",
-    "nombre_en": "Salted butter quarters",
+    "nombre": "Bogopa Mantequilla con sal en barras 1 lb",
+    "nombre_en": "Bogopa Salted butter quarters",
     "precio": 4.19,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -371,8 +371,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Mantequilla"
   },
   {
-    "nombre": "Mantequilla irlandesa de pastoreo 8 oz",
-    "nombre_en": "Irish grass-fed butter",
+    "nombre": "Kerrygold Mantequilla irlandesa de pastoreo 8 oz",
+    "nombre_en": "Kerrygold Irish grass-fed butter",
     "precio": 7.97,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -381,8 +381,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Mantequilla"
   },
   {
-    "nombre": "Mantequilla batida 8 oz",
-    "nombre_en": "Whipped butter",
+    "nombre": "Breakstone's Mantequilla batida 8 oz",
+    "nombre_en": "Breakstone's Whipped butter",
     "precio": 4.4,
     "peso_lb": 0.5,
     "vendido_por_lb": false,
@@ -391,8 +391,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Mantequilla"
   },
   {
-    "nombre": "Margarina en barras 1 lb",
-    "nombre_en": "Margarine sticks",
+    "nombre": "Land O Lakes Margarina en barras 1 lb",
+    "nombre_en": "Land O Lakes Margarine sticks",
     "precio": 4.4,
     "peso_lb": 1.0,
     "vendido_por_lb": false,
@@ -401,8 +401,8 @@ export const HOUSE_DAIRY_CATALOG = [
     "subcategoria": "Mantequilla"
   },
   {
-    "nombre": "Ghee mantequilla clarificada",
-    "nombre_en": "Ghee clarified butter",
+    "nombre": "Organic Valley Ghee mantequilla clarificada",
+    "nombre_en": "Organic Valley Ghee clarified butter",
     "precio": 13.64,
     "peso_lb": 0.8,
     "vendido_por_lb": false,
