@@ -6,6 +6,42 @@ import { HOUSE_VEGETABLE_CATALOG } from "./house-vegetable-catalog";
 import { productDescription, unitPriceCents } from "./house-store-rules";
 import { HOUSE_MEAT_CATALOG } from "./house-meat-catalog";
 import { HOUSE_MEAT_SUBCATEGORIES, houseSubcategories } from "./house-store-rules";
+import { HOUSE_DAIRY_CATALOG } from "./house-dairy-catalog";
+import { HOUSE_DAIRY_SUBCATEGORIES } from "./house-store-rules";
+
+describe("catálogo de lácteos y huevos", () => {
+  it("valida los 41 productos únicos y las seis subcategorías", () => {
+    expect(HOUSE_DAIRY_CATALOG).toHaveLength(41);
+    expect(new Set(HOUSE_DAIRY_CATALOG.map((p) => p.nombre)).size).toBe(41);
+    expect(new Set(HOUSE_DAIRY_CATALOG.map((p) => p.nombre_en)).size).toBe(41);
+    expect(HOUSE_DAIRY_SUBCATEGORIES.map((c) => HOUSE_DAIRY_CATALOG.filter((p) => p.subcategoria === c.es).length)).toEqual([8, 6, 4, 13, 5, 5]);
+    for (const p of HOUSE_DAIRY_CATALOG) {
+      expect(houseProductSchema.safeParse({ ...p, categoria: "Lácteos y huevos" }).success).toBe(true);
+      expect(p.vendido_por_lb).toBe(false);
+      expect(p.descripcion.length).toBeGreaterThan(10);
+      expect(p.descripcion_en.length).toBeGreaterThan(10);
+    }
+  });
+  it("conserva precio por unidad y distingue presentaciones existentes", () => {
+    expect(HOUSE_DAIRY_CATALOG[0].peso_lb).toBe(8.6);
+    expect(unitPriceCents(HOUSE_DAIRY_CATALOG[0])).toBe(524);
+    expect(HOUSE_DAIRY_CATALOG[14].precio).toBe(2.4);
+    expect(HOUSE_DAIRY_CATALOG[14].peso_lb).toBe(2.4);
+    for (const p of HOUSE_DAIRY_CATALOG) expect(p.nombre).not.toMatch(/Kraft|Philadelphia|Polly-O|Organic Valley|Fairlife|Reddi-wip/);
+    expect(HOUSE_DAIRY_CATALOG.map((p) => p.nombre)).not.toContain("Huevos grandes 12 unidades");
+  });
+  it("rechaza subcategorías de otra categoría y acepta CSV sin perder metadatos omitidos", () => {
+    const base = { nombre: "Leche", precio: 5.24, peso_lb: 8.6, categoria: "Lácteos y huevos" };
+    expect(houseProductSchema.parse(base).subcategoria).toBeUndefined();
+    expect(houseProductSchema.safeParse({ ...base, subcategoria: "Res" }).success).toBe(false);
+    expect(houseProductSchema.safeParse({ ...base, categoria: "Carnes y mariscos", subcategoria: "Leche" }).success).toBe(false);
+    expect(houseSubcategories("Lácteos y huevos")).toEqual(HOUSE_DAIRY_SUBCATEGORIES);
+    const bulk = parseBulkRows([{ ...base, subcategoria: "Leche", por_libra: "no" }]);
+    expect(bulk.errors).toEqual([]);
+    expect(bulk.ok[0]?.subcategoria).toBe("Leche");
+    expect(bulk.ok[0]?.vendido_por_lb).toBe(false);
+  });
+});
 
 describe("catálogo de carnes y mariscos", () => {
   it("valida los 64 productos únicos y las seis subcategorías", () => {
