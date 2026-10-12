@@ -300,7 +300,7 @@ function BulkDialog({ onClose }: { onClose: () => void }) {
     const ws = XLSX.utils.aoa_to_sheet([
       [...TEMPLATE_HEADERS],
       ["Aguacate Hass grande", "Large Hass avocado", "Frutas y verduras", 3.14, "", "1 unidad", 0.5, "no", "si", "", "Food Bazaar", "", "", "", "Frutas", ""],
-      ["Goya Frijoles negros 15.5 oz", "Goya Black beans 15.5 oz", "Despensa", 1.79, "", "15.5 oz", 1, "no", "si", "", "Food Bazaar", "", "", "", "Enlatados", "041331024686; 0041331024686"],
+      ["Goya Frijoles negros 15.5 oz", "Goya Black beans 15.5 oz", "Despensa", 1.79, "", "15.5 oz", 1, "no", "si", "", "Food Bazaar", "", "", "", "Enlatados", "012345678905; 0012345678905"],
       ["Guineos / plátanos", "Bananas", "Frutas y verduras", 2.40, "", "aprox. 2 lb", 2, "si", "si", "", "Food Bazaar", "", "", "", "Frutas", ""],
     ]);
     const wb = XLSX.utils.book_new();
