@@ -69,6 +69,9 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
+- [ ] Aprobar plan de Despensa: 72 productos de marca, siete subcategorías y clasificación de cinco existentes sin duplicados.
+- [ ] Incorporar catálogo Despensa ES/EN con precios/pesos solicitados; buscar fotos OFF exactas o crear fotos propias genéricas, guardar originales y créditos pertinentes.
+- [ ] Verificar cantidades, precios/pesos, fotos y filtros ES/EN; entregar total añadido, fotos reales y propias, sin publicar ni tocar pagos/clientes.
 - [x] Aprobar plan para nombres con marca: 32 Panadería y 41 Lácteos y huevos, sin cambiar precios/pesos.
 - [x] Aplicar 73 nombres ES/EN por identificador existente; buscar fotos OFF y rechazar marcas/tamaños/etiquetas incorrectos. Seis fotos exactas aceptadas con fondo blanco y originales: Pepperidge Farm Farmhouse, Thomas' English muffins, ambos Stonefire naan, Organic Valley 1% y Daisy 16 oz. Los otros 67 conservan foto actual porque no hubo coincidencia exacta utilizable y completa; OFF presentó errores 403/503. No usar las ediciones generadas que alteraron etiquetas.
 - [x] Verificar 274 productos antes/después: mismos identificadores, precios/pesos y demás campos fuera de nombres/fotos autorizados; 22 pruebas pasan. Seis fotos cargan en la tienda, crédito/original/código comprobados, celular sin desbordamiento y sin errores; build OK. Sin publicar ni tocar pagos/clientes.
