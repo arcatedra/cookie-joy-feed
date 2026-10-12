@@ -3,11 +3,15 @@ import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Download, Eye, EyeOff, Plus, Search, Upload } from "lucide-react";
+import { Download, Eye, EyeOff, Plus, ScanLine, Search, Upload } from "lucide-react";
+import { BarcodeScanner, scanFeedback } from "@/components/BarcodeScanner";
+import { parseBarcodeList } from "@/lib/barcode-rules";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
+  adminAssignBarcode,
   adminBulkHouseProducts,
+  adminFindProductByBarcode,
   adminListHouseProducts,
   adminQuickUpdateHouseProduct,
   adminSaveHouseProduct,
@@ -45,6 +49,33 @@ function AdminProductsPage() {
   const [cat, setCat] = useState("");
   const [editing, setEditing] = useState<HouseProductInput | null>(null);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [scanMode, setScanMode] = useState<"find" | "teach" | null>(null);
+  const [teachCode, setTeachCode] = useState<string | null>(null);
+  const findFn = useServerFn(adminFindProductByBarcode);
+
+  function toEditing(p: any): HouseProductInput {
+    return {
+      id: p.id, nombre: p.nombre, nombre_en: p.nombre_en ?? "", categoria: p.categoria || "Despensa",
+      precio: Number(p.precio), precio_anterior: p.precio_anterior == null ? null : Number(p.precio_anterior),
+      tamano: p.tamano ?? "", peso_lb: Number(p.peso_lb ?? 0), vendido_por_lb: !!p.vendido_por_lb,
+      disponible: p.disponible !== false, stock: p.stock ?? null, super: p.super, direccion: p.direccion, imagen_url: null,
+      codigo_barras: p.codigo_barras ?? null, codigos_barras: p.codigos_barras ?? [],
+      descripcion: p.descripcion ?? "", descripcion_en: p.descripcion_en ?? "", subcategoria: p.subcategoria ?? null,
+    };
+  }
+
+  async function onScanned(code: string) {
+    const mode = scanMode;
+    setScanMode(null);
+    if (mode === "teach") return setTeachCode(code);
+    try {
+      const r = await findFn({ data: { code } });
+      const p = r.product && ((data?.products ?? []) as any[]).find((x) => x.id === r.product!.id);
+      if (!p) { scanFeedback(false); return toast.error(`El código ${code} no pertenece a ningún producto.`); }
+      scanFeedback(true);
+      setEditing(toEditing(p));
+    } catch (e) { toast.error((e as Error).message); }
+  }
 
   const products = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -79,6 +110,8 @@ function AdminProductsPage() {
         </select>
         <Button onClick={() => setEditing({ ...EMPTY })}><Plus className="mr-1 h-4 w-4" /> Agregar producto</Button>
         <Button variant="outline" onClick={() => setBulkOpen(true)}><Upload className="mr-1 h-4 w-4" /> Subir en bloque</Button>
+        <Button variant="outline" onClick={() => setScanMode("teach")}><ScanLine className="mr-1 h-4 w-4" /> Escanear para guardar código</Button>
+        <Button variant="outline" onClick={() => setScanMode("find")}><Search className="mr-1 h-4 w-4" /> Buscar escaneando</Button>
       </div>
 
       {isLoading && <p className="mt-6 text-sm text-muted-foreground">Cargando…</p>}
@@ -102,7 +135,7 @@ function AdminProductsPage() {
                     <div>
                       <p className="font-medium">{p.nombre}</p>
                       <p className="text-xs text-muted-foreground">{p.tamano}{p.vendido_por_lb ? " · por libra" : ""}</p>
-                      {p.codigo_barras && <p className="text-xs text-muted-foreground">Código: {p.codigo_barras}</p>}
+                      {(p.codigos_barras ?? []).length > 0 && <p className="text-xs text-muted-foreground">Códigos: {(p.codigos_barras as string[]).join(", ")}</p>}
                       {p.foto_credito && <p className="text-xs text-muted-foreground">{p.foto_credito} ({p.foto_licencia})</p>}
                     </div>
                   </div>
@@ -119,14 +152,7 @@ function AdminProductsPage() {
                   </button>
                 </td>
                 <td className="p-2">
-                  <Button size="sm" variant="ghost" onClick={() => setEditing({
-                    id: p.id, nombre: p.nombre, nombre_en: p.nombre_en ?? "", categoria: p.categoria || "Despensa",
-                    precio: Number(p.precio), precio_anterior: p.precio_anterior == null ? null : Number(p.precio_anterior),
-                    tamano: p.tamano ?? "", peso_lb: Number(p.peso_lb ?? 0), vendido_por_lb: !!p.vendido_por_lb,
-                    disponible: p.disponible !== false, stock: p.stock ?? null, super: p.super, direccion: p.direccion, imagen_url: null,
-                    codigo_barras: p.codigo_barras ?? null,
-                     descripcion: p.descripcion ?? "", descripcion_en: p.descripcion_en ?? "", subcategoria: p.subcategoria ?? null,
-                  })}>Editar</Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditing(toEditing(p))}>Editar</Button>
                 </td>
               </tr>
             ))}
@@ -139,6 +165,8 @@ function AdminProductsPage() {
 
       {editing && <ProductDialog initial={editing} onClose={() => setEditing(null)} />}
       {bulkOpen && <BulkDialog onClose={() => setBulkOpen(false)} />}
+      {scanMode && <BarcodeScanner title={scanMode === "teach" ? "Escanear para guardar código" : "Buscar producto escaneando"} onDetected={onScanned} onClose={() => setScanMode(null)} />}
+      {teachCode && <TeachDialog code={teachCode} products={(data?.products ?? []) as any[]} onClose={() => setTeachCode(null)} />}
     </main>
   );
 }
@@ -166,7 +194,7 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
   const save = useServerFn(adminSaveHouseProduct);
   const upload = useServerFn(adminUploadHouseImage);
   const qc = useQueryClient();
-  const [f, setF] = useState<any>({ ...initial, precio: initial.precio || "", peso_lb: initial.peso_lb || "" });
+  const [f, setF] = useState<any>({ ...initial, precio: initial.precio || "", peso_lb: initial.peso_lb || "", codigos_txt: (initial.codigos_barras ?? (initial.codigo_barras ? [initial.codigo_barras] : [])).join("; ") });
   const [busy, setBusy] = useState(false);
   const set = (k: string, v: unknown) => setF((p: any) => ({ ...p, [k]: v }));
 
@@ -183,13 +211,17 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
 
   async function submit() {
     if (!(Number(f.peso_lb) > 0)) return toast.error("El peso en lb es obligatorio.");
+    const bc = parseBarcodeList(f.codigos_txt);
+    if (bc.invalid.length) return toast.error(`Código de barras inválido: ${bc.invalid.join(", ")} (solo números, 8 a 14).`);
     setBusy(true);
     try {
       await save({ data: {
         ...f, precio: Number(f.precio), peso_lb: Number(f.peso_lb),
         precio_anterior: f.precio_anterior === "" || f.precio_anterior == null ? null : Number(f.precio_anterior),
         stock: f.stock === "" || f.stock == null ? null : Number(f.stock),
-        codigo_barras: f.codigo_barras?.trim() || null,
+        codigos_txt: undefined,
+        codigos_barras: bc.codes,
+        codigo_barras: bc.codes[0] ?? null,
       } });
       await qc.invalidateQueries({ queryKey: ["admin-house-products"] });
       toast.success("Producto guardado");
@@ -235,7 +267,7 @@ function ProductDialog({ initial, onClose }: { initial: HouseProductInput; onClo
           {input("precio", f.vendido_por_lb ? "Precio por libra ($)" : "Precio ($)", { inputMode: "decimal" })}
           {input("precio_anterior", "Precio anterior / oferta ($, opcional)", { inputMode: "decimal" })}
           {input("tamano", "Tamaño (ej. 16 oz)")}
-          {input("codigo_barras", "Código de barras (opcional)", { inputMode: "numeric" })}
+          {input("codigos_txt", "Códigos de barras UPC/EAN (varios separados por ;)", { inputMode: "numeric" })}
           {input("peso_lb", f.vendido_por_lb ? "Peso aproximado por porción (lb) *" : "Peso (lb) *", { inputMode: "decimal" })}
           <label className="block text-sm">
             <span className="mb-1 block text-xs text-muted-foreground">Se vende</span>
@@ -267,8 +299,9 @@ function BulkDialog({ onClose }: { onClose: () => void }) {
     const XLSX = await import("xlsx");
     const ws = XLSX.utils.aoa_to_sheet([
       [...TEMPLATE_HEADERS],
-      ["Aguacate Hass grande", "Large Hass avocado", "Frutas y verduras", 3.14, "", "1 unidad", 0.5, "no", "si", "", "Food Bazaar", ""],
-      ["Guineos / plátanos", "Bananas", "Frutas y verduras", 2.40, "", "aprox. 2 lb", 2, "si", "si", "", "Food Bazaar", ""],
+      ["Aguacate Hass grande", "Large Hass avocado", "Frutas y verduras", 3.14, "", "1 unidad", 0.5, "no", "si", "", "Food Bazaar", "", "", "", "Frutas", ""],
+      ["Goya Frijoles negros 15.5 oz", "Goya Black beans 15.5 oz", "Despensa", 1.79, "", "15.5 oz", 1, "no", "si", "", "Food Bazaar", "", "", "", "Enlatados", "041331024686; 0041331024686"],
+      ["Guineos / plátanos", "Bananas", "Frutas y verduras", 2.40, "", "aprox. 2 lb", 2, "si", "si", "", "Food Bazaar", "", "", "", "Frutas", ""],
     ]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Productos");
@@ -298,7 +331,7 @@ function BulkDialog({ onClose }: { onClose: () => void }) {
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader><DialogTitle>Subir productos en bloque</DialogTitle></DialogHeader>
-        <p className="text-sm text-muted-foreground">Usa la plantilla (CSV o Excel). Columnas: {TEMPLATE_HEADERS.join(", ")}. "por_libra" y "disponible": si / no.</p>
+        <p className="text-sm text-muted-foreground">Usa la plantilla (CSV o Excel). Columnas: {TEMPLATE_HEADERS.join(", ")}. "por_libra" y "disponible": si / no. "codigos_barras": solo números, varios separados por ;.</p>
         <Button variant="outline" onClick={template}><Download className="mr-1 h-4 w-4" /> Descargar plantilla</Button>
         <input type="file" accept=".csv,.xlsx,.xls" onChange={(e) => onFile(e.target.files?.[0])} className="text-sm" />
         {parsed && (
@@ -312,6 +345,51 @@ function BulkDialog({ onClose }: { onClose: () => void }) {
           </div>
         )}
         <Button onClick={submit} disabled={busy || !parsed?.ok.length}>{busy ? "Guardando…" : `Guardar ${parsed?.ok.length ?? 0} productos`}</Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TeachDialog({ code, products, onClose }: { code: string; products: any[]; onClose: () => void }) {
+  const assign = useServerFn(adminAssignBarcode);
+  const qc = useQueryClient();
+  const [q, setQ] = useState("");
+  const [busy, setBusy] = useState(false);
+  const owner = products.find((p) => (p.codigos_barras ?? []).includes(code));
+  const list = useMemo(() => {
+    const t = q.trim().toLowerCase();
+    return products.filter((p) => !t || `${p.nombre} ${p.nombre_en ?? ""}`.toLowerCase().includes(t)).slice(0, 40);
+  }, [products, q]);
+
+  async function pick(p: any) {
+    setBusy(true);
+    try {
+      const r = await assign({ data: { productId: p.id, code } });
+      if (!r.ok) { scanFeedback(false); toast.error(`Este código ya pertenece a "${r.conflict}". No se guardó.`); return; }
+      scanFeedback(true);
+      await qc.invalidateQueries({ queryKey: ["admin-house-products"] });
+      toast.success(`Código guardado en ${p.nombre}`);
+      onClose();
+    } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+  }
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-h-[90dvh] overflow-y-auto">
+        <DialogHeader><DialogTitle>Guardar código {code}</DialogTitle></DialogHeader>
+        {owner && <p className="rounded-lg bg-destructive/10 p-2 text-sm text-destructive">Este código ya pertenece a "{owner.nombre}".</p>}
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar el producto" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" autoFocus />
+        <ul className="divide-y divide-border">
+          {list.map((p) => (
+            <li key={p.id}>
+              <button type="button" disabled={busy} onClick={() => pick(p)} className="flex w-full items-center gap-2 py-2 text-left text-sm hover:bg-muted">
+                {p.imagenUrl ? <img src={p.imagenUrl} alt="" className="h-8 w-8 rounded object-cover" /> : <div className="h-8 w-8 rounded bg-muted" />}
+                <span className="flex-1">{p.nombre}</span>
+                {(p.codigos_barras ?? []).length > 0 && <span className="text-xs text-muted-foreground">{p.codigos_barras.length} código(s)</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
       </DialogContent>
     </Dialog>
   );

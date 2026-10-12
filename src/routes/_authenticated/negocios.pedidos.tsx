@@ -224,6 +224,15 @@ function StoreOrdersPage() {
                 </button>
               )}
               {["confirmado", "preparando", "cobro_fallido"].includes(o.estado) && (
+                <Link
+                  to="/compra/$id"
+                  params={{ id: o.id }}
+                  className="rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary"
+                >
+                  Comprar y escanear
+                </Link>
+              )}
+              {["confirmado", "preparando", "cobro_fallido"].includes(o.estado) && (
                 <button
                   onClick={() =>
                     readyM.mutate({
