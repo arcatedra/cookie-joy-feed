@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { barcodeListSchema, parseBarcodeList } from "./barcode-rules";
 
 /** Slug fijo de la tienda propia de Hazorex. */
 export const HOUSE_STORE_SLUG = "hazorex-supermercado";
@@ -94,6 +95,8 @@ export const houseProductSchema = z.object({
   direccion: z.string().trim().max(240).default(""),
   imagen_url: z.string().max(500).nullable().default(null),
   codigo_barras: z.string().trim().regex(/^\d{8,14}$/, "Código de barras inválido").nullable().optional(),
+  /** Varios UPC/EAN por producto; omitirlo conserva los guardados. */
+  codigos_barras: barcodeListSchema.optional(),
 }).refine((p) => !p.subcategoria || houseSubcategories(p.categoria).some((c) => c.es === p.subcategoria), {
   path: ["subcategoria"], message: "Subcategoría no válida para esta categoría",
 });
@@ -117,7 +120,7 @@ export function productPhotoPatch(input: Pick<HouseProductInput, "imagen_url" | 
 export const TEMPLATE_HEADERS = [
   "nombre", "nombre_en", "categoria", "precio", "precio_anterior", "tamano",
   "peso_lb", "por_libra", "disponible", "stock", "super", "direccion",
-  "descripcion", "descripcion_en", "subcategoria",
+  "descripcion", "descripcion_en", "subcategoria", "codigos_barras",
 ] as const;
 
 function yes(v: unknown, def: boolean): boolean {
@@ -140,6 +143,11 @@ export function parseBulkRows(rows: Record<string, unknown>[]) {
     const r: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(raw)) r[k.trim().toLowerCase()] = v;
     if (Object.values(r).every((v) => String(v ?? "").trim() === "")) return;
+    const bc = parseBarcodeList(r.codigos_barras);
+    if (bc.invalid.length) {
+      errors.push({ row: i + 2, message: `Código de barras inválido: ${bc.invalid.join(", ")}` });
+      return;
+    }
     const pa = num(r.precio_anterior);
     const st = num(r.stock);
     const parsed = houseProductSchema.safeParse({
@@ -159,6 +167,7 @@ export function parseBulkRows(rows: Record<string, unknown>[]) {
       descripcion: r.descripcion === undefined ? undefined : String(r.descripcion),
       descripcion_en: r.descripcion_en === undefined ? undefined : String(r.descripcion_en),
       subcategoria: String(r.subcategoria ?? "").trim() || null,
+      ...(bc.codes.length ? { codigos_barras: bc.codes } : {}),
     });
     if (parsed.success) ok.push(parsed.data);
     else errors.push({ row: i + 2, message: parsed.error.issues.map((x) => x.message).join("; ") });
