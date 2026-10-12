@@ -8,6 +8,41 @@ import { HOUSE_MEAT_CATALOG } from "./house-meat-catalog";
 import { HOUSE_MEAT_SUBCATEGORIES, houseSubcategories } from "./house-store-rules";
 import { HOUSE_DAIRY_CATALOG } from "./house-dairy-catalog";
 import { HOUSE_DAIRY_SUBCATEGORIES } from "./house-store-rules";
+import { HOUSE_BAKERY_CATALOG } from "./house-bakery-catalog";
+import { HOUSE_BAKERY_SUBCATEGORIES } from "./house-store-rules";
+
+describe("catálogo de Panadería", () => {
+  it("valida 38 productos únicos, precios por unidad y cinco subcategorías", () => {
+    expect(HOUSE_BAKERY_CATALOG).toHaveLength(38);
+    expect(new Set(HOUSE_BAKERY_CATALOG.map((p) => p.nombre)).size).toBe(38);
+    expect(new Set(HOUSE_BAKERY_CATALOG.map((p) => p.nombre_en)).size).toBe(38);
+    expect(HOUSE_BAKERY_SUBCATEGORIES.map((c) => HOUSE_BAKERY_CATALOG.filter((p) => p.subcategoria === c.es).length)).toEqual([9, 7, 6, 9, 7]);
+    for (const p of HOUSE_BAKERY_CATALOG) {
+      expect(houseProductSchema.safeParse({ ...p, categoria: "Panadería" }).success).toBe(true);
+      expect(p.vendido_por_lb).toBe(false);
+      expect(unitPriceCents(p)).toBe(Math.round(p.precio * 100));
+      expect(p.descripcion.length).toBeGreaterThan(10);
+      expect(p.descripcion_en.length).toBeGreaterThan(10);
+    }
+    expect(HOUSE_BAKERY_CATALOG.map((p) => [p.precio, p.peso_lb])).toEqual([
+      [2.30,1.25],[3.35,1.25],[4.82,1.25],[3.56,1.25],[4.82,1.25],[4.82,1.25],[7.86,1.7],[6.08,1],[5.55,1.5],
+      [5.76,0.75],[4.40,0.9],[4.40,0.9],[5.45,0.6],[2.30,0.75],[7.02,0.6],[4.82,0.9],
+      [5.76,1.3],[5.76,1.3],[5.76,1.3],[1.04,0.25],[5.97,0.8],[5.97,0.8],
+      [6.92,0.75],[9.44,1.5],[7.97,0.75],[1.77,0.25],[1.77,0.25],[4.19,0.5],[6.29,1.5],[15.74,2],[8.91,0.6],
+      [6.60,4.1],[6.60,4.1],[3.87,0.3],[3.66,1],[4.19,0.75],[3.98,0.5],[3.98,0.5],
+    ]);
+  });
+  it("comparte filtros y rechaza subcategorías de otro padre", () => {
+    const p = { ...HOUSE_BAKERY_CATALOG[0], categoria: "Panadería" };
+    expect(houseSubcategories(p.categoria)).toEqual(HOUSE_BAKERY_SUBCATEGORIES);
+    expect(houseProductSchema.safeParse({ ...p, subcategoria: "Quesos" }).success).toBe(false);
+    expect(houseProductSchema.safeParse({ ...p, categoria: "Lácteos y huevos" }).success).toBe(false);
+    expect(houseProductSchema.parse({ nombre: "Pan", categoria: "Panadería", precio: 2, peso_lb: 1 }).subcategoria).toBeUndefined();
+    const bulk = parseBulkRows([{ ...p, por_libra: "no" }]);
+    expect(bulk.errors).toEqual([]);
+    expect(bulk.ok[0]?.subcategoria).toBe("Pan de molde");
+  });
+});
 
 describe("catálogo de lácteos y huevos", () => {
   it("valida los 41 productos únicos y las seis subcategorías", () => {
