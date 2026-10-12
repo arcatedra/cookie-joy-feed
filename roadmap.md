@@ -69,9 +69,9 @@
 - No modificar ni borrar usuarios o clientes reales.
 - No afirmar pruebas completas cuando falte acceso autenticado seguro al Supabase externo.
 ## Supermercado propio (11 oct)
-- [ ] Aprobar plan para nombres con marca: 32 Panadería y 41 Lácteos y huevos, sin cambiar precios/pesos.
-- [ ] Aplicar nombres ES/EN por producto existente y buscar fotos frontales exactas en Open Food Facts; conservar fotos sin coincidencia y originales de las editadas.
-- [ ] Verificar nombres, precios/pesos conservados, fotos/créditos y búsqueda; entregar conteos sin publicar ni tocar pagos/clientes.
+- [x] Aprobar plan para nombres con marca: 32 Panadería y 41 Lácteos y huevos, sin cambiar precios/pesos.
+- [x] Aplicar 73 nombres ES/EN por identificador existente; buscar fotos OFF y rechazar marcas/tamaños/etiquetas incorrectos. Seis fotos exactas aceptadas con fondo blanco y originales: Pepperidge Farm Farmhouse, Thomas' English muffins, ambos Stonefire naan, Organic Valley 1% y Daisy 16 oz. Los otros 67 conservan foto actual porque no hubo coincidencia exacta utilizable y completa; OFF presentó errores 403/503. No usar las ediciones generadas que alteraron etiquetas.
+- [x] Verificar 274 productos antes/después: mismos identificadores, precios/pesos y demás campos fuera de nombres/fotos autorizados; 22 pruebas pasan. Seis fotos cargan en la tienda, crédito/original/código comprobados, celular sin desbordamiento y sin errores; build OK. Sin publicar ni tocar pagos/clientes.
 - [x] Aprobar plan de Panadería: 38 productos, cinco subcategorías y fotos genéricas ausentes de cheddar/pavo.
 - [x] Incorporar 38 productos de Panadería sin duplicados, con precios/pesos indicados, fotos propias y descripciones ES/EN; Food Bazaar en información restringida. Completar fotos ausentes de cheddar Kraft/pavo Butterball sin alterar otros datos.
 - [x] Verificar cinco filtros (9/7/6/9/7), 38 fotos cargadas, búsqueda ES/EN y celular/escritorio sin errores; 19 pruebas pasan y 38 filas coinciden exactamente con catálogo aprobado. Ninguno nuevo sin foto. Sin publicar ni tocar pagos/clientes; edición admin no comprobada por Supabase externo sin sesión autorizada.
