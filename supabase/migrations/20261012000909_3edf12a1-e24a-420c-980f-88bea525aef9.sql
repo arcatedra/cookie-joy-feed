@@ -1,0 +1,2 @@
+ALTER TABLE public.store_products DROP CONSTRAINT store_products_subcategoria_valid;
+ALTER TABLE public.store_products ADD CONSTRAINT store_products_subcategoria_valid CHECK (subcategoria IS NULL OR subcategoria IN ('Frutas','Verduras','Pollo y pavo','Res','Cerdo','Cordero y chivo','Pescado','Mariscos','Leche','Cremas','Huevos','Quesos','Yogur','Mantequilla'));
