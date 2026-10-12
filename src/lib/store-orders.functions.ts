@@ -144,33 +144,42 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const { data: pricingRows } = await db.from("pricing_settings").select("key, value");
     const pricing = pricingFromRows(pricingRows);
 
+    // La compra en el súper es la fuente de verdad: no se cobra hasta revisar cada artículo.
+    const { pendingPicks, pickedQuantity } = await import("./barcode-rules");
+    const pending = pendingPicks(items ?? []);
+    if (pending > 0) {
+      throw new Error(`Faltan ${pending} artículo(s) por revisar (Encontrado, Reemplazado o No había).`);
+    }
+
     // Pesos de los productos para recalcular el cargo por peso real
     const productIds = (items ?? []).map((i: any) => i.product_id).filter(Boolean);
     const weightById = new Map<string, number>();
+    const productById = new Map<string, any>();
     if (productIds.length > 0) {
       const { data: prods } = await db
         .from("store_products")
-        .select("id, peso_lb")
+        .select("id, peso_lb, vendido_por_lb")
         .in("id", productIds);
       for (const p of prods ?? []) {
         weightById.set(p.id, Number(p.peso_lb ?? pricing.defaultProductWeightLb));
+        productById.set(p.id, p);
       }
     }
 
-    const realById = new Map(data.items.map((i) => [i.itemId, i.cantidadReal]));
     let realSubtotalCents = 0;
     let realLb = 0;
     let realItemCount = 0;
     for (const it of items ?? []) {
-      const real = realById.has(it.id) ? Number(realById.get(it.id)) : Number(it.cantidad);
-      realSubtotalCents += Math.round(Number(it.precio_unitario) * 100) * real;
+      const real = pickedQuantity(it, productById.get(it.product_id));
+      realSubtotalCents += Math.round(Math.round(Number(it.precio_unitario) * 100) * real);
       realItemCount += real;
       realLb +=
         (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
-      if (realById.has(it.id) && real !== Number(it.cantidad_real)) {
+      if (real !== Number(it.cantidad_real)) {
         await db.from("store_order_items").update({ cantidad_real: real }).eq("id", it.id);
       }
     }
+    void data.items;
     realLb = Math.round(realLb * 100) / 100;
 
     const tier = tierForWeight(realLb, pricing);

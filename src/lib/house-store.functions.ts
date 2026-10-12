@@ -88,6 +88,15 @@ async function upsertProducts(db: any, items: HouseProductInput[]) {
       ...(it.subcategoria !== undefined ? { subcategoria: it.subcategoria } : {}),
     };
     Object.assign(row, productPhotoPatch(it));
+    if (it.codigos_barras !== undefined) {
+      const { findBarcodeOwner } = await import("./barcode.server");
+      for (const code of it.codigos_barras) {
+        const owner = await findBarcodeOwner(db, store.id, code, it.id);
+        if (owner) throw new Error(`${it.nombre}: el código ${code} ya pertenece a "${owner.nombre}".`);
+      }
+      row.codigos_barras = it.codigos_barras;
+      if (it.codigo_barras === undefined) row.codigo_barras = it.codigos_barras[0] ?? null;
+    }
     const q = it.id
       ? db.from("store_products").update(row).eq("id", it.id).eq("business_id", store.id).select("id").single()
       : db.from("store_products").insert(row).select("id").single();
@@ -157,4 +166,34 @@ export const adminUploadHouseImage = createServerFn({ method: "POST" })
       .upload(path, bytes, { contentType: `image/${ext === "jpg" ? "jpeg" : ext}` });
     if (error) throw new Error("No se pudo subir la foto.");
     return { path };
+  });
+
+/** Busca un producto del supermercado por código escaneado. */
+export const adminFindProductByBarcode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ code: z.string().regex(/^\d{8,14}$/) }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    const store = await houseStore(db);
+    const { findBarcodeOwner } = await import("./barcode.server");
+    const owner = await findBarcodeOwner(db, store.id, data.code);
+    return { product: owner ? { id: owner.id, nombre: owner.nombre } : null };
+  });
+
+/** Modo enseñar: guarda un código en un producto; si ya es de otro producto, avisa y no lo guarda. */
+export const adminAssignBarcode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) =>
+    z.object({ productId: z.string().uuid(), code: z.string().regex(/^\d{8,14}$/) }).parse(raw),
+  )
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    const store = await houseStore(db);
+    const { findBarcodeOwner, addBarcodeToProduct } = await import("./barcode.server");
+    const owner = await findBarcodeOwner(db, store.id, data.code, data.productId);
+    if (owner) return { ok: false as const, conflict: owner.nombre };
+    const { data: p } = await db.from("store_products").select("id").eq("id", data.productId).eq("business_id", store.id).maybeSingle();
+    if (!p) throw new Error("Producto no encontrado.");
+    await addBarcodeToProduct(db, data.productId, data.code);
+    return { ok: true as const };
   });
