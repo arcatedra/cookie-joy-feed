@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Precio justo Food Bazaar (18 oct)
+- [ ] Aprobar plan para precios y modalidades de la lista recibida, sin sobreprecio, texto público y pruebas.
+- [ ] Actualizar únicamente los productos existentes indicados, conservar otros precios/fotos y sincronizar referencias; no tocar pagos, entrega ni clientes.
+- [ ] Verificar valores guardados, modalidades por libra y peso de sandía, ausencia de sobreprecio y pantalla; informar cambios y faltantes, sin publicar.
+
 ## Diseño del supermercado y portada
 - [x] Aprobar ajustes exclusivamente visuales: barra compacta con carrito deslizable, cuarta tarjeta, cuatro destacados y Cómo funciona.
 - [x] Implementar y verificar celular (390 px) y computadora (1280 px): cuatro unidades reales, subtotal correcto, abrir/cerrar y conservar propina; cuatro destacados con fotos, sin hueco antes del pie ni desbordamiento. Pasaron 19 pruebas del catálogo. Sin pagos, cambios de precios/base de datos ni publicación.
