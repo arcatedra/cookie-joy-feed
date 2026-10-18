@@ -91,7 +91,7 @@ function SupermarketPage() {
    const card = (p: P) => <ProductCard key={p.id} p={p} name={name(p)} description={productDescription(p, en)} qty={cart[p.id] ?? 0} onAdd={add} L={L} />;
 
   return (
-    <main className="mx-auto max-w-6xl pb-64">
+    <main className="mx-auto max-w-6xl pb-24">
       <header className="px-4 pt-5">
         <div className="flex items-center gap-2">
           <ShoppingBasket className="h-6 w-6 text-primary" />
@@ -156,7 +156,7 @@ function SupermarketPage() {
         {" ("}<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-SA</a>{")"}
         {products.some((p: P) => p.foto_fondo_editado === true) ? ", fondo editado" : null}
       </footer>
-      <StoreCartBar businessId={store.id} products={products} cart={cart} onClear={() => setCart({})} />
+      <StoreCartBar compact businessId={store.id} products={products} cart={cart} onClear={() => setCart({})} />
     </main>
   );
 }

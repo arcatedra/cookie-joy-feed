@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { sweepstakesEnabled } from "@/lib/feature-flags";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -15,9 +15,10 @@ export function SiteFooter() {
   const storesVisible = useStoresVisible();
   const { t } = useTranslation();
   const year = new Date().getFullYear();
+  const isHome = useRouterState({ select: (state) => state.location.pathname === "/" });
 
   return (
-    <footer className="mt-12 border-t border-[#C8862E]/40 bg-[#1e3a5f] text-white">
+    <footer className={`${isHome ? "" : "mt-12"} border-t border-[#C8862E]/40 bg-[#1e3a5f] text-white`}>
       <div className="mx-auto max-w-[1500px] px-4 py-10 md:px-6 md:py-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           {/* Brand */}

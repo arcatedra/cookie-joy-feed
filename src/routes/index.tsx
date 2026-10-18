@@ -26,6 +26,10 @@ import imgPB from "@/assets/ins-pb.jpg";
 import imgMint from "@/assets/ins-mint.jpg";
 import imgVegan from "@/assets/ins-vegan-choc.jpg";
 import imgBox from "@/assets/cookie-box.jpg";
+import fruitPhoto from "@/assets/fruits/fruit-01.jpg.asset.json";
+import meatPhoto from "@/assets/meat/meat-01.jpg.asset.json";
+import dairyPhoto from "@/assets/dairy/dairy-01.jpg.asset.json";
+import bakeryPhoto from "@/assets/bakery/bakery-01.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -141,8 +145,7 @@ function Home() {
       </section>
 
       
-      <section className="mx-auto mt-4 max-w-[1500px] px-3 md:px-6">
-      </section>
+
 
 
 
@@ -171,6 +174,7 @@ function Home() {
           </div>
         </div>
       </section>
+      <HowItWorks />
     </main>
   );
 }
@@ -290,6 +294,7 @@ function CategoryCardGrid() {
         <BestSellersCard />
         <BuildPackCard />
         <FeaturedCard />
+        <SupermarketCard />
       </div>
     </div>
   );
@@ -305,12 +310,12 @@ function CardShell({
   children: React.ReactNode;
 }) {
   return (
-    <article className="flex flex-col rounded-md bg-white p-4 shadow-md ring-1 ring-black/5 md:p-5">
-      <h3 className="text-base font-extrabold text-[#1a0f0a] md:text-lg">{title}</h3>
+    <article className="flex flex-col rounded-md bg-card p-4 shadow-md ring-1 ring-border md:p-5">
+      <h3 className="text-base font-extrabold text-card-foreground md:text-lg">{title}</h3>
       <div className="mt-3 flex-1">{children}</div>
       <Link
         to={link.to}
-        className="mt-3 inline-block text-xs font-semibold text-[#007185] hover:text-[#c7511f] hover:underline"
+        className="mt-3 inline-block text-xs font-semibold text-primary hover:text-primary hover:underline"
       >
         {link.label}
       </Link>
@@ -392,31 +397,74 @@ function BuildPackCard() {
 // the end date and the units-sold count from the database before showing
 // any countdown or claim percentage.
 function FeaturedCard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { data: products = [] } = useCookieCatalog();
+  const en = i18n.language.startsWith("en");
+  // The current cookie catalog has no promotional price field: show real featured items without invented discounts.
+  const items = products.slice(0, 4);
   return (
-    <CardShell
-      title={t("home.cards.flashTitle")}
-      link={{ to: "/menu", label: t("home.cards.flashLink") }}
-    >
-      <Link to="/menu" className="block">
-        <div className="flex gap-3">
-          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-sm bg-[#f7f7f7]">
-            <img src={imgPack9} alt={t("home.cards.flashAlt")} loading="lazy" className="h-full w-full object-cover" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="line-clamp-2 text-xs font-semibold text-[#1a0f0a]">
-              {t("home.cards.flashProduct")}
-            </p>
-            <p className="mt-1 text-sm font-bold text-[#1a0f0a]">
-              <span className="text-[10px] align-top">$</span>32.00
-            </p>
-            <p className="mt-1 text-[11px] text-[#555]">
-              {t("home.cards.flashLink")}
-            </p>
-          </div>
-        </div>
-      </Link>
+    <CardShell title={t("home.cards.flashTitle")} link={{ to: "/menu", label: t("home.cards.flashLink") }}>
+      <div className="grid grid-cols-2 gap-2">
+        {items.map((it) => (
+          <Link key={it.id} to="/shop" className="group min-w-0">
+            <div className="aspect-square overflow-hidden rounded-sm bg-muted">
+              <img src={it.imagen_url || imgBox} alt={it.nombre} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
+            </div>
+            <p className="mt-1 line-clamp-2 text-xs font-semibold text-card-foreground">{it.nombre}</p>
+            <p className="text-xs font-bold text-primary">${Number(it.precio).toFixed(2)}</p>
+            <p className="text-[10px] text-muted-foreground">{en ? "Featured" : "Destacado"}</p>
+          </Link>
+        ))}
+      </div>
     </CardShell>
+  );
+}
+
+function SupermarketCard() {
+  const { i18n } = useTranslation();
+  const en = i18n.language.startsWith("en");
+  const categories = [
+    { es: "Frutas y verduras", en: "Fruit & vegetables", photo: fruitPhoto.url },
+    { es: "Carnes", en: "Meat", photo: meatPhoto.url },
+    { es: "Lácteos", en: "Dairy", photo: dairyPhoto.url },
+    { es: "Panadería", en: "Bakery", photo: bakeryPhoto.url },
+  ];
+  return (
+    <CardShell title={en ? "Supermarket" : "Supermercado"} link={{ to: "/supermercado", label: en ? "Store prices, no markup" : "Precios de tienda, sin sobreprecio" }}>
+      <div className="grid grid-cols-2 gap-2">
+        {categories.map((category) => (
+          <Link key={category.es} to="/supermercado" className="group min-w-0">
+            <div className="aspect-square overflow-hidden rounded-sm bg-background">
+              <img src={category.photo} alt={en ? category.en : category.es} loading="lazy" className="h-full w-full object-contain transition group-hover:scale-105" />
+            </div>
+            <p className="mt-1 text-[11px] text-card-foreground">{en ? category.en : category.es}</p>
+          </Link>
+        ))}
+      </div>
+    </CardShell>
+  );
+}
+
+function HowItWorks() {
+  const { i18n } = useTranslation();
+  const en = i18n.language.startsWith("en");
+  const steps = en
+    ? ["Order the day before", "We shop and prepare your order", "We deliver on Monday, Wednesday or Friday"]
+    : ["Pides el día antes", "Compramos y preparamos tu pedido", "Te lo entregamos lunes, miércoles o viernes"];
+  return (
+    <section className="border-t border-border bg-card px-4 py-8 text-card-foreground">
+      <div className="mx-auto max-w-6xl">
+        <h2 className="mb-6 text-xl font-bold">{en ? "How it works" : "Cómo funciona"}</h2>
+        <ol className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {steps.map((step, index) => (
+            <li key={step} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{index + 1}</span>
+              <p className="min-w-0 text-sm font-semibold leading-relaxed">{step}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   );
 }
 
