@@ -1,8 +1,8 @@
 # Revisión final antes de apertura
 
 ## Diseño del supermercado y portada
-- [ ] Aprobar ajustes exclusivamente visuales: barra compacta con carrito deslizable, cuarta tarjeta, cuatro destacados y Cómo funciona.
-- [ ] Implementar y verificar celular/computadora sin modificar precios, pagos ni base de datos; no publicar.
+- [x] Aprobar ajustes exclusivamente visuales: barra compacta con carrito deslizable, cuarta tarjeta, cuatro destacados y Cómo funciona.
+- [x] Implementar y verificar celular (390 px) y computadora (1280 px): cuatro unidades reales, subtotal correcto, abrir/cerrar y conservar propina; cuatro destacados con fotos, sin hueco antes del pie ni desbordamiento. Pasaron 19 pruebas del catálogo. Sin pagos, cambios de precios/base de datos ni publicación.
 
 ## Cantidades reales de pedidos de tienda
 - [x] Confirmar con código actual y reproducción aislada que 3 unidades pedidas y 2 reales siguen calculándose como 3.

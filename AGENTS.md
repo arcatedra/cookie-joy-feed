@@ -9,7 +9,7 @@
 - Reel product associations require an exact available catalog flavor, shared by carousel and fullscreen; hide unmatched media without deleting records to prevent misleading purchases.
 - Reservable-block calculations live in a pure validated rules module and must remain inactive until checkout, assignment, funding and historical-order isolation are verified, preventing partial rollout of financial rules.
 - New orders persist a driver pricing model while historical orders keep their existing amounts; database assignment triggers serialize driver capacity checks across cookie routes and store stops.
-- Browser cart and preferred language hydrate only after mounting so their first render matches server output.
+- Hydrate cart/language after mount for SSR; reuse mounted StoreCartBar in drawers to preserve payment state.
 
 - Persist the Stripe environment on marketplace orders and connected accounts; transfer and capture operations must validate that environment instead of deriving it from background execution, preventing sandbox/live crossovers.
 - Tax identifiers and bank account details must be collected only by Stripe onboarding; local write endpoints and database triggers reject new sensitive financial data while preserving historical rows.
