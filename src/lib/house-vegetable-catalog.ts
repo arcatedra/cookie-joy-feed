@@ -3,7 +3,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Alcachofa",
     "Artichoke",
-    3.14,
+    2.99,
     false,
     0.5,
     "Corazón tierno, ideal para cocinar al vapor.",
@@ -12,7 +12,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Espárragos",
     "Asparagus",
-    6.29,
+    5.99,
     true,
     1.0,
     "Tallos frescos para asar o saltear.",
@@ -21,7 +21,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Brócoli",
     "Broccoli crown",
-    3.45,
+    2.49,
     true,
     1.0,
     "Brócoli fresco para sopas y acompañamientos.",
@@ -30,7 +30,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Coliflor",
     "Cauliflower",
-    3.14,
+    2.99,
     false,
     2.0,
     "Coliflor suave para asar o preparar puré.",
@@ -48,8 +48,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ají pimiento verde",
     "Green bell pepper",
-    1.19,
-    false,
+    1.99,
+    true,
     0.6,
     "Pimiento crujiente para guisos y ensaladas.",
     "Crisp pepper for stews and salads."
@@ -57,7 +57,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pimiento rojo",
     "Red bell pepper",
-    4.71,
+    1.79,
     true,
     0.5,
     "Pimiento dulce para asar o comer fresco.",
@@ -66,8 +66,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pimiento naranja",
     "Orange bell pepper",
-    2.1,
-    false,
+    1.79,
+    true,
     0.5,
     "Pimiento de sabor dulce para ensaladas.",
     "Sweet-flavored pepper for salads."
@@ -75,7 +75,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Mini pimientos dulces",
     "Mini sweet peppers",
-    4.19,
+    3.00,
     true,
     1.0,
     "Pimientos pequeños para meriendas y recetas.",
@@ -93,7 +93,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ají serrano",
     "Serrano pepper",
-    3.45,
+    4.99,
     true,
     0.25,
     "Ají de picor intenso para salsas frescas.",
@@ -102,7 +102,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ají cubanela",
     "Cubanelle pepper",
-    4.19,
+    3.29,
     true,
     0.5,
     "Ají suave para sofritos y rellenos.",
@@ -111,7 +111,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ají dulce",
     "Sweet aji pepper",
-    6.29,
+    5.99,
     true,
     0.25,
     "Ají aromático de sabor suave para sofritos.",
@@ -129,7 +129,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Habichuelas verdes",
     "Green beans",
-    2.82,
+    2.49,
     true,
     1.0,
     "Habichuelas tiernas para salteados y guarniciones.",
@@ -138,7 +138,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Guisantes tirabeques",
     "Snow peas",
-    4.19,
+    3.99,
     true,
     0.5,
     "Vainas crujientes para salteados rápidos.",
@@ -147,7 +147,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Coles de Bruselas",
     "Brussels sprouts",
-    3.14,
+    2.99,
     true,
     1.0,
     "Coles pequeñas para asar o cocinar al vapor.",
@@ -192,7 +192,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pepino inglés",
     "English cucumber",
-    2.1,
+    2.00,
     false,
     0.8,
     "Pepino alargado para rodajas y ensaladas.",
@@ -201,8 +201,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Berenjena",
     "Eggplant",
-    1.56,
-    false,
+    1.49,
+    true,
     1.0,
     "Berenjena de pulpa suave para guisos y horno.",
     "Soft-fleshed eggplant for stews and baking."
@@ -219,7 +219,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Sábila",
     "Aloe vera leaf",
-    2.09,
+    2.00,
     false,
     1.0,
     "Hoja carnosa de sábila con gel interior.",
@@ -228,7 +228,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Caña de azúcar",
     "Sugar cane",
-    4.19,
+    3.99,
     false,
     2.0,
     "Tallos dulces para preparar jugos caseros.",
@@ -246,7 +246,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Tomatillo",
     "Tomatillo",
-    4.4,
+    1.99,
     true,
     0.5,
     "Tomatillo de sabor ácido para salsas verdes.",
@@ -255,8 +255,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Tomate en rama",
     "Tomato on the vine",
-    2.23,
-    false,
+    2.49,
+    true,
     0.4,
     "Tomate jugoso para ensaladas y bocadillos.",
     "Juicy tomato for salads and sandwiches."
@@ -264,7 +264,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Tomate pera",
     "Plum tomato",
-    2.19,
+    1.99,
     true,
     1.0,
     "Tomate de pulpa firme para salsas y guisos.",
@@ -273,7 +273,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Tomate cherry",
     "Cherry tomatoes",
-    3.14,
+    2.00,
     false,
     0.7,
     "Tomates pequeños y jugosos para ensaladas.",
@@ -282,7 +282,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Rábanos manojo",
     "Radish bunch",
-    1.56,
+    1.49,
     false,
     0.5,
     "Rábanos crujientes para ensaladas frescas.",
@@ -291,8 +291,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Nabo blanco",
     "White turnip",
-    1.44,
-    false,
+    0.99,
+    true,
     0.6,
     "Nabo de sabor suave para sopas y purés.",
     "Mild turnip for soups and mash."
@@ -300,7 +300,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Remolacha manojo",
     "Beet bunch",
-    4.71,
+    2.50,
     false,
     2.0,
     "Remolacha de sabor terroso para asar o hervir.",
@@ -309,7 +309,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Yautía blanca",
     "White yautia",
-    5.24,
+    4.99,
     true,
     1.0,
     "Raíz de pulpa blanca para hervidos y purés.",
@@ -327,7 +327,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Papas Idaho 5 lb",
     "Idaho potatoes 5 lb",
-    4.71,
+    3.50,
     false,
     5.0,
     "Papas de pulpa harinosa para hornear y freír.",
@@ -336,7 +336,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Batata",
     "Sweet potato",
-    2.09,
+    1.99,
     true,
     1.0,
     "Batata de sabor dulce para horno y purés.",
@@ -354,7 +354,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Hongos portobello 8 oz",
     "Portobello mushrooms",
-    4.08,
+    2.00,
     false,
     0.5,
     "Hongos carnosos para asar o rellenar.",
@@ -363,7 +363,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Hongos shiitake",
     "Shiitake",
-    7.34,
+    5.99,
     true,
     0.5,
     "Hongos aromáticos para sopas y salteados.",
@@ -372,7 +372,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Cebollín",
     "Scallions",
-    3.14,
+    0.75,
     false,
     0.2,
     "Cebollín fresco para sopas y acompañamientos.",
@@ -390,7 +390,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Cebolla amarilla 2 lb",
     "Yellow onions 2 lb",
-    2.93,
+    2.00,
     false,
     2.0,
     "Cebollas amarillas para sofritos y guisos.",
@@ -399,7 +399,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ajo bolsa",
     "Garlic bag",
-    4.19,
+    2.00,
     false,
     0.5,
     "Ajo aromático para sazonar recetas caseras.",
@@ -408,7 +408,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Chayote",
     "Chayote",
-    2.09,
+    0.67,
     false,
     0.7,
     "Chayote de pulpa suave para hervir y guisar.",
@@ -417,8 +417,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Calabacín",
     "Zucchini",
-    1.97,
-    false,
+    1.99,
+    true,
     0.6,
     "Calabacín tierno para salteados y horno.",
     "Tender zucchini for sautéing and baking."
@@ -426,7 +426,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Calabacín amarillo",
     "Yellow squash",
-    1.79,
+    1.70,
     false,
     0.5,
     "Calabaza amarilla suave para guarniciones.",
@@ -435,7 +435,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Lechuga hoja verde",
     "Green leaf lettuce",
-    1.98,
+    0.95,
     false,
     1.0,
     "Hojas frescas para ensaladas y bocadillos.",
@@ -444,7 +444,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Lechuga romana",
     "Romaine lettuce",
-    2.93,
+    2.50,
     false,
     1.0,
     "Lechuga crujiente para ensaladas y wraps.",
@@ -453,7 +453,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Escarola",
     "Escarole",
-    4.19,
+    1.49,
     true,
     1.0,
     "Hojas de sabor ligeramente amargo para sopas.",
@@ -462,7 +462,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Col rizada",
     "Kale",
-    5.24,
+    1.49,
     true,
     0.5,
     "Hojas firmes para salteados y sopas.",
@@ -471,8 +471,8 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Repollo verde",
     "Green cabbage",
-    2.6,
-    false,
+    0.59,
+    true,
     3.0,
     "Repollo crujiente para ensaladas y guisos.",
     "Crisp cabbage for salads and stews."
@@ -480,7 +480,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Apio",
     "Celery",
-    3.14,
+    1.50,
     false,
     1.5,
     "Tallos crujientes para sopas y ensaladas.",
@@ -507,7 +507,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Cilantro",
     "Cilantro",
-    3.03,
+    1.99,
     false,
     0.2,
     "Hierba fresca para salsas y acompañamientos.",
@@ -516,7 +516,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Recao",
     "Culantro",
-    2.09,
+    1.99,
     false,
     0.2,
     "Hojas aromáticas para sofritos y caldos.",
@@ -525,7 +525,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Ensalada mixta 12 oz",
     "Garden salad mix",
-    2.61,
+    2.95,
     false,
     0.75,
     "Mezcla de hojas y verduras para ensaladas.",

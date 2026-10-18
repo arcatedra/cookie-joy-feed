@@ -97,6 +97,9 @@ function SupermarketPage() {
           <ShoppingBasket className="h-6 w-6 text-primary" />
           <h1 className="text-2xl font-bold">{L("Supermercado", "Supermarket")}</h1>
         </div>
+        <p className="mt-1 text-sm font-medium text-foreground">
+          {L("Precios de tienda Food Bazaar, sin sobreprecio", "Food Bazaar in-store prices, no markup")}
+        </p>
         <p className="mt-1 text-sm text-muted-foreground">
           {L("Lo compramos por ti en el súper y te lo llevamos. La entrega depende del peso.", "We shop at the supermarket for you and deliver it. Delivery is priced by weight.")}
         </p>
