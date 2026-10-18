@@ -1815,7 +1815,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
     "subcategoria": "Verduras",
     "descripcion": "Coles de Bruselas paquete. Ideal para ensaladas, guisos y recetas caseras.",
     "descripcion_en": "Brussels sprouts. Ideal for salads, stews and home cooking.",
-    "imagen_url": "/__l5e/assets-v1/708bd1f0-05c7-47d2-a281-bcc47252e95a/hazorex-vegetable-18.jpg",
+    "imagen_url": "/__l5e/assets-v1/3887ea03-ccfd-47a5-852f-c7ff4813fd8b/hazorex-vegetable-17.jpg",
     "photo_kind": "reused",
     "codigo_barras": null,
     "requested_upc": null,

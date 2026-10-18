@@ -154,27 +154,27 @@ export const HOUSE_VEGETABLE_CATALOG = [
     "Small sprouts for roasting or steaming."
   ],
   [
-    "Zanahoria baby 16 oz",
-    "Baby carrots",
-    2.1,
+    "Zanahorias baby 16 oz",
+    "Baby carrots 16 oz",
+    1.5,
     false,
     1.0,
     "Zanahorias pequeñas para meriendas y guisos.",
     "Small carrots for snacks and stews."
   ],
   [
-    "Maíz dulce",
-    "Sweet corn",
-    0.93,
+    "Maíz amarillo (mazorca)",
+    "Yellow corn cob",
+    0.5,
     false,
     0.6,
     "Mazorca dulce para hervir o asar.",
     "Sweet corn cob for boiling or grilling."
   ],
   [
-    "Hoja de maíz para tamales",
-    "Corn husks",
-    5.24,
+    "Hojas de maíz para tamales",
+    "Corn husks for tamales",
+    4.99,
     true,
     0.5,
     "Hojas secas para envolver tamales caseros.",
@@ -183,7 +183,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pepino",
     "Cucumber",
-    1.04,
+    0.67,
     false,
     0.6,
     "Pepino fresco y crujiente para ensaladas.",
