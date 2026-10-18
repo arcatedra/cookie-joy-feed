@@ -1,7 +1,7 @@
 # Marketplace safety
 
 - Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve metadata.
-- Catalog additions use client-safe fixtures and individual stored photos; guard duplicate Spanish/English names so repeated batches cannot duplicate products.
+- Catalog fixtures target IDs, guard duplicate ES/EN names and reject mismatched UPCs; store photos with intact original labels to prevent misidentification.
 - Catalog renames target stable existing product IDs with previous-name guards and synchronize reference fixtures; never create replacement rows or alter commercial quantities, preventing duplicate products and unintended pricing changes.
 
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
