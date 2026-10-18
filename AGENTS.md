@@ -1,7 +1,7 @@
 # Marketplace safety
 
 - Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve metadata.
-- Approved catalog additions have client-safe catalog fixtures and individual stored photos; data loads guard against duplicate Spanish or English names so repeated batches do not duplicate products.
+- Catalog additions use client-safe fixtures and individual stored photos; guard duplicate Spanish/English names so repeated batches cannot duplicate products.
 - Catalog renames target stable existing product IDs with previous-name guards and synchronize reference fixtures; never create replacement rows or alter commercial quantities, preventing duplicate products and unintended pricing changes.
 
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
@@ -13,7 +13,7 @@
 
 - Persist the Stripe environment on marketplace orders and connected accounts; transfer and capture operations must validate that environment instead of deriving it from background execution, preventing sandbox/live crossovers.
 - Tax identifiers and bank account details must be collected only by Stripe onboarding; local write endpoints and database triggers reject new sensitive financial data while preserving historical rows.
-- Authenticated end-to-end tests require an authorized test session; never bypass authentication or elevate real users to fabricate test results.
+- End-to-end tests require an authorized session; never bypass authentication or elevate real users to fabricate results.
 - Public merchant reads use the security-invoker commercial view and column-restricted anonymous base-table grants; registration starts pending and connected-account fields are server-managed to prevent disclosure and self-approval.
 - Affiliate withdrawal requests serialize per authenticated affiliate and lock eligible commission rows before calculating totals, preventing simultaneous requests from claiming the same balance twice.
 - Referral rewards and wallet spending are atomic database operations scoped to persisted payment environment; capture grants rewards, while delivery creates cookie tip payout rows, preventing reservation bonuses and duplicate spending.
