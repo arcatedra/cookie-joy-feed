@@ -1,5 +1,9 @@
 # Revisión final antes de apertura
 
+## Diseño del supermercado y portada
+- [ ] Aprobar ajustes exclusivamente visuales: barra compacta con carrito deslizable, cuarta tarjeta, cuatro destacados y Cómo funciona.
+- [ ] Implementar y verificar celular/computadora sin modificar precios, pagos ni base de datos; no publicar.
+
 ## Cantidades reales de pedidos de tienda
 - [x] Confirmar con código actual y reproducción aislada que 3 unidades pedidas y 2 reales siguen calculándose como 3.
 - [x] Aprobar el plan antes de modificar el cálculo usado para cobrar.
