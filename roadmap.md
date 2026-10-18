@@ -1,9 +1,9 @@
 # Revisión final antes de apertura
 
 ## Precio justo Food Bazaar (18 oct)
-- [ ] Aprobar plan para precios y modalidades de la lista recibida, sin sobreprecio, texto público y pruebas.
-- [ ] Actualizar únicamente los productos existentes indicados, conservar otros precios/fotos y sincronizar referencias; no tocar pagos, entrega ni clientes.
-- [ ] Verificar valores guardados, modalidades por libra y peso de sandía, ausencia de sobreprecio y pantalla; informar cambios y faltantes, sin publicar.
+- [x] Aprobar plan para precios y modalidades de la lista recibida, sin sobreprecio, texto público y pruebas.
+- [x] Actualizar 93 precios existentes con comprobación previa; 13 cambios a venta por libra y sandía a 12 lb. Sincronizar 87 referencias; seis productos previos identificados, ninguno faltante. No tocar pagos, entrega ni clientes.
+- [x] Verificar los 93 valores/modalidades desde la pantalla real y los 15 productos de Frutas y verduras no indicados, sin cambios; 346 productos conservados con hash idéntico de nombres/fotos/metadatos. 110 pruebas pasan; sandía estimada y carrito $15.48, texto visible y celular/escritorio sin errores ni desbordamiento. No existía +5 % automático. Sin publicar; catálogo compartido actualizado, edición admin autenticada no disponible en Supabase externo.
 
 ## Diseño del supermercado y portada
 - [x] Aprobar ajustes exclusivamente visuales: barra compacta con carrito deslizable, cuarta tarjeta, cuatro destacados y Cómo funciona.
