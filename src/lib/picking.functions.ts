@@ -6,7 +6,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { productHasBarcode } from "./barcode-rules";
+import { productHasBarcode, pickedQuantity, validateUnitQuantity } from "./barcode-rules";
 
 const EDITABLE = ["confirmado", "preparando", "cobro_fallido"];
 const code = z.string().regex(/^\d{8,14}$/, "Código de barras inválido");
@@ -82,6 +82,7 @@ export const getPickingOrder = createServerFn({ method: "GET" })
           nombre_en: (p?.nombre_en ?? null) as string | null,
           tamano: (p?.tamano ?? null) as string | null,
           cantidad: Number(it.cantidad),
+          cantidad_real: it.pick_status === "pendiente" ? null : pickedQuantity(it, p),
           precio_unitario: Number(it.precio_unitario),
           imagen: img,
           tieneCodigo: (p?.codigos_barras ?? []).length > 0,
@@ -126,7 +127,7 @@ export const pickScanItem = createServerFn({ method: "POST" })
     } else if (!productHasBarcode(codes, data.code)) {
       return { result: "wrong" as const };
     }
-    await setPick(adb, item.id, userId, { pick_status: "encontrado", scanned_barcode: data.code, replacement_product_id: null, replacement_name: null });
+    await setPick(adb, item.id, userId, { pick_status: "encontrado", cantidad_real: item.cantidad_real ?? Number(item.cantidad), scanned_barcode: data.code, replacement_product_id: null, replacement_name: null });
     return { result: "found" as const };
   });
 
@@ -139,7 +140,8 @@ export const pickWeighItem = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adb, item, product, userId } = await loadItem(context, data.itemId);
     if (product?.vendido_por_lb !== true) throw new Error("Este producto se vende por unidad: escanéalo.");
-    await setPick(adb, item.id, userId, { pick_status: "encontrado", picked_weight_lb: data.weightLb, replacement_product_id: null, replacement_name: null });
+    const real = pickedQuantity({ ...item, pick_status: "encontrado", picked_weight_lb: data.weightLb }, product);
+    await setPick(adb, item.id, userId, { pick_status: "encontrado", cantidad_real: real, picked_weight_lb: data.weightLb, replacement_product_id: null, replacement_name: null });
     return { ok: true as const };
   });
 
@@ -158,6 +160,7 @@ export const pickReplaceItem = createServerFn({ method: "POST" })
     if (!owner) return { ok: false as const, reason: "unknown" as const };
     await setPick(adb, item.id, userId, {
       pick_status: "reemplazado",
+      cantidad_real: item.cantidad_real ?? Number(item.cantidad),
       scanned_barcode: data.code,
       replacement_product_id: owner.id,
       replacement_name: owner.nombre,
@@ -171,7 +174,7 @@ export const pickNotFoundItem = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => z.object({ itemId: z.string().uuid() }).parse(raw))
   .handler(async ({ data, context }) => {
     const { adb, item, userId, order } = await loadItem(context, data.itemId);
-    await setPick(adb, item.id, userId, { pick_status: "no_habia", scanned_barcode: null, picked_weight_lb: null, replacement_product_id: null, replacement_name: null });
+    await setPick(adb, item.id, userId, { pick_status: "no_habia", cantidad_real: 0, scanned_barcode: null, picked_weight_lb: null, replacement_product_id: null, replacement_name: null });
     const { data: prof } = await adb.from("profiles").select("locale").eq("id", order.cliente_id).maybeSingle();
     const en = String(prof?.locale ?? "es").startsWith("en");
     const { pushToCustomer } = await import("./barcode.server");
@@ -195,8 +198,21 @@ export const pickResetItem = createServerFn({ method: "POST" })
     const { adb, item } = await loadItem(context, data.itemId);
     const { error } = await adb
       .from("store_order_items")
-      .update({ pick_status: "pendiente", scanned_barcode: null, picked_weight_lb: null, replacement_product_id: null, replacement_name: null, picked_by: null, picked_at: null })
+      .update({ pick_status: "pendiente", cantidad_real: null, scanned_barcode: null, picked_weight_lb: null, replacement_product_id: null, replacement_name: null, picked_by: null, picked_at: null })
       .eq("id", item.id);
     if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
+
+/** Ajusta unidades parciales sin sustituir la verificación del producto. */
+export const pickSetQuantity = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ itemId: z.string().uuid(), quantity: z.number().min(0).max(999) }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const { adb, item, product, userId } = await loadItem(context, data.itemId);
+    if (product?.vendido_por_lb === true) throw new Error("Este artículo requiere peso real en libras.");
+    if (!["encontrado", "reemplazado"].includes(item.pick_status)) throw new Error("Primero verifica el artículo escaneándolo.");
+    const quantity = validateUnitQuantity(data.quantity, item.cantidad);
+    await setPick(adb, item.id, userId, { cantidad_real: quantity });
     return { ok: true as const };
   });

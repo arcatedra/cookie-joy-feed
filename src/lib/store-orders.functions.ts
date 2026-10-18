@@ -47,9 +47,18 @@ export const listStoreOrders = createServerFn({ method: "GET" })
       .select("*")
       .in("order_id", orders.map((o: any) => o.id));
     if (itErr) throw itErr;
+    const productIds = [...new Set((items ?? []).map((it: any) => it.product_id).filter(Boolean))];
+    const { data: products, error: productError } = productIds.length
+      ? await db.from("store_products").select("id, vendido_por_lb, peso_lb").in("id", productIds)
+      : { data: [], error: null };
+    if (productError) throw productError;
+    const byId = new Map<string, any>((products ?? []).map((p: any) => [p.id, p]));
     return orders.map((o: any) => ({
       ...o,
-      items: (items ?? []).filter((i: any) => i.order_id === o.id),
+      items: (items ?? []).filter((i: any) => i.order_id === o.id).map((it: any) => ({
+        ...it,
+        porLibra: byId.get(it.product_id)?.vendido_por_lb === true,
+      })),
     }));
   });
 
@@ -145,7 +154,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const pricing = pricingFromRows(pricingRows);
 
     // La compra en el súper es la fuente de verdad: no se cobra hasta revisar cada artículo.
-    const { pendingPicks, pickedQuantity } = await import("./barcode-rules");
+    const { pendingPicks, readyQuantities } = await import("./barcode-rules");
     const pending = pendingPicks(items ?? []);
     if (pending > 0) {
       throw new Error(`Faltan ${pending} artículo(s) por revisar (Encontrado, Reemplazado o No había).`);
@@ -156,10 +165,11 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const weightById = new Map<string, number>();
     const productById = new Map<string, any>();
     if (productIds.length > 0) {
-      const { data: prods } = await db
+      const { data: prods, error: productError } = await db
         .from("store_products")
         .select("id, peso_lb, vendido_por_lb")
         .in("id", productIds);
+      if (productError) throw productError;
       for (const p of prods ?? []) {
         weightById.set(p.id, Number(p.peso_lb ?? pricing.defaultProductWeightLb));
         productById.set(p.id, p);
@@ -169,17 +179,20 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     let realSubtotalCents = 0;
     let realLb = 0;
     let realItemCount = 0;
+    const quantities = new Map(readyQuantities(items ?? [], productById, data.items).map((q) => [q.itemId, q.cantidadReal]));
     for (const it of items ?? []) {
-      const real = pickedQuantity(it, productById.get(it.product_id));
+      const real = quantities.get(it.id);
+      if (real == null) throw new Error("Falta la cantidad real de un artículo.");
       realSubtotalCents += Math.round(Math.round(Number(it.precio_unitario) * 100) * real);
       realItemCount += real;
       realLb +=
         (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
       if (real !== Number(it.cantidad_real)) {
-        await db.from("store_order_items").update({ cantidad_real: real }).eq("id", it.id);
+        const { data: saved, error: saveError } = await db.from("store_order_items")
+          .update({ cantidad_real: real }).eq("id", it.id).eq("order_id", order.id).select("id");
+        if (saveError || saved?.length !== 1) throw new Error("No se pudo guardar la cantidad real. No se inició el cobro.");
       }
     }
-    void data.items;
     realLb = Math.round(realLb * 100) / 100;
 
     const tier = tierForWeight(realLb, pricing);
