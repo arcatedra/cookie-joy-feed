@@ -22,7 +22,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Clementinas bolsa 3 lb",
     "nombre_en": "Clementines 3 lb bag",
-    "precio": 5,
+    "precio": 5.99,
     "vendido_por_lb": false,
     "peso_lb": 3,
     "tamano": "3 lb",
@@ -41,7 +41,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Naranja Navel",
     "nombre_en": "Navel orange",
-    "precio": 1,
+    "precio": 1.69,
     "vendido_por_lb": false,
     "peso_lb": 0.6,
     "tamano": "1 unidad · aprox. 0.6 lb",
@@ -60,7 +60,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Mandarina Sunburst",
     "nombre_en": "Sunburst tangerine",
-    "precio": 0.6,
+    "precio": 0.99,
     "vendido_por_lb": false,
     "peso_lb": 0.3,
     "tamano": "1 unidad · aprox. 0.3 lb",
@@ -117,7 +117,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Driscoll's arándanos 11 oz",
     "nombre_en": "Driscoll's blueberries 11 oz",
-    "precio": 4.99,
+    "precio": 5.99,
     "vendido_por_lb": false,
     "peso_lb": 0.6875,
     "tamano": "11 oz",
@@ -136,7 +136,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Driscoll's frambuesas 6 oz",
     "nombre_en": "Driscoll's raspberries 6 oz",
-    "precio": 3.99,
+    "precio": 6.99,
     "vendido_por_lb": false,
     "peso_lb": 0.375,
     "tamano": "6 oz",
@@ -155,7 +155,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Driscoll's moras 6 oz",
     "nombre_en": "Driscoll's blackberries 6 oz",
-    "precio": 3.99,
+    "precio": 5.69,
     "vendido_por_lb": false,
     "peso_lb": 0.375,
     "tamano": "6 oz",
@@ -174,7 +174,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Driscoll's fresas orgánicas 16 oz",
     "nombre_en": "Driscoll's organic strawberries 16 oz",
-    "precio": 5.99,
+    "precio": 11.99,
     "vendido_por_lb": false,
     "peso_lb": 1,
     "tamano": "16 oz",
@@ -231,7 +231,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Natural Delights dátiles Medjool orgánicos 12 oz",
     "nombre_en": "Natural Delights organic Medjool dates 12 oz",
-    "precio": 7.99,
+    "precio": 11.99,
     "vendido_por_lb": false,
     "peso_lb": 0.75,
     "tamano": "12 oz",
@@ -250,7 +250,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Dole dátiles sin semilla 8 oz",
     "nombre_en": "Dole pitted dates 8 oz",
-    "precio": 3.29,
+    "precio": 4.19,
     "vendido_por_lb": false,
     "peso_lb": 0.5,
     "tamano": "8 oz",
@@ -326,7 +326,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Melocotón plano (donut)",
     "nombre_en": "Donut peach",
-    "precio": 4.99,
+    "precio": 5.99,
     "vendido_por_lb": true,
     "peso_lb": 0.3,
     "tamano": "aprox. 0.3 lb",
@@ -383,7 +383,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Mango Francis",
     "nombre_en": "Francis mango",
-    "precio": 1.67,
+    "precio": 2.99,
     "vendido_por_lb": false,
     "peso_lb": 0.8,
     "tamano": "1 unidad · aprox. 0.8 lb",
@@ -402,7 +402,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Mango Ataulfo",
     "nombre_en": "Ataulfo mango",
-    "precio": 1.25,
+    "precio": 1.49,
     "vendido_por_lb": false,
     "peso_lb": 0.5,
     "tamano": "1 unidad · aprox. 0.5 lb",
@@ -516,7 +516,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Dole trozos de piña 20 oz",
     "nombre_en": "Dole pineapple chunks 20 oz",
-    "precio": 2.39,
+    "precio": 2.89,
     "vendido_por_lb": false,
     "peso_lb": 1.25,
     "tamano": "20 oz",
@@ -535,7 +535,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Pitahaya roja",
     "nombre_en": "Red dragon fruit",
-    "precio": 5.99,
+    "precio": 6.59,
     "vendido_por_lb": true,
     "peso_lb": 0.8,
     "tamano": "aprox. 0.8 lb",
@@ -554,7 +554,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Zespri kiwi verde orgánico 1 lb",
     "nombre_en": "Zespri organic green kiwi 1 lb",
-    "precio": 5.99,
+    "precio": 7.99,
     "vendido_por_lb": false,
     "peso_lb": 1,
     "tamano": "1 lb",
@@ -687,7 +687,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Guineos orgánicos",
     "nombre_en": "Organic bananas",
-    "precio": 0.99,
+    "precio": 1.99,
     "vendido_por_lb": true,
     "peso_lb": 1,
     "tamano": "aprox. 1 lb",
@@ -706,7 +706,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Manzanas Gala bolsa 3 lb",
     "nombre_en": "Gala apples 3 lb bag",
-    "precio": 4.99,
+    "precio": 5.99,
     "vendido_por_lb": false,
     "peso_lb": 3,
     "tamano": "3 lb",
@@ -820,7 +820,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Sundance limones orgánicos 2 lb",
     "nombre_en": "Sundance organic lemons 2 lb",
-    "precio": 4.99,
+    "precio": 5.99,
     "vendido_por_lb": false,
     "peso_lb": 2,
     "tamano": "2 lb",
@@ -1732,7 +1732,7 @@ export const HOUSE_PRODUCE_OCT18_CATALOG = [
   {
     "nombre": "Pimientos mixtos (rojo, amarillo, naranja)",
     "nombre_en": "Mixed red yellow orange peppers",
-    "precio": 1.5,
+    "precio": 4.99,
     "vendido_por_lb": true,
     "peso_lb": 1,
     "tamano": "aprox. 1 lb",

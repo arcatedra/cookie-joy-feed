@@ -21,7 +21,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Brócoli",
     "Broccoli crown",
-    2.49,
+    3.29,
     true,
     1.0,
     "Brócoli fresco para sopas y acompañamientos.",
@@ -57,7 +57,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pimiento rojo",
     "Red bell pepper",
-    1.79,
+    4.99,
     true,
     0.5,
     "Pimiento dulce para asar o comer fresco.",
@@ -66,7 +66,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Pimiento naranja",
     "Orange bell pepper",
-    1.79,
+    4.99,
     true,
     0.5,
     "Pimiento de sabor dulce para ensaladas.",
@@ -75,7 +75,7 @@ export const HOUSE_VEGETABLE_CATALOG = [
   [
     "Mini pimientos dulces",
     "Mini sweet peppers",
-    3.00,
+    3.99,
     true,
     1.0,
     "Pimientos pequeños para meriendas y recetas.",
