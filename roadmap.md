@@ -2,7 +2,7 @@
 
 ## Corrección de precios regulares (18 octubre, 18:05 UTC)
 - [x] Plan aprobado y 43 precios únicos actualizados; frambuesas $6.99 y moras $5.69 confirmados.
-- [ ] Verificar los 43 precios, campos conservados, pruebas y catálogo público; no publicar ni tocar pagos/clientes.
+- [x] Verificados los 43 precios en catálogo público y lectura guardada: 408 otros productos idénticos; nombres/fotos/unidades/pesos/UPC conservados en los 451 registros. 384 pruebas pasan, sin errores de página ni pagos; no publicado. Regla de precio regular guardada.
 
 ## Ampliación Food Bazaar: frutas, verduras y hierbas (18 oct)
 - [x] Aprobar plan antes de cambios amplios: 111 solicitudes, 105 nuevos y seis registros coincidentes conservados; 451 productos totales.
