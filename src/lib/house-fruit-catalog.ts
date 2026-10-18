@@ -44,3 +44,8 @@ export const HOUSE_FRUIT_CATALOG = [
   ["Mamey", "Mamey sapote", 4.99, true, 1.5, "Mamey de pulpa cremosa para batidos y postres.", "Creamy-fleshed mamey for smoothies and desserts."],
   ["Nance", "Nance fruit", 7.99, true, 0.5, "Nance pequeño y aromático para bebidas y dulces caseros.", "Small, aromatic nance fruit for drinks and homemade sweets."],
 ] as const;
+/** Existing initial products stay separate from the additions above. */
+export const HOUSE_INITIAL_FRUIT_REGULAR_PRICES = [
+  ["Aguacate Hass grande", 3.49, false],
+  ["Fresas Driscoll's", 6.29, false],
+] as const;
