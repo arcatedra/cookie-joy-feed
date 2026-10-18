@@ -2,8 +2,9 @@
 
 ## Cantidades reales de pedidos de tienda
 - [x] Confirmar con código actual y reproducción aislada que 3 unidades pedidas y 2 reales siguen calculándose como 3.
-- [ ] Aprobar el plan antes de modificar el cálculo usado para cobrar.
-- [ ] Corregir cantidades parciales y comprobar ambos caminos de preparación, conservando el escaneo obligatorio y el peso real; sin cobros reales ni publicación.
+- [x] Aprobar el plan antes de modificar el cálculo usado para cobrar.
+- [x] Corregir cantidades parciales y comprobar ambos caminos de preparación, conservando el escaneo obligatorio y el peso real; 23 pruebas pasan, cinco sobre el cobro con Stripe simulado, sin cobros reales ni publicación.
+- [ ] Revisar ambas pantallas con un pedido y sesión autorizada: acceso autenticado no disponible para Supabase externo; pruebas aisladas del cálculo y guardado completadas.
 
 ## Correcciones del 10 de octubre y continuación
 - [x] Aprobar el plan de correcciones de portada/textos y bloques reservables antes de cambios de más de tres archivos o pagos.
