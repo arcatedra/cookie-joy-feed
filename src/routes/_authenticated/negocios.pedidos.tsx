@@ -10,6 +10,7 @@ import {
 } from "@/lib/store-orders.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { groupByZoneZip, zoneForZip } from "@/lib/pricing";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/negocios/pedidos")({
   head: () => ({
@@ -167,12 +168,13 @@ function StoreOrdersPage() {
                         {money(it.precio_unitario)} / {it.unidad} · pedido: {it.cantidad}
                       </div>
                     </div>
-                    {editable ? (
+                    {editable && !it.porLibra && it.pick_status !== "no_habia" ? (
                       <label className="text-xs flex items-center gap-2">
                         Real
                         <input
                           type="number"
                           min={0}
+                          max={Number(it.cantidad)}
                           step="0.01"
                           value={value}
                           onChange={(e) =>
@@ -183,7 +185,7 @@ function StoreOrdersPage() {
                       </label>
                     ) : (
                       <span className="text-xs text-muted-foreground">
-                        entregado: {it.cantidad_real ?? it.cantidad}
+                        {it.pick_status === "no_habia" ? "No había · 0" : it.porLibra ? `Peso real: ${it.picked_weight_lb ?? "pendiente"} lb` : `entregado: ${it.cantidad_real ?? it.cantidad}`}
                       </span>
                     )}
                   </li>
@@ -233,11 +235,11 @@ function StoreOrdersPage() {
                 </Link>
               )}
               {["confirmado", "preparando", "cobro_fallido"].includes(o.estado) && (
-                <button
+                <Button
                   onClick={() =>
                     readyM.mutate({
                       id: o.id,
-                      items: (o.items ?? []).map((it: any) => ({
+                      items: (o.items ?? []).filter((it: any) => !it.porLibra && it.pick_status !== "no_habia").map((it: any) => ({
                         itemId: it.id,
                         cantidadReal: reales[it.id] ?? Number(it.cantidad_real ?? it.cantidad),
                       })),
@@ -247,7 +249,7 @@ function StoreOrdersPage() {
                   className="rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold disabled:opacity-60"
                 >
                   {readyM.isPending ? "Cobrando…" : "Listo para recoger (cobrar lo real)"}
-                </button>
+                </Button>
               )}
               {(o.estado === "listo" || o.estado === "entregado") && (
                 <p className="text-sm text-muted-foreground">

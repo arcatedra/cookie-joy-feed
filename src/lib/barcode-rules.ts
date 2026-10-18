@@ -65,15 +65,54 @@ export function pendingPicks(items: { pick_status?: string | null }[]): number {
  * Cantidad a cobrar (en unidades del carrito) según lo comprado.
  * - No había → 0
  * - Por libra con peso real → peso real / peso por unidad
- * - Lo demás → la cantidad pedida
+ * - Por unidad → cantidad real guardada, o pedida si no se ha ajustado
  */
 export function pickedQuantity(
-  item: { pick_status?: string | null; cantidad: unknown; picked_weight_lb?: unknown },
+  item: { pick_status?: string | null; cantidad: unknown; cantidad_real?: unknown; picked_weight_lb?: unknown },
   product: { vendido_por_lb?: unknown; peso_lb?: unknown } | undefined,
 ): number {
   if (item.pick_status === "no_habia") return 0;
   const w = Number(item.picked_weight_lb);
   const perUnit = Number(product?.peso_lb);
   if (product?.vendido_por_lb === true && w > 0 && perUnit > 0) return Math.round((w / perUnit) * 1000) / 1000;
-  return Number(item.cantidad);
+  return product?.vendido_por_lb === true ? Number(item.cantidad) : validateUnitQuantity(item.cantidad_real ?? item.cantidad, item.cantidad);
+}
+
+export function validateUnitQuantity(real: unknown, ordered: unknown): number {
+  const n = Number(real);
+  const limit = Number(ordered);
+  if (!Number.isFinite(n) || !Number.isFinite(limit) || n < 0 || n > limit) {
+    throw new Error("Cantidad real inválida: debe estar entre 0 y la cantidad pedida.");
+  }
+  return n;
+}
+
+/** Valida el pedido completo antes de guardar cantidades o iniciar el cobro. */
+export function readyQuantities(
+  items: { id: string; product_id?: string | null; pick_status?: string | null; cantidad: unknown; cantidad_real?: unknown; picked_weight_lb?: unknown }[],
+  products: Map<string, { vendido_por_lb?: unknown; peso_lb?: unknown }>,
+  requested: { itemId: string; cantidadReal: number }[],
+): { itemId: string; cantidadReal: number }[] {
+  const pending = pendingPicks(items);
+  if (pending > 0) throw new Error(`Faltan ${pending} artículo(s) por revisar (Encontrado, Reemplazado o No había).`);
+  const ids = new Set(items.map((it) => it.id));
+  const overrides = new Map<string, number>();
+  for (const entry of requested) {
+    if (!ids.has(entry.itemId) || overrides.has(entry.itemId)) throw new Error("Artículo ajeno al pedido o duplicado.");
+    if (!Number.isFinite(entry.cantidadReal) || entry.cantidadReal < 0) throw new Error("Cantidad real inválida.");
+    overrides.set(entry.itemId, entry.cantidadReal);
+  }
+  return items.map((it) => {
+    const product = products.get(it.product_id ?? "");
+    if (it.pick_status === "no_habia") return { itemId: it.id, cantidadReal: 0 };
+    if (product?.vendido_por_lb === true) {
+      const weight = Number(it.picked_weight_lb);
+      const portion = Number(product.peso_lb);
+      if (!Number.isFinite(weight) || weight <= 0 || weight > 200 || !Number.isFinite(portion) || portion <= 0) {
+        throw new Error("Falta un peso real válido para un artículo por libra.");
+      }
+      return { itemId: it.id, cantidadReal: pickedQuantity(it, product) };
+    }
+    return { itemId: it.id, cantidadReal: validateUnitQuantity(overrides.get(it.id) ?? it.cantidad_real ?? it.cantidad, it.cantidad) };
+  });
 }
