@@ -128,8 +128,8 @@ describe("catálogo de frutas", () => {
       expect(descripcion.length).toBeGreaterThan(10);
       expect(descripcion_en.length).toBeGreaterThan(10);
     }
-    expect(unitPriceCents({ precio: 1.56, vendido_por_lb: true, peso_lb: 0.4 })).toBe(62);
-    expect(unitPriceCents({ precio: 16.58, vendido_por_lb: false, peso_lb: 15 })).toBe(1658);
+    expect(unitPriceCents({ precio: 0.99, vendido_por_lb: true, peso_lb: 0.4 })).toBe(40);
+    expect(unitPriceCents({ precio: 1.29, vendido_por_lb: true, peso_lb: 12 })).toBe(1548);
   });
   it("conserva campos omitidos y rechaza subcategorías inválidas", () => {
     const p = houseProductSchema.parse({ nombre: "Mango", precio: 2, peso_lb: 0.8, categoria: "Frutas y verduras" });
@@ -159,8 +159,8 @@ describe("catálogo de verduras", () => {
     expect(tomatillo).toBeDefined();
     expect(papas).toBeDefined();
     if (!tomatillo || !papas) throw new Error("Falta un producto requerido");
-    expect(unitPriceCents({ precio: tomatillo[2], vendido_por_lb: tomatillo[3], peso_lb: tomatillo[4] })).toBe(220);
-    expect(unitPriceCents({ precio: papas[2], vendido_por_lb: papas[3], peso_lb: papas[4] })).toBe(471);
+    expect(unitPriceCents({ precio: tomatillo[2], vendido_por_lb: tomatillo[3], peso_lb: tomatillo[4] })).toBe(100);
+    expect(unitPriceCents({ precio: papas[2], vendido_por_lb: papas[3], peso_lb: papas[4] })).toBe(350);
   });
 });
 
