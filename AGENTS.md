@@ -1,6 +1,6 @@
 # Marketplace safety
 
-- Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve existing metadata, preventing accidental content loss.
+- Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve metadata.
 - Approved catalog additions have client-safe catalog fixtures and individual stored photos; data loads guard against duplicate Spanish or English names so repeated batches do not duplicate products.
 - Catalog renames target stable existing product IDs with previous-name guards and synchronize reference fixtures; never create replacement rows or alter commercial quantities, preventing duplicate products and unintended pricing changes.
 
@@ -24,5 +24,5 @@
 - Reservable-block driver payouts are split across captured order charges with deterministic keys; retries resume paid parts and never transfer a block twice.- Post-delivery tips are separate Stripe charges (saved card off-session, else embedded checkout) tracked in post_delivery_tips and paid to the driver via driver_payouts.post_tip_id with source_transaction; never add them to the original order charge, to avoid double charging.
 - Delivery block stops reference exactly one store order or one cookie order; same-building orders must share a block and cookie orders in blocks never enter legacy cookie routes, so each delivery and tip is paid once.
 - Hazorex's own supermarket is a regular approved business (slug `hazorex-supermercado`) reusing store checkout; supplier "where to buy" lives in admin/assigned-driver-only `store_product_sourcing`, so it never reaches public catalog reads.
-- Per-pound products charge one estimated portion (price/lb × approx lb) per cart unit, shared by cart and server checkout so totals match.
+- Shared cart/server rules price per-pound portions. Reviewed unit items bill validated actual quantities, weighted items recorded weight, and missing items zero; validate all quantities before writes and stop capture on save failure to prevent overcharging.
 - Product photo attribution and background-edit status belong to the current stored image; preserve the original storage reference on background edits and clear attribution/status on unrelated replacements, preventing false credits while keeping originals recoverable.

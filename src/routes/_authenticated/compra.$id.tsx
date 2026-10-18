@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { CheckCircle2, Phone, RotateCcw, ScanLine, XCircle } from "lucide-react";
 import { BarcodeScanner, scanFeedback } from "@/components/BarcodeScanner";
+import { Button } from "@/components/ui/button";
 import {
   getPickingOrder,
   pickNotFoundItem,
@@ -13,6 +14,7 @@ import {
   pickResetItem,
   pickScanItem,
   pickWeighItem,
+  pickSetQuantity,
 } from "@/lib/picking.functions";
 import { markOrderReadyAndCapture } from "@/lib/store-orders.functions";
 import { pendingPicks, pickedQuantity } from "@/lib/barcode-rules";
@@ -49,9 +51,11 @@ function PickingPage() {
   const notFoundFn = useServerFn(pickNotFoundItem);
   const resetFn = useServerFn(pickResetItem);
   const readyFn = useServerFn(markOrderReadyAndCapture);
+  const quantityFn = useServerFn(pickSetQuantity);
   const [scan, setScan] = useState<Scan>(null);
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [weights, setWeights] = useState<Record<string, string>>({});
+  const [quantities, setQuantities] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
 
   const key = ["picking", id];
@@ -267,14 +271,34 @@ function PickingPage() {
               )}
 
               {o.editable && done && (
+                <div className="mt-3 space-y-2">
+                {!it.porLibra && it.pick_status !== "no_habia" && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label htmlFor={`quantity-${it.id}`} className="text-sm">{L("Cantidad real", "Actual quantity")}</label>
+                    <input id={`quantity-${it.id}`} type="number" min={0} max={it.cantidad} step="1"
+                      value={quantities[it.id] ?? String(it.cantidad_real ?? it.cantidad)}
+                      onChange={(e) => setQuantities((prev) => ({ ...prev, [it.id]: e.target.value }))}
+                      className="w-20 rounded border border-border bg-background px-2 py-1" />
+                    <Button size="sm" variant="outline" disabled={busy !== null} onClick={() => run(it.id, async () => {
+                      const raw = quantities[it.id] ?? String(it.cantidad_real ?? it.cantidad);
+                      if (!raw.trim()) throw new Error(L("Escribe la cantidad real.", "Enter the actual quantity."));
+                      await quantityFn({ data: { itemId: it.id, quantity: Number(raw) } });
+                      setQuantities((prev) => { const next = { ...prev }; delete next[it.id]; return next; });
+                    })}>{L("Guardar", "Save")}</Button>
+                  </div>
+                )}
                 <button
                   type="button"
                   disabled={busy === it.id}
-                  onClick={() => run(it.id, () => resetFn({ data: { itemId: it.id } }))}
+                  onClick={() => run(it.id, async () => {
+                    await resetFn({ data: { itemId: it.id } });
+                    setQuantities((prev) => { const next = { ...prev }; delete next[it.id]; return next; });
+                  })}
                   className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground underline"
                 >
                   <RotateCcw className="h-3 w-3" /> {L("Deshacer", "Undo")}
                 </button>
+                </div>
               )}
             </li>
           );
@@ -290,7 +314,7 @@ function PickingPage() {
           {o.editable && o.canCapture ? (
             <button
               type="button"
-              disabled={pending > 0 || busy === "ready"}
+              disabled={pending > 0 || busy !== null || Object.keys(quantities).length > 0}
               onClick={markReady}
               className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-50"
             >
@@ -323,6 +347,7 @@ function StatusLine({ it, L }: { it: any; L: (es: string, en: string) => string 
       <p className="mt-1 flex items-center gap-1 text-sm font-bold text-primary">
         <CheckCircle2 className="h-4 w-4" /> {L("Encontrado", "Found")}
         {it.picked_weight_lb ? ` · ${it.picked_weight_lb} lb` : ""}
+        {!it.porLibra ? ` · ${it.cantidad_real ?? it.cantidad}/${it.cantidad}` : ""}
       </p>
     );
   if (it.pick_status === "reemplazado")
