@@ -1,9 +1,9 @@
 # Revisión final antes de apertura
 
 ## Ampliación Food Bazaar: frutas, verduras y hierbas (18 oct)
-- [ ] Aprobar plan antes de cambios amplios: añadir solo productos distintos y conservar registros coincidentes.
-- [ ] Verificar UPC/fotos OFF, reutilizar imágenes fieles o crear fotos propias; guardar precios, tamaños, descripciones ES/EN y proveedor restringido.
-- [ ] Comprobar precios/unidades, duplicados, códigos, fotos y pantalla en celular/computadora; informar añadidos y fotos por origen, sin tocar pagos/clientes ni publicar.
+- [x] Aprobar plan antes de cambios amplios: 111 solicitudes, 105 nuevos y seis registros coincidentes conservados; 451 productos totales.
+- [x] Consultar 10 UPC y revisar fotos: seis OFF con originales intactos, 31 reutilizadas y 74 propias. Siete UPC guardados; no asignar código de café a pimientos ni códigos de paquetes 2 lb/3 lb a dátiles 12 oz/kiwi 1 lb. Guardar precios, tamaños aproximados cuando faltan, ES/EN y Food Bazaar restringido.
+- [x] Verificar 111 precios/modalidades/clasificaciones/códigos y fotos decodificadas; seis identificadores conservados, 340 demás filas idénticas, sin duplicados por nombres ES/EN. 341 pruebas pasan; carrito real $6.99, celular sin desbordamiento, sin errores ni pagos. No publicar ni tocar pagos/clientes. Admin autenticado y escaneo físico no disponibles en este entorno.
 
 ## Precio justo Food Bazaar (18 oct)
 - [x] Aprobar plan para precios y modalidades de la lista recibida, sin sobreprecio, texto público y pruebas.
