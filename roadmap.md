@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Ampliación Food Bazaar: frutas, verduras y hierbas (18 oct)
+- [ ] Aprobar plan antes de cambios amplios: añadir solo productos distintos y conservar registros coincidentes.
+- [ ] Verificar UPC/fotos OFF, reutilizar imágenes fieles o crear fotos propias; guardar precios, tamaños, descripciones ES/EN y proveedor restringido.
+- [ ] Comprobar precios/unidades, duplicados, códigos, fotos y pantalla en celular/computadora; informar añadidos y fotos por origen, sin tocar pagos/clientes ni publicar.
+
 ## Precio justo Food Bazaar (18 oct)
 - [x] Aprobar plan para precios y modalidades de la lista recibida, sin sobreprecio, texto público y pruebas.
 - [x] Actualizar 93 precios existentes con comprobación previa; 13 cambios a venta por libra y sandía a 12 lb. Sincronizar 87 referencias; seis productos previos identificados, ninguno faltante. No tocar pagos, entrega ni clientes.
