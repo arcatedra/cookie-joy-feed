@@ -1,5 +1,9 @@
 # Revisión final antes de apertura
 
+## Corrección de precios regulares (18 octubre, 18:05 UTC)
+- [x] Plan aprobado y 43 precios únicos actualizados; frambuesas $6.99 y moras $5.69 confirmados.
+- [x] Verificados los 43 precios en catálogo público y lectura guardada: 408 otros productos idénticos; nombres/fotos/unidades/pesos/UPC conservados en los 451 registros. 384 pruebas pasan, sin errores de página ni pagos; no publicado. Regla de precio regular guardada.
+
 ## Ampliación Food Bazaar: frutas, verduras y hierbas (18 oct)
 - [x] Aprobar plan antes de cambios amplios: 111 solicitudes, 105 nuevos y seis registros coincidentes conservados; 451 productos totales.
 - [x] Consultar 10 UPC y revisar fotos: seis OFF con originales intactos, 31 reutilizadas y 74 propias. Siete UPC guardados; no asignar código de café a pimientos ni códigos de paquetes 2 lb/3 lb a dátiles 12 oz/kiwi 1 lb. Guardar precios, tamaños aproximados cuando faltan, ES/EN y Food Bazaar restringido.
