@@ -4,11 +4,12 @@ import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from "@/components/ui/drawer";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Clock, Loader2, Minus, Plus, Search, Store } from "lucide-react";
+import { Clock, Loader2, Minus, Plus, Search, Store, ShoppingBasket, X } from "lucide-react";
 import { getPublicStore } from "@/lib/store-public.functions";
 import { isStoreOpen, todayHoursLabel } from "@/lib/store";
 import { getPricingConfig } from "@/lib/pricing.functions";
@@ -272,11 +273,13 @@ export function StoreCartBar({
   products,
   cart,
   onClear,
+  compact = false,
 }: {
   businessId: string;
   products: any[];
   cart: Record<string, number>;
   onClear: () => void;
+  compact?: boolean;
 }) {
   const { user } = useAuth();
   const fetchPricing = useServerFn(getPricingConfig);
@@ -286,6 +289,7 @@ export function StoreCartBar({
   const cancelCheckout = useServerFn(cancelPendingCheckout);
   const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
 
+  const [cartOpen, setCartOpen] = useState(false);
   const [fecha, setFecha] = useState<string>("");
   const [propina, setPropina] = useState(0);
   const [doorService, setDoorService] = useState<DoorService>("lobby");
@@ -408,9 +412,8 @@ export function StoreCartBar({
 
   const pct = Math.min(100, Math.round((totalLb / Math.max(pricing.weightIncludedLb, 1)) * 100));
 
-  return (
-    <div className="fixed inset-x-0 bottom-0 z-40 max-h-[70dvh] overflow-y-auto border-t border-border bg-card/95 p-4 backdrop-blur">
-      <div className="mx-auto max-w-5xl space-y-3">
+  const panel = (
+      <div className="mx-auto w-full max-w-5xl space-y-3">
         <div>
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>
@@ -509,6 +512,34 @@ export function StoreCartBar({
           Pagar ${(totalCents / 100).toFixed(2)}
         </button>
       </div>
+  );
+
+  return (
+    <>
+      {compact ? (
+        <Drawer open={cartOpen} onOpenChange={setCartOpen} shouldScaleBackground={false}>
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background p-3 pb-[max(env(safe-area-inset-bottom),12px)]">
+            <DrawerTrigger asChild>
+              <Button className="mx-auto grid h-12 w-full max-w-3xl grid-cols-[minmax(0,1fr)_auto] gap-3 rounded-lg px-4" aria-expanded={cartOpen}>
+                <span className="flex min-w-0 items-center gap-2">
+                  <ShoppingBasket className="h-5 w-5 shrink-0" />
+                  <span className="truncate">{lines.reduce((sum, line) => sum + line.qty, 0)} {i18n.language.startsWith("en") ? "products" : "productos"} · ${(subtotalCents / 100).toFixed(2)}</span>
+                </span>
+                <span className="shrink-0">{i18n.language.startsWith("en") ? "View cart" : "Ver carrito"}</span>
+              </Button>
+            </DrawerTrigger>
+          </div>
+          <DrawerContent className="mx-auto max-h-[85dvh] max-w-3xl" aria-describedby={undefined}>
+            <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-3">
+              <DrawerTitle className="min-w-0 tracking-normal">{i18n.language.startsWith("en") ? "Your cart" : "Tu carrito"}</DrawerTitle>
+              <DrawerClose asChild><Button variant="ghost" size="icon" aria-label={i18n.language.startsWith("en") ? "Close cart" : "Cerrar carrito"}><X className="h-5 w-5" /></Button></DrawerClose>
+            </header>
+            <div className="min-h-0 overflow-y-auto p-4 pb-[max(env(safe-area-inset-bottom),16px)]">{panel}</div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <div className="fixed inset-x-0 bottom-0 z-40 max-h-[70dvh] overflow-y-auto border-t border-border bg-card/95 p-4 backdrop-blur">{panel}</div>
+      )}
       <Dialog open={!!clientSecret} onOpenChange={async (open) => {
         if (open || !pendingOrderId || busy) return;
         setBusy(true);
@@ -530,7 +561,7 @@ export function StoreCartBar({
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
 
