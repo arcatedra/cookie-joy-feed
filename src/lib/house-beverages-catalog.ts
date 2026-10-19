@@ -1,7 +1,7 @@
 // Approved non-alcoholic Food Bazaar original digital prices, 2026-10-19. Images are own representations, not official photos.
 export const HOUSE_BEVERAGES_CATALOG = [
   {
-    "id": "c2328d2e-f50d-50fb-ad9e-06d52e15f158",
+    "id": "2455ff67-72fa-4e3a-b942-81b84f5a7bb0",
     "nombre": "Pure Life agua purificada",
     "nombre_en": "Pure Life purified water",
     "precio": 7.99,
@@ -14,11 +14,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 × 16.9 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2009682-nestle-pure-life-purified-water-16-9-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/e200f789-103c-4993-a4e3-b53ccbdc7ad5/beverage-1.jpg",
+    "imagen_url": "house/beverages/oct19/1.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "93d88a12-52cb-5cfb-bb0d-7057b3c1212a",
+    "id": "32f1fafe-0b8f-4252-be24-750f5ac175c7",
     "nombre": "Essentia agua purificada",
     "nombre_en": "Essentia purified water",
     "precio": 2.19,
@@ -31,11 +31,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16694804-essentia-purified-water-20-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/3061902f-13e9-40e8-8044-bb3c9ed5d821/beverage-2.jpg",
+    "imagen_url": "house/beverages/oct19/2.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "c5b5f2b2-9221-573a-8146-30110e10b2eb",
+    "id": "5ea7e85c-e60f-4136-860b-1d6a2fef00ea",
     "nombre": "Voss agua sin gas",
     "nombre_en": "Voss still water",
     "precio": 3.29,
@@ -48,11 +48,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28.7 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/98949-voss-artesian-water-28-7-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/6a2e8f17-ae80-47e7-9fcf-8df6e40d9aba/beverage-3.jpg",
+    "imagen_url": "house/beverages/oct19/3.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "594fe48b-7deb-508c-b309-a9d75971d604",
+    "id": "b508e9e8-421a-4b2b-a1ea-25af25ba557e",
     "nombre": "Evian agua de manantial",
     "nombre_en": "Evian spring water",
     "precio": 3.89,
@@ -65,11 +65,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1.5 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/3316119-evian-natural-spring-water-1-5-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/8cdd38cc-d7b3-4f83-ae88-b94324c323b7/beverage-4.jpg",
+    "imagen_url": "house/beverages/oct19/4.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "13ce8672-2acd-5917-9fae-6da678d0dca2",
+    "id": "ec3c4cb8-96dc-475b-8e7d-f29609d4697b",
     "nombre": "Fiji agua artesiana natural",
     "nombre_en": "Fiji natural artesian water",
     "precio": 16.99,
@@ -82,11 +82,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "6 × 33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/54385-fiji-water-natural-artesian-water-1-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/03a2cdfb-d1c3-466e-b55a-624c10f6f7d8/beverage-5.jpg",
+    "imagen_url": "house/beverages/oct19/5.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "5033cbf2-d5cc-569a-b79c-34879a0bfdc1",
+    "id": "bfe0d8f4-f72d-4795-8e93-6a471b0d8578",
     "nombre": "Saratoga agua de manantial con gas",
     "nombre_en": "Saratoga sparkling spring water",
     "precio": 3.39,
@@ -99,11 +99,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/186321-saratoga-spring-water-sparkling-28-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/5f6c9da5-c49f-4dc2-8b87-a0c65b2359c2/beverage-6.jpg",
+    "imagen_url": "house/beverages/oct19/6.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "a5d8135c-6ac8-5863-b9a9-68a779d2e5f2",
+    "id": "d6417794-80d6-4918-88a6-40de98a744fb",
     "nombre": "Adirondack agua con gas original",
     "nombre_en": "Adirondack sparkling water original",
     "precio": 0.99,
@@ -116,11 +116,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/116380-adirondack-sparkling-water-original-1-lt",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/93a19d86-87ec-4649-90b8-a75ab6d053a7/beverage-7.jpg",
+    "imagen_url": "house/beverages/oct19/7.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "28cff43c-07c1-54f0-b375-12ac13db13f0",
+    "id": "b6fbe3f3-eaf4-4a96-acb3-f1091b74e06f",
     "nombre": "Poland Spring agua con gas Simply Bubbles",
     "nombre_en": "Poland Spring sparkling water Simply Bubbles",
     "precio": 2.29,
@@ -133,11 +133,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/54403-poland-spring-sparkling-water-simply-bubbles-33-8-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/df8b60d4-a35b-4d3a-a544-b211fdfb73d0/beverage-8.jpg",
+    "imagen_url": "house/beverages/oct19/8.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "6a8350d3-8047-5e4a-96d4-b16ed0ee74fd",
+    "id": "e4c45460-6ad9-4e70-ba75-4eccdcfe0f84",
     "nombre": "Coca-Cola refresco original",
     "nombre_en": "Coca-Cola original soda",
     "precio": 2.19,
@@ -150,11 +150,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1.25 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/34967-coca-cola-soda-soft-drink-1-25-liter",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/5684204a-4cb4-4ebb-841b-bb35fbd6e3a6/beverage-9.jpg",
+    "imagen_url": "house/beverages/oct19/9.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "cfa9282f-afce-5a00-af8c-e9716021e09b",
+    "id": "f0427984-7653-412d-8aaf-6d23623b7fb4",
     "nombre": "Coca-Cola refresco original",
     "nombre_en": "Coca-Cola original soda",
     "precio": 2.79,
@@ -167,11 +167,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16706881-coke-classic-soda-soft-drink-20-oza",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/bd0b55b5-1cd3-42fe-b722-591c06a92d31/beverage-10.jpg",
+    "imagen_url": "house/beverages/oct19/10.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "de8af091-9871-5a4d-bda1-5a8321535164",
+    "id": "cf1807ab-0ff1-4786-8f52-c52a47a44c65",
     "nombre": "Coca-Cola refresco original Fridge Pack",
     "nombre_en": "Coca-Cola original soda Fridge Pack",
     "precio": 12.99,
@@ -184,11 +184,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12 × 12 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/35023-coca-cola-coke-fridge-pack-12-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/1bf44924-728b-4244-a36b-eb1ef87fc2a6/beverage-11.jpg",
+    "imagen_url": "house/beverages/oct19/11.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "ace70e00-2ab2-539e-91be-7e2506e5e378",
+    "id": "5815716a-6ea5-40cd-869a-03c5127440a2",
     "nombre": "Coca-Cola refresco Zero Sugar",
     "nombre_en": "Coca-Cola soda Zero Sugar",
     "precio": 3.69,
@@ -201,11 +201,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "2 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16611250-coca-cola-cola-2-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/21c3a5d5-088d-417a-84f6-cfb8b4f2579a/beverage-12.jpg",
+    "imagen_url": "house/beverages/oct19/12.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "20fe3215-5b33-59d2-ae70-76e408df8958",
+    "id": "9a6ded6d-e172-4d27-a017-b7e8170297a8",
     "nombre": "Coca-Cola refresco cereza",
     "nombre_en": "Coca-Cola cherry soda",
     "precio": 3.69,
@@ -218,11 +218,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "2 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/35854-coca-cola-coca-cola-2-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/9ec091ae-ab41-4c78-9cdf-93aba8709539/beverage-13.jpg",
+    "imagen_url": "house/beverages/oct19/13.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "413b4e00-0078-5360-b738-469fcb3e0c0a",
+    "id": "3b5597c9-9a48-4da2-8b70-9e36d4b9f8c3",
     "nombre": "Pepsi refresco de cola",
     "nombre_en": "Pepsi cola",
     "precio": 11.99,
@@ -235,11 +235,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12 × 12 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/42309-pepsi-cola-12-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/cc316de7-4370-41a1-97a7-38289bef4006/beverage-14.jpg",
+    "imagen_url": "house/beverages/oct19/14.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "2c4f8c7d-9036-5aec-b009-03d346130413",
+    "id": "344ffb2c-4433-4c8c-b87f-9a3f7cc548ed",
     "nombre": "Dr Pepper refresco original",
     "nombre_en": "Dr Pepper original soda",
     "precio": 3.69,
@@ -252,11 +252,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "2 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16657490-dr-pepper-soda-2-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/ac14a8f7-9ac8-4a60-8fda-8301bce716f0/beverage-15.jpg",
+    "imagen_url": "house/beverages/oct19/15.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "b30400d9-0bde-5675-aeb7-eeeac42a06f0",
+    "id": "84b1d083-c431-4d7b-bb1b-4faa8cc5b819",
     "nombre": "Sprite refresco lima-limón",
     "nombre_en": "Sprite lemon-lime soda",
     "precio": 2.19,
@@ -269,11 +269,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1.25 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/43443-sprite-lemon-lime-soda-soft-drink-1-25-ltr",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/871453fb-0d90-4ca4-a44d-8ae3fcdadda8/beverage-16.jpg",
+    "imagen_url": "house/beverages/oct19/16.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "0b6fb42f-e6ed-5e85-899d-b45108498d1f",
+    "id": "e92a3000-eb48-404f-850e-537537a0de6c",
     "nombre": "Sprite refresco lima-limón",
     "nombre_en": "Sprite lemon-lime soda",
     "precio": 7.99,
@@ -286,11 +286,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "6 × 16.9 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/34964-sprite-lemon-lime-16-9-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/ccd9f7d1-83c3-459c-b22f-a8bae804186e/beverage-17.jpg",
+    "imagen_url": "house/beverages/oct19/17.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "ba503ea1-e2e4-565a-9892-5f180d274bbf",
+    "id": "adf3e81c-e85d-4579-8433-d67557c41bd2",
     "nombre": "Petit néctar de guayaba",
     "nombre_en": "Petit guava nectar",
     "precio": 1.39,
@@ -303,11 +303,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "11.2 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16558536-petit-nectar-guava-11-2-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/d1e4d6a2-3835-4c71-80cf-a1e70738c12a/beverage-18.jpg",
+    "imagen_url": "house/beverages/oct19/18.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "4a787b46-4d53-5971-b798-a15c72e03917",
+    "id": "fd1f6a3c-b9d5-49d4-80f0-1dd70a86c463",
     "nombre": "Rica néctar de guayaba",
     "nombre_en": "Rica guava nectar",
     "precio": 3.39,
@@ -320,11 +320,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/29979090-rica-guava-nectar-1-l",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/93759f36-475e-40e0-b935-714aad6f8496/beverage-19.jpg",
+    "imagen_url": "house/beverages/oct19/19.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "905094e1-720f-5de3-b623-0ae6ea9033f2",
+    "id": "61dcee5a-acfe-45e5-8b8b-512b360049b1",
     "nombre": "Dole jugo naranja, fresa y banana",
     "nombre_en": "Dole orange strawberry banana juice",
     "precio": 6.79,
@@ -337,11 +337,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "52 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/62695030-dole-100-juice-no-sugar-added-orange-strawberry-banana-52-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/e24f54e7-56e7-4cdf-a5a9-50e0714b59f4/beverage-20.jpg",
+    "imagen_url": "house/beverages/oct19/20.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "ed42ca96-37b6-5ce9-9b15-72c6d5d602f2",
+    "id": "d97b8334-f4b9-48bc-bf0a-dc294ea3db32",
     "nombre": "Tropicana jugo naranja sin pulpa baja acidez",
     "nombre_en": "Tropicana low-acid no-pulp orange juice",
     "precio": 6.29,
@@ -354,11 +354,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "46 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118932-tropicana-100-orange-juice-no-pulp-46-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/eb1d835d-fcff-4984-97f1-96a92666acca/beverage-21.jpg",
+    "imagen_url": "house/beverages/oct19/21.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "30ae291a-80f4-523c-8602-38da16e1dbc4",
+    "id": "c4f8d5c8-2127-41cb-9907-1f66943b6ca9",
     "nombre": "Tropicana Pure Premium jugo naranja sin pulpa",
     "nombre_en": "Tropicana Pure Premium no-pulp orange juice",
     "precio": 6.29,
@@ -371,11 +371,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "46 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118930-tropicana-100-orange-juice-no-pulp-46-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/615c76dd-091d-47a4-b2af-4f1764e6e4bd/beverage-22.jpg",
+    "imagen_url": "house/beverages/oct19/22.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "c86e762b-1cef-56ea-9853-8ab1e57b87f1",
+    "id": "6d46d8f9-7e72-451f-92d3-9e6c9b9e3faf",
     "nombre": "Tropicana Pure Premium jugo naranja calcio y vitamina D",
     "nombre_en": "Tropicana Pure Premium orange juice with calcium and vitamin D",
     "precio": 2.79,
@@ -388,11 +388,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "11 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/47130987-tropicana-100-orange-juice-11-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/0e7ef1c8-4ebc-45cb-baa3-b2fd7cb4ea7d/beverage-23.jpg",
+    "imagen_url": "house/beverages/oct19/23.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "41d2c9b8-2339-5da7-a5eb-2305b5cb5203",
+    "id": "7e2e0a55-9681-47b7-885e-3ce9ae201e5b",
     "nombre": "Tropicana jugo naranja sin pulpa",
     "nombre_en": "Tropicana no-pulp orange juice",
     "precio": 15.99,
@@ -405,11 +405,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "128 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16480535-tropicana-pure-premium-original-no-pulp-orange-juice-128-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/693ee206-adbe-4d6a-b8f5-befcce7b0247/beverage-24.jpg",
+    "imagen_url": "house/beverages/oct19/24.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "6e63a8f4-b884-52d8-b8f6-f1c6b375e953",
+    "id": "58fc6999-2fd2-438c-b582-6409214a70e7",
     "nombre": "Tropicana Pure Premium jugo naranja con algo de pulpa",
     "nombre_en": "Tropicana Pure Premium orange juice with some pulp",
     "precio": 6.29,
@@ -422,11 +422,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "46 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118936-tropicana-100-orange-juice-some-pulp-46-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/4953e303-08ab-4e9b-b37a-675b2dbc4cd4/beverage-25.jpg",
+    "imagen_url": "house/beverages/oct19/25.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "cc40d200-86ce-5176-aa3e-c5656329bc9c",
+    "id": "dd4854cd-21fc-4031-8fcd-11e506bdabb8",
     "nombre": "Gatorade bebida deportiva naranja",
     "nombre_en": "Gatorade sports drink orange",
     "precio": 3.19,
@@ -439,11 +439,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/210671-gatorade-orange-thirst-quencher-28-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/e2af04b4-d2be-404c-b0fb-a72438e7758b/beverage-26.jpg",
+    "imagen_url": "house/beverages/oct19/26.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "48543d70-6b3d-5888-8d37-a1456d54b43e",
+    "id": "4869bb35-0a7b-4052-9c20-7749f8f6b416",
     "nombre": "Gatorade bebida deportiva limón-lima",
     "nombre_en": "Gatorade sports drink lemon-lime",
     "precio": 3.19,
@@ -456,11 +456,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/219031-gatorade-lemon-lime-thirst-quencher-28-0-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/9f63328d-024e-4bf7-a987-3626995c78ab/beverage-27.jpg",
+    "imagen_url": "house/beverages/oct19/27.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "21754f0f-c848-5cc4-8f3e-6ac69f0e69d3",
+    "id": "a7452029-2156-42db-a21f-6bbdeb551fb2",
     "nombre": "Gatorade Frost bebida deportiva Glacier Freeze",
     "nombre_en": "Gatorade Frost sports drink Glacier Freeze",
     "precio": 3.19,
@@ -473,11 +473,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16573737-gatorade-frost-glacier-freeze-thrist-quencher-28-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/f4e10586-3d78-4948-8e31-960e38490662/beverage-28.jpg",
+    "imagen_url": "house/beverages/oct19/28.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "33d8616f-7227-574e-be06-bb25dd25e5d3",
+    "id": "bd0c8404-40d0-497c-b9a1-a3cbd8b6990b",
     "nombre": "Gatorade Fierce bebida deportiva uva",
     "nombre_en": "Gatorade Fierce sports drink grape",
     "precio": 3.19,
@@ -490,11 +490,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16997628-gatorade-grape-thirst-quencher-28-0-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/d7095ea9-fc71-4d54-818a-383823795652/beverage-29.jpg",
+    "imagen_url": "house/beverages/oct19/29.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "f8afba7e-1b46-5436-a6f1-4d999ae573c0",
+    "id": "931d65a3-4603-41a3-b5bf-5634ce1a1732",
     "nombre": "Gatorade Lower Sugar bebida deportiva ponche de frutas",
     "nombre_en": "Gatorade Lower Sugar sports drink fruit punch",
     "precio": 3.19,
@@ -507,11 +507,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/94822627-gator-lw-sgr-frt-p",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/d384c13e-c273-4d25-8f08-a66f02ddc7c3/beverage-30.jpg",
+    "imagen_url": "house/beverages/oct19/30.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "1e985cc6-e23e-599d-b2b0-7b8608c41a3b",
+    "id": "318703e6-bd61-4d3c-8429-cc77423c8789",
     "nombre": "Gatorade Zero bebida deportiva frutos del bosque",
     "nombre_en": "Gatorade Zero sports drink berry",
     "precio": 3.19,
@@ -524,11 +524,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/19674006-gatorade-berry-zero-sugar-thirst-quencher-28-0-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/20295225-1b65-4cf9-9299-4a04f567303d/beverage-31.jpg",
+    "imagen_url": "house/beverages/oct19/31.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "088f9680-7271-52d6-98b1-b7b74fd56c40",
+    "id": "7ef1af24-046f-4338-ba7d-ff928c3104c8",
     "nombre": "Powerade bebida deportiva uva",
     "nombre_en": "Powerade sports drink grape",
     "precio": 2.19,
@@ -541,11 +541,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/21006027-powerade-grape-ion4-electrolyte-enhanced-fruit-flavored-sports-drink-w-vitamins-b3-b6-and-b12-replenish-sodium-calcium-potassium-magnesium-28-oza",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/7d55a70e-14f1-4eaf-bd04-26e8bf8e0c59/beverage-32.jpg",
+    "imagen_url": "house/beverages/oct19/32.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "7a4c003e-18fe-522f-9c4d-b2f603e5e0f9",
+    "id": "76b595fa-837d-434b-91d2-25b8fd632a5f",
     "nombre": "Bodyarmor bebida deportiva fresa y banana",
     "nombre_en": "Bodyarmor sports drink strawberry banana",
     "precio": 2.69,
@@ -558,11 +558,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "16 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/183748-bodyarmor-strawberry-banana-16-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/afc37185-c578-4832-b459-296556fcb941/beverage-33.jpg",
+    "imagen_url": "house/beverages/oct19/33.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "5b70d655-8568-59e0-b94d-677140cea8bb",
+    "id": "7e52e58f-0d8e-44bc-b4e9-d0b5f39f5175",
     "nombre": "Bodyarmor bebida deportiva ponche de frutas",
     "nombre_en": "Bodyarmor sports drink fruit punch",
     "precio": 2.69,
@@ -575,11 +575,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "16 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/147170-bodyarmor-super-drink-super-hydration-fruit-punch-16-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/65783e63-a795-4804-afa9-f20765b7d593/beverage-34.jpg",
+    "imagen_url": "house/beverages/oct19/34.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "0e64a2df-e819-5b58-9e8a-f0f45e8328ce",
+    "id": "d7b713e4-72b9-435c-97a9-e6f053477213",
     "nombre": "Bodyarmor bebida deportiva ponche tropical",
     "nombre_en": "Bodyarmor sports drink tropical punch",
     "precio": 2.69,
@@ -592,11 +592,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "16 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/147168-bodyarmor-superdrink-tropical-punch-16-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/f110bc54-d67d-470f-a0a2-03bf2b290ef9/beverage-35.jpg",
+    "imagen_url": "house/beverages/oct19/35.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "7883b900-7372-58d4-ab7a-6141002cccf8",
+    "id": "252255a9-be46-4685-b6e5-cf8e763dc374",
     "nombre": "Red Bull bebida energética original",
     "nombre_en": "Red Bull energy drink original",
     "precio": 3.99,
@@ -609,11 +609,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2797093-red-bull-energy-drink-12-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/b288b779-4ffa-418a-9b96-8ad4858071fd/beverage-36.jpg",
+    "imagen_url": "house/beverages/oct19/36.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "b16024e4-e61e-57ad-bada-cde6a428c104",
+    "id": "6fc17efa-f8a2-4961-a5ea-a4ab7955740a",
     "nombre": "AriZona té helado estilo Sun Brewed",
     "nombre_en": "AriZona iced tea Sun Brewed",
     "precio": 2.59,
@@ -626,11 +626,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "59 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/18558401-arizona-iced-tea-sun-brewed-style-59-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/591ccc83-78e9-4a21-bf2e-c7a7f6943f1f/beverage-37.jpg",
+    "imagen_url": "house/beverages/oct19/37.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "7fd6a6cf-441a-5143-9574-456ed86b0207",
+    "id": "a0c4248b-e86e-4bc0-9d92-5f8fef5040f4",
     "nombre": "AriZona té helado con limón",
     "nombre_en": "AriZona lemon iced tea",
     "precio": 0.89,
@@ -643,11 +643,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "11.5 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2008864-arizona-iced-tea-with-lemon-flavor-11-5-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/ac2ceb5e-c411-4ee3-82ae-58ffaee4fd5c/beverage-38.jpg",
+    "imagen_url": "house/beverages/oct19/38.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "645299d9-e21a-5438-a875-ae0702d59bb1",
+    "id": "6d1ea0cb-6794-4804-be47-fa9570ef576f",
     "nombre": "AriZona té helado con frambuesa",
     "nombre_en": "AriZona raspberry iced tea",
     "precio": 4.49,
@@ -660,11 +660,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1 gal",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2429-arizona-iced-tea-with-raspberry-flavor-sun-brewed-style-1-gal",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/b0ef32fd-e3f8-45b2-a296-a565561bf1a3/beverage-39.jpg",
+    "imagen_url": "house/beverages/oct19/39.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "f7458055-c665-56c7-b00c-fa79c7c92e17",
+    "id": "ee445746-2917-4639-8744-25f2d7d8a16c",
     "nombre": "Turkey Hill té helado con limón",
     "nombre_en": "Turkey Hill lemon iced tea",
     "precio": 3.49,
@@ -677,11 +677,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "64 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/99464-turkey-hill-iced-tea-lemon-flavored-64-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/3269e25e-6c40-4dc7-a906-92d971af849b/beverage-40.jpg",
+    "imagen_url": "house/beverages/oct19/40.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "327c3568-a33f-50a7-818d-0aff5e8d6178",
+    "id": "80a7d068-56c6-4cef-821f-763d9c412984",
     "nombre": "Turkey Hill té dulce sin azúcar estilo sureño",
     "nombre_en": "Turkey Hill Southern-style zero-sugar sweet tea",
     "precio": 3.49,
@@ -694,11 +694,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "0.5 gal",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/66362402-turkey-hill-sweet-tea-zero-sugar-southern-brewed-style-05-gal",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/022632a1-6534-4227-b7fa-2f9f50decb49/beverage-41.jpg",
+    "imagen_url": "house/beverages/oct19/41.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "f3299626-8747-54cc-8bd0-5a4eab2bf1ff",
+    "id": "9b61532c-388f-42b6-a528-37f687b80244",
     "nombre": "Twinings té verde puro en bolsitas",
     "nombre_en": "Twinings pure green tea bags",
     "precio": 5.89,
@@ -711,11 +711,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/35313-twinings-green-tea-bags-20-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/bb6d697c-7e76-4d15-aca2-729d487fc207/beverage-42.jpg",
+    "imagen_url": "house/beverages/oct19/42.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "151b70e8-e452-5a79-8d50-292719d0c787",
+    "id": "0ee1b738-ffc6-4873-9464-d0f490c11b3d",
     "nombre": "Twinings té negro English Breakfast en bolsitas",
     "nombre_en": "Twinings black tea English Breakfast tea bags",
     "precio": 5.89,
@@ -728,11 +728,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/27882-twinings-english-breakfast-tea-bags-20-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/46ebedf9-73a2-4c8b-bbb9-eb3d4249cfec/beverage-43.jpg",
+    "imagen_url": "house/beverages/oct19/43.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "4db20aea-9423-5c2d-b824-f508d017e0bb",
+    "id": "332b4f5e-f541-41e9-acbe-a690871f9219",
     "nombre": "Twinings té verde descafeinado en bolsitas",
     "nombre_en": "Twinings decaffeinated green tea bags",
     "precio": 5.89,
@@ -745,11 +745,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/119432-twinings-decaffeinated-green-tea-bags-20-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/9d556e33-388d-443c-975c-de34484c0c15/beverage-44.jpg",
+    "imagen_url": "house/beverages/oct19/44.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "29fbcc50-caf6-5aee-96be-1ca7ec9b3a16",
+    "id": "6064b9aa-204c-4d1c-b45f-9dace881cd2e",
     "nombre": "Twinings té negro Irish Breakfast en bolsitas",
     "nombre_en": "Twinings black tea Irish Breakfast tea bags",
     "precio": 5.89,
@@ -762,11 +762,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/27883-twinings-irish-breakfast-tea-bags-20-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/7a610826-9990-4510-bdd3-f66f21aedd6c/beverage-45.jpg",
+    "imagen_url": "house/beverages/oct19/45.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "e7223410-b88c-555a-8a9b-31b88c57cb06",
+    "id": "99a6c1ee-7a85-4648-9127-3eea048f9e7f",
     "nombre": "Stash té negro English Breakfast en bolsitas",
     "nombre_en": "Stash black tea English Breakfast tea bags",
     "precio": 5.29,
@@ -779,11 +779,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "20 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/70999-stash-tea-english-breakfast-black-tea-20-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/18223696-bac7-4ad7-b39a-35d8efe9acd0/beverage-46.jpg",
+    "imagen_url": "house/beverages/oct19/46.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "3af5e7d0-cde0-5eb7-9f2f-ca1bfcebc0ce",
+    "id": "1254e497-9ced-4db0-a20c-99880e45442b",
     "nombre": "Jarritos refresco de mandarina",
     "nombre_en": "Jarritos mandarin soda",
     "precio": 4.29,
@@ -796,11 +796,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1.5 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/42311-jarritos-soda-mandarin-1-58-qt",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/21f55eab-889b-4ac5-8023-8563545086a0/beverage-47.jpg",
+    "imagen_url": "house/beverages/oct19/47.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "e337e393-09c7-50a6-a300-c0d90c91c65c",
+    "id": "ebb9ffeb-2aae-47da-b33c-5ed3e7698a03",
     "nombre": "Jarritos refresco de tamarindo",
     "nombre_en": "Jarritos tamarind soda",
     "precio": 4.29,
@@ -813,11 +813,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "1.5 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/42254-jarritos-soda-tamarind-1-58-qt",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/a62643bc-69dd-411e-9d68-3b05a21a5a0e/beverage-48.jpg",
+    "imagen_url": "house/beverages/oct19/48.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "8956b37c-92ce-5cc2-bcc3-28281836a440",
+    "id": "16d4b06e-5345-47d5-bfbe-f34cf327c152",
     "nombre": "Jarritos refresco de toronja",
     "nombre_en": "Jarritos grapefruit soda",
     "precio": 2.19,
@@ -830,11 +830,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12.5 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/153938-jarritos-soda-grapefruit-12-5-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/21215571-11d8-44ed-a270-aa5a042f8964/beverage-49.jpg",
+    "imagen_url": "house/beverages/oct19/49.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "cd467d18-4611-5a28-b363-da75d925b5e2",
+    "id": "288bc0ca-51cd-440e-80fb-d67a59845533",
     "nombre": "Jarritos refresco de ponche de frutas",
     "nombre_en": "Jarritos fruit punch soda",
     "precio": 2.19,
@@ -847,11 +847,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12.5 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16902825-jarritos-soda-fruit-punch-12-5-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/c3159e53-1713-462e-b134-f8ca433c4677/beverage-50.jpg",
+    "imagen_url": "house/beverages/oct19/50.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "6add840a-9eae-5fb9-a1c2-5a3c51368486",
+    "id": "c20aac92-20bd-4ec8-b86b-777f53a48de2",
     "nombre": "Materva refresco de yerba mate",
     "nombre_en": "Materva yerba mate soda",
     "precio": 6.99,
@@ -864,11 +864,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "6 × 12 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/316733-materva-soda-yerba-mate-6-pack-6-ea",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/36285daa-79f8-4d05-8675-a4301dadc4fa/beverage-51.jpg",
+    "imagen_url": "house/beverages/oct19/51.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "5ef831d0-2af7-5168-8c4e-43d3e420e9f3",
+    "id": "a182834c-0e4c-471d-812b-583e68b15b04",
     "nombre": "Inca Kola refresco",
     "nombre_en": "Inca Kola soda",
     "precio": 12.49,
@@ -881,11 +881,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "12 × 12 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/316770-inca-kola-carbonated-soda-soft-drinks-12-oza",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/5bfe4676-cd89-4030-908a-40c3fcb245fe/beverage-52.jpg",
+    "imagen_url": "house/beverages/oct19/52.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "2e8084e9-b322-578f-a8e5-52f4d47d5b42",
+    "id": "7a3c29b3-7c63-43a9-be5e-3fd386dc941f",
     "nombre": "Inca Kola refresco",
     "nombre_en": "Inca Kola soda",
     "precio": 3.49,
@@ -898,11 +898,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "2 L",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/42470-inca-kola-inca-kola-carbonated-soda-soft-drink-2-ltr",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/6ffd36f3-8a30-41e8-b483-63bea4ce3ed0/beverage-53.jpg",
+    "imagen_url": "house/beverages/oct19/53.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "a1230147-12f0-5b0d-88b2-18fb8ad22e65",
+    "id": "c1aa96a9-4d18-4f14-9c50-13e40ed6e355",
     "nombre": "Goya néctar de guayaba",
     "nombre_en": "Goya guava nectar",
     "precio": 3.29,
@@ -915,11 +915,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/310533-goya-guava-nectar-33-8-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/306698fa-303d-43b8-8ac9-a69272b64409/beverage-54.jpg",
+    "imagen_url": "house/beverages/oct19/54.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "3a89208c-e968-5b15-a8c8-fad2ce95fe47",
+    "id": "8a3c5eaa-55c3-493f-b44a-9117882d9179",
     "nombre": "Goya néctar de mango",
     "nombre_en": "Goya mango nectar",
     "precio": 3.29,
@@ -932,11 +932,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/37001-goya-nectar-mango-33-8-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/789de1fc-e692-4709-b86d-2138ef3ce778/beverage-55.jpg",
+    "imagen_url": "house/beverages/oct19/55.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "fd3e8397-6df1-56d8-83ca-ee7b82922626",
+    "id": "941029ae-7c69-4b63-9a24-b5a793410795",
     "nombre": "Goya néctar de durazno",
     "nombre_en": "Goya peach nectar",
     "precio": 3.29,
@@ -949,11 +949,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/37007-goya-peach-nectar-33-8-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/648f4ef9-8829-4352-a9ca-d5177e589214/beverage-56.jpg",
+    "imagen_url": "house/beverages/oct19/56.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "9f5ecd8a-457c-565f-a252-549db7ae30a9",
+    "id": "9530d27e-e539-4fd9-a546-7c7d1c3e11cc",
     "nombre": "Goya néctar de pera",
     "nombre_en": "Goya pear nectar",
     "precio": 3.29,
@@ -966,11 +966,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/100915-goya-pear-nectar-33-8-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/174f7aac-341e-4648-a258-ca16ac24e846/beverage-57.jpg",
+    "imagen_url": "house/beverages/oct19/57.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "dc0c469e-f3b7-5822-8831-81b472b6b176",
+    "id": "8b643381-b421-43e4-96fe-995551070e1d",
     "nombre": "Goya néctar de guanábana",
     "nombre_en": "Goya soursop nectar",
     "precio": 4.79,
@@ -983,11 +983,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/19698788-goya-soursop-nectar-33-8-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/bb781949-d527-4f26-8bfc-2c5663312379/beverage-58.jpg",
+    "imagen_url": "house/beverages/oct19/58.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "32c99aee-5e1a-5a82-b057-b3651d25d135",
+    "id": "38ebcb49-dedd-4f36-8c03-520232d09537",
     "nombre": "ZUKO mezcla endulzada de melón, bolsa resellable",
     "nombre_en": "ZUKO sweetened cantaloupe drink mix",
     "precio": 4.99,
@@ -1000,11 +1000,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "14.1 oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2738012-zuko-drink-mix-cantaloupe-14-1-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/38e7d21c-bf4f-4102-b433-f8a82b2e7d02/beverage-59.jpg",
+    "imagen_url": "house/beverages/oct19/59.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "fdc1edf6-b828-50fb-971c-995e82ce2b8f",
+    "id": "d6c9151e-0230-4272-ab0f-934bc3cbbf43",
     "nombre": "ZUKO mezcla endulzada de horchata, bolsa resellable",
     "nombre_en": "ZUKO sweetened horchata drink mix",
     "precio": 4.99,
@@ -1017,11 +1017,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "14.1 oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/286588-zuko-drink-mix-horchata-14-10-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/acb8e694-243d-4fe0-b9d4-bc773089a46f/beverage-60.jpg",
+    "imagen_url": "house/beverages/oct19/60.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "db8e44a7-1aee-5ab7-b6b9-1d8ec22751f1",
+    "id": "c71619f6-271f-496d-8100-6740832e807e",
     "nombre": "Crystal Light limonada rosa en polvo",
     "nombre_en": "Crystal Light pink lemonade drink mix",
     "precio": 4.79,
@@ -1034,11 +1034,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "10 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/41865-crystal-light-pink-lemonade-naturally-flavored-powdered-drink-mix-10-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/cb51e7a6-ff32-480c-89e7-774417cc92fe/beverage-61.jpg",
+    "imagen_url": "house/beverages/oct19/61.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "7f5d1281-eb3c-51b2-a358-7b07454f016e",
+    "id": "bc30098a-1291-4f23-b9be-79e70cd5cd5c",
     "nombre": "Crystal Light limonada en polvo",
     "nombre_en": "Crystal Light lemonade drink mix",
     "precio": 4.79,
@@ -1051,11 +1051,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "10 × 0.14 oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/41860-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-0-14-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/729da7d2-880a-4231-a61e-c7121efdabe6/beverage-62.jpg",
+    "imagen_url": "house/beverages/oct19/62.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "5b56fe35-71ea-53a9-b924-f9534dd3eb98",
+    "id": "0e3f978e-13c4-4de8-bfe7-72d9a7462374",
     "nombre": "Crystal Light uva en polvo con cafeína",
     "nombre_en": "Crystal Light caffeinated grape drink mix",
     "precio": 4.79,
@@ -1068,11 +1068,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "10 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/41804-crystal-light-grape-naturally-flavored-powdered-drink-mix-with-caffeine-10-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/9ec5bddb-d2fb-463f-b712-4bc18a504c5f/beverage-63.jpg",
+    "imagen_url": "house/beverages/oct19/63.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "7edbc76c-1d46-5d22-85a6-eeeb1144e28e",
+    "id": "af93fcd4-4276-4d2a-a358-800f7a21daec",
     "nombre": "Crystal Light limonada en polvo",
     "nombre_en": "Crystal Light lemonade drink mix",
     "precio": 5.59,
@@ -1085,11 +1085,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "6 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/41900-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-6-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/ea05b104-2b69-4654-b4ea-43c664f66adc/beverage-64.jpg",
+    "imagen_url": "house/beverages/oct19/64.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "4094f87b-56dd-5326-866b-46fcdaa21c90",
+    "id": "16098693-9fcf-4598-961f-1a356a689677",
     "nombre": "Abuelita mezcla instantánea para chocolate mexicano",
     "nombre_en": "Abuelita Mexican instant hot chocolate mix",
     "precio": 4.99,
@@ -1102,11 +1102,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "8 unidades",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/34580-abuelita-hot-chocolate-drink-mix-authentic-mexican-hot-chocolate-drink-mix-quick-and-easy-to-prepare-8-ct",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/3a79c6ab-0a87-40ee-8d01-90bbd8e63ca4/beverage-65.jpg",
+    "imagen_url": "house/beverages/oct19/65.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "003e5ab6-8e2d-595d-ab0b-c4a9b745aade",
+    "id": "c3ff0393-6479-456e-89bf-5548a052f2bd",
     "nombre": "Abuelita tabletas para chocolate mexicano",
     "nombre_en": "Abuelita Mexican hot chocolate tablets",
     "precio": 8.99,
@@ -1119,11 +1119,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "19 oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/34579-abuelita-nestle-mexican-hot-chocolate-tablets-19-onz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/e44cee77-a382-45c3-8e53-6679ee65c798/beverage-66.jpg",
+    "imagen_url": "house/beverages/oct19/66.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "e271b729-d117-574d-8cd2-78330732a8c8",
+    "id": "fca1f3dd-94db-4f89-a71f-5296bf35ecdb",
     "nombre": "FOCO agua de coco 100% pura",
     "nombre_en": "FOCO 100% pure coconut water",
     "precio": 4.69,
@@ -1136,11 +1136,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/303466-foco-coconut-water-100-pure-33-8-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/1d25e4f4-ca1e-4101-8fdb-4c69c11af046/beverage-67.jpg",
+    "imagen_url": "house/beverages/oct19/67.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "851458da-1544-5aa3-9272-5439491d2ead",
+    "id": "7e2d10af-dfae-4456-a5ae-d116c1ae8a75",
     "nombre": "Vita Coco agua de coco pura",
     "nombre_en": "Vita Coco pure coconut water",
     "precio": 7.49,
@@ -1153,11 +1153,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "33.8 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/16850032-vita-coco-coconut-water-pure-33-8-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/57af7510-89bb-4d79-8f65-8c8fd70ed25d/beverage-68.jpg",
+    "imagen_url": "house/beverages/oct19/68.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "b5df8e4a-1360-5f5a-93c2-5e9568e1ba36",
+    "id": "9d7e1905-4c1c-4a16-b46f-09878f660e92",
     "nombre": "MALK bebida de almendra sin azúcar",
     "nombre_en": "MALK unsweetened almond drink",
     "precio": 9.09,
@@ -1170,11 +1170,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "28 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/2591776-malk-milk-pure-almond-unsweetened-28-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/8cef7f0e-ca5e-48fd-9d32-6bc8fab54c71/beverage-69.jpg",
+    "imagen_url": "house/beverages/oct19/69.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "1149fa66-34b7-5c6f-b2d5-4f872cf4f723",
+    "id": "af22dae3-52a5-467f-8475-b221d43eac73",
     "nombre": "Silk bebida de almendra sin azúcar",
     "nombre_en": "Silk unsweetened almond drink",
     "precio": 6.99,
@@ -1187,11 +1187,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "64 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/42741-silk-unsweetened-almond-milk-64-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/57627f9a-f65a-49c8-a73b-7dc5360704ab/beverage-70.jpg",
+    "imagen_url": "house/beverages/oct19/70.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "702f5bcb-7c2f-5d54-8374-71b85ddaa528",
+    "id": "42791093-2978-46ea-a5eb-dd7da39d46f9",
     "nombre": "Califia Farms bebida de almendra sin azúcar",
     "nombre_en": "Califia Farms unsweetened almond drink",
     "precio": 6.69,
@@ -1204,11 +1204,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "48 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/29132-califia-farms-unsweetened-almondmilk-48-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/09362c44-8b0c-40d3-9a0c-fb51e99980d4/beverage-71.jpg",
+    "imagen_url": "house/beverages/oct19/71.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "9730d5c3-bca4-58f1-a8e8-fbe0ea0808ea",
+    "id": "92fc357b-ec80-4889-a2b2-c0dcea2e38b5",
     "nombre": "Silk bebida de soya original",
     "nombre_en": "Silk original soy drink",
     "precio": 8.09,
@@ -1221,11 +1221,11 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "64 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/35871-silk-original-soy-milk-64-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/e494fb5c-62eb-435b-a41f-a5567d126632/beverage-72.jpg",
+    "imagen_url": "house/beverages/oct19/72.jpg",
     "photo_kind": "own"
   },
   {
-    "id": "a1068173-985c-5511-8034-ffc934849967",
+    "id": "17f67099-394a-4225-951d-1bef52667c8a",
     "nombre": "Silk bebida de avena original",
     "nombre_en": "Silk original oat drink",
     "precio": 7.19,
@@ -1238,7 +1238,7 @@ export const HOUSE_BEVERAGES_CATALOG = [
     "tamano": "59 fl oz",
     "source_url": "https://shop.foodbazaar.com/store/food-bazaar/products/19520879-silk-original-oat-milk-64-fl-oz",
     "alcohol_free": true,
-    "imagen_url": "/__l5e/assets-v1/ee88ce51-0fa7-4044-bf3f-10a00c0eb689/beverage-73.jpg",
+    "imagen_url": "house/beverages/oct19/73.jpg",
     "photo_kind": "own"
   }
 ] as const;

@@ -2,13 +2,13 @@
 
 ## Bebidas Food Bazaar (19 octubre)
 - [x] Preparar 123 referencias con tamaños y fuentes: 73 nuevos con precio original reconfirmado, 45 nuevos pendientes y cinco existentes; sin inventar precios ni cargar catálogo.
-- [ ] Mostrar plan y esperar aprobación del dueño antes de cualquier cambio de catálogo.
-- [ ] Tras aprobación, incorporar nueve subcategorías y productos ES/EN sin duplicados, fotos OFF/reutilizadas/propias y códigos solo de tamaño exacto; verificar cantidad y catálogo sin pagos/entrega/clientes ni publicación.
+- [x] Plan aprobado: incorporar solo 73 nuevos con precio regular confirmado; 45 pendientes no cargados.
+- [x] Incorporados 73 nuevos y clasificados cinco existentes (78 en Bebidas), nueve filtros y 73 fotos propias; sin nuevos UPC no verificados. Dos precios existentes corregidos, Café Bustelo trasladado conservando ID/precio. 31 pruebas pasan y 73 precios comprobados en lectura guardada; 518 registros anteriores conservados fuera de los campos aprobados. Fotos/filtros/búsqueda/carrito verificados en 390/1280 px sin errores. Sin pagos/entrega/clientes ni publicación; admin autenticado y escáner físico no disponibles en este entorno.
 
 ## Snacks Food Bazaar (18 octubre)
 - [x] Plan aprobado; la lista real contiene 67 nuevos (el plan contó 78 por error), más corrección de Cheez-It 7 oz.
-- [ ] Añadir siete subcategorías, catálogo ES/EN, precios regulares, fotos propias/OFF y UPC solo para tamaños exactos; conservar original y evitar duplicados.
-- [ ] Guardar catálogo, corregir Cheez-It $4.19 y clasificarlo; verificar precios, filtros, imágenes, celular/computadora y pruebas; sin pagos/clientes ni publicación.
+- [x] Añadidas siete subcategorías, 67 nuevos ES/EN, precios regulares, 17 fotos OFF y 50 propias; cinco UPC de tamaño exacto.
+- [x] Catálogo guardado y Cheez-It corregido a $4.19; 68 productos y fotos comprobados en vista previa. Sin pagos/clientes ni publicación.
 
 ## Corrección de precios regulares (18 octubre, 18:05 UTC)
 - [x] Plan aprobado y 43 precios únicos actualizados; frambuesas $6.99 y moras $5.69 confirmados.
