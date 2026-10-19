@@ -13,7 +13,7 @@ export const HOUSE_CATEGORIES: { es: string; en: string }[] = [
   { es: "Despensa", en: "Pantry" },
   { es: "Bebidas", en: "Beverages" },
   { es: "Snacks", en: "Snacks" },
-  { es: "Limpieza", en: "Cleaning" },
+  { es: "Limpieza y hogar", en: "Cleaning & home" },
   { es: "Cuidado personal", en: "Personal care" },
   { es: "Bebé", en: "Baby" },
   { es: "Mascotas", en: "Pets" },
@@ -112,6 +112,21 @@ export const HOUSE_BEVERAGE_SUBCATEGORIES = [
   }
 ] as const;
 
+export const HOUSE_CLEANING_SUBCATEGORIES = [
+  { es: "Detergente y suavizante de ropa", en: "Laundry detergent & softener" },
+  { es: "Jabón y accesorios para platos", en: "Dish soap & accessories" },
+  { es: "Limpiadores multiusos y de baño", en: "All-purpose & bathroom cleaners" },
+  { es: "Cloro y desinfectantes", en: "Bleach & disinfectants" },
+  { es: "Papel higiénico y servilletas", en: "Toilet paper & napkins" },
+  { es: "Toallas de papel", en: "Paper towels" },
+  { es: "Bolsas de basura", en: "Trash bags" },
+  { es: "Bolsas, envolturas y aluminio", en: "Food bags, wraps & foil" },
+  { es: "Esponjas, trapos y escobas", en: "Sponges, cloths & brooms" },
+  { es: "Ambientadores y velas", en: "Air fresheners & candles" },
+  { es: "Insecticidas y trampas", en: "Insecticides & traps" },
+  { es: "Focos, pilas y artículos del hogar", en: "Light bulbs, batteries & household" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
@@ -120,6 +135,7 @@ export function houseSubcategories(category: string | null) {
   if (category === "Despensa") return HOUSE_PANTRY_SUBCATEGORIES;
   if (category === "Snacks") return HOUSE_SNACK_SUBCATEGORIES;
   if (category === "Bebidas") return HOUSE_BEVERAGE_SUBCATEGORIES;
+  if (category === "Limpieza y hogar") return HOUSE_CLEANING_SUBCATEGORIES;
   return [];
 }
 
@@ -133,7 +149,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca", "Agua y agua con gas", "Refrescos", "Jugos y néctares", "Bebidas deportivas y energéticas", "Té y café listos para tomar", "Café y té (en grano, molido, cápsulas, bolsitas)", "Bebidas latinas", "Mezclas y bebidas en polvo", "Agua de coco y bebidas vegetales"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca", "Agua y agua con gas", "Refrescos", "Jugos y néctares", "Bebidas deportivas y energéticas", "Té y café listos para tomar", "Café y té (en grano, molido, cápsulas, bolsitas)", "Bebidas latinas", "Mezclas y bebidas en polvo", "Agua de coco y bebidas vegetales", "Detergente y suavizante de ropa", "Jabón y accesorios para platos", "Limpiadores multiusos y de baño", "Cloro y desinfectantes", "Papel higiénico y servilletas", "Toallas de papel", "Bolsas de basura", "Bolsas, envolturas y aluminio", "Esponjas, trapos y escobas", "Ambientadores y velas", "Insecticidas y trampas", "Focos, pilas y artículos del hogar"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
