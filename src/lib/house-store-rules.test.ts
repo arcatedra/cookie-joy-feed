@@ -99,6 +99,8 @@ describe("catálogo de carnes y mariscos", () => {
     expect(houseProductSchema.safeParse({ ...base, subcategoria: "Frutas" }).success).toBe(false);
     expect(houseProductSchema.safeParse({ ...base, categoria: "Frutas y verduras", subcategoria: "Res" }).success).toBe(false);
     expect(houseSubcategories("Congelados")).toEqual([]);
+    expect(houseSubcategories("Limpieza y hogar").map((s) => s.es)).toHaveLength(12);
+    expect(houseSubcategories("Limpieza y hogar")[5]?.es).toBe("Toallas de papel");
     const bulk = parseBulkRows([{ ...base, subcategoria: "Pollo y pavo", por_libra: "sí" }]);
     expect(bulk.ok[0]?.subcategoria).toBe("Pollo y pavo");
   });
