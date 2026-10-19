@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Snacks Food Bazaar (18 octubre)
+- [x] Plan aprobado; la lista real contiene 67 nuevos (el plan contó 78 por error), más corrección de Cheez-It 7 oz.
+- [ ] Añadir siete subcategorías, catálogo ES/EN, precios regulares, fotos propias/OFF y UPC solo para tamaños exactos; conservar original y evitar duplicados.
+- [ ] Guardar catálogo, corregir Cheez-It $4.19 y clasificarlo; verificar precios, filtros, imágenes, celular/computadora y pruebas; sin pagos/clientes ni publicación.
+
 ## Corrección de precios regulares (18 octubre, 18:05 UTC)
 - [x] Plan aprobado y 43 precios únicos actualizados; frambuesas $6.99 y moras $5.69 confirmados.
 - [x] Verificados los 43 precios en catálogo público y lectura guardada: 408 otros productos idénticos; nombres/fotos/unidades/pesos/UPC conservados en los 451 registros. 384 pruebas pasan, sin errores de página ni pagos; no publicado. Regla de precio regular guardada.
