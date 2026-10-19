@@ -27,7 +27,7 @@ describe("Bebidas aprobadas", () => {
   });
   for (const [name, size, price] of [
     ["Pure Life agua purificada", "28 × 16.9 fl oz", 7.99],
-    ["Coca-Cola refresco de cola original", "1.25 L", 2.19],
+    ["Coca-Cola refresco original", "1.25 L", 2.19],
     ["Gatorade bebida deportiva naranja", "28 fl oz", 3.19],
     ["Jarritos refresco de mandarina", "1.5 L", 4.29],
     ["FOCO agua de coco 100% pura", "33.8 fl oz", 4.69],
