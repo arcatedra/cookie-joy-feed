@@ -127,6 +127,18 @@ export const HOUSE_CLEANING_SUBCATEGORIES = [
   { es: "Focos, pilas y artículos del hogar", en: "Light bulbs, batteries & household" },
 ] as const;
 
+export const HOUSE_FROZEN_SUBCATEGORIES = [
+  { es: "Helados y postres congelados", en: "Ice cream & frozen desserts" },
+  { es: "Pizzas y comidas listas", en: "Pizza & frozen meals" },
+  { es: "Vegetales y frutas congeladas", en: "Frozen vegetables & fruit" },
+  { es: "Papas y aperitivos congelados", en: "Frozen potatoes & snacks" },
+  { es: "Pollo, carne y mariscos congelados", en: "Frozen chicken, meat & seafood" },
+  { es: "Desayuno congelado", en: "Frozen breakfast" },
+  { es: "Pan y masas congeladas", en: "Frozen bread & dough" },
+  { es: "Comida latina congelada", en: "Frozen Latin foods" },
+  { es: "Jugos y hielo", en: "Frozen juice & ice" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
