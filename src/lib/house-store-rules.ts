@@ -73,6 +73,45 @@ export const HOUSE_SNACK_SUBCATEGORIES = [
   { es: "Carne seca", en: "Jerky" },
 ] as const;
 
+export const HOUSE_BEVERAGE_SUBCATEGORIES = [
+  {
+    "es": "Agua y agua con gas",
+    "en": "Water & sparkling water"
+  },
+  {
+    "es": "Refrescos",
+    "en": "Soft drinks"
+  },
+  {
+    "es": "Jugos y néctares",
+    "en": "Juices & nectars"
+  },
+  {
+    "es": "Bebidas deportivas y energéticas",
+    "en": "Sports & energy drinks"
+  },
+  {
+    "es": "Té y café listos para tomar",
+    "en": "Ready-to-drink tea & coffee"
+  },
+  {
+    "es": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "en": "Coffee & tea (beans, ground, pods, bags)"
+  },
+  {
+    "es": "Bebidas latinas",
+    "en": "Latin drinks"
+  },
+  {
+    "es": "Mezclas y bebidas en polvo",
+    "en": "Drink mixes & powders"
+  },
+  {
+    "es": "Agua de coco y bebidas vegetales",
+    "en": "Coconut water & plant-based drinks"
+  }
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
@@ -80,6 +119,7 @@ export function houseSubcategories(category: string | null) {
   if (category === "Panadería") return HOUSE_BAKERY_SUBCATEGORIES;
   if (category === "Despensa") return HOUSE_PANTRY_SUBCATEGORIES;
   if (category === "Snacks") return HOUSE_SNACK_SUBCATEGORIES;
+  if (category === "Bebidas") return HOUSE_BEVERAGE_SUBCATEGORIES;
   return [];
 }
 
@@ -93,7 +133,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca", "Agua y agua con gas", "Refrescos", "Jugos y néctares", "Bebidas deportivas y energéticas", "Té y café listos para tomar", "Café y té (en grano, molido, cápsulas, bolsitas)", "Bebidas latinas", "Mezclas y bebidas en polvo", "Agua de coco y bebidas vegetales"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
