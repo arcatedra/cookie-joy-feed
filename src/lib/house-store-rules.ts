@@ -63,12 +63,23 @@ export const HOUSE_PANTRY_SUBCATEGORIES = [
   { es: "Desayuno", en: "Breakfast" },
 ] as const;
 
+export const HOUSE_SNACK_SUBCATEGORIES = [
+  { es: "Papas y chips", en: "Chips" },
+  { es: "Galletas saladas", en: "Crackers" },
+  { es: "Galletas dulces", en: "Cookies" },
+  { es: "Chocolates y dulces", en: "Chocolate & candy" },
+  { es: "Barras y frutos secos", en: "Bars & nuts" },
+  { es: "Palomitas y pretzels", en: "Popcorn & pretzels" },
+  { es: "Carne seca", en: "Jerky" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
   if (category === "Lácteos y huevos") return HOUSE_DAIRY_SUBCATEGORIES;
   if (category === "Panadería") return HOUSE_BAKERY_SUBCATEGORIES;
   if (category === "Despensa") return HOUSE_PANTRY_SUBCATEGORIES;
+  if (category === "Snacks") return HOUSE_SNACK_SUBCATEGORIES;
   return [];
 }
 
@@ -82,7 +93,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
