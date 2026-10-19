@@ -1,0 +1,2444 @@
+[
+  {
+    "group": "Agua y agua con gas",
+    "name": "Pure Life agua purificada",
+    "size": "28 × 16.9 fl oz",
+    "price": 7.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2009682-nestle-pure-life-purified-water-16-9-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Pure Life agua purificada",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2009682-nestle-pure-life-purified-water-16-9-fl-oz",
+      "http": 200,
+      "proposed": 7.99,
+      "observed": 7.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Pure Life agua purificada",
+    "size": "12 × 12 fl oz",
+    "price": 5.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42494587-pure-life-purified-water-12-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Pure Life agua purificada",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42494587-pure-life-purified-water-12-oz",
+      "http": 200,
+      "proposed": 5.29,
+      "observed": 5.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Poland Spring agua de manantial",
+    "size": "12 × 16.9 fl oz",
+    "price": 5.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/214299-poland-spring-no-flavor-100-natural-spring-water-16-9-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Poland Spring agua de manantial",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/214299-poland-spring-no-flavor-100-natural-spring-water-16-9-oz",
+      "http": 200,
+      "proposed": 5.99,
+      "observed": 5.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Essentia agua purificada",
+    "size": "20 fl oz",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16694804-essentia-purified-water-20-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Essentia agua purificada",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16694804-essentia-purified-water-20-oz",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Voss agua sin gas",
+    "size": "28.7 fl oz",
+    "price": 3.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/98949-voss-artesian-water-28-7-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Voss agua sin gas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/98949-voss-artesian-water-28-7-fl-oz",
+      "http": 200,
+      "proposed": 3.29,
+      "observed": 3.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Evian agua de manantial",
+    "size": "1.5 L",
+    "price": 3.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3316119-evian-natural-spring-water-1-5-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Evian agua de manantial",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3316119-evian-natural-spring-water-1-5-l",
+      "http": 200,
+      "proposed": 3.89,
+      "observed": 3.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Fiji agua artesiana natural",
+    "size": "6 × 33.8 fl oz",
+    "price": 16.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54385-fiji-water-natural-artesian-water-1-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Fiji agua artesiana natural",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54385-fiji-water-natural-artesian-water-1-l",
+      "http": 200,
+      "proposed": 16.99,
+      "observed": 16.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Nursery agua purificada",
+    "size": "1 gal",
+    "price": 2.19,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2599519-nursery-water-purified-128-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Nursery agua purificada",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2599519-nursery-water-purified-128-fl-oz",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Saratoga agua de manantial con gas",
+    "size": "28 fl oz",
+    "price": 3.39,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/186321-saratoga-spring-water-sparkling-28-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Saratoga agua de manantial con gas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/186321-saratoga-spring-water-sparkling-28-oz",
+      "http": 200,
+      "proposed": 3.39,
+      "observed": 3.39,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Adirondack agua con gas original",
+    "size": "1 L",
+    "price": 0.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/116380-adirondack-sparkling-water-original-1-lt",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Adirondack agua con gas original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/116380-adirondack-sparkling-water-original-1-lt",
+      "http": 200,
+      "proposed": 0.99,
+      "observed": 0.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Poland Spring agua con gas Simply Bubbles",
+    "size": "33.8 fl oz",
+    "price": 2.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54403-poland-spring-sparkling-water-simply-bubbles-33-8-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Poland Spring agua con gas Simply Bubbles",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54403-poland-spring-sparkling-water-simply-bubbles-33-8-oz",
+      "http": 200,
+      "proposed": 2.29,
+      "observed": 2.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Poland Spring agua con gas naranja",
+    "size": "33.8 fl oz",
+    "price": 2.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54401-poland-spring-sparkling-water-orange-33-8-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Poland Spring agua con gas naranja",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/54401-poland-spring-sparkling-water-orange-33-8-oz",
+      "http": 200,
+      "proposed": 2.29,
+      "observed": 2.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "LaCroix agua con gas Pure",
+    "size": "12 × 12 fl oz",
+    "price": 8.49,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/23665-lacroix-natural-pure-sparkling-water-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "LaCroix agua con gas Pure",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/23665-lacroix-natural-pure-sparkling-water-12-fl-oz",
+      "http": 200,
+      "proposed": 8.49,
+      "observed": 8.49,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "LaCroix agua con gas coco",
+    "size": "12 × 12 fl oz",
+    "price": 8.49,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/23667-lacroix-natural-coconut-sparkling-water-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "LaCroix agua con gas coco",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/23667-lacroix-natural-coconut-sparkling-water-12-fl-oz",
+      "http": 200,
+      "proposed": 8.49,
+      "observed": 8.49,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua y agua con gas",
+    "name": "Poland Spring agua de manantial",
+    "size": "24 × 16.9 fl oz",
+    "price": 8.59,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/118414-poland-spring-100-natural-spring-water-16-9-oz",
+    "existing": true,
+    "conditional": false,
+    "check": {
+      "name": "Poland Spring agua de manantial",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/118414-poland-spring-100-natural-spring-water-16-9-oz",
+      "http": 200,
+      "proposed": 8.59,
+      "observed": 8.59,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Coca-Cola refresco original",
+    "size": "1.25 L",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34967-coca-cola-soda-soft-drink-1-25-liter",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Coca-Cola refresco original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34967-coca-cola-soda-soft-drink-1-25-liter",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Coca-Cola refresco original",
+    "size": "20 fl oz",
+    "price": 2.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16706881-coke-classic-soda-soft-drink-20-oza",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Coca-Cola refresco original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16706881-coke-classic-soda-soft-drink-20-oza",
+      "http": 200,
+      "proposed": 2.79,
+      "observed": 2.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Coca-Cola refresco original Fridge Pack",
+    "size": "12 × 12 fl oz",
+    "price": 12.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35023-coca-cola-coke-fridge-pack-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Coca-Cola refresco original Fridge Pack",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35023-coca-cola-coke-fridge-pack-12-fl-oz",
+      "http": 200,
+      "proposed": 12.99,
+      "observed": 12.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Coca-Cola refresco Zero Sugar",
+    "size": "2 L",
+    "price": 3.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16611250-coca-cola-cola-2-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Coca-Cola refresco Zero Sugar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16611250-coca-cola-cola-2-l",
+      "http": 200,
+      "proposed": 3.69,
+      "observed": 3.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Coca-Cola refresco cereza",
+    "size": "2 L",
+    "price": 3.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35854-coca-cola-coca-cola-2-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Coca-Cola refresco cereza",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35854-coca-cola-coca-cola-2-l",
+      "http": 200,
+      "proposed": 3.69,
+      "observed": 3.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Pepsi refresco de cola",
+    "size": "1.25 L",
+    "price": 2.09,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3062243-pepsi-cola-soda-1-25-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Pepsi refresco de cola",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3062243-pepsi-cola-soda-1-25-l",
+      "http": 200,
+      "proposed": 2.09,
+      "observed": 2.09,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Pepsi refresco de cola",
+    "size": "12 × 12 fl oz",
+    "price": 11.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42309-pepsi-cola-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Pepsi refresco de cola",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42309-pepsi-cola-12-fl-oz",
+      "http": 200,
+      "proposed": 11.99,
+      "observed": 11.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Dr Pepper refresco original",
+    "size": "2 L",
+    "price": 3.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16657490-dr-pepper-soda-2-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Dr Pepper refresco original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16657490-dr-pepper-soda-2-l",
+      "http": 200,
+      "proposed": 3.69,
+      "observed": 3.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Sprite refresco lima-limón",
+    "size": "1.25 L",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/43443-sprite-lemon-lime-soda-soft-drink-1-25-ltr",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Sprite refresco lima-limón",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/43443-sprite-lemon-lime-soda-soft-drink-1-25-ltr",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Sprite refresco lima-limón",
+    "size": "6 × 16.9 fl oz",
+    "price": 7.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34964-sprite-lemon-lime-16-9-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Sprite refresco lima-limón",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34964-sprite-lemon-lime-16-9-fl-oz",
+      "http": 200,
+      "proposed": 7.99,
+      "observed": 7.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Sprite refresco lima-limón",
+    "size": "8 × 12 fl oz",
+    "price": 9.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16408590-sprite-soda-lemon-lime-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Sprite refresco lima-limón",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16408590-sprite-soda-lemon-lime-12-fl-oz",
+      "http": 200,
+      "proposed": 9.99,
+      "observed": 9.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Refrescos",
+    "name": "Schweppes Ginger Ale",
+    "size": "12 latas (volumen por confirmar)",
+    "price": 12.59,
+    "state": "E",
+    "url": null,
+    "existing": true,
+    "conditional": false,
+    "check": {
+      "name": "Schweppes Ginger Ale",
+      "status": "existing"
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Petit néctar de guayaba",
+    "size": "11.2 fl oz",
+    "price": 1.39,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16558536-petit-nectar-guava-11-2-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Petit néctar de guayaba",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16558536-petit-nectar-guava-11-2-oz",
+      "http": 200,
+      "proposed": 1.39,
+      "observed": 1.39,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Rica néctar de guayaba",
+    "size": "33.8 fl oz",
+    "price": 3.39,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/29979090-rica-guava-nectar-1-l",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Rica néctar de guayaba",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/29979090-rica-guava-nectar-1-l",
+      "http": 200,
+      "proposed": 3.39,
+      "observed": 3.39,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Dole jugo naranja, fresa y banana",
+    "size": "52 fl oz",
+    "price": 6.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/62695030-dole-100-juice-no-sugar-added-orange-strawberry-banana-52-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Dole jugo naranja, fresa y banana",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/62695030-dole-100-juice-no-sugar-added-orange-strawberry-banana-52-fl-oz",
+      "http": 200,
+      "proposed": 6.79,
+      "observed": 6.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Tropicana jugo naranja sin pulpa baja acidez",
+    "size": "46 fl oz",
+    "price": 6.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118932-tropicana-100-orange-juice-no-pulp-46-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tropicana jugo naranja sin pulpa baja acidez",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118932-tropicana-100-orange-juice-no-pulp-46-fl-oz",
+      "http": 200,
+      "proposed": 6.29,
+      "observed": 6.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Tropicana Pure Premium jugo naranja sin pulpa",
+    "size": "46 fl oz",
+    "price": 6.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118930-tropicana-100-orange-juice-no-pulp-46-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tropicana Pure Premium jugo naranja sin pulpa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118930-tropicana-100-orange-juice-no-pulp-46-fl-oz",
+      "http": 200,
+      "proposed": 6.29,
+      "observed": 6.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Tropicana Pure Premium jugo naranja calcio y vitamina D",
+    "size": "11 fl oz",
+    "price": 2.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/47130987-tropicana-100-orange-juice-11-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tropicana Pure Premium jugo naranja calcio y vitamina D",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/47130987-tropicana-100-orange-juice-11-fl-oz",
+      "http": 200,
+      "proposed": 2.79,
+      "observed": 2.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Tropicana jugo naranja sin pulpa",
+    "size": "128 fl oz",
+    "price": 15.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16480535-tropicana-pure-premium-original-no-pulp-orange-juice-128-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tropicana jugo naranja sin pulpa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16480535-tropicana-pure-premium-original-no-pulp-orange-juice-128-fl-oz",
+      "http": 200,
+      "proposed": 15.99,
+      "observed": 15.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Tropicana Pure Premium jugo naranja con algo de pulpa",
+    "size": "46 fl oz",
+    "price": 6.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118936-tropicana-100-orange-juice-some-pulp-46-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tropicana Pure Premium jugo naranja con algo de pulpa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/48118936-tropicana-100-orange-juice-some-pulp-46-fl-oz",
+      "http": 200,
+      "proposed": 6.29,
+      "observed": 6.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Jugos y néctares",
+    "name": "Apple & Eve jugo de manzana",
+    "size": "64 fl oz",
+    "price": 4.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/114616-apple-eve-100-apple-juice-64-0-fl-oz",
+    "existing": true,
+    "conditional": false,
+    "check": {
+      "name": "Apple & Eve jugo de manzana",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/114616-apple-eve-100-apple-juice-64-0-fl-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade bebida deportiva naranja",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/210671-gatorade-orange-thirst-quencher-28-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade bebida deportiva naranja",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/210671-gatorade-orange-thirst-quencher-28-fl-oz",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade bebida deportiva limón-lima",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/219031-gatorade-lemon-lime-thirst-quencher-28-0-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade bebida deportiva limón-lima",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/219031-gatorade-lemon-lime-thirst-quencher-28-0-fl-oz",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade Frost bebida deportiva Glacier Freeze",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16573737-gatorade-frost-glacier-freeze-thrist-quencher-28-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade Frost bebida deportiva Glacier Freeze",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16573737-gatorade-frost-glacier-freeze-thrist-quencher-28-fl-oz",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade Fierce bebida deportiva uva",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16997628-gatorade-grape-thirst-quencher-28-0-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade Fierce bebida deportiva uva",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16997628-gatorade-grape-thirst-quencher-28-0-fl-oz",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade Lower Sugar bebida deportiva ponche de frutas",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/94822627-gator-lw-sgr-frt-p",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade Lower Sugar bebida deportiva ponche de frutas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/94822627-gator-lw-sgr-frt-p",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Gatorade Zero bebida deportiva frutos del bosque",
+    "size": "28 fl oz",
+    "price": 3.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19674006-gatorade-berry-zero-sugar-thirst-quencher-28-0-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Gatorade Zero bebida deportiva frutos del bosque",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19674006-gatorade-berry-zero-sugar-thirst-quencher-28-0-fl-oz",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Powerade bebida deportiva uva",
+    "size": "28 fl oz",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21006027-powerade-grape-ion4-electrolyte-enhanced-fruit-flavored-sports-drink-w-vitamins-b3-b6-and-b12-replenish-sodium-calcium-potassium-magnesium-28-oza",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Powerade bebida deportiva uva",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21006027-powerade-grape-ion4-electrolyte-enhanced-fruit-flavored-sports-drink-w-vitamins-b3-b6-and-b12-replenish-sodium-calcium-potassium-magnesium-28-oza",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Bodyarmor bebida deportiva fresa y banana",
+    "size": "16 fl oz",
+    "price": 2.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/183748-bodyarmor-strawberry-banana-16-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Bodyarmor bebida deportiva fresa y banana",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/183748-bodyarmor-strawberry-banana-16-fl-oz",
+      "http": 200,
+      "proposed": 2.69,
+      "observed": 2.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Bodyarmor bebida deportiva ponche de frutas",
+    "size": "16 fl oz",
+    "price": 2.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147170-bodyarmor-super-drink-super-hydration-fruit-punch-16-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Bodyarmor bebida deportiva ponche de frutas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147170-bodyarmor-super-drink-super-hydration-fruit-punch-16-fl-oz",
+      "http": 200,
+      "proposed": 2.69,
+      "observed": 2.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Bodyarmor bebida deportiva ponche tropical",
+    "size": "16 fl oz",
+    "price": 2.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147168-bodyarmor-superdrink-tropical-punch-16-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Bodyarmor bebida deportiva ponche tropical",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147168-bodyarmor-superdrink-tropical-punch-16-fl-oz",
+      "http": 200,
+      "proposed": 2.69,
+      "observed": 2.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Red Bull bebida energética original",
+    "size": "12 fl oz",
+    "price": 3.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2797093-red-bull-energy-drink-12-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Red Bull bebida energética original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2797093-red-bull-energy-drink-12-fl-oz",
+      "http": 200,
+      "proposed": 3.99,
+      "observed": 3.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Red Bull bebida energética original",
+    "size": "8.4 fl oz",
+    "price": 3.19,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2724815-red-bull-energy-drink-fl-oz-8-4-8-4",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Red Bull bebida energética original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2724815-red-bull-energy-drink-fl-oz-8-4-8-4",
+      "http": 200,
+      "proposed": 3.19,
+      "observed": 3.19,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Red Bull bebida energética original",
+    "size": "20 fl oz",
+    "price": 6.19,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2300-red-bull-energy-drink-fl-oz-20-20",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Red Bull bebida energética original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2300-red-bull-energy-drink-fl-oz-20-20",
+      "http": 200,
+      "proposed": 6.19,
+      "observed": 6.19,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas deportivas y energéticas",
+    "name": "Red Bull sin azúcar",
+    "size": "4 × 8.4 fl oz",
+    "price": 13.11,
+    "state": "E",
+    "url": null,
+    "existing": true,
+    "conditional": false,
+    "check": {
+      "name": "Red Bull sin azúcar",
+      "status": "existing"
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "AriZona té helado estilo Sun Brewed",
+    "size": "59 fl oz",
+    "price": 2.59,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/18558401-arizona-iced-tea-sun-brewed-style-59-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "AriZona té helado estilo Sun Brewed",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/18558401-arizona-iced-tea-sun-brewed-style-59-oz",
+      "http": 200,
+      "proposed": 2.59,
+      "observed": 2.59,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "AriZona té helado con limón",
+    "size": "11.5 fl oz",
+    "price": 0.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2008864-arizona-iced-tea-with-lemon-flavor-11-5-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "AriZona té helado con limón",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2008864-arizona-iced-tea-with-lemon-flavor-11-5-fl-oz",
+      "http": 200,
+      "proposed": 0.89,
+      "observed": 0.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "AriZona té helado con frambuesa",
+    "size": "1 gal",
+    "price": 4.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2429-arizona-iced-tea-with-raspberry-flavor-sun-brewed-style-1-gal",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "AriZona té helado con frambuesa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2429-arizona-iced-tea-with-raspberry-flavor-sun-brewed-style-1-gal",
+      "http": 200,
+      "proposed": 4.49,
+      "observed": 4.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Turkey Hill té helado con limón",
+    "size": "64 fl oz",
+    "price": 3.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/99464-turkey-hill-iced-tea-lemon-flavored-64-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Turkey Hill té helado con limón",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/99464-turkey-hill-iced-tea-lemon-flavored-64-oz",
+      "http": 200,
+      "proposed": 3.49,
+      "observed": 3.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Turkey Hill té dulce sin azúcar estilo sureño",
+    "size": "0.5 gal",
+    "price": 3.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/66362402-turkey-hill-sweet-tea-zero-sugar-southern-brewed-style-05-gal",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Turkey Hill té dulce sin azúcar estilo sureño",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/66362402-turkey-hill-sweet-tea-zero-sugar-southern-brewed-style-05-gal",
+      "http": 200,
+      "proposed": 3.49,
+      "observed": 3.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Starbucks Frappuccino bebida de café",
+    "size": "9.5 fl oz",
+    "price": 3.49,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16409949-starbucks-frappuccino-chilled-coffee-drink-9-5-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Starbucks Frappuccino bebida de café",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16409949-starbucks-frappuccino-chilled-coffee-drink-9-5-fl-oz",
+      "http": 200,
+      "proposed": 3.49,
+      "observed": 3.49,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Starbucks Frappuccino bebida de café vainilla",
+    "size": "13.7 fl oz",
+    "price": 5.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34739-starbucks-frappuccino-vanilla-chilled-coffee-drink-13-7-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Starbucks Frappuccino bebida de café vainilla",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34739-starbucks-frappuccino-vanilla-chilled-coffee-drink-13-7-fl-oz",
+      "http": 200,
+      "proposed": 5.29,
+      "observed": 5.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Starbucks Frappuccino bebida de café moca",
+    "size": "13.7 fl oz",
+    "price": 5.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16315215-starbucks-frappuccino-mocha-chilled-coffee-drink-13-7-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Starbucks Frappuccino bebida de café moca",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16315215-starbucks-frappuccino-mocha-chilled-coffee-drink-13-7-fl-oz",
+      "http": 200,
+      "proposed": 5.29,
+      "observed": 5.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Starbucks bebida de café moca refrigerada",
+    "size": "9.5 fl oz",
+    "price": 3.49,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16642784-starbucks-frappuccino-coffee-mocha-9-5-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Starbucks bebida de café moca refrigerada",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16642784-starbucks-frappuccino-coffee-mocha-9-5-fl-oz",
+      "http": 200,
+      "proposed": 3.49,
+      "observed": 3.49,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Té y café listos para tomar",
+    "name": "Starbucks café espresso helado Caffè Mocha",
+    "size": "40 fl oz",
+    "price": 7.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3116467-starbucks-caffe-mocha-chilled-espresso-beverage-40-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Starbucks café espresso helado Caffè Mocha",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3116467-starbucks-caffe-mocha-chilled-espresso-beverage-40-fl-oz",
+      "http": 401,
+      "proposed": 7.99,
+      "observed": null,
+      "original": false,
+      "out_of_stock": false,
+      "matches": false
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Sello Rojo café molido Tradicional tueste medio",
+    "size": "16 oz",
+    "price": 14.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16705751-sello-rojo-medium-roast-100-colombian-premium-pure-arabica-ground-coffee-17-6-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Sello Rojo café molido Tradicional tueste medio",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16705751-sello-rojo-medium-roast-100-colombian-premium-pure-arabica-ground-coffee-17-6-oz",
+      "http": 200,
+      "proposed": 14.99,
+      "observed": 14.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Juan Valdez Cumbre café molido descafeinado tueste medio",
+    "size": "12 oz",
+    "price": 13.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/26647632-juan-valdez-decaf-coffee-12-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Juan Valdez Cumbre café molido descafeinado tueste medio",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/26647632-juan-valdez-decaf-coffee-12-oz",
+      "http": 200,
+      "proposed": 13.99,
+      "observed": 13.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Dunkin’ café descafeinado tueste medio cápsulas K-Cup",
+    "size": "10 × 0.37 oz (3.7 oz)",
+    "price": 11.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2578507-dunkin-coffee-10-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Dunkin’ café descafeinado tueste medio cápsulas K-Cup",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2578507-dunkin-coffee-10-ct",
+      "http": 200,
+      "proposed": 11.99,
+      "observed": 11.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Dunkin’ café Original Blend cápsulas K-Cup",
+    "size": "10 × 0.37 oz",
+    "price": 11.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2596955-dunkin-coffee-0-37-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Dunkin’ café Original Blend cápsulas K-Cup",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2596955-dunkin-coffee-0-37-oz",
+      "http": 200,
+      "proposed": 11.99,
+      "observed": 11.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Café Bustelo café espresso tueste oscuro cápsulas K-Cup",
+    "size": "10 × 0.37 oz",
+    "price": 11.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/51996880-caf-bustelo-espresso-style-dark-roast-coffee-k-cup-pods-10-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Café Bustelo café espresso tueste oscuro cápsulas K-Cup",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/51996880-caf-bustelo-espresso-style-dark-roast-coffee-k-cup-pods-10-oz",
+      "http": 200,
+      "proposed": 11.29,
+      "observed": 11.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Twinings té verde puro en bolsitas",
+    "size": "20 unidades",
+    "price": 5.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35313-twinings-green-tea-bags-20-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Twinings té verde puro en bolsitas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35313-twinings-green-tea-bags-20-ct",
+      "http": 200,
+      "proposed": 5.89,
+      "observed": 5.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Twinings té negro English Breakfast en bolsitas",
+    "size": "20 unidades",
+    "price": 5.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/27882-twinings-english-breakfast-tea-bags-20-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Twinings té negro English Breakfast en bolsitas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/27882-twinings-english-breakfast-tea-bags-20-ct",
+      "http": 200,
+      "proposed": 5.89,
+      "observed": 5.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Twinings té verde descafeinado en bolsitas",
+    "size": "20 unidades",
+    "price": 5.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/119432-twinings-decaffeinated-green-tea-bags-20-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Twinings té verde descafeinado en bolsitas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/119432-twinings-decaffeinated-green-tea-bags-20-ct",
+      "http": 200,
+      "proposed": 5.89,
+      "observed": 5.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Twinings té negro Irish Breakfast en bolsitas",
+    "size": "20 unidades",
+    "price": 5.89,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/27883-twinings-irish-breakfast-tea-bags-20-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Twinings té negro Irish Breakfast en bolsitas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/27883-twinings-irish-breakfast-tea-bags-20-ct",
+      "http": 200,
+      "proposed": 5.89,
+      "observed": 5.89,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Stash té negro English Breakfast en bolsitas",
+    "size": "20 unidades",
+    "price": 5.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/70999-stash-tea-english-breakfast-black-tea-20-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Stash té negro English Breakfast en bolsitas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/70999-stash-tea-english-breakfast-black-tea-20-ct",
+      "http": 200,
+      "proposed": 5.29,
+      "observed": 5.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Kauai Coffee café en grano tueste medio",
+    "size": "10 oz",
+    "price": 16.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3319187-kauai-coffee-koloa-estate-medium-roast-whole-bean-coffee-10-0-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Kauai Coffee café en grano tueste medio",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/3319187-kauai-coffee-koloa-estate-medium-roast-whole-bean-coffee-10-0-oz",
+      "http": 200,
+      "proposed": 16.99,
+      "observed": 16.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Vermont Coffee Company café orgánico en grano tueste medio",
+    "size": "16 oz",
+    "price": 20.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2619154-vermont-coffee-company-medium-organic-whole-bean-coffee-16-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Vermont Coffee Company café orgánico en grano tueste medio",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2619154-vermont-coffee-company-medium-organic-whole-bean-coffee-16-oz",
+      "http": 200,
+      "proposed": 20.99,
+      "observed": 20.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Peet's Coffee Major Dickason's Blend café en grano tueste oscuro",
+    "size": "10.5 oz",
+    "price": 17.59,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21367768-peet-s-coffee-major-dickason-s-blend-dark-roast-whole-bean-coffee-bag-10-5-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Peet's Coffee Major Dickason's Blend café en grano tueste oscuro",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21367768-peet-s-coffee-major-dickason-s-blend-dark-roast-whole-bean-coffee-bag-10-5-oz",
+      "http": 200,
+      "proposed": 17.59,
+      "observed": 17.59,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Café y té (en grano, molido, cápsulas, bolsitas)",
+    "name": "Café Bustelo espresso molido",
+    "size": "10 oz",
+    "price": 11.54,
+    "state": "E",
+    "url": null,
+    "existing": true,
+    "conditional": false,
+    "check": {
+      "name": "Café Bustelo espresso molido",
+      "status": "existing"
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Malta Goya bebida de malta no alcohólica",
+    "size": "6 × 7 fl oz",
+    "price": 7.59,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/36966-goya-malta-malt-beverage-non-alcoholic-6-pack-7-0-fl-oz",
+    "existing": false,
+    "conditional": true,
+    "check": {
+      "name": "Malta Goya bebida de malta no alcohólica",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/36966-goya-malta-malt-beverage-non-alcoholic-6-pack-7-0-fl-oz",
+      "http": 200,
+      "proposed": 7.59,
+      "observed": 7.59,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Malta Goya bebida de malta no alcohólica",
+    "size": "10 × 7 fl oz",
+    "price": 9.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/100921-goya-malta-malt-beverage-non-alcoholic-7-fl-oz",
+    "existing": false,
+    "conditional": true,
+    "check": {
+      "name": "Malta Goya bebida de malta no alcohólica",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/100921-goya-malta-malt-beverage-non-alcoholic-7-fl-oz",
+      "http": 200,
+      "proposed": 9.99,
+      "observed": 9.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Malta Goya bebida de malta light no alcohólica",
+    "size": "12 fl oz",
+    "price": 1.49,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147599-goya-malta-malt-beverage-non-alcoholic-light-12-0-fl-oz",
+    "existing": false,
+    "conditional": true,
+    "check": {
+      "name": "Malta Goya bebida de malta light no alcohólica",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/147599-goya-malta-malt-beverage-non-alcoholic-light-12-0-fl-oz",
+      "http": 200,
+      "proposed": 1.49,
+      "observed": 1.49,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Jarritos refresco de mandarina",
+    "size": "1.5 L",
+    "price": 4.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42311-jarritos-soda-mandarin-1-58-qt",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Jarritos refresco de mandarina",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42311-jarritos-soda-mandarin-1-58-qt",
+      "http": 200,
+      "proposed": 4.29,
+      "observed": 4.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Jarritos refresco de tamarindo",
+    "size": "1.5 L",
+    "price": 4.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42254-jarritos-soda-tamarind-1-58-qt",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Jarritos refresco de tamarindo",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42254-jarritos-soda-tamarind-1-58-qt",
+      "http": 200,
+      "proposed": 4.29,
+      "observed": 4.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Jarritos refresco de toronja",
+    "size": "12.5 fl oz",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/153938-jarritos-soda-grapefruit-12-5-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Jarritos refresco de toronja",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/153938-jarritos-soda-grapefruit-12-5-fl-oz",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Jarritos refresco de ponche de frutas",
+    "size": "12.5 fl oz",
+    "price": 2.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16902825-jarritos-soda-fruit-punch-12-5-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Jarritos refresco de ponche de frutas",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16902825-jarritos-soda-fruit-punch-12-5-oz",
+      "http": 200,
+      "proposed": 2.19,
+      "observed": 2.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Materva refresco de yerba mate",
+    "size": "67.6 fl oz",
+    "price": 3.79,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316732-materva-soda-yerba-mate-67-6-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Materva refresco de yerba mate",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316732-materva-soda-yerba-mate-67-6-oz",
+      "http": 200,
+      "proposed": 3.79,
+      "observed": 3.79,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Materva refresco de yerba mate",
+    "size": "6 × 12 fl oz",
+    "price": 6.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316733-materva-soda-yerba-mate-6-pack-6-ea",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Materva refresco de yerba mate",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316733-materva-soda-yerba-mate-6-pack-6-ea",
+      "http": 200,
+      "proposed": 6.99,
+      "observed": 6.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Inca Kola refresco",
+    "size": "12 × 12 fl oz",
+    "price": 12.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316770-inca-kola-carbonated-soda-soft-drinks-12-oza",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Inca Kola refresco",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/316770-inca-kola-carbonated-soda-soft-drinks-12-oza",
+      "http": 200,
+      "proposed": 12.49,
+      "observed": 12.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Inca Kola refresco",
+    "size": "10.14 fl oz",
+    "price": 1.79,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16559157-inca-s-kola-glass-bottled-soft-drink-300-ml",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Inca Kola refresco",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16559157-inca-s-kola-glass-bottled-soft-drink-300-ml",
+      "http": 200,
+      "proposed": 1.79,
+      "observed": 1.79,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Inca Kola refresco",
+    "size": "2 L",
+    "price": 3.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42470-inca-kola-inca-kola-carbonated-soda-soft-drink-2-ltr",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Inca Kola refresco",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42470-inca-kola-inca-kola-carbonated-soda-soft-drink-2-ltr",
+      "http": 200,
+      "proposed": 3.49,
+      "observed": 3.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de guayaba",
+    "size": "33.8 fl oz",
+    "price": 3.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/310533-goya-guava-nectar-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de guayaba",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/310533-goya-guava-nectar-33-8-fl-oz",
+      "http": 200,
+      "proposed": 3.29,
+      "observed": 3.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de mango",
+    "size": "33.8 fl oz",
+    "price": 3.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/37001-goya-nectar-mango-33-8-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de mango",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/37001-goya-nectar-mango-33-8-oz",
+      "http": 200,
+      "proposed": 3.29,
+      "observed": 3.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de durazno",
+    "size": "33.8 oz, tal como figura en la ficha",
+    "price": 3.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/37007-goya-peach-nectar-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de durazno",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/37007-goya-peach-nectar-33-8-fl-oz",
+      "http": 200,
+      "proposed": 3.29,
+      "observed": 3.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de tamarindo",
+    "size": "33.8 oz, tal como figura en la ficha",
+    "price": 3.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/117917-goya-tamarind-nectar-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de tamarindo",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/117917-goya-tamarind-nectar-33-8-fl-oz",
+      "http": 200,
+      "proposed": 3.99,
+      "observed": 3.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de pera",
+    "size": "33.8 fl oz",
+    "price": 3.29,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/100915-goya-pear-nectar-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de pera",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/100915-goya-pear-nectar-33-8-fl-oz",
+      "http": 200,
+      "proposed": 3.29,
+      "observed": 3.29,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Goya néctar de guanábana",
+    "size": "33.8 fl oz",
+    "price": 4.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19698788-goya-soursop-nectar-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Goya néctar de guanábana",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19698788-goya-soursop-nectar-33-8-fl-oz",
+      "http": 200,
+      "proposed": 4.79,
+      "observed": 4.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Bebidas latinas",
+    "name": "Guaraná Antarctica refresco de guaraná",
+    "size": "67.6 fl oz",
+    "price": 4.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1443185-antarctica-guarana-soda-67-6-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Guaraná Antarctica refresco de guaraná",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1443185-antarctica-guarana-soda-67-6-oz",
+      "http": 200,
+      "proposed": 4.29,
+      "observed": 4.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "ZUKO mezcla endulzada de melón, bolsa resellable",
+    "size": "14.1 oz",
+    "price": 4.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2738012-zuko-drink-mix-cantaloupe-14-1-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "ZUKO mezcla endulzada de melón, bolsa resellable",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2738012-zuko-drink-mix-cantaloupe-14-1-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "ZUKO mezcla endulzada de horchata, bolsa resellable",
+    "size": "14.1 oz",
+    "price": 4.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/286588-zuko-drink-mix-horchata-14-10-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "ZUKO mezcla endulzada de horchata, bolsa resellable",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/286588-zuko-drink-mix-horchata-14-10-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Doña Isabel mezcla para chicha morada de maíz morado",
+    "size": "4.2 oz",
+    "price": 1.89,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1407555-isabel-dona-isabel-chicha-morada-beverage-4-2-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Doña Isabel mezcla para chicha morada de maíz morado",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1407555-isabel-dona-isabel-chicha-morada-beverage-4-2-oz",
+      "http": 200,
+      "proposed": 1.89,
+      "observed": 1.89,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Tang mezcla en polvo de naranja",
+    "size": "20 oz",
+    "price": 7.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41812-tang-orange-naturally-flavored-powdered-soft-drink-mix-20-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Tang mezcla en polvo de naranja",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41812-tang-orange-naturally-flavored-powdered-soft-drink-mix-20-oz",
+      "http": 200,
+      "proposed": 7.29,
+      "observed": 7.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Country Time mezcla en polvo de limonada rosa",
+    "size": "19 oz",
+    "price": 7.29,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41892-country-time-pink-lemonade-naturally-flavored-powdered-drink-mix-19-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Country Time mezcla en polvo de limonada rosa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41892-country-time-pink-lemonade-naturally-flavored-powdered-drink-mix-19-oz",
+      "http": 200,
+      "proposed": 7.29,
+      "observed": 7.29,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Crystal Light limonada rosa en polvo",
+    "size": "10 unidades",
+    "price": 4.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41865-crystal-light-pink-lemonade-naturally-flavored-powdered-drink-mix-10-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Crystal Light limonada rosa en polvo",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41865-crystal-light-pink-lemonade-naturally-flavored-powdered-drink-mix-10-ct",
+      "http": 200,
+      "proposed": 4.79,
+      "observed": 4.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Crystal Light limonada en polvo",
+    "size": "10 × 0.14 oz",
+    "price": 4.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41860-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-0-14-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Crystal Light limonada en polvo",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41860-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-0-14-oz",
+      "http": 200,
+      "proposed": 4.79,
+      "observed": 4.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Crystal Light uva en polvo con cafeína",
+    "size": "10 unidades",
+    "price": 4.79,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41804-crystal-light-grape-naturally-flavored-powdered-drink-mix-with-caffeine-10-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Crystal Light uva en polvo con cafeína",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41804-crystal-light-grape-naturally-flavored-powdered-drink-mix-with-caffeine-10-ct",
+      "http": 200,
+      "proposed": 4.79,
+      "observed": 4.79,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Crystal Light limonada en polvo",
+    "size": "6 unidades",
+    "price": 5.59,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41900-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-6-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Crystal Light limonada en polvo",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/41900-crystal-light-lemonade-naturally-flavored-powdered-drink-mix-6-ct",
+      "http": 200,
+      "proposed": 5.59,
+      "observed": 5.59,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Nestlé Nesquik mezcla en polvo de chocolate",
+    "size": "10 oz",
+    "price": 5.59,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21131045-nestle-nesquik-chocolate-powder-drink-mix-10-onz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Nestlé Nesquik mezcla en polvo de chocolate",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21131045-nestle-nesquik-chocolate-powder-drink-mix-10-onz",
+      "http": 200,
+      "proposed": 5.59,
+      "observed": 5.59,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Nestlé Nesquik mezcla en polvo de fresa",
+    "size": "9.38 oz",
+    "price": 5.59,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21112237-nestle-nesquik-strawberry-powder-drink-mix-9-38-onz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Nestlé Nesquik mezcla en polvo de fresa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/21112237-nestle-nesquik-strawberry-powder-drink-mix-9-38-onz",
+      "http": 200,
+      "proposed": 5.59,
+      "observed": 5.59,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Nestlé Nesquik mezcla en polvo de chocolate",
+    "size": "20.1 oz",
+    "price": 9.89,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/20989704-nestle-nesquik-chocolate-powder-drink-mix-20-1-onz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Nestlé Nesquik mezcla en polvo de chocolate",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/20989704-nestle-nesquik-chocolate-powder-drink-mix-20-1-onz",
+      "http": 200,
+      "proposed": 9.89,
+      "observed": 9.89,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Abuelita mezcla instantánea para chocolate mexicano",
+    "size": "8 unidades",
+    "price": 4.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34580-abuelita-hot-chocolate-drink-mix-authentic-mexican-hot-chocolate-drink-mix-quick-and-easy-to-prepare-8-ct",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Abuelita mezcla instantánea para chocolate mexicano",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34580-abuelita-hot-chocolate-drink-mix-authentic-mexican-hot-chocolate-drink-mix-quick-and-easy-to-prepare-8-ct",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Mezclas y bebidas en polvo",
+    "name": "Abuelita tabletas para chocolate mexicano",
+    "size": "19 oz",
+    "price": 8.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34579-abuelita-nestle-mexican-hot-chocolate-tablets-19-onz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Abuelita tabletas para chocolate mexicano",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/34579-abuelita-nestle-mexican-hot-chocolate-tablets-19-onz",
+      "http": 200,
+      "proposed": 8.99,
+      "observed": 8.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "FOCO agua de coco 100% pura",
+    "size": "33.8 fl oz",
+    "price": 4.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/303466-foco-coconut-water-100-pure-33-8-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "FOCO agua de coco 100% pura",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/303466-foco-coconut-water-100-pure-33-8-oz",
+      "http": 200,
+      "proposed": 4.69,
+      "observed": 4.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Vita Coco agua de coco Original",
+    "size": "16.9 fl oz",
+    "price": 3.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42704-vita-coco-coconut-water-pure-16-9-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Vita Coco agua de coco Original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42704-vita-coco-coconut-water-pure-16-9-fl-oz",
+      "http": 200,
+      "proposed": 3.99,
+      "observed": 3.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Vita Coco agua de coco pura",
+    "size": "33.8 fl oz",
+    "price": 7.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16850032-vita-coco-coconut-water-pure-33-8-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Vita Coco agua de coco pura",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/16850032-vita-coco-coconut-water-pure-33-8-fl-oz",
+      "http": 200,
+      "proposed": 7.49,
+      "observed": 7.49,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Iberia agua de coco con pulpa",
+    "size": "16.9 fl oz",
+    "price": 1.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1825186-iberia-coconut-water-with-pulp-16-9-fl-oz-16-9-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Iberia agua de coco con pulpa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1825186-iberia-coconut-water-with-pulp-16-9-fl-oz-16-9-oz",
+      "http": 200,
+      "proposed": 1.99,
+      "observed": null,
+      "original": false,
+      "out_of_stock": true,
+      "matches": false
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Jamaican Choice agua de coco sin pulpa",
+    "size": "16.9 fl oz",
+    "price": 1.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1469259-jamaican-choice-coconut-water-no-pulp-16-9-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Jamaican Choice agua de coco sin pulpa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/1469259-jamaican-choice-coconut-water-no-pulp-16-9-fl-oz",
+      "http": 200,
+      "proposed": 1.99,
+      "observed": null,
+      "original": false,
+      "out_of_stock": true,
+      "matches": false
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Copra Coconuts agua de coco joven tailandés orgánica",
+    "size": "16 fl oz",
+    "price": 4.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19079709-copra-organic-100-raw-coconut-water-16-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Copra Coconuts agua de coco joven tailandés orgánica",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19079709-copra-organic-100-raw-coconut-water-16-fl-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Almond Breeze bebida de almendra original sin azúcar",
+    "size": "64 fl oz",
+    "price": 5.79,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42844-almond-breeze-unsweetened-original-almondmilk-non-dairy-milk-alternative-64-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Almond Breeze bebida de almendra original sin azúcar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42844-almond-breeze-unsweetened-original-almondmilk-non-dairy-milk-alternative-64-fl-oz",
+      "http": 200,
+      "proposed": 5.79,
+      "observed": 5.79,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "MALK bebida de almendra sin azúcar",
+    "size": "28 fl oz",
+    "price": 9.09,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2591776-malk-milk-pure-almond-unsweetened-28-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "MALK bebida de almendra sin azúcar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/2591776-malk-milk-pure-almond-unsweetened-28-oz",
+      "http": 200,
+      "proposed": 9.09,
+      "observed": 9.09,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Silk bebida de almendra sin azúcar",
+    "size": "64 fl oz",
+    "price": 6.99,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42741-silk-unsweetened-almond-milk-64-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Silk bebida de almendra sin azúcar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/42741-silk-unsweetened-almond-milk-64-fl-oz",
+      "http": 200,
+      "proposed": 6.99,
+      "observed": 6.99,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Califia Farms bebida de almendra sin azúcar",
+    "size": "48 fl oz",
+    "price": 6.69,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/29132-califia-farms-unsweetened-almondmilk-48-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Califia Farms bebida de almendra sin azúcar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/29132-califia-farms-unsweetened-almondmilk-48-oz",
+      "http": 200,
+      "proposed": 6.69,
+      "observed": 6.69,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Elmhurst bebida de almendra sin azúcar",
+    "size": "32 fl oz",
+    "price": 7.49,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/17786835-elmhurst-unsweetened-almond-milk-32-0-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Elmhurst bebida de almendra sin azúcar",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/17786835-elmhurst-unsweetened-almond-milk-32-0-fl-oz",
+      "http": 200,
+      "proposed": 7.49,
+      "observed": null,
+      "original": false,
+      "out_of_stock": true,
+      "matches": false
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Silk bebida de almendra de vainilla sin azúcar, estable a temperatura ambiente",
+    "size": "32 fl oz",
+    "price": 3.89,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/77651-silk-shelf-stable-unsweetened-vanilla-almond-milk-32-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Silk bebida de almendra de vainilla sin azúcar, estable a temperatura ambiente",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/77651-silk-shelf-stable-unsweetened-vanilla-almond-milk-32-oz",
+      "http": 200,
+      "proposed": 3.89,
+      "observed": null,
+      "original": false,
+      "out_of_stock": true,
+      "matches": false
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Silk bebida de soya original",
+    "size": "64 fl oz",
+    "price": 8.09,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35871-silk-original-soy-milk-64-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Silk bebida de soya original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/35871-silk-original-soy-milk-64-fl-oz",
+      "http": 200,
+      "proposed": 8.09,
+      "observed": 8.09,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Planet Oat bebida de avena original",
+    "size": "52 fl oz",
+    "price": 4.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19502584-planet-oat-original-oatmilk-52-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Planet Oat bebida de avena original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19502584-planet-oat-original-oatmilk-52-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Silk bebida de avena original",
+    "size": "59 fl oz",
+    "price": 7.19,
+    "state": "R",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19520879-silk-original-oat-milk-64-fl-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Silk bebida de avena original",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19520879-silk-original-oat-milk-64-fl-oz",
+      "http": 200,
+      "proposed": 7.19,
+      "observed": 7.19,
+      "original": true,
+      "out_of_stock": false,
+      "matches": true
+    }
+  },
+  {
+    "group": "Agua de coco y bebidas vegetales",
+    "name": "Planet Oat bebida de avena original extra cremosa",
+    "size": "52 fl oz",
+    "price": 4.99,
+    "state": "P",
+    "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19502565-planet-oat-extra-creamy-original-oatmilk-52-oz",
+    "existing": false,
+    "conditional": false,
+    "check": {
+      "name": "Planet Oat bebida de avena original extra cremosa",
+      "url": "https://shop.foodbazaar.com/store/food-bazaar/products/19502565-planet-oat-extra-creamy-original-oatmilk-52-oz",
+      "http": 200,
+      "proposed": 4.99,
+      "observed": 4.99,
+      "original": false,
+      "out_of_stock": false,
+      "matches": true
+    }
+  }
+]
