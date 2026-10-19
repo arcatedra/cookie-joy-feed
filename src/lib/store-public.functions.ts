@@ -96,6 +96,17 @@ export const getPublicStore = createServerFn({ method: "GET" })
     if (cats.error) throw cats.error;
     if (prods.error) throw prods.error;
 
+    // Firma todas las fotos en una sola llamada: con cientos de productos,
+    // firmar una por una supera el límite de peticiones y algunas fotos no cargaban.
+    const prodsData = (prods.data ?? []) as any[];
+    const isUrl = (x: unknown): x is string => typeof x === "string" && (/^https?:\/\//i.test(x) || x.startsWith("/"));
+    const paths = [...new Set(prodsData.map((p) => p.imagen_url).filter((x) => typeof x === "string" && x && !isUrl(x)))] as string[];
+    const signedMap = new Map<string, string>();
+    if (paths.length) {
+      const { data: signed } = await sb.storage.from(BUCKET).createSignedUrls(paths, 60 * 60);
+      for (const s of signed ?? []) if (s?.signedUrl) signedMap.set(s.path, s.signedUrl);
+    }
+
     return {
       store: {
         ...store,
@@ -105,11 +116,9 @@ export const getPublicStore = createServerFn({ method: "GET" })
         bannerUrl: await sign(sb, store.banner_url),
       },
       categories: cats.data ?? [],
-      products: await Promise.all(
-        (prods.data ?? []).map(async (p: any) => ({
-          ...p,
-          imagenUrl: await sign(sb, p.imagen_url),
-        })),
-      ),
+      products: prodsData.map((p) => ({
+        ...p,
+        imagenUrl: isUrl(p.imagen_url) ? p.imagen_url : (signedMap.get(p.imagen_url) ?? null),
+      })),
     };
   });
