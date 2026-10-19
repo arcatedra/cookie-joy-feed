@@ -1,7 +1,7 @@
 # Revisión final antes de apertura
 
 ## Bebidas Food Bazaar (19 octubre)
-- [ ] Preparar lista completa sin alcohol, con tamaños, precios regulares y fuentes; señalar precios no verificables sin inventarlos.
+- [x] Preparar 123 referencias con tamaños y fuentes: 73 nuevos con precio original reconfirmado, 45 nuevos pendientes y cinco existentes; sin inventar precios ni cargar catálogo.
 - [ ] Mostrar plan y esperar aprobación del dueño antes de cualquier cambio de catálogo.
 - [ ] Tras aprobación, incorporar nueve subcategorías y productos ES/EN sin duplicados, fotos OFF/reutilizadas/propias y códigos solo de tamaño exacto; verificar cantidad y catálogo sin pagos/entrega/clientes ni publicación.
 

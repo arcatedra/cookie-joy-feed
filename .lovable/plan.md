@@ -184,9 +184,9 @@ Fuentes: Food Bazaar digital, consultado el 19/10/2026. Sin sucursal seleccionad
 - Los 45 pendientes esperan confirmación. Excluir alcohol, cerveza, vino, sidra, licor y cualquier producto que requiera licencia. Malta solo tras comprobar etiqueta y autorización; no entra ahora.
 
 ## Fotos y verificaciones
-Buscar frontal en Open Food Facts por UPC, con variante correcta, fondo blanco sin alterar etiqueta, original conservado y crédito «Foto: Open Food Facts (CC BY-SA)», indicando fondo editado. UPC solo con tamaño exacto. Sin foto válida, reutilizar únicamente imagen no engañosa; si no existe, crear propia con marca visible. No copiar fotos de Instacart, Walmart ni Google ni presentar imágenes propias como oficiales.
+Open Food Facts por UPC: frontal correcto, blanco sin alterar etiqueta, original conservado y crédito «Foto: Open Food Facts (CC BY-SA)», indicando fondo editado. UPC solo con tamaño exacto. Sin foto, reutilizar imagen no engañosa o crear propia con marca. No copiar Instacart, Walmart ni Google ni presentar imagen propia como oficial.
 
-Probar precios aprobados, duplicados, nueve filtros, búsqueda ES/EN, fotos, códigos y celular/computadora. Informar cantidad agregada y procedencia de fotos. No tocar pagos, entrega, usuarios/clientes ni publicar; todavía no se cargó nada.
+Probar precios, duplicados, nueve filtros, búsqueda ES/EN, fotos, códigos y celular/computadora. Informar cantidad agregada. No tocar pagos, entrega, usuarios/clientes ni publicar; no se cargó nada.
 
 ## Detalles técnicos
 Ampliar subcategorías en validación compartida y restricción de base de datos, sin borrar registros. Crear catálogo de referencia y pruebas; conservar IDs existentes y proveedor privado. No cambiar checkout ni envío.
