@@ -1,5 +1,9 @@
 # Revisión final antes de apertura
 
+## Seguridad autorizada (20 oct, 05:38 UTC)
+- [ ] Aplicar una pasada limitada de permisos seguros a avisos confirmados, conservando consultas publicadas y catálogo de visitantes; sin tocar productos, precios, fotos, carrito, checkout, Stripe ni filas de clientes/pedidos.
+- [ ] Una verificación corta de permisos, catálogo público y QA aislado; sin pruebas con pagos. Informar accesos legítimos y acciones manuales pendientes.
+
 ## Seguridad y QA (20 oct): aprobación por etapas
 - [x] Presentar plan individual de los 22 avisos Supabase, los 11 del análisis adicional y QA; distinguir riesgos y autorizaciones específicas.
 - [x] Consultar reglas actuales sin cambios: 18 funciones distintas/20 avisos de ejecución; HAZOREX bloqueada; search_path definido. Sin reglas temporales de escritura libre en los dos depósitos.
