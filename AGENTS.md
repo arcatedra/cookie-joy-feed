@@ -1,8 +1,8 @@
 # Marketplace safety
 
-- Catalog subcategories are validated against their parent category and shared by admin and public views with bilingual descriptions; omitted edit fields preserve metadata.
-- Catalog fixtures use stable IDs, deduplicate ES/EN names, reject mismatched UPCs and preserve labels; beverages exclude unconfirmed prices and alcohol to prevent unintended additions.
-- Catalog renames target stable existing product IDs with previous-name guards and synchronize reference fixtures; never create replacement rows or alter commercial quantities, preventing duplicate products and unintended pricing changes.
+- Validate subcategories against parents; share bilingual descriptions across admin/public views and preserve omitted edit metadata.
+- Catalog fixtures use stable IDs, deduplicate ES/EN names, reject mismatched UPCs, preserve labels and exclude alcohol/unconfirmed beverage prices. Public reads use stable ordered readCatalogPages pagination to avoid row caps.
+- Rename existing product IDs with previous-name guards and sync fixtures; never replace rows or change commercial quantities, preventing duplicates and pricing changes.
 
 - Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
 - All cookie shopping surfaces read the shared product catalog with a Spanish display-name adapter; public bestseller output exposes only aggregate product order, never buyer records.

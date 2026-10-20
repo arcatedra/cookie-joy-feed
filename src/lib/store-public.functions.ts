@@ -8,6 +8,7 @@ import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { zoneForPostalCode } from "@/lib/nyc-zones";
 import { normalizeSchedule } from "@/lib/store";
+import { readCatalogPages } from "./catalog-pages";
 
 const BUCKET = "store-media";
 
@@ -89,16 +90,14 @@ export const getPublicStore = createServerFn({ method: "GET" })
     const { paymentsEnvironmentForHost } = await import("./stripe.server");
     if (store.stripe_environment && store.stripe_environment !== paymentsEnvironmentForHost(getRequestHost())) return null;
 
-    const [cats, prods] = await Promise.all([
+    const [cats, prodsData] = await Promise.all([
       sb.from("store_categories").select("*").eq("business_id", store.id).order("orden"),
-      sb.from("store_products").select("*").eq("business_id", store.id).order("orden"),
+      readCatalogPages<any>((from, to) => sb.from("store_products").select("*").eq("business_id", store.id).order("orden").order("id").range(from, to)),
     ]);
     if (cats.error) throw cats.error;
-    if (prods.error) throw prods.error;
 
     // Firma todas las fotos en una sola llamada: con cientos de productos,
     // firmar una por una supera el límite de peticiones y algunas fotos no cargaban.
-    const prodsData = (prods.data ?? []) as any[];
     const isUrl = (x: unknown): x is string => typeof x === "string" && (/^https?:\/\//i.test(x) || x.startsWith("/"));
     const paths = [...new Set(prodsData.map((p) => p.imagen_url).filter((x) => typeof x === "string" && x && !isUrl(x)))] as string[];
     const signedMap = new Map<string, string>();
