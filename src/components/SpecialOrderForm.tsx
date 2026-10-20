@@ -3,26 +3,29 @@ import { toast } from "sonner";
 import { Camera, PackageSearch, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { SPECIAL_MAX_PRICE_USD, SPECIAL_MAX_QTY, specialItemSchema, type SpecialItem } from "@/lib/special-order-rules";
+import { SPECIAL_MAX_PRICE_USD, SPECIAL_MAX_QTY, SPECIAL_SAME_STORE_MESSAGE, specialItemSchema, type SpecialItem } from "@/lib/special-order-rules";
 
 export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[]; onChange: (v: SpecialItem[]) => void; L: (es: string, en: string) => string }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [f, setF] = useState({ marca: "", nombre: "", tamano: "", qty: "1", precio: "" });
+  const [f, setF] = useState({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", supermercado: "" });
   const [busy, setBusy] = useState(false);
 
   async function save() {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return toast.error(L("Inicia sesión para hacer un pedido especial.", "Sign in to place a special order."));
     if (!file || !file.type.startsWith("image/") || file.size > 8_000_000) return toast.error(L("Sube una foto del producto (máx. 8 MB).", "Upload a product photo (max 8 MB)."));
+    if (items.length > 0 && f.supermercado.trim().toLowerCase().replace(/\s+/g, " ") !== items[0].supermercado.trim().toLowerCase().replace(/\s+/g, " ")) {
+      return toast.error(SPECIAL_SAME_STORE_MESSAGE);
+    }
     setBusy(true);
     try {
       const path = `special/${u.user.id}/${crypto.randomUUID()}.${(file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "")}`;
-      const item = specialItemSchema.parse({ foto: path, marca: f.marca, nombre: f.nombre, tamano: f.tamano, qty: Number(f.qty), precio: Number(f.precio) });
+      const item = specialItemSchema.parse({ foto: path, marca: f.marca, nombre: f.nombre, tamano: f.tamano, qty: Number(f.qty), precio: Number(f.precio), supermercado: f.supermercado });
       const { error } = await supabase.storage.from("store-media").upload(path, file, { contentType: file.type });
       if (error) throw new Error(L("No se pudo subir la foto.", "Could not upload the photo."));
       onChange([...items, item]);
-      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "" });
+      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", supermercado: items.length ? f.supermercado : "" });
       setFile(null);
       setOpen(false);
       toast.success(L("Agregado al carrito", "Added to cart"));
