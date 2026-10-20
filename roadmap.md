@@ -1,7 +1,7 @@
 # Revisión final antes de apertura
 
 ## Mascotas (20 oct)
-- [ ] Aprobar alcance antes de investigar el catálogo completo o generar fotos: diez subcategorías; presupuesto de fotos pendiente de cantidad confirmada.
+- [x] Aprobada primera etapa: preparar lista/precios sin cargar ni generar fotos; segundo OK necesario para carga amplia y fotos.
 - [ ] Incorporar solo presentaciones con precio regular exacto de Food Bazaar, sin duplicados; listar precios no confirmados y productos excluidos.
 - [ ] Comprobar las fotos nuevas y comunicar cantidad añadida; sin seguridad, pagos, entrega, clientes ni publicación.
 
