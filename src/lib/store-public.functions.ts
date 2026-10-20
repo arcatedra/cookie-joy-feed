@@ -8,6 +8,7 @@ import { z } from "zod";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { zoneForPostalCode } from "@/lib/nyc-zones";
 import { normalizeSchedule } from "@/lib/store";
+import { readCatalogPages } from "./catalog-pages";
 
 const BUCKET = "store-media";
 
