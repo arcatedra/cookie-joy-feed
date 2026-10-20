@@ -84,6 +84,7 @@ export const getPickingOrder = createServerFn({ method: "GET" })
           tamano: (p?.tamano ?? it.tamano_especial ?? null) as string | null,
           especial: it.especial === true,
           marca: (it.marca_especial ?? null) as string | null,
+          supermercado: (it.supermercado_especial ?? null) as string | null,
           cantidad: Number(it.cantidad),
           cantidad_real: it.pick_status === "pendiente" ? null : pickedQuantity(it, p),
           precio_unitario: Number(it.precio_unitario),

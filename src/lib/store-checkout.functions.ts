@@ -22,7 +22,7 @@ import {
   weightFeeCents,
 } from "./pricing";
 import { unitPriceCents } from "./house-store-rules";
-import { assertSpecialPhoto, specialItemSchema, specialPriceCents } from "./special-order-rules";
+import { assertSameSupermarket, assertSpecialPhoto, specialItemSchema, specialPriceCents } from "./special-order-rules";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
