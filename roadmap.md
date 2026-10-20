@@ -2,8 +2,8 @@
 
 ## Bebé (20 oct)
 - [x] Aprobar y aplicar las once subcategorías.
-- [ ] Cargar productos con precios regulares documentados, sin duplicados y con fotos coincidentes.
-- [ ] Verificar fotos de Bebé y Snacks en computadora/celular y comunicar excepciones.
+- [x] Cargados 132 productos y fotos propias; 976 existentes sin cambios. Precios del listado Food Bazaar, ninguno de Instacart directo; Swaddlers talla 6/16 ct y Nido 4.85 lb requieren confirmación de presentación/precio en tienda. Parent's Choice, Aveeno Baby, chupetes y cremas específicas no localizados; Vaseline es barrera genérica, no crema especializada.
+- [x] Vista previa computadora/celular: 132 fotos de Bebé cargadas, sin desbordamiento ni errores; Goldfish Colors 9 packs, Ritz 10 packs y Club 12.7 oz comprobados. 26 pruebas pasan; corregida paginación pública para mostrar los 1108 productos completos. Sin publicar ni tocar pagos/entrega/clientes.
 
 ## Bebidas Food Bazaar (19 octubre)
 - [x] Preparar 123 referencias con tamaños y fuentes: 73 nuevos con precio original reconfirmado, 45 nuevos pendientes y cinco existentes; sin inventar precios ni cargar catálogo.
