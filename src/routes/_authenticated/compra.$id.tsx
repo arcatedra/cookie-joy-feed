@@ -272,6 +272,21 @@ function PickingPage() {
 
               {o.editable && done && (
                 <div className="mt-3 space-y-2">
+                {it.porLibra && it.pick_status === "reemplazado" && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label htmlFor={`replacement-weight-${it.id}`} className="text-sm">{L("Peso real (lb)", "Actual weight (lb)")}</label>
+                    <input id={`replacement-weight-${it.id}`} inputMode="decimal"
+                      value={weights[it.id] ?? String(it.picked_weight_lb ?? "")}
+                      onChange={(e) => setWeights((prev) => ({ ...prev, [it.id]: e.target.value }))}
+                      className="w-24 rounded border border-border bg-background px-2 py-1" />
+                    <Button size="sm" variant="outline" disabled={busy !== null} onClick={() => run(it.id, async () => {
+                      const weight = Number((weights[it.id] ?? String(it.picked_weight_lb ?? "")).replace(",", "."));
+                      if (!Number.isFinite(weight) || weight <= 0 || weight > 200) throw new Error(L("Escribe un peso válido en lb.", "Enter a valid weight in lb."));
+                      await weighFn({ data: { itemId: it.id, weightLb: weight } });
+                      setWeights((prev) => { const next = { ...prev }; delete next[it.id]; return next; });
+                    })}>{L("Guardar", "Save")}</Button>
+                  </div>
+                )}
                 {!it.porLibra && it.pick_status !== "no_habia" && (
                   <div className="flex flex-wrap items-center gap-2">
                     <label htmlFor={`quantity-${it.id}`} className="text-sm">{L("Cantidad real", "Actual quantity")}</label>
@@ -314,7 +329,7 @@ function PickingPage() {
           {o.editable && o.canCapture ? (
             <button
               type="button"
-              disabled={pending > 0 || busy !== null || Object.keys(quantities).length > 0}
+              disabled={pending > 0 || busy !== null || Object.keys(quantities).length > 0 || o.items.some((it) => it.pick_status === "reemplazado" && it.porLibra && (!(Number(it.picked_weight_lb) > 0) || weights[it.id] !== undefined))}
               onClick={markReady}
               className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-50"
             >

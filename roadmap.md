@@ -6,7 +6,8 @@
 - [x] Clasificación limitada de archivos: reels-media contiene 9 JPEG/10 MP4 y store-media 1017 JPEG; el tipo de archivo no prueba ausencia de contenido privado. Lectura pública usada para fotos comerciales; no cerrar permisos a ciegas.
 - [x] Cinco pruebas aisladas pasan: comprobante/ETA propios permitidos y ajenos bloqueados; nombres solo de comentaristas y solo primer nombre. No equivalen a verificar los 22 avisos completos ni el recorrido autenticado.
 - [ ] Cambios de permisos compartidos con producción: esperan autorización específica y propuesta exacta; no aplicar bajo aprobación general.
-- [ ] QA de sustituciones por libra y cualquier ajuste de saldo/cobro: esperan autorización explícita de pagos y guardado del artículo del pedido.
+- [x] QA: implementación limitada usa modalidad/peso del reemplazo y permite guardar peso real conservando precio original; sin migraciones, cambios en datos existentes, Stripe ni publicación.
+- [ ] Verificación QA: única ejecución obtuvo 21/28 pruebas correctas; siete fallos de preparación de pruebas (identidad del reemplazo faltante, permiso simulado sin rpc, validación síncrona y columna reemplazo ausente en base ficticia). Corregidos los datos de prueba; no se repitió por instrucción del dueño. Cobro con reemplazo y checkout de tienda pendientes de confirmar; no cerrar aviso ni publicar como verificado.
 - [ ] Protección de contraseñas filtradas: activación manual del dueño en Supabase, Pro o superior. No modificar clientes ni publicar.
 
 ## Mascotas (20 oct)

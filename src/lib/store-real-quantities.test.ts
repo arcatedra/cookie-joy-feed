@@ -17,7 +17,8 @@ describe("cantidades reales de tienda", () => {
     expect(readyQuantities([item], products, [{ itemId: "item", cantidadReal: 0 }])[0].cantidadReal).toBe(0);
   });
   it("un reemplazo parcial cobra 2 de 3", () => {
-    expect(readyQuantities([{ ...item, pick_status: "reemplazado", cantidad_real: 2 }], products, [])[0].cantidadReal).toBe(2);
+    const replacements = new Map([...products, ["replacement", { vendido_por_lb: false, peso_lb: 1 }] as const]);
+    expect(readyQuantities([{ ...item, pick_status: "reemplazado", replacement_product_id: "replacement", cantidad_real: 2 }], replacements, [])[0].cantidadReal).toBe(2);
   });
   it("No había siempre es cero", () => {
     expect(readyQuantities([{ ...item, pick_status: "no_habia" }], products, [{ itemId: "item", cantidadReal: 3 }])[0].cantidadReal).toBe(0);
