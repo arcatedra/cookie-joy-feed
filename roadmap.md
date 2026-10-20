@@ -2,8 +2,8 @@
 
 ## Mascotas (20 oct)
 - [x] Aprobada primera etapa: preparar lista/precios sin cargar ni generar fotos; segundo OK necesario para carga amplia y fotos.
-- [ ] Incorporar solo presentaciones con precio regular exacto de Food Bazaar, sin duplicados; listar precios no confirmados y productos excluidos.
-- [ ] Comprobar las fotos nuevas y comunicar cantidad añadida; sin seguridad, pagos, entrega, clientes ni publicación.
+- [ ] Incorporar solo presentaciones con precio regular exacto de Food Bazaar: bloqueado porque las diez consultas devolvieron portada genérica, no productos. Cero precios confirmados; ocho candidatos de búsquedas no aceptados. Se necesitan enlaces exactos accesibles o fotos de etiquetas/recibo con presentación y precio regular.
+- [ ] Comprobar las fotos nuevas y comunicar cantidad añadida: pendiente de precios confirmados y segundo OK para carga/fotos; cero productos o fotos añadidos. Sin seguridad, pagos, entrega, clientes ni publicación.
 
 ## Bebé (20 oct)
 - [x] Aprobar y aplicar las once subcategorías.
