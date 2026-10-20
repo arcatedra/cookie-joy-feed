@@ -775,7 +775,7 @@ export const HOUSE_PETS_CATALOG = [
     "tamano": "3 lb",
     "precio": 12.69,
     "nombre_en": "Fancy Feast chicken & turkey",
-    "disponible": false,
+    "disponible": true,
     "peso_lb": 3.0,
     "descripcion": "Alimento seco para gatos. Presentación de 3 lb.",
     "descripcion_en": "Dry cat food. 3 lb package."
@@ -871,7 +871,7 @@ export const HOUSE_PETS_CATALOG = [
     "tamano": "3.5 lb",
     "precio": 14.49,
     "nombre_en": "IAMS Proactive chicken adult",
-    "disponible": false,
+    "disponible": true,
     "peso_lb": 3.5,
     "descripcion": "Alimento seco para gatos. Presentación de 3.5 lb.",
     "descripcion_en": "Dry cat food. 3.5 lb package."
@@ -1135,7 +1135,7 @@ export const HOUSE_PETS_CATALOG = [
     "tamano": "3 oz",
     "precio": 1.5,
     "nombre_en": "Fancy Feast Gravy Lovers hearts & liver chicken",
-    "disponible": false,
+    "disponible": true,
     "peso_lb": 0.1875,
     "descripcion": "Alimento húmedo para gatos. Presentación de 3 oz.",
     "descripcion_en": "Wet cat food. 3 oz package."
@@ -2011,7 +2011,7 @@ export const HOUSE_PETS_CATALOG = [
     "tamano": "19 lb",
     "precio": 21.99,
     "nombre_en": "Arm & Hammer Clump & Seal Ultra Odor Blasters",
-    "disponible": false,
+    "disponible": true,
     "peso_lb": 19.0,
     "descripcion": "Producto para la caja de arena de tu gato. Presentación de 19 lb.",
     "descripcion_en": "Cat litter & accessories. 19 lb package."
