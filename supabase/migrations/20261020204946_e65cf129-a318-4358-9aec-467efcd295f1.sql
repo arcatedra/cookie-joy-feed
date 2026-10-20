@@ -1,0 +1,1 @@
+ALTER TABLE public.store_order_items ADD COLUMN IF NOT EXISTS supermercado_especial TEXT;
