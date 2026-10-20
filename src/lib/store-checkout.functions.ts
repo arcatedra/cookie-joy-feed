@@ -117,7 +117,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const blockEnabled = blockRow?.enabled === true;
 
     const byId = new Map<string, any>((rows ?? []).map((r: any) => [r.id, r]));
-    const priced: Array<{ productId: string | null; name: string; unit: string; priceCents: number; pesoLb: number; qty: number; special?: { foto: string; marca: string; tamano: string } }> = data.items.map((it) => {
+    const priced: Array<{ productId: string | null; name: string; unit: string; priceCents: number; pesoLb: number; qty: number; special?: { foto: string; marca: string; tamano: string; supermercado: string } }> = data.items.map((it) => {
       const p = byId.get(it.productId);
       if (!p || p.disponible === false || !Number.isFinite(Number(p.precio))) {
         throw new Error("Uno de los productos ya no está disponible.");
@@ -132,6 +132,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       };
     });
 
+    assertSameSupermarket(data.especiales);
     for (const sp of data.especiales) {
       assertSpecialPhoto(sp.foto, userId);
       priced.push({
@@ -141,7 +142,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         priceCents: specialPriceCents(sp),
         pesoLb: pricing.defaultProductWeightLb,
         qty: sp.qty,
-        special: { foto: sp.foto, marca: sp.marca, tamano: sp.tamano },
+        special: { foto: sp.foto, marca: sp.marca, tamano: sp.tamano, supermercado: sp.supermercado },
       });
     }
 
@@ -257,7 +258,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         precio_unitario: it.priceCents / 100,
         cantidad: it.qty,
         subtotal_item: (it.priceCents * it.qty) / 100,
-        ...(it.special ? { especial: true, foto_especial: it.special.foto, marca_especial: it.special.marca, tamano_especial: it.special.tamano } : {}),
+        ...(it.special ? { especial: true, foto_especial: it.special.foto, marca_especial: it.special.marca, tamano_especial: it.special.tamano, supermercado_especial: it.special.supermercado } : {}),
       })),
     );
     if (itemsErr) {
