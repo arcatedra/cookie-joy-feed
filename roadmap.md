@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Mascotas (20 oct)
+- [ ] Aprobar alcance antes de investigar el catálogo completo o generar fotos: diez subcategorías; presupuesto de fotos pendiente de cantidad confirmada.
+- [ ] Incorporar solo presentaciones con precio regular exacto de Food Bazaar, sin duplicados; listar precios no confirmados y productos excluidos.
+- [ ] Comprobar las fotos nuevas y comunicar cantidad añadida; sin seguridad, pagos, entrega, clientes ni publicación.
+
 ## Bebé (20 oct)
 - [x] Aprobar y aplicar las once subcategorías.
 - [x] Cargados 132 productos y fotos propias; 976 existentes sin cambios. Precios del listado Food Bazaar, ninguno de Instacart directo; Swaddlers talla 6/16 ct y Nido 4.85 lb requieren confirmación de presentación/precio en tienda. Parent's Choice, Aveeno Baby, chupetes y cremas específicas no localizados; Vaseline es barrera genérica, no crema especializada.
