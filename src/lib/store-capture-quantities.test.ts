@@ -17,6 +17,7 @@ vi.mock("./barcode.server", () => ({ findBarcodeOwner: async () => ({ id: "repla
 vi.mock("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: (t: string) => db.from(t), rpc: async () => ({ data: 0, error: null }) } }));
 
 const db = {
+  rpc: async () => ({ data: false, error: null }),
   from(table: string) {
     let patch: any;
     let id: string | undefined;
@@ -115,7 +116,7 @@ describe("cobro real con Stripe simulado", () => {
   it("un peso inválido del reemplazo se rechaza antes de guardar", async () => {
     state.items[0] = { ...state.items[0], pick_status: "reemplazado", replacement_product_id: "replacement" };
     state.products.push({ id: "replacement", vendido_por_lb: true, peso_lb: 2 });
-    await expect(pickWeighItem({ data: { itemId, weightLb: 0 }, context } as any)).rejects.toThrow();
+    await expect(async () => pickWeighItem({ data: { itemId, weightLb: 0 }, context } as any)).rejects.toThrow();
     expect(state.writes).toEqual([]);
     expect(state.capture).not.toHaveBeenCalled();
   });
