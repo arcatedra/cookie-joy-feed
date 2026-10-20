@@ -12,6 +12,7 @@ import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { pricingFromRows, serviceFeeCents, tierForWeight, weightFeeCents } from "./pricing";
+import { pickedProductId } from "./barcode-rules";
 
 const MAX_CAPTURE_ATTEMPTS = 3;
 
@@ -47,7 +48,7 @@ export const listStoreOrders = createServerFn({ method: "GET" })
       .select("*")
       .in("order_id", orders.map((o: any) => o.id));
     if (itErr) throw itErr;
-    const productIds = [...new Set((items ?? []).map((it: any) => it.product_id).filter(Boolean))];
+    const productIds = [...new Set((items ?? []).filter((it: any) => it.pick_status !== "no_habia").map((it: any) => pickedProductId(it)).filter(Boolean))];
     const { data: products, error: productError } = productIds.length
       ? await db.from("store_products").select("id, vendido_por_lb, peso_lb").in("id", productIds)
       : { data: [], error: null };
@@ -57,7 +58,7 @@ export const listStoreOrders = createServerFn({ method: "GET" })
       ...o,
       items: (items ?? []).filter((i: any) => i.order_id === o.id).map((it: any) => ({
         ...it,
-        porLibra: byId.get(it.product_id)?.vendido_por_lb === true,
+        porLibra: byId.get(it.pick_status === "no_habia" ? it.product_id : pickedProductId(it))?.vendido_por_lb === true,
       })),
     }));
   });
@@ -161,7 +162,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     }
 
     // Pesos de los productos para recalcular el cargo por peso real
-    const productIds = (items ?? []).map((i: any) => i.product_id).filter(Boolean);
+    const productIds = (items ?? []).filter((i: any) => i.pick_status !== "no_habia").map((i: any) => pickedProductId(i)).filter(Boolean);
     const weightById = new Map<string, number>();
     const productById = new Map<string, any>();
     if (productIds.length > 0) {
@@ -186,7 +187,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
       realSubtotalCents += Math.round(Math.round(Number(it.precio_unitario) * 100) * real);
       realItemCount += real;
       realLb +=
-        (weightById.get(it.product_id) ?? pricing.defaultProductWeightLb) * real;
+        (weightById.get(it.pick_status === "no_habia" ? it.product_id : pickedProductId(it)) ?? pricing.defaultProductWeightLb) * real;
       if (real !== Number(it.cantidad_real)) {
         const { data: saved, error: saveError } = await db.from("store_order_items")
           .update({ cantidad_real: real }).eq("id", it.id).eq("order_id", order.id).select("id");

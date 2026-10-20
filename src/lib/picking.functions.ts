@@ -6,7 +6,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { productHasBarcode, pickedQuantity, validateUnitQuantity } from "./barcode-rules";
+import { productHasBarcode, pickedQuantity, pickedProductId, validateUnitQuantity } from "./barcode-rules";
 
 const EDITABLE = ["confirmado", "preparando", "cobro_fallido"];
 const code = z.string().regex(/^\d{8,14}$/, "Código de barras inválido");
@@ -42,8 +42,9 @@ async function loadItem(context: any, itemId: string) {
   if (!item) throw new Error("Artículo no encontrado.");
   const auth = await authorizeOrder(context, item.order_id);
   if (!EDITABLE.includes(auth.order.estado)) throw new Error("Este pedido ya no se puede modificar.");
-  const { data: product } = item.product_id
-    ? await auth.adb.from("store_products").select("id, nombre, nombre_en, codigos_barras, vendido_por_lb, peso_lb").eq("id", item.product_id).maybeSingle()
+  const productId = pickedProductId(item);
+  const { data: product } = productId
+    ? await auth.adb.from("store_products").select("id, nombre, nombre_en, codigos_barras, vendido_por_lb, peso_lb").eq("id", productId).maybeSingle()
     : { data: null };
   return { ...auth, item, product };
 }
@@ -63,14 +64,14 @@ export const getPickingOrder = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { adb, order, isOwner } = await authorizeOrder(context, data.id);
     const { data: items } = await adb.from("store_order_items").select("*").eq("order_id", order.id).order("created_at");
-    const ids = (items ?? []).map((i: any) => i.product_id).filter(Boolean);
+    const ids = (items ?? []).filter((i: any) => i.pick_status !== "no_habia").map((i: any) => pickedProductId(i)).filter(Boolean);
     const { data: prods } = ids.length
       ? await adb.from("store_products").select("id, nombre_en, imagen_url, codigos_barras, vendido_por_lb, peso_lb, tamano").in("id", ids)
       : { data: [] };
     const byId = new Map<string, any>((prods ?? []).map((p: any) => [p.id, p]));
     const out = await Promise.all(
       (items ?? []).map(async (it: any) => {
-        const p = byId.get(it.product_id);
+        const p = byId.get(it.pick_status === "no_habia" ? it.product_id : pickedProductId(it));
         let img: string | null = p?.imagen_url ?? null;
         if (img && !/^https?:|^\//.test(img)) {
           const { data: s } = await adb.storage.from("store-media").createSignedUrl(img, 3600);
@@ -140,8 +141,13 @@ export const pickWeighItem = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { adb, item, product, userId } = await loadItem(context, data.itemId);
     if (product?.vendido_por_lb !== true) throw new Error("Este producto se vende por unidad: escanéalo.");
-    const real = pickedQuantity({ ...item, pick_status: "encontrado", picked_weight_lb: data.weightLb }, product);
-    await setPick(adb, item.id, userId, { pick_status: "encontrado", cantidad_real: real, picked_weight_lb: data.weightLb, replacement_product_id: null, replacement_name: null });
+    const replacing = item.pick_status === "reemplazado";
+    if (!Number.isFinite(Number(product.peso_lb)) || Number(product.peso_lb) <= 0) throw new Error("Falta el peso por unidad del producto.");
+    const real = pickedQuantity({ ...item, picked_weight_lb: data.weightLb }, product);
+    await setPick(adb, item.id, userId, {
+      pick_status: replacing ? "reemplazado" : "encontrado", cantidad_real: real, picked_weight_lb: data.weightLb,
+      ...(replacing ? {} : { replacement_product_id: null, replacement_name: null }),
+    });
     return { ok: true as const };
   });
 
@@ -161,6 +167,7 @@ export const pickReplaceItem = createServerFn({ method: "POST" })
     await setPick(adb, item.id, userId, {
       pick_status: "reemplazado",
       cantidad_real: item.cantidad_real ?? Number(item.cantidad),
+      picked_weight_lb: null,
       scanned_barcode: data.code,
       replacement_product_id: owner.id,
       replacement_name: owner.nombre,

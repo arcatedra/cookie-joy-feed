@@ -88,8 +88,16 @@ export function validateUnitQuantity(real: unknown, ordered: unknown): number {
 }
 
 /** Valida el pedido completo antes de guardar cantidades o iniciar el cobro. */
+export function pickedProductId(item: { product_id?: string | null; replacement_product_id?: string | null; pick_status?: string | null }): string {
+  if (item.pick_status === "reemplazado") {
+    if (!item.replacement_product_id) throw new Error("Falta el producto de reemplazo. Vuelve a revisarlo antes de cobrar.");
+    return item.replacement_product_id;
+  }
+  return item.product_id ?? "";
+}
+
 export function readyQuantities(
-  items: { id: string; product_id?: string | null; pick_status?: string | null; cantidad: unknown; cantidad_real?: unknown; picked_weight_lb?: unknown }[],
+  items: { id: string; product_id?: string | null; replacement_product_id?: string | null; pick_status?: string | null; cantidad: unknown; cantidad_real?: unknown; picked_weight_lb?: unknown }[],
   products: Map<string, { vendido_por_lb?: unknown; peso_lb?: unknown }>,
   requested: { itemId: string; cantidadReal: number }[],
 ): { itemId: string; cantidadReal: number }[] {
@@ -103,8 +111,11 @@ export function readyQuantities(
     overrides.set(entry.itemId, entry.cantidadReal);
   }
   return items.map((it) => {
-    const product = products.get(it.product_id ?? "");
     if (it.pick_status === "no_habia") return { itemId: it.id, cantidadReal: 0 };
+    const product = products.get(pickedProductId(it));
+    if (it.pick_status === "reemplazado" && (!product || typeof product.vendido_por_lb !== "boolean" || !Number.isFinite(Number(product.peso_lb)) || Number(product.peso_lb) <= 0)) {
+      throw new Error("Falta la forma de venta o el peso del reemplazo. No se inició el cobro.");
+    }
     if (product?.vendido_por_lb === true) {
       const weight = Number(it.picked_weight_lb);
       const portion = Number(product.peso_lb);
