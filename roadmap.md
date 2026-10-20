@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Bebé (20 oct)
+- [x] Aprobar y aplicar las once subcategorías.
+- [ ] Cargar productos con precios regulares documentados, sin duplicados y con fotos coincidentes.
+- [ ] Verificar fotos de Bebé y Snacks en computadora/celular y comunicar excepciones.
+
 ## Bebidas Food Bazaar (19 octubre)
 - [x] Preparar 123 referencias con tamaños y fuentes: 73 nuevos con precio original reconfirmado, 45 nuevos pendientes y cinco existentes; sin inventar precios ni cargar catálogo.
 - [x] Plan aprobado: incorporar solo 73 nuevos con precio regular confirmado; 45 pendientes no cargados.
