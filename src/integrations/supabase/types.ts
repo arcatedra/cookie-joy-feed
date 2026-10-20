@@ -3304,6 +3304,10 @@ export type Database = {
         Args: { p_driver: string; p_reservation: string }
         Returns: string
       }
+      media_reference_matches: {
+        Args: { bucket: string; object_name: string; reference: string }
+        Returns: boolean
+      }
       minutes_per_stop: { Args: never; Returns: number }
       my_available_delivery_blocks: {
         Args: { p_driver: string }

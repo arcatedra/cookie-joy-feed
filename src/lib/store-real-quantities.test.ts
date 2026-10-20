@@ -41,4 +41,14 @@ describe("cantidades reales de tienda", () => {
   it("exige peso real antes del cobro", () => {
     expect(() => readyQuantities([item], new Map([["product", { vendido_por_lb: true, peso_lb: 1.5 }]]), [])).toThrow(/peso real/);
   });
+  it("reemplazo por libra exige peso y luego usa 3 lb reales del sustituto", () => {
+    const replaced = { ...item, pick_status: "reemplazado", replacement_product_id: "replacement" };
+    const replacements = new Map([["product", { vendido_por_lb: false, peso_lb: 1 }], ["replacement", { vendido_por_lb: true, peso_lb: 2 }]]);
+    expect(() => readyQuantities([replaced], replacements, [])).toThrow(/peso real/);
+    expect(readyQuantities([{ ...replaced, picked_weight_lb: 3 }], replacements, [])).toEqual([{ itemId: "item", cantidadReal: 1.5 }]);
+  });
+  it("reemplazo por unidad no exige peso real del original", () => {
+    const replacements = new Map([["product", { vendido_por_lb: true, peso_lb: 1 }], ["replacement", { vendido_por_lb: false, peso_lb: 2 }]]);
+    expect(readyQuantities([{ ...item, pick_status: "reemplazado", replacement_product_id: "replacement", cantidad_real: 2 }], replacements, [])).toEqual([{ itemId: "item", cantidadReal: 2 }]);
+  });
 });

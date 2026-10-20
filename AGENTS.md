@@ -25,4 +25,5 @@
 - Delivery block stops reference exactly one store order or one cookie order; same-building orders must share a block and cookie orders in blocks never enter legacy cookie routes, so each delivery and tip is paid once.
 - Hazorex's own supermarket is a regular approved business (slug `hazorex-supermercado`) reusing store checkout; supplier "where to buy" lives in admin/assigned-driver-only `store_product_sourcing`, so it never reaches public catalog reads.
 - Picking/capture use pickedProductId for replacement sale mode and weight, preserving original price. Bill validated actual units or recorded weight, missing items zero; validate before writes and stop on save failure to prevent overcharging.
-- Product photo attribution and background-edit status belong to the current stored image; preserve the original storage reference on background edits and clear attribution/status on unrelated replacements, preventing false credits while keeping originals recoverable.
+- Photo credits/status belong to the current image; keep originals on background edits and clear credits on replacements.
+- Storage public reads require catalog/reel references; owner/admin reads stay separate to protect unused uploads. Likes are owner-only; counters use aggregate RPCs.

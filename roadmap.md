@@ -1,17 +1,20 @@
 # Revisión final antes de apertura
 
 ## Seguridad autorizada (20 oct, 05:38 UTC)
-- [ ] Aplicar una pasada limitada de permisos seguros a avisos confirmados, conservando consultas publicadas y catálogo de visitantes; sin tocar productos, precios, fotos, carrito, checkout, Stripe ni filas de clientes/pedidos.
-- [ ] Una verificación corta de permisos, catálogo público y QA aislado; sin pruebas con pagos. Informar accesos legítimos y acciones manuales pendientes.
+- [x] Aplicar una pasada limitada: me gusta propios; archivos públicos solo referenciados por catálogo/reels, con lectura propia/admin separada. Sin modificar filas ni checkout/Stripe.
+- [x] Una verificación: 22 pruebas aisladas pasan (permisos, privacidad de comprobante/ETA/nombres y pesos de sustitución); catálogo público carga 186 imágenes sin errores, build OK; sin pruebas con pagos.
+- [ ] Configuración pública de precios/lotes: cerrar acceso rompería getPricingConfig publicado, que consulta todos los campos. Bloqueado por prohibición de tocar checkout/precios y no publicar; requiere aprobar separación de lecturas y publicación coordinada.
+- [ ] Activación manual de contraseñas filtradas en Supabase Authentication → Email (Pro o superior). Permanecen 22 avisos linter: funciones con acceso legítimo (20), HAZOREX bloqueada (1), contraseña (1); no revocar para silenciarlos.
+- [x] Nuevo análisis: 11→8 avisos, un bloqueante de configuración conservado por compatibilidad. Accesos comerciales de zonas/días/productos/reels/comentarios públicos conservados; análisis de conexiones omitido por falta de configuración. No afirmar seguridad total ni checkout probado.
 
 ## Seguridad y QA (20 oct): aprobación por etapas
 - [x] Presentar plan individual de los 22 avisos Supabase, los 11 del análisis adicional y QA; distinguir riesgos y autorizaciones específicas.
 - [x] Consultar reglas actuales sin cambios: 18 funciones distintas/20 avisos de ejecución; HAZOREX bloqueada; search_path definido. Sin reglas temporales de escritura libre en los dos depósitos.
 - [x] Clasificación limitada de archivos: reels-media contiene 9 JPEG/10 MP4 y store-media 1017 JPEG; el tipo de archivo no prueba ausencia de contenido privado. Lectura pública usada para fotos comerciales; no cerrar permisos a ciegas.
 - [x] Cinco pruebas aisladas pasan: comprobante/ETA propios permitidos y ajenos bloqueados; nombres solo de comentaristas y solo primer nombre. No equivalen a verificar los 22 avisos completos ni el recorrido autenticado.
-- [ ] Cambios de permisos compartidos con producción: esperan autorización específica y propuesta exacta; no aplicar bajo aprobación general.
+- [x] Permisos autorizados 05:38 UTC: aplicada migración limitada de me gusta y archivos comerciales; configuración pública pendiente por compatibilidad con compras publicadas.
 - [x] QA: implementación limitada usa modalidad/peso del reemplazo y permite guardar peso real conservando precio original; sin migraciones, cambios en datos existentes, Stripe ni publicación.
-- [ ] Verificación QA: única ejecución obtuvo 21/28 pruebas correctas; siete fallos de preparación de pruebas (identidad del reemplazo faltante, permiso simulado sin rpc, validación síncrona y columna reemplazo ausente en base ficticia). Corregidos los datos de prueba; no se repitió por instrucción del dueño. Cobro con reemplazo y checkout de tienda pendientes de confirmar; no cerrar aviso ni publicar como verificado.
+- [x] QA: verificación pura autorizada 05:38 UTC confirma peso del reemplazo obligatorio y luego válido; sustitución por unidad conserva cantidad real sin exigir peso del original. Campo de peso visible en código actual; aviso resuelto. Sin ejecutar pruebas de pagos ni afirmar checkout/Stripe verificado.
 - [ ] Protección de contraseñas filtradas: activación manual del dueño en Supabase, Pro o superior. No modificar clientes ni publicar.
 
 ## Mascotas (20 oct)

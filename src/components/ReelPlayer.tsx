@@ -26,12 +26,11 @@ export function ReelPlayer({ reelId, poster, src, title }: ReelPlayerProps) {
   const qc = useQueryClient();
 
   const likesQ = useQuery({
-    queryKey: ["reel-likes", reelId],
+    queryKey: ["reel-likes", reelId, user?.id],
     queryFn: async () => {
-      const { count } = await supabase
-        .from("reel_likes")
-        .select("*", { count: "exact", head: true })
-        .eq("reel_id", reelId);
+      const { data: totals, error } = await supabase.rpc("reel_like_counts", { reel_ids: [reelId] });
+      if (error) throw error;
+      const count = Number(totals?.[0]?.count ?? 0);
       let liked = false;
       if (user) {
         const { data } = await supabase
