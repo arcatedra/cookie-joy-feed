@@ -1,0 +1,163 @@
+/**
+ * Bebé del Supermercado Hazorex (20/10/2026).
+ * Precio regular de la tienda Food Bazaar (si hay oferta, el precio de antes), 0 % sobreprecio, venta por unidad/paquete.
+ * Fila: [subcategoría, nombre ES, nombre EN, tamaño, precio, peso aprox. lb]
+ */
+export type BabyRow = readonly [string, string, string, string, number, number];
+
+const P = "Pañales por talla";
+const T = "Pañales de entrenamiento";
+const W = "Toallitas húmedas";
+const F = "Fórmula infantil";
+const C = "Compotas y papillas";
+const S = "Cereales y snacks para bebé";
+const B = "Biberones, chupetes y accesorios";
+const H = "Baño y cuidado del bebé";
+const R = "Cremas para el pañal";
+const L = "Leche y bebidas para niños";
+const M = "Salud del bebé sin receta";
+
+export const HOUSE_BABY_CATALOG: readonly BabyRow[] = [
+  [P, "Pampers Baby Dry pañales talla 1", "Pampers Baby Dry diapers, size 1", "Talla 1 · 44 ct", 15.99, 2.2],
+  [P, "Pampers Baby Dry pañales talla 4", "Pampers Baby Dry diapers, size 4", "Talla 4 · 28 ct", 15.99, 2.4],
+  [P, "Pampers Baby Dry pañales talla 4, paquete grande", "Pampers Baby Dry diapers, size 4, big pack", "Talla 4 · 92 ct", 43.99, 7.5],
+  [P, "Pampers Baby Dry pañales talla 5", "Pampers Baby Dry diapers, size 5", "Talla 5 · 24 ct", 15.99, 2.4],
+  [P, "Pampers Baby Dry pañales talla 6", "Pampers Baby Dry diapers, size 6", "Talla 6 · 21 ct", 15.99, 2.4],
+  [P, "Pampers Baby Dry pañales talla 6, paquete grande", "Pampers Baby Dry diapers, size 6, big pack", "Talla 6 · 64 ct", 43.99, 7.0],
+  [P, "Pampers Swaddlers pañales talla 4", "Pampers Swaddlers diapers, size 4", "Talla 4 · 22 ct", 15.99, 2.0],
+  [P, "Pampers Swaddlers pañales talla 5", "Pampers Swaddlers diapers, size 5", "Talla 5 · 19 ct", 15.99, 2.0],
+  [P, "Pampers Swaddlers pañales talla 6", "Pampers Swaddlers diapers, size 6", "Talla 6 · 16 ct", 15.99, 2.0],
+  [P, "Pampers Cruisers 360 pañales tipo calzón talla 5", "Pampers Cruisers 360 pull-on diapers, size 5", "Talla 5 · 19 ct", 14.69, 2.0],
+  [P, "Huggies pañales talla 1", "Huggies diapers, size 1", "Talla 1 · 44 ct", 14.49, 2.2],
+  [P, "Huggies pañales talla 5", "Huggies diapers, size 5", "Talla 5 · 25 ct", 14.49, 2.5],
+  [P, "Huggies pañales Disney Baby talla 6", "Huggies Disney Baby diapers, size 6", "Talla 6 · 21 ct", 14.49, 2.4],
+  [P, "Huggies Little Movers pañales talla 3", "Huggies Little Movers diapers, size 3", "Talla 3 · 25 ct", 16.79, 2.0],
+  [P, "Huggies Little Movers pañales talla 5", "Huggies Little Movers diapers, size 5", "Talla 5 · 19 ct", 16.79, 2.0],
+  [P, "Huggies Little Movers pañales talla 6", "Huggies Little Movers diapers, size 6", "Talla 6 · 16 ct", 16.79, 2.0],
+  [P, "Huggies Little Movers pañales talla 7", "Huggies Little Movers diapers, size 7", "Talla 7 · 14 ct", 16.79, 2.0],
+  [P, "Huggies OverNites pañales de noche talla 6", "Huggies OverNites overnight diapers, size 6", "Talla 6 · 54 ct", 39.99, 6.5],
+  [P, "Luvs Platinum Protection pañales talla 4", "Luvs Platinum Protection diapers, size 4", "Talla 4 · 28 ct", 10.99, 2.3],
+  [P, "Luvs Platinum Protection pañales talla 5", "Luvs Platinum Protection diapers, size 5", "Talla 5 · 24 ct", 10.99, 2.3],
+  [P, "Luvs Platinum Protection pañales talla 6", "Luvs Platinum Protection diapers, size 6", "Talla 6 · 20 ct", 10.99, 2.3],
+
+  [T, "Pampers Easy Ups calzones de entrenamiento niña 2T-3T", "Pampers Easy Ups training underwear, girls 2T-3T", "2T-3T · 25 ct", 14.99, 2.2],
+  [T, "Pampers Easy Ups calzones de entrenamiento Bluey 3T-4T", "Pampers Easy Ups Bluey training underwear 3T-4T", "3T-4T · 22 ct", 14.99, 2.2],
+  [T, "Pampers Easy Ups calzones de entrenamiento 4T-5T", "Pampers Easy Ups training underwear 4T-5T", "4T-5T · 18 ct", 14.99, 2.2],
+  [T, "Pull-Ups calzones de entrenamiento niño 3T-4T", "Pull-Ups boys' potty training pants 3T-4T", "3T-4T · 20 ct", 16.69, 2.2],
+  [T, "Pull-Ups calzones de entrenamiento niño 4T-5T", "Pull-Ups boys' potty training pants 4T-5T", "4T-5T · 17 ct", 16.69, 2.2],
+  [T, "Goodnites ropa interior de noche niña S/M", "Goodnites bedtime underwear, girls S/M", "S/M · 14 ct", 18.39, 1.8],
+  [T, "Goodnites ropa interior de noche niña XL", "Goodnites nighttime underwear, girls XL", "XL · 9 ct", 18.09, 1.6],
+
+  [W, "Pampers toallitas Complete Clean", "Pampers Complete Clean baby wipes", "72 ct", 3.99, 0.9],
+  [W, "Pampers toallitas Complete Clean, paquete triple", "Pampers Complete Clean baby wipes, 3 pack", "216 ct", 11.49, 2.6],
+  [W, "Pampers toallitas Sensitive sin perfume", "Pampers Sensitive perfume-free baby wipes", "56 ct", 3.99, 0.7],
+  [W, "Pampers toallitas Sensitive", "Pampers Sensitive baby wipes", "168 ct", 11.39, 2.1],
+  [W, "Pampers toallitas Sensitive, caja grande", "Pampers Sensitive baby wipes, big box", "336 ct", 19.99, 4.2],
+  [W, "Pampers toallitas Aqua Pure Sensitive", "Pampers Aqua Pure Sensitive baby wipes", "6 paquetes", 26.99, 3.8],
+  [W, "Huggies toallitas Natural Care Refreshing", "Huggies Natural Care Refreshing baby wipes", "56 ct", 3.89, 0.7],
+  [W, "Huggies toallitas Natural Care Refreshing, paquete triple", "Huggies Natural Care Refreshing baby wipes, 3 pack", "168 ct", 11.49, 2.1],
+  [W, "Huggies toallitas Natural Care Sensitive sin perfume", "Huggies Natural Care Sensitive unscented baby wipes", "168 ct", 11.49, 2.1],
+  [W, "Huggies toallitas Natural Care con aloe y vitamina E", "Huggies Natural Care aloe & vitamin E baby wipes", "56 ct", 3.89, 0.7],
+  [W, "Huggies toallitas Simply Clean sin perfume", "Huggies Simply Clean unscented baby wipes", "64 ct", 3.59, 0.7],
+  [W, "Huggies toallitas Simply Clean sin perfume, paquete triple", "Huggies Simply Clean unscented baby wipes, 3 pack", "3 x 64 ct", 10.69, 2.1],
+
+  [F, "Enfamil NeuroPro fórmula infantil en polvo", "Enfamil NeuroPro infant formula powder", "31.4 oz", 78.59, 2.4],
+  [F, "Enfamil NeuroPro Gentlease fórmula infantil", "Enfamil NeuroPro Gentlease infant formula", "19.5 oz", 61.79, 1.6],
+  [F, "Enfamil Gentlease fórmula infantil", "Enfamil Gentlease infant formula powder", "12.4 oz", 29.69, 1.0],
+  [F, "Enfamil fórmula infantil Infant", "Enfamil Infant milk-based formula powder", "21.1 oz", 53.49, 1.7],
+  [F, "Enfamil fórmula infantil con hierro 0-12 meses", "Enfamil milk-based with iron infant formula, 0-12 months", "12.5 oz", 26.69, 1.0],
+  [F, "Enfamil A.R. fórmula infantil anti regurgitación", "Enfamil A.R. spit-up infant formula", "12.9 oz", 36.99, 1.0],
+  [F, "Enfamil ProSobee fórmula infantil de soya", "Enfamil ProSobee soy infant formula", "12.9 oz", 38.89, 1.0],
+  [F, "Similac Alimentum fórmula infantil hipoalergénica", "Similac Alimentum hypoallergenic infant formula", "12.1 oz", 63.59, 1.0],
+
+  [C, "Gerber 1st Foods compota de plátano", "Gerber 1st Foods bananas", "2 x 2 oz", 2.09, 0.3],
+  [C, "Gerber etapa 1 compota de manzana", "Gerber Stage 1 apple puree", "2 x 2 oz", 2.09, 0.3],
+  [C, "Gerber etapa 1 compota de zanahoria", "Gerber Stage 1 carrot puree", "2 x 2 oz", 2.09, 0.3],
+  [C, "Gerber etapa 1 compota de ciruela pasa", "Gerber Stage 1 prune puree", "2 x 2 oz", 2.09, 0.3],
+  [C, "Gerber orgánico etapa 1 compota de plátano", "Gerber Organic Stage 1 banana", "4 oz", 2.19, 0.4],
+  [C, "Gerber 2nd Foods compota de melocotón", "Gerber 2nd Foods peaches", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber etapa 2 compota de plátano", "Gerber Stage 2 banana puree", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber etapa 2 compota de pera", "Gerber Stage 2 pear puree", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber etapa 2 compota de guisantes", "Gerber Stage 2 peas puree", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber 2nd Foods papilla de vegetales con pollo", "Gerber 2nd Foods vegetable chicken dinner", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber 2nd Foods papilla de camote y pavo", "Gerber 2nd Foods sweet potato & turkey dinner", "2 x 4 oz", 2.89, 0.6],
+  [C, "Gerber etapa 2 pouch manzana, fresa y plátano", "Gerber Stage 2 apple strawberry banana pouch", "3.5 oz", 2.59, 0.3],
+  [C, "Gerber etapa 2 pouch plátano y arándano", "Gerber Stage 2 banana blueberry pouch", "3.5 oz", 2.59, 0.3],
+  [C, "Gerber orgánico etapa 2 pouch pera, melocotón y fresa", "Gerber Organic Stage 2 pear peach strawberry pouch", "3.5 oz", 2.79, 0.3],
+  [C, "Gerber papilla de pollo con salsa", "Gerber chicken and gravy", "2.5 oz", 1.99, 0.2],
+  [C, "Gerber papilla de pavo con salsa", "Gerber turkey and gravy", "2.5 oz", 1.99, 0.2],
+  [C, "Gerber papilla de res con salsa", "Gerber beef and gravy", "2.5 oz", 1.99, 0.2],
+  [C, "Beech-Nut Naturals etapa 1 compota de plátano", "Beech-Nut Naturals Stage 1 banana", "4 oz", 1.89, 0.4],
+  [C, "Beech-Nut Naturals etapa 1 compota de judías verdes", "Beech-Nut Naturals Stage 1 green beans", "4 oz", 1.89, 0.4],
+  [C, "Beech-Nut Naturals etapa 2 compota de mango", "Beech-Nut Naturals Stage 2 mango", "4 oz", 1.89, 0.4],
+  [C, "Beech-Nut Naturals etapa 2 guayaba, pera y fresa", "Beech-Nut Naturals Stage 2 guava pear strawberry", "4 oz", 1.89, 0.4],
+  [C, "Beech-Nut Naturals etapa 2 manzana y granola", "Beech-Nut Naturals Stage 2 apple & granola", "4 oz", 1.89, 0.4],
+  [C, "Beech-Nut etapa 2 compota de camote", "Beech-Nut Stage 2 sweet potato", "4 oz", 1.69, 0.4],
+  [C, "Beech-Nut etapa 2 manzana y arándanos", "Beech-Nut Stage 2 apple & blueberries", "4 oz", 1.69, 0.4],
+  [C, "Beech-Nut etapa 2 pera y piña", "Beech-Nut Stage 2 pear & pineapple", "4 oz", 1.69, 0.4],
+  [C, "Beech-Nut Organics etapa 2 ciruelas y peras", "Beech-Nut Organics Stage 2 prunes & pears", "4 oz", 2.09, 0.4],
+  [C, "Beech-Nut etapa 1 papilla de pollo", "Beech-Nut Stage 1 chicken & chicken broth", "2.5 oz", 2.09, 0.2],
+  [C, "Beech-Nut etapa 1 papilla de pavo", "Beech-Nut Stage 1 turkey & turkey broth", "2.5 oz", 2.09, 0.2],
+  [C, "Beech-Nut Fruities etapa 2 pouch manzana, durazno y fresa", "Beech-Nut Fruities Stage 2 apple peach strawberry pouch", "3.5 oz", 1.89, 0.3],
+  [C, "Happy Baby Organics etapa 2 pouch plátano, frambuesa y avena", "Happy Baby Organics Stage 2 bananas, raspberries & oats pouch", "4 oz", 2.79, 0.3],
+  [C, "Happy Baby Organics etapa 2 manzana y espinaca", "Happy Baby Organics Stage 2 apples & spinach jar", "4 oz", 2.29, 0.4],
+  [C, "Happy Tot Organics pouch pera, arándano y espinaca", "Happy Tot Organics pears, blueberries & spinach pouch", "4 oz", 2.79, 0.3],
+  [C, "Plum Organics compota de plátano y calabaza", "Plum Organics banana & pumpkin", "4 oz", 2.49, 0.3],
+  [C, "Plum Organics etapa 2 brócoli y manzana", "Plum Organics Stage 2 broccoli & apple", "4 oz", 2.49, 0.3],
+  [C, "Plum Organics compota de ciruela pasa", "Plum Organics just prunes", "3.5 oz", 2.19, 0.3],
+
+  [S, "Gerber cereal de arroz para bebé", "Gerber rice baby cereal", "8 oz", 5.19, 0.6],
+  [S, "Gerber cereal multigrano para bebé", "Gerber multigrain baby cereal", "8 oz", 5.19, 0.6],
+  [S, "Gerber cereal de maíz amarillo para bebé", "Gerber yellow corn baby cereal", "8 oz", 5.19, 0.6],
+  [S, "Gerber Toddler cereal de avena con plátano y fresa", "Gerber Toddler banana strawberry oatmeal cereal", "8 oz", 5.39, 0.6],
+  [S, "Nestlé Nestum cereal infantil trigo y miel", "Nestlé NESTUM wheat & honey infant cereal", "10.6 oz", 8.49, 0.8],
+  [S, "Nestlé Nestum cereal infantil trigo y frutas", "Nestlé NESTUM wheat & fruits infant cereal", "9.52 oz", 6.99, 0.7],
+  [S, "Earth's Best cereal orgánico de arroz integral", "Earth's Best organic whole grain brown rice cereal", "8 oz", 5.39, 0.6],
+  [S, "Gerber Puffs de vainilla", "Gerber Puffs vanilla", "1.48 oz", 4.39, 0.2],
+  [S, "Gerber Puffs de batata", "Gerber Puffs sweet potato", "1.48 oz", 4.39, 0.2],
+  [S, "Gerber Puffs de melocotón", "Gerber Puffs peach", "1.48 oz", 4.39, 0.2],
+  [S, "Gerber Puffs de fresa y manzana", "Gerber Puffs strawberry apple", "1.48 oz", 4.39, 0.2],
+  [S, "Gerber Yogurt Melts de fresa", "Gerber Yogurt Melts strawberry", "1 oz", 5.69, 0.1],
+  [S, "Gerber Yogurt Melts de plátano y vainilla", "Gerber Yogurt Melts banana vanilla", "1 oz", 5.69, 0.1],
+  [S, "Gerber Lil' Crunchies sabor cheddar", "Gerber Lil' Crunchies mild cheddar", "1.48 oz", 3.99, 0.2],
+  [S, "Gerber galletas Arrowroot", "Gerber Arrowroot biscuits", "5.5 oz", 4.29, 0.4],
+  [S, "Gerber Teethers galletas plátano y durazno", "Gerber Teethers banana peach teething wafers", "12 x 0.14 oz", 4.99, 0.2],
+  [S, "Happy Baby Teethers galletas de guisante y espinaca", "Happy Baby Teethers pea & spinach teething wafers", "12 x 0.14 oz", 6.99, 0.2],
+  [S, "Beech-Nut Puffies de fresa y plátano", "Beech-Nut strawberry banana Puffies", "1.48 oz", 3.09, 0.2],
+  [S, "Beech-Nut Mini Waffles calabaza y manzana", "Beech-Nut Mini Waffles pumpkin apple", "3.2 oz", 4.49, 0.3],
+
+  [B, "Gerber biberón de flujo medio", "Gerber medium flow bottle", "9 oz · 1 unidad", 1.99, 0.2],
+  [B, "Sesame Street biberón Sesame Beginnings", "Sesame Street Sesame Beginnings bottle", "9 oz · 1 unidad", 2.99, 0.2],
+
+  [H, "Johnson's champú para bebé Original", "Johnson's Original baby shampoo", "500 ml", 7.49, 1.2],
+  [H, "Johnson's loción para bebé Bedtime", "Johnson's Bedtime baby lotion", "9 fl oz", 6.49, 0.7],
+  [H, "Johnson's jabón en barra para bebé", "Johnson's baby bar soap", "2.65 oz", 1.99, 0.2],
+  [H, "Johnson's talco de maicena para bebé con aloe", "Johnson's cornstarch baby powder with aloe & vitamin E", "9 oz", 8.29, 0.7],
+  [H, "Cetaphil Baby gel de baño y champú con caléndula", "Cetaphil Baby wash & shampoo with calendula", "7.8 fl oz", 8.99, 0.6],
+  [H, "Dove Baby gel de baño Rich Moisture", "Dove Baby Rich Moisture wash", "13 fl oz", 10.49, 1.0],
+  [H, "Dr. Bronner's Baby jabón en barra sin aroma", "Dr. Bronner's Baby unscented bar soap", "5 oz", 5.49, 0.4],
+  [H, "Dreft detergente líquido para ropa de bebé", "Dreft liquid baby laundry detergent", "60 fl oz", 20.99, 4.2],
+  [H, "Arm & Hammer Baby detergente líquido hipoalergénico", "Arm & Hammer Baby hypoallergenic liquid detergent", "100.5 fl oz", 15.99, 7.0],
+
+  [R, "Vaseline vaselina pura Original", "Vaseline Original petroleum jelly", "7.5 oz", 5.79, 0.6],
+
+  [L, "Nestlé Nido Kinder 1+ leche en polvo", "Nestlé NIDO Kinder 1+ toddler milk powder", "12.6 oz", 8.99, 0.9],
+  [L, "Nestlé Nido Kinder 1+ leche en polvo mediana", "Nestlé NIDO Kinder 1+ toddler milk powder, medium", "1.76 lb", 21.99, 1.9],
+  [L, "Nestlé Nido Kinder 1+ leche en polvo grande", "Nestlé NIDO Kinder 1+ toddler milk powder, large", "56.3 oz", 34.99, 3.7],
+  [L, "Nestlé Nido Kinder 1+ leche en polvo familiar", "Nestlé NIDO Kinder 1+ toddler milk powder, family size", "4.85 lb", 45.99, 5.0],
+  [L, "PediaSure Grow & Gain batido de vainilla", "PediaSure Grow & Gain vanilla shake", "6 x 8 fl oz", 20.49, 3.3],
+  [L, "PediaSure Grow & Gain batido de chocolate", "PediaSure Grow & Gain chocolate shake", "6 x 8 fl oz", 20.49, 3.3],
+  [L, "PediaSure Grow & Gain batido de fresa", "PediaSure Grow & Gain strawberry shake", "6 x 8 fl oz", 20.49, 3.3],
+  [L, "PediaSure Grow & Gain batido de plátano", "PediaSure Grow & Gain banana shake", "6 x 8 fl oz", 20.49, 3.3],
+  [L, "Gerber jugo 100 % de manzana", "Gerber 100% apple juice", "32 fl oz", 4.09, 2.2],
+  [L, "Gerber jugo de pera", "Gerber pear juice", "32 fl oz", 4.09, 2.2],
+  [L, "Gerber jugo de manzana y ciruela para niños", "Gerber apple prune toddler juice", "4 x 4 fl oz", 4.79, 1.2],
+  [L, "Pure Life Baby agua purificada", "PURE LIFE Baby purified water", "1 gal", 2.89, 8.5],
+  [L, "Danimals smoothie de frambuesa para niños", "Danimals raspberry smoothie for kids", "6 x 3.1 fl oz", 5.99, 1.3],
+
+  [M, "Infants' Tylenol acetaminofén líquido sabor uva", "Infants' Tylenol acetaminophen liquid, grape", "1 fl oz", 12.99, 0.2],
+  [M, "Children's Motrin ibuprofeno líquido sabor bayas", "Children's Motrin ibuprofen liquid, berry", "4 fl oz", 13.99, 0.4],
+  [M, "Pedialyte solución de electrolitos fresa", "Pedialyte electrolyte solution, strawberry", "1 L", 7.99, 2.4],
+  [M, "Pedialyte solución de electrolitos frutas mixtas", "Pedialyte electrolyte solution, mixed fruit", "33.8 fl oz", 7.99, 2.4],
+  [M, "Band-Aid curitas para niños Paw Patrol", "BAND-AID Paw Patrol kids bandages", "20 ct", 6.99, 0.1],
+];
