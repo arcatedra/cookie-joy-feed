@@ -168,6 +168,17 @@ export const HOUSE_BABY_SUBCATEGORIES = [
   { es: "Salud del bebé sin receta", en: "Baby health (OTC)" },
 ] as const;
 
+export const HOUSE_PETS_SUBCATEGORIES = [
+  { es: "Comida seca para perros", en: "Dry dog food" },
+  { es: "Comida húmeda para perros", en: "Wet dog food" },
+  { es: "Premios para perros", en: "Dog treats" },
+  { es: "Accesorios (pads)", en: "Accessories (pads)" },
+  { es: "Comida seca para gatos", en: "Dry cat food" },
+  { es: "Comida húmeda para gatos", en: "Wet cat food" },
+  { es: "Premios para gatos", en: "Cat treats" },
+  { es: "Arena para gatos y accesorios", en: "Cat litter & accessories" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
@@ -180,6 +191,7 @@ export function houseSubcategories(category: string | null) {
   if (category === "Congelados") return HOUSE_FROZEN_SUBCATEGORIES;
   if (category === "Cuidado personal") return HOUSE_PERSONAL_CARE_SUBCATEGORIES;
   if (category === "Bebé") return HOUSE_BABY_SUBCATEGORIES;
+  if (category === "Mascotas") return HOUSE_PETS_SUBCATEGORIES;
   return [];
 }
 
@@ -193,7 +205,7 @@ export const houseProductSchema = z.object({
   nombre_en: z.string().trim().max(160).default(""),
   descripcion: z.string().trim().max(240).optional(),
   descripcion_en: z.string().trim().max(240).optional(),
-  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca", "Agua y agua con gas", "Refrescos", "Jugos y néctares", "Bebidas deportivas y energéticas", "Té y café listos para tomar", "Café y té (en grano, molido, cápsulas, bolsitas)", "Bebidas latinas", "Mezclas y bebidas en polvo", "Agua de coco y bebidas vegetales", "Detergente y suavizante de ropa", "Jabón y accesorios para platos", "Limpiadores multiusos y de baño", "Cloro y desinfectantes", "Papel higiénico y servilletas", "Toallas de papel", "Bolsas de basura", "Bolsas, envolturas y aluminio", "Esponjas, trapos y escobas", "Ambientadores y velas", "Insecticidas y trampas", "Focos, pilas y artículos del hogar", "Helados y postres congelados", "Pizzas y comidas listas", "Vegetales y frutas congeladas", "Papas y aperitivos congelados", "Pollo, carne y mariscos congelados", "Desayuno congelado", "Pan y masas congeladas", "Comida latina congelada", "Jugos y hielo", "Champú y acondicionador", "Jabón y gel de baño", "Cuidado del cabello y peinado", "Pasta y cepillos de dientes", "Enjuague bucal e hilo dental", "Desodorantes", "Afeitado", "Cuidado de la piel y lociones", "Higiene femenina", "Algodón, hisopos y pañuelos", "Vitaminas y primeros auxilios", "Productos para el cabello latino y afro", "Pañales por talla", "Pañales de entrenamiento", "Toallitas húmedas", "Fórmula infantil", "Compotas y papillas", "Cereales y snacks para bebé", "Biberones, chupetes y accesorios", "Baño y cuidado del bebé", "Cremas para el pañal", "Leche y bebidas para niños", "Salud del bebé sin receta"]).nullable().optional(),
+  subcategoria: z.enum(["Frutas", "Verduras", "Pollo y pavo", "Res", "Cerdo", "Cordero y chivo", "Pescado", "Mariscos", "Leche", "Cremas", "Huevos", "Quesos", "Yogur", "Mantequilla", "Pan de molde", "Panecillos", "Bagels y muffins", "Pasteles y postres", "Tortillas y arepas", "Arroz y granos", "Pastas", "Enlatados", "Salsas y condimentos", "Aceites y especias", "Para hornear", "Desayuno", "Papas y chips", "Galletas saladas", "Galletas dulces", "Chocolates y dulces", "Barras y frutos secos", "Palomitas y pretzels", "Carne seca", "Agua y agua con gas", "Refrescos", "Jugos y néctares", "Bebidas deportivas y energéticas", "Té y café listos para tomar", "Café y té (en grano, molido, cápsulas, bolsitas)", "Bebidas latinas", "Mezclas y bebidas en polvo", "Agua de coco y bebidas vegetales", "Detergente y suavizante de ropa", "Jabón y accesorios para platos", "Limpiadores multiusos y de baño", "Cloro y desinfectantes", "Papel higiénico y servilletas", "Toallas de papel", "Bolsas de basura", "Bolsas, envolturas y aluminio", "Esponjas, trapos y escobas", "Ambientadores y velas", "Insecticidas y trampas", "Focos, pilas y artículos del hogar", "Helados y postres congelados", "Pizzas y comidas listas", "Vegetales y frutas congeladas", "Papas y aperitivos congelados", "Pollo, carne y mariscos congelados", "Desayuno congelado", "Pan y masas congeladas", "Comida latina congelada", "Jugos y hielo", "Champú y acondicionador", "Jabón y gel de baño", "Cuidado del cabello y peinado", "Pasta y cepillos de dientes", "Enjuague bucal e hilo dental", "Desodorantes", "Afeitado", "Cuidado de la piel y lociones", "Higiene femenina", "Algodón, hisopos y pañuelos", "Vitaminas y primeros auxilios", "Productos para el cabello latino y afro", "Pañales por talla", "Pañales de entrenamiento", "Toallitas húmedas", "Fórmula infantil", "Compotas y papillas", "Cereales y snacks para bebé", "Biberones, chupetes y accesorios", "Baño y cuidado del bebé", "Cremas para el pañal", "Leche y bebidas para niños", "Salud del bebé sin receta", "Comida seca para perros", "Comida húmeda para perros", "Premios para perros", "Accesorios (pads)", "Comida seca para gatos", "Comida húmeda para gatos", "Premios para gatos", "Arena para gatos y accesorios"]).nullable().optional(),
   categoria: z.string().trim().refine((c) => HOUSE_CATEGORIES.some((x) => x.es === c), "Categoría no válida"),
   precio: money,
   precio_anterior: z.coerce.number().min(0).max(10000).nullable().default(null),
