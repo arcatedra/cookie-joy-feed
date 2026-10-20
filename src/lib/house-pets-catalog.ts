@@ -1,7 +1,7 @@
 /** Lista exclusiva y precios originales confirmados por el dueño, 20/10/2026. */
 export const HOUSE_PETS_CATALOG = [
   {
-    "id": "ef7a25d0-f544-5558-aee4-cca11c850232",
+    "id": "c2012026-1020-4000-8000-000000000001",
     "subcategoria": "Comida seca para perros",
     "nombre": "Pedigree adulto pequeño pollo asado y vegetales",
     "tamano": "3.5 lb",
@@ -13,7 +13,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "d0964043-b830-5fdb-a33f-62e8500f3126",
+    "id": "c2012026-1020-4000-8000-000000000002",
     "subcategoria": "Comida seca para perros",
     "nombre": "Pedigree High Protein pollo asado y vegetales",
     "tamano": "3.5 lb",
@@ -25,7 +25,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "3c3b6c96-14cd-55ae-9fac-a5375762becd",
+    "id": "c2012026-1020-4000-8000-000000000003",
     "subcategoria": "Comida seca para perros",
     "nombre": "Pedigree Healthy Weight pollo y vegetales",
     "tamano": "14 lb",
@@ -37,7 +37,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 14 lb package."
   },
   {
-    "id": "98603c1f-6404-5f6d-afac-979db3745fdc",
+    "id": "c2012026-1020-4000-8000-000000000004",
     "subcategoria": "Comida seca para perros",
     "nombre": "Pedigree cachorro pollo, arroz y vegetales",
     "tamano": "3.5 lb",
@@ -49,7 +49,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "c714f0e4-63ab-5d91-b55e-6eb0ab1ea8dd",
+    "id": "c2012026-1020-4000-8000-000000000005",
     "subcategoria": "Comida seca para perros",
     "nombre": "Rachael Ray Nutrish raza pequeña pollo y verduras",
     "tamano": "5 lb",
@@ -61,7 +61,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "738db2ae-ed95-5e3d-b83f-3b16dae466d1",
+    "id": "c2012026-1020-4000-8000-000000000006",
     "subcategoria": "Comida seca para perros",
     "nombre": "Rachael Ray Nutrish adulto pollo y verduras",
     "tamano": "5 lb",
@@ -73,7 +73,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "1a377ecc-40fa-54e0-90e7-f848dabd4774",
+    "id": "c2012026-1020-4000-8000-000000000007",
     "subcategoria": "Comida seca para perros",
     "nombre": "Rachael Ray Nutrish res, guisantes y arroz integral",
     "tamano": "5 lb",
@@ -85,7 +85,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "709911bd-68f4-5747-a7b1-2ac7650e15ff",
+    "id": "c2012026-1020-4000-8000-000000000008",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina Beneful Originals res",
     "tamano": "3.5 lb",
@@ -97,7 +97,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "82bdd953-316f-5637-836d-7cc6ce44311e",
+    "id": "c2012026-1020-4000-8000-000000000009",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina Beneful IncrediBites raza pequeña res",
     "tamano": "3.5 lb",
@@ -109,7 +109,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "2def3a80-c047-54ae-ac9e-2fe146c78b25",
+    "id": "c2012026-1020-4000-8000-000000000010",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina Beneful Healthy Puppy pollo",
     "tamano": "3.5 lb",
@@ -121,7 +121,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.5 lb package."
   },
   {
-    "id": "941f7f9f-31d2-5438-a439-b3c6d6f0f8d4",
+    "id": "c2012026-1020-4000-8000-000000000011",
     "subcategoria": "Comida seca para perros",
     "nombre": "IAMS Proactive Health Minichunks pollo",
     "tamano": "5 lb",
@@ -133,7 +133,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "7b7d5534-d5ee-5259-b385-a5533876b570",
+    "id": "c2012026-1020-4000-8000-000000000012",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina ONE True Instinct pavo y venado",
     "tamano": "3.8 lb",
@@ -145,7 +145,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 3.8 lb package."
   },
   {
-    "id": "8b55f53f-cf53-51fb-8334-57d5810f9f6d",
+    "id": "c2012026-1020-4000-8000-000000000013",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina ONE cordero y arroz",
     "tamano": "4 lb",
@@ -157,7 +157,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 4 lb package."
   },
   {
-    "id": "1c0ce2a1-2c40-51ab-9db4-b4f8f756531d",
+    "id": "c2012026-1020-4000-8000-000000000014",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina Puppy Chow pollo y arroz",
     "tamano": "15 lb",
@@ -169,7 +169,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 15 lb package."
   },
   {
-    "id": "c8c66336-9b16-5ba7-8c0e-64eab14151d3",
+    "id": "c2012026-1020-4000-8000-000000000015",
     "subcategoria": "Comida seca para perros",
     "nombre": "Purina Moist & Meaty hamburguesa con queso",
     "tamano": "12 ct",
@@ -181,7 +181,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 12 ct package."
   },
   {
-    "id": "b588025e-2f13-5a8c-8c87-46f6b89215fc",
+    "id": "c2012026-1020-4000-8000-000000000016",
     "subcategoria": "Comida seca para perros",
     "nombre": "Wellness Complete Health raza pequeña pavo y avena",
     "tamano": "4 lb",
@@ -193,7 +193,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 4 lb package."
   },
   {
-    "id": "87c5b85d-f949-5dcf-9911-91e0fe509f75",
+    "id": "c2012026-1020-4000-8000-000000000017",
     "subcategoria": "Comida seca para perros",
     "nombre": "Wellness Complete Health pollo y avena",
     "tamano": "5 lb",
@@ -205,7 +205,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "8175b52d-dcfd-5d34-a558-db57bde57fed",
+    "id": "c2012026-1020-4000-8000-000000000018",
     "subcategoria": "Comida seca para perros",
     "nombre": "Wellness Complete Health cordero y cebada",
     "tamano": "5 lb",
@@ -217,7 +217,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "20e7b45d-7198-5b67-b475-7fa0908c33b3",
+    "id": "c2012026-1020-4000-8000-000000000019",
     "subcategoria": "Comida seca para perros",
     "nombre": "Kibbles n Bits res y pollo",
     "tamano": "16 lb",
@@ -229,7 +229,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 16 lb package."
   },
   {
-    "id": "c99de185-9898-5dc4-9ddb-1126e775b2c3",
+    "id": "c2012026-1020-4000-8000-000000000020",
     "subcategoria": "Comida seca para perros",
     "nombre": "Cesar raza pequeña filete mignon",
     "tamano": "5 lb",
@@ -241,7 +241,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry dog food. 5 lb package."
   },
   {
-    "id": "3806fe87-3dfc-5fb1-838f-337910bb0e42",
+    "id": "c2012026-1020-4000-8000-000000000021",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar Home Delights estofado de res",
     "tamano": "3.5 oz",
@@ -253,7 +253,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "d12ebfcc-f51e-569d-a560-8980d5482bd4",
+    "id": "c2012026-1020-4000-8000-000000000022",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar Filets in Gravy prime rib",
     "tamano": "3.5 oz",
@@ -265,7 +265,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "28f9122a-1736-5f37-926d-29b2cf234123",
+    "id": "c2012026-1020-4000-8000-000000000023",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar cachorro pollo y res",
     "tamano": "3.5 oz",
@@ -277,7 +277,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "7547c74c-e637-533c-9a7b-07351752401d",
+    "id": "c2012026-1020-4000-8000-000000000024",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar pollo e hígado",
     "tamano": "3.5 oz",
@@ -289,7 +289,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "628d4c2a-f5aa-535d-9614-8ff1c7bac3b7",
+    "id": "c2012026-1020-4000-8000-000000000025",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar pollo a la parrilla",
     "tamano": "3.5 oz",
@@ -301,7 +301,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "58a9e642-a469-56e9-b4ef-a9c4e3d0789e",
+    "id": "c2012026-1020-4000-8000-000000000026",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar filet mignon",
     "tamano": "3.5 oz",
@@ -313,7 +313,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "abf2a1a7-a7cf-51c3-9f1a-7d2d974e1867",
+    "id": "c2012026-1020-4000-8000-000000000027",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar pavo",
     "tamano": "3.5 oz",
@@ -325,7 +325,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "e8567c78-a413-5a48-840c-e5489c1dc614",
+    "id": "c2012026-1020-4000-8000-000000000028",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar res",
     "tamano": "3.5 oz",
@@ -337,7 +337,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "b948ee71-4911-55eb-8602-08572e530b3a",
+    "id": "c2012026-1020-4000-8000-000000000029",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar Home Delights pollo y vegetales",
     "tamano": "3.5 oz",
@@ -349,7 +349,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "3e07200d-78ec-5711-ab1e-58a74880dc85",
+    "id": "c2012026-1020-4000-8000-000000000030",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar porterhouse steak",
     "tamano": "3.5 oz",
@@ -361,7 +361,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "a070d5fb-ce34-58ba-89d3-3407ba9466e3",
+    "id": "c2012026-1020-4000-8000-000000000031",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Cesar steak y huevos",
     "tamano": "3.5 oz",
@@ -373,7 +373,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 3.5 oz package."
   },
   {
-    "id": "e9ee4cad-4560-5103-9bb6-ca88d3fabbce",
+    "id": "c2012026-1020-4000-8000-000000000032",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Pedigree Chopped Ground Dinner res",
     "tamano": "13.2 oz",
@@ -385,7 +385,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13.2 oz package."
   },
   {
-    "id": "563f1a1c-2a0e-59a7-915a-84e072f322dd",
+    "id": "c2012026-1020-4000-8000-000000000033",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Pedigree Chopped res, tocino y queso",
     "tamano": "13.2 oz",
@@ -397,7 +397,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13.2 oz package."
   },
   {
-    "id": "d0710200-594e-5ecc-b744-477d288b9089",
+    "id": "c2012026-1020-4000-8000-000000000034",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Pedigree Choice Cuts Country Stew",
     "tamano": "13.2 oz",
@@ -409,7 +409,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13.2 oz package."
   },
   {
-    "id": "1dc9d278-f23d-57c1-a8a8-340291d5d8c7",
+    "id": "c2012026-1020-4000-8000-000000000035",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Pedigree Choice Cuts res",
     "tamano": "13.2 oz",
@@ -421,7 +421,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13.2 oz package."
   },
   {
-    "id": "3c555387-a1cc-58af-b6e7-1babf59a9320",
+    "id": "c2012026-1020-4000-8000-000000000036",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Blue Buffalo Homestyle res",
     "tamano": "12.5 oz",
@@ -433,7 +433,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "20c9cb35-4277-52bb-9b92-dbd4beba8eff",
+    "id": "c2012026-1020-4000-8000-000000000037",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Rachael Ray Nutrish Chicken Muttballs",
     "tamano": "8 oz",
@@ -445,7 +445,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 8 oz package."
   },
   {
-    "id": "539b20ab-268c-5dae-83a7-a062f09e7f7f",
+    "id": "c2012026-1020-4000-8000-000000000038",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Rachael Ray Nutrish Chicken Paw Pie",
     "tamano": "8 oz",
@@ -457,7 +457,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 8 oz package."
   },
   {
-    "id": "e052a6a4-1539-5e69-9be6-d8a9d6d6f300",
+    "id": "c2012026-1020-4000-8000-000000000039",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Purina ONE Tender Cuts res y cebada",
     "tamano": "13 oz",
@@ -469,7 +469,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13 oz package."
   },
   {
-    "id": "2457eced-e9d1-5320-bffa-7b7cc0c7f1c2",
+    "id": "c2012026-1020-4000-8000-000000000040",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Purina Beneful Freshly Prepared cordero",
     "tamano": "10 oz",
@@ -481,7 +481,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 10 oz package."
   },
   {
-    "id": "f6594c81-4339-5788-8703-acc965c1b3f9",
+    "id": "c2012026-1020-4000-8000-000000000041",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Wellness estofado pollo con guisantes y zanahorias",
     "tamano": "12.5 oz",
@@ -493,7 +493,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "6e946c83-7358-5a09-b443-0631269b8d4e",
+    "id": "c2012026-1020-4000-8000-000000000042",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Wellness venado y salmón",
     "tamano": "12.5 oz",
@@ -505,7 +505,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "82114e69-1eef-56b6-bcdf-ece5e30dc693",
+    "id": "c2012026-1020-4000-8000-000000000043",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Wellness estofado res con zanahorias y papas",
     "tamano": "12.5 oz",
@@ -517,7 +517,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "33fed97a-f239-5cbb-9b88-05369e9c70fd",
+    "id": "c2012026-1020-4000-8000-000000000044",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "Wellness Complete Health pavo y camote",
     "tamano": "12.5 oz",
@@ -529,7 +529,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "9fb587e7-51b2-5595-901c-92f93ab01647",
+    "id": "c2012026-1020-4000-8000-000000000045",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "I and love and you Gobble it Up Stew",
     "tamano": "13 oz",
@@ -541,7 +541,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 13 oz package."
   },
   {
-    "id": "b8b409cc-eb1b-5aac-a748-77de671a4a61",
+    "id": "c2012026-1020-4000-8000-000000000046",
     "subcategoria": "Comida húmeda para perros",
     "nombre": "BIXBI cordero",
     "tamano": "12.5 oz",
@@ -553,7 +553,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet dog food. 12.5 oz package."
   },
   {
-    "id": "e484c4b0-e611-5f19-849d-e62590bf1d81",
+    "id": "c2012026-1020-4000-8000-000000000047",
     "subcategoria": "Premios para perros",
     "nombre": "Milk-Bone GravyBones",
     "tamano": "19 oz",
@@ -565,7 +565,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 19 oz package."
   },
   {
-    "id": "73b9f552-4c93-5d8b-a57d-2eb60601ecff",
+    "id": "c2012026-1020-4000-8000-000000000048",
     "subcategoria": "Premios para perros",
     "nombre": "Milk-Bone Original res mediano",
     "tamano": "24 oz",
@@ -577,7 +577,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 24 oz package."
   },
   {
-    "id": "a1d03bdc-0469-5629-a10a-f08de87b0ae2",
+    "id": "c2012026-1020-4000-8000-000000000049",
     "subcategoria": "Premios para perros",
     "nombre": "Milk-Bone Flavor Snacks",
     "tamano": "24 oz",
@@ -589,7 +589,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 24 oz package."
   },
   {
-    "id": "6d737b12-4d48-5eb9-87ed-40082b5ead2a",
+    "id": "c2012026-1020-4000-8000-000000000050",
     "subcategoria": "Premios para perros",
     "nombre": "Milk-Bone Soft & Chewy pollo",
     "tamano": "5.6 oz",
@@ -601,7 +601,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 5.6 oz package."
   },
   {
-    "id": "8236bffa-45c8-5557-b8cf-c30369126ec5",
+    "id": "c2012026-1020-4000-8000-000000000051",
     "subcategoria": "Premios para perros",
     "nombre": "Purina Beggin Strips tocino",
     "tamano": "6 oz",
@@ -613,7 +613,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 6 oz package."
   },
   {
-    "id": "0a2b8485-3973-5236-be55-08718b37bc27",
+    "id": "c2012026-1020-4000-8000-000000000052",
     "subcategoria": "Premios para perros",
     "nombre": "Purina Busy mantequilla de maní",
     "tamano": "21 oz",
@@ -625,7 +625,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 21 oz package."
   },
   {
-    "id": "a1063bdc-b176-5007-9555-356e922f1e05",
+    "id": "c2012026-1020-4000-8000-000000000053",
     "subcategoria": "Premios para perros",
     "nombre": "Blue Buffalo Health Bars manzana y yogur",
     "tamano": "16 oz",
@@ -637,7 +637,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 16 oz package."
   },
   {
-    "id": "8c002de5-5b0e-53f4-8b86-75bb3299650e",
+    "id": "c2012026-1020-4000-8000-000000000054",
     "subcategoria": "Premios para perros",
     "nombre": "Pup-Peroni res",
     "tamano": "5.6 oz",
@@ -649,7 +649,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 5.6 oz package."
   },
   {
-    "id": "18b3f423-0876-5128-be10-63fe6632f09e",
+    "id": "c2012026-1020-4000-8000-000000000055",
     "subcategoria": "Premios para perros",
     "nombre": "Canine Carry Outs res",
     "tamano": "4.5 oz",
@@ -661,7 +661,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 4.5 oz package."
   },
   {
-    "id": "441ef862-4bc4-596f-900d-881224de7835",
+    "id": "c2012026-1020-4000-8000-000000000056",
     "subcategoria": "Premios para perros",
     "nombre": "Canine Carry Outs tocino",
     "tamano": "4.5 oz",
@@ -673,7 +673,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 4.5 oz package."
   },
   {
-    "id": "c3864777-c4b6-5757-bb64-b1a485c267e5",
+    "id": "c2012026-1020-4000-8000-000000000057",
     "subcategoria": "Premios para perros",
     "nombre": "COOKIEPAL camote y linaza",
     "tamano": "10 oz",
@@ -685,7 +685,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dog treats. 10 oz package."
   },
   {
-    "id": "3d0bdbe4-de10-5ea7-90e5-3260a13dea06",
+    "id": "c2012026-1020-4000-8000-000000000058",
     "subcategoria": "Accesorios (pads)",
     "nombre": "Bogopa pads de entrenamiento",
     "tamano": "50 ct",
@@ -697,7 +697,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Accessories (pads). 50 ct package."
   },
   {
-    "id": "15125b84-5dd6-57b7-a89d-dc7d1ed475a0",
+    "id": "c2012026-1020-4000-8000-000000000059",
     "subcategoria": "Accesorios (pads)",
     "nombre": "Bogopa pads",
     "tamano": "100 ct",
@@ -709,7 +709,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Accessories (pads). 100 ct package."
   },
   {
-    "id": "1ec6e477-58e4-56da-a5e9-16816847bd2b",
+    "id": "c2012026-1020-4000-8000-000000000060",
     "subcategoria": "Accesorios (pads)",
     "nombre": "Bogopa pads",
     "tamano": "200 ct",
@@ -721,7 +721,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Accessories (pads). 200 ct package."
   },
   {
-    "id": "a0879266-1f43-543d-80cb-1eef87894af0",
+    "id": "c2012026-1020-4000-8000-000000000061",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Purina Friskies mariscos, salmón, atún y camarones",
     "tamano": "3.15 lb",
@@ -733,7 +733,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "b0d8a141-6311-5728-b67d-864677f91e27",
+    "id": "c2012026-1020-4000-8000-000000000062",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Friskies Tender and Crunchy Combo",
     "tamano": "3.15 lb",
@@ -745,7 +745,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "dce5d86a-779f-5fc9-9230-ace569ad7567",
+    "id": "c2012026-1020-4000-8000-000000000063",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Friskies Surfin & Turfin",
     "tamano": "3.15 lb",
@@ -757,7 +757,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "2464f26c-eab1-58e5-87b1-8893e46b61a2",
+    "id": "c2012026-1020-4000-8000-000000000064",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Fancy Feast pollo y pavo",
     "tamano": "16 oz",
@@ -769,7 +769,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 16 oz package."
   },
   {
-    "id": "054d9991-f3a2-569a-94e7-829ad618a01d",
+    "id": "c2012026-1020-4000-8000-000000000065",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Fancy Feast pollo y pavo",
     "tamano": "3 lb",
@@ -781,7 +781,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "090a60af-2cc1-5fac-957c-262cba1ca407",
+    "id": "c2012026-1020-4000-8000-000000000066",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Fancy Feast filet mignon con mariscos y camarones",
     "tamano": "3 lb",
@@ -793,7 +793,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "142c7f7c-e445-59ee-ada3-2bf7374783d2",
+    "id": "c2012026-1020-4000-8000-000000000067",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Fancy Feast filet mignon",
     "tamano": "16 oz",
@@ -805,7 +805,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 16 oz package."
   },
   {
-    "id": "9eaaaa8d-a550-534f-961b-e9b6d03a490f",
+    "id": "c2012026-1020-4000-8000-000000000068",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Fancy Feast pescado y salmón",
     "tamano": "16 oz",
@@ -817,7 +817,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 16 oz package."
   },
   {
-    "id": "8c4bad78-5b97-5ce3-a915-b0e1a39e45af",
+    "id": "c2012026-1020-4000-8000-000000000069",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Cat Chow sensible",
     "tamano": "3.15 lb",
@@ -829,7 +829,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "56ba3893-c75f-5d12-bd65-4655a067c05c",
+    "id": "c2012026-1020-4000-8000-000000000070",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Cat Chow interior",
     "tamano": "3.15 lb",
@@ -841,7 +841,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "1695bb26-1ce8-5165-9875-46b55faaaa29",
+    "id": "c2012026-1020-4000-8000-000000000071",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Cat Chow alto en proteína pollo",
     "tamano": "3.15 lb",
@@ -853,7 +853,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "511dd8f4-1a2d-528a-91c2-319899ba47c0",
+    "id": "c2012026-1020-4000-8000-000000000072",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Purina gatitos pollo",
     "tamano": "3.15 lb",
@@ -865,7 +865,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "8f01043b-0c62-5792-9a15-c5f27206966e",
+    "id": "c2012026-1020-4000-8000-000000000073",
     "subcategoria": "Comida seca para gatos",
     "nombre": "IAMS Proactive pollo adulto",
     "tamano": "3.5 lb",
@@ -877,7 +877,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.5 lb package."
   },
   {
-    "id": "53fa238a-0a05-565c-945d-855730960cf3",
+    "id": "c2012026-1020-4000-8000-000000000074",
     "subcategoria": "Comida seca para gatos",
     "nombre": "IAMS tracto urinario",
     "tamano": "3.5 lb",
@@ -889,7 +889,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.5 lb package."
   },
   {
-    "id": "6010fbf8-67cd-5966-9e16-e89b58759ac3",
+    "id": "c2012026-1020-4000-8000-000000000075",
     "subcategoria": "Comida seca para gatos",
     "nombre": "IAMS salmón",
     "tamano": "3.5 lb",
@@ -901,7 +901,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.5 lb package."
   },
   {
-    "id": "d7072700-d17f-5297-bae8-d8f1819896c1",
+    "id": "c2012026-1020-4000-8000-000000000076",
     "subcategoria": "Comida seca para gatos",
     "nombre": "IAMS bolas de pelo",
     "tamano": "3.5 lb",
@@ -913,7 +913,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.5 lb package."
   },
   {
-    "id": "0bca119a-57d8-5b2e-b181-fb9c7718aab3",
+    "id": "c2012026-1020-4000-8000-000000000077",
     "subcategoria": "Comida seca para gatos",
     "nombre": "IAMS interior control de peso",
     "tamano": "3.5 lb",
@@ -925,7 +925,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.5 lb package."
   },
   {
-    "id": "81e52378-2d11-5392-9b83-e6fbf20a1b5e",
+    "id": "c2012026-1020-4000-8000-000000000078",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Original Choice",
     "tamano": "3.15 lb",
@@ -937,7 +937,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "e67d673a-a6a5-5625-bcc4-a53f5b69e531",
+    "id": "c2012026-1020-4000-8000-000000000079",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Seafood Medley",
     "tamano": "3.15 lb",
@@ -949,7 +949,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "ec02618a-3a84-5584-8b37-dc649c9af1a7",
+    "id": "c2012026-1020-4000-8000-000000000080",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Indoor Health",
     "tamano": "3.15 lb",
@@ -961,7 +961,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3.15 lb package."
   },
   {
-    "id": "67da503f-3b38-5a47-9eab-791ec1d03f4f",
+    "id": "c2012026-1020-4000-8000-000000000081",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Tender Centers pollo y atún",
     "tamano": "3 lb",
@@ -973,7 +973,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "dc34fcf3-229f-5d74-acc3-e8e7a9145ff2",
+    "id": "c2012026-1020-4000-8000-000000000082",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Tender Centers salmón y pollo",
     "tamano": "3 lb",
@@ -985,7 +985,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "54c6277a-c716-504f-a271-80a475b9b63e",
+    "id": "c2012026-1020-4000-8000-000000000083",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Meow Mix Vitality Bursts salmón y pavo",
     "tamano": "3 lb",
@@ -997,7 +997,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "89f760b7-8e96-52c8-95e3-d45110b25460",
+    "id": "c2012026-1020-4000-8000-000000000084",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Blue Buffalo Wilderness interior pollo",
     "tamano": "4 lb",
@@ -1009,7 +1009,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 4 lb package."
   },
   {
-    "id": "c988b5d5-107c-5766-99a4-d24bc61a88be",
+    "id": "c2012026-1020-4000-8000-000000000085",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Rachael Ray Nutrish pollo y arroz integral",
     "tamano": "3 lb",
@@ -1021,7 +1021,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 3 lb package."
   },
   {
-    "id": "e12d2a7f-1a8a-5a36-916c-fe94f2a2882f",
+    "id": "c2012026-1020-4000-8000-000000000086",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Rachael Ray Nutrish salmón",
     "tamano": "2.5 lb",
@@ -1033,7 +1033,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 2.5 lb package."
   },
   {
-    "id": "ab732396-ae93-56a4-8841-e4385f95f50d",
+    "id": "c2012026-1020-4000-8000-000000000087",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Purina Kit & Kaboodle Original",
     "tamano": "13 lb",
@@ -1045,7 +1045,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 13 lb package."
   },
   {
-    "id": "36799f26-4a70-5bb2-ac3e-e6ea3e19d89a",
+    "id": "c2012026-1020-4000-8000-000000000088",
     "subcategoria": "Comida seca para gatos",
     "nombre": "Purina ONE urinario",
     "tamano": "56 oz",
@@ -1057,7 +1057,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Dry cat food. 56 oz package."
   },
   {
-    "id": "fd932fae-6cab-54ae-bd42-3b17842e8169",
+    "id": "c2012026-1020-4000-8000-000000000089",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers res",
     "tamano": "3 oz",
@@ -1069,7 +1069,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "d5d9e37c-a120-599f-976a-b99c9d88c885",
+    "id": "c2012026-1020-4000-8000-000000000090",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers pavo",
     "tamano": "3 oz",
@@ -1081,7 +1081,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "e895b499-ac37-56d3-8e2a-e0ba74a2dea2",
+    "id": "c2012026-1020-4000-8000-000000000091",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers pollo",
     "tamano": "3 oz",
@@ -1093,7 +1093,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "d8358e54-2e48-54ce-a311-809ad7934a19",
+    "id": "c2012026-1020-4000-8000-000000000092",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers salmón",
     "tamano": "3 oz",
@@ -1105,7 +1105,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "1ef60fa9-5ebd-5110-b884-6f01351db2a1",
+    "id": "c2012026-1020-4000-8000-000000000093",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers salmón y lenguado",
     "tamano": "3 oz",
@@ -1117,7 +1117,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "6244acc6-2818-594e-96b0-ee927937db17",
+    "id": "c2012026-1020-4000-8000-000000000094",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers pescado blanco y atún",
     "tamano": "3 oz",
@@ -1129,7 +1129,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "25776c9f-7d08-55a3-927c-c9e38fc7082b",
+    "id": "c2012026-1020-4000-8000-000000000095",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Gravy Lovers corazones e hígado de pollo",
     "tamano": "3 oz",
@@ -1141,7 +1141,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "7ed3330f-719b-55a0-9cf8-eaf3a42e2ff9",
+    "id": "c2012026-1020-4000-8000-000000000096",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast salmón y camarones a la parrilla",
     "tamano": "3 oz",
@@ -1153,7 +1153,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "44cfffda-e97d-573a-b956-362bc1258afa",
+    "id": "c2012026-1020-4000-8000-000000000097",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast pavo a la parrilla",
     "tamano": "3 oz",
@@ -1165,7 +1165,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "983f0409-bef1-5ae4-8976-9e3c918731f4",
+    "id": "c2012026-1020-4000-8000-000000000098",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast salmón a la parrilla",
     "tamano": "3 oz",
@@ -1177,7 +1177,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "44bb0b75-847a-57b3-a1b8-673f5eae3050",
+    "id": "c2012026-1020-4000-8000-000000000099",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast hígado y pollo a la parrilla",
     "tamano": "3 oz",
@@ -1189,7 +1189,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "c74e47a5-34d5-5c1a-a8f5-fcfd92f5d8ef",
+    "id": "c2012026-1020-4000-8000-000000000100",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast pollo y res a la parrilla",
     "tamano": "3 oz",
@@ -1201,7 +1201,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "14d855c2-5136-5b24-a12e-264de9a5befa",
+    "id": "c2012026-1020-4000-8000-000000000101",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast res e hígado a la parrilla",
     "tamano": "3 oz",
@@ -1213,7 +1213,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "90783617-3d6f-53fa-b41e-9672e01f0dbd",
+    "id": "c2012026-1020-4000-8000-000000000102",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast mariscos a la parrilla",
     "tamano": "3 oz",
@@ -1225,7 +1225,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "00131540-da3e-5854-af70-c9b8fbb434ad",
+    "id": "c2012026-1020-4000-8000-000000000103",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast pollo a la parrilla",
     "tamano": "3 oz",
@@ -1237,7 +1237,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "bdd6a3a2-911e-5f43-96c9-4aad06a8e03f",
+    "id": "c2012026-1020-4000-8000-000000000104",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast res a la parrilla",
     "tamano": "3 oz",
@@ -1249,7 +1249,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "2fe932e6-bd38-54f4-8ed1-5271289a14dd",
+    "id": "c2012026-1020-4000-8000-000000000105",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté salmón",
     "tamano": "3 oz",
@@ -1261,7 +1261,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "98a90d69-d4df-584e-9842-5c330300494f",
+    "id": "c2012026-1020-4000-8000-000000000106",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté res tierna",
     "tamano": "3 oz",
@@ -1273,7 +1273,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "a089a3ef-a35d-55cd-884b-ca58500c2e78",
+    "id": "c2012026-1020-4000-8000-000000000107",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté pavo y menudillos",
     "tamano": "3 oz",
@@ -1285,7 +1285,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "860572b0-afc2-5425-a123-bd81434a7302",
+    "id": "c2012026-1020-4000-8000-000000000108",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté mariscos",
     "tamano": "3 oz",
@@ -1297,7 +1297,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "3d52c9b4-3d8f-562e-af89-7263711a1c73",
+    "id": "c2012026-1020-4000-8000-000000000109",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté salmón y camarones",
     "tamano": "3 oz",
@@ -1309,7 +1309,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "6f44c0f0-7ba9-57ac-98b8-bc8be05c98fa",
+    "id": "c2012026-1020-4000-8000-000000000110",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté res y pollo",
     "tamano": "3 oz",
@@ -1321,7 +1321,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "6192bb65-2357-5e56-8bc2-48a0011d59de",
+    "id": "c2012026-1020-4000-8000-000000000111",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté res e hígado",
     "tamano": "3 oz",
@@ -1333,7 +1333,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "bfebb62d-cda8-565e-9551-2bf3458e9100",
+    "id": "c2012026-1020-4000-8000-000000000112",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Paté pollo e hígado",
     "tamano": "3 oz",
@@ -1345,7 +1345,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "f64bb7b9-942c-591b-823d-c49deb1a9ac3",
+    "id": "c2012026-1020-4000-8000-000000000113",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Chunky pollo",
     "tamano": "3 oz",
@@ -1357,7 +1357,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "66a7d132-d126-5a7b-9000-fbf193e33c7a",
+    "id": "c2012026-1020-4000-8000-000000000114",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Naturals Paté pollo",
     "tamano": "3 oz",
@@ -1369,7 +1369,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "567d8f61-b8ab-5ce0-8a84-89d1018504fd",
+    "id": "c2012026-1020-4000-8000-000000000115",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Naturals Paté salmón de Alaska",
     "tamano": "3 oz",
@@ -1381,7 +1381,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "2d92ee93-ddd2-5876-a85a-9100db6716db",
+    "id": "c2012026-1020-4000-8000-000000000116",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Naturals salmón y camarones en salsa",
     "tamano": "3 oz",
@@ -1393,7 +1393,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "9ec71475-ffb9-56fa-babb-8f89ce3b88c4",
+    "id": "c2012026-1020-4000-8000-000000000117",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Medleys pollo Tuscany",
     "tamano": "3 oz",
@@ -1405,7 +1405,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "789c0c83-76d1-5e17-aab4-e1be474fe299",
+    "id": "c2012026-1020-4000-8000-000000000118",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Petites pollo a la parrilla",
     "tamano": "2 x 1.4 oz",
@@ -1417,7 +1417,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 1.4 oz package."
   },
   {
-    "id": "2832a3ca-b530-5840-b206-b83606e71c34",
+    "id": "c2012026-1020-4000-8000-000000000119",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Broth atún, anchoas y pescado blanco",
     "tamano": "1.4 oz",
@@ -1429,7 +1429,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 1.4 oz package."
   },
   {
-    "id": "b256a50f-fd3e-5077-b532-a9d21430b4d5",
+    "id": "c2012026-1020-4000-8000-000000000120",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Broth cremoso pollo y verduras",
     "tamano": "1.4 oz",
@@ -1441,7 +1441,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 1.4 oz package."
   },
   {
-    "id": "ee8bdd05-06a7-5a8b-a4a8-4a93e15ba491",
+    "id": "c2012026-1020-4000-8000-000000000121",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Broth atún y verduras",
     "tamano": "1.4 oz",
@@ -1453,7 +1453,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 1.4 oz package."
   },
   {
-    "id": "bb1adb5e-cd4d-52cf-bf5f-7f3acc9ce73b",
+    "id": "c2012026-1020-4000-8000-000000000122",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Broth pollo y verduras",
     "tamano": "1.4 oz",
@@ -1465,7 +1465,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 1.4 oz package."
   },
   {
-    "id": "4d142752-2a51-55d2-ba13-e7bd4bba07d5",
+    "id": "c2012026-1020-4000-8000-000000000123",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast variedad Gravy Lovers pollo y res",
     "tamano": "24 x 3 oz",
@@ -1477,7 +1477,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 24 x 3 oz package."
   },
   {
-    "id": "dee0b55d-9d71-5896-95a1-207c7513386b",
+    "id": "c2012026-1020-4000-8000-000000000124",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Fancy Feast Poultry & Beef Grilled Collection",
     "tamano": "72 oz",
@@ -1489,7 +1489,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 72 oz package."
   },
   {
-    "id": "6a2bd878-15d7-502f-8f00-da23c83789b1",
+    "id": "c2012026-1020-4000-8000-000000000125",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Shreds salmón",
     "tamano": "5.5 oz",
@@ -1501,7 +1501,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "812ae11e-d33e-56a9-a495-737fb8a42223",
+    "id": "c2012026-1020-4000-8000-000000000126",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Shreds pescado blanco y atún",
     "tamano": "5.5 oz",
@@ -1513,7 +1513,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "54ee5daf-a783-501b-9a03-5fc1fce16258",
+    "id": "c2012026-1020-4000-8000-000000000127",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Shreds pescado blanco y sardinas",
     "tamano": "5.5 oz",
@@ -1525,7 +1525,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "3afb6300-1c35-5c4a-ac88-956472cd8344",
+    "id": "c2012026-1020-4000-8000-000000000128",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Shreds res",
     "tamano": "5.5 oz",
@@ -1537,7 +1537,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "379804bb-25f3-5dfe-bef2-553536b48f31",
+    "id": "c2012026-1020-4000-8000-000000000129",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Shreds pollo y salmón",
     "tamano": "5.5 oz",
@@ -1549,7 +1549,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "b2ad71f9-640a-56b3-887a-6ffc11bf07a3",
+    "id": "c2012026-1020-4000-8000-000000000130",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Paté Country Style",
     "tamano": "5.5 oz",
@@ -1561,7 +1561,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "357ce7ae-2a9f-5031-9131-714c72b88009",
+    "id": "c2012026-1020-4000-8000-000000000131",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Paté salmón",
     "tamano": "5.5 oz",
@@ -1573,7 +1573,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "b7754e50-f0c4-51df-ab91-fb4923b76750",
+    "id": "c2012026-1020-4000-8000-000000000132",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Paté pollo y atún",
     "tamano": "5.5 oz",
@@ -1585,7 +1585,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "c4001157-7e14-565b-8b12-9c5ec608ebbc",
+    "id": "c2012026-1020-4000-8000-000000000133",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Prime Filets res",
     "tamano": "5.5 oz",
@@ -1597,7 +1597,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "a5f8e6e0-bc04-598b-8426-7ace40973959",
+    "id": "c2012026-1020-4000-8000-000000000134",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Prime Filets salmón y res",
     "tamano": "5.5 oz",
@@ -1609,7 +1609,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "67b4bee0-2236-590d-8529-be862c739b80",
+    "id": "c2012026-1020-4000-8000-000000000135",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Extra Gravy pavo",
     "tamano": "5.5 oz",
@@ -1621,7 +1621,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "4d3dc0f2-c363-5014-8b86-c9bcc83e4296",
+    "id": "c2012026-1020-4000-8000-000000000136",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Friskies Lil Soups pollo",
     "tamano": "1.2 oz",
@@ -1633,7 +1633,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 1.2 oz package."
   },
   {
-    "id": "dac7dea0-4ac4-573a-a78b-247dc70de6e5",
+    "id": "c2012026-1020-4000-8000-000000000137",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Sheba Perfect Portions pavo asado",
     "tamano": "2 x 37.5 g",
@@ -1645,7 +1645,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 37.5 g package."
   },
   {
-    "id": "28fe4c59-2bca-522d-9e44-acf9b2678a08",
+    "id": "c2012026-1020-4000-8000-000000000138",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Sheba Perfect Portions pollo",
     "tamano": "2 x 37.5 g",
@@ -1657,7 +1657,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 37.5 g package."
   },
   {
-    "id": "ae8b3c6a-bb67-5d89-82cc-86c11cbbe00a",
+    "id": "c2012026-1020-4000-8000-000000000139",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Sheba Perfect Portions pescado blanco y atún",
     "tamano": "2 x 37.5 g",
@@ -1669,7 +1669,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 37.5 g package."
   },
   {
-    "id": "1c7946cd-784d-5b4d-907e-c20e29348234",
+    "id": "c2012026-1020-4000-8000-000000000140",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Sheba Perfect Portions salmón",
     "tamano": "2 x 37.5 g",
@@ -1681,7 +1681,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 37.5 g package."
   },
   {
-    "id": "987eedc9-9031-52d9-a7b8-fb49c1c625bb",
+    "id": "c2012026-1020-4000-8000-000000000141",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Sheba Perfect Portions res",
     "tamano": "2 x 37.5 g",
@@ -1693,7 +1693,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 2 x 37.5 g package."
   },
   {
-    "id": "d1e638d5-a7a1-5152-9596-c60a9d2e14b8",
+    "id": "c2012026-1020-4000-8000-000000000142",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wellness Morsels pollo y salmón",
     "tamano": "3 oz",
@@ -1705,7 +1705,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "17fb80e3-7f97-5e67-bb70-52b8d7972a18",
+    "id": "c2012026-1020-4000-8000-000000000143",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wellness pavo y salmón",
     "tamano": "3 oz",
@@ -1717,7 +1717,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "8d80501f-0817-5267-add7-b260073f6e25",
+    "id": "c2012026-1020-4000-8000-000000000144",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wellness pollo y arenque",
     "tamano": "3 oz",
@@ -1729,7 +1729,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "ca301364-4bbd-5d1a-911c-719c08a104a8",
+    "id": "c2012026-1020-4000-8000-000000000145",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wellness pavo",
     "tamano": "3 oz",
@@ -1741,7 +1741,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 3 oz package."
   },
   {
-    "id": "90a2ac40-52a2-5926-91e1-311a2c1e80f9",
+    "id": "c2012026-1020-4000-8000-000000000146",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wellness pollo y arenque",
     "tamano": "5.5 oz",
@@ -1753,7 +1753,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "8fded67f-fe70-5092-a4a4-f8305ff63588",
+    "id": "c2012026-1020-4000-8000-000000000147",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wild Harvest pavo y menudillos",
     "tamano": "5.5 oz",
@@ -1765,7 +1765,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "f7386128-7d0b-51a8-bcf3-37cfacb9d3bc",
+    "id": "c2012026-1020-4000-8000-000000000148",
     "subcategoria": "Comida húmeda para gatos",
     "nombre": "Wild Harvest pollo y pescado blanco paté",
     "tamano": "5.5 oz",
@@ -1777,7 +1777,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Wet cat food. 5.5 oz package."
   },
   {
-    "id": "65abb1f7-1747-5b04-90ec-6fa4a3f4a8ae",
+    "id": "c2012026-1020-4000-8000-000000000149",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic pollo",
     "tamano": "16 oz",
@@ -1789,7 +1789,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 16 oz package."
   },
   {
-    "id": "917fccce-bf02-5e36-8594-63fbfddc8d2f",
+    "id": "c2012026-1020-4000-8000-000000000150",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic pollo",
     "tamano": "3 oz",
@@ -1801,7 +1801,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "92444fb5-8a82-5e5a-b7ae-461f1f941fe3",
+    "id": "c2012026-1020-4000-8000-000000000151",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic salmón",
     "tamano": "3 oz",
@@ -1813,7 +1813,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "e7fe6027-d7e5-50c5-8a44-944b1697e35c",
+    "id": "c2012026-1020-4000-8000-000000000152",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic catnip",
     "tamano": "3 oz",
@@ -1825,7 +1825,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "fc76a6cb-7c31-52f7-8f20-dfc235a1db52",
+    "id": "c2012026-1020-4000-8000-000000000153",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic queso cremoso",
     "tamano": "3 oz",
@@ -1837,7 +1837,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "5fca0d8c-8edc-5f35-81a7-2b25910a8808",
+    "id": "c2012026-1020-4000-8000-000000000154",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic mariscos",
     "tamano": "3 oz",
@@ -1849,7 +1849,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "faf50f38-b1d0-5df2-9bf7-b8fabef9fc3c",
+    "id": "c2012026-1020-4000-8000-000000000155",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Classic res",
     "tamano": "3 oz",
@@ -1861,7 +1861,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "a9425a36-472f-5dba-8aad-e72bb9422ceb",
+    "id": "c2012026-1020-4000-8000-000000000156",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations MixUps Catnip Fever",
     "tamano": "3 oz",
@@ -1873,7 +1873,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 3 oz package."
   },
   {
-    "id": "9140f06a-f584-562e-bab2-55212071e262",
+    "id": "c2012026-1020-4000-8000-000000000157",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations MixUps Backyard Cookout",
     "tamano": "16 oz",
@@ -1885,7 +1885,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 16 oz package."
   },
   {
-    "id": "1f521bca-c1ad-5b8a-968b-2d8718ee09d7",
+    "id": "c2012026-1020-4000-8000-000000000158",
     "subcategoria": "Premios para gatos",
     "nombre": "Temptations Shakeups Crustacean",
     "tamano": "2.47 oz",
@@ -1897,7 +1897,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 2.47 oz package."
   },
   {
-    "id": "a821b780-72a0-5f50-821a-8583def40ebe",
+    "id": "c2012026-1020-4000-8000-000000000159",
     "subcategoria": "Premios para gatos",
     "nombre": "Friskies Party Mix atún",
     "tamano": "2.1 oz",
@@ -1909,7 +1909,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 2.1 oz package."
   },
   {
-    "id": "e3a85856-21dc-5f18-9dd5-8f2ab60643e2",
+    "id": "c2012026-1020-4000-8000-000000000160",
     "subcategoria": "Premios para gatos",
     "nombre": "Friskies Party Mix Original Crunch",
     "tamano": "2.1 oz",
@@ -1921,7 +1921,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 2.1 oz package."
   },
   {
-    "id": "ff4d5cc0-129d-5835-be7a-4f2f4393a2c9",
+    "id": "c2012026-1020-4000-8000-000000000161",
     "subcategoria": "Premios para gatos",
     "nombre": "Friskies Party Mix California Crunch",
     "tamano": "2.1 oz",
@@ -1933,7 +1933,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 2.1 oz package."
   },
   {
-    "id": "6087c73f-6572-5c11-9bf1-ae64b2bcd3c2",
+    "id": "c2012026-1020-4000-8000-000000000162",
     "subcategoria": "Premios para gatos",
     "nombre": "Friskies Party Mix Gravy-licious",
     "tamano": "2.1 oz",
@@ -1945,7 +1945,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat treats. 2.1 oz package."
   },
   {
-    "id": "7c148c64-1aff-5150-8519-b65d3b654532",
+    "id": "c2012026-1020-4000-8000-000000000163",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Double Duty aglomerante",
     "tamano": "20 lb",
@@ -1957,7 +1957,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "5f1e8532-52bb-5866-a7af-8ce2e1e73c61",
+    "id": "c2012026-1020-4000-8000-000000000164",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Double Duty Dual perfumada",
     "tamano": "14 lb",
@@ -1969,7 +1969,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "3d6d648d-6280-5c78-8c62-7b060824900f",
+    "id": "c2012026-1020-4000-8000-000000000165",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer multi-gato sin perfume",
     "tamano": "29 lb",
@@ -1981,7 +1981,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 29 lb package."
   },
   {
-    "id": "07db9935-caf9-5960-8d16-4fac9b96a9fd",
+    "id": "c2012026-1020-4000-8000-000000000166",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer multi-gato",
     "tamano": "20 lb",
@@ -1993,7 +1993,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "41d093d3-2eee-548e-bb5d-7e63fa5826a5",
+    "id": "c2012026-1020-4000-8000-000000000167",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Clump & Seal",
     "tamano": "14 lb",
@@ -2005,7 +2005,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "c8865f91-3e97-55bb-abba-0d5270422751",
+    "id": "c2012026-1020-4000-8000-000000000168",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Clump & Seal Ultra Odor Blasters",
     "tamano": "19 lb",
@@ -2017,7 +2017,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 19 lb package."
   },
   {
-    "id": "2e7b7d8e-c3a6-5776-9d85-624a162f6b3e",
+    "id": "c2012026-1020-4000-8000-000000000169",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Super Scoop",
     "tamano": "14 lb",
@@ -2029,7 +2029,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "4340a6d2-6c8f-5f1b-a4e5-e394af018214",
+    "id": "c2012026-1020-4000-8000-000000000170",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Super Scoop sin fragancia",
     "tamano": "14 lb",
@@ -2041,7 +2041,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "0f81e2c1-2296-5d1d-8404-c2f85c166806",
+    "id": "c2012026-1020-4000-8000-000000000171",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Super Scoop aroma fresco",
     "tamano": "20 lb",
@@ -2053,7 +2053,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "5d1b5c41-8e7a-5b04-8458-e4955b0a9c66",
+    "id": "c2012026-1020-4000-8000-000000000172",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Double Duty Advanced",
     "tamano": "40 lb",
@@ -2065,7 +2065,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 40 lb package."
   },
   {
-    "id": "62e1a4bf-7cfe-5005-99a7-754c956a1b20",
+    "id": "c2012026-1020-4000-8000-000000000173",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer Hardball",
     "tamano": "7 lb",
@@ -2077,7 +2077,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 7 lb package."
   },
   {
-    "id": "3299db09-5d1d-5289-8571-1ace5fce4da5",
+    "id": "c2012026-1020-4000-8000-000000000174",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Febreze 7 días",
     "tamano": "14 lb",
@@ -2089,7 +2089,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "6868673a-035a-5668-b82a-0916b49d9f4a",
+    "id": "c2012026-1020-4000-8000-000000000175",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Extra Fuerte multi-gato",
     "tamano": "14 lb",
@@ -2101,7 +2101,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "dec377d1-3315-5663-a3b6-85ee34ab2f4b",
+    "id": "c2012026-1020-4000-8000-000000000176",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Extreme Clump multi-gato",
     "tamano": "22 lb",
@@ -2113,7 +2113,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 22 lb package."
   },
   {
-    "id": "68c04fe0-247a-5d2a-9d6b-44a06c46aa24",
+    "id": "c2012026-1020-4000-8000-000000000177",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Odor Shield Gain multi-gato",
     "tamano": "22 lb",
@@ -2125,7 +2125,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 22 lb package."
   },
   {
-    "id": "9ae1440d-b4c0-5af2-a30c-39fe3903de04",
+    "id": "c2012026-1020-4000-8000-000000000178",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Odor Shield",
     "tamano": "25 lb",
@@ -2137,7 +2137,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 25 lb package."
   },
   {
-    "id": "b443e8f4-3967-568c-ad31-c379abb777ed",
+    "id": "c2012026-1020-4000-8000-000000000179",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Ever Fresh multi-gato",
     "tamano": "21 lb",
@@ -2149,7 +2149,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 21 lb package."
   },
   {
-    "id": "3675b352-384f-5d7f-981d-f2a984ba0664",
+    "id": "c2012026-1020-4000-8000-000000000180",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Crystals",
     "tamano": "8 lb",
@@ -2161,7 +2161,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 8 lb package."
   },
   {
-    "id": "422092af-01a3-552a-9692-2d2c98fa0d3f",
+    "id": "c2012026-1020-4000-8000-000000000181",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step Clean Paws",
     "tamano": "22 lb",
@@ -2173,7 +2173,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 22 lb package."
   },
   {
-    "id": "7ec94662-9795-5e8e-9a97-765009e91873",
+    "id": "c2012026-1020-4000-8000-000000000182",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Fresh Step sin grumos Febreze",
     "tamano": "21 lb",
@@ -2185,7 +2185,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 21 lb package."
   },
   {
-    "id": "fd8c8174-3cff-5324-a10f-7daf4a392c01",
+    "id": "c2012026-1020-4000-8000-000000000183",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "World's Best original sin perfume",
     "tamano": "8 lb",
@@ -2197,7 +2197,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 8 lb package."
   },
   {
-    "id": "7a01a510-10e9-547e-b8e4-0445a8136739",
+    "id": "c2012026-1020-4000-8000-000000000184",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "World's Best original sin perfume",
     "tamano": "15 lb",
@@ -2209,7 +2209,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 15 lb package."
   },
   {
-    "id": "5622f666-a8aa-594f-85b1-b9fd1e290e93",
+    "id": "c2012026-1020-4000-8000-000000000185",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "World's Best multi-gato",
     "tamano": "8 lb",
@@ -2221,7 +2221,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 8 lb package."
   },
   {
-    "id": "49c69ed4-18e1-5a18-b920-caf3972edaeb",
+    "id": "c2012026-1020-4000-8000-000000000186",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Purina Tidy Cats 24/7",
     "tamano": "14 lb",
@@ -2233,7 +2233,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "cec1283b-11be-599b-aa93-25fe6b0028b5",
+    "id": "c2012026-1020-4000-8000-000000000187",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Purina Tidy Cats Instant Action multi-gato",
     "tamano": "14 lb",
@@ -2245,7 +2245,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "bc0dbf8d-3786-536a-8864-6045e4bed54f",
+    "id": "c2012026-1020-4000-8000-000000000188",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Purina Tidy Cats LightWeight 4 en 1",
     "tamano": "8.5 lb",
@@ -2257,7 +2257,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 8.5 lb package."
   },
   {
-    "id": "8796ace6-0c33-565f-bdbd-90e3b6458182",
+    "id": "c2012026-1020-4000-8000-000000000189",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Purina Tidy Cats Feet Low Tracking",
     "tamano": "20 lb",
@@ -2269,7 +2269,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "b2abe132-41b2-5691-a4da-2f8d7f7a8a34",
+    "id": "c2012026-1020-4000-8000-000000000190",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Purina Tidy Cats 24/7",
     "tamano": "35 lb",
@@ -2281,7 +2281,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 35 lb package."
   },
   {
-    "id": "e6ea8dc9-37ed-5136-8cf6-9a128dedfa46",
+    "id": "c2012026-1020-4000-8000-000000000191",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Feline Pine original",
     "tamano": "7 lb",
@@ -2293,7 +2293,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 7 lb package."
   },
   {
-    "id": "5a012d6b-19fd-5ca0-8e9c-9f5dc5d4ef6f",
+    "id": "c2012026-1020-4000-8000-000000000192",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Feline Pine",
     "tamano": "20 lb",
@@ -2305,7 +2305,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "d7aca4d0-e36d-51e7-a4a0-72627b64f7b7",
+    "id": "c2012026-1020-4000-8000-000000000193",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Cat's Pride Complete perfumada",
     "tamano": "20 lb",
@@ -2317,7 +2317,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "6bf28fb5-06e0-5937-99ca-b8c08b84f787",
+    "id": "c2012026-1020-4000-8000-000000000194",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Cat's Pride KatKit caja desechable",
     "tamano": "1 ct",
@@ -2329,7 +2329,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 1 ct package."
   },
   {
-    "id": "a5409ca6-b7ad-5f3d-9f75-36938fa26914",
+    "id": "c2012026-1020-4000-8000-000000000195",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Jonny Cat Complete perfumada",
     "tamano": "10 lb",
@@ -2341,7 +2341,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 10 lb package."
   },
   {
-    "id": "4a801146-9b1e-55aa-8a92-ffd9f9cce392",
+    "id": "c2012026-1020-4000-8000-000000000196",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Jonny Cat Original",
     "tamano": "20 lb",
@@ -2353,7 +2353,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "181e30ed-41d9-5e05-b778-968413ba3a1c",
+    "id": "c2012026-1020-4000-8000-000000000197",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Jonny Cat Complete perfumada",
     "tamano": "20 lb",
@@ -2365,7 +2365,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 lb package."
   },
   {
-    "id": "28a8d6ad-08cc-5783-abe4-d8d783336622",
+    "id": "c2012026-1020-4000-8000-000000000198",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Jonny Cat sin fragancia",
     "tamano": "10 lb",
@@ -2377,7 +2377,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 10 lb package."
   },
   {
-    "id": "8d1519fc-4ee1-511f-b2f1-29962202582c",
+    "id": "c2012026-1020-4000-8000-000000000199",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Scoop Away multi-gato Meadow Fresh",
     "tamano": "14 lb",
@@ -2389,7 +2389,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 14 lb package."
   },
   {
-    "id": "2964f210-98fd-57fc-98dd-7d835a9b4901",
+    "id": "c2012026-1020-4000-8000-000000000200",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Arm & Hammer desodorante para arena",
     "tamano": "20 oz",
@@ -2401,7 +2401,7 @@ export const HOUSE_PETS_CATALOG = [
     "descripcion_en": "Cat litter & accessories. 20 oz package."
   },
   {
-    "id": "22f8bd3a-decb-52d5-b898-6d79ad1d8448",
+    "id": "c2012026-1020-4000-8000-000000000201",
     "subcategoria": "Arena para gatos y accesorios",
     "nombre": "Jonny Cat bolsas para caja de arena",
     "tamano": "5 ct",
