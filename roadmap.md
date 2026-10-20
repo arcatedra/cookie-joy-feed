@@ -4,7 +4,7 @@
 - [x] Presentar plan individual de los 22 avisos Supabase, los 11 del análisis adicional y QA; distinguir riesgos y autorizaciones específicas.
 - [x] Consultar reglas actuales sin cambios: 18 funciones distintas/20 avisos de ejecución; HAZOREX bloqueada; search_path definido. Sin reglas temporales de escritura libre en los dos depósitos.
 - [x] Clasificación limitada de archivos: reels-media contiene 9 JPEG/10 MP4 y store-media 1017 JPEG; el tipo de archivo no prueba ausencia de contenido privado. Lectura pública usada para fotos comerciales; no cerrar permisos a ciegas.
-- [ ] Ejecutar pruebas aisladas de comprobante, ETA y nombres públicos; no equivalen a verificar los 22 avisos completos ni el recorrido autenticado.
+- [x] Cinco pruebas aisladas pasan: comprobante/ETA propios permitidos y ajenos bloqueados; nombres solo de comentaristas y solo primer nombre. No equivalen a verificar los 22 avisos completos ni el recorrido autenticado.
 - [ ] Cambios de permisos compartidos con producción: esperan autorización específica y propuesta exacta; no aplicar bajo aprobación general.
 - [ ] QA de sustituciones por libra y cualquier ajuste de saldo/cobro: esperan autorización explícita de pagos y guardado del artículo del pedido.
 - [ ] Protección de contraseñas filtradas: activación manual del dueño en Supabase, Pro o superior. No modificar clientes ni publicar.
