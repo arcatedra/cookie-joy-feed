@@ -6,7 +6,7 @@
 - [x] Plan aprobado para los 201 productos y fotos propias en ocho grupos.
 - [x] Incorporados 201 registros sin duplicados, precios/tamaños y unidades exactos: 197 visibles y cuatro ocultos por texto incorrecto de sus fotos. Los 1108 productos anteriores conservan su hash completo sin cambios.
 - [x] Comprobados los 201 precios/tamaños/modalidades y 197 fotos cargadas en la tienda; filtros y tres pads comprobados, sin errores de página; 39 pruebas pasan y build OK. Sin seguridad, pagos, entrega, clientes ni publicación.
-- [ ] Cuatro fotos pendientes: Fancy Feast pollo y pavo 3 lb; IAMS Proactive pollo adulto 3.5 lb; Fancy Feast Gravy Lovers corazones e hígado de pollo 3 oz; Arm & Hammer Clump & Seal Ultra Odor Blasters 19 lb. Ocultos sin borrar; bloqueado hasta autorización de otro intento o entrega de fotos correctas. No repetir automáticamente.
+- [ ] Autorizada corrección solo de las cuatro fotos: Fancy Feast pollo y pavo 3 lb; IAMS Proactive pollo adulto 3.5 lb; Fancy Feast Gravy Lovers corazones e hígado de pollo 3 oz; Arm & Hammer Clump & Seal Ultra Odor Blasters 19 lb. Fotos corregidas; pendiente activar y comprobar carga en vista previa, conservando precios y demás productos.
 
 ## Bebé (20 oct)
 - [x] Aprobar y aplicar las once subcategorías.

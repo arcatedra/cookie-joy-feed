@@ -25,6 +25,10 @@ describe("Lista exclusiva de Mascotas del dueño", () => {
     expect(houseProductSchema.safeParse({ ...HOUSE_PETS_CATALOG[0], categoria: "Bebé" }).success).toBe(false);
   });
   const checks: [string,string,number][] = [
+    ["Fancy Feast pollo y pavo","3 lb",12.69],
+    ["IAMS Proactive pollo adulto","3.5 lb",14.49],
+    ["Fancy Feast Gravy Lovers corazones e hígado de pollo","3 oz",1.50],
+    ["Arm & Hammer Clump & Seal Ultra Odor Blasters","19 lb",21.99],
     ["Pedigree adulto pequeño pollo asado y vegetales","3.5 lb",8.89],
     ["Purina Moist & Meaty hamburguesa con queso","12 ct",10.39],
     ["Bogopa pads de entrenamiento","50 ct",12.99],
