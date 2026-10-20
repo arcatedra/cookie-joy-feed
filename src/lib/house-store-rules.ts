@@ -139,6 +139,21 @@ export const HOUSE_FROZEN_SUBCATEGORIES = [
   { es: "Jugos y hielo", en: "Frozen juice & ice" },
 ] as const;
 
+export const HOUSE_PERSONAL_CARE_SUBCATEGORIES = [
+  { es: "Champú y acondicionador", en: "Shampoo & conditioner" },
+  { es: "Jabón y gel de baño", en: "Soap & body wash" },
+  { es: "Cuidado del cabello y peinado", en: "Hair care & styling" },
+  { es: "Pasta y cepillos de dientes", en: "Toothpaste & toothbrushes" },
+  { es: "Enjuague bucal e hilo dental", en: "Mouthwash & floss" },
+  { es: "Desodorantes", en: "Deodorants" },
+  { es: "Afeitado", en: "Shaving" },
+  { es: "Cuidado de la piel y lociones", en: "Skin care & lotions" },
+  { es: "Higiene femenina", en: "Feminine care" },
+  { es: "Algodón, hisopos y pañuelos", en: "Cotton, swabs & wipes" },
+  { es: "Vitaminas y primeros auxilios", en: "Vitamins & first aid" },
+  { es: "Productos para el cabello latino y afro", en: "Latin & Afro hair care" },
+] as const;
+
 export function houseSubcategories(category: string | null) {
   if (category === "Frutas y verduras") return HOUSE_PRODUCE_SUBCATEGORIES;
   if (category === "Carnes y mariscos") return HOUSE_MEAT_SUBCATEGORIES;
@@ -149,6 +164,7 @@ export function houseSubcategories(category: string | null) {
   if (category === "Bebidas") return HOUSE_BEVERAGE_SUBCATEGORIES;
   if (category === "Limpieza y hogar") return HOUSE_CLEANING_SUBCATEGORIES;
   if (category === "Congelados") return HOUSE_FROZEN_SUBCATEGORIES;
+  if (category === "Cuidado personal") return HOUSE_PERSONAL_CARE_SUBCATEGORIES;
   return [];
 }
 
