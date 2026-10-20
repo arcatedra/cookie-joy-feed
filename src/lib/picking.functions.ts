@@ -72,7 +72,7 @@ export const getPickingOrder = createServerFn({ method: "GET" })
     const out = await Promise.all(
       (items ?? []).map(async (it: any) => {
         const p = byId.get(it.pick_status === "no_habia" ? it.product_id : pickedProductId(it));
-        let img: string | null = p?.imagen_url ?? null;
+        let img: string | null = p?.imagen_url ?? it.foto_especial ?? null;
         if (img && !/^https?:|^\//.test(img)) {
           const { data: s } = await adb.storage.from("store-media").createSignedUrl(img, 3600);
           img = s?.signedUrl ?? null;
@@ -81,7 +81,9 @@ export const getPickingOrder = createServerFn({ method: "GET" })
           id: it.id as string,
           nombre: it.nombre_producto as string,
           nombre_en: (p?.nombre_en ?? null) as string | null,
-          tamano: (p?.tamano ?? null) as string | null,
+          tamano: (p?.tamano ?? it.tamano_especial ?? null) as string | null,
+          especial: it.especial === true,
+          marca: (it.marca_especial ?? null) as string | null,
           cantidad: Number(it.cantidad),
           cantidad_real: it.pick_status === "pendiente" ? null : pickedQuantity(it, p),
           precio_unitario: Number(it.precio_unitario),
