@@ -2399,7 +2399,10 @@ export type Database = {
           cantidad: number
           cantidad_real: number | null
           created_at: string
+          especial: boolean
+          foto_especial: string | null
           id: string
+          marca_especial: string | null
           nombre_producto: string
           order_id: string
           pick_status: string
@@ -2412,6 +2415,7 @@ export type Database = {
           replacement_product_id: string | null
           scanned_barcode: string | null
           subtotal_item: number
+          tamano_especial: string | null
           unidad: string
           updated_at: string
         }
@@ -2419,7 +2423,10 @@ export type Database = {
           cantidad: number
           cantidad_real?: number | null
           created_at?: string
+          especial?: boolean
+          foto_especial?: string | null
           id?: string
+          marca_especial?: string | null
           nombre_producto: string
           order_id: string
           pick_status?: string
@@ -2432,6 +2439,7 @@ export type Database = {
           replacement_product_id?: string | null
           scanned_barcode?: string | null
           subtotal_item: number
+          tamano_especial?: string | null
           unidad?: string
           updated_at?: string
         }
@@ -2439,7 +2447,10 @@ export type Database = {
           cantidad?: number
           cantidad_real?: number | null
           created_at?: string
+          especial?: boolean
+          foto_especial?: string | null
           id?: string
+          marca_especial?: string | null
           nombre_producto?: string
           order_id?: string
           pick_status?: string
@@ -2452,6 +2463,7 @@ export type Database = {
           replacement_product_id?: string | null
           scanned_barcode?: string | null
           subtotal_item?: number
+          tamano_especial?: string | null
           unidad?: string
           updated_at?: string
         }

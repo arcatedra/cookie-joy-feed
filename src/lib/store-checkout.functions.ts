@@ -22,6 +22,7 @@ import {
   weightFeeCents,
 } from "./pricing";
 import { unitPriceCents } from "./house-store-rules";
+import { assertSpecialPhoto, specialItemSchema, specialPriceCents } from "./special-order-rules";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
@@ -48,8 +49,9 @@ const schema = z.object({
         qty: z.number().int().min(1).max(99),
       }),
     )
-    .min(1)
     .max(60),
+  /** Pedido especial: producto que el cliente pide con foto y precio declarado. */
+  especiales: z.array(specialItemSchema).max(10).optional().default([]),
   address: addressSchema,
   /** Día de entrega elegido por el cliente (YYYY-MM-DD). */
   fechaEntrega: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -69,7 +71,11 @@ export const STORE_DELIVERY_FEE_CENTS = 499;
 
 export const createStoreCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => schema.parse(d))
+  .inputValidator((d: unknown) => {
+    const parsed = schema.parse(d);
+    if (parsed.items.length + parsed.especiales.length === 0) throw new Error("El pedido está vacío.");
+    return parsed;
+  })
   .handler(async ({ data, context }) => {
     const { supabase, userId, claims } = context as {
       supabase: import("@supabase/supabase-js").SupabaseClient;
@@ -111,7 +117,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const blockEnabled = blockRow?.enabled === true;
 
     const byId = new Map<string, any>((rows ?? []).map((r: any) => [r.id, r]));
-    const priced = data.items.map((it) => {
+    const priced: Array<{ productId: string | null; name: string; unit: string; priceCents: number; pesoLb: number; qty: number; special?: { foto: string; marca: string; tamano: string } }> = data.items.map((it) => {
       const p = byId.get(it.productId);
       if (!p || p.disponible === false || !Number.isFinite(Number(p.precio))) {
         throw new Error("Uno de los productos ya no está disponible.");
@@ -125,6 +131,19 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         qty: it.qty,
       };
     });
+
+    for (const sp of data.especiales) {
+      assertSpecialPhoto(sp.foto, userId);
+      priced.push({
+        productId: null,
+        name: `Pedido especial: ${sp.marca} ${sp.nombre} ${sp.tamano}`,
+        unit: "unidad",
+        priceCents: specialPriceCents(sp),
+        pesoLb: pricing.defaultProductWeightLb,
+        qty: sp.qty,
+        special: { foto: sp.foto, marca: sp.marca, tamano: sp.tamano },
+      });
+    }
 
     const subtotalCents = priced.reduce((s, it) => s + it.priceCents * it.qty, 0);
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
@@ -238,6 +257,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         precio_unitario: it.priceCents / 100,
         cantidad: it.qty,
         subtotal_item: (it.priceCents * it.qty) / 100,
+        ...(it.special ? { especial: true, foto_especial: it.special.foto, marca_especial: it.special.marca, tamano_especial: it.special.tamano } : {}),
       })),
     );
     if (itemsErr) {

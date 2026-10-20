@@ -9,6 +9,8 @@ import { HOUSE_STORE_SLUG, HOUSE_CATEGORIES, discountPct } from "@/lib/house-sto
 import { StoreCartBar, storeCartKey } from "./tienda.$slug";
 import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
 import { Button } from "@/components/ui/button";
+import { SpecialOrderForm } from "@/components/SpecialOrderForm";
+import { specialCartKey, type SpecialItem } from "@/lib/special-order-rules";
 import { houseSubcategories, productDescription } from "@/lib/house-store-rules";
 
 export const Route = createFileRoute("/supermercado")({
@@ -44,6 +46,7 @@ function SupermarketPage() {
   const [subcat, setSubcat] = useState<string | null>(null);
   const [cart, setCart] = useState<Record<string, number>>({});
   const [loaded, setLoaded] = useState(false);
+  const [especiales, setEspeciales] = useState<SpecialItem[]>([]);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const { data: best = [] } = useQuery({ queryKey: ["house-best"], queryFn: () => getHouseBestSellers(), staleTime: 300_000 });
@@ -52,6 +55,8 @@ function SupermarketPage() {
     try {
       const raw = localStorage.getItem(storeCartKey(store.id));
       if (raw) setCart(JSON.parse(raw));
+      const sp = localStorage.getItem(specialCartKey(store.id));
+      if (sp) setEspeciales(JSON.parse(sp));
     } catch {}
     setLoaded(true);
   }, [store.id]);
@@ -60,8 +65,10 @@ function SupermarketPage() {
     try {
       if (Object.keys(cart).length) localStorage.setItem(storeCartKey(store.id), JSON.stringify(cart));
       else localStorage.removeItem(storeCartKey(store.id));
+      if (especiales.length) localStorage.setItem(specialCartKey(store.id), JSON.stringify(especiales));
+      else localStorage.removeItem(specialCartKey(store.id));
     } catch {}
-  }, [cart, loaded, store.id]);
+  }, [cart, especiales, loaded, store.id]);
 
   const add = (id: string, d: number) =>
     setCart((prev) => {
@@ -127,6 +134,8 @@ function SupermarketPage() {
         {houseSubcategories(cat).map((c) => <Button variant="ghost" key={c.es} onClick={() => setSubcat(c.es)} className={chip(subcat === c.es)}>{en ? c.en : c.es}</Button>)}
       </nav>}
 
+      <SpecialOrderForm items={especiales} onChange={setEspeciales} L={L} />
+
       {results ? (
         <section className="px-4 pt-4">
           <h2 className="mb-3 text-lg font-bold">{L("Resultados", "Results")} ({results.length})</h2>
@@ -159,7 +168,7 @@ function SupermarketPage() {
         {" ("}<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-SA</a>{")"}
         {products.some((p: P) => p.foto_fondo_editado === true) ? ", fondo editado" : null}
       </footer>
-      <StoreCartBar compact businessId={store.id} products={products} cart={cart} onClear={() => setCart({})} />
+      <StoreCartBar compact businessId={store.id} products={products} cart={cart} especiales={especiales} onClear={() => { setCart({}); setEspeciales([]); }} />
     </main>
   );
 }

@@ -274,7 +274,9 @@ export function StoreCartBar({
   cart,
   onClear,
   compact = false,
+  especiales = [],
 }: {
+  especiales?: import("@/lib/special-order-rules").SpecialItem[];
   businessId: string;
   products: any[];
   cart: Record<string, number>;
@@ -337,12 +339,12 @@ export function StoreCartBar({
   const subtotalCents = lines.reduce(
     (s, l) => s + unitPriceCents(l.p) * l.qty,
     0,
-  );
+  ) + especiales.reduce((s, e) => s + Math.round(e.precio * 100) * e.qty, 0);
   const totalLb = cartWeightLb(
     lines.map((l) => ({
       pesoLb: Number((l.p as any).peso_lb ?? pricing.defaultProductWeightLb),
       qty: l.qty,
-    })),
+    })).concat(especiales.map((e) => ({ pesoLb: pricing.defaultProductWeightLb, qty: e.qty }))),
     pricing,
   );
   const overLimit = totalLb > (blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb);
@@ -364,7 +366,7 @@ export function StoreCartBar({
     [pricing.deliveryDaysMask, pricing.cutoffHourEt, zoneDays.join()],
   );
 
-  if (lines.length === 0) return null;
+  if (lines.length === 0 && especiales.length === 0) return null;
 
   const hasAddress = !!cliente?.direccion_linea1 && !!cliente?.ciudad && !!cliente?.codigo_postal;
 
@@ -383,6 +385,7 @@ export function StoreCartBar({
         data: {
           businessId,
           items: lines.map((l) => ({ productId: l.p.id, qty: l.qty })),
+          especiales,
           address: {
             name: String(cliente.nombre_completo ?? ""),
             street: String(cliente.direccion_linea1 ?? ""),
@@ -419,7 +422,7 @@ export function StoreCartBar({
             <span>
               Tu pedido pesa {totalLb} lb de {pricing.weightIncludedLb} lb incluidas
             </span>
-            <span>{lines.length} productos</span>
+            <span>{lines.length + especiales.length} productos</span>
           </div>
           <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
