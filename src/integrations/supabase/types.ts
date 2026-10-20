@@ -2415,6 +2415,7 @@ export type Database = {
           replacement_product_id: string | null
           scanned_barcode: string | null
           subtotal_item: number
+          supermercado_especial: string | null
           tamano_especial: string | null
           unidad: string
           updated_at: string
@@ -2439,6 +2440,7 @@ export type Database = {
           replacement_product_id?: string | null
           scanned_barcode?: string | null
           subtotal_item: number
+          supermercado_especial?: string | null
           tamano_especial?: string | null
           unidad?: string
           updated_at?: string
@@ -2463,6 +2465,7 @@ export type Database = {
           replacement_product_id?: string | null
           scanned_barcode?: string | null
           subtotal_item?: number
+          supermercado_especial?: string | null
           tamano_especial?: string | null
           unidad?: string
           updated_at?: string

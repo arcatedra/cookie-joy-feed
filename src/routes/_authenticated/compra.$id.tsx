@@ -194,6 +194,12 @@ function PickingPage() {
                       ? L(`${it.cantidad} × aprox. ${it.pesoLb} lb`, `${it.cantidad} × approx. ${it.pesoLb} lb`)
                       : L(`Cantidad: ${it.cantidad}`, `Quantity: ${it.cantidad}`)}
                   </p>
+                  {it.especial && (
+                    <>
+                      {it.supermercado && <p className="mt-0.5 text-xs font-semibold text-primary">{it.supermercado}</p>}
+                      <p className="text-lg font-extrabold">${(it.precio_unitario * it.cantidad).toFixed(2)}</p>
+                    </>
+                  )}
                   <StatusLine it={it} L={L} />
                 </div>
               </div>

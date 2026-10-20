@@ -437,6 +437,19 @@ export function StoreCartBar({
           ) : null}
         </div>
 
+        {especiales.length > 0 && (
+          <ul className="space-y-1 text-xs">
+            {especiales.map((e) => (
+              <li key={e.foto} className="flex items-baseline justify-between gap-2 rounded-lg bg-muted px-2 py-1">
+                <span className="min-w-0">
+                  <span className="block truncate font-medium">{e.qty} × {e.marca} {e.nombre} {e.tamano}</span>
+                  <span className="block truncate text-muted-foreground">{e.supermercado}</span>
+                </span>
+                <span className="shrink-0 text-base font-extrabold">${(e.precio * e.qty).toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
         {blockEnabled && (
           <div className="space-y-2 text-xs">
             <p className="font-semibold">Punto de entrega</p>
