@@ -153,6 +153,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
         ...(kind === "cookie" ? { items: [{ id: uid(90), name: "PRUEBA", price: 0.01, qty: 1 }] } : { businessId: uid(91), items: [{ productId: uid(92), qty: 1 }] }) },
         context: { supabase: client("authenticated"), userId: uid(2), claims: { email: "prueba@example.com" } } });
       expect(result.clientSecret).toBe("PRUEBA_secret");
+      expect(result.cargoProcesamiento).toBe(1.35);
       const table = kind === "cookie" ? "pedidos" : "store_orders";
       expect(state.writes).toContain(`service_role:${table}:insert`);
       expect(state.writes).not.toContain(`authenticated:${table}:insert`);
@@ -160,6 +161,10 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       const row = (await state.db?.query(`SELECT propina,subtotal,stripe_checkout_session_id FROM ${table} WHERE id=$1`, [id]))?.rows[0];
       expect(row).toMatchObject({ propina: "3", subtotal: "20", stripe_checkout_session_id: `cs_test_${kind}` });
       expect(state.stripe).toHaveBeenLastCalledWith("/v1/checkout/sessions", expect.objectContaining({ payment_intent_data: expect.objectContaining({ capture_method: kind === "cookie" ? "automatic" : "manual" }) }), "sandbox");
+      const payload = state.stripe.mock.calls.at(-1)?.[1];
+      expect(payload.ui_mode).toBe("embedded_page");
+      expect(payload.line_items.reduce((sum: number, line: any) => sum + line.price_data.unit_amount * line.quantity, 0)).toBe(kind === "cookie" ? 3635 : 4180);
+      expect((await state.db?.query(`SELECT cargo_procesamiento,procesamiento_version FROM ${table} WHERE id=$1`, [id]))?.rows[0]).toMatchObject({ cargo_procesamiento: "1.35", procesamiento_version: 1 });
       if (kind === "cookie") {
         const request = state.stripe.mock.calls.at(-1)?.[1];
         const amount = request.line_items.reduce((sum: number, line: any) => sum + line.price_data.unit_amount * line.quantity, 0);

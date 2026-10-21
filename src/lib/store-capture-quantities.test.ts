@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const state = vi.hoisted(() => ({ items: [] as any[], products: [] as any[], failSave: false, capture: vi.fn(), writes: [] as any[] }));
+const state = vi.hoisted(() => ({ items: [] as any[], products: [] as any[], failSave: false, version: null as number | null, capture: vi.fn(), cancel: vi.fn(), writes: [] as any[] }));
 const orderId = "00000000-0000-4000-8000-000000000001";
 const itemId = "00000000-0000-4000-8000-000000000002";
 vi.mock("@tanstack/react-start", () => ({ createServerFn: () => {
@@ -10,7 +10,8 @@ vi.mock("@tanstack/react-start", () => ({ createServerFn: () => {
 } }));
 vi.mock("@tanstack/react-start/server", () => ({ getRequestHost: () => "localhost:8080" }));
 vi.mock("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
-vi.mock("./stripe.server", () => ({ paymentsEnvironmentForHost: () => "sandbox", stripeCapturePaymentIntent: state.capture }));
+vi.mock("./stripe.server", () => ({ paymentsEnvironmentForHost: () => "sandbox", stripeCapturePaymentIntent: state.capture, stripeCancelPaymentIntent: state.cancel }));
+vi.mock("./order-credit.server", () => ({ releaseOrderCredit: async () => undefined }));
 vi.mock("./payouts.server", () => ({ environmentForStoreOrder: async () => "sandbox", adminDb: () => db, flushBusinessPending: async () => {} }));
 vi.mock("./referral-rewards.server", () => ({ grantReferralRewardForOrder: async () => {} }));
 vi.mock("./barcode.server", () => ({ findBarcodeOwner: async () => ({ id: "replacement", nombre: "PRUEBA Reemplazo" }) }));
@@ -26,6 +27,7 @@ const db = {
       update: (value: any) => { patch = value; return query; },
       maybeSingle: async () => ({ data: table === "businesses" ? { id: "business", owner_user_id: "merchant" } : table === "store_order_items" ? state.items.find(it => it.id === id) : table === "store_products" ? state.products.find(p => p.id === id) : {
         id: orderId, business_id: "business", estado: "preparando", reemplazo: "similar", stripe_payment_intent_id: "pi_simulated", monto_autorizado: 100, propina: 0,
+        procesamiento_version: state.version,
       }, error: null }),
       then: (yes: any, no: any) => Promise.resolve().then(() => {
         if (patch) {
@@ -46,7 +48,7 @@ const call = (items: { itemId: string; cantidadReal: number }[]) => markOrderRea
 
 describe("cobro real con Stripe simulado", () => {
   beforeEach(() => {
-    state.capture.mockReset(); state.failSave = false; state.writes = [];
+    state.capture.mockReset(); state.cancel.mockReset(); state.version = null; state.failSave = false; state.writes = [];
     state.items = [{ id: itemId, product_id: "product", cantidad: 3, cantidad_real: null, pick_status: "encontrado", precio_unitario: 5 }];
     state.products = [{ id: "product", vendido_por_lb: false, peso_lb: 1 }];
   });
@@ -55,6 +57,21 @@ describe("cobro real con Stripe simulado", () => {
     expect(state.items[0].cantidad_real).toBe(2);
     expect(state.writes.find(w => w.table === "store_orders").patch.subtotal).toBe(10);
     expect(state.capture).toHaveBeenCalledTimes(1);
+  });
+  it("nuevo pedido recalcula cargo al faltar una unidad sin cambiar precio ni entrega", async () => {
+    state.version = 1;
+    await call([{ itemId, cantidadReal: 2 }]);
+    expect(state.capture.mock.calls[0][1]).toBe(2297);
+    const saved = state.writes.find(w => w.table === "store_orders").patch;
+    expect(saved).toMatchObject({ subtotal: 10, costo_envio: 12, cargo_procesamiento: .97, total_estimado: 22.97 });
+  });
+  it("especial no encontrado libera reserva completa sin capturar ni cargo", async () => {
+    state.version = 1;
+    state.items = [{ ...state.items[0], especial: true, product_id: null, pick_status: "no_habia", cantidad_real: 0 }];
+    await call([]);
+    expect(state.capture).not.toHaveBeenCalled();
+    expect(state.cancel).toHaveBeenCalledTimes(1);
+    expect(state.writes.find(w => w.table === "store_orders").patch).toMatchObject({ estado: "cancelado", cargo_procesamiento: 0, monto_capturado: 0 });
   });
   it("la pantalla de escaneo y los reintentos usan las 2 unidades guardadas", async () => {
     state.items[0].cantidad_real = 2;

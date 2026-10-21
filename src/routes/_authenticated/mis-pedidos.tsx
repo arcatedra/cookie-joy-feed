@@ -4,10 +4,18 @@ import { useServerFn } from "@tanstack/react-start";
 import { listMyPedidos } from "@/lib/pedidos.functions";
 import { listMyTipPrompts } from "@/lib/post-delivery-tips.functions";
 import { PostDeliveryTipCard } from "@/components/PostDeliveryTipCard";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
 
 export const Route = createFileRoute("/_authenticated/mis-pedidos")({
   head: () => ({
-    meta: [{ title: "Mis pedidos — HAZOREX" }],
+    meta: [
+      { title: "Mis pedidos — HAZOREX" },
+      { name: "description", content: "Historial y desglose de tus compras en HAZOREX." },
+      { property: "og:title", content: "Mis pedidos — HAZOREX" },
+      { property: "og:description", content: "Historial y desglose de tus compras en HAZOREX." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
   }),
   component: MisPedidosPage,
 });
@@ -91,6 +99,7 @@ function MisPedidosPage() {
                 </li>
               ))}
             </ul>
+            <PaymentProcessingRow amount={p.cargo_procesamiento} />
           </article>
         ))}
       </div>

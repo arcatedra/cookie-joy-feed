@@ -17,6 +17,7 @@ export type Pedido = {
   subtotal: number;
   costo_envio: number;
   impuestos: number;
+  cargo_procesamiento: number | null;
   total: number;
   moneda: string;
   direccion_envio: string | null;
@@ -34,7 +35,7 @@ export const listMyPedidos = createServerFn({ method: "GET" })
     const { data, error } = await supabase
       .from("pedidos")
       .select(
-        `id,numero_pedido,estado,subtotal,costo_envio,impuestos,total,moneda,direccion_envio,creado_en,
+        `id,numero_pedido,estado,subtotal,costo_envio,impuestos,total,moneda,direccion_envio,creado_en,cargo_procesamiento,
          pedido_items(id,producto_id,nombre_producto,precio_unitario,cantidad,subtotal_item)`,
       )
       .eq("cliente_id", userId)
@@ -48,6 +49,7 @@ export const listMyPedidos = createServerFn({ method: "GET" })
       subtotal: Number(p.subtotal),
       costo_envio: Number(p.costo_envio),
       impuestos: Number(p.impuestos),
+      cargo_procesamiento: p.cargo_procesamiento == null ? null : Number(p.cargo_procesamiento),
       total: Number(p.total),
       moneda: p.moneda,
       direccion_envio: p.direccion_envio ? JSON.stringify(p.direccion_envio) : null,
