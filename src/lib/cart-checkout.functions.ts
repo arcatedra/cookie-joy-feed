@@ -2,21 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHost } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertCookieSubtotal, cookieDeliveryFeeCents } from "./cookie-order-rules";
+import { assertCookieSubtotal } from "./cookie-order-rules";
+import { cookieQuoteItemsSchema } from "./cookie-shipping.functions";
 
 interface StripeSession {
   id: string;
   client_secret?: string | null;
   url?: string | null;
 }
-
-const itemSchema = z.object({
-  id: z.string().min(1).max(120),
-  name: z.string().min(1).max(200),
-  price: z.number().positive().max(10000),
-  qty: z.number().int().min(1).max(99),
-  image: z.string().max(2000).optional(),
-});
 
 const addressSchema = z.object({
   name: z.string().min(2).max(120),
@@ -29,13 +22,13 @@ const addressSchema = z.object({
 });
 
 const schema = z.object({
-  items: z.array(itemSchema).min(1).max(40),
+  items: cookieQuoteItemsSchema,
   address: addressSchema,
   shipping: z.literal("standard").default("standard"),
   propina: z.number().finite().min(0).max(200).default(0),
   usarSaldo: z.boolean().default(true),
   locale: z.enum(["es", "en"]).default("es"),
-  expectedDeliveryCents: z.number().int().min(0).max(10000).optional(),
+  expectedDeliveryCents: z.number().int().min(0).optional(),
   expectedProcessingCents: z.number().int().min(0).optional(),
 });
 
@@ -62,7 +55,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { reserveOrderCredit, releaseOrderCredit } = await import("./order-credit.server");
     const { paymentsEnvironmentForHost, stripePost } = await import("./stripe.server");
-    const { resolveStaticPrice } = await import("./catalog-prices.server");
+    const { resolveCookieShipping } = await import("./cookie-shipping.server");
     const host = getRequestHost();
     const env = paymentsEnvironmentForHost(host);
     const proto = host?.startsWith("localhost") ? "http" : "https";
@@ -71,64 +64,13 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     const { attachReferralIfPending } = await import("./referrals-attach.server");
     await attachReferralIfPending({ supabase: supabase, userId });
 
-    // ---- Trusted pricing -------------------------------------------------
-    // Never charge the price sent by the browser. Real products are priced from
-    // the `productos` table; static catalog items from a server-side allowlist.
-    const productIds = [...new Set(data.items.filter((it) => UUID_RE.test(it.id)).map((it) => it.id))];
-    const productMap = new Map<string, { precio: number; nombre: string }>();
-    if (productIds.length > 0) {
-      const { data: rows, error: prodErr } = await supabase
-        .from("productos")
-        .select("id, nombre, precio, disponible")
-        .in("id", productIds);
-      if (prodErr) {
-        console.error("[cart-checkout] failed to load productos", prodErr);
-        throw new Error("No se pudieron verificar los precios. Inténtalo de nuevo.");
-      }
-      for (const r of rows ?? []) {
-        if (r.disponible === false) continue;
-        productMap.set(r.id as string, { precio: Number(r.precio), nombre: String(r.nombre) });
-      }
-    }
-
-    const pricedItems = data.items.map((it) => {
-      if (UUID_RE.test(it.id)) {
-        const p = productMap.get(it.id);
-        if (!p || !Number.isFinite(p.precio) || p.precio <= 0) {
-          throw new Error("Uno de los productos de tu carrito ya no está disponible.");
-        }
-        return {
-        id: it.id,
-        name: p.nombre,
-        price: p.precio,
-        qty: it.qty,
-        image: it.image,
-      };
-      }
-      const price = resolveStaticPrice(it.id, it.price);
-      if (price === null) {
-        throw new Error("Uno de los productos de tu carrito ya no está disponible.");
-      }
-      return {
-        id: it.id,
-        name: it.name,
-        price,
-        qty: it.qty,
-        image: it.image,
-      };
-    });
-
-    // "Entrega y servicio" fija, leída del servidor (editable en /admin/precios).
-    const { data: pricingRows } = await supabaseAdmin.from("pricing_settings").select("key, value");
-    const { pricingFromRows } = await import("./pricing");
-    const shippingRate = { label: SHIPPING_RATES[data.shipping].label, amount: cookieDeliveryFeeCents(pricingFromRows(pricingRows as any)) };
+    const shipping = await resolveCookieShipping(supabase, data.items);
+    const { pricedItems, subtotalCents } = shipping;
+    if (shipping.overLimit) throw new Error(`El peso máximo por pedido es ${shipping.maxWeightLb} lb.`);
+    const shippingRate = { label: SHIPPING_RATES[data.shipping].label, amount: shipping.deliveryCents };
     if (data.expectedDeliveryCents !== undefined && data.expectedDeliveryCents !== shippingRate.amount) {
       throw new Error("El costo de entrega cambió. Recarga la página para ver el total actualizado.");
     }
-    const subtotalCents = pricedItems.reduce(
-      (s, it) => s + Math.round(it.price * 100) * it.qty,
-      0,
-    );
     const tipCents = Math.round(data.propina * 100);
     assertCookieSubtotal(subtotalCents);
     const grossCents = subtotalCents + shippingRate.amount + tipCents;
@@ -300,6 +242,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       creditoAplicado: creditCents / 100,
       totalEstimado: totalCents / 100,
       cargoProcesamiento: processingCents / 100,
+      pesoTotalLb: shipping.weightLb,
+      costoEnvio: shippingRate.amount / 100,
     };
   });
 

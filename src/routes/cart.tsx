@@ -13,8 +13,8 @@ import { useCart, deriveCartItemNameKey } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { createCartCheckout } from "@/lib/cart-checkout.functions";
 import { HazorexLogo } from "@/components/HazorexLogo";
-import { cookieDeliveryFeeCents, COOKIE_MIN_SUBTOTAL_CENTS } from "@/lib/cookie-order-rules";
-import { getPricingConfig } from "@/lib/pricing.functions";
+import { COOKIE_MIN_SUBTOTAL_CENTS } from "@/lib/cookie-order-rules";
+import { quoteCookieShipping } from "@/lib/cookie-shipping.functions";
 import i18n from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -91,22 +91,24 @@ function CartPage() {
     if (user?.email && !email) setEmail(user.email);
   }, [user, email]);
 
-  const fetchPricing = useServerFn(getPricingConfig);
-  const { data: pricingConfig } = useQuery({ queryKey: ["pricing-config"], queryFn: () => fetchPricing() });
-  const deliveryCents = cookieDeliveryFeeCents(pricingConfig?.pricing);
+  const fetchShipping = useServerFn(quoteCookieShipping);
+  const shippingItems = cart.items.map(({ id, name, price, qty }) => ({ id, name: name.slice(0, 200), price, qty }));
+  const shippingQuote = useQuery({ queryKey: ["cookie-shipping", shippingItems], queryFn: () => fetchShipping({ data: shippingItems }), enabled: cart.hydrated && cart.count > 0, retry: false });
+  const deliveryCents = shippingQuote.data?.deliveryCents ?? 0;
   const shippingCost = deliveryCents / 100;
-  const subtotal = cart.total;
+  const subtotal = shippingQuote.data ? shippingQuote.data.subtotalCents / 100 : cart.total;
   const gross = subtotal + shippingCost + propina;
   const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
   const baseCents = Math.round((gross - discount) * 100);
-  const feeQuote = usePaymentProcessing(baseCents, cart.count > 0 && !!pricingConfig && (!user || !!credit));
+  const feeQuote = usePaymentProcessing(baseCents, cart.count > 0 && !!shippingQuote.data && !shippingQuote.data.overLimit && (!user || !!credit));
   const total = confirmedTotal ?? (feeQuote.data?.totalCents ?? baseCents) / 100;
 
   const missingCents = Math.max(0, COOKIE_MIN_SUBTOTAL_CENTS - Math.round(subtotal * 100));
   const canCheckout =
     cart.count > 0 &&
     missingCents === 0 &&
-    !!pricingConfig &&
+    !!shippingQuote.data &&
+    !shippingQuote.data.overLimit &&
     feeQuote.ready &&
     /.+@.+\..+/.test(email) &&
     address.name.length >= 2 &&
@@ -125,7 +127,7 @@ function CartPage() {
             id: it.id,
             name: (() => {
               const k = it.nameKey ?? deriveCartItemNameKey(it.id);
-              return k && i18n.exists(k) ? t(k) : it.name;
+              return (k && i18n.exists(k) ? t(k) : it.name).slice(0, 200);
             })(),
             price: it.price,
             qty: it.qty,
@@ -298,7 +300,8 @@ function CartPage() {
                 {t("cartPage.shipping")}
               </h2>
               <p className="mt-3 text-sm text-muted-foreground">{t("deliveryPromise")}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{t("cartPage.noMinimum", { fee: shippingCost.toFixed(2) })}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("cartPage.noMinimum")}</p>
+              {shippingQuote.data && <p className="mt-2 text-sm text-muted-foreground">{t("cartPage.weightDeliveryTable", { ...shippingQuote.data.tiers, smallUsd: shippingQuote.data.tiers.smallUsd.toFixed(2), mediumUsd: shippingQuote.data.tiers.mediumUsd.toFixed(2), largeUsd: shippingQuote.data.tiers.largeUsd.toFixed(2), extraUsd: shippingQuote.data.tiers.extraUsd.toFixed(2) })}</p>}
             </section>
             <div className="mt-4 space-y-3">
               <TipSelector value={propina} onChange={setPropina} />
@@ -309,13 +312,16 @@ function CartPage() {
 
         <section className="mt-4 space-y-1 rounded-2xl bg-card p-4 ring-1 ring-border text-sm">
           <Row label={t("cartPage.subtotal")} value={`$${subtotal.toFixed(2)}`} />
+          <Row label={t("cartPage.orderWeight")} value={shippingQuote.data ? `${shippingQuote.data.weightLb.toFixed(2)} lb` : "…"} />
           <Row
             label={t("cartPage.deliveryService")}
-            value={`$${shippingCost.toFixed(2)}`}
+            value={shippingQuote.data ? `$${shippingCost.toFixed(2)}` : "…"}
           />
           <Row label={t("tips.title")} value={`$${propina.toFixed(2)}`} />
           {discount > 0 && <Row label={t("credit.discount")} value={`-$${discount.toFixed(2)}`} />}
           <PaymentProcessingRow amount={confirmedFee ?? (feeQuote.ready ? Number(feeQuote.data?.feeCents) / 100 : null)} />
+          {shippingQuote.isError && <p className="text-destructive">{t("cartPage.shippingQuoteError")}</p>}
+          {shippingQuote.data?.overLimit && <p className="text-destructive">{t("cartPage.weightLimit", { max: shippingQuote.data.maxWeightLb })}</p>}
           {feeQuote.isError && <p className="text-destructive">{i18n.language.startsWith("en") ? "Unable to calculate payment processing fee." : "No se pudo calcular el cargo por procesamiento de pago."}</p>}
           <div className="mt-2 flex items-baseline justify-between border-t border-border pt-3">
             <span className="text-base font-bold text-foreground">{t("cartPage.total")}</span>

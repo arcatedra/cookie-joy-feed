@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Galletas por peso (21 oct)
+- [x] Plan aprobado; usar tabla compartida sin modificar tarifas ni datos existentes.
+- [x] Cotización y checkout comparten cálculo servidor; packs cuentan sus unidades; sin límite independiente de cantidad; carrito/textos ES/EN por peso.
+- [ ] Una ejecución de pruebas aisladas y comprobación breve del carrito, sin cobros ni publicación.
+
 ## Cargo por procesamiento de pago (21 oct)
 - [x] Plan aprobado; migración aditiva de cargo/version nullable sin actualizar pedidos existentes ni clientes; campos protegidos contra escritura del navegador.
 - [x] Cálculo único de servidor, línea ES/EN en carritos y Stripe integrado, historial/admin, reserva con margen y captura recalculada; pedido vacío libera reserva. Repartos excluyen cargo, sin cambiar entregas, precios, referidos ni QR.
