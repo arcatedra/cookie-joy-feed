@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Cargo por procesamiento de pago (21 oct)
+- [ ] Mostrar plan previo obligatorio para pagos y migración; autorización de ejecución recibida, pendiente aprobación del plan concreto.
+- [ ] Implementar cálculo único de servidor, desglose ES/EN, reserva/captura real y aislamiento de pedidos históricos sin tocar entregas, precios, clientes, referidos ni QR.
+- [ ] Verificación limitada aislada y visual sin dinero real; informar ejemplos y créditos verificables, sin publicar.
+
 ## Seguridad autorizada (20 oct, 05:38 UTC)
 - [x] Aplicar una pasada limitada: me gusta propios; archivos públicos solo referenciados por catálogo/reels, con lectura propia/admin separada. Sin modificar filas ni checkout/Stripe.
 - [x] Una verificación: 22 pruebas aisladas pasan (permisos, privacidad de comprobante/ETA/nombres y pesos de sustitución); catálogo público carga 186 imágenes sin errores, build OK; sin pruebas con pagos.
