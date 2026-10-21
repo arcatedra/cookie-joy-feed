@@ -3,12 +3,12 @@ import { toast } from "sonner";
 import { Camera, PackageSearch, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { SPECIAL_MAX_PRICE_USD, SPECIAL_MAX_QTY, SPECIAL_SAME_STORE_MESSAGE, specialItemSchema, type SpecialItem } from "@/lib/special-order-rules";
+import { SPECIAL_MAX_QTY, SPECIAL_SAME_STORE_MESSAGE, specialItemSchema, type SpecialItem } from "@/lib/special-order-rules";
 
 export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[]; onChange: (v: SpecialItem[]) => void; L: (es: string, en: string) => string }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [f, setF] = useState({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", supermercado: "" });
+  const [f, setF] = useState({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", peso: "", supermercado: "" });
   const [busy, setBusy] = useState(false);
 
   async function save() {
@@ -21,16 +21,16 @@ export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[];
     setBusy(true);
     try {
       const path = `special/${u.user.id}/${crypto.randomUUID()}.${(file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "")}`;
-      const item = specialItemSchema.parse({ foto: path, marca: f.marca, nombre: f.nombre, tamano: f.tamano, qty: Number(f.qty), precio: Number(f.precio), supermercado: f.supermercado });
+      const item = specialItemSchema.parse({ foto: path, marca: f.marca, nombre: f.nombre, tamano: f.tamano, qty: Number(f.qty), precio: Number(f.precio), pesoLb: Number(f.peso), supermercado: f.supermercado });
       const { error } = await supabase.storage.from("store-media").upload(path, file, { contentType: file.type });
       if (error) throw new Error(L("No se pudo subir la foto.", "Could not upload the photo."));
       onChange([...items, item]);
-      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", supermercado: items.length ? f.supermercado : "" });
+      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", peso: "", peso: "", supermercado: items.length ? f.supermercado : "" });
       setFile(null);
       setOpen(false);
       toast.success(L("Agregado al carrito", "Added to cart"));
     } catch (e) {
-      toast.error(e instanceof Error && !e.message.startsWith("[") ? e.message : L(`Revisa los datos: precio hasta $${SPECIAL_MAX_PRICE_USD}, cantidad 1–${SPECIAL_MAX_QTY}.`, `Check the details: price up to $${SPECIAL_MAX_PRICE_USD}, quantity 1–${SPECIAL_MAX_QTY}.`));
+      toast.error(e instanceof Error && !e.message.startsWith("[") ? e.message : L(`Revisa los datos: precio, peso en libras y cantidad 1–${SPECIAL_MAX_QTY}.`, `Check the details: price, weight in pounds and quantity 1–${SPECIAL_MAX_QTY}.`));
     } finally {
       setBusy(false);
     }
@@ -56,7 +56,7 @@ export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[];
           {items.map((it, i) => (
             <li key={it.foto} className="flex items-center justify-between gap-2 rounded-lg bg-primary-foreground/15 px-3 py-2">
               <span className="min-w-0">
-                <span className="block truncate font-medium">{it.qty} × {it.marca} {it.nombre} {it.tamano}</span>
+                <span className="block truncate font-medium">{it.qty} × {it.marca} {it.nombre} {it.tamano} · {it.pesoLb} lb</span>
                 <span className="block truncate text-xs opacity-90">{it.supermercado}</span>
               </span>
               <span className="flex shrink-0 items-center gap-2">
@@ -79,13 +79,14 @@ export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[];
           <input className={input} type="number" min={1} max={SPECIAL_MAX_QTY} placeholder={L("Cantidad", "Quantity")} value={f.qty} onChange={(e) => setF({ ...f, qty: e.target.value })} />
           <label className="sm:col-span-2">
             <span className="mb-1 block text-sm font-bold text-primary-foreground">{L("Precio por unidad (USD) *", "Price per unit (USD) *")}</span>
-            <input className={`${input} text-xl font-extrabold`} type="number" step="0.01" min={0.5} max={SPECIAL_MAX_PRICE_USD} placeholder="$0.00" value={f.precio} onChange={(e) => setF({ ...f, precio: e.target.value })} />
+            <input className={`${input} text-xl font-extrabold`} type="number" step="0.01" min={0.5} placeholder="$0.00" value={f.precio} onChange={(e) => setF({ ...f, precio: e.target.value })} />
           </label>
+          <input className={input} type="number" step="0.01" min={0.01} max={45} placeholder={L("Peso en libras * (ej: 1.5)", "Weight in pounds * (e.g. 1.5)")} value={f.peso} onChange={(e) => setF({ ...f, peso: e.target.value })} />
           <label className="sm:col-span-2">
             <span className="mb-1 block text-sm font-bold text-primary-foreground">{L("Supermercado donde está el producto *", "Supermarket where the product is *")}</span>
             <input className={input} placeholder={L("Nombre y dirección o zona (ej: Supermercado El Valle, 123 Main St, Bronx)", "Name and address or area (e.g. El Valle Market, 123 Main St, Bronx)")} value={f.supermercado} onChange={(e) => setF({ ...f, supermercado: e.target.value })} />
           </label>
-          <p className="text-xs text-primary-foreground/90 sm:col-span-2">{L("Todos los artículos del pedido deben ser del mismo supermercado. Pagas este precio con tu pedido; si no lo encontramos, te devolvemos ese monto completo.", "All items in the order must be from the same supermarket. You pay this price with your order; if we can't find it, we refund that full amount.")}</p>
+          <p className="text-xs text-primary-foreground/90 sm:col-span-2">{L("Todos los artículos del pedido deben ser del mismo supermercado. El pedido completo no puede superar 45 lb. Pagas este precio con tu pedido; si no lo encontramos, te devolvemos ese monto completo.", "All items in the order must be from the same supermarket. The whole order cannot exceed 45 lb. You pay this price with your order; if we can't find it, we refund that full amount.")}</p>
           <Button className="sm:col-span-2" variant="secondary" disabled={busy} onClick={save}>{busy ? L("Guardando…", "Saving…") : L("Agregar al carrito", "Add to cart")}</Button>
         </div>
       )}

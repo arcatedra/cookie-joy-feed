@@ -344,10 +344,11 @@ export function StoreCartBar({
     lines.map((l) => ({
       pesoLb: Number((l.p as any).peso_lb ?? pricing.defaultProductWeightLb),
       qty: l.qty,
-    })).concat(especiales.map((e) => ({ pesoLb: pricing.defaultProductWeightLb, qty: e.qty }))),
+    })).concat(especiales.map((e) => ({ pesoLb: Number(e.pesoLb) || pricing.defaultProductWeightLb, qty: e.qty }))),
     pricing,
   );
-  const overLimit = totalLb > (blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb);
+  const maxLb = Math.min(blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb, especiales.length ? 45 : Infinity);
+  const overLimit = totalLb > maxLb;
   const tier = tierForWeight(totalLb, pricing);
   const tipCents = Math.max(0, Math.round(propina * 100));
   const blockQuote = blockEnabled && !overLimit ? blockOrderQuote(totalLb, doorService, blockConfig) : null;
@@ -432,7 +433,7 @@ export function StoreCartBar({
           </div>
           {overLimit ? (
             <p className="mt-1 text-xs font-semibold text-red-600">
-              Máximo {blockEnabled ? blockConfig.maxOrderLb : pricing.weightMaxLb} lb por pedido. Divide tu compra en 2 pedidos.
+              Máximo {maxLb} lb por pedido. Divide tu compra en 2 pedidos.
             </p>
           ) : null}
         </div>
@@ -442,7 +443,7 @@ export function StoreCartBar({
             {especiales.map((e) => (
               <li key={e.foto} className="flex items-baseline justify-between gap-2 rounded-lg bg-muted px-2 py-1">
                 <span className="min-w-0">
-                  <span className="block truncate font-medium">{e.qty} × {e.marca} {e.nombre} {e.tamano}</span>
+                  <span className="block truncate font-medium">{e.qty} × {e.marca} {e.nombre} {e.tamano} · {e.pesoLb} lb</span>
                   <span className="block truncate text-muted-foreground">{e.supermercado}</span>
                 </span>
                 <span className="shrink-0 text-base font-extrabold">${(e.precio * e.qty).toFixed(2)}</span>
