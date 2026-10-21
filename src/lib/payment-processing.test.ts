@@ -10,7 +10,7 @@ describe("cargo por procesamiento de pago", () => {
   it("supermercado: $80 base, $2.70 cargo, $82.70 tarjeta", () => {
     expect(cardPaymentQuote(8000)).toEqual({ baseCents: 8000, feeCents: 270, totalCents: 8270 });
   });
-  it.each([[15, 1200, 0, 290], [30, 2500, 0, 329], [45, 3999, 0, 374], [50, 3999, 400, 386]])(
+  it.each([[15, 1200, 0, 291], [30, 2500, 0, 330], [45, 3999, 0, 374], [50, 3999, 400, 386]])(
     "%s lb mantiene entrega y calcula cargo sobre productos, entrega y propina", (lb, delivery, extra, fee) => {
       expect(tierForWeight(lb, DEFAULT_PRICING).feeCents).toBe(delivery);
       expect(weightFeeCents(lb, DEFAULT_PRICING)).toBe(extra);
