@@ -16,6 +16,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BestSellersRouteImport } from './routes/best-sellers'
 import { Route as BuildPackRouteImport } from './routes/build-pack'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as ConfianzaRouteImport } from './routes/confianza'
 import { Route as DomainsRouteImport } from './routes/domains'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -150,6 +151,11 @@ const BuildPackRoute = BuildPackRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfianzaRoute = ConfianzaRouteImport.update({
+  id: '/confianza',
+  path: '/confianza',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DomainsRoute = DomainsRouteImport.update({
@@ -719,6 +725,7 @@ export interface FileRoutesByFullPath {
   '/best-sellers': typeof BestSellersRoute
   '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
+  '/confianza': typeof ConfianzaRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -828,6 +835,7 @@ export interface FileRoutesByTo {
   '/best-sellers': typeof BestSellersRoute
   '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
+  '/confianza': typeof ConfianzaRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -937,6 +945,7 @@ export interface FileRoutesById {
   '/best-sellers': typeof BestSellersRoute
   '/build-pack': typeof BuildPackRoute
   '/cart': typeof CartRoute
+  '/confianza': typeof ConfianzaRoute
   '/domains': typeof DomainsRoute
   '/donate': typeof DonateRoute
   '/explore': typeof ExploreRoute
@@ -1048,6 +1057,7 @@ export interface FileRouteTypes {
     | '/best-sellers'
     | '/build-pack'
     | '/cart'
+    | '/confianza'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -1157,6 +1167,7 @@ export interface FileRouteTypes {
     | '/best-sellers'
     | '/build-pack'
     | '/cart'
+    | '/confianza'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -1265,6 +1276,7 @@ export interface FileRouteTypes {
     | '/best-sellers'
     | '/build-pack'
     | '/cart'
+    | '/confianza'
     | '/domains'
     | '/donate'
     | '/explore'
@@ -1376,6 +1388,7 @@ export interface RootRouteChildren {
   BestSellersRoute: typeof BestSellersRoute
   BuildPackRoute: typeof BuildPackRoute
   CartRoute: typeof CartRoute
+  ConfianzaRoute: typeof ConfianzaRoute
   DomainsRoute: typeof DomainsRoute
   DonateRoute: typeof DonateRoute
   ExploreRoute: typeof ExploreRoute
@@ -1477,6 +1490,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confianza': {
+      id: '/confianza'
+      path: '/confianza'
+      fullPath: '/confianza'
+      preLoaderRoute: typeof ConfianzaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/domains': {
@@ -2365,6 +2385,7 @@ const rootRouteChildren: RootRouteChildren = {
   BestSellersRoute: BestSellersRoute,
   BuildPackRoute: BuildPackRoute,
   CartRoute: CartRoute,
+  ConfianzaRoute: ConfianzaRoute,
   DomainsRoute: DomainsRoute,
   DonateRoute: DonateRoute,
   ExploreRoute: ExploreRoute,

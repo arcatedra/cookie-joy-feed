@@ -22,7 +22,7 @@ import {
   weightFeeCents,
 } from "./pricing";
 import { unitPriceCents } from "./house-store-rules";
-import { assertSameSupermarket, assertSpecialPhoto, specialItemSchema, specialPriceCents } from "./special-order-rules";
+import { assertSameSupermarket, assertSpecialPhoto, SPECIAL_MAX_ORDER_LB, specialItemSchema, specialPriceCents } from "./special-order-rules";
 import { blockOrderQuote, DEFAULT_BLOCK_CONFIG, type DoorService } from "./delivery-block-rules";
 
 interface StripeSession {
@@ -137,12 +137,12 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       assertSpecialPhoto(sp.foto, userId);
       priced.push({
         productId: null,
-        name: `Pedido especial: ${sp.marca} ${sp.nombre} ${sp.tamano}`,
+        name: `Pedido especial: ${sp.marca} ${sp.nombre} ${sp.tamano} · ${sp.pesoLb} lb`,
         unit: "unidad",
         priceCents: specialPriceCents(sp),
-        pesoLb: pricing.defaultProductWeightLb,
+        pesoLb: sp.pesoLb,
         qty: sp.qty,
-        special: { foto: sp.foto, marca: sp.marca, tamano: sp.tamano, supermercado: sp.supermercado },
+        special: { foto: sp.foto, marca: sp.marca, tamano: `${sp.tamano} · ${sp.pesoLb} lb`, supermercado: sp.supermercado },
       });
     }
 
@@ -150,7 +150,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     if (subtotalCents <= 0) throw new Error("El pedido está vacío.");
 
     const totalLb = cartWeightLb(priced, pricing);
-    const maxWeight = blockEnabled ? Number(blockRow.max_order_lb) : pricing.weightMaxLb;
+    const baseMax = blockEnabled ? Number(blockRow.max_order_lb) : pricing.weightMaxLb;
+    const maxWeight = data.especiales.length ? Math.min(baseMax, SPECIAL_MAX_ORDER_LB) : baseMax;
     if (totalLb > maxWeight) {
       throw new Error(
         `Máximo ${maxWeight} lb por pedido. Divide tu compra en 2 pedidos.`,

@@ -430,7 +430,7 @@ function SupermarketCard() {
     { es: "Panadería", en: "Bakery", photo: bakeryPhoto.url },
   ];
   return (
-    <CardShell title={en ? "Supermarket" : "Supermercado"} link={{ to: "/supermercado", label: en ? "Store prices, no markup" : "Precios de tienda, sin sobreprecio" }}>
+    <CardShell title={en ? "Supermarket" : "Supermercado"} link={{ to: "/supermercado", label: en ? "Local supermarket prices, no markup on products" : "Precios de supermercado de tu zona, sin recargo en los productos" }}>
       <div className="grid grid-cols-2 gap-2">
         {categories.map((category) => (
           <Link key={category.es} to="/supermercado" className="group min-w-0">

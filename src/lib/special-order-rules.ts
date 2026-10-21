@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 /** Límites del "Pedido especial" del Supermercado (precio que declara el cliente). */
-export const SPECIAL_MAX_PRICE_USD = 200;
+/** Peso máximo del pedido completo cuando incluye Pedido especial (20 kg). */
+export const SPECIAL_MAX_ORDER_LB = 45;
 export const SPECIAL_MAX_QTY = 20;
 
 export const specialItemSchema = z.object({
@@ -10,7 +11,9 @@ export const specialItemSchema = z.object({
   nombre: z.string().trim().min(1).max(120),
   tamano: z.string().trim().min(1).max(60),
   qty: z.number().int().min(1).max(SPECIAL_MAX_QTY),
-  precio: z.number().min(0.5).max(SPECIAL_MAX_PRICE_USD),
+  precio: z.number().min(0.5),
+  /** Peso en libras por unidad. */
+  pesoLb: z.number().positive().max(SPECIAL_MAX_ORDER_LB),
   /** Supermercado donde está el producto: nombre y dirección o zona. */
   supermercado: z.string().trim().min(3).max(120),
 });
