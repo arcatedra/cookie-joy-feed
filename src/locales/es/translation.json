@@ -838,7 +838,7 @@
       },
       {
         "title": "3. Costo de entrega",
-        "body": "Cuando el modelo de bloques esté activo, cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $35; sobre 45 lb se suman $0.70 por libra excedente. El máximo es 80 lb por pedido. Mientras esté apagado, se aplica el precio mostrado antes de confirmar. <strong>Galletas Hazorex:</strong> el pedido mínimo es $12 en productos y cada pedido de galletas paga además una <strong>Entrega y servicio</strong> fija de $12. <strong>Propina:</strong> es opcional y el 100% es para tu repartidor. Después de la entrega puedes dejar o subir la propina durante 24 horas; si aceptas que Stripe guarde tu tarjeta al pagar, la usamos solo para esa propina y solo cuando tú la confirmas."
+        "body": "Cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $39.99; sobre 45 lb se suman $0.80 por libra excedente. Un pedido con Pedido especial no puede superar 45 lb. <strong>Galletas Hazorex:</strong> el pedido mínimo es $12 en productos y cada pedido de galletas paga además una <strong>Entrega y servicio</strong> fija de $12. <strong>Propina:</strong> es opcional y el 100% es para tu repartidor. Después de la entrega puedes dejar o subir la propina durante 24 horas; si aceptas que Stripe guarde tu tarjeta al pagar, la usamos solo para esa propina y solo cuando tú la confirmas."
       },
       {
         "title": "4. Cómo se cobra: reserva y cobro final",
@@ -861,20 +861,24 @@
         "body": "Pide el día antes y recibe en 24 horas: lunes, miércoles y viernes. Las entregas se hacen en los días de ruta habilitados para tu zona. Cada día tiene una hora límite: los pedidos hechos después de esa hora se entregan en el siguiente día de ruta disponible."
       },
       {
-        "title": "8. Repartidores: contratistas independientes",
+        "title": "9. Repartidores: contratistas independientes",
         "body": "Los repartidores son <strong>contratistas independientes</strong>, no empleados de Hazorex. Usan sus propios vehículos, deciden cuándo trabajar y son responsables de sus impuestos, licencias y seguros."
       },
       {
-        "title": "9. Programa de referidos",
+        "title": "10. Programa de referidos",
         "body": "Si invitas a una persona nueva con tu código, recibes un bono de $5 en tu saldo cuando esa persona recibe su primer pedido. El bono solo se usa como descuento en tus próximas compras: no es dinero en efectivo ni se puede retirar. No puedes usar tu propio código y anulamos bonos de cuentas duplicadas (mismo teléfono, tarjeta o dirección) o de cualquier intento de fraude."
       },
       {
-        "title": "10. Pagos a tiendas y repartidores",
+        "title": "11. Pagos a tiendas y repartidores",
         "body": "Los pagos a las tiendas aliadas y a los repartidores se procesan mediante Stripe Connect. Cada tienda y cada repartidor abre su propia cuenta con Stripe y proporciona sus datos bancarios directamente a Stripe; Hazorex no ve ni almacena esa información bancaria. Al usar la plataforma como tienda o repartidor aceptas también los términos de servicio de Stripe Connect."
       },
       {
-        "title": "11. Pagos con tarjeta",
+        "title": "12. Pagos con tarjeta",
         "body": "Los pagos de los clientes se procesan mediante Stripe. Hazorex no guarda los números completos de tu tarjeta."
+      },
+      {
+        "title": "13. Pedido especial",
+        "body": "Si no encuentras un producto, puedes pedirlo subiendo su foto, marca, tamaño, peso y el precio que tú mismo pones. Todos los artículos del pedido deben ser de un solo supermercado. No hay límite de dinero; el máximo es 20 unidades por artículo y el pedido completo no puede superar 45 lb (20 kg). Si el producto no se encuentra, ese artículo se te reembolsa al 100%."
       }
     ],
     "metaDescNoSweepstakes": "Términos y Condiciones de Hazorex: cobro por pedido, entrega, propinas, reembolsos y referidos."

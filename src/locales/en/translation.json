@@ -838,7 +838,7 @@
       },
       {
         "title": "3. Delivery charge",
-        "body": "When the reservable-block model is active, each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $35; above 45 lb adds $0.70 per excess pound. The maximum is 80 lb per order. While it is off, the price shown before confirmation applies. <strong>Hazorex cookies:</strong> the minimum order is $12 in products, and every cookie order also pays a flat $12 <strong>Delivery and service</strong> charge. <strong>Tip:</strong> optional, and 100% goes to your driver. After delivery you can add or raise the tip for 24 hours; if you let Stripe save your card at checkout, we use it only for that tip and only when you confirm it."
+        "body": "Each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $39.99; above 45 lb adds $0.80 per excess pound. An order with a Special order cannot exceed 45 lb. <strong>Hazorex cookies:</strong> the minimum order is $12 in products, and every cookie order also pays a flat $12 <strong>Delivery and service</strong> charge. <strong>Tip:</strong> optional, and 100% goes to your driver. After delivery you can add or raise the tip for 24 hours; if you let Stripe save your card at checkout, we use it only for that tip and only when you confirm it."
       },
       {
         "title": "4. How we charge: hold and final charge",
@@ -861,20 +861,24 @@
         "body": "Order the day before, get it in 24 hours: Monday, Wednesday and Friday. Deliveries run on the route days enabled for your zone. Each day has a cut-off time: orders placed after it are delivered on the next available route day."
       },
       {
-        "title": "8. Drivers: independent contractors",
+        "title": "9. Drivers: independent contractors",
         "body": "Drivers are <strong>independent contractors</strong>, not Hazorex employees. They use their own vehicles, choose when to work, and are responsible for their own taxes, licenses and insurance."
       },
       {
-        "title": "9. Referral program",
+        "title": "10. Referral program",
         "body": "If you invite a new person with your code, you receive a $5 credit once that person receives their first order. The credit can only be used as a discount on your next purchases: it is not cash and cannot be withdrawn. You may not use your own code, and we void credits from duplicate accounts (same phone, card or address) or any fraud attempt."
       },
       {
-        "title": "10. Payouts to stores and drivers",
+        "title": "11. Payouts to stores and drivers",
         "body": "Payouts to partner stores and drivers are processed through Stripe Connect. Each store and driver opens their own Stripe account and provides bank details directly to Stripe; Hazorex never sees or stores that banking information. Using the platform as a store or driver also means accepting Stripe Connect's terms of service."
       },
       {
-        "title": "11. Card payments",
+        "title": "12. Card payments",
         "body": "Customer payments are processed by Stripe. Hazorex does not store full card numbers."
+      },
+      {
+        "title": "13. Special order",
+        "body": "If you can't find a product, you can request it by uploading its photo, brand, size, weight and the price you set yourself. All items in the order must be from a single supermarket. There is no money limit; the maximum is 20 units per item and the whole order cannot exceed 45 lb (20 kg). If the product can't be found, that item is refunded 100%."
       }
     ],
     "metaDescNoSweepstakes": "Hazorex Terms and Conditions: per-order pricing, delivery, tips, refunds and referrals."
