@@ -838,7 +838,7 @@
       },
       {
         "title": "3. Costo de entrega",
-        "body": "Cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $39.99; sobre 45 lb se suman $0.80 por libra excedente. Un pedido con Pedido especial no puede superar 45 lb. <strong>Galletas Hazorex:</strong> el pedido mínimo es $12 en productos y cada pedido de galletas paga además una <strong>Entrega y servicio</strong> fija de $12. <strong>Propina:</strong> es opcional y el 100% es para tu repartidor. Después de la entrega puedes dejar o subir la propina durante 24 horas; si aceptas que Stripe guarde tu tarjeta al pagar, la usamos solo para esa propina y solo cuando tú la confirmas."
+        "body": "Cada pedido paga un único cargo de <strong>Entrega y servicio</strong> según el peso real: hasta 15 lb $12; más de 15 a 30 lb $25; más de 30 a 45 lb $39.99; sobre 45 lb se suman $0.80 por libra excedente. Un pedido con Pedido especial no puede superar 45 lb. <strong>Galletas Hazorex:</strong> el pedido mínimo es $12 en productos y la entrega usa los mismos tramos por peso y el mismo peso máximo por pedido del Supermercado. Usamos el peso guardado del producto o, por defecto, 110 gramos por galleta; los packs suman las galletas incluidas. No hay un límite independiente de cantidad de galletas. <strong>Propina:</strong> es opcional y el 100% es para tu repartidor. Después de la entrega puedes dejar o subir la propina durante 24 horas; si aceptas que Stripe guarde tu tarjeta al pagar, la usamos solo para esa propina y solo cuando tú la confirmas."
       },
       {
         "title": "4. Cómo se cobra: reserva y cobro final",
@@ -1443,7 +1443,7 @@
       },
       "cancel": {
         "q": "¿Cuál es el pedido mínimo?",
-        "a": "$12 en productos, más $12 de entrega."
+        "a": "$12 en productos, más entrega según el peso: hasta 15 lb $12; hasta 30 lb $25; hasta 45 lb $39.99; después se suma la tarifa por libra excedente."
       },
       "sweepstakes": {
         "q": "¿Cómo participo en el sorteo diario?",
@@ -1559,7 +1559,11 @@
     "authHoldNote": "Reservamos un poco más en tu tarjeta para cubrir diferencias de peso o sustituciones. Se cobra solo lo que realmente se empaque.",
     "minimum": "Pedido mínimo $12 — te faltan ${{missing}}",
     "deliveryService": "Entrega y servicio",
-    "noMinimum": "Pedido mínimo $12 en productos. Cada pedido de galletas paga además ${{fee}} de entrega y servicio.",
+    "noMinimum": "Pedido mínimo $12 en productos. La entrega y servicio de galletas se calcula por el peso total, incluidos los packs.",
+    "orderWeight": "Peso del pedido",
+    "weightDeliveryTable": "Hasta {{smallMaxLb}} lb: ${{smallUsd}}; hasta {{mediumMaxLb}} lb: ${{mediumUsd}}; hasta {{largeMaxLb}} lb: ${{largeUsd}}; después, ${{extraUsd}} por libra excedente.",
+    "weightLimit": "El peso máximo por pedido es {{max}} lb. Reduce el peso para continuar.",
+    "shippingQuoteError": "No se pudo calcular la entrega. Inténtalo de nuevo.",
     "minimumMissing": "Pedido mínimo $12 — te faltan ${{missing}}"
   },
   "favorites": {

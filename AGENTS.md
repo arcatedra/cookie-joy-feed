@@ -4,7 +4,7 @@
 - Catalog fixtures use stable IDs, deduplicate ES/EN names, reject mismatched UPCs and preserve labels; hide malformed generated pet labels without retrying. Exclude alcohol/unconfirmed beverage prices. Public reads use ordered readCatalogPages pagination to avoid row caps.
 - Rename existing product IDs with previous-name guards and sync fixtures; never replace rows or change commercial quantities, preventing duplicates and pricing changes.
 
-- Cookie checkout charges the exact payable amount automatically and validates the product subtotal before writes; marketplace authorization remains separate to avoid charging cookie orders twice.
+- Cookie quotes and checkout share server-only catalog weights and pricing_settings tiers, validate subtotal/weight before writes, and charge exactly once; marketplace authorization stays separate.
 - All cookie shopping surfaces read the shared product catalog with a Spanish display-name adapter; public bestseller output exposes only aggregate product order, never buyer records.
 - Reel product associations require an exact available catalog flavor, shared by carousel and fullscreen; hide unmatched media without deleting records to prevent misleading purchases.
 - Reservable-block calculations live in a pure validated rules module and must remain inactive until checkout, assignment, funding and historical-order isolation are verified, preventing partial rollout of financial rules.

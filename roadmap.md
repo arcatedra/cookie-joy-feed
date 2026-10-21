@@ -1,5 +1,10 @@
 # Revisión final antes de apertura
 
+## Galletas por peso (21 oct)
+- [x] Plan aprobado; usar tabla compartida sin modificar tarifas ni datos existentes.
+- [x] Cotización y checkout comparten cálculo servidor; packs cuentan sus unidades; sin límite independiente de cantidad; carrito/textos ES/EN por peso.
+- [x] Una ejecución: 41 pruebas pasan, incluido checkout real con Stripe simulado y rechazo antes de escribir por sobrepeso/entrega desactualizada. Carrito confirma 20 y 136 galletas, Términos por peso visibles, sin errores; build OK. Sin cobros, cambios en datos reales ni publicación. Pago autenticado externo no ejercitado; verificación de cobro aislada.
+
 ## Cargo por procesamiento de pago (21 oct)
 - [x] Plan aprobado; migración aditiva de cargo/version nullable sin actualizar pedidos existentes ni clientes; campos protegidos contra escritura del navegador.
 - [x] Cálculo único de servidor, línea ES/EN en carritos y Stripe integrado, historial/admin, reserva con margen y captura recalculada; pedido vacío libera reserva. Repartos excluyen cargo, sin cambiar entregas, precios, referidos ni QR.

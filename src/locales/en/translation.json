@@ -838,7 +838,7 @@
       },
       {
         "title": "3. Delivery charge",
-        "body": "Each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $39.99; above 45 lb adds $0.80 per excess pound. An order with a Special order cannot exceed 45 lb. <strong>Hazorex cookies:</strong> the minimum order is $12 in products, and every cookie order also pays a flat $12 <strong>Delivery and service</strong> charge. <strong>Tip:</strong> optional, and 100% goes to your driver. After delivery you can add or raise the tip for 24 hours; if you let Stripe save your card at checkout, we use it only for that tip and only when you confirm it."
+        "body": "Each order pays one <strong>Delivery and service</strong> charge based on actual weight: up to 15 lb $12; over 15 to 30 lb $25; over 30 to 45 lb $39.99; above 45 lb adds $0.80 per excess pound. An order with a Special order cannot exceed 45 lb. <strong>Hazorex cookies:</strong> the minimum order is $12 in products, and delivery uses the Supermarket's same weight tiers and maximum order weight. We use the product's stored weight or, by default, 110 grams per cookie; packs add the cookies they include. There is no separate cookie quantity limit. <strong>Tip:</strong> optional, and 100% goes to your driver. After delivery you can add or raise the tip for 24 hours; if you let Stripe save your card at checkout, we use it only for that tip and only when you confirm it."
       },
       {
         "title": "4. How we charge: hold and final charge",
@@ -1443,7 +1443,7 @@
       },
       "cancel": {
         "q": "What is the minimum order?",
-        "a": "$12 in products, plus $12 delivery."
+        "a": "$12 in products, plus weight-based delivery: up to 15 lb $12; up to 30 lb $25; up to 45 lb $39.99; then add the rate per excess pound."
       },
       "sweepstakes": {
         "q": "How do I enter the daily sweepstakes?",
@@ -1559,7 +1559,11 @@
     "authHoldNote": "We place a slightly larger hold on your card to cover weight differences or substitutions. You are only charged for what is actually packed.",
     "minimum": "Minimum order $12 — you need ${{missing}} more",
     "deliveryService": "Delivery & service",
-    "noMinimum": "Minimum order $12 in products. Every cookie order also pays ${{fee}} for delivery and service.",
+    "noMinimum": "Minimum order $12 in products. Cookie delivery and service is based on total weight, including packs.",
+    "orderWeight": "Order weight",
+    "weightDeliveryTable": "Up to {{smallMaxLb}} lb: ${{smallUsd}}; up to {{mediumMaxLb}} lb: ${{mediumUsd}}; up to {{largeMaxLb}} lb: ${{largeUsd}}; then ${{extraUsd}} per excess pound.",
+    "weightLimit": "Maximum order weight is {{max}} lb. Reduce the weight to continue.",
+    "shippingQuoteError": "Unable to calculate delivery. Please try again.",
     "minimumMissing": "Minimum order $12 — you need ${{missing}} more"
   },
   "cartFloating": {

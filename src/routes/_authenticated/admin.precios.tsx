@@ -14,6 +14,10 @@ export const Route = createFileRoute("/_authenticated/admin/precios")({
       { title: "Precios y cargos — Admin Hazorex" },
       { name: "description", content: "Edita los cargos por pedido, peso y pagos al repartidor." },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Precios y cargos — Admin Hazorex" },
+      { property: "og:description", content: "Ajustes de cargos y entregas de Hazorex." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: PreciosPage,
@@ -55,7 +59,7 @@ const LABELS: Record<keyof PricingSettings, string> = {
   weightExtraPerLbUsd: "Precio por libra extra ($)",
   processingFeePct: "Recargo de procesamiento (%)",
   payoutFrequencyDays: "Pago a súpers: inmediato",
-  cookieDeliveryFeeUsd: "Galletas: Entrega y servicio por pedido ($)",
+  cookieDeliveryFeeUsd: "Tarifa fija anterior de galletas (sin uso)",
   cookieDistanceFeeEnabled: "Galletas: cobrar extra por distancia",
   cookieDistanceFeePerMileUsd: "Galletas: extra por milla ($)",
 };
@@ -206,13 +210,14 @@ function PreciosPage() {
         <section className="mt-6 rounded-xl border border-border bg-card p-5">
           <h2 className="text-sm font-bold">Galletas</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Sin mínimo de compra. Cada pedido de galletas paga esta Entrega y servicio fija.
+            Mínimo $12 en productos. La entrega de galletas usa los tramos por peso y el peso máximo del Supermercado; la tarifa fija anterior ya no se aplica.
           </p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <label className="block text-sm">
               <span className="mb-1 block text-xs text-muted-foreground">{LABELS.cookieDeliveryFeeUsd}</span>
               <input
                 value={form.cookieDeliveryFeeUsd ?? ""}
+                disabled
                 onChange={(e) => setForm({ ...form, cookieDeliveryFeeUsd: e.target.value })}
                 inputMode="decimal"
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
