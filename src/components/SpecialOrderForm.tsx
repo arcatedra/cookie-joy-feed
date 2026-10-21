@@ -25,7 +25,7 @@ export function SpecialOrderForm({ items, onChange, L }: { items: SpecialItem[];
       const { error } = await supabase.storage.from("store-media").upload(path, file, { contentType: file.type });
       if (error) throw new Error(L("No se pudo subir la foto.", "Could not upload the photo."));
       onChange([...items, item]);
-      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", peso: "", peso: "", supermercado: items.length ? f.supermercado : "" });
+      setF({ marca: "", nombre: "", tamano: "", qty: "1", precio: "", peso: "", supermercado: items.length ? f.supermercado : "" });
       setFile(null);
       setOpen(false);
       toast.success(L("Agregado al carrito", "Added to cart"));
