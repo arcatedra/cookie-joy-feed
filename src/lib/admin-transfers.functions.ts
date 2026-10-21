@@ -38,7 +38,7 @@ export const listTransfers = createServerFn({ method: "GET" })
       admin
         .from("store_orders")
         .select(
-          "id, numero_pedido, business_id, monto_capturado, monto_transferido_negocio, transferido_en, capturado_en, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado",
+          "id, numero_pedido, business_id, monto_capturado, monto_transferido_negocio, transferido_en, capturado_en, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado, cargo_procesamiento",
         )
         .not("capturado_en", "is", null)
         .order("capturado_en", { ascending: false })

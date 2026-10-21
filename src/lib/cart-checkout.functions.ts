@@ -36,6 +36,7 @@ const schema = z.object({
   usarSaldo: z.boolean().default(true),
   locale: z.enum(["es", "en"]).default("es"),
   expectedDeliveryCents: z.number().int().min(0).max(10000).optional(),
+  expectedProcessingCents: z.number().int().min(0).optional(),
 });
 
 const SHIPPING_RATES = {
@@ -131,6 +132,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     const tipCents = Math.round(data.propina * 100);
     assertCookieSubtotal(subtotalCents);
     const grossCents = subtotalCents + shippingRate.amount + tipCents;
+    const { cardPaymentQuote, assertProcessingQuote } = await import("./payment-processing.server");
+    let processingCents = cardPaymentQuote(grossCents).feeCents;
     let creditCents = 0;
     let totalCents = grossCents;
 
@@ -151,6 +154,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         costo_envio: shippingRate.amount / 100,
         impuestos: 0,
         total: totalCents / 100,
+        cargo_procesamiento: processingCents / 100,
+        procesamiento_version: 1,
         moneda: "USD",
         direccion_envio: data.address,
         metodo_pago: "stripe",
@@ -165,9 +170,16 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     }
 
     if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "cookie", pedidoRow.id, Math.max(0, Math.min(grossCents - 100, subtotalCents + shippingRate.amount)), env);
-    totalCents = grossCents - creditCents;
+    const cardQuote = cardPaymentQuote(grossCents - creditCents);
+    processingCents = cardQuote.feeCents;
+    if (data.expectedProcessingCents !== undefined && data.expectedProcessingCents !== processingCents) {
+      await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
+      await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
+      assertProcessingQuote(data.expectedProcessingCents, processingCents);
+    }
+    totalCents = cardQuote.totalCents;
     authorizedCents = totalCents;
-    const { error: totalsError } = await supabaseAdmin.from("pedidos").update({ credito_aplicado: creditCents / 100, total: totalCents / 100, monto_autorizado: authorizedCents / 100 }).eq("id", pedidoRow.id);
+    const { error: totalsError } = await supabaseAdmin.from("pedidos").update({ cargo_procesamiento: processingCents / 100, credito_aplicado: creditCents / 100, total: totalCents / 100, monto_autorizado: authorizedCents / 100 }).eq("id", pedidoRow.id);
     if (totalsError) {
       await supabaseAdmin.from("pedidos").update({ estado: "cancelado" }).eq("id", pedidoRow.id);
       await releaseOrderCredit(supabaseAdmin, "cookie", pedidoRow.id);
@@ -209,7 +221,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
     if (creditCents > 0) {
       lineItems.splice(0, lineItems.length, {
         quantity: 1,
-        price_data: { currency: "usd", unit_amount: totalCents, product_data: { name: `HAZOREX ${pedidoRow.numero_pedido} (${data.locale === "en" ? "credit applied" : "saldo aplicado"}: -$${(creditCents / 100).toFixed(2)})` } },
+        price_data: { currency: "usd", unit_amount: cardQuote.baseCents, product_data: { name: `HAZOREX ${pedidoRow.numero_pedido} (${data.locale === "en" ? "credit applied" : "saldo aplicado"}: -$${(creditCents / 100).toFixed(2)})` } },
       });
     } else {
       for (const [name, cents] of [
@@ -219,6 +231,8 @@ export const createCartCheckout = createServerFn({ method: "POST" })
         if (cents > 0) lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: cents, product_data: { name } } });
       }
     }
+
+    lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: processingCents, product_data: { name: data.locale === "en" ? "Payment processing fee" : "Cargo por procesamiento de pago" } } });
 
     // Cliente de Stripe para poder guardar la tarjeta (con el aviso de Stripe)
     // y permitir una propina extra después de la entrega. Si falla, se sigue sin guardar.
@@ -285,6 +299,7 @@ export const createCartCheckout = createServerFn({ method: "POST" })
       numeroPedido: pedidoRow.numero_pedido,
       creditoAplicado: creditCents / 100,
       totalEstimado: totalCents / 100,
+      cargoProcesamiento: processingCents / 100,
     };
   });
 

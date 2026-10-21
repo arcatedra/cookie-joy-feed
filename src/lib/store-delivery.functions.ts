@@ -265,7 +265,7 @@ export const adminListStoreDeliveries = createServerFn({ method: "GET" })
     const [{ data: orders }, { data: drivers }] = await Promise.all([
       admin
         .from("store_orders")
-        .select(ORDER_COLS + ", repartidor_nombre")
+        .select(ORDER_COLS + ", repartidor_nombre, cargo_procesamiento")
         .in("estado", ["listo", "entregado"])
         .order("created_at", { ascending: false })
         .limit(150),
@@ -280,7 +280,7 @@ export const adminListStoreDeliveries = createServerFn({ method: "GET" })
     return {
       pedidos: cards.map((c) => {
         const o: any = byId.get(c.id);
-        return { ...c, sinZona: c.zona === OTHER_AREAS, estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
+        return { ...c, cargoProcesamiento: o.cargo_procesamiento == null ? null : Number(o.cargo_procesamiento), sinZona: c.zona === OTHER_AREAS, estado: o.estado, repartidorId: o.repartidor_id, repartidorNombre: o.repartidor_nombre };
       }),
       repartidores: drivers ?? [],
     };

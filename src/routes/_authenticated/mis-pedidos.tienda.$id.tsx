@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Camera, Star } from "lucide-react";
 import { toast } from "sonner";
 import { PostDeliveryTipCard } from "@/components/PostDeliveryTipCard";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
 
 export const Route = createFileRoute("/_authenticated/mis-pedidos/tienda/$id")({
   head: () => ({
@@ -181,6 +182,7 @@ function StoreOrderDetailPage() {
         <span className="text-right">{money(order.subtotal)}</span>
         <span className="text-muted-foreground">Entrega</span>
         <span className="text-right">{money(order.costo_envio)}</span>
+        <div className="col-span-2"><PaymentProcessingRow amount={order.cargo_procesamiento} /></div>
         <span className="text-muted-foreground">Estimado</span>
         <span className="text-right">{money(order.total_estimado)}</span>
         <span className="font-semibold">{cobrado ? "Cobrado" : "Reservado"}</span>

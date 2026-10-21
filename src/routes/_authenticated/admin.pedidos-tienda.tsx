@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Loader2, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
 import { groupByZoneZip } from "@/lib/pricing";
 import { adminAssignStoreOrder, adminListExpiredReservations, adminListStoreDeliveries } from "@/lib/store-delivery.functions";
 
@@ -116,6 +117,7 @@ function AdminStoreDeliveries() {
                   {p.pesoLb} lb · {p.articulos} art. · repartidor gana $
                   {p.gananciaUsd.toFixed(2)}
                 </p>
+                <PaymentProcessingRow amount={p.cargoProcesamiento} />
                 <p className="text-xs">
                   {p.estado === "entregado"
                     ? `Entregado por ${p.repartidorNombre ?? "—"}`

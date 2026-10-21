@@ -12,7 +12,7 @@
 - Hydrate cart/language after mount for SSR; reuse mounted StoreCartBar in drawers to preserve payment state.
 
 - Persist the Stripe environment on marketplace orders and connected accounts; transfer and capture operations must validate that environment instead of deriving it from background execution, preventing sandbox/live crossovers.
-- Tax identifiers and bank account details must be collected only by Stripe onboarding; local write endpoints and database triggers reject new sensitive financial data while preserving historical rows.
+- Stripe onboarding alone collects tax/bank details; local writes reject new sensitive data and preserve history.
 - End-to-end tests require an authorized session; never bypass authentication or elevate real users to fabricate results.
 - Public merchant reads use the security-invoker commercial view and column-restricted anonymous base-table grants; registration starts pending and connected-account fields are server-managed to prevent disclosure and self-approval.
 - Affiliate withdrawal requests serialize per authenticated affiliate and lock eligible commission rows before calculating totals, preventing simultaneous requests from claiming the same balance twice.
@@ -25,5 +25,6 @@
 - Delivery block stops reference exactly one store order or one cookie order; same-building orders must share a block and cookie orders in blocks never enter legacy cookie routes, so each delivery and tip is paid once.
 - Hazorex's own supermarket is a regular approved business (slug `hazorex-supermercado`) reusing store checkout; supplier "where to buy" lives in admin/assigned-driver-only `store_product_sourcing`, so it never reaches public catalog reads.
 - Picking/capture use pickedProductId for replacement sale mode and weight, preserving original price. Bill validated actual units or recorded weight, missing items zero; validate before writes and stop on save failure to prevent overcharging.
-- Photo credits/status belong to the current image; keep originals on background edits and clear credits on replacements.
-- Storage public reads require catalog/reel references; owner/admin reads stay separate to protect unused uploads. Likes are owner-only; counters use aggregate RPCs.
+- Image credits/status follow the current photo; retain originals on background edits, clear credits on replacement.
+- Payment fees use server-only cents shared by quotes/checkout/capture; nullable versions isolate history and payouts exclude fees.
+- Public media requires catalog/reel references; owner/admin reads stay separate. Likes are private; counters aggregate.

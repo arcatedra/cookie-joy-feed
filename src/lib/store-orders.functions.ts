@@ -196,6 +196,18 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     }
     realLb = Math.round(realLb * 100) / 100;
 
+    if (order.procesamiento_version === 1 && realItemCount === 0) {
+      const { stripeCancelPaymentIntent } = await import("./stripe.server");
+      const { environmentForStoreOrder } = await import("./payouts.server");
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { releaseOrderCredit } = await import("./order-credit.server");
+      await stripeCancelPaymentIntent(order.stripe_payment_intent_id, `store-empty-${order.id}`, await environmentForStoreOrder(order.id, db));
+      const { error } = await supabaseAdmin.from("store_orders").update({ estado: "cancelado", cargo_procesamiento: 0, monto_capturado: 0 }).eq("id", order.id);
+      if (error) throw new Error("La reserva se liberó, pero falta guardar la cancelación.");
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
+      return { ok: true as const, cancelled: true as const };
+    }
+
     const tier = tierForWeight(realLb, pricing);
     const shippingCents = tier.feeCents;
     const weightCents = weightFeeCents(realLb, pricing);
@@ -209,10 +221,13 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
     const { data: adjustedCredit, error: creditError } = await creditDb.rpc("adjust_order_credit", { p_kind: "store", p_order: order.id, p_limit: Math.max(0, Math.min(realGrossCents - 100, serviceCents + tier.companyCents)) / 100 });
     if (creditError) throw new Error("No se pudo ajustar el saldo del pedido.");
     const creditCents = Math.round(Number(adjustedCredit ?? 0) * 100);
-    const realTotalCents = Math.max(
+    const realBaseCents = Math.max(
       0,
       realSubtotalCents + shippingCents + weightCents + serviceCents + tipCents - creditCents,
     );
+    const { cardPaymentQuote } = await import("./payment-processing.server");
+    const processingQuote = cardPaymentQuote(realBaseCents, order.procesamiento_version ?? null);
+    const realTotalCents = processingQuote.totalCents;
     const authorizedCents = Math.round(Number(order.monto_autorizado ?? 0) * 100);
     if (authorizedCents <= 0) throw new Error("La reserva del pago no es válida.");
 
@@ -266,6 +281,7 @@ export const markOrderReadyAndCapture = createServerFn({ method: "POST" })
         ajuste_pendiente: pendingAdjustmentCents / 100,
         subtotal: realSubtotalCents / 100,
         cargo_servicio: serviceCents / 100,
+        ...(order.procesamiento_version === 1 ? { cargo_procesamiento: processingQuote.feeCents / 100, total_estimado: realTotalCents / 100 } : {}),
         costo_envio: shippingCents / 100,
         tramo: tier.tier,
         envio_repartidor: order.pricing_model === "batch_v1" ? stopCompensation(realLb).baseCents / 100 : Number(order.envio_repartidor),

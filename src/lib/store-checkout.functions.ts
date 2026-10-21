@@ -63,6 +63,7 @@ const schema = z.object({
   /** Qué hacer si falta un producto. */
   reemplazo: z.enum(["similar", "no_reemplazar", "llamar"]).optional().default("similar"),
   locale: z.enum(["es", "en"]).default("es"),
+  expectedProcessingCents: z.number().int().min(0).optional(),
 });
 
 /** Envío fijo del marketplace (no toca las tarifas de galletas). */
@@ -176,6 +177,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       pricing,
     );
     const grossCents = subtotalCents + shippingCents + weightCents + serviceCents + tipCents;
+    const { cardPaymentQuote, assertProcessingQuote } = await import("./payment-processing.server");
+    let processingCents = cardPaymentQuote(grossCents).feeCents;
 
     const { attachReferralIfPending } = await import("./referrals-attach.server");
     await attachReferralIfPending({ supabase: db, userId });
@@ -183,7 +186,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { reserveOrderCredit, releaseOrderCredit } = await import("./order-credit.server");
     let creditCents = 0;
-    let totalCents = grossCents;
+    let totalCents = grossCents + processingCents;
 
     // ---- Margen de reserva (mismo ajuste configurable de siempre) --------
     let bufferPct = 15;
@@ -214,6 +217,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         subtotal: subtotalCents / 100,
         costo_envio: shippingCents / 100,
         cargo_servicio: serviceCents / 100,
+        cargo_procesamiento: processingCents / 100,
+        procesamiento_version: 1,
         door_service: blockEnabled ? data.doorService : "lobby",
         door_service_fee: blockEnabled ? serviceCents / 100 : 0,
         pricing_model: blockEnabled ? "reservable_block_v1" : "batch_v1",
@@ -241,10 +246,17 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
 
 
     if (data.usarSaldo) creditCents = await reserveOrderCredit(supabaseAdmin, "store", order.id, Math.max(0, Math.min(grossCents - 100, serviceCents + tier.companyCents)), env);
-    totalCents = grossCents - creditCents;
+    const cardQuote = cardPaymentQuote(grossCents - creditCents);
+    processingCents = cardQuote.feeCents;
+    if (data.expectedProcessingCents !== undefined && data.expectedProcessingCents !== processingCents) {
+      await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
+      await releaseOrderCredit(supabaseAdmin, "store", order.id);
+      assertProcessingQuote(data.expectedProcessingCents, processingCents);
+    }
+    totalCents = cardQuote.totalCents;
     bufferCents = Math.max(Math.round((totalCents * bufferPct) / 100), bufferMinCents);
     authorizedCents = totalCents + bufferCents;
-    const { error: totalsError } = await supabaseAdmin.from("store_orders").update({ credito_aplicado: creditCents / 100, total_estimado: totalCents / 100 }).eq("id", order.id);
+    const { error: totalsError } = await supabaseAdmin.from("store_orders").update({ cargo_procesamiento: processingCents / 100, credito_aplicado: creditCents / 100, total_estimado: totalCents / 100 }).eq("id", order.id);
     if (totalsError) {
       await supabaseAdmin.from("store_orders").update({ estado: "cancelado" }).eq("id", order.id);
       await releaseOrderCredit(supabaseAdmin, "store", order.id);
@@ -279,7 +291,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
         quantity: 1,
         price_data: {
           currency: "usd",
-          unit_amount: totalCents + bufferCents,
+          unit_amount: cardQuote.baseCents + bufferCents,
           product_data: {
             name: `Pedido ${order.numero_pedido} (saldo aplicado -$${(creditCents / 100).toFixed(2)})`,
           },
@@ -312,6 +324,8 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       }
     }
 
+
+    lineItems.push({ quantity: 1, price_data: { currency: "usd", unit_amount: processingCents, product_data: { name: data.locale === "en" ? "Payment processing fee" : "Cargo por procesamiento de pago" } } });
 
     const metadata = {
       kind: "store_order",
@@ -381,6 +395,7 @@ export const createStoreCheckout = createServerFn({ method: "POST" })
       totalEstimado: totalCents / 100,
       creditoAplicado: creditCents / 100,
       cargoServicio: serviceCents / 100,
+      cargoProcesamiento: processingCents / 100,
       costoEnvio: shippingCents / 100,
       tramo: tier.tier,
       propina: tipCents / 100,

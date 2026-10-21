@@ -13,7 +13,7 @@ export async function runPayouts(source: "cron" | "manual") {
 
   const { data: orders, error } = await db
     .from("store_orders")
-    .select("id, monto_capturado, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado")
+    .select("id, monto_capturado, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado, cargo_procesamiento")
     .is("transferido_en", null)
     .not("capturado_en", "is", null)
     .gt("monto_capturado", 0)

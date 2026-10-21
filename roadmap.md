@@ -1,9 +1,10 @@
 # Revisión final antes de apertura
 
 ## Cargo por procesamiento de pago (21 oct)
-- [ ] Mostrar plan previo obligatorio para pagos y migración; autorización de ejecución recibida, pendiente aprobación del plan concreto.
-- [ ] Implementar cálculo único de servidor, desglose ES/EN, reserva/captura real y aislamiento de pedidos históricos sin tocar entregas, precios, clientes, referidos ni QR.
-- [ ] Verificación limitada aislada y visual sin dinero real; informar ejemplos y créditos verificables, sin publicar.
+- [x] Plan aprobado; migración aditiva de cargo/version nullable sin actualizar pedidos existentes ni clientes; campos protegidos contra escritura del navegador.
+- [x] Cálculo único de servidor, línea ES/EN en carritos y Stripe integrado, historial/admin, reserva con margen y captura recalculada; pedido vacío libera reserva. Repartos excluyen cargo, sin cambiar entregas, precios, referidos ni QR.
+- [x] Una pasada: 40 pruebas aisladas pasan (checkout real con Stripe simulado, reserva, captura/faltantes, todos los tramos, históricos y fondos de tienda). Carrito público muestra cargo $0.70 y total $13.95, Términos visibles, sin errores de página; build OK. Sin dinero real ni publicación.
+- [ ] Recorrido autenticado real no verificado: Supabase externo sin sesión autorizada; no se solicitó ni se hizo prueba con dinero real. Créditos exactos por esta tarea no disponibles: herramienta solo devuelve consumo acumulado del período.
 
 ## Seguridad autorizada (20 oct, 05:38 UTC)
 - [x] Aplicar una pasada limitada: me gusta propios; archivos públicos solo referenciados por catálogo/reels, con lectura propia/admin separada. Sin modificar filas ni checkout/Stripe.

@@ -147,7 +147,7 @@ export const captureOrder = createServerFn({ method: "POST" })
     const { data: pedido } = await supabaseAdmin
       .from("pedidos")
       .select(
-        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,monto_capturado,captura_intentos,stripe_payment_intent_id,propina,credito_aplicado,stripe_environment",
+        "id,numero_pedido,estado,flujo_pago,costo_envio,impuestos,monto_autorizado,monto_capturado,captura_intentos,stripe_payment_intent_id,propina,credito_aplicado,stripe_environment,procesamiento_version",
       )
       .eq("id", data.pedidoId)
       .maybeSingle();
@@ -211,7 +211,9 @@ export const captureOrder = createServerFn({ method: "POST" })
     const realGrossCents = realSubtotalCents + shippingCents + taxCents + Math.round(Number(p.propina ?? 0) * 100);
     const { data: adjustedCredit, error: adjustmentError } = await supabaseAdmin.rpc("adjust_order_credit", { p_kind: "cookie", p_order: data.pedidoId, p_limit: Math.max(0, Math.min(realSubtotalCents + shippingCents + taxCents, realGrossCents - 100)) / 100 });
     if (adjustmentError) return { ok: false, error: "No se pudo ajustar el saldo del pedido." };
-    const wantedCents = Math.max(0, realGrossCents - Math.round(Number(adjustedCredit ?? 0) * 100));
+    const { cardPaymentQuote } = await import("./payment-processing.server");
+    const processingQuote = cardPaymentQuote(Math.max(0, realGrossCents - Math.round(Number(adjustedCredit ?? 0) * 100)), p.procesamiento_version === 1 ? 1 : null);
+    const wantedCents = processingQuote.totalCents;
     const captureCents = Math.min(Math.max(wantedCents, 50), authorizedCents);
     const recortado = wantedCents > authorizedCents;
 
@@ -251,6 +253,7 @@ export const captureOrder = createServerFn({ method: "POST" })
       .update({
         estado: "pagado",
         total: captureCents / 100,
+        ...(p.procesamiento_version === 1 ? { cargo_procesamiento: processingQuote.feeCents / 100 } : {}),
         subtotal: realSubtotalCents / 100,
         monto_capturado: captureCents / 100,
         capturado_en: new Date().toISOString(),
