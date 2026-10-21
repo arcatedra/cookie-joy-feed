@@ -32,6 +32,8 @@ import { unitPriceCents, productDescription } from "@/lib/house-store-rules";
 import { TipSelector } from "@/components/TipSelector";
 import { spendableOrderCreditCents } from "@/lib/referral-credit";
 import { ProductPhotoCredit } from "@/components/ProductPhotoCredit";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
+import { usePaymentProcessing } from "@/hooks/usePaymentProcessing";
 
 export const Route = createFileRoute("/tienda/$slug")({
   loader: async ({ params }) => {
@@ -300,6 +302,7 @@ export function StoreCartBar({
   const [reemplazo, setReemplazo] = useState<"similar" | "no_reemplazar" | "llamar">("similar");
   const [busy, setBusy] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [confirmedFee, setConfirmedFee] = useState<number | null>(null);
 
   const { data: config } = useQuery({
     queryKey: ["pricing-config"],
@@ -359,7 +362,9 @@ export function StoreCartBar({
   const balanceCents = Math.round(Number(credit?.balance ?? 0) * 100);
   const grossCents = subtotalCents + shippingCents + tipCents;
   const creditCents = usarSaldo ? spendableOrderCreditCents(balanceCents, grossCents, processingCents + tier.companyCents) : 0;
-  const totalCents = Math.max(0, grossCents - creditCents);
+  const baseCents = Math.max(0, grossCents - creditCents);
+  const feeQuote = usePaymentProcessing(baseCents, !!config && !overLimit && (!user || !!credit) && (lines.length > 0 || especiales.length > 0));
+  const totalCents = feeQuote.data?.totalCents ?? baseCents;
 
   const zoneDays = daysForZip(deliveryZones, cliente?.codigo_postal as string | undefined, pricing);
   const fechas = useMemo(
@@ -372,6 +377,7 @@ export function StoreCartBar({
   const hasAddress = !!cliente?.direccion_linea1 && !!cliente?.ciudad && !!cliente?.codigo_postal;
 
   async function handleCheckout() {
+    if (!feeQuote.ready) return;
     if (!user) {
       toast.error("Inicia sesión para continuar.");
       return;
@@ -401,11 +407,13 @@ export function StoreCartBar({
           usarSaldo,
           reemplazo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
+          expectedProcessingCents: feeQuote.data?.feeCents,
         },
       });
       // El carrito NO se vacía aquí: solo cuando Stripe autoriza el pago.
       if (!res.clientSecret) throw new Error("No se pudo abrir la pantalla de pago.");
       setPendingOrderId(res.orderId);
+      setConfirmedFee(res.cargoProcesamiento);
       setClientSecret(res.clientSecret);
     } catch (err) {
       toast.error((err as Error).message || "No se pudo iniciar el pago.");
@@ -508,6 +516,8 @@ export function StoreCartBar({
         <TipSelector value={propina} onChange={setPropina} />
         <p className="text-xs text-muted-foreground">{t("deliveryPromise")}</p>
         {creditCents > 0 && <p className="text-xs text-muted-foreground">{t("credit.discount")}: -${(creditCents / 100).toFixed(2)}</p>}
+        <PaymentProcessingRow amount={feeQuote.ready ? Number(feeQuote.data?.feeCents) / 100 : null} />
+        {feeQuote.isError && <p className="text-xs text-destructive">{i18n.language.startsWith("en") ? "Unable to calculate payment processing fee." : "No se pudo calcular el cargo por procesamiento de pago."}</p>}
 
         {!hasAddress && user && (
           <p className="text-xs text-amber-700">
@@ -519,15 +529,15 @@ export function StoreCartBar({
           </p>
         )}
 
-        <button
+        <Button
           type="button"
           onClick={handleCheckout}
-          disabled={busy || overLimit}
-          className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-full bg-[#1e3a5f] px-6 text-sm font-bold text-white disabled:opacity-50"
+          disabled={busy || overLimit || !feeQuote.ready}
+          className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-bold disabled:opacity-50"
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           Pagar ${(totalCents / 100).toFixed(2)}
-        </button>
+        </Button>
       </div>
   );
 
@@ -571,6 +581,7 @@ export function StoreCartBar({
           <p className="text-xs text-muted-foreground">
             Reservamos el total más un 15% (mínimo $5 de margen) para ajustes de peso. Al final solo se cobra lo real.
           </p>
+          <PaymentProcessingRow amount={confirmedFee} />
           {clientSecret && (
             <EmbeddedCheckoutProvider key={clientSecret} stripe={getStripe()} options={{ clientSecret }}>
               <EmbeddedCheckout />

@@ -7,6 +7,7 @@ import { Loader2, Printer, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format-price";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
 import { adminCookieOrderAction, adminListCookieOrders } from "@/lib/admin-cookie-orders.functions";
 import {
   allowedActions, COOKIE_STATUS_FILTERS, COOKIE_STATUS_LABEL, isUnpaid, nyToday, statusGroup,
@@ -172,6 +173,7 @@ function AdminCookieOrders() {
                 <p className="text-xs text-muted-foreground">
                   Subtotal {formatPrice(p.subtotal)} · Entrega {formatPrice(p.envio)} · Propina {formatPrice(p.propina)} · Total {formatPrice(p.total)}
                 </p>
+                <PaymentProcessingRow amount={p.cargoProcesamiento} />
                 {allowedActions(p).length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {allowedActions(p).map((a) => (

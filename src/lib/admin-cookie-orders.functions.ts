@@ -51,7 +51,7 @@ export type CookieAdminOrder = {
   direccion: Record<string, string | null>;
   entrega: string;
   items: { nombre: string; cantidad: number }[];
-  subtotal: number; envio: number; propina: number; total: number;
+  subtotal: number; envio: number; propina: number; total: number; cargoProcesamiento: number | null;
   historial: { de: string | null; a: string; nota: string | null; en: string; por: string }[];
 };
 
@@ -61,7 +61,7 @@ export const adminListCookieOrders = createServerFn({ method: "GET" })
     await assertAdmin((context as any).supabase, (context as any).userId);
     const db = await admin();
     const { data: orders, error } = await db.from("pedidos")
-      .select("id,numero_pedido,creado_en,cliente_id,direccion_envio,subtotal,costo_envio,propina,total,estado,monto_capturado,capturado_en,stripe_environment")
+      .select("id,numero_pedido,creado_en,cliente_id,direccion_envio,subtotal,costo_envio,propina,total,estado,monto_capturado,capturado_en,stripe_environment,cargo_procesamiento")
       .order("creado_en", { ascending: false }).limit(500);
     if (error) throw new Error("No se pudieron cargar los pedidos.");
     const ids = (orders ?? []).map((o: any) => o.id);
@@ -87,6 +87,7 @@ export const adminListCookieOrders = createServerFn({ method: "GET" })
           entrega: cookieDeliveryDate(o.creado_en),
           items: (items ?? []).filter((i: any) => i.pedido_id === o.id).map((i: any) => ({ nombre: i.nombre_producto, cantidad: i.cantidad })),
           subtotal: Number(o.subtotal ?? 0), envio: Number(o.costo_envio ?? 0), propina: Number(o.propina ?? 0), total: Number(o.total ?? 0),
+          cargoProcesamiento: o.cargo_procesamiento == null ? null : Number(o.cargo_procesamiento),
           historial: (events ?? []).filter((e: any) => e.pedido_id === o.id).map((e: any) => ({
             de: e.from_estado, a: e.to_estado, nota: e.nota, en: e.created_at, por: String(actorName.get(e.actor_id) ?? "Admin"),
           })),

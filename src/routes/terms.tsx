@@ -14,6 +14,10 @@ export const Route = createFileRoute("/terms")({
           ? i18n.t("terms.metaDesc")
           : i18n.t("terms.metaDescNoSweepstakes", "Términos y Condiciones de uso de HAZOREX."),
       },
+      { property: "og:title", content: i18n.t("terms.metaTitle") },
+      { property: "og:description", content: "Condiciones de compra y pagos en HAZOREX." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: TermsPage,
@@ -77,6 +81,7 @@ function TermsPage() {
       </p>
 
       <section style={{ marginTop: 24 }}>
+        <p>{i18n.language.startsWith("en") ? "Card payments include a payment processing fee that covers payment gateway costs." : "Los pagos con tarjeta incluyen un cargo por procesamiento de pago que cubre los costos de la pasarela."}</p>
         {/*
           Con sweepstakesEnabled=false ocultamos las secciones ligadas al sorteo
           (1 Aceptación con enlace a reglas, 2 Elegibilidad, 3 Estrellas y Compras,

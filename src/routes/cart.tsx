@@ -22,6 +22,8 @@ import { getMyCredit } from "@/lib/wallet-credits.functions";
 import { TipSelector } from "@/components/TipSelector";
 import { Button } from "@/components/ui/button";
 import { cancelPendingCheckout } from "@/lib/checkout-cancel.functions";
+import { usePaymentProcessing } from "@/hooks/usePaymentProcessing";
+import { PaymentProcessingRow } from "@/components/PaymentProcessingRow";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -70,6 +72,7 @@ function CartPage() {
   const [propina, setPropina] = useState(0);
   const [usarSaldo, setUsarSaldo] = useState(true);
   const [confirmedTotal, setConfirmedTotal] = useState<number | null>(null);
+  const [confirmedFee, setConfirmedFee] = useState<number | null>(null);
   const [email, setEmail] = useState(user?.email ?? "");
   const [address, setAddress] = useState<AddressForm>({
     name: "",
@@ -95,13 +98,16 @@ function CartPage() {
   const subtotal = cart.total;
   const gross = subtotal + shippingCost + propina;
   const discount = usarSaldo ? Math.min(Math.max(0, Number(credit?.balance ?? 0)), Math.max(gross - 1, 0), subtotal + shippingCost) : 0;
-  const total = confirmedTotal ?? Math.round((gross - discount) * 100) / 100;
+  const baseCents = Math.round((gross - discount) * 100);
+  const feeQuote = usePaymentProcessing(baseCents, cart.count > 0 && !!pricingConfig && (!user || !!credit));
+  const total = confirmedTotal ?? (feeQuote.data?.totalCents ?? baseCents) / 100;
 
   const missingCents = Math.max(0, COOKIE_MIN_SUBTOTAL_CENTS - Math.round(subtotal * 100));
   const canCheckout =
     cart.count > 0 &&
     missingCents === 0 &&
     !!pricingConfig &&
+    feeQuote.ready &&
     /.+@.+\..+/.test(email) &&
     address.name.length >= 2 &&
     address.street.length >= 2 &&
@@ -131,11 +137,13 @@ function CartPage() {
           usarSaldo,
           locale: i18n.language.startsWith("en") ? "en" : "es",
           expectedDeliveryCents: deliveryCents,
+          expectedProcessingCents: feeQuote.data?.feeCents,
         },
       });
       setPendingOrderId(res.pedidoId);
       setClientSecret(res.clientSecret);
       setConfirmedTotal(res.totalEstimado);
+      setConfirmedFee(res.cargoProcesamiento);
       setTimeout(() => {
         checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -307,6 +315,8 @@ function CartPage() {
           />
           <Row label={t("tips.title")} value={`$${propina.toFixed(2)}`} />
           {discount > 0 && <Row label={t("credit.discount")} value={`-$${discount.toFixed(2)}`} />}
+          <PaymentProcessingRow amount={confirmedFee ?? (feeQuote.ready ? Number(feeQuote.data?.feeCents) / 100 : null)} />
+          {feeQuote.isError && <p className="text-destructive">{i18n.language.startsWith("en") ? "Unable to calculate payment processing fee." : "No se pudo calcular el cargo por procesamiento de pago."}</p>}
           <div className="mt-2 flex items-baseline justify-between border-t border-border pt-3">
             <span className="text-base font-bold text-foreground">{t("cartPage.total")}</span>
             <span className="text-2xl font-extrabold text-primary">
@@ -347,7 +357,7 @@ function CartPage() {
             <Button variant="outline" className="m-4" disabled={loadingCheckout} onClick={async () => {
               if (!pendingOrderId) return;
               setLoadingCheckout(true);
-              try { const result = await cancelCheckout({ data: { kind: "cookie", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setConfirmedTotal(null); setPendingOrderId(null); } }
+              try { const result = await cancelCheckout({ data: { kind: "cookie", orderId: pendingOrderId } }); if (result.cancelled) { setClientSecret(null); setConfirmedTotal(null); setConfirmedFee(null); setPendingOrderId(null); } }
               catch (error) { toast.error(error instanceof Error ? error.message : t("cartPage.checkoutError")); }
               finally { setLoadingCheckout(false); }
             }}>{t("common.back")}</Button>

@@ -65,7 +65,7 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
 
   const { data: stops, error: stopsError } = await db
     .from("delivery_block_stops")
-    .select("store_order_id,cookie_order_id,store_orders(monto_capturado,costo_envio,cargo_peso,cargo_servicio,propina,credito_aplicado,stripe_environment,stripe_payment_intent_id),pedidos(monto_capturado,costo_envio,propina,stripe_environment,stripe_payment_intent_id)")
+    .select("store_order_id,cookie_order_id,store_orders(monto_capturado,costo_envio,cargo_peso,cargo_servicio,propina,credito_aplicado,cargo_procesamiento,stripe_environment,stripe_payment_intent_id),pedidos(monto_capturado,costo_envio,propina,cargo_procesamiento,stripe_environment,stripe_payment_intent_id)")
     .eq("block_id", payout.block_id)
     .order("sequence_number");
   if (stopsError || !stops?.length) return { ok: false, error: stopsError?.message ?? "El lote no tiene pedidos" };
@@ -75,7 +75,7 @@ export async function transferDeliveryBlockPayout(payoutId: string, db = adminDb
   const parts: Part[] = stops.map((stop: any): Part => {
     const isCookie = !!stop.cookie_order_id;
     const o = isCookie ? stop.pedidos : stop.store_orders;
-    const captured = Math.round(money(o?.monto_capturado) * 100);
+    const captured = Math.round((money(o?.monto_capturado) - money(o?.cargo_procesamiento)) * 100);
     const available = isCookie
       ? Math.max(0, Math.min(captured, Math.round((money(o?.costo_envio) + money(o?.propina)) * 100)))
       : Math.max(0, captured - Math.max(0, Math.min(captured, captured + Math.round(money(o?.credito_aplicado) * 100) - Math.round((money(o?.costo_envio) + money(o?.cargo_peso) + money(o?.cargo_servicio) + money(o?.propina)) * 100))));

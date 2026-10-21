@@ -29,7 +29,7 @@ export interface TransferResult {
 /** Parte del negocio de un pedido ya cobrado. */
 export function storeShareCents(o: any): number {
   const platform =
-    money(o.costo_envio) + money(o.cargo_peso) + money(o.cargo_servicio) + money(o.propina);
+    money(o.costo_envio) + money(o.cargo_peso) + money(o.cargo_servicio) + money(o.propina) + money(o.cargo_procesamiento);
   const captured = money(o.monto_capturado);
   const usd = Math.max(0, Math.min(captured, captured + money(o.credito_aplicado) - platform));
   return Math.round(usd * 100);
@@ -66,7 +66,7 @@ export async function transferStoreOrder(orderId: string, db = adminDb()): Promi
   const { data: o } = await db
     .from("store_orders")
     .select(
-      "id, business_id, monto_capturado, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado, transferido_en",
+      "id, business_id, monto_capturado, costo_envio, cargo_peso, cargo_servicio, propina, credito_aplicado, cargo_procesamiento, transferido_en",
     )
     .eq("id", orderId)
     .maybeSingle();

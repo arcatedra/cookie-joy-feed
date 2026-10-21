@@ -85,6 +85,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
         estado text DEFAULT 'pendiente',subtotal numeric,total numeric,costo_envio numeric,impuestos numeric,moneda text,direccion_envio jsonb,metodo_pago text,flujo_pago text,
         propina numeric DEFAULT 0,credito_aplicado numeric DEFAULT 0,monto_capturado numeric DEFAULT 0,monto_autorizado numeric,
         stripe_environment text,stripe_payment_intent_id text,stripe_checkout_session_id text,capturado_en timestamptz);
+      ALTER TABLE pedidos ADD cargo_procesamiento numeric, ADD procesamiento_version smallint;
       CREATE TABLE store_orders(LIKE pedidos INCLUDING ALL);
       ALTER TABLE store_orders ADD business_id uuid,ADD cargo_servicio numeric,ADD tramo text,ADD envio_repartidor numeric,ADD envio_empresa numeric,
         ADD cargo_peso numeric,ADD cargo_peso_repartidor numeric,ADD peso_total_lb numeric,ADD fecha_entrega date,ADD total_estimado numeric,ADD comision_porcentaje numeric,ADD comision_estimada numeric,ADD door_service text,ADD door_service_fee numeric,ADD pricing_model text,ADD reemplazo text;
@@ -162,7 +163,7 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       if (kind === "cookie") {
         const request = state.stripe.mock.calls.at(-1)?.[1];
         const amount = request.line_items.reduce((sum: number, line: any) => sum + line.price_data.unit_amount * line.quantity, 0);
-        expect(amount).toBe(3500); // $20 galletas + $12 entrega y servicio + $3 propina
+        expect(amount).toBe(3635); // $35 base + $1.35 processing
         expect(request.line_items.some((line: any) => line.price_data.product_data.name === "Entrega y servicio" && line.price_data.unit_amount === 1200)).toBe(true);
         expect(request).toMatchObject({ customer: "cus_PRUEBA", payment_intent_data: expect.objectContaining({ setup_future_usage: "off_session" }) });
         expect(request.line_items.some((line: any) => /margen|hold|exprés|express/i.test(line.price_data.product_data.name))).toBe(false);
