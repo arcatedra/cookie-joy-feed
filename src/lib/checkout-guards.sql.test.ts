@@ -175,6 +175,27 @@ describe("bloqueos de checkout y referidos en PostgreSQL aislado", () => {
       }
     });
   }
+  it("136 galletas: checkout real cobra entrega por peso y cargo sin límite de 99", async () => {
+    state.stripe.mockResolvedValue({ id: "cs_test_weight", client_secret: "PRUEBA_secret" });
+    const { createCartCheckout } = await import("./cart-checkout.functions");
+    const handler: any = createCartCheckout;
+    const result = await handler({ data: { address, usarSaldo: false, items: [{ id: "c1", name: "Galleta", price: 3.75, qty: 136 }], expectedDeliveryCents: 3999, expectedProcessingCents: 1674 }, context: { supabase: client("authenticated"), userId: uid(2) } });
+    expect(result).toMatchObject({ costoEnvio: 39.99, cargoProcesamiento: 16.74, totalEstimado: 566.73 });
+    const request = state.stripe.mock.calls.at(-1)?.[1];
+    expect(request.line_items.reduce((sum: number, line: any) => sum + line.quantity * line.price_data.unit_amount, 0)).toBe(56673);
+    expect((await state.db?.query("SELECT costo_envio,total FROM pedidos WHERE id=$1", [result.pedidoId]))?.rows[0]).toMatchObject({ costo_envio: "39.99", total: "566.73" });
+  });
+  it("rechaza sobrepeso y entrega desactualizada antes de escribir o llamar Stripe", async () => {
+    const { createCartCheckout } = await import("./cart-checkout.functions");
+    const handler: any = createCartCheckout;
+    const calls = state.stripe.mock.calls.length;
+    const writes = state.writes.length;
+    const context = { supabase: client("authenticated"), userId: uid(2) };
+    await expect(handler({ data: { address, items: [{ id: "c1", name: "Galleta", price: 3.75, qty: 500 }] }, context })).rejects.toThrow("peso máximo");
+    await expect(handler({ data: { address, items: [{ id: "c1", name: "Galleta", price: 3.75, qty: 136 }], expectedDeliveryCents: 1200 }, context })).rejects.toThrow("entrega cambió");
+    expect(state.stripe.mock.calls.length).toBe(calls);
+    expect(state.writes.length).toBe(writes);
+  });
   it("dos familiares compran y se cobra a ambos; la dirección compartida bloquea únicamente el segundo bono", async () => {
     await state.db?.exec("SELECT set_config('request.jwt.claim.role','service_role',false)");
     for (const [n, table] of [[2, "pedidos"], [3, "store_orders"]] as const) {

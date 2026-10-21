@@ -1,7 +1,8 @@
-/** Pedido mínimo $12 en productos; además cada pedido paga una "Entrega y servicio" fija. */
+/** Pedido mínimo $12 en productos; entrega de nuevos pedidos en cookie-shipping.server. */
 export const COOKIE_MIN_SUBTOTAL_CENTS = 1200;
 export const DEFAULT_COOKIE_DELIVERY_CENTS = 1200;
 
+/** Legacy helper retained for historical callers; not used by new cookie checkout. */
 export function cookieDeliveryFeeCents(settings?: { cookieDeliveryFeeUsd?: number } | null): number {
   const usd = Number(settings?.cookieDeliveryFeeUsd);
   if (!Number.isFinite(usd) || usd < 0 || usd > 100) return DEFAULT_COOKIE_DELIVERY_CENTS;
