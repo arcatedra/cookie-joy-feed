@@ -1807,6 +1807,7 @@ export type Database = {
           captura_error: string | null
           captura_intentos: number
           capturado_en: string | null
+          cargo_procesamiento: number | null
           cliente_id: string
           costo_envio: number
           creado_en: string
@@ -1823,6 +1824,7 @@ export type Database = {
           monto_capturado: number | null
           notas: string | null
           numero_pedido: string
+          procesamiento_version: number | null
           propina: number
           stripe_checkout_session_id: string | null
           stripe_environment: string | null
@@ -1836,6 +1838,7 @@ export type Database = {
           captura_error?: string | null
           captura_intentos?: number
           capturado_en?: string | null
+          cargo_procesamiento?: number | null
           cliente_id: string
           costo_envio?: number
           creado_en?: string
@@ -1852,6 +1855,7 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          procesamiento_version?: number | null
           propina?: number
           stripe_checkout_session_id?: string | null
           stripe_environment?: string | null
@@ -1865,6 +1869,7 @@ export type Database = {
           captura_error?: string | null
           captura_intentos?: number
           capturado_en?: string | null
+          cargo_procesamiento?: number | null
           cliente_id?: string
           costo_envio?: number
           creado_en?: string
@@ -1881,6 +1886,7 @@ export type Database = {
           monto_capturado?: number | null
           notas?: string | null
           numero_pedido?: string
+          procesamiento_version?: number | null
           propina?: number
           stripe_checkout_session_id?: string | null
           stripe_environment?: string | null
@@ -2497,6 +2503,7 @@ export type Database = {
           capturado_en: string | null
           cargo_peso: number
           cargo_peso_repartidor: number
+          cargo_procesamiento: number | null
           cargo_servicio: number
           cliente_id: string
           comision_estimada: number
@@ -2526,6 +2533,7 @@ export type Database = {
           peso_total_kg: number
           peso_total_lb: number
           pricing_model: string | null
+          procesamiento_version: number | null
           propina: number
           recogido_en: string | null
           reemplazo: string
@@ -2551,6 +2559,7 @@ export type Database = {
           capturado_en?: string | null
           cargo_peso?: number
           cargo_peso_repartidor?: number
+          cargo_procesamiento?: number | null
           cargo_servicio?: number
           cliente_id: string
           comision_estimada?: number
@@ -2580,6 +2589,7 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           pricing_model?: string | null
+          procesamiento_version?: number | null
           propina?: number
           recogido_en?: string | null
           reemplazo?: string
@@ -2605,6 +2615,7 @@ export type Database = {
           capturado_en?: string | null
           cargo_peso?: number
           cargo_peso_repartidor?: number
+          cargo_procesamiento?: number | null
           cargo_servicio?: number
           cliente_id?: string
           comision_estimada?: number
@@ -2634,6 +2645,7 @@ export type Database = {
           peso_total_kg?: number
           peso_total_lb?: number
           pricing_model?: string | null
+          procesamiento_version?: number | null
           propina?: number
           recogido_en?: string | null
           reemplazo?: string
